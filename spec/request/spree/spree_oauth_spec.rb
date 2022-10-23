@@ -36,6 +36,45 @@ describe 'Spree Oauth Spec', type: :request do
     end
   end
 
+  # :assertion
+  context 'grant_type: assertion' do
+    it 'successfully log to existing user in' do
+      existing_user = create(:cm_user_id_token)
+
+      post "/spree_oauth/token", params: {
+        "grant_type": "assertion",
+        "id_token": generate(:cm_id_token),
+      }
+
+      recently_created_token = Spree::OauthAccessToken.last
+      p recently_created_token
+
+      # expect(recently_created_token.resource_owner_id).to eq existing_user.id
+      expect(json_response_body.keys).to contain_exactly(
+        'access_token',
+        'token_type',
+        'expires_in',
+        'refresh_token',
+        'created_at'
+      )
+    end
+
+    it 'successfully register new user' do
+      post "/spree_oauth/token", params: {
+        "grant_type": "assertion",
+        "id_token": generate(:cm_id_token),
+      }
+
+      expect(json_response_body.keys).to contain_exactly(
+        'access_token',
+        'token_type',
+        'expires_in',
+        'refresh_token',
+        'created_at'
+      )
+    end
+  end
+
   # :client_credentials
   context 'grant_type: client_credentials' do
     it 'return tokens with valid client id & secret' do

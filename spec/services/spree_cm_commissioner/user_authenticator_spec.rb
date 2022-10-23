@@ -6,13 +6,13 @@ RSpec.describe SpreeCmCommissioner::UserAuthenticator do
 
   context 'no exceptions' do
     it 'log into user when email & password valid' do
-      context = double(:user_password_authenticator, user: user, success?: true)
+      context = double(:user_password_authenticator, 'user': user, 'success?': true)
       expect(SpreeCmCommissioner::UserPasswordAuthenticator)
           .to receive(:call)
           .with({ login: user.email, password: user.password })
           .and_return(context)
 
-      params = {  username: user.email, password: user.password }
+      params = { grant_type: 'password', username: user.email, password: user.password }
       authenticated_user = described_class.call?(params)
 
       expect(authenticated_user.email).to eq 'abc@vtenh.com'
@@ -21,7 +21,7 @@ RSpec.describe SpreeCmCommissioner::UserAuthenticator do
 
   context 'no exceptions' do
     it 'log into user when email & password valid' do
-      params = {  username: user.email, password: "wrong-password" }
+      params = { grant_type: 'password', username: user.email, password: "wrong-password" }
       expect { described_class.call?(params) }.to raise_error(
                                                     Doorkeeper::Errors::DoorkeeperError, 
                                                     I18n.t('authenticator.incorrect_password')
