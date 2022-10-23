@@ -21,7 +21,7 @@ Doorkeeper.configure do
     current_spree_user&.spree_admin? || redirect_to(routes.root_url)
   end
 
-  grant_flows %w[password client_credentials]
+  grant_flows %w[password client_credentials assertion]
 
   allow_blank_redirect_uri true
 
@@ -39,7 +39,6 @@ Doorkeeper.configure do
   hash_token_secrets fallback: :plain
   hash_application_secrets fallback: :plain, using: '::Doorkeeper::SecretStoring::BCrypt'
 
-
   # custom configuration https://github.com/doorkeeper-gem/doorkeeper/wiki/Customizing-Token-Expiration
   custom_access_token_expires_in do |context|
     # context.grant_type for grant_type, context.client for client, context.scopes for scopes
@@ -52,3 +51,9 @@ Doorkeeper.configure do
     end
   end
 end
+
+Doorkeeper::GrantFlow.register(
+  :assertion,
+  grant_type_matches: "assertion",
+  grant_type_strategy: Doorkeeper::Request::Password,
+)
