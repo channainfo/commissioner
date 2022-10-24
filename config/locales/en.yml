@@ -3,3 +3,10 @@
 
 en:
   hello: "Hello world"
+  stock_location:
+    lat:
+      label: "Latitude"
+      hint: "Enter between 90 to -90"
+    lon:
+      label: "Longitude"
+      hint: "Enter between 180 to -180"
