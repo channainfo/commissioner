@@ -59,6 +59,8 @@
     <%= f.text_field :lon, class: 'form-control', placeholder: t("stock_location.lon.hint") %>
   </div>
 
+  <%= render 'shared/map/map', lat: f.object.lat, lon: f.object.lon %>
+
   <%#-------------------------------------------------%>
   <%# END NEW ADDED BLOCK                             %>
   <%#-------------------------------------------------%>

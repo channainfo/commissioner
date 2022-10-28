@@ -1,0 +1,15 @@
+<div class="border rounded mb-4"><div id="map" class="rounded" style="height: 200px;"></div></div>
+
+<% @default_latlon = ENV.fetch("DEFAULT_LATLON") %>
+<% @default_lat = @default_latlon.split(",")[0] %>
+<% @default_lon = @default_latlon.split(",")[1] %>
+
+<%= content_tag :div, class: 'map-selector', data: {
+  lat: lat || @default_lat, 
+  lon: lon || @default_lon
+} do %><% end %>
+
+<%# MAP scripts %>
+<% @map_key = ENV.fetch("GOOGLE_MAP_KEY") %>
+<% @map_src = "https://maps.googleapis.com/maps/api/js?key=#{@map_key}&callback=initMap&v=weekly" %>
+<script type="text/javascript" src="<%= @map_src %>" defer></script>
