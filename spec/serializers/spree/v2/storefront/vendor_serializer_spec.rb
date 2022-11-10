@@ -4,7 +4,7 @@ RSpec.describe Spree::V2::Storefront::VendorSerializer, type: :serializer do
   describe '.serializable_hash' do
     let(:vendor) {
       stock_location = create(:stock_location)
-      
+
       vendor = build(:vendor)
       vendor.stock_locations = [stock_location]
       vendor.save!
@@ -19,6 +19,7 @@ RSpec.describe Spree::V2::Storefront::VendorSerializer, type: :serializer do
     it { expect(subject[:data][:attributes]).to include(:slug) }
 
     it { expect(subject[:data][:relationships]).to include(:image) }
+    it { expect(subject[:data][:relationships]).to include(:logo) }
     it { expect(subject[:data][:relationships]).to include(:products) }
     it { expect(subject[:data][:relationships]).to include(:stock_locations) }
   end

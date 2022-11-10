@@ -4,6 +4,7 @@ module Spree
       module VendorSerializerDecorator
         def self.prepended(base)
           base.has_many :stock_locations
+          base.has_one :logo, serializer: :vendor_logo
         end
       end
     end
