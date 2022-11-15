@@ -13,9 +13,6 @@ gem 'spree_multi_vendor'
 
 gem 'rails-controller-testing'
 
-# for cron jobs
-gem 'whenever', require: false
-
 group :test do
   gem 'byebug'
   gem 'interactor', '~> 3.1'
