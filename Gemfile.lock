@@ -1,3 +1,15 @@
+GIT
+  remote: https://github.com/channainfo/spree_travel_core.git
+  revision: 0d9489602a70327fbf2a657abbcda5cef40421e9
+  specs:
+    spree_travel_core (4.0.0)
+      deface (~> 1.0)
+      rails (~> 6.1.4)
+      spree_api
+      spree_backend
+      spree_core
+      spree_extension
+
 PATH
   remote: .
   specs:
@@ -60,7 +72,7 @@ GEM
     activerecord (6.1.7)
       activemodel (= 6.1.7)
       activesupport (= 6.1.7)
-    activerecord-typedstore (1.5.0)
+    activerecord-typedstore (1.5.1)
       activerecord (>= 6.1)
     activestorage (6.1.7)
       actionpack (= 6.1.7)
@@ -88,14 +100,14 @@ GEM
       console (~> 1.10)
       nio4r (~> 2.3)
       timers (~> 4.1)
-    async-http (0.59.2)
+    async-http (0.59.3)
       async (>= 1.25)
       async-io (>= 1.28)
       async-pool (>= 0.2)
       protocol-http (~> 0.23.1)
       protocol-http1 (~> 0.14.0)
       protocol-http2 (~> 0.14.0)
-      traces (>= 0.4.0)
+      traces (>= 0.8.0)
     async-http-faraday (0.11.0)
       async-http (~> 0.42)
       faraday
@@ -120,8 +132,9 @@ GEM
       popper_js (>= 1.16.1, < 2)
       sassc-rails (>= 2.0.0)
     builder (3.2.4)
+    byebug (11.1.3)
     cancancan (3.4.0)
-    capybara (3.37.1)
+    capybara (3.38.0)
       addressable
       matrix
       mini_mime (>= 0.1.3)
@@ -137,6 +150,7 @@ GEM
     carmen (1.1.3)
       activesupport (>= 3.0.0)
     childprocess (4.1.0)
+    chronic (0.10.2)
     coderay (1.1.3)
     concurrent-ruby (1.1.10)
     connection_pool (2.3.0)
@@ -168,7 +182,7 @@ GEM
       ruby2_keywords (>= 0.0.4)
     faraday-http-cache (2.4.1)
       faraday (>= 0.8)
-    faraday-net_http (3.0.1)
+    faraday-net_http (3.0.2)
     ffaker (2.21.0)
     ffi (1.15.5)
     fiber-local (1.0.0)
@@ -201,7 +215,8 @@ GEM
     inline_svg (1.8.0)
       activesupport (>= 3.0)
       nokogiri (>= 1.6)
-    jquery-rails (4.5.0)
+    interactor (3.1.2)
+    jquery-rails (4.5.1)
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
@@ -249,8 +264,6 @@ GEM
     nio4r (2.5.8)
     nokogiri (1.13.9)
       mini_portile2 (~> 2.8.0)
-      racc (~> 1.4)
-    nokogiri (1.13.9-x86_64-darwin)
       racc (~> 1.4)
     octokit (4.25.1)
       faraday (>= 1, < 3)
@@ -320,7 +333,7 @@ GEM
       i18n
     redis (5.0.5)
       redis-client (>= 0.9.0)
-    redis-client (0.10.0)
+    redis-client (0.11.1)
       connection_pool
     regexp_parser (2.6.0)
     responders (3.0.1)
@@ -331,14 +344,14 @@ GEM
       activemodel (>= 3.0)
       activesupport (>= 3.0)
       rspec-mocks (>= 2.99, < 4.0)
-    rspec-core (3.11.0)
-      rspec-support (~> 3.11.0)
-    rspec-expectations (3.11.1)
+    rspec-core (3.12.0)
+      rspec-support (~> 3.12.0)
+    rspec-expectations (3.12.0)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.11.0)
-    rspec-mocks (3.11.1)
+      rspec-support (~> 3.12.0)
+    rspec-mocks (3.12.0)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.11.0)
+      rspec-support (~> 3.12.0)
     rspec-rails (4.1.2)
       actionpack (>= 4.2)
       activesupport (>= 4.2)
@@ -349,22 +362,22 @@ GEM
       rspec-support (~> 3.10)
     rspec-retry (0.6.2)
       rspec-core (> 3.3)
-    rspec-support (3.11.1)
+    rspec-support (3.12.0)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.37.0)
+    rubocop (1.38.0)
       json (~> 2.3)
       parallel (~> 1.10)
       parser (>= 3.1.2.1)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8, < 3.0)
       rexml (>= 3.2.5, < 4.0)
-      rubocop-ast (>= 1.22.0, < 2.0)
+      rubocop-ast (>= 1.23.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
     rubocop-ast (1.23.0)
       parser (>= 3.1.1.0)
-    rubocop-rails (2.17.0)
+    rubocop-rails (2.17.2)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
@@ -387,11 +400,13 @@ GEM
       addressable (>= 2.3.5)
       faraday (>= 0.17.3, < 3)
     select2-rails (4.0.13)
-    selenium-webdriver (4.5.0)
+    selenium-webdriver (4.6.1)
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    shoulda-matchers (5.2.0)
+      activesupport (>= 5.2.0)
     simplecov (0.21.2)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -490,7 +505,7 @@ GEM
       actionmailer
       spree_core (>= 4.4.0)
       sprockets (>= 4.0)
-    spree_extension (0.0.9)
+    spree_extension (0.1.0)
       activerecord (>= 4.2)
       spree_core
     spree_multi_vendor (2.3.0)
@@ -513,7 +528,7 @@ GEM
     state_machines-activerecord (0.8.0)
       activerecord (>= 5.1)
       state_machines-activemodel (>= 0.8.0)
-    stimulus-rails (1.1.0)
+    stimulus-rails (1.1.1)
       railties (>= 6.0.0)
     stringex (2.8.5)
     thor (1.2.1)
@@ -522,7 +537,7 @@ GEM
     timers (4.3.5)
     tinymce-rails (6.2.0)
       railties (>= 3.1.1)
-    traces (0.7.0)
+    traces (0.8.0)
     turbo-rails (1.3.2)
       actionpack (>= 6.0.0)
       activejob (>= 6.0.0)
@@ -540,23 +555,29 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    whenever (1.0.0)
+      chronic (>= 0.6.3)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.1)
+    zeitwerk (2.6.6)
 
 PLATFORMS
   ruby
-  x86_64-darwin-21
 
 DEPENDENCIES
+  byebug
+  interactor (~> 3.1)
   pg
   rails-controller-testing
+  shoulda-matchers (~> 5.0)
   spree (>= 4.4.0)
   spree_api (>= 4.4.0)
   spree_backend (>= 4.4.0)
   spree_cm_commissioner!
   spree_dev_tools
   spree_multi_vendor
+  spree_travel_core!
+  whenever
 
 BUNDLED WITH
-   2.3.24
+   2.1.4

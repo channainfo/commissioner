@@ -20,5 +20,18 @@ describe 'API V2 Storefront Vendor Spec', type: :request do
         expect(json_response['included'].first['attributes']['styles'].length).to eq(2)
       end
     end
+
+    context 'with attribute min and max price' do
+      before { get "/api/v2/storefront/vendors/#{vendor.slug}" }
+
+      it_behaves_like 'returns 200 HTTP status'
+
+      it 'returns min and max price attribute' do
+        json_response = JSON.parse(response.body)
+
+        expect(json_response['data']['attributes']).to have_key('min_price')
+        expect(json_response['data']['attributes']).to have_key('max_price')
+      end
+    end
   end
 end
