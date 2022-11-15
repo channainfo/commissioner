@@ -3,6 +3,7 @@ module Spree
     module Storefront
       module VendorSerializerDecorator
         def self.prepended(base)
+          base.attributes :min_price, :max_price
           base.has_many :stock_locations
           base.has_one :logo, serializer: :vendor_logo
         end

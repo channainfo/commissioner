@@ -1,5 +1,5 @@
-module Spree
-  class VendorLogo < Asset
+module SpreeCmCommissioner
+  class VendorLogo < Spree::Asset
     include Spree::Image::Configuration::ActiveStorage
     include Rails.application.routes.url_helpers
 

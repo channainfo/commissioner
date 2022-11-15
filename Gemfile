@@ -13,4 +13,11 @@ gem 'spree_multi_vendor'
 
 gem 'rails-controller-testing'
 
+group :test do
+  gem 'byebug'
+  gem 'interactor', '~> 3.1'
+  gem 'shoulda-matchers', '~> 5.0'
+  gem 'spree_travel_core', github: 'channainfo/spree_travel_core'
+end
+
 gemspec

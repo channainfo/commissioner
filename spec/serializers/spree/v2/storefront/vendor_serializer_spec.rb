@@ -17,6 +17,8 @@ RSpec.describe Spree::V2::Storefront::VendorSerializer, type: :serializer do
     it { expect(subject[:data][:attributes]).to include(:contact_us) }
     it { expect(subject[:data][:attributes]).to include(:name) }
     it { expect(subject[:data][:attributes]).to include(:slug) }
+    it { expect(subject[:data][:attributes]).to include(:min_price) }
+    it { expect(subject[:data][:attributes]).to include(:max_price) }
 
     it { expect(subject[:data][:relationships]).to include(:image) }
     it { expect(subject[:data][:relationships]).to include(:logo) }
