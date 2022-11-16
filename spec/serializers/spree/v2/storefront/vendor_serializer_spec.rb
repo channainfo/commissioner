@@ -2,27 +2,42 @@
 
 RSpec.describe Spree::V2::Storefront::VendorSerializer, type: :serializer do
   describe '.serializable_hash' do
-    let(:vendor) {
-      stock_location = create(:stock_location)
+    let(:logo) { create(:vendor_logo) }
+    let(:photo1) { create(:vendor_photo) }
+    let(:vendor) { create(:vendor, logo: logo, photos: [ photo1 ]) }
+    let(:stock_location1) { create(:stock_location, vendor: vendor) }
 
-      vendor = build(:vendor)
-      vendor.stock_locations = [stock_location]
-      vendor.save!
-      vendor.reload
-    }
+    context 'with no include' do
+      subject { described_class.new(vendor).serializable_hash }
 
-    subject { described_class.new(vendor).serializable_hash }
+      it { expect(subject[:data][:attributes]).to include(:about_us) }
+      it { expect(subject[:data][:attributes]).to include(:contact_us) }
+      it { expect(subject[:data][:attributes]).to include(:name) }
+      it { expect(subject[:data][:attributes]).to include(:slug) }
+      it { expect(subject[:data][:attributes]).to include(:min_price) }
+      it { expect(subject[:data][:attributes]).to include(:max_price) }
+  
+      it { expect(subject[:data][:relationships]).to include(:image) }
+      it { expect(subject[:data][:relationships]).to include(:logo) }
+      it { expect(subject[:data][:relationships]).to include(:photos) }
+      it { expect(subject[:data][:relationships]).to include(:products) }
+      it { expect(subject[:data][:relationships]).to include(:stock_locations) }
+    end
 
-    it { expect(subject[:data][:attributes]).to include(:about_us) }
-    it { expect(subject[:data][:attributes]).to include(:contact_us) }
-    it { expect(subject[:data][:attributes]).to include(:name) }
-    it { expect(subject[:data][:attributes]).to include(:slug) }
-    it { expect(subject[:data][:attributes]).to include(:min_price) }
-    it { expect(subject[:data][:attributes]).to include(:max_price) }
+    context 'with include' do
+      subject {
+        described_class.new(vendor, include: [
+          :image,
+          :logo,
+          :photos,
+          :products,
+          :stock_locations
+        ]).serializable_hash
+      }
 
-    it { expect(subject[:data][:relationships]).to include(:image) }
-    it { expect(subject[:data][:relationships]).to include(:logo) }
-    it { expect(subject[:data][:relationships]).to include(:products) }
-    it { expect(subject[:data][:relationships]).to include(:stock_locations) }
+      it { expect(subject[:included].select {|e| e[:type] == :vendor_logo}.size).to eq 1}
+      it { expect(subject[:included].select {|e| e[:type] == :photo}.size).to eq 1}
+      it { expect(subject[:included].select {|e| e[:type] == :stock_location}.size).to eq 1}
+    end
   end
 end
