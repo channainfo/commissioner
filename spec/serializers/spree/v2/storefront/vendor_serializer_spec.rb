@@ -5,7 +5,7 @@ RSpec.describe Spree::V2::Storefront::VendorSerializer, type: :serializer do
     let(:logo) { create(:vendor_logo) }
     let(:photo1) { create(:vendor_photo) }
     let(:vendor) { create(:vendor, logo: logo, photos: [ photo1 ]) }
-    let(:stock_location1) { create(:stock_location, vendor: vendor) }
+    let(:stock_location1) { create(:cm_stock_location, vendor: vendor) }
 
     context 'with no include' do
       subject { described_class.new(vendor).serializable_hash }
