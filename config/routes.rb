@@ -14,6 +14,7 @@ Spree::Core::Engine.add_routes do
     namespace :v2 do
       namespace :storefront do
         resource :user_registration_with_socials, only: [:create]
+        resource :account_checkers
       end
     end
   end

@@ -25,7 +25,7 @@ module DoorkeeperAuthHelper
   end
 
   def create_application_token
-    @oauth_application  = create(:oauth_application)
+    @oauth_application = create(:oauth_application)
     @oauth_access_token = create(:oauth_access_token, application: @oauth_application)
     @oauth_access_token
   end
@@ -72,8 +72,4 @@ module DoorkeeperAuthHelper
       @request.headers[key] = value
     end
   end
-end
-
-RSpec.configure do |config|
-  config.include DoorkeeperAuthHelper, type: :controller
 end

@@ -3,6 +3,17 @@
 
 en:
   hello: "Hello world"
+
+  authenticator:
+    incorrect_login: "Incorrect login"
+    incorrect_password: "Incorrect password"
+
+  account_checker:
+    login_not_found: "%{login} does not exist"
+
+  user_identity_provider:
+    not_found: "User identity provider for %{identity_type} not found in the system"
+
   stock_location:
     lat:
       label: "Latitude"
