@@ -4,6 +4,10 @@ RSpec.describe Spree::Variant, type: :model do
   describe 'callbacks' do
     context '#after_commit' do
       let(:vendor) { create(:active_vendor, name: 'Angkor Hotel', min_price: 10, max_price: 30) }
+      let(:state) { create(:state, name: 'Siemreap') }
+      let!(:option_type) { create(:option_type, name: 'location', presentation: 'Location', attr_type: 'state_selection') }
+      let!(:option_value) { create(:option_value, option_type: option_type, presentation: state.id) }
+      let!(:stock_location) { vendor.stock_locations.first.update(state: state) }
       let!(:product1) { create(:base_product, name: 'Bedroom 1', vendor: vendor, price: 10 ) }
       let!(:product2) { create(:base_product, name: 'Bedroom 2', vendor: vendor, price: 20 ) }
       let!(:product3) { create(:base_product, name: 'Bedroom 3', vendor: vendor, price: 30 ) }

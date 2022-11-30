@@ -9,4 +9,12 @@ Spree::Core::Engine.add_routes do
       end
     end
   end
+
+  namespace :api, defaults: { format: 'json' } do
+    namespace :v2 do
+      namespace :storefront do
+        resources :search, only: %i[index]
+      end
+    end
+  end
 end

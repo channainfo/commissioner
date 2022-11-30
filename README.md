@@ -27,6 +27,16 @@ Introduction goes here.
   If your server was running, restart it so that it can find the assets properly.
 
 ## Config
+
+## Rake tasks
+Seed province data for Cambodia country
+```
+rake data:seed_kh_provinces
+```
+Seed option values and type location
+```
+rake data:seed_kh_location_option_values
+```
 ### Google Map
 CM commissioner required Google Map key for [map components](app/views/shared/map/_map.html.erb).
 ```.env
