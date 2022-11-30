@@ -3,6 +3,8 @@ module SpreeCmCommissioner
     # :id_token
     def call
       claim = decode_id_token
+
+      p claim
   
       if(claim)
         context.claim = claim
@@ -44,28 +46,32 @@ module SpreeCmCommissioner
   
     def decode_id_token
       begin
-        result = JWT.decode(id_token, nil, false, { algorithm: 'RS256' }) do |header|
+        result = JWT.decode(id_token, nil, true, { algorithm: 'RS256' }) do |header|
           kid = header['kid']
-          cert = cert_generation(kid)
+          cert = cert_lookup(kid)
+          return if cert.nil?
+
           public_key = OpenSSL::X509::Certificate.new(cert).public_key
           public_key
         end
+
         result[0]
-      rescue => ex
+      rescue JWT::DecodeError => ex
+        # Rails.logger.info { "FirebaseIdTokenProvider decode error with: #{ex.message}"}
         context.fail!(message: ex.message)
       end
     end
   
-    def cert_generation(kid)
-      json = fetch_cert_key
-      cert = json[kid]
+    def cert_lookup(kid)
+      # json = fetch_cert_key
+      # cert = json['123456']
+
+      # if cert.nil?
+      #   json = refresh_fetch_cert_key
+      #   cert = json['123456']
+      # end
   
-      if cert.nil?
-        json =  refresh_fetch_cert_key
-        cert = json[kid]
-      end
-  
-      cert
+      # cert
     end
   
     def refresh_fetch_cert_key

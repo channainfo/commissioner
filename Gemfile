@@ -13,6 +13,7 @@ gem 'spree_backend', spree_opts
 gem 'spree_auth_devise'
 gem 'spree_multi_vendor'
 gem 'rails-controller-testing'
+gem 'jwt'
 
 group :test do
   gem 'byebug'
