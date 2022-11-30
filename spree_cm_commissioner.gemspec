@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
   s.requirements << 'none'
 
   s.add_dependency 'rails', '~> 6.1.4'
+  s.add_dependency 'jwt'
 
   s.add_development_dependency 'spree_dev_tools'
   s.add_development_dependency 'pg'
