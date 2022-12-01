@@ -13,15 +13,8 @@ Doorkeeper.configure do
   use_polymorphic_resource_owner
 
   resource_owner_from_credentials do
-    user = Spree.user_class.find_for_database_authentication(email: params[:username])
-
-    next if user.nil?
-
-    if defined?(Spree::Auth::Config) && Spree::Auth::Config[:confirmable] == true
-      user if user.active_for_authentication? && user.valid_for_authentication? { user.valid_password?(params[:password]) }
-    elsif user&.valid_for_authentication? { user.valid_password?(params[:password]) }
-      user
-    end
+    user = SpreeCmCommissioner::UserAuthenticator.call?(params)
+    user
   end
 
   admin_authenticator do |routes|
