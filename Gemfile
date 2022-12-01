@@ -10,7 +10,7 @@ gem 'spree', spree_opts
 gem 'spree_api', spree_opts
 gem 'spree_backend', spree_opts
 gem 'spree_multi_vendor'
-
+gem 'spree_auth_devise'
 gem 'rails-controller-testing'
 
 group :test do
