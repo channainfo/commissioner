@@ -10,7 +10,7 @@ module SpreeCmCommissioner
     end
 
     initializer 'spree_cm_commissioner.environment', before: :load_config_initializers do |_app|
-      SpreeCmCommissioner::Config = SpreeCmCommissioner::Configuration.new
+      Config = Configuration.new
     end
 
     def self.activate
