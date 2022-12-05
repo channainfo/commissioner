@@ -17,6 +17,7 @@ describe 'API V2 Storefront Vendor Search Spec', type: :request do
 
   describe 'search#index' do
     context 'with no param' do
+      before { Spree::Vendor.reindex }
       before { get '/api/v2/storefront/search' }
 
       it 'returns one vendor' do
