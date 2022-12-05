@@ -2,32 +2,36 @@
 module SpreeCmCommissioner
   class UserAuthenticator
 
-    # :login, :password
+    # :username, :password
     # :id_token
     def self.call?(params)
-      context = authenticate(params)
-
-      raise exception(context) unless context.success?
+      context = auth_context(params)
+      raise exception(context.message) unless context.success?
       context.user
     end
 
     private
 
-    def self.authenticate(params)
-      grant_type = params[:grant_type]
-
-      case grant_type
-      when 'password'
+    def self.auth_context(params)
+      case flow_type(params)
+      when 'email_auth'
         options = { login: params[:username], password: params[:password] }
         SpreeCmCommissioner::UserPasswordAuthenticator.call(options)
-      when 'assertion'
+      when 'social_auth'
         options = { id_token: params[:id_token] }
         SpreeCmCommissioner::UserIdTokenAuthenticator.call(options)
       end
     end
 
-    def self.exception(context)
-      Doorkeeper::Errors::DoorkeeperError.new(context.message)
+    def self.flow_type(params)
+      return 'email_auth' if params.include?('username') && params.include?('password')
+      return 'social_auth' if params.include?('id_token')
+
+      raise exception(I18n.t('authenticator.invalid_or_missing_params'))
+    end
+
+    def self.exception(message)
+      Doorkeeper::Errors::DoorkeeperError.new(message)
     end
   end
 end

@@ -19,6 +19,7 @@ public/spree
 .ruby-gemset
 *.gem
 */*.gem
+.byebug_history
 
 # Cache
 vendor/cache

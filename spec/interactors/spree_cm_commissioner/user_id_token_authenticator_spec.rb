@@ -1,12 +1,7 @@
 require 'spec_helper'
 
-RSpec.describe SpreeCmCommissioner::UserIdTokenAuthenticator do
-  context 'has account' do
-    let(:user) { create(:user) }
+# spec/request/spree/spree_oauth_spec.rb
+# grant_type: assertion
 
-    describe '.call' do
-      it '' do
-      end
-    end
-  end
+RSpec.describe SpreeCmCommissioner::UserIdTokenAuthenticator do
 end

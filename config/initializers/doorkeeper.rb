@@ -21,7 +21,7 @@ Doorkeeper.configure do
     current_spree_user&.spree_admin? || redirect_to(routes.root_url)
   end
 
-  grant_flows %w[password client_credentials assertion]
+  grant_flows %w[password client_credentials]
 
   allow_blank_redirect_uri true
 
@@ -51,9 +51,3 @@ Doorkeeper.configure do
     end
   end
 end
-
-Doorkeeper::GrantFlow.register(
-  :assertion,
-  grant_type_matches: "assertion",
-  grant_type_strategy: Doorkeeper::Request::Password,
-)

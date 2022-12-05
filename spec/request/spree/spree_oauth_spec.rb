@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe 'Spree Oauth Spec', type: :request do
+
   # :password
   context 'grant_type: password' do
     it 'successfully log user in' do
@@ -34,22 +35,34 @@ describe 'Spree Oauth Spec', type: :request do
       expect(json_response_body.keys).to contain_exactly('error', 'error_description')
       expect(response.status).to eq 400
     end
+
+    it 'return error on params missing' do
+      user = create(:user)
+
+      post "/spree_oauth/token", params: {
+        "grant_type": "password",
+        "username": user.login,
+      }
+
+      expect(json_response_body["error"]).to eq I18n.t('authenticator.invalid_or_missing_params')
+      expect(json_response_body.keys).to contain_exactly('error', 'error_description')
+      expect(response.status).to eq 400
+    end
   end
 
-  # :assertion
-  context 'grant_type: assertion' do
+  # :password, but for id token
+  context 'grant_type: password' do
     it 'successfully log to existing user in' do
       existing_user = create(:cm_user_id_token)
 
       post "/spree_oauth/token", params: {
-        "grant_type": "assertion",
+        "grant_type": "password",
         "id_token": generate(:cm_id_token),
       }
 
       recently_created_token = Spree::OauthAccessToken.last
-      p recently_created_token
 
-      # expect(recently_created_token.resource_owner_id).to eq existing_user.id
+      expect(recently_created_token.resource_owner_id).to eq existing_user.id
       expect(json_response_body.keys).to contain_exactly(
         'access_token',
         'token_type',
@@ -61,7 +74,7 @@ describe 'Spree Oauth Spec', type: :request do
 
     it 'successfully register new user' do
       post "/spree_oauth/token", params: {
-        "grant_type": "assertion",
+        "grant_type": "password",
         "id_token": generate(:cm_id_token),
       }
 

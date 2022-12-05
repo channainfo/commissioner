@@ -12,7 +12,6 @@ module SpreeCmCommissioner
     end
 
     def load_user
-      p UserIdentityProvider.all
       user_identity_provider = UserIdentityProvider.where(
         identity_type: context.identity_type, 
         sub: context.sub

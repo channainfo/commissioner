@@ -46,14 +46,13 @@ RSpec.describe SpreeCmCommissioner::FirebaseIdTokenProvider do
       expect{ subject.decode_id_token }.to raise_error(Interactor::Failure)
     end
 
-    it 'wrong kid return error' do
-      kid = 'fake74f3c486ee503d5eec93a101c64bacf7da'
-      subject = SpreeCmCommissioner::FirebaseIdTokenProvider.new(id_token: id_token)
-      allow(subject).to receive(:kid).and_return(kid)
-
-      p subject.decode_id_token
-      # expect{ subject.decode_id_token }.to raise_error(Interactor::Failure)
-    end
+    # TODO: we are still verifying without public key
+    # it 'wrong kid return error' do
+    #   kid = 'fake74f3c486ee503d5eec93a101c64bacf7da'
+    #   subject = SpreeCmCommissioner::FirebaseIdTokenProvider.new(id_token: id_token)
+    #   allow(subject).to receive(:kid).and_return(kid)
+    #   expect{ subject.decode_id_token }.to raise_error(Interactor::Failure)
+    # end
   end
 
   describe '.cert_generation' do
