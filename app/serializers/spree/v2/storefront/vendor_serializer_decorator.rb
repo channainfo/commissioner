@@ -3,8 +3,6 @@ module Spree
     module Storefront
       module VendorSerializerDecorator
         def self.prepended(base)
-          base.include JSONAPI::Serializer
-
           base.attributes :min_price, :max_price
 
           base.has_many :stock_locations
