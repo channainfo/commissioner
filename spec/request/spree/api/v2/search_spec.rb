@@ -16,6 +16,8 @@ describe 'API V2 Storefront Vendor Search Spec', type: :request do
   let!(:product2) {create(:product_in_stock, name: 'Bedroom 2', vendor: vendor_sr, price: 10 )}
 
   describe 'search#index' do
+    before { Spree::Vendor.reindex }
+
     context 'with no param' do
       before { get '/api/v2/storefront/search' }
 

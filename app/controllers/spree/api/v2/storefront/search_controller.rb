@@ -4,26 +4,31 @@ module Spree
       module Storefront
         class SearchController < ::Spree::Api::V2::ResourceController
 
+          def index
+            render_serialized_payload do
+              serialize_collection(paginated_collection)
+            end
+          end
+
           private
 
           def collection
-            @collection ||= province_id.present? ? scope.ransack(option_values_presentation_eq: province_id).result(distinct: true) : scope
-          end
-
-          def province_id
-            params[:province_id]
-          end
-
-          def scope
-            model_class.active
+            @collection ||= SpreeCmCommissioner::VendorSearch.new(params).call
           end
 
           def model_class
-            ::Spree::Vendor
+            Spree::Vendor
           end
 
           def collection_serializer
             Spree::V2::Storefront::VendorSerializer
+          end
+
+          def serialize_collection(collection)
+            collection_serializer.new(
+              collection,
+              collection_options(collection).merge(is_collection: true)
+            ).serializable_hash
           end
         end
       end

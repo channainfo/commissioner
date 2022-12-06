@@ -11,6 +11,10 @@ gem 'spree_api', spree_opts
 gem 'spree_backend', spree_opts
 gem 'spree_auth_devise'
 gem 'spree_multi_vendor'
+
+gem 'elasticsearch', '~> 8.5'
+gem 'searchkick',    '~> 5.1'
+
 gem 'rails-controller-testing'
 gem 'jwt'
 

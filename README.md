@@ -37,6 +37,10 @@ Seed option values and type location
 ```
 rake data:seed_kh_location_option_values
 ```
+Reindex Elasticsearch on Vendor model
+```
+rake searchkick:reindex CLASS=Spree::Vendor
+```
 ### Google Map
 CM commissioner required Google Map key for [map components](app/views/shared/map/_map.html.erb).
 ```.env
@@ -46,6 +50,9 @@ DEFAULT_LATLON = "10.627543,103.522141"
 
 <!-- * Describe new config usage above -->
 <!-- * Also put in summary at the last section [All environments] below -->
+
+### Elasticsearch
+Elasticsearch version 8.5.2
 
 ### All environments
 Following are required varialbles inside .env

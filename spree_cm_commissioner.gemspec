@@ -21,7 +21,9 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.requirements << 'none'
 
-  s.add_dependency 'rails', '~> 6.1.4'
+  s.add_dependency 'rails',            '~> 6.1.4'
+  s.add_dependency 'searchkick',       '~> 5.1'
+  s.add_dependency 'elasticsearch',    '~> 8.5'
 
   s.add_development_dependency 'spree_dev_tools'
   s.add_development_dependency 'pg'
