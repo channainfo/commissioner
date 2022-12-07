@@ -24,8 +24,8 @@ module SpreeCmCommissioner
     end
 
     def self.flow_type(params)
-      return 'email_auth' if params.include?('username') && params.include?('password')
-      return 'social_auth' if params.include?('id_token')
+      return 'email_auth' if params.has_key?(:username) && params.has_key?(:password)
+      return 'social_auth' if params.has_key?(:id_token)
 
       raise exception(I18n.t('authenticator.invalid_or_missing_params'))
     end
