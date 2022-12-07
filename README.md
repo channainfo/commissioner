@@ -28,19 +28,18 @@ Introduction goes here.
 
 ## Config
 
-## Rake tasks
-Seed province data for Cambodia country
-```
+### Rake tasks
+```s
+# Seed province data for Cambodia country
 rake data:seed_kh_provinces
-```
-Seed option values and type location
-```
+
+# Seed option values and type location
 rake data:seed_kh_location_option_values
-```
-Reindex Elasticsearch on Vendor model
-```
+
+# Reindex Elasticsearch on Vendor model
 rake searchkick:reindex CLASS=Spree::Vendor
 ```
+
 ### Google Map
 CM commissioner required Google Map key for [map components](app/views/shared/map/_map.html.erb).
 ```.env
@@ -52,7 +51,24 @@ DEFAULT_LATLON = "10.627543,103.522141"
 <!-- * Also put in summary at the last section [All environments] below -->
 
 ### Elasticsearch
-Elasticsearch version 8.5.2
+Commissioner required elasticsearch version 8.5.2. We recommend using (evm)[https://github.com/duydo/evm] to manage their version.
+
+1. Install EVM (Elasticsearch Version Manager):
+```s
+sudo curl -o /usr/local/bin/evm https://raw.githubusercontent.com/duydo/evm/master/evm
+sudo chmod +x /usr/local/bin/evm
+```
+
+2. Install elasticsearch
+```s
+evm install 8.5.2
+
+# To start elasticsearch
+evm start
+
+# To stop elasticsearch
+evm stop
+```
 
 ### All environments
 Following are required varialbles inside .env
@@ -63,8 +79,9 @@ DEFAULT_LATLON = "10.627543,103.522141"
 
 ## Using Deface DSL (.deface files)
 - Make sure the path of override should match the path of view template
-- The .deface can be use with :erb, :haml, or :text
-example:
+- The .deface can be use with :erb, :html, or :text
+
+Example:
 ```
 View Template file: app/views/spree/admin/vendors/_form
 Override file: app/overrides/spree/admin/vendors/_form/logo.html.erb.deface
