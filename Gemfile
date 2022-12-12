@@ -17,10 +17,13 @@ gem 'searchkick',    '~> 5.1'
 
 gem 'rails-controller-testing'
 gem 'jwt'
+gem 'interactor', '~> 3.1'
+
+# Temporarily for ruby 3.1. Until upgrade rails to v7.0.1+
+gem "net-smtp", require: false
 
 group :test do
   gem 'byebug'
-  gem 'interactor', '~> 3.1'
   gem 'shoulda-matchers', '~> 5.0'
   gem 'spree_travel_core', github: 'channainfo/spree_travel_core'
 end

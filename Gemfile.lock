@@ -15,6 +15,7 @@ PATH
   specs:
     spree_cm_commissioner (0.0.1)
       elasticsearch (~> 8.5)
+      interactor (~> 3.1)
       rails (~> 6.1.4)
       searchkick (~> 5.1)
 
@@ -278,6 +279,10 @@ GEM
     money (6.16.0)
       i18n (>= 0.6.4, <= 2)
     multi_json (1.15.0)
+    net-protocol (0.2.1)
+      timeout
+    net-smtp (0.3.3)
+      net-protocol
     nio4r (2.5.8)
     nokogiri (1.13.9-x86_64-darwin)
       racc (~> 1.4)
@@ -556,6 +561,7 @@ GEM
     thor (1.2.1)
     tilt (2.0.11)
     timecop (0.9.5)
+    timeout (0.3.1)
     timers (4.3.5)
     tinymce-rails (6.3.0)
       railties (>= 3.1.1)
@@ -584,6 +590,8 @@ GEM
     zeitwerk (2.6.6)
 
 PLATFORMS
+  x86_64-darwin-19
+  x86_64-darwin-20
   x86_64-darwin-21
 
 DEPENDENCIES
@@ -591,6 +599,7 @@ DEPENDENCIES
   elasticsearch (~> 8.5)
   interactor (~> 3.1)
   jwt
+  net-smtp
   pg
   rails-controller-testing
   searchkick (~> 5.1)

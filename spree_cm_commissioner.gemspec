@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.version     = SpreeCmCommissioner.version
   s.summary     = 'Add extension summary here'
   s.description = 'Add (optional) extension description here'
-  s.required_ruby_version = '>= 2.5'
+  s.required_ruby_version = '~> 3.1.3'
 
   s.author    = 'You'
   s.email     = 'you@example.com'
@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'rails',            '~> 6.1.4'
   s.add_dependency 'searchkick',       '~> 5.1'
   s.add_dependency 'elasticsearch',    '~> 8.5'
+  s.add_dependency 'interactor',       '~> 3.1'
 
   s.add_development_dependency 'spree_dev_tools'
   s.add_development_dependency 'pg'
