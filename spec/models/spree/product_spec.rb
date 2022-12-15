@@ -4,6 +4,8 @@ RSpec.describe Spree::Product, type: :model do
   describe 'associations' do
     it { should have_many(:prices_including_master).class_name('Spree::Price').through(:variants_including_master) }
     it { should have_many(:option_values).through(:option_types) }
+    it { should have_many(:master_option_types).through(:product_option_types) }
+    it { should have_many(:option_types_excluding_master).through(:product_option_types) }
   end
 
   describe 'scope' do

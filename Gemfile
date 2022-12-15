@@ -5,7 +5,7 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-spree_opts = '>= 4.4.0'
+spree_opts = '~> 4.4.0'
 gem 'spree', spree_opts
 gem 'spree_api', spree_opts
 gem 'spree_backend', spree_opts
@@ -26,6 +26,9 @@ group :test do
   gem 'byebug'
   gem 'shoulda-matchers', '~> 5.0'
   gem 'spree_travel_core', github: 'channainfo/spree_travel_core'
+
+  # ActionMailer, Net::SMTP
+  gem 'net-smtp'
 end
 
 gemspec

@@ -1,0 +1,13 @@
+<!-- insert_bottom "[data-hook='admin_option_type_form_fields']" -->
+
+<div class="col-12">
+  <%= f.field_container :is_master do %>
+    <%= f.label :is_master do %>
+      <%= f.check_box :is_master, :disabled => !f.object.new_record? %>
+      <%= Spree.t(:is_master) %>
+    <% end %>
+    <small class="form-text text-muted">
+      <%= raw I18n.t('option_type.is_master_info') %>
+    </small>
+  <% end %>
+</div>
