@@ -16,7 +16,7 @@
             <%= form.collection_check_boxes :selected_option_value_ids, page, :id, :name do |value| %>
               <td class="border-bottom">
                 <div class="d-flex align-items-center justify-content-left">
-                  <img class="mr-2" height="18px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/External_link_font_awesome.svg/2048px-External_link_font_awesome.svg.png" />
+                  <%= inline_svg_tag value.object.display_icon, size: "16px*16px", class: "mr-2" %>
                   <%= value.check_box %>
                   <label class="ml-2 mr-2" ><%= value.object.presentation %></label>
                 </div>

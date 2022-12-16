@@ -8,7 +8,10 @@ module Spree
           base.whitelisted_ransackable_attributes = %w[presentation]
         end
       end
+    end
 
+    def display_icon
+      self.icon || "backend-tick.svg"
     end
   end
 end

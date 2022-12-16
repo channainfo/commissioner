@@ -1,0 +1,36 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:vectors) %>
+<% end %>
+
+<%= render partial: 'spree/admin/shared/icons_tabs', locals: { current: :icons } %>
+
+<div class="table-responsive">
+  <table class="table">
+    <% @collection.each do |set| %>
+      <thead>
+        <tr>
+          <th colspan="6">
+            <%= set.first.set_name %>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody class="pb-3">
+        <% set.each_slice(5).each do |page| %>
+          <tr>
+            <% page.each do |vector_icon| %>
+              <td class="border-bottom" onclick="navigator.clipboard.writeText('<%= vector_icon.path %>')">
+                <div class="d-flex align-items-center justify-content-left">
+                  <%= inline_svg_tag vector_icon.path, size: "16px*16px" %>
+                  <label class="ml-2 mr-2" ><%= vector_icon.icon_name %></label>
+                </div>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+        <tr><td colspan=3></td></tr>
+      </tbody>
+
+    <% end %>
+  </table>
+</div>
