@@ -7,7 +7,7 @@ module SpreeCmCommissioner
     validates :set_name, presence: true
     validates :icon_name, presence: true
 
-    # path: no-icon/backend-arrow-up
+    # path: no-icon/backend-arrow-up.svg
     # 
     # set_name: backend
     # icon_name: arrow-up
@@ -16,7 +16,7 @@ module SpreeCmCommissioner
 
       name = File.basename(path)
       set_name = name.split('-')[0]
-      icon_name = name.delete_prefix(set_name + "-")
+      icon_name = name.delete_prefix(set_name + "-").delete_suffix(".svg")
 
       send("path=", path)
       send("set_name=", set_name)

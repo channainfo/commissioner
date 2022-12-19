@@ -2,7 +2,7 @@
   <%= Spree.t(:vectors) %>
 <% end %>
 
-<%= render partial: 'spree/admin/shared/icons_tabs', locals: { current: :option_values } %>
+<%= render partial: 'spree/admin/shared/vectors_tabs', locals: { current: :option_values } %>
 
 <div class="table-responsive">
   <table class="table">
@@ -20,7 +20,12 @@
         <% option_type.option_values.each_slice(3).each do |page| %>
           <tr>
             <% page.each do |value| %>
-              <td class="border-bottom option-value-toggler" data-id="<%= value.id %>" data-vector-icon="<%= value.icon %>" data-toggle="modal" data-target="#vector-icons-modal">
+              <td style="cursor: pointer;" class="border-bottom option-value-toggler"
+                data-id="<%= value.id %>" 
+                data-value-presentation="<%= value.presentation %>"
+                data-vector-icon="<%= value.icon %>" 
+                data-toggle="modal" data-target="#vector-icons-modal">
+
                 <div class="d-flex align-items-center justify-content-left" style="pointer-events: none;">
                   <%= inline_svg_tag value.display_icon, size: "16px*16px", class: "mr-2" %>
                   <label class="ml-2 mr-2" ><%= value.presentation %></label>
@@ -41,7 +46,7 @@
     <div class="modal-content">
       <%= form_for :option_value do |f| %>
         <div class="modal-header">
-          <h5 class="modal-title">Icons</h5>
+          <h5 class="modal-title" id="modal-option-value-title">Icons</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -84,8 +89,9 @@ function setCurrentSelectedIcon(selectVectorIcon) {
   selectedOptionContainer.innerHTML = options[index]
 }
 
-function setOptionValueId(id) {
+function setCurrentOptionValueToModal(id, presentation) {
   document.getElementById("modal-option-value-id").value = id
+  document.getElementById("modal-option-value-title").innerHTML = presentation
 }
 
 document.body.addEventListener('click', function(e){
@@ -93,7 +99,7 @@ document.body.addEventListener('click', function(e){
 
   var modalOpened = e.className && e.className.indexOf('option-value-toggler') != -1
   if (modalOpened) {
-    setOptionValueId(e.dataset.id)
+    setCurrentOptionValueToModal(e.dataset.id, e.dataset.valuePresentation)
     setCurrentSelectedIcon(e.dataset.vectorIcon)
   }
 });

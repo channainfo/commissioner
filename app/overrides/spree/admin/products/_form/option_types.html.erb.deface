@@ -14,7 +14,7 @@
 
 <div data-hook="admin_product_form_master_option_types">
   <%= render 'shared/option_type_field',
-    label: Spree.t(:amenities),
+    label: Spree.t(:master_option_types),
     select: :master_option_type_ids,
     option_types: master_option_types,
     f:f

@@ -1,5 +1,12 @@
 <%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :master_variant } %>
 
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:edit_icons), 
+    admin_vectors_option_values_url, 
+    { icon: 'spree-icon.svg', id: 'admin-option-values-icons-index' } 
+  %>
+<% end %>
+
 <%= form_with model: @object, url: { action: 'update' } do |form| %>
   <% unless @master_option_types.empty? %>
     <%= render partial: 'form', locals: { form: form } %>
