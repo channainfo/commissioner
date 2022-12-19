@@ -1,0 +1,32 @@
+<div class="table-responsive">
+  <table class="table">
+    <% @master_option_types.each do |option_type| %>
+
+      <thead>
+        <tr>
+          <th colspan="3">
+            <%= link_to option_type.presentation, edit_admin_option_type_path(option_type) %>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody class="pb-3">
+        <% option_type.option_values.each_slice(3).each do |page| %>
+          <tr>
+            <%= form.collection_check_boxes :selected_option_value_ids, page, :id, :name do |value| %>
+              <td class="border-bottom">
+                <div class="d-flex align-items-center justify-content-left">
+                  <img class="mr-2" height="18px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/External_link_font_awesome.svg/2048px-External_link_font_awesome.svg.png" />
+                  <%= value.check_box %>
+                  <label class="ml-2 mr-2" ><%= value.object.presentation %></label>
+                </div>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+        <tr><td colspan=3></td></tr>
+      </tbody>
+
+    <% end %>
+  </table>
+</div>

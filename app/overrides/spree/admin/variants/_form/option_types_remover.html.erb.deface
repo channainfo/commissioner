@@ -1,0 +1,10 @@
+<!-- remove "[data-hook='presentation']" -->
+
+<% if false %>
+
+Purpose is to remove all previous option types.
+Then render again but only normal option type (exclude master)
+
+./option_types_replacer.html.erb.deface
+
+<% end %>

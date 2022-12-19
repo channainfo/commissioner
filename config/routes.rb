@@ -8,6 +8,14 @@ Spree::Core::Engine.add_routes do
         end
       end
     end
+
+    resources :products do
+      resources :master_variant, only: [:index, :update] do
+        collection do
+          patch :update
+        end
+      end
+    end
   end
 
   namespace :api, defaults: { format: 'json' } do
