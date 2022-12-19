@@ -1,14 +1,25 @@
 module Spree
   module ProductDecorator
     def self.prepended(base)
+      base.has_many :master_option_types, -> { where(is_master: true).order(:position) }, 
+        through: :product_option_types, source: :option_type
+
+      base.has_many :option_types_excluding_master, -> { where(is_master: false).order(:position) }, 
+        through: :product_option_types, source: :option_type
+
+      base.has_many :option_types_including_master, -> { order(:position) }, through: :product_option_types
+
       base.has_many :option_values, through: :option_types
       base.has_many :prices_including_master, -> { order('spree_variants.position, spree_variants.id, currency') }, source: :prices, through: :variants_including_master
+
       base.scope  :min_price, -> (vendor) { joins(:prices_including_master).where(vendor_id: vendor.id).minimum('spree_prices.price').to_f }
       base.scope  :max_price, -> (vendor) { joins(:prices_including_master).where(vendor_id: vendor.id).maximum('spree_prices.price').to_f }
+
       base.after_commit :create_location
     end
 
     private
+
     def create_location
       location = vendor.stock_locations.first
       raise ("Missig state in stock location for vendorId: #{vendor.id}") if location&.state_id.nil?

@@ -1,6 +1,83 @@
 require 'spec_helper'
 
 RSpec.describe Spree::Variant, type: :model do
+  describe 'validations' do
+    context 'saving option values to variants' do
+      let(:master_option_type) { Spree::OptionType.create(is_master: true, presentation: "Bathroom & Toiletries", name: "bathroom-toiletries") }
+      let(:normal_option_type) { Spree::OptionType.create(is_master: false, presentation: "Capacity", name: "capacity") }
+  
+      let(:master_option_values) {[
+        Spree::OptionValue.create(option_type: master_option_type, presentation: "Accessible toilet", name: "accessible-toilet"),
+        Spree::OptionValue.create(option_type: master_option_type, presentation: "Adapted bath", name: "adapted-bath"),
+        # Spree::OptionValue.create(option_type: master_option_type, presentation: "Bathrobes", name: "bathrobes"),
+        # Spree::OptionValue.create(option_type: master_option_type, presentation: "Cleaning products", name: "cleaning-products"),
+        # Spree::OptionValue.create(option_type: master_option_type, presentation: "Hair dryer", name: "hair-dryer"),
+        # Spree::OptionValue.create(option_type: master_option_type, presentation: "Mirror", name: "mirror"),
+        # Spree::OptionValue.create(option_type: master_option_type, presentation: "Toiletries", name: "toiletries"),
+        # Spree::OptionValue.create(option_type: master_option_type, presentation: "Towels", name: "towels"),
+        # Spree::OptionValue.create(option_type: master_option_type, presentation: "Walk-in shower", name: "walk-in-shower"),
+      ]}
+  
+      let(:normal_option_values) {[
+        Spree::OptionValue.create(option_type: normal_option_type, presentation: "1 people", name: "1-people"),
+        # Spree::OptionValue.create(option_type: normal_option_type, presentation: "2 people", name: "2-people"),
+        # Spree::OptionValue.create(option_type: normal_option_type, presentation: "3 people", name: "3-people"),
+      ]}
+  
+      let(:vendor) { create(:active_vendor, stock_locations: [ create(:stock_location) ]) }
+      let(:product) {
+        product = create(:base_product, vendor: vendor, option_types: [ master_option_type, normal_option_type ])
+        product.reload
+      }
+  
+      context 'for master variant' do
+        it 'saved master option values to master_variant' do
+          master_variant = build(
+            :master_variant, 
+            product: product, 
+            option_values: master_option_values
+          )
+  
+          expect { master_variant.save! }.not_to raise_error
+        end
+    
+        # it 'raise error on saving none-master option values to master_variant' do
+        #   master_variant = build(
+        #     :master_variant,
+        #     product: product,
+        #     option_values: normal_option_values
+        #   )
+    
+        #   expect {
+        #     master_variant.save! 
+        #   }.to raise_error(ActiveRecord::RecordInvalid)
+        # end
+      end
+  
+      context 'for normal variant' do
+        it 'saved none-master option values to normal_variant' do
+          normal_variant = build(
+            :base_variant, 
+            product: product, 
+            option_values: normal_option_values
+          )
+  
+          expect { normal_variant.save! }.not_to raise_error
+        end
+    
+        # it 'raise error on saving master option values to normal_variant' do
+        #   normal_variant = build(
+        #     :base_variant,
+        #     product: product,
+        #     option_values: master_option_values
+        #   )
+  
+        #   expect { normal_variant.save! }.to raise_error(ActiveRecord::RecordInvalid)
+        # end
+      end
+    end
+  end
+
   describe 'callbacks' do
     context '#after_commit' do
       let(:vendor) { create(:active_vendor, name: 'Angkor Hotel', min_price: 10, max_price: 30) }
