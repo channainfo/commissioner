@@ -2,7 +2,19 @@
   <%= Spree.t(:vectors) %>
 <% end %>
 
-<%= render partial: 'spree/admin/shared/icons_tabs', locals: { current: :icons } %>
+<%= render partial: 'spree/admin/shared/vectors_tabs', locals: { current: :icons } %>
+
+<small class="form-text text-muted">
+  <ul>
+    <li><%= raw I18n.t('vectors.icons.info_rules.first') %></li>
+    <li><%= raw I18n.t('vectors.icons.info_rules.second') %>
+      <ul>
+        <li><%= raw I18n.t('vectors.icons.info_rules.second_eg') %></li>
+        <li><%= raw I18n.t('vectors.icons.info_rules.second_set_creation_info') %></li>
+      </ul>
+    </li>
+  </ul>
+</small>
 
 <div class="table-responsive">
   <table class="table">
@@ -19,11 +31,15 @@
         <% set.each_slice(5).each do |page| %>
           <tr>
             <% page.each do |vector_icon| %>
-              <td class="border-bottom" onclick="navigator.clipboard.writeText('<%= vector_icon.path %>')">
-                <div class="d-flex align-items-center justify-content-left">
+              <td class="border-bottom"
+                onclick="navigator.clipboard.writeText('<%= vector_icon.path %>'); 
+                      show_flash('success', '<%= vector_icon.path + ' copied' %>')">
+
+                <div class="d-flex align-items-center justify-content-left" >
                   <%= inline_svg_tag vector_icon.path, size: "16px*16px" %>
                   <label class="ml-2 mr-2" ><%= vector_icon.icon_name %></label>
                 </div>
+
               </td>
             <% end %>
           </tr>
