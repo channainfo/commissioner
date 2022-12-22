@@ -11,7 +11,8 @@ module Spree
     end
 
     def display_icon
-      self.icon || "backend-tick.svg"
+      return "cm-default-icon.svg" unless icon&.end_with?(".svg")
+      icon
     end
   end
 end
