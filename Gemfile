@@ -25,7 +25,6 @@ gem "net-smtp", require: false
 group :test do
   gem 'byebug'
   gem 'shoulda-matchers', '~> 5.0'
-  gem 'spree_travel_core', github: 'channainfo/spree_travel_core'
 
   # ActionMailer, Net::SMTP
   gem 'net-smtp'

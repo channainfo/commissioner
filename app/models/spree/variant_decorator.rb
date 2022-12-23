@@ -1,6 +1,8 @@
  module Spree
   module VariantDecorator
     def self.prepended(base)
+      base.has_one :product_type, class_name: 'SpreeCmCommissioner::ProductType', through: :product
+
       base.after_commit :update_vendor_price
       base.validate :validate_option_types
     end

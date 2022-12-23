@@ -25,6 +25,8 @@ Spree::Core::Engine.add_routes do
         end
       end
     end
+
+    resources :product_types
   end
 
   namespace :api, defaults: { format: 'json' } do

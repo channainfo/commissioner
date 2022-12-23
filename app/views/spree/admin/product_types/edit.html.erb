@@ -1,0 +1,13 @@
+<%= render :partial => 'spree/admin/shared/error_messages', :locals => { :target => @object } %>
+
+<% content_for :page_title do %>
+  <%= Spree.t(:product_types) %>
+<% end %>
+
+<%= form_with model: @object, url: { action: 'update' } do |f| %>
+  <fieldset class="no-border-top">
+    <%= render :partial => 'form', :locals => { :f => f } %>
+    <%= render :partial => 'spree/admin/shared/edit_resource_links' %>
+  </fieldset>
+<% end %>
+

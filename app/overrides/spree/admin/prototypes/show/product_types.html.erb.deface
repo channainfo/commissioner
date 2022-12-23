@@ -1,0 +1,20 @@
+<!-- insert_before "h2" -->
+
+<%= @prototype %>
+<%= if false %>
+
+<div class="col-md-6" data-hook="new_product_type">
+  <% if @prototype&.product_type.nil? %>
+    <%= f.field_container :product_type, :class => ['form-group'] do %>
+      <%= f.label :product_type_id, Spree.t(:product_type) %><br />
+      <%= f.collection_select :product_type_id, SpreeCmCommissioner::ProductType.all, :id, :presentation, {:include_blank => true}, {:class => 'select2 fullwidth'} %>
+    <% end %>
+  <% else %>
+    <%= f.field_container :product_type, :class => ['form-group'] do %>
+      <%= f.label :product_type_id, Spree.t(:product_type) %><br />
+      <%= f.collection_select :product_type_id, SpreeCmCommissioner::ProductType.all, :id, :presentation, {:include_blank => true, :selected => @prototype.product_type}, {:class => 'select2 fullwidth'} %>
+    <% end %>
+  <% end %>
+</div>
+
+<% end %>

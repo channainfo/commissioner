@@ -1,6 +1,8 @@
 module Spree
   module ProductDecorator
     def self.prepended(base)
+      base.belongs_to :product_type, class_name: 'SpreeCmCommissioner::ProductType'
+
       base.has_many :master_option_types, -> { where(is_master: true).order(:position) }, 
         through: :product_option_types, source: :option_type
 

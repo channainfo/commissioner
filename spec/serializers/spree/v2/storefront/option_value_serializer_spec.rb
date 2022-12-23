@@ -2,6 +2,10 @@ require 'spec_helper'
 
 describe Spree::V2::Storefront::OptionValueSerializer, type: :serializer do
   context 'for display_icon' do
+    before(:each) do
+      ActionController::Base.asset_host = nil
+    end
+
     it 'returns attributes with compiled icon' do
       option_value_with_icon = create(:option_value, icon: "/assets/cm-box.svg")
 
