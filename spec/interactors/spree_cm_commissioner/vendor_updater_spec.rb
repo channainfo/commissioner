@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::VendorUpdater do
-  let(:vendor) { create(:active_vendor, name: 'Angkor Hotel') }
+  let(:product_type) { create(:product_type, name: 'property', presentation: 'Property', enabled: true) }
+  let(:vendor) { create(:active_vendor, name: 'Angkor Hotel', primary_product_type: product_type ) }
   let(:state) { create(:state, name: 'Siemreap') }
   let!(:option_type) { create(:option_type, name: 'location', presentation: 'Location', attr_type: 'state_selection') }
   let!(:option_value) { create(:option_value, option_type: option_type, presentation: state.id) }
   let!(:stock_location) { vendor.stock_locations.first.update(state: state) }
-  let(:product_type) { create(:product_type, name: 'property', presentation: 'Property', enabled: true) }
   let(:shipping_category) { create(:shipping_category, name: 'Digital') }
   let!(:product1) { create(:product, name: 'Bedroom 1', vendor: vendor, product_type: product_type, price: 10, shipping_category: shipping_category ) }
   let!(:product2) { create(:product, name: 'Bedroom 2', vendor: vendor, product_type: product_type, price: 20, shipping_category: shipping_category ) }
