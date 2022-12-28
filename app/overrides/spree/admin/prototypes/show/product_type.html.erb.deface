@@ -1,0 +1,13 @@
+<!-- insert_before "erb[silent]:contains('if @prototype.option_types.present?')" -->
+
+<div class="form-group mb-4">
+  <%= label_tag :product_type, Spree.t(:product_type) %>
+  <% SpreeCmCommissioner::ProductType.all.each do |product_type| %>
+    <div class="radio" data-id="<%= product_type.id %>">
+      <label data-hook="product_type_field">
+        <%= radio_button_tag 'product[product_type_id]', product_type.id, product_type == @prototype&.product_type, { class: "product_types_radios" } %>
+        <%= product_type.presentation %>
+      </label>
+    </div>
+  <% end %>
+</div>

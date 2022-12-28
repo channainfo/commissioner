@@ -1,0 +1,6 @@
+<!-- insert_before "erb[loud]:contains('field_container :state')" -->
+
+<%= f.field_container :primary_product_type, :class => ['form-group'] do %>
+  <%= f.label :primary_product_type_id, Spree.t(:primary_product_type) %><br />
+  <%= f.collection_select :primary_product_type_id, SpreeCmCommissioner::ProductType.all, :id, :presentation, {:include_blank => true}, {:class => 'select2 fullwidth'} %>
+<% end %>

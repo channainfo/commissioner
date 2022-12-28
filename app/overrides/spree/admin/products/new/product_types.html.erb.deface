@@ -1,0 +1,6 @@
+<!-- replace "[data-hook='product-from-prototype']" -->
+
+<div data-hook="product-from-prototype" id="product-from-prototype">
+  <% @prototype = @prototype || Spree::Prototype.new(option_types: []) %>
+  <%= render template: 'spree/admin/prototypes/show' %>
+</div>

@@ -1,0 +1,8 @@
+<!-- insert_before "[data-hook='admin_product_form_taxons']" -->
+
+<div data-hook="admin_product_form_product_types">
+  <%= f.field_container :product_type, :class => ['form-group'] do %>
+    <%= f.label :product_type_id, Spree.t(:product_type) %><br />
+    <%= f.collection_select :product_type_id, SpreeCmCommissioner::ProductType.all, :id, :presentation, {:include_blank => true}, {:class => 'select2 fullwidth'} %>
+  <% end %>
+</div>
