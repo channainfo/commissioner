@@ -1,6 +1,8 @@
 module Spree
   module VendorDecorator
     def self.prepended(base)
+      base.belongs_to :primary_product_type, class_name: 'SpreeCmCommissioner::ProductType', foreign_key: 'primary_product_type_id'
+
       base.has_many :photos, -> { order(:position) }, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorPhoto'
       base.has_many :option_values, through: :products
       base.has_one  :logo, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorLogo'

@@ -1,6 +1,8 @@
  module Spree
   module VariantDecorator
     def self.prepended(base)
+      base.has_one :product_type, class_name: 'SpreeCmCommissioner::ProductType', through: :product
+
       base.after_commit :update_vendor_price
       base.validate :validate_option_types
     end
@@ -12,7 +14,7 @@
     private
 
     def update_vendor_price
-      if product_type&.name == 'Property'
+      if product_type_id == vendor.primary_product_type_id
         vendor.update(min_price: price) if price < vendor.min_price
         vendor.update(max_price: price) if price > vendor.max_price
       end
