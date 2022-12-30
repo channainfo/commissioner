@@ -1,6 +1,8 @@
 module Spree
   module OptionValueDecorator
     def self.prepended(base)
+      base.include SpreeCmCommissioner::ParameterizeName
+
       if base.method_defined?(:whitelisted_ransackable_attributes)
         if base.whitelisted_ransackable_attributes
           base.whitelisted_ransackable_attributes |= %w[presentation]
