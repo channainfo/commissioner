@@ -25,4 +25,24 @@ RSpec.describe Spree::Vendor, type: :model do
       end
     end
   end
+
+  describe '#primary_product_type' do
+    it 'raise error on enter invalid primary_product_type' do
+      expect{create(:vendor, primary_product_type: :fake)}
+        .to raise_error(ArgumentError)
+        .with_message("'fake' is not a valid primary_product_type")
+    end
+
+    it 'raise error when input product_type instead of primary_product_type' do
+      expect{create(:vendor, product_type: :fake)}.to raise_error { |error|
+        expect(error).to be_a(NoMethodError)
+        expect(error.message).to include('undefined method `product_type=')
+      }
+    end
+
+    it 'save on input valid primary_product_type' do
+      vendor = build(:vendor, primary_product_type: described_class.primary_product_types[0])
+      expect(vendor.save!).to be true
+    end
+  end
 end

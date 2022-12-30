@@ -1,6 +1,8 @@
 module Spree
   module ProductDecorator
     def self.prepended(base)
+      base.include SpreeCmCommissioner::ProductType
+
       base.has_many :master_option_types, -> { where(is_master: true).order(:position) }, 
         through: :product_option_types, source: :option_type
 
@@ -12,8 +14,15 @@ module Spree
       base.has_many :option_values, through: :option_types
       base.has_many :prices_including_master, -> { order('spree_variants.position, spree_variants.id, currency') }, source: :prices, through: :variants_including_master
 
-      base.scope  :min_price, -> (vendor) { joins(:prices_including_master).where(vendor_id: vendor.id).minimum('spree_prices.price').to_f }
-      base.scope  :max_price, -> (vendor) { joins(:prices_including_master).where(vendor_id: vendor.id).maximum('spree_prices.price').to_f }
+      base.scope :min_price, -> (vendor) { joins(:prices_including_master)
+        .where(vendor_id: vendor.id, product_type: vendor.primary_product_type)
+        .minimum('spree_prices.price').to_f 
+      }
+
+      base.scope :max_price, -> (vendor) { joins(:prices_including_master)
+        .where(vendor_id: vendor.id, product_type: vendor.primary_product_type)
+        .maximum('spree_prices.price').to_f
+      }
 
       base.after_commit :create_location
     end

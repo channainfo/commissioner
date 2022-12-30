@@ -1,0 +1,5 @@
+<!-- insert_before "[data-hook='admin_product_form_taxons']" -->
+
+<div data-hook="admin_product_form_product_types">
+  <%= render 'shared/product_type_field', field: :product_type, f: f, disabled: !f.object.product_type.nil? %>
+</div>

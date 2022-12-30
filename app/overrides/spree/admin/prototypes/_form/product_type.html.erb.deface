@@ -1,0 +1,3 @@
+<!-- insert_bottom "[data-hook='admin_prototype_form_fields']" -->
+
+<%= render 'shared/product_type_field', field: :product_type, f: f %>

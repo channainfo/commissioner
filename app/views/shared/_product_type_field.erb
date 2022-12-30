@@ -1,0 +1,10 @@
+<%# :field, eg. :product_type or :primary_product_type %>
+<%# :disabled, optional %>
+
+<%= f.field_container field, :class => ['form-group'] do %>
+  <%= f.label field, Spree.t(field) %><br />
+  <%= f.collection_select field, SpreeCmCommissioner::ProductType::PRODUCT_TYPES, :to_s, :capitalize, 
+    {:include_blank => true}, 
+    {:class => 'select2 fullwidth', :disabled => defined?(disabled) && disabled == true ? 'disable' : nil }.compact 
+  %>
+<% end %>
