@@ -40,7 +40,7 @@ module Spree
       self.option_types << option_type if option_type_ids.exclude?(option_type.id)
 
       # create option_value location to variants
-      variants.each { |v|
+      variants_including_master.each { |v|
         v.option_value_variants.find_or_create_by(option_value_id: option_value.id)
       }
     end
