@@ -7,6 +7,11 @@ RSpec.describe Spree::Vendor, type: :model do
     it { should have_many(:option_values).class_name('Spree::OptionValue').through(:products) }
   end
 
+  describe 'attributes' do
+    it { should define_enum_for :primary_product_type }
+    it { expect(described_class.primary_product_types.keys).to match(SpreeCmCommissioner::ProductType::PRODUCT_TYPES.map(&:to_s)) }
+  end
+
   describe 'searchkick' do
     it 'has searchkick_index' do
       expect(described_class.searchkick_index).to be_a(Searchkick::Index)

@@ -8,6 +8,11 @@ RSpec.describe Spree::Product, type: :model do
     it { should have_many(:option_types_excluding_master).through(:product_option_types) }
   end
 
+  describe 'attributes' do
+    it { should define_enum_for :product_type }
+    it { expect(described_class.product_types.keys).to match(SpreeCmCommissioner::ProductType::PRODUCT_TYPES..map(&:to_s)) }
+  end
+
   describe 'scope' do
     let(:vendor) { create(:active_vendor, name: 'Angkor Hotel') }
     let(:state) { create(:state, name: 'Siemreap') }
