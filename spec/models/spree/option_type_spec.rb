@@ -10,6 +10,18 @@ RSpec.describe Spree::OptionType, type: :model do
     it { should validate_presence_of(:name) }
   end
 
+  describe 'default scope' do 
+    it 'it should return variant as default' do
+      create(:option_type, kind: :variant)
+      create(:option_type, kind: :product)
+
+      option_types = described_class.all
+
+      expect(option_types.size).to eq 1
+      expect(option_types.first.kind).to eq 'variant'
+    end
+  end
+
   describe 'validations' do
     it 'saved on [attr_type] is included in ATTRIBUTE_TYPES' do
       expect{create(:option_type, attr_type: 'float')}.to_not raise_error
@@ -25,11 +37,12 @@ RSpec.describe Spree::OptionType, type: :model do
       expect{option_type.save!}.to raise_error ActiveRecord::RecordInvalid
     end
 
-    it 'raise error on update is_master after created' do
-      option_type = create(:option_type, is_master: true)
-      option_type.is_master = false
+    it 'raise error on update kind after created' do
+      option_type = create(:option_type, kind: :variant)
+      option_type.kind = :vendor
 
-      expect(option_type.is_master_changed?).to eq true
+      expect(option_type.vendor?).to eq true
+      expect(option_type.kind_changed?).to eq true
       expect{option_type.save!}.to raise_error ActiveRecord::RecordInvalid
     end
   end

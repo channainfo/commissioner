@@ -1,14 +1,18 @@
 <div data-hook="admin_product_form_option_types">
-  <%= f.field_container :master_option_types do %>
-    <%= f.label :option_type_ids, label %>
+  <%= f.field_container select do %>
+    <%= f.label select, label %>
 
     <% if can? :modify, Spree::ProductOptionType %>
     <%= f.select select, options_from_collection_for_select(option_types, :id, :name, option_types.pluck(:id)),
-                                    { include_hidden: true },
-                                      multiple: true,
-                                      data: { autocomplete_url_value: 'option_types_api_v2',
-                                              autocomplete_return_attr_value: 'name',
-                                              autocomplete_multiple_value: true } %>
+        { include_hidden: true },
+        multiple: true,
+        data: { 
+          autocomplete_url_value: 'option_types_api_v2',
+          autocomplete_return_attr_value: 'name',
+          autocomplete_multiple_value: true,
+          autocomplete_additional_url_params_value: "kind=#{kind}"
+        } 
+      %>
     <% elsif option_types.any? %>
       <ul class="text_list">
         <% option_types.each do |type| %>

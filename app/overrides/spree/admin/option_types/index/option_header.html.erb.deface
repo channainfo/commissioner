@@ -4,6 +4,7 @@
   <th class="no-border handel-head"></th>
   <th><%= Spree.t(:name) %></th>
   <th><%= Spree.t(:presentation) %></th>
+  <th><%= Spree.t(:kind) %></th>
   <th><%= Spree.t(:filterable) %></th>
   <th><%= Spree.t(:travel) %></th>
   <th class="actions"></th>

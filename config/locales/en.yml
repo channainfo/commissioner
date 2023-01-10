@@ -10,8 +10,8 @@ en:
   hello: "Hello world"
 
   option_type:
-    is_master_info: "When option type is set to master, it can only be used with master variants. <b>Once set</b>, it can't be updated."
-    is_master_validation: "Attribute can't be updated for %{option_type_name}"
+    kind_info: "<b>Once set</b>, it can't be updated."
+    kind_validation: "Attribute can't be updated for %{option_type_name}"
 
   stock_location:
     lat:
@@ -26,10 +26,10 @@ en:
 
   variant:
     validation:
-      option_type_is_master: "%{option_type_name} / %{option_value_name} is master"
-      option_type_is_not_master: "%{option_type_name} / %{option_value_name} is not master"
-    master_option_types:
-      empty_info: "<b>Note:</b> Set master option types to product first. To edit, go to <b>Details</b> tab > <b>Option Types</b>"
+      option_type_is_not_variant: "%{option_type_name} / %{option_value_name} is not kind of variant"
+      option_type_is_not_product: "%{option_type_name} / %{option_value_name} is not kind of product"
+    product_kind_option_types:
+      empty_info: "<b>Note:</b> Set product option types to product first. To edit, go to <b>Details</b> tab > <b>Option Types</b>"
 
   vectors:
     icons:

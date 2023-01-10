@@ -1,22 +1,24 @@
 <!-- replace "[data-hook='admin_product_form_option_types']" -->
 
-<% master_option_types = @product.master_option_types %>
-<% option_types_excluding_master = @product.option_types_excluding_master %>
+<% product_kind_option_types = @product.product_kind_option_types %>
+<% variant_kind_option_types = @product.variant_kind_option_types %>
 
-<div data-hook="admin_product_form_option_types_excluding_master">
+<div data-hook="admin_product_form_variant_kind_option_types">
   <%= render 'shared/option_type_field',
     label: Spree.t(:option_types),
-    select: :option_types_excluding_master_ids,
-    option_types: option_types_excluding_master,
+    select: :variant_kind_option_type_ids,
+    option_types: variant_kind_option_types,
+    kind: 'variant',
     f:f
   %>
 </div>
 
-<div data-hook="admin_product_form_master_option_types">
+<div data-hook="admin_product_form_product_kind_option_types">
   <%= render 'shared/option_type_field',
     label: Spree.t(:master_option_types),
-    select: :master_option_type_ids,
-    option_types: master_option_types,
+    select: :product_kind_option_type_ids,
+    option_types: product_kind_option_types,
+    kind: 'product',
     f:f
   %>
 </div>

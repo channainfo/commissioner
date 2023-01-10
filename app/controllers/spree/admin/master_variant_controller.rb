@@ -11,7 +11,7 @@ module Spree
 
       # @overrided
       def index
-        @master_option_types = @product.master_option_types
+        @product_kind_option_types = @product.product_kind_option_types
       end
 
       # @overrided

@@ -3,7 +3,7 @@ module Spree
     module Storefront
       module OptionTypeSerializerDecorator
         def self.prepended(base)
-          base.attributes :is_master, :attr_type
+          base.attributes :kind, :attr_type
         end
       end
     end

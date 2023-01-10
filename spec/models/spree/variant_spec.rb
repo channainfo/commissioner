@@ -3,19 +3,19 @@ require 'spec_helper'
 RSpec.describe Spree::Variant, type: :model do
   describe 'validations' do
     context 'saving option values to variants' do
-      let(:master_option_type) { Spree::OptionType.create(is_master: true, presentation: "Bathroom & Toiletries", name: "bathroom-toiletries") }
-      let(:normal_option_type) { Spree::OptionType.create(is_master: false, presentation: "Capacity", name: "capacity") }
+      product_kind_option_type = Spree::OptionType.create(kind: :product, presentation: "Bathroom & Toiletries", name: "bathroom-toiletries")
+      normal_option_type = Spree::OptionType.create(kind: :variant, presentation: "Capacity", name: "capacity")
   
-      let(:master_option_values) {[
-        Spree::OptionValue.create(option_type: master_option_type, presentation: "Accessible toilet", name: "accessible-toilet"),
-        Spree::OptionValue.create(option_type: master_option_type, presentation: "Adapted bath", name: "adapted-bath"),
-        # Spree::OptionValue.create(option_type: master_option_type, presentation: "Bathrobes", name: "bathrobes"),
-        # Spree::OptionValue.create(option_type: master_option_type, presentation: "Cleaning products", name: "cleaning-products"),
-        # Spree::OptionValue.create(option_type: master_option_type, presentation: "Hair dryer", name: "hair-dryer"),
-        # Spree::OptionValue.create(option_type: master_option_type, presentation: "Mirror", name: "mirror"),
-        # Spree::OptionValue.create(option_type: master_option_type, presentation: "Toiletries", name: "toiletries"),
-        # Spree::OptionValue.create(option_type: master_option_type, presentation: "Towels", name: "towels"),
-        # Spree::OptionValue.create(option_type: master_option_type, presentation: "Walk-in shower", name: "walk-in-shower"),
+      let(:product_option_values) {[
+        Spree::OptionValue.create(option_type: product_kind_option_type, presentation: "Accessible toilet", name: "accessible-toilet"),
+        Spree::OptionValue.create(option_type: product_kind_option_type, presentation: "Adapted bath", name: "adapted-bath"),
+        # Spree::OptionValue.create(option_type: product_kind_option_type_, presentation: "Bathrobes", name: "bathrobes"),
+        # Spree::OptionValue.create(option_type: product_kind_option_type_, presentation: "Cleaning products", name: "cleaning-products"),
+        # Spree::OptionValue.create(option_type: product_kind_option_type_, presentation: "Hair dryer", name: "hair-dryer"),
+        # Spree::OptionValue.create(option_type: product_kind_option_type_, presentation: "Mirror", name: "mirror"),
+        # Spree::OptionValue.create(option_type: product_kind_option_type_, presentation: "Toiletries", name: "toiletries"),
+        # Spree::OptionValue.create(option_type: product_kind_option_type_, presentation: "Towels", name: "towels"),
+        # Spree::OptionValue.create(option_type: product_kind_option_type_, presentation: "Walk-in shower", name: "walk-in-shower"),
       ]}
   
       let(:normal_option_values) {[
@@ -26,16 +26,16 @@ RSpec.describe Spree::Variant, type: :model do
   
       let(:vendor) { create(:active_vendor, stock_locations: [ create(:stock_location) ]) }
       let(:product) {
-        product = create(:base_product, vendor: vendor, option_types: [ master_option_type, normal_option_type ])
+        product = create(:base_product, vendor: vendor, option_types: [ product_kind_option_type, normal_option_type ])
         product.reload
       }
   
       context 'for master variant' do
-        it 'saved master option values to master_variant' do
+        it 'saved products option values to master_variant' do
           master_variant = build(
             :master_variant, 
             product: product, 
-            option_values: master_option_values
+            option_values: product_option_values
           )
   
           expect { master_variant.save! }.not_to raise_error
@@ -69,7 +69,7 @@ RSpec.describe Spree::Variant, type: :model do
         #   normal_variant = build(
         #     :base_variant,
         #     product: product,
-        #     option_values: master_option_values
+        #     option_values: products_option_values
         #   )
   
         #   expect { normal_variant.save! }.to raise_error(ActiveRecord::RecordInvalid)
