@@ -1,0 +1,8 @@
+<!-- insert_bottom "[data-hook='admin_products_index_search']" -->
+
+<div class="col-12 col-lg-6">
+  <div class="form-group">
+    <%= f.label :vendor_id_eq, Spree.t(:vendor) %>
+    <%= f.collection_select(:vendor_id_eq, Spree::Vendor.all, :id, :name, { include_blank: Spree.t('match_choices.none') }, { class: 'select2' }) %>
+  </div>
+</div>
