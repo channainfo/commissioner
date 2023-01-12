@@ -24,6 +24,14 @@ RSpec.describe SpreeCmCommissioner::VendorUpdater do
         expect(vendor.min_price).to eq product1.price
         expect(vendor.max_price).to eq product3.price
       end
+
+      it 'update total inventory' do
+        context = SpreeCmCommissioner::VendorUpdater.call(vendor: vendor)
+
+        vendor.reload
+
+        expect(vendor.total_inventory).to eq 2 # default master_variant has 1 item each by default
+      end
     end
 
     context 'with product variants' do
