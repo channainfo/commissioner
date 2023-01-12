@@ -131,6 +131,7 @@ RSpec.describe SpreeCmCommissioner::VendorQuery do
       it 'total_booking on 2023_01_03' do
         @subject = described_class.new(from_date: date('2023_01_03'), to_date: date('2023_01_04'), province_id: phnom_penh.id)
         print_as_table(records, booking_fields)
+
         expect(records.first.total_booking).to eq 10
       end
 
@@ -221,9 +222,12 @@ RSpec.describe SpreeCmCommissioner::VendorQuery do
 
   context 'book two hotel with multiple dates' do
     let!(:make_order) {
-      book_room(order1, hotel: phnom_penh_hotel, quantity: 2,  from_date: date('2023_01_01'), to_date: date('2023_01_04'))
-      book_room(order1, hotel: sokha_pp_hotel,   quantity: 3,  from_date: date('2023_01_01'), to_date: date('2023_01_08'))
+      book_room(order1, hotel: phnom_penh_hotel, quantity: 2,  from_date: date('2023_01_01'), to_date: date('2023_01_05'))
       book_room(order2, hotel: phnom_penh_hotel, quantity: 5,  from_date: date('2023_01_03'), to_date: date('2023_01_04'))
+      book_room(order2, hotel: phnom_penh_hotel, quantity: 5,  from_date: date('2023_01_10'), to_date: date('2023_01_14'))
+
+
+      book_room(order1, hotel: sokha_pp_hotel,   quantity: 3,  from_date: date('2023_01_01'), to_date: date('2023_01_08'))
       book_room(order2, hotel: sokha_pp_hotel,   quantity: 7,  from_date: date('2023_01_03'), to_date: date('2023_01_09'))
     }
 
@@ -255,9 +259,10 @@ RSpec.describe SpreeCmCommissioner::VendorQuery do
 
         it 'total_bookings of phnom_penh_hotel' do
           phnom_penh_hotel_records = records.select { |r| r.vendor_id == phnom_penh_hotel.id }
+
           expect(phnom_penh_hotel_records.find { |r| r.day == date('2023_01_03') }.total_booking).to eq 7
           expect(phnom_penh_hotel_records.find { |r| r.day == date('2023_01_04') }.total_booking).to eq 7
-          expect(phnom_penh_hotel_records.find { |r| r.day == date('2023_01_05') }).to be_nil
+          expect(phnom_penh_hotel_records.find { |r| r.day == date('2023_01_05') }.total_booking).to eq 2
           expect(phnom_penh_hotel_records.find { |r| r.day == date('2023_01_06') }).to be_nil
         end
 
@@ -290,6 +295,20 @@ RSpec.describe SpreeCmCommissioner::VendorQuery do
         it 'total_booking of sokha_pp_hotel' do
           record = records.find { |record| record['vendor_id'] == sokha_pp_hotel.id }
           expect(record['total_booking']).to eq 3
+        end
+      end
+
+      context 'query between 2023_01_05 and 2023_01_11' do
+        let(:subject) { described_class.new(from_date: date('2023_01_05'), to_date: date('2023_01_11'), province_id: phnom_penh.id)}
+
+        it 'total_booking of phnom_penh_hotel' do
+          record = records.find { |record| record['vendor_id'] == phnom_penh_hotel.id }
+          expect(record['total_booking']).to eq 5
+        end
+
+        it 'total_booking of sokha_pp_hotel' do
+          record = records.find { |record| record['vendor_id'] == sokha_pp_hotel.id }
+          expect(record['total_booking']).to eq 10
         end
       end
     end
@@ -346,13 +365,6 @@ RSpec.describe SpreeCmCommissioner::VendorQuery do
     end
   end
 
-  # TODO: Validate - cannot order the same room for overlap dates
-  context 'book one hotel with overlap dates (the same room)' do
-  end
-
-  context 'book one hotel with overlap dates (the different room)' do
-  end
-
   context 'validate date range' do
     it 'is valid' do
       subject = described_class.new(from_date: date('2023_01_01'), to_date: date('2023_01_03'), province_id: phnom_penh.id)
@@ -398,7 +410,7 @@ RSpec.describe SpreeCmCommissioner::VendorQuery do
   private
 
   def book_room(order, hotel: , price: 100, quantity: , from_date:, to_date:)
-    room = hotel.variants.first
+    room = hotel.variants.first # vip, air
     order.line_items.create(vendor_id: hotel.id, price: price, quantity: quantity, from_date: from_date, to_date: to_date, variant_id: room.id)
   end
 

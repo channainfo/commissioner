@@ -24,8 +24,8 @@ module SpreeCmCommissioner
         .joins('INNER JOIN spree_line_items line_items ON line_items.vendor_id = spree_vendors.id')
         .joins("INNER JOIN (#{date_list_sql}) date_list ON day >= line_items.from_date AND day <= line_items.to_date")
         .where(
-            ['(line_items.from_date >= :from_date AND line_items.from_date <= :to_date) OR
-            (line_items.to_date >= :from_date AND line_items.to_date <= :to_date)',
+            ['(line_items.from_date >= :from_date OR line_items.from_date <= :to_date)
+            AND (line_items.to_date >= :from_date OR line_items.to_date <= :to_date)',
             from_date: from_date, to_date: to_date]
         )
         .where(['spree_vendors.state_id = ?', province_id])
