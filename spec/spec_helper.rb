@@ -13,6 +13,6 @@ require 'interactor'
 Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].sort.each { |f| require f }
 
 RSpec.configure do |config|
-  config.include JsonHelper
+  config.include Helper
   config.include DoorkeeperAuthHelper
 end

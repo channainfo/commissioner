@@ -10,7 +10,7 @@ RSpec.describe Spree::Product, type: :model do
 
   describe 'attributes' do
     it { should define_enum_for :product_type }
-    it { expect(described_class.product_types.keys).to match(SpreeCmCommissioner::ProductType::PRODUCT_TYPES..map(&:to_s)) }
+    it { expect(described_class.product_types.keys).to match(SpreeCmCommissioner::ProductType::PRODUCT_TYPES.map(&:to_s)) }
   end
 
   describe 'scope' do
@@ -55,32 +55,6 @@ RSpec.describe Spree::Product, type: :model do
 
       it '.max_price' do
         expect(Spree::Product.max_price(vendor)).to eq 0
-      end
-    end
-  end
-
-  describe '#create_location' do
-    let(:vendor) { create(:active_vendor, name: 'Angkor Hotel') }
-    let(:state) { create(:state, name: 'Siemreap') }
-
-    context 'missing stock location' do
-      it 'raise error' do
-        expect { create(:base_product, name: 'Bedroom 1', vendor: vendor, price: 10) }.to raise_error("Missig state in stock location for vendorId: #{vendor.id}")
-      end
-    end
-
-    context 'adding location' do
-      let!(:stock_location) { vendor.stock_locations.first.update(state: state) }
-      let!(:option_type) { create(:option_type, name: 'location', presentation: 'Location', attr_type: 'state_selection') }
-      let!(:option_value) { create(:option_value, name: 'Siemreap', presentation: 'SR', option_type: option_type, presentation: state.id) }
-      let!(:product)  { create(:base_product, name: 'Bedroom 1', vendor: vendor, price: 10) }
-
-      it 'append option type location to product' do
-        expect(product.option_type_ids).to include(option_type.id)
-      end
-
-      it 'create option value location to product variants' do
-        expect(product.option_value_ids).to include(option_value.id)
       end
     end
   end

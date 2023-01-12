@@ -1,15 +1,9 @@
 module SpreeCmCommissioner
-  class VendorSearch
-
-    attr_accessor :properties
-
-    def initialize(params)
-      @properties = {}
-      prepare(params)
-    end
+  class VendorSearch < BaseInteractor
+    delegate :params, :passenger_options, to: :context
 
     def call
-      @vendors = base_elasticsearch
+      context.vendors = base_elasticsearch
     end
 
     def base_elasticsearch
@@ -31,7 +25,6 @@ module SpreeCmCommissioner
       end
     end
 
-
     protected
 
     def keyword_query
@@ -47,12 +40,13 @@ module SpreeCmCommissioner
     end
 
     def prepare(params)
-      @properties[:name] = params[:name]
-      @properties[:province_id] = params[:province_id]
-
       per_page = params[:per_page].to_i
-      @properties[:per_page] = per_page > 0 ? per_page : Spree::Config[:products_per_page]
-      @properties[:page] = if params[:page].respond_to?(:to_i)
+      context.properties[:name] = params[:name]
+      context.properties[:province_id] = params[:province_id]
+      context.properties[:from_date] = params[:from_date]
+      context.properties[:to_date] = params[:to_date]
+      context.properties[:per_page] = per_page > 0 ? per_page : Spree::Config[:products_per_page]
+      context.properties[:page] = if params[:page].respond_to?(:to_i)
                              params[:page].to_i <= 0 ? 1 : params[:page].to_i
                            else
                              1

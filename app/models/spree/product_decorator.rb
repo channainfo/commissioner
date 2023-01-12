@@ -3,10 +3,10 @@ module Spree
     def self.prepended(base)
       base.include SpreeCmCommissioner::ProductType
 
-      base.has_many :master_option_types, -> { where(is_master: true).order(:position) }, 
+      base.has_many :master_option_types, -> { where(is_master: true).order(:position) },
         through: :product_option_types, source: :option_type
 
-      base.has_many :option_types_excluding_master, -> { where(is_master: false).order(:position) }, 
+      base.has_many :option_types_excluding_master, -> { where(is_master: false).order(:position) },
         through: :product_option_types, source: :option_type
 
       base.has_many :option_types_including_master, -> { order(:position) }, through: :product_option_types
@@ -16,32 +16,12 @@ module Spree
 
       base.scope :min_price, -> (vendor) { joins(:prices_including_master)
         .where(vendor_id: vendor.id, product_type: vendor.primary_product_type)
-        .minimum('spree_prices.price').to_f 
+        .minimum('spree_prices.price').to_f
       }
 
       base.scope :max_price, -> (vendor) { joins(:prices_including_master)
         .where(vendor_id: vendor.id, product_type: vendor.primary_product_type)
         .maximum('spree_prices.price').to_f
-      }
-
-      base.after_commit :create_location
-    end
-
-    private
-
-    def create_location
-      location = vendor.stock_locations.first
-      raise ("Missig state in stock location for vendorId: #{vendor.id}") if location&.state_id.nil?
-
-      option_type = Spree::OptionType.find_or_create_by(name: 'location', presentation: 'Location', attr_type: 'state_selection')
-      option_value = option_type.option_values.find_or_create_by(presentation: location.state_id, name: location.name)
-
-      # append option type location to product
-      self.option_types << option_type if option_type_ids.exclude?(option_type.id)
-
-      # create option_value location to variants
-      variants_including_master.each { |v|
-        v.option_value_variants.find_or_create_by(option_value_id: option_value.id)
       }
     end
   end

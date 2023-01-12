@@ -2,7 +2,8 @@
   module VariantDecorator
     def self.prepended(base)
       base.after_commit :update_vendor_price
-      base.validate :validate_option_types
+      base.after_save   :update_vendor_total_inventory, if: :saved_change_to_permanent_stock?
+      base.validate     :validate_option_types
     end
 
     def selected_option_value_ids
@@ -18,6 +19,10 @@
       end
     end
 
+    def update_vendor_total_inventory
+      SpreeCmCommissioner::VendorJob.perform_later(vendor.id)
+    end
+
     def validate_option_types
       variant = self
 
@@ -26,7 +31,7 @@
 
         if variant.is_master? && !option_type.is_master?
           message = I18n.t("variant.validation.option_type_is_not_master", option_type_name: option_type.name, option_value_name: option_value.name)
-          errors.add(:attr_type, message) 
+          errors.add(:attr_type, message)
         end
 
         if !variant.is_master? && option_type.is_master?

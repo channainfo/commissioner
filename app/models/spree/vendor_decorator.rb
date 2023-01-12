@@ -42,6 +42,18 @@ module Spree
       def index_data
         {}
       end
+
+      def update_total_inventory
+        update(total_inventory: variants.pluck(:permanent_stock).sum)
+      end
+
+      def update_min_max_price
+        update(min_price: Spree::Product.min_price(self), max_price: Spree::Product.max_price(self))
+      end
+
+      def update_location
+        update(state_id: stock_locations.first&.state_id)
+      end
     end
   end
 end
