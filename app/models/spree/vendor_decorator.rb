@@ -5,6 +5,8 @@ module Spree
 
       base.has_many :photos, -> { order(:position) }, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorPhoto'
       base.has_many :option_values, through: :products
+      base.has_many :vendor_option_types, class_name: 'SpreeCmCommissioner::VendorOptionType'
+      base.has_many :option_types, through: :vendor_option_types
       base.has_one  :logo, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorLogo'
 
       base.searchkick(
