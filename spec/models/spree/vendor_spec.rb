@@ -50,4 +50,41 @@ RSpec.describe Spree::Vendor, type: :model do
       expect(vendor.save!).to be true
     end
   end
+
+  describe '#update' do
+    let(:phnom_penh) { create(:state, name: 'Phnom Penh') }
+    let(:siem_reap) { create(:state, name: 'Siem Reap') }
+    let!(:vendor) { create(:vendor, total_inventory: 0, state_id: phnom_penh.id)  }
+    let!(:stock_location) { vendor.stock_locations.first }
+    let!(:product1) { create(:product, vendor: vendor)}
+    let!(:product2) { create(:product, vendor: vendor)}
+    let!(:variant1) { create(:base_variant, product: product1, permanent_stock: 5, price: 20)}
+    let!(:variant2) { create(:base_variant, product: product2, permanent_stock: 5, price: 30)}
+
+    context '#update_total_inventory' do
+      it 'should update total inventory' do
+        vendor.update_total_inventory
+        expect(vendor.total_inventory).to eq 12 # master_variant has 1 item each by default
+      end
+    end
+
+    context '#update_min_max_price' do
+      it 'should update min max price ' do
+        variant3 = create(:base_variant, product: product2, permanent_stock: 5, price: 10)
+        vendor.update_min_max_price
+
+        expect(vendor.min_price.to_f).to eq 10.0
+        expect(vendor.max_price.to_f).to eq 30.0
+      end
+    end
+
+    context '#update_location' do
+      it 'should update location ' do
+        stock_location.update(state_id: siem_reap.id)
+
+        subject { vendor.update_location }
+        expect(vendor.state_id).to eq siem_reap.id
+      end
+    end
+  end
 end

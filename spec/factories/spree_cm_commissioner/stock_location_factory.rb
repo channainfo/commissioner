@@ -10,9 +10,13 @@ FactoryBot.define do
     lat                   { 00.to_d }
     lon                   { 000.to_d }
 
+    transient {
+      state_name { 'Phnom Penh' }
+     }
+
     country  { |stock_location| Spree::Country.first || stock_location.association(:country) }
     state do |stock_location|
-      stock_location.country.states.first || stock_location.association(:state, country: stock_location.country)
+      stock_location.country.states.find_by(name: state_name) || stock_location.association(:state, name: state_name, country: stock_location.country)
     end
 
     factory :cm_stock_location_with_items do

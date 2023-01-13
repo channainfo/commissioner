@@ -25,7 +25,7 @@ gem "net-smtp", require: false
 group :test do
   gem 'byebug'
   gem 'shoulda-matchers', '~> 5.0'
-
+  gem 'terminal-table', '~> 3.0.1'
   # ActionMailer, Net::SMTP
   gem 'net-smtp'
 end
