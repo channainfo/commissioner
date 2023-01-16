@@ -6,7 +6,7 @@
         Spree.t(:details),
         edit_admin_vendor_url(@vendor),
         class: "nav-link #{'active' if current == :details}" 
-      %>
+    %>
     <% end if can?(:admin, Spree::Vendor) %>
 
     <%= content_tag :li do %>
@@ -16,6 +16,15 @@
         class: "nav-link #{'active' if current == :photos}" 
       %>
     <% end if can?(:admin, SpreeCmCommissioner::VendorPhoto) %>
+
+    <%= content_tag :li do %>
+      <%= link_to_with_icon 'extensions.svg',
+        Spree.t(:vendor_rules),
+        admin_vendor_vendor_rules_url(@vendor),
+        class: "nav-link #{'active' if current == :vendor_rules}" 
+      %>
+    <% end if can?(:admin, SpreeCmCommissioner::VendorOptionType) %>
+
 
   </ul>
 <% end %>

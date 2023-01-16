@@ -7,6 +7,12 @@ module Spree
       base.has_many :option_values, through: :products
       base.has_many :vendor_option_types, class_name: 'SpreeCmCommissioner::VendorOptionType'
       base.has_many :option_types, through: :vendor_option_types
+
+      base.has_many :vendor_kind_option_types, -> { where(kind: :vendor).order(:position) },
+        through: :vendor_option_types, source: :option_type
+
+      base.has_many :vendor_kind_option_values, through: :vendor_kind_option_types, source: :option_values
+
       base.has_one  :logo, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorLogo'
 
       base.searchkick(
@@ -56,6 +62,10 @@ module Spree
       def update_location
         update(state_id: stock_locations.first&.state_id)
       end
+    end
+
+    def selected_vendor_kind_option_value_ids
+      vendor_kind_option_values.pluck(:id)
     end
   end
 end

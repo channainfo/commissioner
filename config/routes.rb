@@ -16,6 +16,11 @@ Spree::Core::Engine.add_routes do
           post :update_positions
         end
       end
+      resources :vendor_rules, only: [:index, :update] do
+        collection do
+          patch :update
+        end
+      end
     end
 
     resources :products do
