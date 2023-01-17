@@ -1,6 +1,6 @@
 <!-- insert_top "[data-hook='variants']" -->
 
-<% @product.option_types_excluding_master.each do |option_type| %>
+<% @product.variant_kind_option_types.each do |option_type| %>
   <div class="form-group" data-hook="presentation">
     <%= label :new_variant, option_type.presentation %>
     <% if option_type.name == 'color' %>

@@ -15,7 +15,7 @@ module Spree
         # @overrided
         def collection
           @vector_icons = icon_objects
-          @collection ||= Spree::OptionType.where(is_master: true)
+          @collection ||= Spree::OptionType.product
         end
 
         # @overrided

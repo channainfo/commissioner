@@ -1,4 +1,4 @@
- module Spree
+module Spree
   module VariantDecorator
     def self.prepended(base)
       base.after_commit :update_vendor_price
@@ -29,13 +29,13 @@
       option_values.each do |option_value|
         option_type = option_value.option_type
 
-        if variant.is_master? && !option_type.is_master?
-          message = I18n.t("variant.validation.option_type_is_not_master", option_type_name: option_type.name, option_value_name: option_value.name)
-          errors.add(:attr_type, message)
+        if variant.is_master? && !option_type.product?
+          message = I18n.t("variant.validation.option_type_is_not_product", option_type_name: option_type.name, option_value_name: option_value.name)
+          errors.add(:attr_type, message) 
         end
 
-        if !variant.is_master? && option_type.is_master?
-          message = I18n.t("variant.validation.option_type_is_master", option_type_name: option_type.name, option_value_name: option_value.name)
+        if !variant.is_master? && !option_type.variant?
+          message = I18n.t("variant.validation.option_type_is_not_variant", option_type_name: option_type.name, option_value_name: option_value.name)
           errors.add(:attr_type, message)
         end
       end

@@ -11,7 +11,7 @@ describe Spree::V2::Storefront::OptionTypeSerializer, type: :serializer do
     expect(subject.serializable_hash[:data].keys).to contain_exactly(:attributes, :id, :relationships, :type)
     expect(subject.serializable_hash[:data][:attributes].keys).to contain_exactly(
       :attr_type, 
-      :is_master, 
+      :kind,
       :name, 
       :position, 
       :presentation, 
