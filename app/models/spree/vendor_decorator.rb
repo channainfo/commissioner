@@ -6,7 +6,15 @@ module Spree
       base.has_many :photos, -> { order(:position) }, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorPhoto'
       base.has_many :option_values, through: :products
       base.has_many :vendor_option_types, class_name: 'SpreeCmCommissioner::VendorOptionType'
+      base.has_many :option_value_vendors, class_name: 'SpreeCmCommissioner::OptionValueVendor'
       base.has_many :option_types, through: :vendor_option_types
+
+      base.has_many :vendor_kind_option_types, -> { where(kind: :vendor).order(:position) },
+        through: :vendor_option_types, source: :option_type
+
+      base.has_many :vendor_kind_option_values,
+        through: :option_value_vendors, source: :option_value
+
       base.has_one  :logo, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorLogo'
 
       base.searchkick(
@@ -57,7 +65,13 @@ module Spree
         update(state_id: stock_locations.first&.state_id)
       end
     end
+
+    def selected_option_value_vendors_ids
+      option_value_vendors.pluck(:option_value_id)
+    end
   end
 end
 
 Spree::Vendor.prepend(Spree::VendorDecorator)
+
+
