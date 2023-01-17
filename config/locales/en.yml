@@ -38,3 +38,9 @@ en:
         second: "Icons will be separated into [set] based on prefix:"
         second_eg: "For example, backend-adjust.svg will automatically be marked as BACKEND set."
         second_set_creation_info: "Currently, only [backend] & [cm] are supported, eg. backend-adjust.svg or cm-adjust.svg"
+  
+  vendor:
+    validation:
+      vendor_kind_option_types:
+        empty_info: "<b>Note:</b> Set vendor option types to vendor first. To edit, go to <b>Details</b> tab > <b>Option Types</b>"
+

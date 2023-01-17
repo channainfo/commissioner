@@ -15,7 +15,7 @@ module Spree
         # @overrided
         def collection
           @vector_icons = icon_objects
-          @collection ||= Spree::OptionType.product
+          @collection ||= Spree::OptionType.where(kind: ["product","vendor"])
         end
 
         # @overrided

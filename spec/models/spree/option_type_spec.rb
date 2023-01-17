@@ -9,19 +9,7 @@ RSpec.describe Spree::OptionType, type: :model do
     it { should validate_presence_of(:presentation) }
     it { should validate_presence_of(:name) }
   end
-
-  describe 'default scope' do 
-    it 'it should return variant as default' do
-      create(:option_type, kind: :variant)
-      create(:option_type, kind: :product)
-
-      option_types = described_class.all
-
-      expect(option_types.size).to eq 1
-      expect(option_types.first.kind).to eq 'variant'
-    end
-  end
-
+  
   describe 'validations' do
     it 'saved on [attr_type] is included in ATTRIBUTE_TYPES' do
       expect{create(:option_type, attr_type: 'float')}.to_not raise_error
