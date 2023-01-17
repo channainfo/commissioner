@@ -413,12 +413,12 @@ RSpec.describe SpreeCmCommissioner::VendorQuery do
 
         it 'inventory of phnom_penh_hotel' do
           hotel = records.find { |r| r.id == phnom_penh_hotel.id }
-          expect_inventory(hotel, total_inventory: 20, total_booking: nil, remaining: nil)
+          expect_inventory(hotel, total_inventory: 20, total_booking: 0, remaining: 20)
         end
 
         it 'inventory of sokha_pp_hotel' do
           hotel = records.find { |r| r.id == sokha_pp_hotel.id }
-          expect_inventory(hotel, total_inventory: 20, total_booking: nil, remaining: nil)
+          expect_inventory(hotel, total_inventory: 20, total_booking: 0, remaining: 20)
         end
       end
 
@@ -433,12 +433,12 @@ RSpec.describe SpreeCmCommissioner::VendorQuery do
 
         it 'inventory of phnom_penh_hotel' do
           hotel = records.find { |r| r.id == phnom_penh_hotel.id }
-          expect_inventory(hotel, total_inventory: 20, total_booking: nil, remaining: nil)
+          expect_inventory(hotel, total_inventory: 20, total_booking: 0, remaining: 20)
         end
 
         it 'inventory of sokha_pp_hotel' do
           hotel = records.find { |r| r.id == sokha_pp_hotel.id }
-          expect_inventory(hotel, total_inventory: 20, total_booking: nil, remaining: nil)
+          expect_inventory(hotel, total_inventory: 20, total_booking: 0, remaining: 20)
         end
       end
 
@@ -528,7 +528,7 @@ RSpec.describe SpreeCmCommissioner::VendorQuery do
 
         it 'inventory of phnom_penh_hotel' do
           hotel = records.find { |r| r.id == phnom_penh_hotel.id }
-          expect_inventory(hotel, total_inventory: 20, total_booking: nil, remaining: nil)
+          expect_inventory(hotel, total_inventory: 20, total_booking: 0, remaining: 20)
         end
 
         it 'inventory of sokha_pp_hotel' do
@@ -558,12 +558,12 @@ RSpec.describe SpreeCmCommissioner::VendorQuery do
 
         it 'inventory of phnom_penh_hotel' do
           hotel = records.find { |r| r.id == phnom_penh_hotel.id }
-          expect_inventory(hotel, total_inventory: 20, total_booking: nil, remaining: nil)
+          expect_inventory(hotel, total_inventory: 20, total_booking: 0, remaining: 20)
         end
 
         it 'inventory of sokha_pp_hotel' do
           hotel = records.find { |r| r.id == sokha_pp_hotel.id }
-          expect_inventory(hotel, total_inventory: 20, total_booking: nil, remaining: nil)
+          expect_inventory(hotel, total_inventory: 20, total_booking: 0, remaining: 20)
         end
       end
     end

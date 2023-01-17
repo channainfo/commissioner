@@ -13,9 +13,7 @@ module Spree
           private
 
           def collection
-            ## TODO: handle only less than 1 month
-            passenger_options = SpreeCmCommissioner::PassengerOption.new()
-            @collection ||= SpreeCmCommissioner::VendorSearch.call(params: params, passenger_options: passenger_options)
+            @collection ||= SpreeCmCommissioner::VendorSearch.call(params: params).vendors
           end
 
           def model_class

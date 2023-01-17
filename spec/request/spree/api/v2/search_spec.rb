@@ -2,42 +2,89 @@ require 'spec_helper'
 
 describe 'API V2 Storefront Vendor Search Spec', type: :request do
 
-  let!(:vendor_pp) { create(:active_vendor, name: 'vendor_pp') }
-  let!(:vendor_sr) { create(:active_vendor, name: 'vendor_sr') }
-  let!(:siem_reap) { create(:state, name: 'Siemreap')}
-  let!(:phnom_penh) { create(:state, name: 'Phnom Penh')}
-  let!(:option_type) { create(:option_type, name: 'location', presentation: 'Location', attr_type: 'state_selection') }
-  let!(:option_value_pp) { create(:option_value, option_type: option_type, presentation: phnom_penh.id) }
-  let!(:option_value_sr) { create(:option_value, option_type: option_type, presentation: siem_reap.id) }
-  let!(:stock_location_pp) { vendor_pp.stock_locations.first.update(state: phnom_penh)}
-  let!(:stock_location_sr) { vendor_sr.stock_locations.first.update(state: siem_reap)}
-  let!(:product1) {create(:product_in_stock, name: 'Bedroom 1', vendor: vendor_pp, price: 10 )}
-  let!(:product1) {create(:product, name: 'Bedroom 1', vendor: vendor_sr, price: 10 )}
-  let!(:product2) {create(:product_in_stock, name: 'Bedroom 2', vendor: vendor_sr, price: 10 )}
+  let(:phnom_penh) { create(:state, name: 'Phnom Penh') }
+  let(:siem_reap)  { create(:state, name: 'Siem Reap') }
+  let!(:phnom_penh_hotel) { create(:cm_vendor_with_product, name: 'Phnom Penh Hotel',       state_id: phnom_penh.id, permanent_stock: 10) }
+  let!(:sokha_pp_hotel)   { create(:cm_vendor_with_product, name: 'Sokha Phnom Penh Hotel', state_id: phnom_penh.id, permanent_stock: 20) }
+  let!(:angkor_hotel)     { create(:cm_vendor_with_product, name: 'Angkor Hotel',           state_id: siem_reap.id,  permanent_stock: 15) }
+  let(:params) {
+    { from_date: date('2023-01-01'), to_date: date('2023-01-03'), province_id: phnom_penh.id, adult: 2, children: 1, room_qty: 1 }
+  }
+  let(:json_response) { JSON.parse(response.body) }
 
-  describe 'search#index' do
-    before { Spree::Vendor.reindex }
+  context 'when all hotels are available' do
+    before { get '/api/v2/storefront/search', params: params }
 
-    context 'with no param' do
-      before { get '/api/v2/storefront/search' }
-
-      it 'returns one vendor' do
-        json_response = JSON.parse(response.body)
-
-        expect(json_response["meta"]["count"]).to eq 2
-      end
-      it_behaves_like 'returns 200 HTTP status'
+    it_behaves_like 'returns 200 HTTP status'
+    it 'returns all phnom penh hotels' do
+      expect(json_response["meta"]["count"]).to eq 2
     end
 
-    context 'with param province_id' do
-      before { get "/api/v2/storefront/search", params: { province_id: siem_reap.id } }
-      it_behaves_like 'returns 200 HTTP status'
-
-      it 'returns one vendor' do
-        json_response = JSON.parse(response.body)
-
-        expect(json_response["meta"]["count"]).to eq 1
-      end
+    it 'return total available of phnom penh hotel' do
+      data = json_response['data'].find {|h| h['id'].to_i == phnom_penh_hotel.id }
+      expect(data['attributes']['total_booking']).to eq 0
+      expect(data['attributes']['remaining']).to eq phnom_penh_hotel.total_inventory
     end
+
+    it 'return total available of phnom penh hotel' do
+      data = json_response['data'].find {|h| h['id'].to_i == sokha_pp_hotel.id }
+      expect(data['attributes']['total_booking']).to eq 0
+      expect(data['attributes']['remaining']).to eq sokha_pp_hotel.total_inventory
+    end
+  end
+
+  context "when match with booking dates" do
+    let(:order) { create(:order) }
+    let!(:pp_hotel_order) {
+      book_room(order, hotel: phnom_penh_hotel, quantity: 2,  from_date: date('2023_01_01'), to_date: date('2023_01_02'))
+    }
+    let!(:sokha_pp_hotel_order) {
+      book_room(order, hotel: sokha_pp_hotel,   quantity: 5,  from_date: date('2023_01_01'), to_date: date('2023_01_02'))
+    }
+
+    before { get '/api/v2/storefront/search', params: params }
+
+    it 'return total available of phnom penh hotel' do
+      data = json_response['data'].find {|h| h['id'].to_i == phnom_penh_hotel.id }
+      expect(data['attributes']['total_booking']).to eq pp_hotel_order.quantity
+      expect(data['attributes']['remaining']).to eq (phnom_penh_hotel.total_inventory - pp_hotel_order.quantity)
+    end
+
+    it 'return total available of sokha phnom penh hotel' do
+      data = json_response['data'].find {|h| h['id'].to_i == sokha_pp_hotel.id }
+      expect(data['attributes']['total_booking']).to eq sokha_pp_hotel_order.quantity
+      expect(data['attributes']['remaining']).to eq (sokha_pp_hotel.total_inventory - sokha_pp_hotel_order.quantity)
+    end
+  end
+
+  context "when doesn't match with booking dates" do
+    let(:order) { create(:order) }
+    let!(:pp_hotel_order) {
+      book_room(order, hotel: phnom_penh_hotel, quantity: 2,  from_date: date('2023_02_01'), to_date: date('2023_02_02'))
+    }
+    let!(:sokha_pp_hotel_order) {
+      book_room(order, hotel: sokha_pp_hotel,   quantity: 5,  from_date: date('2023_02_01'), to_date: date('2023_02_02'))
+    }
+
+    before { get '/api/v2/storefront/search', params: params }
+
+    it 'return total available of phnom penh hotel' do
+      data = json_response['data'].find {|h| h['id'].to_i == phnom_penh_hotel.id }
+      expect(data['attributes']['total_booking']).to eq 0
+      expect(data['attributes']['remaining']).to eq phnom_penh_hotel.total_inventory
+    end
+
+    it 'return total available of sokha phnom penh hotel' do
+      data = json_response['data'].find {|h| h['id'].to_i == sokha_pp_hotel.id }
+      expect(data['attributes']['total_booking']).to eq 0
+      expect(data['attributes']['remaining']).to eq sokha_pp_hotel.total_inventory
+    end
+  end
+
+  private
+
+  def book_room(order, hotel: , price: 100, quantity: , from_date:, to_date:)
+    room = hotel.variants.first
+    order.line_items.create(vendor_id: hotel.id, price: price, quantity: quantity, from_date: from_date, to_date: to_date, variant_id: room.id)
   end
 end
