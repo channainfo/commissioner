@@ -1,9 +1,8 @@
 require_dependency 'spree_cm_commissioner'
 
 module SpreeCmCommissioner
-  class VendorOptionType < ApplicationRecord
+  class OptionValueVendor < ApplicationRecord
     belongs_to :vendor, class_name: 'Spree::Vendor', dependent: :destroy
-    belongs_to :option_type, class_name: 'Spree::OptionType', dependent: :destroy
+    belongs_to :option_value, class_name: 'Spree::OptionValue', dependent: :destroy
   end
 end
-
