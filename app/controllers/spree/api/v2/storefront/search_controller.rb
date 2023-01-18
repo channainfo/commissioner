@@ -13,9 +13,7 @@ module Spree
           private
 
           def collection
-            ## TODO: handle only less than 1 month
-            passenger_options = SpreeCmCommissioner::PassengerOption.new()
-            @collection ||= SpreeCmCommissioner::VendorSearch.call(params: params, passenger_options: passenger_options)
+            @collection ||= SpreeCmCommissioner::VendorSearch.call(params: params).vendors
           end
 
           def model_class
@@ -23,7 +21,7 @@ module Spree
           end
 
           def collection_serializer
-            Spree::V2::Storefront::VendorSerializer
+            Spree::V2::Storefront::VendorSearchResultSerializer
           end
 
           def serialize_collection(collection)

@@ -1,35 +1,25 @@
 module SpreeCmCommissioner
   class VendorSearch < BaseInteractor
-    delegate :params, :passenger_options, to: :context
+    delegate :params, to: :context
 
     def call
-      context.vendors = base_elasticsearch
+      prepare_params
+      context.vendors = vendor_query.vendor_with_available_inventory.page(page).per(per_page)
     end
 
-    def base_elasticsearch
-      curr_page = page || 1
-      Spree::Vendor.search(
-        keyword_query,
-        fields: Spree::Vendor.search_fields,
-        where: where_query,
-        page: curr_page,
-        per_page: per_page,
-      )
+    def vendor_query
+      SpreeCmCommissioner::VendorQuery.new(from_date: from_date, to_date: to_date, province_id: province_id)
     end
 
     def method_missing(name)
-      if @properties.key? name
-        @properties[name]
+      if context.properties.key? name
+        context.properties[name]
       else
         super
       end
     end
 
     protected
-
-    def keyword_query
-      name.blank? ? "*" : name
-    end
 
     def where_query
       where_query = {
@@ -39,18 +29,27 @@ module SpreeCmCommissioner
       where_query
     end
 
-    def prepare(params)
+    def prepare_params
+      context.properties = {}
       per_page = params[:per_page].to_i
-      context.properties[:name] = params[:name]
-      context.properties[:province_id] = params[:province_id]
-      context.properties[:from_date] = params[:from_date]
-      context.properties[:to_date] = params[:to_date]
+      # name and location
+      context.properties[:province_id] = params[:province_id].to_i
+      # date_range
+      context.properties[:from_date] = params[:from_date].to_date
+      context.properties[:to_date] = params[:to_date].to_date
+      # passenger_options
+      context.properties[:passenger_options] = passenger_options
+      # pagination
       context.properties[:per_page] = per_page > 0 ? per_page : Spree::Config[:products_per_page]
       context.properties[:page] = if params[:page].respond_to?(:to_i)
                              params[:page].to_i <= 0 ? 1 : params[:page].to_i
                            else
                              1
                            end
+    end
+
+    def passenger_options
+      SpreeCmCommissioner::PassengerOption.new(adult: params[:adult], children: params[:children], room_qty: params[:room_qty])
     end
   end
 end
