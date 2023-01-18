@@ -21,7 +21,7 @@ module Spree
           end
 
           def collection_serializer
-            Spree::V2::Storefront::VendorSerializer
+            Spree::V2::Storefront::VendorSearchResultSerializer
           end
 
           def serialize_collection(collection)
