@@ -5,6 +5,7 @@ RSpec.describe Spree::Vendor, type: :model do
     it { should have_one(:logo).class_name('SpreeCmCommissioner::VendorLogo').dependent(:destroy) }
     it { should have_many(:photos).class_name('SpreeCmCommissioner::VendorPhoto').dependent(:destroy) }
     it { should have_many(:vendor_option_types).class_name('SpreeCmCommissioner::VendorOptionType') }
+    it { should have_many(:option_value_vendors).class_name('SpreeCmCommissioner::OptionValueVendor') }
     it { should have_many(:option_values).class_name('Spree::OptionValue').through(:products) }
     it { should have_many(:option_types).class_name('Spree::OptionType').through(:vendor_option_types) }
   end

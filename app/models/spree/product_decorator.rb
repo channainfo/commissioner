@@ -2,12 +2,22 @@ module Spree
   module ProductDecorator
     def self.prepended(base)
       base.include SpreeCmCommissioner::ProductType
+<<<<<<< HEAD
       
       base.has_many :variant_kind_option_types, -> { where(kind: :variant).order(:position) },
           through: :product_option_types, source: :option_type
           
       base.has_many :product_kind_option_types, -> { where(kind: :product).order(:position) },
           through: :product_option_types, source: :option_type
+=======
+      base.has_many :master_option_types, -> { where(is_master: true).order(:position) },
+        through: :product_option_types, source: :option_type
+
+      base.has_many :option_types_excluding_master, -> { where(is_master: false).order(:position) },
+        through: :product_option_types, source: :option_type
+
+      base.has_many :option_types_including_master, -> { order(:position) }, through: :product_option_types
+>>>>>>> 21e7e3a (close #99-user-profile)
 
       base.has_many :option_values, through: :option_types
       base.has_many :prices_including_master, -> { order('spree_variants.position, spree_variants.id, currency') }, source: :prices, through: :variants_including_master
