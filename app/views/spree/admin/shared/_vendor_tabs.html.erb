@@ -17,5 +17,14 @@
       %>
     <% end if can?(:admin, SpreeCmCommissioner::VendorPhoto) %>
 
+    <%= content_tag :li do %>
+      <%= link_to_with_icon 'extensions.svg',
+        Spree.t(:vendor_option_types),
+        admin_vendor_vendor_kind_option_types_url(@vendor),
+        class: "nav-link #{'active' if current == :vendor_option_types}" 
+      %>
+    <% end if can?(:admin, SpreeCmCommissioner::VendorOptionType) %>
+
+
   </ul>
 <% end %>
