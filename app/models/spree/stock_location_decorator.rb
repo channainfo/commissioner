@@ -5,7 +5,6 @@ module Spree
 
       base.after_commit :update_vendor_location
 
-      private
       def update_vendor_location
         vendor&.update_location
       end

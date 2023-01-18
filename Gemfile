@@ -20,7 +20,7 @@ gem 'jwt'
 gem 'interactor', '~> 3.1'
 
 # Temporarily for ruby 3.1. Until upgrade rails to v7.0.1+
-gem "net-smtp", require: false
+# gem "net-smtp", require: false
 
 group :test do
   gem 'byebug'
