@@ -15,7 +15,7 @@ module Spree
         # @overrided
         def collection
           @vector_icons = icon_objects
-          @collection ||= Spree::OptionType.where(kind: ["product","vendor"])
+          @collection ||= Spree::OptionType.where(kind: kind)
         end
 
         # @overrided
@@ -29,8 +29,12 @@ module Spree
         end
 
         # @overrided
-        def collection_url(options = {})
+        def collection_url(options = {kind: kind})
           admin_vectors_option_values_url(options)
+        end
+      
+        def kind 
+          @kind = params[:kind] || 'variant'
         end
       end
     end
