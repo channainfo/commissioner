@@ -43,4 +43,4 @@ module Spree
   end
 end
 
-Spree::Variant.prepend(Spree::VariantDecorator)
+Spree::Variant.prepend(Spree::VariantDecorator) if Spree::Variant.included_modules.exclude?(Spree::VariantDecorator)
