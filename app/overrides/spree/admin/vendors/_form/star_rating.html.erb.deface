@@ -1,0 +1,6 @@
+<!-- insert_before "erb[loud]:contains('field_container :state')" -->
+ 
+<%= f.field_container :star_rating do %>
+  <%= f.label :star_rating %>
+  <%= f.select :star_rating, Spree::Vendor::STAR_RATING, {}, :class => "fullwidth select2" %>
+<% end %>
