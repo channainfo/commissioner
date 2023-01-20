@@ -36,6 +36,9 @@ Spree::Core::Engine.add_routes do
     namespace :v2 do
       namespace :storefront do
         resources :search, only: %i[index]
+        resources :vendors do
+          get 'profile'
+        end
       end
     end
   end

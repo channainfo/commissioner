@@ -1,9 +1,9 @@
 module SpreeCmCommissioner
   class VendorSearch < BaseInteractor
     delegate :params, to: :context
+    before :prepare_params
 
     def call
-      prepare_params
       context.vendors = vendor_query.vendor_with_available_inventory.page(page).per(per_page)
     end
 
