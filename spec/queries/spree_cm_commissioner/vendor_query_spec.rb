@@ -396,8 +396,8 @@ RSpec.describe SpreeCmCommissioner::VendorQuery do
       end
     end
 
-    context '.vendor_with_available_inventory' do
-      let(:records) { subject.vendor_with_available_inventory }
+    context '.vendors_with_available_inventory' do
+      let(:records) { subject.vendors_with_available_inventory }
       before(:each) do
         print_as_table(records, inventory_fields)
       end

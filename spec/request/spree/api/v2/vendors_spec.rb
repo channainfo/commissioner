@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe 'API V2 Storefront Vendor Spec', type: :request do
+  let(:json_response) { JSON.parse(response.body) }
+
   describe 'vendors#show' do
     let!(:vendor_logo) { create(:vendor_logo) }
     let!(:vendor) { create(:active_vendor, name: 'vendor', logo: vendor_logo) }
@@ -11,8 +13,6 @@ describe 'API V2 Storefront Vendor Spec', type: :request do
       it_behaves_like 'returns 200 HTTP status'
 
       it 'returns logo information' do
-        json_response = JSON.parse(response.body)
-
         expect(json_response.keys).to contain_exactly('data', 'included')
 
         expect(json_response['included'].first['id']).to eq(vendor_logo.id.to_s)
@@ -26,18 +26,14 @@ describe 'API V2 Storefront Vendor Spec', type: :request do
       it_behaves_like 'returns 200 HTTP status'
 
       it 'returns min and max price attribute' do
-        json_response = JSON.parse(response.body)
-
         expect(json_response['data']['attributes']).to have_key('min_price')
         expect(json_response['data']['attributes']).to have_key('max_price')
       end
     end
-    
+
     context 'with invalid slug' do
       it 'return 404 on resource not found' do
         get "/api/v2/storefront/vendors/not-found"
-
-        json_response = JSON.parse(response.body)
 
         expect(json_response['error'].present?).to eq true
         expect(response.status).to eq 404
@@ -47,8 +43,6 @@ describe 'API V2 Storefront Vendor Spec', type: :request do
         blocked_vendor = create(:vendor, state: 'blocked')
         get "/api/v2/storefront/vendors/#{blocked_vendor.slug}"
 
-        json_response = JSON.parse(response.body)
-
         expect(json_response['error'].present?).to eq true
         expect(response.status).to eq 404
       end
@@ -56,8 +50,6 @@ describe 'API V2 Storefront Vendor Spec', type: :request do
       it 'return 404 when vendor is pending' do
         pending_vendor = create(:vendor, state: 'pending')
         get "/api/v2/storefront/vendors/#{pending_vendor.slug}"
-
-        json_response = JSON.parse(response.body)
 
         expect(json_response['error'].present?).to eq true
         expect(response.status).to eq 404
@@ -67,8 +59,6 @@ describe 'API V2 Storefront Vendor Spec', type: :request do
     context 'with validated vendor slug' do
       it 'successfully response active vendor' do
         get "/api/v2/storefront/vendors/#{vendor.slug}"
-
-        json_response = JSON.parse(response.body)
 
         expect(response.status).to eq 200
         expect(json_response['data']['id']).to eq vendor.id.to_s
@@ -93,14 +83,50 @@ describe 'API V2 Storefront Vendor Spec', type: :request do
         active_vendor = create(:vendor, state: 'active')
         pending_vendor = create(:vendor, state: 'pending')
         blocked_vendor = create(:vendor, state: 'blocked')
-  
+
         get "/api/v2/storefront/vendors"
 
-        json_response = JSON.parse(response.body)
-  
         expect(json_response['data'].size).to eq 1
         expect(json_response['data'][0]['id']).to eq active_vendor.id.to_s
       end
     end
+  end
+
+  describe 'vendor#profile' do
+    let!(:vendor) { create(:cm_vendor_with_product, permanent_stock: 10, with_logo: true) }
+
+    context "when the vendor's is all available" do
+      before { get "/api/v2/storefront/vendors/#{vendor.id}/profile", params: { include: 'logo,variants', from_date: '2023-01-01', to_date: '2023-01-02'} }
+
+      it_behaves_like 'returns 200 HTTP status'
+
+      it 'should return json with stock information' do
+        expect(json_response['data']['attributes']['total_booking']).to eq 0
+        expect(json_response['data']['attributes']['remaining']).to eq vendor.total_inventory
+      end
+    end
+
+    context "when match with booking dates" do
+      let!(:booking) {
+        order = create(:order)
+        book_room(order, hotel: vendor, quantity: 2,  from_date: date('2023_01_01'), to_date: date('2023_01_02'))
+      }
+
+      before { get "/api/v2/storefront/vendors/#{vendor.id}/profile", params: { include: 'logo,variants', from_date: '2023-01-01', to_date: '2023-01-02'} }
+
+      it_behaves_like 'returns 200 HTTP status'
+
+      it 'should return json with stock information' do
+        expect(json_response['data']['attributes']['total_booking']).to eq booking.quantity
+        expect(json_response['data']['attributes']['remaining']).to eq (vendor.total_inventory - booking.quantity)
+      end
+    end
+  end
+
+  private
+
+  def book_room(order, hotel: , price: 100, quantity: , from_date:, to_date:)
+    room = hotel.variants.first
+    order.line_items.create(vendor_id: hotel.id, price: price, quantity: quantity, from_date: from_date, to_date: to_date, variant_id: room.id)
   end
 end
