@@ -1,6 +1,11 @@
 require 'spec_helper'
 
 RSpec.describe Spree::Prototype, type: :model do
+  describe 'associations' do 
+    it { should have_many(:option_values).through(:option_types) }
+    it { should have_many(:variant_kind_option_types).through(:option_type_prototypes) }
+    it { should have_many(:product_kind_option_types).through(:option_type_prototypes) }
+  end
   describe '#product_type' do
     it 'raise error on enter invalid product_type' do
       expect{create(:prototype, product_type: :fake)}
