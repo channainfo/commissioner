@@ -44,7 +44,7 @@ module Spree
 
       # @overrided
       def collection_url(options = {})
-        admin_vendor_vendor_rules_index_url(options)
+        admin_vendor_vendor_kind_option_types_url(options)
       end
     end
   end
