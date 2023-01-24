@@ -1,14 +1,15 @@
 module SpreeCmCommissioner
-  class AccommodationSearch < BaseInteractor
+  class AccommodationSearchDetail < BaseInteractor
     delegate :params, to: :context
     before :prepare_params
+    before :check_is_detail
 
     def call
-      context.value = accommodation_query.with_available_inventory.page(page).per(per_page)
+      context.value = context.is_detail ? accommodation_query.first : accommodation_query.page(page).per(per_page)
     end
 
     def accommodation_query
-      SpreeCmCommissioner::AccommodationQuery.new(from_date: from_date, to_date: to_date, province_id: province_id)
+      SpreeCmCommissioner::AccommodationQuery.new(from_date: from_date, to_date: to_date, province_id: province_id, vendor_id: vendor_id).with_available_inventory
     end
 
     def method_missing(name)
@@ -29,11 +30,23 @@ module SpreeCmCommissioner
       where_query
     end
 
+    protected
+    def check_is_detail
+      context.properties[:vendor_id] = nil
+
+      if context.is_detail = params[:id].present?
+        resource = Spree::Vendor.find_by(slug: params[:id])
+
+        context.fail! if resource.nil?
+        context.properties[:vendor_id] = resource.id   # accommodation id
+      end
+    end
+
     def prepare_params
       context.properties = {}
       per_page = params[:per_page].to_i
-      # name and location
-      context.properties[:province_id] = params[:province_id].to_i
+      # location
+      context.properties[:province_id] = params[:province_id]
       # date_range
       context.properties[:from_date] = params[:from_date].to_date
       context.properties[:to_date] = params[:to_date].to_date

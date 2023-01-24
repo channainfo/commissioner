@@ -1,16 +1,16 @@
 module SpreeCmCommissioner
   class AccommodationQuery
     include ActiveModel::Validations
-    attr_reader :from_date, :to_date, :province_id, :id
+    attr_reader :from_date, :to_date, :province_id, :vendor_id
     MAX_QUERY_DAYS = 31
 
     validate :validate_date_range
 
-    def initialize(from_date:, to_date:, province_id: nil, id: nil)
+    def initialize(from_date:, to_date:, province_id: nil, vendor_id: nil)
       @from_date = from_date
       @to_date = to_date
       @province_id = province_id
-      @id = id
+      @vendor_id = vendor_id
     end
 
     def date_list_sql
@@ -52,7 +52,7 @@ module SpreeCmCommissioner
 
     def apply_filter(scope)
       scope = scope.where(['spree_vendors.state_id = ?', province_id]) if province_id.present?
-      scope = scope.where(['spree_vendors.id = ?', id]) if id.present?
+      scope = scope.where(['spree_vendors.id = ?', vendor_id]) if vendor_id.present?
       scope
     end
   end

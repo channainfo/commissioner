@@ -89,10 +89,10 @@ describe 'API V2 Storefront Accommodation Spec', type: :request do
     context "cannot find by id" do
       before { get "/api/v2/storefront/accommodations/#{vendor.id}", params: { include: 'logo,variants', from_date: '2023-01-01', to_date: '2023-01-02'} }
 
-      it_behaves_like 'returns 422 HTTP status'
+      it_behaves_like 'returns 404 HTTP status'
 
       it 'should return json with error' do
-        expect(json_response['error']).to eq 'The accommodation you were looking for could not be found.'
+        expect(json_response['error']).to eq 'The resource you were looking for could not be found.'
       end
     end
 

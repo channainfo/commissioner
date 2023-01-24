@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe SpreeCmCommissioner::AccommodationSearch do
+RSpec.describe SpreeCmCommissioner::AccommodationSearchDetail do
   let(:phnom_penh) { create(:state, name: 'Phnom Penh') }
   let(:siem_reap) { create(:state, name: 'Siem Reap') }
   let!(:phnom_penh_hotel) { create(:cm_vendor_with_product, name: 'Phnom Penh Hotel', state_id: phnom_penh.id, permanent_stock: 10) }

@@ -3,25 +3,17 @@ module Spree
     module V2
       module Storefront
         class AccommodationsController < ::Spree::Api::V2::ResourceController
-
-          def index
-            render_serialized_payload do
-              serialize_collection(paginated_collection)
-            end
-          end
-
-          def show
-            render_result(resource)
-          end
-
           private
 
           def collection
-            @collection ||= SpreeCmCommissioner::AccommodationSearch.call(params: params).value
+            collection_finder.call(params: params).value
           end
 
           def resource
-            @resource ||= SpreeCmCommissioner::AccommodationDetail.call(params: params)
+            resource = resource_finder.call(params: params).value
+            raise ActiveRecord::RecordNotFound if resource.nil?
+
+            resource
           end
 
           def model_class
@@ -33,7 +25,15 @@ module Spree
           end
 
           def collection_serializer
-            resource_serializer
+            Spree::V2::Storefront::AccommodationSerializer
+          end
+
+          def collection_finder
+            SpreeCmCommissioner::AccommodationSearchDetail
+          end
+
+          def resource_finder
+            SpreeCmCommissioner::AccommodationSearchDetail
           end
         end
       end
