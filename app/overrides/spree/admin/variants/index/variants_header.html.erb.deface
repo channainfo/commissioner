@@ -1,0 +1,13 @@
+<!-- replace "[data-hook='variants_header']" -->
+
+<thead data-hook="variants_header">
+  <tr>
+    <th></th>
+    <th><%= Spree.t('admin.digitals.digital') %></th>
+    <th><%= Spree.t(:options) %></th>
+    <th><%= Spree.t(:permanent_stock) %></th>
+    <th><%= Spree.t(:price) %></th>
+    <th><%= sort_link @search, :sku, Spree.t(:sku) %></th>
+    <th class="actions"></th>
+  </tr>
+</thead>
