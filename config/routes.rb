@@ -36,8 +36,6 @@ Spree::Core::Engine.add_routes do
     namespace :v2 do
       namespace :storefront do
         resources :accommodations, only: %i[index show]
-
-        resources :search, only: %i[index]
       end
     end
   end

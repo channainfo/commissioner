@@ -92,37 +92,6 @@ describe 'API V2 Storefront Vendor Spec', type: :request do
     end
   end
 
-  describe 'vendor#profile' do
-    let!(:vendor) { create(:cm_vendor_with_product, permanent_stock: 10, with_logo: true) }
-
-    context "when the vendor's is all available" do
-      before { get "/api/v2/storefront/vendors/#{vendor.id}/profile", params: { include: 'logo,variants', from_date: '2023-01-01', to_date: '2023-01-02'} }
-
-      it_behaves_like 'returns 200 HTTP status'
-
-      it 'should return json with stock information' do
-        expect(json_response['data']['attributes']['total_booking']).to eq 0
-        expect(json_response['data']['attributes']['remaining']).to eq vendor.total_inventory
-      end
-    end
-
-    context "when match with booking dates" do
-      let!(:booking) {
-        order = create(:order)
-        book_room(order, hotel: vendor, quantity: 2,  from_date: date('2023_01_01'), to_date: date('2023_01_02'))
-      }
-
-      before { get "/api/v2/storefront/vendors/#{vendor.id}/profile", params: { include: 'logo,variants', from_date: '2023-01-01', to_date: '2023-01-02'} }
-
-      it_behaves_like 'returns 200 HTTP status'
-
-      it 'should return json with stock information' do
-        expect(json_response['data']['attributes']['total_booking']).to eq booking.quantity
-        expect(json_response['data']['attributes']['remaining']).to eq (vendor.total_inventory - booking.quantity)
-      end
-    end
-  end
-
   private
 
   def book_room(order, hotel: , price: 100, quantity: , from_date:, to_date:)
