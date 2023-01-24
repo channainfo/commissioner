@@ -1,16 +1,16 @@
 module SpreeCmCommissioner
-  class VendorQuery
+  class AccommodationQuery
     include ActiveModel::Validations
-    attr_reader :from_date, :to_date, :province_id, :vendor_id
+    attr_reader :from_date, :to_date, :province_id, :id
     MAX_QUERY_DAYS = 31
 
     validate :validate_date_range
 
-    def initialize(from_date:, to_date:, province_id: nil, vendor_id: nil)
+    def initialize(from_date:, to_date:, province_id: nil, id: nil)
       @from_date = from_date
       @to_date = to_date
       @province_id = province_id
-      @vendor_id = vendor_id
+      @id = id
     end
 
     def date_list_sql
@@ -34,7 +34,7 @@ module SpreeCmCommissioner
       "SELECT DISTINCT ON (vendor_id) vendor_id, day, total_booking FROM (#{booked_vendors.to_sql}) AS booked_vendors ORDER BY vendor_id, total_booking DESC"
     end
 
-    def vendor_with_available_inventory
+    def with_available_inventory
       # Get vendors by province that include: day, total_booking and remaining
       scope = Spree::Vendor.select('spree_vendors.*, vendor_id, day, COALESCE(total_booking, 0) AS total_booking, COALESCE((spree_vendors.total_inventory - max_booked_vendors.total_booking), spree_vendors.total_inventory) AS remaining')
                 .joins("LEFT JOIN (#{max_booked_vendor_sql}) max_booked_vendors ON max_booked_vendors.vendor_id = spree_vendors.id")
@@ -52,7 +52,7 @@ module SpreeCmCommissioner
 
     def apply_filter(scope)
       scope = scope.where(['spree_vendors.state_id = ?', province_id]) if province_id.present?
-      scope = scope.where(['spree_vendors.id = ?', vendor_id]) if vendor_id.present?
+      scope = scope.where(['spree_vendors.id = ?', id]) if id.present?
       scope
     end
   end

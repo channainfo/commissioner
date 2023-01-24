@@ -1,14 +1,14 @@
 module SpreeCmCommissioner
-  class VendorSearch < BaseInteractor
+  class AccommodationSearch < BaseInteractor
     delegate :params, to: :context
     before :prepare_params
 
     def call
-      context.vendors = vendor_query.vendor_with_available_inventory.page(page).per(per_page)
+      context.value = accommodation_query.with_available_inventory.page(page).per(per_page)
     end
 
-    def vendor_query
-      SpreeCmCommissioner::VendorQuery.new(from_date: from_date, to_date: to_date, province_id: province_id)
+    def accommodation_query
+      SpreeCmCommissioner::AccommodationQuery.new(from_date: from_date, to_date: to_date, province_id: province_id)
     end
 
     def method_missing(name)

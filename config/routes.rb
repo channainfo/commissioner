@@ -35,10 +35,9 @@ Spree::Core::Engine.add_routes do
   namespace :api, defaults: { format: 'json' } do
     namespace :v2 do
       namespace :storefront do
+        resources :accommodations, only: %i[index show]
+
         resources :search, only: %i[index]
-        resources :vendors do
-          get 'profile'
-        end
       end
     end
   end

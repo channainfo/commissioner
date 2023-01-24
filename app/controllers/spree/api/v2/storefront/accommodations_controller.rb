@@ -2,12 +2,16 @@ module Spree
   module Api
     module V2
       module Storefront
-        class SearchController < ::Spree::Api::V2::ResourceController
+        class AccommodationsController < ::Spree::Api::V2::ResourceController
 
           def index
             render_serialized_payload do
               serialize_collection(paginated_collection)
             end
+          end
+
+          def show
+            render_result(resource)
           end
 
           private
@@ -16,19 +20,20 @@ module Spree
             @collection ||= SpreeCmCommissioner::AccommodationSearch.call(params: params).value
           end
 
+          def resource
+            @resource ||= SpreeCmCommissioner::AccommodationDetail.call(params: params)
+          end
+
           def model_class
             Spree::Vendor
           end
 
-          def collection_serializer
+          def resource_serializer
             Spree::V2::Storefront::AccommodationSerializer
           end
 
-          def serialize_collection(collection)
-            collection_serializer.new(
-              collection,
-              collection_options(collection).merge(is_collection: true)
-            ).serializable_hash
+          def collection_serializer
+            resource_serializer
           end
         end
       end

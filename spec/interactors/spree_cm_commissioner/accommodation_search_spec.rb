@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe SpreeCmCommissioner::VendorSearch do
+RSpec.describe SpreeCmCommissioner::AccommodationSearch do
   let(:phnom_penh) { create(:state, name: 'Phnom Penh') }
   let(:siem_reap) { create(:state, name: 'Siem Reap') }
   let!(:phnom_penh_hotel) { create(:cm_vendor_with_product, name: 'Phnom Penh Hotel', state_id: phnom_penh.id, permanent_stock: 10) }
@@ -14,11 +14,11 @@ RSpec.describe SpreeCmCommissioner::VendorSearch do
       let(:search_sr) { described_class.call(params: { from_date: date('2022-12-29'), to_date: date('2022-12-30'), province_id: siem_reap.id }, passenger_options: passenger_options) }
 
       it 'return vendors in Siem Reap only' do
-        expect(search_sr.vendors).to eq([angkor_hotel])
+        expect(search_sr.value).to eq([angkor_hotel])
       end
 
       it 'return vendors in Phnom Penh only' do
-        vendors = search_pp.vendors
+        vendors = search_pp.value
 
         vendor_names = vendors.map(&:name)
 
@@ -28,7 +28,7 @@ RSpec.describe SpreeCmCommissioner::VendorSearch do
       end
 
       it 'return vendors with available room' do
-        vendors = search_pp.vendors
+        vendors = search_pp.value
         expect(vendors.first.total_booking).to eq 0
         expect(vendors.last.total_booking).to  eq 0
 
@@ -53,7 +53,7 @@ RSpec.describe SpreeCmCommissioner::VendorSearch do
       it 'search in Siem Reap' do
         search = described_class.call(params: { from_date: date('2023_01_01'), to_date: date('2023_01_08'), province_id: siem_reap.id }, passenger_options: passenger_options)
 
-        vendor = search.vendors.first
+        vendor = search.value.first
         expect(vendor.name).to eq angkor_hotel.name
         expect(vendor.remaining).to eq 11
         expect(vendor.total_booking).to eq 4
@@ -61,7 +61,7 @@ RSpec.describe SpreeCmCommissioner::VendorSearch do
 
       it 'search in Phnom Penh' do
         search = described_class.call(params: { from_date: date('2023_01_01'), to_date: date('2023_01_08'), province_id: phnom_penh.id }, passenger_options: passenger_options)
-        vendors = search.vendors
+        vendors = search.value
 
         expect(vendors.size).to eq 2
 

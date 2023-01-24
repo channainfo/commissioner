@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe SpreeCmCommissioner::VendorQuery do
+RSpec.describe SpreeCmCommissioner::AccommodationQuery do
   let(:phnom_penh) { create(:state, name: 'Phnom Penh') }
   let(:siem_reap)  { create(:state, name: 'Siem Reap') }
   let!(:phnom_penh_hotel) { create(:cm_vendor_with_product, name: 'Phnom Penh Hotel',       state_id: phnom_penh.id, permanent_stock: 20) }
@@ -396,8 +396,8 @@ RSpec.describe SpreeCmCommissioner::VendorQuery do
       end
     end
 
-    context '.vendors_with_available_inventory' do
-      let(:records) { subject.vendors_with_available_inventory }
+    context '.with_available_inventory' do
+      let(:records) { subject.with_available_inventory }
       before(:each) do
         print_as_table(records, inventory_fields)
       end
