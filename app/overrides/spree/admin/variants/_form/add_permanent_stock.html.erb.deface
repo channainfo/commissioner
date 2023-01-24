@@ -1,0 +1,9 @@
+<!-- insert_bottom "[data-hook='admin_variant_form_additional_fields']" -->
+
+<div class="form-group">
+  <%= f.field_container :permanent_stock do %>
+    <%= f.label :permanent_stock, Spree.t(:permanent_stock) %>
+    <%= f.number_field :permanent_stock, class: 'form-control' %>
+  <% end %>
+</div>
+
