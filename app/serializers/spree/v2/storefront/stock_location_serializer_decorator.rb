@@ -3,7 +3,7 @@ module Spree
     module Storefront
       module StockLocationSerializerDecorator
         def self.prepended(base)
-          base.attributes :lat, :lon, :address1 
+          base.attributes :lat, :lon, :name, :address1
         end
       end
     end

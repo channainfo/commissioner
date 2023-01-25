@@ -3,9 +3,8 @@ require 'spec_helper'
 RSpec.describe Spree::Variant, type: :model do
   describe 'validations' do
     context 'saving option values to variants' do
-      product_kind_option_type = Spree::OptionType.create(kind: :product, presentation: "Bathroom & Toiletries", name: "bathroom-toiletries")
-      normal_option_type = Spree::OptionType.create(kind: :variant, presentation: "Capacity", name: "capacity")
-  
+      let(:product_kind_option_type) { create(:option_type, kind: :product, presentation: 'Bathroom & Toiletries', name: 'bathroom-toiletries') }
+      let(:normal_option_type)       { create(:option_type, kind: :variant, presentation: 'Capacity', name: 'capacity') }
       let(:product_option_values) {[
         Spree::OptionValue.create(option_type: product_kind_option_type, presentation: "Accessible toilet", name: "accessible-toilet"),
         Spree::OptionValue.create(option_type: product_kind_option_type, presentation: "Adapted bath", name: "adapted-bath"),
