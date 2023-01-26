@@ -20,16 +20,18 @@ module Spree
       base.has_one  :logo, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorLogo'
 
       # TODO: we will need searchkick later
-      # base.searchkick(
-      #   word_start: [:name],
-      #   unscope: false,
-      # ) unless base.respond_to?(:searchkick_index)
+      # unless Rails.env.test?
+      #   base.searchkick(
+      #     word_start: [:name],
+      #     unscope: false,
+      #   ) unless base.respond_to?(:searchkick_index)
 
-      # base.scope :search_import, lambda {
-      #   includes(
-      #     :option_values,
-      #   )
-      # }
+      #   base.scope :search_import, lambda {
+      #     includes(
+      #       :option_values,
+      #     )
+      #   }
+      # end
 
       def search_data
         # option_values_presentation
