@@ -1,13 +1,23 @@
 FactoryBot.define do
-  factory :cm_product, class: Spree::Product do    
-    factory :cm_product_with_product_kind_option_types do
+  factory :cm_product, parent: :base_product do
+    vendor { 
+      stock_location = create(:stock_location)
+      vendor = create(:active_vendor, stock_locations: [ stock_location ])
+      vendor
+    }
 
-      initialize_with do
-        stock_locations = [ create(:stock_location) ]
-        product = create(:product, vendor: create(:active_vendor, stock_locations: stock_locations))
-        product
+    before(:create) do |product|
+      create(:stock_location) unless Spree::StockLocation.any?
+
+      if product.stores.empty?
+        default_store = Spree::Store.default.persisted? ? Spree::Store.default : nil
+        store = default_store || create(:store)
+
+        product.stores << [store]
       end
-
+    end
+    
+    factory :cm_product_with_product_kind_option_types do
       before(:create) do |product|
         product_kind_option_type = Spree::OptionType.create(kind: :product, presentation: "Bathroom & Toiletries", name: "bathroom-toiletries")
         product_option_values = [

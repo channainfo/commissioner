@@ -1,0 +1,7 @@
+<!-- replace "[data-hook='option_header']" -->
+
+<tr>
+  <th colspan="2"><%= Spree.t(:name) %> <span class="required">*</span></th>
+  <th><%= Spree.t(:display) %> <span class="required">*</span></th>
+  <th class="actions"></th>
+</tr>

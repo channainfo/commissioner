@@ -6,6 +6,7 @@ RSpec.describe Spree::Product, type: :model do
     it { should have_many(:option_values).through(:option_types) }
     it { should have_many(:variant_kind_option_types).through(:product_option_types) }
     it { should have_many(:product_kind_option_types).through(:product_option_types) } 
+    it { should have_many(:promoted_option_types).through(:product_option_types) } 
   end
 
   describe 'attributes' do

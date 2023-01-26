@@ -9,6 +9,10 @@ module Spree
       base.has_many :product_kind_option_types, -> { where(kind: :product).order(:position) },
           through: :product_option_types, source: :option_type
 
+      base.has_many :promoted_option_types, -> { where(promoted: :true).order(:position) },
+          through: :product_option_types, source: :option_type
+
+
       base.has_many :option_values, through: :option_types
       base.has_many :prices_including_master, -> { order('spree_variants.position, spree_variants.id, currency') }, source: :prices, through: :variants_including_master
 

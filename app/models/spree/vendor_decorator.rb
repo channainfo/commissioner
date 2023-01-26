@@ -10,6 +10,9 @@ module Spree
       base.has_many :vendor_option_types, class_name: 'SpreeCmCommissioner::VendorOptionType'
       base.has_many :option_value_vendors, class_name: 'SpreeCmCommissioner::OptionValueVendor'
       base.has_many :option_types, through: :vendor_option_types
+      
+      base.has_many :promoted_option_types, -> { where(promoted: :true).order(:position) },
+        through: :vendor_option_types, source: :option_type
 
       base.has_many :vendor_kind_option_types, -> { where(kind: :vendor).order(:position) },
         through: :vendor_option_types, source: :option_type
