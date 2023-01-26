@@ -10,7 +10,6 @@ Gem::Specification.new do |s|
   s.version     = SpreeCmCommissioner.version
   s.summary     = 'Add extension summary here'
   s.description = 'Add (optional) extension description here'
-  s.required_ruby_version = '~> 3.1.3'
 
   s.author    = 'You'
   s.email     = 'you@example.com'

@@ -1,0 +1,53 @@
+# https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-ruby
+name: Commissioner Gem
+
+on:
+  pull_request:
+    branches:
+      - master
+      - develop
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres:12
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_USER: myuser
+          POSTGRES_PASSWORD: mypassword
+          POSTGRES_DB: test_db
+
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v3
+
+    # - uses: borales/actions-yarn@v2.0.0
+    #   with:
+    #     cmd: install
+
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.2.0'
+
+        # bundle-cache might cause problem when upgrading ruby. Disable it when upgrading to solve the problem.
+        bundler-cache: true
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get -yqq install libpq-dev
+        gem install bundler
+        bundle install --jobs 4 --retry 3
+
+    - name: Run test
+      env:
+        DATABASE_URL: postgres://myuser:mypassword@localhost:5432/test_db
+      run: |
+        bundle exec rake
