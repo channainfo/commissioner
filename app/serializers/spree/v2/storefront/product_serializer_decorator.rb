@@ -5,6 +5,7 @@ module Spree
         def self.prepended(base)
           base.has_many :variant_kind_option_types, serializer: :option_type
           base.has_many :product_kind_option_types, serializer: :option_type
+          base.has_many :promoted_option_types, serializer: :option_type
         end
       end
     end

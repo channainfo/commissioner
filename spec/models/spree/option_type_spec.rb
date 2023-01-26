@@ -8,8 +8,18 @@ RSpec.describe Spree::OptionType, type: :model do
   describe 'test scope and validation' do
     it { should validate_presence_of(:presentation) }
     it { should validate_presence_of(:name) }
-  end
+
+    describe '.promoted' do
+      it 'return only promoted option types' do
+        option_type1 = create(:option_type, promoted: true)
+        option_type2 = create(:option_type, promoted: false)
   
+        expect(described_class.promoted.size).to eq 1
+        expect(described_class.promoted.first).to eq option_type1
+      end
+    end
+  end
+
   describe 'validations' do
     it 'saved on [attr_type] is included in ATTRIBUTE_TYPES' do
       expect{create(:option_type, attr_type: 'float')}.to_not raise_error

@@ -1,10 +1,23 @@
 <!-- insert_bottom "[data-hook='admin_option_type_form_fields']" -->
 
 <div class="col-12">
-  <%= f.field_container :travel do %>
-    <%= f.label :travel do %>
-      <%= f.check_box :travel %>
-      <%= Spree.t(:travel) %>
-    <% end %>
-  <% end %>
+  <div class="d-flex justify-content-start">
+    <span>
+      <%= f.field_container :travel do %>
+        <%= f.label :travel do %>
+          <%= f.check_box :travel %>
+          <%= Spree.t(:travel) %>
+        <% end %>
+      <% end %>
+    </span>
+    <span class="ml-2">
+      <%= f.field_container :promoted do %>
+        <%= f.label :promoted do %>
+          <%= f.check_box :promoted %>
+          <%= Spree.t(:promoted) %>
+        <% end %>
+      <% end %>
+    </span>
+  </div>
 </div>
+

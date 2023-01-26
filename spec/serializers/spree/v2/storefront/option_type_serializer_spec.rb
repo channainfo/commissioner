@@ -15,7 +15,8 @@ describe Spree::V2::Storefront::OptionTypeSerializer, type: :serializer do
       :name, 
       :position, 
       :presentation, 
-      :public_metadata
+      :public_metadata,
+      :promoted
     )
   end
 end

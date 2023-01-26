@@ -10,6 +10,8 @@ module Spree
       base.validates :attr_type, inclusion: { in: ATTRIBUTE_TYPES }
       base.validates :attr_type, presence: true, if: :travel?
       base.validate :kind_has_updated, on: :update, if: :kind_changed?
+
+      base.scope :promoted, -> { where(promoted: true) }
     end
 
     private
