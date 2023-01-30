@@ -5,22 +5,19 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-spree_opts = '~> 4.4.0'
-
+spree_opts = '~> 4.5.0'
 gem 'spree', spree_opts
 gem 'spree_api', spree_opts
 gem 'spree_auth_devise'
 gem 'spree_backend', spree_opts
 gem 'spree_multi_vendor'
+gem 'spree_api_v1'  # latest spree_multi_vendor 2.4.0 still depends on the Spree v1 API
 
 gem 'elasticsearch', '~> 8.5'
 gem 'searchkick',    '~> 5.1'
 
 gem 'interactor', '~> 3.1'
 gem 'jwt'
-
-# Temporarily for ruby 3.1. Until upgrade rails to v7.0.1+
-# gem "net-smtp", require: false
 
 group :development do
   gem 'brakeman'
