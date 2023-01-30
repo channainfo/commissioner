@@ -19,7 +19,7 @@ jobs:
           POSTGRES_PASSWORD: mypassword
           POSTGRES_DB: test_db
 
-        ports: ['5432:5432']
+        ports: ["5432:5432"]
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -27,27 +27,39 @@ jobs:
           --health-retries 5
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    # - uses: borales/actions-yarn@v2.0.0
-    #   with:
-    #     cmd: install
+      # - uses: borales/actions-yarn@v2.0.0
+      #   with:
+      #     cmd: install
 
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: '3.2.0'
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2.0"
 
-        # bundle-cache might cause problem when upgrading ruby. Disable it when upgrading to solve the problem.
-        bundler-cache: true
+          # bundle-cache might cause problem when upgrading ruby. Disable it when upgrading to solve the problem.
+          # bundler-cache: true
 
-    - name: Install dependencies
-      run: |
-        sudo apt-get -yqq install libpq-dev
-        gem install bundler
-        bundle install --jobs 4 --retry 3
+      - name: Install dependencies
+        run: |
+          sudo apt-get -yqq install libpq-dev
+          gem install bundler
+          bundle install --jobs 4 --retry 3
 
-    - name: Run test
-      env:
-        DATABASE_URL: postgres://myuser:mypassword@localhost:5432/test_db
-      run: |
-        bundle exec rake
+      - name: Quality
+        env:
+          DATABASE_URL: postgres://myuser:mypassword@localhost:5432/test_db
+        run: |
+          bundle exec rubocop
+
+      - name: Security
+        env:
+          DATABASE_URL: postgres://myuser:mypassword@localhost:5432/test_db
+        run: |
+          bundle exec brakeman
+
+      - name: Run test
+        env:
+          DATABASE_URL: postgres://myuser:mypassword@localhost:5432/test_db
+        run: |
+          bundle exec rake
