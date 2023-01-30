@@ -11,7 +11,8 @@ gem 'spree_api', spree_opts
 gem 'spree_auth_devise'
 gem 'spree_backend', spree_opts
 gem 'spree_multi_vendor'
-gem 'spree_api_v1'  # latest spree_multi_vendor 2.4.0 still depends on the Spree v1 API
+# latest spree_multi_vendor 2.4.0 still depends on the Spree v1 API
+gem 'spree_api_v1'
 
 gem 'elasticsearch', '~> 8.5'
 gem 'searchkick',    '~> 5.1'
@@ -21,6 +22,11 @@ gem 'jwt'
 
 group :development do
   gem 'brakeman'
+end
+
+group :development, :test do
+  # modify spree_dev_tools to stop using deprecated default_country_id
+  gem 'spree_dev_tools', github: 'kimsrung/spree_dev_tools'
 end
 
 group :test do
