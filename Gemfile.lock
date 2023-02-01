@@ -1,83 +1,122 @@
+GIT
+  remote: https://github.com/kimsrung/spree_dev_tools.git
+  revision: 83da7045d71138c9b12a2a3c118f8cd59f5cba83
+  specs:
+    spree_dev_tools (0.2.0)
+      appraisal
+      awesome_print
+      capybara
+      capybara-screenshot
+      capybara-select-2
+      database_cleaner
+      factory_bot (~> 4.7)
+      ffaker
+      gem-release
+      github_changelog_generator
+      jsonapi-rspec
+      pry
+      puma
+      rails-controller-testing
+      redis
+      rspec-activemodel-mocks
+      rspec-rails (~> 4.0)
+      rspec-retry
+      rspec_junit_formatter (~> 0.4)
+      rubocop
+      rubocop-rails
+      sass-rails
+      selenium-webdriver
+      simplecov
+      spree_core
+      timecop
+      webdrivers (~> 4.3)
+
 PATH
   remote: .
   specs:
     spree_cm_commissioner (0.0.1)
       elasticsearch (~> 8.5)
       interactor (~> 3.1)
-      rails (~> 6.1.4)
+      rails (~> 7.0.4)
       searchkick (~> 5.1)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    actioncable (6.1.7)
-      actionpack (= 6.1.7)
-      activesupport (= 6.1.7)
+    actioncable (7.0.4.2)
+      actionpack (= 7.0.4.2)
+      activesupport (= 7.0.4.2)
       nio4r (~> 2.0)
       websocket-driver (>= 0.6.1)
-    actionmailbox (6.1.7)
-      actionpack (= 6.1.7)
-      activejob (= 6.1.7)
-      activerecord (= 6.1.7)
-      activestorage (= 6.1.7)
-      activesupport (= 6.1.7)
+    actionmailbox (7.0.4.2)
+      actionpack (= 7.0.4.2)
+      activejob (= 7.0.4.2)
+      activerecord (= 7.0.4.2)
+      activestorage (= 7.0.4.2)
+      activesupport (= 7.0.4.2)
       mail (>= 2.7.1)
-    actionmailer (6.1.7)
-      actionpack (= 6.1.7)
-      actionview (= 6.1.7)
-      activejob (= 6.1.7)
-      activesupport (= 6.1.7)
+      net-imap
+      net-pop
+      net-smtp
+    actionmailer (7.0.4.2)
+      actionpack (= 7.0.4.2)
+      actionview (= 7.0.4.2)
+      activejob (= 7.0.4.2)
+      activesupport (= 7.0.4.2)
       mail (~> 2.5, >= 2.5.4)
+      net-imap
+      net-pop
+      net-smtp
       rails-dom-testing (~> 2.0)
-    actionpack (6.1.7)
-      actionview (= 6.1.7)
-      activesupport (= 6.1.7)
-      rack (~> 2.0, >= 2.0.9)
+    actionpack (7.0.4.2)
+      actionview (= 7.0.4.2)
+      activesupport (= 7.0.4.2)
+      rack (~> 2.0, >= 2.2.0)
       rack-test (>= 0.6.3)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.2.0)
-    actiontext (6.1.7)
-      actionpack (= 6.1.7)
-      activerecord (= 6.1.7)
-      activestorage (= 6.1.7)
-      activesupport (= 6.1.7)
+    actiontext (7.0.4.2)
+      actionpack (= 7.0.4.2)
+      activerecord (= 7.0.4.2)
+      activestorage (= 7.0.4.2)
+      activesupport (= 7.0.4.2)
+      globalid (>= 0.6.0)
       nokogiri (>= 1.8.5)
-    actionview (6.1.7)
-      activesupport (= 6.1.7)
+    actionview (7.0.4.2)
+      activesupport (= 7.0.4.2)
       builder (~> 3.1)
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
     active_storage_validations (0.9.5)
       rails (>= 5.2.0)
-    activejob (6.1.7)
-      activesupport (= 6.1.7)
+    activejob (7.0.4.2)
+      activesupport (= 7.0.4.2)
       globalid (>= 0.3.6)
     activemerchant (1.126.0)
       activesupport (>= 4.2)
       builder (>= 2.1.2, < 4.0.0)
       i18n (>= 0.6.9)
       nokogiri (~> 1.4)
-    activemodel (6.1.7)
-      activesupport (= 6.1.7)
-    activerecord (6.1.7)
-      activemodel (= 6.1.7)
-      activesupport (= 6.1.7)
+    activemodel (7.0.4.2)
+      activesupport (= 7.0.4.2)
+    activerecord (7.0.4.2)
+      activemodel (= 7.0.4.2)
+      activesupport (= 7.0.4.2)
     activerecord-typedstore (1.5.1)
       activerecord (>= 6.1)
-    activestorage (6.1.7)
-      actionpack (= 6.1.7)
-      activejob (= 6.1.7)
-      activerecord (= 6.1.7)
-      activesupport (= 6.1.7)
+    activestorage (7.0.4.2)
+      actionpack (= 7.0.4.2)
+      activejob (= 7.0.4.2)
+      activerecord (= 7.0.4.2)
+      activesupport (= 7.0.4.2)
       marcel (~> 1.0)
       mini_mime (>= 1.1.0)
-    activesupport (6.1.7)
+    activesupport (7.0.4.2)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
-      zeitwerk (~> 2.3)
     acts_as_list (1.0.4)
       activerecord (>= 4.2)
     addressable (2.8.1)
@@ -87,6 +126,25 @@ GEM
       rake
       thor (>= 0.14.0)
     ast (2.4.2)
+    async (2.3.1)
+      console (~> 1.10)
+      io-event (~> 1.1)
+      timers (~> 4.1)
+    async-http (0.59.5)
+      async (>= 1.25)
+      async-io (>= 1.28)
+      async-pool (>= 0.2)
+      protocol-http (~> 0.23)
+      protocol-http1 (~> 0.14.0)
+      protocol-http2 (~> 0.14.0)
+      traces (>= 0.8.0)
+    async-http-faraday (0.11.0)
+      async-http (~> 0.42)
+      faraday
+    async-io (1.34.3)
+      async
+    async-pool (0.3.12)
+      async (>= 1.25)
     auto_strip_attributes (2.6.0)
       activerecord (>= 4.0)
     autoprefixer-rails (10.4.7.0)
@@ -105,12 +163,9 @@ GEM
       sassc-rails (>= 2.0.0)
     brakeman (5.4.0)
     builder (3.2.4)
-    bullet (7.0.7)
-      activesupport (>= 3.0.0)
-      uniform_notifier (~> 1.11)
     byebug (11.1.3)
     cancancan (3.4.0)
-    capybara (3.36.0)
+    capybara (3.38.0)
       addressable
       matrix
       mini_mime (>= 0.1.3)
@@ -125,9 +180,11 @@ GEM
     capybara-select-2 (0.5.1)
     carmen (1.1.3)
       activesupport (>= 3.0.0)
-    childprocess (4.1.0)
     coderay (1.1.3)
     concurrent-ruby (1.1.10)
+    connection_pool (2.3.0)
+    console (1.16.2)
+      fiber-local
     crass (1.0.6)
     database_cleaner (2.0.1)
       database_cleaner-active_record (~> 2.0.0)
@@ -135,6 +192,7 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
+    date (3.3.3)
     deface (1.9.0)
       actionview (>= 5.2)
       nokogiri (>= 1.6)
@@ -173,19 +231,23 @@ GEM
     faraday-net_http (3.0.2)
     ffaker (2.21.0)
     ffi (1.15.5)
+    fiber-local (1.0.0)
+    flag-icons-rails (3.4.6.1)
+      sass-rails
     flatpickr (4.6.11.0)
     friendly_id (5.5.0)
       activerecord (>= 4.0.0)
     gem-release (2.2.2)
-    github_changelog_generator (1.15.2)
+    github_changelog_generator (1.16.4)
       activesupport
+      async (>= 1.25.0)
+      async-http-faraday
       faraday-http-cache
       multi_json
       octokit (~> 4.6)
       rainbow (>= 2.2.1)
       rake (>= 10.0)
-      retriable (~> 3.0)
-    globalid (1.0.0)
+    globalid (1.1.0)
       activesupport (>= 5.0)
     glyphicons (1.0.2)
     hashie (5.0.0)
@@ -203,13 +265,14 @@ GEM
       activesupport (>= 3.0)
       nokogiri (>= 1.6)
     interactor (3.1.2)
+    io-event (1.1.6)
     jquery-rails (4.5.1)
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
-    jsbundling-rails (1.0.3)
+    jsbundling-rails (1.1.1)
       railties (>= 6.0.0)
     json (2.6.2)
     jsonapi-rspec (0.0.11)
@@ -230,9 +293,9 @@ GEM
       activerecord
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
-    launchy (2.5.0)
-      addressable (~> 2.7)
-    loofah (2.19.0)
+    launchy (2.5.2)
+      addressable (~> 2.8)
+    loofah (2.19.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -249,13 +312,22 @@ GEM
     money (6.16.0)
       i18n (>= 0.6.4, <= 2)
     multi_json (1.15.0)
+    net-imap (0.3.4)
+      date
+      net-protocol
+    net-pop (0.1.2)
+      net-protocol
     net-protocol (0.2.1)
       timeout
     net-smtp (0.3.3)
       net-protocol
     nio4r (2.5.8)
-    nokogiri (1.13.9)
+    nokogiri (1.14.0)
       mini_portile2 (~> 2.8.0)
+      racc (~> 1.4)
+    nokogiri (1.14.0-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.14.0-x86_64-linux)
       racc (~> 1.4)
     octokit (4.25.1)
       faraday (>= 1, < 3)
@@ -269,11 +341,18 @@ GEM
     pg (1.4.5)
     polyglot (0.3.5)
     popper_js (1.16.1)
-    pry (0.14.1)
+    protocol-hpack (1.4.2)
+    protocol-http (0.24.0)
+    protocol-http1 (0.14.6)
+      protocol-http (~> 0.22)
+    protocol-http2 (0.14.2)
+      protocol-hpack (~> 1.4)
+      protocol-http (~> 0.18)
+    pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
-    public_suffix (5.0.0)
-    puma (6.0.0)
+    public_suffix (5.0.1)
+    puma (6.0.2)
       nio4r (~> 2.0)
     rabl (0.16.1)
       activesupport (>= 2.3.14)
@@ -281,21 +360,20 @@ GEM
     rack (2.2.4)
     rack-test (2.0.2)
       rack (>= 1.3)
-    rails (6.1.7)
-      actioncable (= 6.1.7)
-      actionmailbox (= 6.1.7)
-      actionmailer (= 6.1.7)
-      actionpack (= 6.1.7)
-      actiontext (= 6.1.7)
-      actionview (= 6.1.7)
-      activejob (= 6.1.7)
-      activemodel (= 6.1.7)
-      activerecord (= 6.1.7)
-      activestorage (= 6.1.7)
-      activesupport (= 6.1.7)
+    rails (7.0.4.2)
+      actioncable (= 7.0.4.2)
+      actionmailbox (= 7.0.4.2)
+      actionmailer (= 7.0.4.2)
+      actionpack (= 7.0.4.2)
+      actiontext (= 7.0.4.2)
+      actionview (= 7.0.4.2)
+      activejob (= 7.0.4.2)
+      activemodel (= 7.0.4.2)
+      activerecord (= 7.0.4.2)
+      activestorage (= 7.0.4.2)
+      activesupport (= 7.0.4.2)
       bundler (>= 1.15.0)
-      railties (= 6.1.7)
-      sprockets-rails (>= 2.0.0)
+      railties (= 7.0.4.2)
     rails-controller-testing (1.0.5)
       actionpack (>= 5.0.1.rc1)
       actionview (>= 5.0.1.rc1)
@@ -303,26 +381,29 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.4.3)
-      loofah (~> 2.3)
-    railties (6.1.7)
-      actionpack (= 6.1.7)
-      activesupport (= 6.1.7)
+    rails-html-sanitizer (1.5.0)
+      loofah (~> 2.19, >= 2.19.1)
+    railties (7.0.4.2)
+      actionpack (= 7.0.4.2)
+      activesupport (= 7.0.4.2)
       method_source
       rake (>= 12.2)
       thor (~> 1.0)
+      zeitwerk (~> 2.5)
     rainbow (3.1.1)
     rake (13.0.6)
     ransack (2.6.0)
       activerecord (>= 6.0.4)
       activesupport (>= 6.0.4)
       i18n
-    redis (4.8.0)
+    redis (5.0.6)
+      redis-client (>= 0.9.0)
+    redis-client (0.12.1)
+      connection_pool
     regexp_parser (2.6.1)
     responders (3.0.1)
       actionpack (>= 5.0)
       railties (>= 5.0)
-    retriable (3.1.2)
     rexml (3.2.5)
     rspec-activemodel-mocks (1.1.0)
       activemodel (>= 3.0)
@@ -330,10 +411,10 @@ GEM
       rspec-mocks (>= 2.99, < 4.0)
     rspec-core (3.12.0)
       rspec-support (~> 3.12.0)
-    rspec-expectations (3.12.0)
+    rspec-expectations (3.12.2)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
-    rspec-mocks (3.12.1)
+    rspec-mocks (3.12.3)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
     rspec-rails (4.1.2)
@@ -387,37 +468,41 @@ GEM
       activemodel (>= 5.2)
       hashie
     select2-rails (4.0.13)
-    selenium-webdriver (4.1.0)
-      childprocess (>= 0.5, < 5.0)
+    selenium-webdriver (4.8.0)
       rexml (~> 3.2, >= 3.2.5)
-      rubyzip (>= 1.2.2)
-    shoulda-matchers (5.2.0)
+      rubyzip (>= 1.2.2, < 3.0)
+      websocket (~> 1.0)
+    shoulda-matchers (5.3.0)
       activesupport (>= 5.2.0)
-    simplecov (0.21.2)
+    simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
-    spree (4.4.0)
-      spree_api (= 4.4.0)
-      spree_cli (= 4.4.0)
-      spree_core (= 4.4.0)
-    spree_api (4.4.0)
+    spree (4.5.1)
+      spree_api (= 4.5.1)
+      spree_cli (= 4.5.1)
+      spree_core (= 4.5.1)
+    spree_api (4.5.1)
       bcrypt (~> 3.1)
       doorkeeper (~> 5.3)
       jsonapi-serializer (~> 2.1)
+      spree_core (= 4.5.1)
+    spree_api_v1 (4.5.0)
       rabl (~> 0.14, >= 0.14.2)
       responders
-      spree_core (= 4.4.0)
-    spree_auth_devise (4.4.2)
+      spree (>= 4.4.0.rc1)
+      spree_extension
+    spree_auth_devise (4.5.0)
       devise (~> 4.7)
       devise-encryptable (= 0.2.0)
-      spree_core (>= 4.3.0.rc1)
+      spree_core (>= 4.5.0)
       spree_extension
-    spree_backend (4.4.1)
+    spree_backend (4.5.0)
       babel-transpiler (~> 0.7)
       bootstrap (~> 4.0)
+      flag-icons-rails (~> 3.4)
       flatpickr (~> 4.6)
       glyphicons (~> 1.0)
       hotwire-rails
@@ -427,23 +512,23 @@ GEM
       jsbundling-rails
       responders
       sass-rails (>= 5)
-      select2-rails (~> 4.0)
-      spree (>= 4.4.0.rc1)
+      select2-rails (~> 4.0.6)
+      spree (>= 4.4.0)
       sprockets (~> 4.0)
-      tinymce-rails
-    spree_cli (4.4.0)
+      tinymce-rails (~> 5.0)
+    spree_cli (4.5.1)
       thor (~> 1.0)
-    spree_core (4.4.0)
-      actionpack (>= 5.2)
-      actionview (>= 5.2)
+    spree_core (4.5.1)
+      actionpack (>= 6.1)
+      actionview (>= 6.1)
       active_storage_validations (~> 0.9, <= 0.9.5)
-      activejob (>= 5.2)
+      activejob (>= 6.1)
       activemerchant (~> 1.67)
-      activemodel (>= 5.2)
-      activerecord (>= 5.2)
+      activemodel (>= 6.1)
+      activerecord (>= 6.1)
       activerecord-typedstore
-      activestorage (>= 5.2)
-      activesupport (>= 5.2)
+      activestorage (>= 6.1)
+      activesupport (>= 6.1)
       acts_as_list (>= 0.8)
       auto_strip_attributes (~> 2.6)
       awesome_nested_set (~> 3.3, >= 3.3.1)
@@ -453,53 +538,24 @@ GEM
       highline (~> 2.0)
       image_processing (~> 1.2)
       kaminari (~> 1.2)
-      mini_magick (~> 4.9, >= 4.9.4)
       monetize (~> 1.9)
       money (~> 6.13)
       paranoia (~> 2.4)
-      railties (>= 5.2)
-      ransack (~> 2.3)
+      railties (>= 6.1)
+      ransack (>= 2.3, < 3.0)
       rexml
       state_machines-activemodel (~> 0.7)
       state_machines-activerecord (~> 0.6)
       stringex
       validates_zipcode
-    spree_dev_tools (0.2.0)
-      appraisal
-      awesome_print
-      capybara
-      capybara-screenshot
-      capybara-select-2
-      database_cleaner
-      factory_bot (~> 4.7)
-      ffaker
-      gem-release
-      github_changelog_generator
-      jsonapi-rspec
-      pry
-      puma
-      rails-controller-testing
-      redis
-      rspec-activemodel-mocks
-      rspec-rails (~> 4.0)
-      rspec-retry
-      rspec_junit_formatter (~> 0.4)
-      rubocop
-      rubocop-rails
-      sass-rails
-      selenium-webdriver
-      simplecov
-      spree_core
-      timecop
-      webdrivers (~> 4.3)
-    spree_emails (4.4.0)
+    spree_emails (4.5.1)
       actionmailer
-      spree_core (>= 4.4.0)
+      spree_core (>= 4.5.1)
       sprockets (>= 4.0)
     spree_extension (0.1.0)
       activerecord (>= 4.2)
       spree_core
-    spree_multi_vendor (2.3.0)
+    spree_multi_vendor (2.4.0)
       deface (~> 1.0)
       spree (>= 4.3.0.rc1)
       spree_backend (>= 4.3.0.rc1)
@@ -519,17 +575,19 @@ GEM
     state_machines-activerecord (0.8.0)
       activerecord (>= 5.1)
       state_machines-activemodel (>= 0.8.0)
-    stimulus-rails (1.1.1)
+    stimulus-rails (1.2.1)
       railties (>= 6.0.0)
     stringex (2.8.5)
     terminal-table (3.0.2)
       unicode-display_width (>= 1.1.1, < 3)
     thor (1.2.1)
     tilt (2.0.11)
-    timecop (0.9.5)
+    timecop (0.9.6)
     timeout (0.3.1)
-    tinymce-rails (6.3.0)
+    timers (4.3.5)
+    tinymce-rails (5.10.7)
       railties (>= 3.1.1)
+    traces (0.8.0)
     turbo-rails (1.3.2)
       actionpack (>= 6.0.0)
       activejob (>= 6.0.0)
@@ -537,8 +595,7 @@ GEM
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.3.0)
-    uniform_notifier (1.16.0)
-    validates_zipcode (0.5.1)
+    validates_zipcode (0.5.2)
       activemodel (>= 4.2.0)
     warden (1.2.9)
       rack (>= 2.0.9)
@@ -546,6 +603,7 @@ GEM
       nokogiri (~> 1.6)
       rubyzip (>= 1.3.0)
       selenium-webdriver (> 3.141, < 5.0)
+    websocket (1.2.9)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -563,7 +621,6 @@ PLATFORMS
 
 DEPENDENCIES
   brakeman
-  bullet
   byebug
   elasticsearch (~> 8.5)
   interactor (~> 3.1)
@@ -574,14 +631,15 @@ DEPENDENCIES
   rubocop-rails
   searchkick (~> 5.1)
   shoulda-matchers (~> 5.0)
-  spree (~> 4.4.0)
-  spree_api (~> 4.4.0)
+  spree (~> 4.5.0)
+  spree_api (~> 4.5.0)
+  spree_api_v1
   spree_auth_devise
-  spree_backend (~> 4.4.0)
+  spree_backend (~> 4.5.0)
   spree_cm_commissioner!
-  spree_dev_tools
+  spree_dev_tools!
   spree_multi_vendor
   terminal-table (~> 3.0.1)
 
 BUNDLED WITH
-   2.3.26
+   2.4.5
