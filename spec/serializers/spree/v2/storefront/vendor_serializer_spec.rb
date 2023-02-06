@@ -29,6 +29,7 @@ RSpec.describe Spree::V2::Storefront::VendorSerializer, type: :serializer do
       it { expect(subject[:data][:relationships]).to include(:promoted_option_types) }
       it { expect(subject[:data][:relationships]).to include(:nearby_places) }
       it { expect(subject[:data][:relationships]).to include(:places) }
+      it { expect(subject[:data][:relationships]).to include(:promoted_option_values) }
     end
 
     context 'with include' do

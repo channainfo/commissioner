@@ -57,6 +57,31 @@ RSpec.describe Spree::Vendor, type: :model do
     end
   end
 
+  describe '#promoted_option_value_ids' do
+    let!(:option_type1) { create(:option_type, promoted: true, kind: :vendor) }
+    let!(:option_value1) { create(:option_value, option_type: option_type1) }
+    let!(:vendor) { create(:vendor, option_types: [option_type1]) }
+
+    it 'return vendor promoted option values' do
+      create(:cm_option_value_vendor, vendor: vendor, option_value: option_value1)
+      vendor.reload
+
+      expect(vendor.promoted_option_value_ids).to eq [option_value1.id]
+    end
+
+    it 'return vendor promoted option values' do
+      option_value1 = create(:option_value, option_type: option_type1)
+      option_value2 = create(:option_value, option_type: option_type1)
+
+      vendor = create(:vendor, option_types: [option_type1])
+
+      create(:cm_option_value_vendor, vendor: vendor, option_value: option_value1)
+      vendor.reload
+
+      expect(vendor.promoted_option_value_ids).to eq [option_value1.id]
+    end
+  end
+
   describe '#update' do
     let(:phnom_penh) { create(:state, name: 'Phnom Penh') }
     let(:siem_reap) { create(:state, name: 'Siem Reap') }
