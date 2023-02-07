@@ -10,7 +10,7 @@ module Spree
       base.has_many :vendor_option_types, class_name: 'SpreeCmCommissioner::VendorOptionType'
       base.has_many :option_value_vendors, class_name: 'SpreeCmCommissioner::OptionValueVendor'
       base.has_many :option_types, through: :vendor_option_types
-      
+
       base.has_many :promoted_option_types, -> { where(promoted: :true).order(:position) },
         through: :vendor_option_types, source: :option_type
 
@@ -21,6 +21,8 @@ module Spree
         through: :option_value_vendors, source: :option_value
 
       base.has_one  :logo, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorLogo'
+
+      base.after_save :update_state_total_inventory, if: :saved_change_to_total_inventory?
 
       # TODO: we will need searchkick later
       # unless Rails.env.test?
@@ -72,6 +74,10 @@ module Spree
       def update_location
         update(state_id: stock_locations.first&.state_id)
       end
+
+      def update_state_total_inventory
+        SpreeCmCommissioner::StateJob.perform_later(state_id) unless state_id.nil?
+      end
     end
 
     def selected_option_value_vendors_ids
@@ -81,5 +87,3 @@ module Spree
 end
 
 Spree::Vendor.prepend(Spree::VendorDecorator)
-
-
