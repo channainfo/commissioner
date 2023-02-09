@@ -3,6 +3,7 @@ module Spree
     module Storefront
       module UserSerializerDecorator
         def self.prepended(base)
+          base.attributes :first_name, :last_name 
           base.has_one :profile, serializer: :user_profile
         end
       end
