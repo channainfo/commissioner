@@ -5,7 +5,7 @@
       <%= link_to_with_icon 'edit.svg',
         Spree.t(:details),
         edit_admin_vendor_url(@vendor),
-        class: "nav-link #{'active' if current == :details}" 
+        class: "nav-link #{'active' if current == :details}"
       %>
     <% end if can?(:admin, Spree::Vendor) %>
 
@@ -13,7 +13,7 @@
       <%= link_to_with_icon 'images.svg',
         Spree.t(:photos),
         admin_vendor_vendor_photos_url(@vendor),
-        class: "nav-link #{'active' if current == :photos}" 
+        class: "nav-link #{'active' if current == :photos}"
       %>
     <% end if can?(:admin, SpreeCmCommissioner::VendorPhoto) %>
 
@@ -21,10 +21,17 @@
       <%= link_to_with_icon 'extensions.svg',
         Spree.t(:vendor_option_types),
         admin_vendor_vendor_kind_option_types_url(@vendor),
-        class: "nav-link #{'active' if current == :vendor_option_types}" 
+        class: "nav-link #{'active' if current == :vendor_option_types}"
       %>
     <% end if can?(:admin, SpreeCmCommissioner::VendorOptionType) %>
 
+    <%= content_tag :li do %>
+      <%= link_to_with_icon 'images.svg',
+        Spree.t(:nearby_places),
+        admin_vendor_nearby_places_url(@vendor),
+        class: "nav-link #{'active' if current == :nearby_places}"
+      %>
+    <% end if can?(:admin, SpreeCmCommissioner::VendorPlace) %>
 
   </ul>
 <% end %>

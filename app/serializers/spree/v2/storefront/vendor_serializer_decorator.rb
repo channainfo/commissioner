@@ -10,9 +10,11 @@ module Spree
           base.has_many :photos, serializer: :vendor_photo
           base.has_many :vendor_kind_option_types, serializer: :option_type
           base.has_many :promoted_option_types, serializer: :option_type
+          base.has_many :nearby_places, serializer: :nearby_place
+          base.has_many :places, serializer: :place
 
           base.has_one :logo, serializer: :vendor_logo
-         
+
         end
       end
     end

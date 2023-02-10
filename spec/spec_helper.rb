@@ -15,4 +15,5 @@ Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].sort.each { |f| requir
 RSpec.configure do |config|
   config.include Helper
   config.include DoorkeeperAuthHelper
+  config.extend Spree::TestingSupport::AuthorizationHelpers::Request, type: :request
 end

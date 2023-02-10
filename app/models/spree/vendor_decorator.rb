@@ -10,6 +10,7 @@ module Spree
       base.has_many :vendor_option_types, class_name: 'SpreeCmCommissioner::VendorOptionType'
       base.has_many :option_value_vendors, class_name: 'SpreeCmCommissioner::OptionValueVendor'
       base.has_many :option_types, through: :vendor_option_types
+      base.has_many :nearby_places, -> { order(position: :asc) }, class_name: 'SpreeCmCommissioner::VendorPlace', dependent: :destroy
 
       base.has_many :promoted_option_types, -> { where(promoted: :true).order(:position) },
         through: :vendor_option_types, source: :option_type
@@ -19,6 +20,9 @@ module Spree
 
       base.has_many :vendor_kind_option_values,
         through: :option_value_vendors, source: :option_value
+
+      base.has_many :places,
+        through: :nearby_places, source: :place, class_name: 'SpreeCmCommissioner::Place'
 
       base.has_one  :logo, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorLogo'
 
@@ -37,6 +41,14 @@ module Spree
       #     )
       #   }
       # end
+
+      def lat
+        stock_locations.first&.lat
+      end
+
+      def lon
+        stock_locations.first&.lon
+      end
 
       def search_data
         # option_values_presentation
@@ -86,4 +98,4 @@ module Spree
   end
 end
 
-Spree::Vendor.prepend(Spree::VendorDecorator)
+Spree::Vendor.prepend(Spree::VendorDecorator) if Spree::Vendor.included_modules.exclude?(Spree::VendorDecorator)
