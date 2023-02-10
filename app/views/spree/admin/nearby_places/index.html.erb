@@ -1,0 +1,51 @@
+<%= render partial: 'spree/admin/shared/vendor_tabs', locals: {current: :nearby_places} %>
+
+<% content_for :page_title do %>
+  <%= link_to plural_resource_name(Spree::Vendor), spree.admin_vendors_url %> /
+  <%= @vendor.name %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= yield :page_actions %>
+  <%= button_link_to(Spree.t(:new_nearby_place), new_admin_vendor_nearby_place_url(@vendor), { class: "btn-success", icon: 'add.svg', id: 'new_nearby_place_link' }) if can? :create, SpreeCmCommissioner::VendorPlace %>
+<% end %>
+
+<div class="table-responsive">
+  <table class="table sortable" data-hook="images_table" data-sortable-link="<%= update_positions_admin_vendor_nearby_places_url(@vendor) %>">
+    <thead>
+      <tr data-hook="images_header">
+        <th>
+          <%= Spree.t(:id) %>
+        </th>
+        <th colspan="2">
+          <%= Spree.t(:name) %>
+        </th>
+        <th>
+          <%= Spree.t(:distance) %>
+        </th>
+        <th class="actions"></th>
+      </tr>
+    </thead>
+
+    <tbody id="sortVert">
+      <% (@nearby_places).each do |nearby_place| %>
+        <tr id="<%= spree_dom_id nearby_place %>" data-hook="places_row">
+          <td><%= nearby_place.id %></td>
+          <td class="move-handle text-center">
+            <% if can? :edit, nearby_place %>
+              <%= svg_icon name: "sort.svg", width: '18', height: '18' %>
+            <% end %>
+          </td>
+          <td><%= nearby_place.place.name %></td>
+          <td><%= nearby_place.distance %></td>
+          <td class="actions">
+            <span class="d-flex justify-content-end">
+              <%= link_to_with_icon('edit.svg', Spree.t(:edit), edit_admin_vendor_nearby_place_url(@vendor, nearby_place), class: 'btn btn-primary btn-sm', no_text: true, data: { action: 'edit' }) if can? :edit, nearby_place %>
+              <%= link_to_delete(nearby_place, { url: admin_vendor_nearby_place_url(@vendor, nearby_place), no_text: true }) if can? :destroy, nearby_place %>
+            </span>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

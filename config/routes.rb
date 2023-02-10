@@ -18,7 +18,12 @@ Spree::Core::Engine.add_routes do
       end
       resources :vendor_kind_option_types, only: [:index, :update] do
         collection do
-          patch :update
+          patch :update_positions
+        end
+      end
+      resources :nearby_places do
+        collection do
+          post :update_positions
         end
       end
     end
@@ -37,6 +42,9 @@ Spree::Core::Engine.add_routes do
       namespace :storefront do
         resources :accommodations, only: %i[index show]
         resources :provinces, only: %i[index]
+        resources :vendors do
+          resources :nearby_places, only: %i[index]
+        end
       end
     end
   end
