@@ -18,6 +18,7 @@ Spree::Core::Engine.add_routes do
       end
       resources :vendor_kind_option_types, only: [:index, :update] do
         collection do
+          patch :update
           patch :update_positions
         end
       end

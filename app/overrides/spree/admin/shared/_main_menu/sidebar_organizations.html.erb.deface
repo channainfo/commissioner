@@ -1,0 +1,6 @@
+<!-- remove "#sidebarOrganizations" -->
+
+# TODO:
+
+# Remove as we don't need organizations side bar yet because spree_multi_vendor still has it.
+# Once spree_multi_vendor remove its side bar, we can remove this file.

@@ -1,2 +1,3 @@
-<!-- insert_before "erb[silent]:contains('content_for :page_title')" -->
+<!-- replace "erb[silent]:contains('content_for :page_title')" closing_selector "erb[silent]:contains('end')" -->
+
 <%= render partial: 'spree/admin/shared/vendor_tabs', locals: { current: :details } %>
