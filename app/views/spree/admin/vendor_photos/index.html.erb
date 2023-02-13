@@ -1,15 +1,11 @@
 <%= render partial: 'spree/admin/shared/vendor_tabs', locals: {current: :photos} %>
 
-<% content_for :page_title do %>
-  <%= link_to plural_resource_name(Spree::Vendor), spree.admin_vendors_url %> /
-  <%= @vendor.name %>
-<% end %>
-
 <% content_for :page_actions do %>
   <%= yield :page_actions %>
   <%= button_link_to(Spree.t(:new_photo), new_admin_vendor_vendor_photo_url(@vendor), { class: "btn-success", icon: 'add.svg', id: 'new_image_link' }) if can? :create, Spree::Image %>
 <% end %>
 
+<% unless @objects.empty? %>
 <div class="table-responsive">
   <table class="table sortable" data-hook="images_table" data-sortable-link="<%= update_positions_admin_vendor_vendor_photos_url(@vendor) %>">
     <thead>
@@ -53,3 +49,8 @@
     </tbody>
   </table>
 </div>
+<% else %>
+<small class="form-text text-muted">
+  <%= raw I18n.t('photo.empty_info') %>
+</small>
+<% end %>

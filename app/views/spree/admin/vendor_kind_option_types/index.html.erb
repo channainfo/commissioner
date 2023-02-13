@@ -1,9 +1,4 @@
-<%= render partial: 'spree/admin/shared/vendor_tabs', locals: { current: :vendor_rules } %>
-
-<% content_for :page_title do %>
-  <%= link_to plural_resource_name(Spree::Vendor), spree.admin_vendors_url %> /
-  <%= @vendor.name %>
-<% end %>
+<%= render partial: 'spree/admin/shared/vendor_tabs', locals: { current: :vendor_option_types } %>
 
 <% content_for :page_actions do %>
   <%= button_link_to Spree.t(:edit_icons), 
@@ -24,5 +19,3 @@
     </small>
   <% end %>
 <% end %>
-
-
