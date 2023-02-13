@@ -28,6 +28,9 @@ module Spree
 
       base.after_save :update_state_total_inventory, if: :saved_change_to_total_inventory?
 
+      base.has_many :promoted_option_values, -> { joins(:option_type).where('option_type.promoted' => true) },
+        through: :option_value_vendors, source: :option_value
+
       # TODO: we will need searchkick later
       # unless Rails.env.test?
       #   base.searchkick(
