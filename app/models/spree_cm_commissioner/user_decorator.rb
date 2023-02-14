@@ -1,4 +1,4 @@
-module Spree
+module SpreeCmCommissioner
   module UserDecorator
     def self.prepended(base)
       base.enum gender: %i[male female other]
@@ -10,4 +10,6 @@ module Spree
   end
 end
 
-Spree::User.prepend(Spree::UserDecorator) if Spree::User.included_modules.exclude?(Spree::UserDecorator)
+unless Spree::User.included_modules.include?(SpreeCmCommissioner::UserDecorator)
+  Spree::User.prepend(SpreeCmCommissioner::UserDecorator)
+end

@@ -1,4 +1,4 @@
-module Spree
+module SpreeCmCommissioner
   module VariantDecorator
     def self.prepended(base)
       base.after_commit :update_vendor_price
@@ -43,4 +43,6 @@ module Spree
   end
 end
 
-Spree::Variant.prepend(Spree::VariantDecorator) if Spree::Variant.included_modules.exclude?(Spree::VariantDecorator)
+unless Spree::Variant.included_modules.include?(SpreeCmCommissioner::VariantDecorator)
+  Spree::Variant.prepend(SpreeCmCommissioner::VariantDecorator)
+end

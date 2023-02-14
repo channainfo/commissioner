@@ -1,4 +1,4 @@
-module Spree
+module SpreeCmCommissioner
   module StateDecorator
     def self.prepended(base)
       base.has_many :vendors
@@ -10,4 +10,6 @@ module Spree
   end
 end
 
-Spree::State.prepend(Spree::StateDecorator) if Spree::State.included_modules.exclude?(Spree::StateDecorator)
+unless Spree::State.included_modules.include?(SpreeCmCommissioner::StateDecorator)
+  Spree::State.prepend(SpreeCmCommissioner::StateDecorator)
+end

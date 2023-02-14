@@ -1,4 +1,4 @@
-module Spree
+module SpreeCmCommissioner
   module OptionValueDecorator
     def self.prepended(base)
       base.include SpreeCmCommissioner::AttrTypeValidation
@@ -13,4 +13,6 @@ module Spree
   end
 end
 
-Spree::OptionValue.prepend Spree::OptionValueDecorator
+unless Spree::OptionValue.included_modules.include?(SpreeCmCommissioner::OptionValueDecorator)
+  Spree::OptionValue.prepend SpreeCmCommissioner::OptionValueDecorator
+end

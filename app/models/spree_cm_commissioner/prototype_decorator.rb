@@ -1,4 +1,4 @@
-module Spree
+module SpreeCmCommissioner
   module PrototypeDecorator
     def self.prepended(base)
       base.include SpreeCmCommissioner::ProductType
@@ -15,4 +15,6 @@ module Spree
   end
 end
 
-Spree::Prototype.prepend Spree::PrototypeDecorator
+unless Spree::Prototype.included_modules.include?(SpreeCmCommissioner::PrototypeDecorator)
+  Spree::Prototype.prepend SpreeCmCommissioner::PrototypeDecorator
+end
