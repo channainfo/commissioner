@@ -1,5 +1,7 @@
 # SpreeCmCommissioner
 
+![Commission gem build status](https://github.com/channainfo/commissioner/actions/workflows/publish.yml/badge.svg?branch= "Build status")
+
 An application platform built on top of Spree commerce for modeling any bussiness applications.
 
 ## Installation
