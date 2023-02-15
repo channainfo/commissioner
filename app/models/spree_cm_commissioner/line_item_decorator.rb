@@ -2,6 +2,8 @@
   module LineItemDecorator
     def self.prepended(base)
       base.before_save :update_vendor_id
+
+      base.delegate :product_type, :accommodation?, :service?, :ecommerce?, to: :product
     end
 
     private

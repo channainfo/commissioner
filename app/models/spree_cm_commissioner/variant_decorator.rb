@@ -13,7 +13,7 @@ module SpreeCmCommissioner
     private
 
     def update_vendor_price
-      if product&.product_type == vendor.primary_product_type
+      if vendor.present? && product&.product_type == vendor&.primary_product_type
         vendor.update(min_price: price) if price < vendor.min_price
         vendor.update(max_price: price) if price > vendor.max_price
       end
