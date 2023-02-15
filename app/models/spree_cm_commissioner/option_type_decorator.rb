@@ -1,4 +1,4 @@
-module Spree
+module SpreeCmCommissioner
   module OptionTypeDecorator
     ATTRIBUTE_TYPES = %w(float integer string boolean date coordinate state_selection)
 
@@ -22,4 +22,6 @@ module Spree
   end
 end
 
-Spree::OptionType.prepend Spree::OptionTypeDecorator if Spree::OptionType.included_modules.exclude?(Spree::OptionTypeDecorator)
+unless Spree::OptionType.included_modules.include?(SpreeCmCommissioner::OptionTypeDecorator)
+  Spree::OptionType.prepend(SpreeCmCommissioner::OptionTypeDecorator)
+end

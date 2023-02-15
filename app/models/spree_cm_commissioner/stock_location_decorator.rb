@@ -1,4 +1,4 @@
-module Spree
+module SpreeCmCommissioner
   module StockLocationDecorator
     def self.prepended(base)
       base.include SpreeCmCommissioner::ProductType
@@ -13,4 +13,6 @@ module Spree
   end
 end
 
-Spree::StockLocation.prepend(Spree::StockLocationDecorator)
+unless Spree::StockLocation.included_modules.include?(SpreeCmCommissioner::StockLocationDecorator)
+  Spree::StockLocation.prepend(SpreeCmCommissioner::StockLocationDecorator)
+end

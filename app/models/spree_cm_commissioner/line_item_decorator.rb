@@ -1,4 +1,4 @@
- module Spree
+ module SpreeCmCommissioner
   module LineItemDecorator
     def self.prepended(base)
       base.before_save :update_vendor_id
@@ -11,4 +11,6 @@
   end
 end
 
-Spree::LineItem.prepend(Spree::LineItemDecorator)
+unless Spree::LineItem.included_modules.include?(SpreeCmCommissioner::LineItemDecorator)
+  Spree::LineItem.prepend(SpreeCmCommissioner::LineItemDecorator)
+end

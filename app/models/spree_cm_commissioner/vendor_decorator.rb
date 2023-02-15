@@ -1,4 +1,4 @@
-module Spree
+module SpreeCmCommissioner
   module VendorDecorator
     STAR_RATING = [1, 2, 3, 4, 5]
 
@@ -101,4 +101,6 @@ module Spree
   end
 end
 
-Spree::Vendor.prepend(Spree::VendorDecorator) if Spree::Vendor.included_modules.exclude?(Spree::VendorDecorator)
+unless Spree::Vendor.included_modules.include?(SpreeCmCommissioner::VendorDecorator)
+  Spree::Vendor.prepend(SpreeCmCommissioner::VendorDecorator)
+end

@@ -1,4 +1,4 @@
-module Spree
+module SpreeCmCommissioner
   module ProductDecorator
     def self.prepended(base)
       base.include SpreeCmCommissioner::ProductType
@@ -29,4 +29,6 @@ module Spree
   end
 end
 
-Spree::Product.prepend(Spree::ProductDecorator)
+unless Spree::Product.included_modules.include?(SpreeCmCommissioner::ProductDecorator)
+  Spree::Product.prepend(SpreeCmCommissioner::ProductDecorator)
+end
