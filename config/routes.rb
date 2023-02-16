@@ -36,6 +36,14 @@ Spree::Core::Engine.add_routes do
         end
       end
     end
+
+    resources :taxonomies do
+      resources :taxons do
+        member do
+          delete :remove_category_icon
+        end
+      end
+    end
   end
 
   namespace :api, defaults: { format: 'json' } do

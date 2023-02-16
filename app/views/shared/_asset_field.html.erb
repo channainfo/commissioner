@@ -1,0 +1,20 @@
+<%# :field, eg. :category_icon or :icon %>
+<%# :label, eg. 'Icon', Spree.t(:icon), I18n.t('icon.field') %>
+<%# :asset %>
+<%# :remove_url, optional %>
+<%# :form %>
+
+<%= form.field_container field, class: ['rounded', 'border', 'p-3'] do %>
+  <%= image_tag(main_app.rails_blob_url(asset.attachment),
+    class: 'rounded border mb-4 mw-100', 
+    style: 'max-height: 100px') if asset %>
+
+  <div data-hook="file" class="form-group">
+    <%= form.label field, label || Spree.t(field) %>
+    <%= form.file_field field %>
+  </div>
+
+  <% if asset.present? && defined?(remove_url) %>
+    <%= link_to Spree.t(:remove_image), remove_url, method: :delete %>
+  <% end %>
+<% end %>
