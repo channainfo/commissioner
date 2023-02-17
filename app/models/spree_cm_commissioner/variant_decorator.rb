@@ -13,10 +13,10 @@ module SpreeCmCommissioner
     private
 
     def update_vendor_price
-      if vendor.present? && product&.product_type == vendor&.primary_product_type
-        vendor.update(min_price: price) if price < vendor.min_price
-        vendor.update(max_price: price) if price > vendor.max_price
-      end
+      return unless vendor.present? && product&.product_type == vendor&.primary_product_type
+
+      vendor.update(min_price: price) if price < vendor.min_price
+      vendor.update(max_price: price) if price > vendor.max_price
     end
 
     def update_vendor_total_inventory
@@ -30,12 +30,12 @@ module SpreeCmCommissioner
         option_type = option_value.option_type
 
         if variant.is_master? && !option_type.product?
-          message = I18n.t("variant.validation.option_type_is_not_product", option_type_name: option_type.name, option_value_name: option_value.name)
-          errors.add(:attr_type, message) 
+          message = I18n.t('variant.validation.option_type_is_not_product', option_type_name: option_type.name, option_value_name: option_value.name)
+          errors.add(:attr_type, message)
         end
 
         if !variant.is_master? && !option_type.variant?
-          message = I18n.t("variant.validation.option_type_is_not_variant", option_type_name: option_type.name, option_value_name: option_value.name)
+          message = I18n.t('variant.validation.option_type_is_not_variant', option_type_name: option_type.name, option_value_name: option_value.name)
           errors.add(:attr_type, message)
         end
       end
@@ -43,6 +43,4 @@ module SpreeCmCommissioner
   end
 end
 
-unless Spree::Variant.included_modules.include?(SpreeCmCommissioner::VariantDecorator)
-  Spree::Variant.prepend(SpreeCmCommissioner::VariantDecorator)
-end
+Spree::Variant.prepend(SpreeCmCommissioner::VariantDecorator) unless Spree::Variant.included_modules.include?(SpreeCmCommissioner::VariantDecorator)

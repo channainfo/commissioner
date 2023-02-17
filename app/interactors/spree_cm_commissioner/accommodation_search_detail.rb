@@ -1,3 +1,5 @@
+# rubocop:disable Style/MissingRespondToMissing
+
 module SpreeCmCommissioner
   class AccommodationSearchDetail < BaseInteractor
     delegate :params, to: :context
@@ -9,7 +11,9 @@ module SpreeCmCommissioner
     end
 
     def accommodation_query
-      SpreeCmCommissioner::AccommodationQuery.new(from_date: from_date, to_date: to_date, province_id: province_id, vendor_id: vendor_id).with_available_inventory
+      SpreeCmCommissioner::AccommodationQuery.new(from_date: from_date, to_date: to_date, province_id: province_id,
+                                                  vendor_id: vendor_id
+      ).with_available_inventory
     end
 
     def method_missing(name)
@@ -24,22 +28,22 @@ module SpreeCmCommissioner
 
     def where_query
       where_query = {
-        active: true,
+        active: true
       }
       where_query[:presentation] = province_id.to_s if province_id
       where_query
     end
 
-    protected
     def check_is_detail
       context.properties[:vendor_id] = nil
+      context.is_detail = params[:id].present?
 
-      if context.is_detail = params[:id].present?
-        resource = Spree::Vendor.find_by(slug: params[:id])
+      return unless context.is_detail
 
-        context.fail! if resource.nil?
-        context.properties[:vendor_id] = resource.id   # accommodation id
-      end
+      resource = Spree::Vendor.find_by(slug: params[:id])
+
+      context.fail! if resource.nil?
+      context.properties[:vendor_id] = resource.id # accommodation id
     end
 
     def prepare_params
@@ -53,12 +57,12 @@ module SpreeCmCommissioner
       # passenger_options
       context.properties[:passenger_options] = passenger_options
       # pagination
-      context.properties[:per_page] = per_page > 0 ? per_page : Spree::Config[:products_per_page]
+      context.properties[:per_page] = per_page.positive? ? per_page : Spree::Config[:products_per_page]
       context.properties[:page] = if params[:page].respond_to?(:to_i)
-                             params[:page].to_i <= 0 ? 1 : params[:page].to_i
-                           else
-                             1
-                           end
+                                    params[:page].to_i <= 0 ? 1 : params[:page].to_i
+                                  else
+                                    1
+                                  end
     end
 
     def passenger_options
@@ -66,3 +70,4 @@ module SpreeCmCommissioner
     end
   end
 end
+# rubocop:enable Style/MissingRespondToMissing

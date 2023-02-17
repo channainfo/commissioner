@@ -1,11 +1,10 @@
 module SpreeCmCommissioner
   class FirebaseIdTokenProvider < BaseInteractor
-
     # :id_token
     def call
       claim = decode_id_token
-  
-      if(claim)
+
+      if claim
         context.claim = claim
         context.provider = extract_provider_params
       else
@@ -13,7 +12,7 @@ module SpreeCmCommissioner
         context.fail!(message: error_message)
       end
     end
-  
+
     # Response sample:
     # ---------- Header --------
     # {
@@ -39,41 +38,39 @@ module SpreeCmCommissioner
     #     },
     #   }
     # }
-  
+
     # https://firebase.google.com/docs/auth/admin/verify-id-tokens#verify_id_tokens_using_a_third-party_jwt_library
     # https://github.com/jwt/ruby-jwt/issues/216
-  
+
     def decode_id_token
-      begin
-        result = JWT.decode(id_token, nil, false, { algorithm: 'RS256' }) do |header|
-          kid = header['kid']
-          cert = cert_generation(kid)
-          public_key = OpenSSL::X509::Certificate.new(cert).public_key
-          public_key
-        end
-        result[0]
-      rescue => ex
-        context.fail!(message: ex.message)
+      result = JWT.decode(id_token, nil, false, { algorithm: 'RS256' }) do |header|
+        kid = header['kid']
+        cert = cert_generation(kid)
+        public_key = OpenSSL::X509::Certificate.new(cert).public_key
+        public_key
       end
+      result[0]
+    rescue StandardError => e
+      context.fail!(message: e.message)
     end
-  
+
     def cert_generation(kid)
       json = fetch_cert_key
       cert = json[kid]
-  
+
       if cert.nil?
-        json =  refresh_fetch_cert_key
+        json = refresh_fetch_cert_key
         cert = json[kid]
       end
-  
+
       cert
     end
-  
+
     def refresh_fetch_cert_key
       Rails.cache.delete('firebase-cert')
       fetch_cert_key
     end
-  
+
     def fetch_cert_key
       Rails.cache.fetch('firebase-cert') do
         url = URI('https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com')
@@ -81,24 +78,21 @@ module SpreeCmCommissioner
         JSON.parse(content)
       end
     end
-  
+
     def extract_provider_params
       claim = context.claim
-  
+
       return nil if claim.nil?
 
-      provider_name = claim["firebase"]["sign_in_provider"]
+      provider_name = claim['firebase']['sign_in_provider']
       sub = claim['firebase']['identities'][provider_name].first
-  
+
       {
         identity_type: provider_name.split('.').first,
         sub: sub
       }
     end
 
-    def id_token
-      context.id_token
-    end
+    delegate :id_token, to: :context
   end
 end
-

@@ -8,7 +8,7 @@ module Spree
       end
 
       def new
-        SpreeCmCommissioner::NearbyPlaceCreator.call(params: permitted_resource_params , vendor: @vendor)
+        SpreeCmCommissioner::NearbyPlaceCreator.call(params: permitted_resource_params, vendor: @vendor)
       end
 
       private
@@ -38,7 +38,7 @@ module Spree
       end
 
       def permitted_resource_params
-        params.permit(nearby_places: [:name, :reference, :lat, :lon, :vicinity, :icon, :url, :rating, :formatted_address, :address_components])
+        params.permit(nearby_places: %i[name reference lat lon vicinity icon url rating formatted_address address_components])
       end
     end
   end

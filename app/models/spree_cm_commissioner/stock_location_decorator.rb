@@ -9,7 +9,6 @@ module SpreeCmCommissioner
         vendor&.update_location
       end
     end
-
   end
 end
 

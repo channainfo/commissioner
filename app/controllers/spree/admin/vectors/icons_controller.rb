@@ -8,7 +8,7 @@ module Spree
         def collection
           @collection ||= [
             backend_icon_objects,
-            commissioner_icon_objects,
+            commissioner_icon_objects
           ]
         end
 

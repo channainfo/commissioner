@@ -1,7 +1,7 @@
 module SpreeCmCommissioner
   module AttrTypeValidation
     extend ActiveSupport::Concern
-    
+
     included do
       def self.act_as_presentation
         validates :presentation, numericality: { only_integer: true }, if: :integer
@@ -17,15 +17,15 @@ module SpreeCmCommissioner
     private
 
     def integer
-      option_type&.attr_type == "integer"
+      option_type&.attr_type == 'integer'
     end
 
     def float
-      option_type&.attr_type == "float"
+      option_type&.attr_type == 'float'
     end
 
     def boolean
-      option_type&.attr_type == "boolean"
+      option_type&.attr_type == 'boolean'
     end
   end
 end

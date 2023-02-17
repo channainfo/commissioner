@@ -1,5 +1,5 @@
 module SpreeCmCommissioner
   def self.table_name_prefix
-    "cm_"
+    'cm_'
   end
 end

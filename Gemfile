@@ -27,6 +27,11 @@ end
 group :development, :test do
   # modify spree_dev_tools to stop using deprecated default_country_id
   gem 'spree_dev_tools', github: 'kimsrung/spree_dev_tools'
+
+  # enforce rails best practice with rubocop
+  gem 'rubocop',             '~> 1.45', require: false
+  gem 'rubocop-performance', '~> 1.16', require: false
+  gem 'rubocop-rails',       '~> 2.17', require: false
 end
 
 group :test do
@@ -37,7 +42,6 @@ group :test do
   gem 'net-smtp'
 
   gem 'rails-controller-testing'
-  gem 'rubocop-rails'
 end
 
 gemspec

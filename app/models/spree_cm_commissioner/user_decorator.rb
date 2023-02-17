@@ -10,6 +10,4 @@ module SpreeCmCommissioner
   end
 end
 
-unless Spree::User.included_modules.include?(SpreeCmCommissioner::UserDecorator)
-  Spree::User.prepend(SpreeCmCommissioner::UserDecorator)
-end
+Spree::User.prepend(SpreeCmCommissioner::UserDecorator) unless Spree::User.included_modules.include?(SpreeCmCommissioner::UserDecorator)

@@ -6,7 +6,7 @@ module Spree
     module Storefront
       module OptionValueSerializerDecorator
         def self.prepended(base)
-          base.attribute :display_icon do | option_value |
+          base.attribute :display_icon do |option_value|
             ActionController::Base.helpers.image_url(option_value.display_icon)
           end
         end

@@ -2,14 +2,15 @@ module Spree
   module Admin
     module VendorsControllerDecorator
       def self.prepended(base)
-        base.before_action :build_logo, only: [:create, :update]
+        base.before_action :build_logo, only: %i[create update]
       end
 
       private
+
       def build_logo
-        if permitted_resource_params[:logo]
-          @vendor.build_logo(attachment: permitted_resource_params.delete(:logo))
-        end
+        return unless permitted_resource_params[:logo]
+
+        @vendor.build_logo(attachment: permitted_resource_params.delete(:logo))
       end
     end
   end

@@ -1,0 +1,14 @@
+###########################################################
+#################### RuboCop Rails ########################
+###########################################################
+
+# You can find all configuration options for rubocop-rails here: https://docs.rubocop.org/rubocop-rails/cops_rails.html
+
+Rails/LexicallyScopedActionFilter:
+  Enabled: false
+
+Rails/HasManyOrHasOneDependent:
+  Enabled: false
+
+Rails/InverseOf:
+  Enabled: false

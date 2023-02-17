@@ -79,6 +79,25 @@ evm start
 evm stop
 ```
 
+### Visual Studio Code Editor && Rubocop
+- Install VScode Extensions: **ruby-rubocop**
+
+- Make sure have below settings in VScode User Settings. It will auto-correct with rubocop after save file
+```json
+{
+  "ruby.rubocop.executePath": "/Users/USER_NAME/.rbenv/shims/",
+}
+```
+
+- We can run auto correction
+```sh
+#  Autocorrect offenses (only when it's safe)
+$ bundle exec rubocop -a # or bundle exec rubocop --auto-correct
+
+# Autocorrect offenses (safe and unsafe).
+$ bundle exec rubocop -A # or bundle exec rubocop --auto-correct-all
+```
+
 ### All environments
 
 Following are required varialbles inside .env

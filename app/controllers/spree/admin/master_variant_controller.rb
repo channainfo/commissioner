@@ -19,16 +19,16 @@ module Spree
         option_values = []
         selected_option_value_ids = params[object_name]['selected_option_value_ids']
 
-        selected_option_value_ids.each do | option_value_id |
+        selected_option_value_ids.each do |option_value_id|
           option_value_id = option_value_id.to_i
 
-          unless option_value_id == 0
+          unless option_value_id.zero?
             option_value = Spree::OptionValue.find(option_value_id)
             option_values << option_value unless option_value.nil?
           end
         end
 
-        { 'option_values': option_values }
+        { option_values: option_values }
       end
 
       # @overrided

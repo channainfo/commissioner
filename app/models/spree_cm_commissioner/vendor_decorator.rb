@@ -1,6 +1,7 @@
+# rubocop:disable Metrics/MethodLength, Metrics/AbcSize
 module SpreeCmCommissioner
   module VendorDecorator
-    STAR_RATING = [1, 2, 3, 4, 5]
+    STAR_RATING = [1, 2, 3, 4, 5].freeze
 
     def self.prepended(base)
       base.include SpreeCmCommissioner::ProductType
@@ -12,24 +13,24 @@ module SpreeCmCommissioner
       base.has_many :option_types, through: :vendor_option_types
       base.has_many :nearby_places, -> { order(position: :asc) }, class_name: 'SpreeCmCommissioner::VendorPlace', dependent: :destroy
 
-      base.has_many :promoted_option_types, -> { where(promoted: :true).order(:position) },
-        through: :vendor_option_types, source: :option_type
+      base.has_many :promoted_option_types, -> { where(promoted: true).order(:position) },
+                    through: :vendor_option_types, source: :option_type
 
       base.has_many :vendor_kind_option_types, -> { where(kind: :vendor).order(:position) },
-        through: :vendor_option_types, source: :option_type
+                    through: :vendor_option_types, source: :option_type
 
       base.has_many :vendor_kind_option_values,
-        through: :option_value_vendors, source: :option_value
+                    through: :option_value_vendors, source: :option_value
 
       base.has_many :places,
-        through: :nearby_places, source: :place, class_name: 'SpreeCmCommissioner::Place'
+                    through: :nearby_places, source: :place, class_name: 'SpreeCmCommissioner::Place'
 
       base.has_one  :logo, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorLogo'
 
       base.after_save :update_state_total_inventory, if: :saved_change_to_total_inventory?
 
       base.has_many :promoted_option_values, -> { joins(:option_type).where('option_type.promoted' => true) },
-        through: :option_value_vendors, source: :option_value
+                    through: :option_value_vendors, source: :option_value
 
       # TODO: we will need searchkick later
       # unless Rails.env.test?
@@ -56,7 +57,7 @@ module SpreeCmCommissioner
       def search_data
         # option_values_presentation
         presentations = option_values.pluck(:presentation).uniq
-        json = {
+        {
           id: id,
           name: name,
           slug: slug,
@@ -65,9 +66,8 @@ module SpreeCmCommissioner
           max_price: max_price,
           created_at: created_at,
           updated_at: updated_at,
-          presentation: presentations,
+          presentation: presentations
         }
-        json
       end
 
       def base.search_fields
@@ -101,6 +101,6 @@ module SpreeCmCommissioner
   end
 end
 
-unless Spree::Vendor.included_modules.include?(SpreeCmCommissioner::VendorDecorator)
-  Spree::Vendor.prepend(SpreeCmCommissioner::VendorDecorator)
-end
+Spree::Vendor.prepend(SpreeCmCommissioner::VendorDecorator) unless Spree::Vendor.included_modules.include?(SpreeCmCommissioner::VendorDecorator)
+
+# rubocop:enable Metrics/MethodLength, Metrics/AbcSize

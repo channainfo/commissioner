@@ -8,7 +8,7 @@ module Spree
         before_action :load_object, only: :update
 
         def load_object
-          option_value_id = params["option-value-id"]
+          option_value_id = params['option-value-id']
           @object = Spree::OptionValue.find(option_value_id)
         end
 
@@ -29,11 +29,11 @@ module Spree
         end
 
         # @overrided
-        def collection_url(options = {kind: kind})
+        def collection_url(options = { kind: kind })
           admin_vectors_option_values_url(options)
         end
-      
-        def kind 
+
+        def kind
           @kind = params[:kind] || 'variant'
         end
       end

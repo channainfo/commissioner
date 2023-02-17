@@ -7,7 +7,8 @@ module SpreeCmCommissioner
     end
 
     def display_icon
-      return "cm-default-icon.svg" unless icon&.end_with?(".svg")
+      return 'cm-default-icon.svg' unless icon&.end_with?('.svg')
+
       icon
     end
   end

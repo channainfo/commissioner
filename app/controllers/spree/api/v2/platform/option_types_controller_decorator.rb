@@ -3,7 +3,7 @@ module Spree
     module V2
       module Platform
         module OptionTypesControllerDecorator
-          def self.prepended(base)
+          def self.prepended(_base)
             def collection
               @collection ||= scope.where(kind: params[:kind]).ransack(params[:filter]).result
             end

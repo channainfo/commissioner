@@ -1,6 +1,5 @@
 module SpreeCmCommissioner
   class UserIdTokenChecker < BaseInteractor
-
     # :id_token
     def call
       firebase_id_token_context = SpreeCmCommissioner::FirebaseIdTokenProvider.call(id_token: context.id_token)

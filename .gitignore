@@ -24,3 +24,7 @@ public/spree
 # Cache
 vendor/cache
 node_modules
+
+# VScode
+.vscode
+!.vscode/.settings.json
