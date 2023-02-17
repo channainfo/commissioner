@@ -19,9 +19,9 @@ module SpreeCmCommissioner
     # 4x3
     def mobile_styles
       {
-        mini: "160x120>",
-        small: "480x360>",
-        medium: "960x720>"
+        mini: '160x120>',
+        small: '480x360>',
+        medium: '960x720>'
       }
     end
   end

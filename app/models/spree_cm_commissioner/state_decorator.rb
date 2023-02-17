@@ -10,6 +10,4 @@ module SpreeCmCommissioner
   end
 end
 
-unless Spree::State.included_modules.include?(SpreeCmCommissioner::StateDecorator)
-  Spree::State.prepend(SpreeCmCommissioner::StateDecorator)
-end
+Spree::State.prepend(SpreeCmCommissioner::StateDecorator) unless Spree::State.included_modules.include?(SpreeCmCommissioner::StateDecorator)

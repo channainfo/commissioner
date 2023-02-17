@@ -10,8 +10,10 @@ FactoryBot.define do
     # create a stock_location with the same name as the vendor
     after :build do |vendor, evaluator|
       state_id ||= create(:state).id
-      stock_location = Spree::StockLocation.find_by(name: vendor.name) || build(:cm_stock_location, name: vendor.name, state_id: evaluator.state_id, vendor: vendor)
-      vendor.stock_locations = [ stock_location ]
+      stock_location = Spree::StockLocation.find_by(name: vendor.name) || build(:cm_stock_location, name: vendor.name, state_id: evaluator.state_id,
+                                                                                                    vendor: vendor
+      )
+      vendor.stock_locations = [stock_location]
     end
 
     after :create do |vendor, evaluator|
@@ -34,5 +36,4 @@ FactoryBot.define do
       end
     end
   end
-
 end

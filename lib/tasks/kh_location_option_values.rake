@@ -9,6 +9,6 @@ namespace :data do
     end
     location_type.save
 
-    p "Created #{location_type.option_values.count} location option values"
+    puts "Created #{location_type.option_values.count} location option values"
   end
 end

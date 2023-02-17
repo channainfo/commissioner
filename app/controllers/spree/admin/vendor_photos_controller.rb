@@ -1,10 +1,10 @@
 # @spree_cm_commissioner_vendor_photo is created by resource controller
 # @spree_cm_commissioner_vendor_photo is equivalent to @object
-# 
-# Override model_class & object_name, 
+#
+# Override model_class & object_name,
 # if object_name does not match the controller name
 #
-# Example. 
+# Example.
 # - object is 'Spree::Image'
 # - controller VendorPhotosController, not ImagesController
 #
@@ -47,7 +47,7 @@ module Spree
 
         @objects = model_class.where(
           viewable_type: viewable_type,
-          viewable_id: viewable_id,
+          viewable_id: viewable_id
         )
       end
 
@@ -57,9 +57,9 @@ module Spree
       end
 
       # form_for :spree_cm_commissioner_vendor_photo.
-      # 
-      # by override object_name, 
-      # on submit form => data in params will include: 
+      #
+      # by override object_name,
+      # on submit form => data in params will include:
       # params['spree_cm_commissioner_vendor_photo']
       #
       # @overrided

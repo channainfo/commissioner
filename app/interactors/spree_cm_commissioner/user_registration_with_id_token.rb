@@ -1,6 +1,5 @@
 module SpreeCmCommissioner
   class UserRegistrationWithIdToken < BaseInteractor
-
     # :id_token
     def call
       firebase_context = SpreeCmCommissioner::FirebaseIdTokenProvider.call(id_token: context.id_token)
@@ -35,8 +34,8 @@ module SpreeCmCommissioner
       identity_type = SpreeCmCommissioner::UserIdentityProvider.identity_types[provider[:identity_type]]
 
       user_identity_provider = SpreeCmCommissioner::UserIdentityProvider.where(
-        user_id: context.user, 
-        identity_type: identity_type,
+        user_id: context.user,
+        identity_type: identity_type
       ).first_or_initialize
 
       user_identity_provider.sub = provider[:sub]

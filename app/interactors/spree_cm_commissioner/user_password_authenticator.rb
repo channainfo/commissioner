@@ -1,12 +1,13 @@
 module SpreeCmCommissioner
   class UserPasswordAuthenticator < BaseInteractor
-
     # :login, :password
     def call
       context.user = Spree.user_class.find_for_database_authentication(email: login)
 
       context.fail!(message: I18n.t('authenticator.incorrect_login')) if context.user.nil?
-      context.fail!(message: I18n.t('authenticator.incorrect_password')) if spree_confirmable? && active_for_authentication? && !validate_password(user)
+      if spree_confirmable? && active_for_authentication? && !validate_password(user)
+        context.fail!(message: I18n.t('authenticator.incorrect_password'))
+      end
       context.fail!(message: I18n.t('authenticator.incorrect_password')) unless validate_password(context.user)
     end
 

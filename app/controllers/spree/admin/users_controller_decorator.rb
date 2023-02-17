@@ -2,14 +2,15 @@ module Spree
   module Admin
     module UsersControllerDecorator
       def self.prepended(base)
-        base.before_action :build_profile, only: [:create, :update]
+        base.before_action :build_profile, only: %i[create update]
       end
 
       private
+
       def build_profile
-        if permitted_resource_params[:profile]
-          @user.build_profile(attachment: permitted_resource_params.delete(:profile))
-        end
+        return unless permitted_resource_params[:profile]
+
+        @user.build_profile(attachment: permitted_resource_params.delete(:profile))
       end
     end
   end

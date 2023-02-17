@@ -1,5 +1,4 @@
-# encoding: UTF-8
-lib = File.expand_path('../lib/', __FILE__)
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift lib unless $LOAD_PATH.include?(lib)
 
 require 'spree_cm_commissioner/version'
@@ -16,15 +15,16 @@ Gem::Specification.new do |s|
   s.homepage  = 'https://github.com/your-github-handle/spree_cm_commissioner'
   s.license = 'BSD-3-Clause'
 
-  s.files       = `git ls-files`.split("\n").reject { |f| f.match(/^spec/) && !f.match(/^spec\/fixtures/) }
+  s.files = `git ls-files`.split("\n").reject { |f| f.match(/^spec/) && !f.match(%r{^spec/fixtures}) }
   s.require_path = 'lib'
   s.requirements << 'none'
 
-  s.add_dependency 'rails',            '~> 7.0.4'
-  s.add_dependency 'searchkick',       '~> 5.1'
   s.add_dependency 'elasticsearch',    '~> 8.5'
   s.add_dependency 'interactor',       '~> 3.1'
+  s.add_dependency 'rails',            '~> 7.0.4'
+  s.add_dependency 'searchkick',       '~> 5.1'
 
-  s.add_development_dependency 'spree_dev_tools'
   s.add_development_dependency 'pg'
+  s.add_development_dependency 'spree_dev_tools'
+  s.metadata['rubygems_mfa_required'] = 'true'
 end

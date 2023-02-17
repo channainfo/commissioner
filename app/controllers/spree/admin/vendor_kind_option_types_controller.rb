@@ -2,7 +2,7 @@ module Spree
   module Admin
     class VendorKindOptionTypesController < Spree::Admin::ResourceController
       before_action :load_resource
-      
+
       # @overrided
       def load_resource
         @vendor ||= Spree::Vendor.find_by(slug: params[:vendor_id])
@@ -20,16 +20,16 @@ module Spree
         option_values = []
         selected_option_value_vendors_ids = params[object_name]['selected_option_value_vendors_ids']
 
-        selected_option_value_vendors_ids.each do | option_value_id |
-          option_value_id = option_value_id.to_i 
+        selected_option_value_vendors_ids.each do |option_value_id|
+          option_value_id = option_value_id.to_i
 
-          unless option_value_id == 0 
+          unless option_value_id.zero?
             option_value = Spree::OptionValue.find(option_value_id)
             option_values << option_value unless option_value.nil?
           end
         end
 
-        { 'vendor_kind_option_values': option_values }
+        { vendor_kind_option_values: option_values }
       end
 
       # @overrided

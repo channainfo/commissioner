@@ -42,9 +42,10 @@ Doorkeeper.configure do
   # custom configuration https://github.com/doorkeeper-gem/doorkeeper/wiki/Customizing-Token-Expiration
   custom_access_token_expires_in do |context|
     # context.grant_type for grant_type, context.client for client, context.scopes for scopes
-    if context.grant_type == Doorkeeper::OAuth::CLIENT_CREDENTIALS # see Doorkeeper::OAuth::GRANT_TYPES for other types
+    case context.grant_type
+    when Doorkeeper::OAuth::CLIENT_CREDENTIALS # see Doorkeeper::OAuth::GRANT_TYPES for other types
       7.days.to_i
-    elsif context.grant_type == Doorkeeper::OAuth::PASSWORD
+    when Doorkeeper::OAuth::PASSWORD
       1.year.to_i
     else
       2.hours.to_i

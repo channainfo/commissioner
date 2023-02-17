@@ -3,7 +3,7 @@ Spree::Core::Engine.add_routes do
   namespace :admin do
     namespace :vectors do
       resources :icons, only: [:index]
-      resources :option_values, only: [:index, :update] do
+      resources :option_values, only: %i[index update] do
         collection do
           post :update
         end
@@ -16,7 +16,7 @@ Spree::Core::Engine.add_routes do
           post :update_positions
         end
       end
-      resources :vendor_kind_option_types, only: [:index, :update] do
+      resources :vendor_kind_option_types, only: %i[index update] do
         collection do
           patch :update
           patch :update_positions
@@ -30,7 +30,7 @@ Spree::Core::Engine.add_routes do
     end
 
     resources :products do
-      resources :master_variant, only: [:index, :update] do
+      resources :master_variant, only: %i[index update] do
         collection do
           patch :update
         end

@@ -1,7 +1,9 @@
 namespace :data do
-  desc "Seeds provinces"
+  desc 'Seeds provinces'
   task seed_kh_provinces: :environment do
-    cambodia = Spree::Country.find_or_initialize_by(iso_name: 'CAMBODIA', iso: 'KH', iso3: 'KHM', name: 'Cambodia', numcode: 116, states_required: false)
+    cambodia = Spree::Country.find_or_initialize_by(iso_name: 'CAMBODIA', iso: 'KH', iso3: 'KHM', name: 'Cambodia', numcode: 116,
+                                                    states_required: false
+    )
     states = [
       { name: 'Phnom Penh', abbr: 'PP' },
       { name: 'Siemreap', abbr: 'SR' },
@@ -32,6 +34,6 @@ namespace :data do
     states.each { |state| cambodia.states.find_or_initialize_by(state) }
     cambodia.save
 
-    p "Created #{cambodia.states.count} provinces"
+    puts "Created #{cambodia.states.count} provinces"
   end
 end

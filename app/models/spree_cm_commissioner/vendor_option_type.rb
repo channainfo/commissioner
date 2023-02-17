@@ -6,4 +6,3 @@ module SpreeCmCommissioner
     belongs_to :option_type, class_name: 'Spree::OptionType', dependent: :destroy
   end
 end
-
