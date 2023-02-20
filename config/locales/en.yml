@@ -9,6 +9,9 @@ en:
 
   hello: "Hello world"
 
+  category_icon:
+    field: Category icon (Square)
+
   option_type:
     kind_info: "<b>Once set</b>, it can't be updated."
     kind_validation: "Attribute can't be updated for %{option_type_name}"
