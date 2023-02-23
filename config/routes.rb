@@ -10,6 +10,10 @@ Spree::Core::Engine.add_routes do
       end
     end
 
+    namespace :merchants do
+      resources :users
+    end
+
     resources :vendors do
       resources :vendor_photos do
         collection do
