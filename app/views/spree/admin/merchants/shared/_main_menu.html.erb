@@ -12,7 +12,7 @@
   </div>
   <% if Spree.user_class && can?(:admin, Spree.user_class) %>
     <ul class="nav nav-sidebar" id="sidebarUser">
-      <%= tab *Spree::Backend::Configuration::USER_TABS, url: spree.admin_users_path, icon: 'people-fill.svg' %>
+      <%= tab *Spree::Backend::Configuration::USER_TABS, url: admin_merchants_users_path(), icon: 'people-fill.svg' %>
     </ul>
   <% end %>
 </nav>

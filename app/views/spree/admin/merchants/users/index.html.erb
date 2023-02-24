@@ -1,1 +1,63 @@
-<h1><%= @route %></h1>
+<% if @users.any? %>
+  <div class="table-responsive border rounded bg-white mb-3">
+    <table class="table" id="listing_users" data-hook>
+      <thead class="text-muted">
+        <tr data-hook="admin_users_index_headers">
+          <th>
+            <%= sort_link @search, :email, Spree.t(:email), {}, {title: 'users_email_title'} %>
+          </th>
+          <th>
+            <%= sort_link @search, :first_name, Spree.t(:first_name), {}, {title: 'first_name_title'} %>
+          </th>
+          <th>
+            <%= sort_link @search, :last_name, Spree.t(:last_name), {}, {title: 'last_name_title'} %>
+          </th>
+          <th>
+            <%= sort_link @search, :gender, Spree.t(:gender), {}, {title: 'gender_title'} %>
+          </th>
+          <th>
+            <%= sort_link @search, :Roles, Spree.t(:roles), {}, {title: 'roles_title'} %>
+          </th>
+          <th>
+            <%= sort_link @search, :created_at, Spree.t(:create_at), {}, {title: 'create_at_title'} %>
+          </th>
+          <th data-hook="admin_users_index_header_actions" class="actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr id="<%= spree_dom_id user %>" data-hook="admin_users_index_rows">
+            <td class='user_email'>
+              <%= link_to user.email, edit_admin_merchants_user_path(id: user.id) %>
+            </td>
+            <td class='first_name'>
+              <%= user.first_name %>
+            </td>
+            <td class='last_name'>
+              <%= user.last_name %>
+            </td>
+            <td class='gender'>
+              <%= user.gender %>
+            </td>
+            <td class='roles'>
+              <% user.spree_roles.each do |role| %>
+                <%= content_tag(:strong, class: "badge #{role.name == 'admin' ? 'badge-primary' : 'badge-secondary' } text-uppercase") do %>
+                  <%= role.name %>
+                <% end %>
+              <% end %>
+            </td>
+            <td class='created_at'>
+              <%= user.created_at %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="text-center no-objects-found m-5 mb-3">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree.user_class)) %>,
+    <%= link_to Spree.t(:add_one), new_object_url %>!
+  </div>
+<% end %>
+<%= paginate @users, theme: 'admin-twitter-bootstrap-4' %>
