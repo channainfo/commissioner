@@ -3,7 +3,8 @@ module Spree
     module Merchants
       class UsersController < Spree::Admin::Merchants::BaseController
         def index
-          @route = 'Created new route'
+          @search = Spree::User.ransack(params[:q])
+          @users = @search.result.page(params[:page] || 1).per(12)
         end
 
         # @overrided
