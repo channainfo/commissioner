@@ -1,0 +1,107 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - www.googleapis.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - scaffolding on HTTPServer2
+      Content-Length:
+      - '2419'
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Date:
+      - Fri, 24 Feb 2023 08:02:59 GMT
+      Expires:
+      - Fri, 24 Feb 2023 14:54:02 GMT
+      Cache-Control:
+      - public, max-age=24663, must-revalidate, no-transform
+      Content-Type:
+      - application/json; charset=UTF-8
+      Vary:
+      - Origin,X-Origin,Referer
+      Age:
+      - '13'
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        {
+          "f876b721400bfafa29d411fe60816bdaec23b382": "-----BEGIN CERTIFICATE-----\nMIIDHTCCAgWgAwIBAgIJAKC/xzutIIHoMA0GCSqGSIb3DQEBBQUAMDExLzAtBgNV\nBAMMJnNlY3VyZXRva2VuLnN5c3RlbS5nc2VydmljZWFjY291bnQuY29tMB4XDTIz\nMDIyMzA5MzkyMFoXDTIzMDMxMTIxNTQyMFowMTEvMC0GA1UEAwwmc2VjdXJldG9r\nZW4uc3lzdGVtLmdzZXJ2aWNlYWNjb3VudC5jb20wggEiMA0GCSqGSIb3DQEBAQUA\nA4IBDwAwggEKAoIBAQC+4YrRPqPjObL8EMpQOtr2CUH/Pu7Xy9Z/NiR2r9t56mqh\nmQX/SwP2MmfiTp3k2mHudrvnkBp8NiPuxvLB1rtuNkh1ix/FtSqQiXsVrVJ35Gmd\nwtKgA/2o3ZKdxZg6MDTKH+E1QUwR3VKTEb9igsIYmbDY8U0XTYEUV4/pQtmKBl8j\nzAa926QAxlo4qvTTLVgtYz2Gcji279mwhEf8hkWjcQcHcdWAKI6SgWuDi4k6X6bQ\nd4XPXCkU8YyZzhFp6FY2WgQ1cFA4OWuWkl1+vL1wp7K6iCj4K247Ucw91+TtpIJw\nH3SA0YKg/byIKkT9GD1mkoi5fc/Ejzt8glEBMPmlAgMBAAGjODA2MAwGA1UdEwEB\n/wQCMAAwDgYDVR0PAQH/BAQDAgeAMBYGA1UdJQEB/wQMMAoGCCsGAQUFBwMCMA0G\nCSqGSIb3DQEBBQUAA4IBAQCe3MNiBa9b8H1M2mfebheLDBLvVoNVzkEgfDE4dcC3\nsAWLYlwrS9XSYTQzDNcI4x7x3f6oQ+r3atbAS/xUnyc+if4mzAg0xYnuNjz4VzRT\nMFdlCQ03ieZ0Gm/kTBfdDtIYm9ouMJNvjaS0HtDt9WG7r2VgNX1wdnB8krDcX0jj\n8c1fuObmSldv5XYIODiPdD5m2Xf3iFBTrlmrasSBzyUxuycUuZG55aPjOImed+yj\nZWq4oVZCdOIddtzvOie/bhGESEVJYNTL3NtvO1bCY4GGpcbosJCPttw3ZmHHuzeh\nFEMDpKJjVObSMtw5LKLzIK2R0PinpvXUIB/m9tp11qg6\n-----END CERTIFICATE-----\n",
+          "15c2b40aa2f322798666a6b332aaa03a6773019b": "-----BEGIN CERTIFICATE-----\nMIIDHDCCAgSgAwIBAgIIUljdYVwEeCYwDQYJKoZIhvcNAQEFBQAwMTEvMC0GA1UE\nAwwmc2VjdXJldG9rZW4uc3lzdGVtLmdzZXJ2aWNlYWNjb3VudC5jb20wHhcNMjMw\nMjE1MDkzOTE5WhcNMjMwMzAzMjE1NDE5WjAxMS8wLQYDVQQDDCZzZWN1cmV0b2tl\nbi5zeXN0ZW0uZ3NlcnZpY2VhY2NvdW50LmNvbTCCASIwDQYJKoZIhvcNAQEBBQAD\nggEPADCCAQoCggEBAOrozwM8hOjLO1b8yg4w0Drb0XlNkUldUPtlovEDj3MO8sQX\nnJZu99oYBnoJ8jKDGgdRkNWIM23evV8jcPflFKGJRrdEg6uUP4w8+8HC6Z8vkbf7\nxUJ1W0zcdN0oJyxE9PCskzdTVuGgpyG+D48k+lMKzjB6s4lgz6ij76ZwykDEFmT2\n/crdzFog3B3n7/6RGIM5RtWZuxedxzrQmW2AB8a4uMqESEzYK7E9bB8+fAi/vNna\nIr5IFhYJIyodbY4kgMeVQQRrlt24NEEp/lNMHRIQXl3oqHiKUsongJI4brkT5mEG\n9pWqgoZWdP8dBagCAveU+6gn/UiyCU5m/c0REacCAwEAAaM4MDYwDAYDVR0TAQH/\nBAIwADAOBgNVHQ8BAf8EBAMCB4AwFgYDVR0lAQH/BAwwCgYIKwYBBQUHAwIwDQYJ\nKoZIhvcNAQEFBQADggEBAAJ9pY3LfKoQMYJ9q3GJdfAgHa46sZ+nKlLwPQly74eK\n+XvpcBNbGbJdwEbliWH9ItgeltrToAt3rIu6nVL+eeJcxzD8dHlPymRziC7nLSjg\nv5U4KebwZQCIw9vpM7ECzFfuLU3q5TJdbw0tiYV9SPSMndAqB7YgTsEjTJMdvuMs\nmprSHsPhz2k8100X0F3xO/Kv8kLsNbvmP8XBtRd9+z493Ag2hPuZJqSHHzK/x6gu\nqsKoPxgDhsPgK86DHynqah+rEJAMLBdWZUCCZCTru8WhOStOcETq+EX/pTylcU4d\npRPPsPPKjy9pCTVtUxrJc1XkJiT8N1PM7APRyXf1ojI=\n-----END CERTIFICATE-----\n"
+        }
+  recorded_at: Fri, 24 Feb 2023 07:59:25 GMT
+- request:
+    method: get
+    uri: https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - www.googleapis.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - scaffolding on HTTPServer2
+      Content-Length:
+      - '2419'
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Date:
+      - Fri, 24 Feb 2023 08:02:59 GMT
+      Expires:
+      - Fri, 24 Feb 2023 14:54:02 GMT
+      Cache-Control:
+      - public, max-age=24663, must-revalidate, no-transform
+      Content-Type:
+      - application/json; charset=UTF-8
+      Vary:
+      - Origin,X-Origin,Referer
+      Age:
+      - '13'
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        {
+          "f876b721400bfafa29d411fe60816bdaec23b382": "-----BEGIN CERTIFICATE-----\nMIIDHTCCAgWgAwIBAgIJAKC/xzutIIHoMA0GCSqGSIb3DQEBBQUAMDExLzAtBgNV\nBAMMJnNlY3VyZXRva2VuLnN5c3RlbS5nc2VydmljZWFjY291bnQuY29tMB4XDTIz\nMDIyMzA5MzkyMFoXDTIzMDMxMTIxNTQyMFowMTEvMC0GA1UEAwwmc2VjdXJldG9r\nZW4uc3lzdGVtLmdzZXJ2aWNlYWNjb3VudC5jb20wggEiMA0GCSqGSIb3DQEBAQUA\nA4IBDwAwggEKAoIBAQC+4YrRPqPjObL8EMpQOtr2CUH/Pu7Xy9Z/NiR2r9t56mqh\nmQX/SwP2MmfiTp3k2mHudrvnkBp8NiPuxvLB1rtuNkh1ix/FtSqQiXsVrVJ35Gmd\nwtKgA/2o3ZKdxZg6MDTKH+E1QUwR3VKTEb9igsIYmbDY8U0XTYEUV4/pQtmKBl8j\nzAa926QAxlo4qvTTLVgtYz2Gcji279mwhEf8hkWjcQcHcdWAKI6SgWuDi4k6X6bQ\nd4XPXCkU8YyZzhFp6FY2WgQ1cFA4OWuWkl1+vL1wp7K6iCj4K247Ucw91+TtpIJw\nH3SA0YKg/byIKkT9GD1mkoi5fc/Ejzt8glEBMPmlAgMBAAGjODA2MAwGA1UdEwEB\n/wQCMAAwDgYDVR0PAQH/BAQDAgeAMBYGA1UdJQEB/wQMMAoGCCsGAQUFBwMCMA0G\nCSqGSIb3DQEBBQUAA4IBAQCe3MNiBa9b8H1M2mfebheLDBLvVoNVzkEgfDE4dcC3\nsAWLYlwrS9XSYTQzDNcI4x7x3f6oQ+r3atbAS/xUnyc+if4mzAg0xYnuNjz4VzRT\nMFdlCQ03ieZ0Gm/kTBfdDtIYm9ouMJNvjaS0HtDt9WG7r2VgNX1wdnB8krDcX0jj\n8c1fuObmSldv5XYIODiPdD5m2Xf3iFBTrlmrasSBzyUxuycUuZG55aPjOImed+yj\nZWq4oVZCdOIddtzvOie/bhGESEVJYNTL3NtvO1bCY4GGpcbosJCPttw3ZmHHuzeh\nFEMDpKJjVObSMtw5LKLzIK2R0PinpvXUIB/m9tp11qg6\n-----END CERTIFICATE-----\n",
+          "15c2b40aa2f322798666a6b332aaa03a6773019b": "-----BEGIN CERTIFICATE-----\nMIIDHDCCAgSgAwIBAgIIUljdYVwEeCYwDQYJKoZIhvcNAQEFBQAwMTEvMC0GA1UE\nAwwmc2VjdXJldG9rZW4uc3lzdGVtLmdzZXJ2aWNlYWNjb3VudC5jb20wHhcNMjMw\nMjE1MDkzOTE5WhcNMjMwMzAzMjE1NDE5WjAxMS8wLQYDVQQDDCZzZWN1cmV0b2tl\nbi5zeXN0ZW0uZ3NlcnZpY2VhY2NvdW50LmNvbTCCASIwDQYJKoZIhvcNAQEBBQAD\nggEPADCCAQoCggEBAOrozwM8hOjLO1b8yg4w0Drb0XlNkUldUPtlovEDj3MO8sQX\nnJZu99oYBnoJ8jKDGgdRkNWIM23evV8jcPflFKGJRrdEg6uUP4w8+8HC6Z8vkbf7\nxUJ1W0zcdN0oJyxE9PCskzdTVuGgpyG+D48k+lMKzjB6s4lgz6ij76ZwykDEFmT2\n/crdzFog3B3n7/6RGIM5RtWZuxedxzrQmW2AB8a4uMqESEzYK7E9bB8+fAi/vNna\nIr5IFhYJIyodbY4kgMeVQQRrlt24NEEp/lNMHRIQXl3oqHiKUsongJI4brkT5mEG\n9pWqgoZWdP8dBagCAveU+6gn/UiyCU5m/c0REacCAwEAAaM4MDYwDAYDVR0TAQH/\nBAIwADAOBgNVHQ8BAf8EBAMCB4AwFgYDVR0lAQH/BAwwCgYIKwYBBQUHAwIwDQYJ\nKoZIhvcNAQEFBQADggEBAAJ9pY3LfKoQMYJ9q3GJdfAgHa46sZ+nKlLwPQly74eK\n+XvpcBNbGbJdwEbliWH9ItgeltrToAt3rIu6nVL+eeJcxzD8dHlPymRziC7nLSjg\nv5U4KebwZQCIw9vpM7ECzFfuLU3q5TJdbw0tiYV9SPSMndAqB7YgTsEjTJMdvuMs\nmprSHsPhz2k8100X0F3xO/Kv8kLsNbvmP8XBtRd9+z493Ag2hPuZJqSHHzK/x6gu\nqsKoPxgDhsPgK86DHynqah+rEJAMLBdWZUCCZCTru8WhOStOcETq+EX/pTylcU4d\npRPPsPPKjy9pCTVtUxrJc1XkJiT8N1PM7APRyXf1ojI=\n-----END CERTIFICATE-----\n"
+        }
+  recorded_at: Fri, 24 Feb 2023 07:59:25 GMT
+recorded_with: VCR 6.1.0
