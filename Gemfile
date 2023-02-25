@@ -42,6 +42,8 @@ group :test do
   gem 'net-smtp'
 
   gem 'rails-controller-testing'
+  gem 'vcr'
+  gem 'webmock'
 end
 
 gemspec
