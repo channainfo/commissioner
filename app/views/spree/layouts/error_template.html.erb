@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head data-hook="admin_inside_head">
+    <%= render partial: 'spree/admin/shared/head' %>
+  </head>
+  <body>
+    <div class="d-flex align-items-center justify-content-center vh-100">
+      <div class="text-center">
+        <%=yield %>
+      </div>
+    </div>
+  </body>
+</html>

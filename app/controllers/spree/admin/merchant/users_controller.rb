@@ -1,7 +1,7 @@
 module Spree
   module Admin
-    module Merchants
-      class UsersController < Spree::Admin::Merchants::BaseController
+    module Merchant
+      class UsersController < Spree::Admin::Merchant::BaseController
         def index
           @search = Spree::User.ransack(params[:q])
           @users = @search.result.page(params[:page] || 1).per(12)
