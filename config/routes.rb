@@ -30,6 +30,8 @@ Spree::Core::Engine.add_routes do
       end
       resources :nearby_places do
         collection do
+          patch :update
+          patch :update_positions
           post :update_positions
         end
       end

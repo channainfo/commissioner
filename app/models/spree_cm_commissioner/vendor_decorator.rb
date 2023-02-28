@@ -32,6 +32,7 @@ module SpreeCmCommissioner
       base.has_many :promoted_option_values, -> { joins(:option_type).where('option_type.promoted' => true) },
                     through: :option_value_vendors, source: :option_value
 
+      base.has_many :promoted_nearby_places, -> { where(promoted: true).order(:position) }, class_name: 'SpreeCmCommissioner::VendorPlace'
       # TODO: we will need searchkick later
       # unless Rails.env.test?
       #   base.searchkick(
@@ -97,6 +98,10 @@ module SpreeCmCommissioner
 
     def selected_option_value_vendors_ids
       option_value_vendors.pluck(:option_value_id)
+    end
+
+    def promoted_nearby_place_ids
+      promoted_nearby_places.pluck(:place_id)
     end
   end
 end
