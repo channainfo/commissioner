@@ -1,6 +1,8 @@
 module SpreeCmCommissioner
   module UserDecorator
     def self.prepended(base)
+      base.include SpreeCmCommissioner::PhoneNumberSanitizer
+
       base.enum gender: %i[male female other]
       base.has_many :user_identity_providers, dependent: :destroy, class_name: 'SpreeCmCommissioner::UserIdentityProvider'
       base.has_one :profile, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::UserProfile'

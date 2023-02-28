@@ -20,6 +20,9 @@ gem 'searchkick',    '~> 5.1'
 gem 'interactor', '~> 3.1'
 gem 'jwt'
 
+# Google libphonenumber library
+gem 'phonelib', '~> 0.5.4'
+
 group :development do
   gem 'brakeman'
 end
