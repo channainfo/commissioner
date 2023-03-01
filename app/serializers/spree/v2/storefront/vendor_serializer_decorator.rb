@@ -13,6 +13,7 @@ module Spree
           base.has_many :nearby_places, serializer: :nearby_place
           base.has_many :places, serializer: :place
           base.has_many :promoted_option_values, serializer: :option_value
+          base.has_many :vendor_kind_option_values, serializer: :option_value
 
           base.has_one :logo, serializer: :vendor_logo
         end
