@@ -1,0 +1,45 @@
+<%= form_with model: @vendor, url: { action: 'update' }  do |form| %>
+  <div class="table-responsive">
+    <table class="table sortable" data-hook="images_table" data-sortable-link="<%= update_positions_admin_vendor_nearby_places_url(@vendor) %>">
+      <thead>
+        <tr data-hook="images_header">
+          <th colspan="3">
+            <%= Spree.t(:name) %>
+          </th>
+            <th colspan="2">
+            <%= Spree.t(:type) %>
+          </th>
+            <th colspan="1">
+            <%= Spree.t(:rating) %>
+          </th>
+          <th colspan="2">
+            <%= Spree.t(:distance) %>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody class="pb-3">
+
+        <%= form.collection_check_boxes  :promoted_nearby_place_ids, @nearby_places.all, :id, :place_id do |value| %>
+          <tr class="spree_cm_commissioner_nearby_places <%= cycle('odd', 'even') %>" id="<%= spree_dom_id value.object %>" data-hook="option_row">
+            <td colspan="3" class="move-handle">
+              <%= svg_icon name: "sort.svg", width: '18', height: '18' %>
+              <label class="ml-2 mr-2" ><%= value.object.place.name %></label>
+            </td>
+            <td colspan="2"><%= value.object.place.types%></td>
+            <td ><%= value.object.place.rating %></td>
+            <td colspan="2"><%= value.object.distance %> km</td>
+              <% if params[:action] == 'new' %>
+                <td><%= value.check_box %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+     <% if params[:action] == 'new' %>
+      <div class='form-actions' data-hook='buttons'>
+        <%= button Spree.t('actions.create'), 'save.svg', 'submit', { class: 'btn-success', data: { disable_with: "#{ Spree.t(:saving) }..." }} %>
+      </div>
+    <% end %>
+<% end %>
