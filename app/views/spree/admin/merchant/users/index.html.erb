@@ -28,7 +28,7 @@
         <% @users.each do |user| %>
           <tr id="<%= spree_dom_id user %>" data-hook="admin_users_index_rows">
             <td class='user_email'>
-              <%= link_to user.email, edit_admin_merchants_user_path(id: user.id) %>
+              <%= link_to user.email, edit_admin_merchant_user_path(id: user.id) %>
             </td>
             <td class='first_name'>
               <%= user.first_name %>
