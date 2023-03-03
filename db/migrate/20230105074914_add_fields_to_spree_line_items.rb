@@ -1,6 +1,6 @@
 class AddFieldsToSpreeLineItems < ActiveRecord::Migration[6.1]
   def change
-    change_table :spree_line_items, bulk: true do |t|
+    change_table :spree_line_items, bulk: true, if_not_exists: true do |t|
       t.datetime :from_date
       t.datetime :to_date
       t.integer :vendor_id

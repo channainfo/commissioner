@@ -9,6 +9,7 @@ Gem::Specification.new do |s|
   s.version     = SpreeCmCommissioner.version
   s.summary     = 'Add extension summary here'
   s.description = 'Add (optional) extension description here'
+  s.required_ruby_version = '>= 2.7'
 
   s.author    = 'You'
   s.email     = 'you@example.com'
@@ -19,10 +20,21 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.requirements << 'none'
 
-  s.add_dependency 'elasticsearch',    '~> 8.5'
-  s.add_dependency 'interactor',       '~> 3.1'
-  s.add_dependency 'rails',            '~> 7.0.4'
-  s.add_dependency 'searchkick',       '~> 5.1'
+  spree_opts = '>= 4.5.0'
+  s.add_dependency 'spree', spree_opts
+  s.add_dependency 'spree_api_v1', spree_opts # latest spree_multi_vendor 2.4.0 still depends on the Spree v1 API
+  s.add_dependency 'spree_auth_devise', spree_opts
+  s.add_dependency 'spree_backend', spree_opts
+  s.add_dependency 'spree_multi_vendor', '>= 2.4.0'
+  s.add_dependency 'spree_extension'
+
+  s.add_dependency 'phonelib'
+  s.add_dependency 'jwt', '>= 2.5.0'
+  s.add_dependency 'elasticsearch', '~> 8.5'
+  s.add_dependency 'interactor', '~> 3.1'
+  s.add_dependency 'rails', '~> 7.0.4'
+  s.add_dependency 'searchkick', '~> 5.1'
+  s.add_dependency 'byebug'
 
   s.add_development_dependency 'pg'
   s.add_development_dependency 'spree_dev_tools'
