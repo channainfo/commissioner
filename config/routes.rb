@@ -55,7 +55,9 @@ Spree::Core::Engine.add_routes do
   namespace :api, defaults: { format: 'json' } do
     namespace :v2 do
       namespace :storefront do
-        resources :accommodations, only: %i[index show]
+        resources :accommodations, only: %i[index show] do
+          resources :price_by_dates, only: %i[index]
+        end
         resources :provinces, only: %i[index]
         resources :vendors do
           resources :nearby_places, only: %i[index]

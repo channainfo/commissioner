@@ -4,6 +4,9 @@ module Spree
       class AccommodationSerializer < VendorSerializer
         has_one :state
 
+        has_many :pricing_rules, serializer: SpreeCmCommissioner::V2::Storefront::VendorPricingRuleSerializer
+        has_many :active_pricing_rules, serializer: SpreeCmCommissioner::V2::Storefront::VendorPricingRuleSerializer
+
         attributes :total_inventory
 
         attribute :total_booking do |vendor|
