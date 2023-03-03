@@ -11,6 +11,8 @@ RSpec.describe Spree::Vendor, type: :model do
     it { should have_many(:option_values).class_name('Spree::OptionValue').through(:products) }
     it { should have_many(:option_types).class_name('Spree::OptionType').through(:vendor_option_types) }
     it { should have_many(:promoted_option_types).class_name('Spree::OptionType').through(:vendor_option_types) }
+    it { should have_many(:pricing_rules).class_name('SpreeCmCommissioner::VendorPricingRule').dependent(:destroy) }
+    it { should have_many(:active_pricing_rules).class_name('SpreeCmCommissioner::VendorPricingRule').dependent(:destroy) }
   end
 
   describe 'attributes' do

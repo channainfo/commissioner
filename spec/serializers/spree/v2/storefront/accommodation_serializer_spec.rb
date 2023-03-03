@@ -26,6 +26,8 @@ RSpec.describe Spree::V2::Storefront::AccommodationSerializer, type: :serializer
       it { expect(subject[:data][:relationships]).to include(:products) }
       it { expect(subject[:data][:relationships]).to include(:stock_locations) }
       it { expect(subject[:data][:relationships]).to include(:vendor_kind_option_types) }
+      it { expect(subject[:data][:relationships]).to include(:pricing_rules) }
+      it { expect(subject[:data][:relationships]).to include(:active_pricing_rules) }
     end
 
     context 'with include' do

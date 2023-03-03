@@ -33,7 +33,9 @@ module SpreeCmCommissioner
                     through: :option_value_vendors, source: :option_value
 
       base.has_many :pricing_rules, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorPricingRule'
-      base.has_many :active_pricing_rules, -> { where(active: true).order(:position) }, class_name: 'SpreeCmCommissioner::VendorPricingRule'
+      base.has_many :active_pricing_rules, lambda {
+                                             where(active: true).order(:position)
+                                           }, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorPricingRule'
 
       # TODO: we will need searchkick later
       # unless Rails.env.test?

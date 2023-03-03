@@ -2,7 +2,7 @@ module Spree
   module Api
     module V2
       module Storefront
-        class PriceByDatesController < ::Spree::Api::V2::ResourceController
+        class PricingRulesController < ::Spree::Api::V2::ResourceController
           before_action :load_vendor
 
           private
