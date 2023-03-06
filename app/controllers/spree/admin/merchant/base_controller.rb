@@ -8,10 +8,10 @@ module Spree
         before_action :required_merchant_user!
         before_action :redirect_with_default_params, unless: :contains_default_params?
 
-        rescue_from SpreeCmCommissioner::UnauthorizedVendorError, with: :handle_unaithorized_vendor
+        rescue_from SpreeCmCommissioner::UnauthorizedVendorError, with: :handle_unauthorized_vendor
 
-        def handle_unaithorized_vendor
-          redirect_to admin_merchant_forbidden_path
+        def handle_unauthorized_vendor
+          redirect_to admin_merchant_forbidden_url
         end
 
         def required_merchant_user!
@@ -29,15 +29,32 @@ module Spree
         end
 
         def default_url_options
-          { slug: current_vendor&.slug || vendors.first&.slug }
+          { vendor_id: current_vendor&.slug || vendors.first&.slug }
         end
 
         def vendors
-          @vendors ||= spree_current_user.vendors
+          @vendors ||= spree_current_user.vendors.to_a
         end
 
         def current_vendor
-          @current_vendor ||= vendors.find_by(slug: params[:slug])
+          @current_vendor ||= vendors.select { |v| v.slug == params[:vendor_id] }.first
+        end
+
+        def page
+          params[:page] || 1
+        end
+
+        def per_page
+          params[:per_page] || 12
+        end
+
+        # @overrided
+        def collection_url(options = {})
+          if parent_data.present?
+            spree.polymorphic_url([:admin, :merchant, parent, model_class], options)
+          else
+            spree.polymorphic_url([:admin, :merchant, model_class], options)
+          end
         end
       end
     end

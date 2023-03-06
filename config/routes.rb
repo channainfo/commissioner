@@ -11,9 +11,12 @@ Spree::Core::Engine.add_routes do
     end
 
     namespace :merchant do
+      scope ':vendor_id' do
+        resources :users
+      end
+
       get '/forbidden', to: 'errors#forbidden', as: :forbidden
-      resources :users
-      get '/', to: redirect('/admin/merchant/users')
+      root to: redirect('/admin/merchant/:vendor_id/users')
     end
 
     resources :vendors do

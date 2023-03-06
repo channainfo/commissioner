@@ -1,3 +1,45 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:users) %>
+<% end %>
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:new_user), new_admin_merchant_user_path, class: "btn-success", icon: 'add.svg', id: 'admin_new_user_link' %>
+<% end if can? :create, Spree::user_class %>
+<% content_for :table_filter_title do %>
+  <%= Spree.t(:search) %>
+<% end %>
+<% content_for :table_filter do %>
+  <div data-hook="admin_users_index_search">
+    <%= search_form_for [:admin, @search], url: spree.admin_merchant_users_path do |f| %>
+      <div class="form-group">
+        <%= f.label :email_cont, Spree.t(:email) %>
+        <%= f.email_field :email_cont, class: "form-control js-quick-search-target js-filterable" %>
+      </div>
+      <div class="row">
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :bill_address_firstname_cont, Spree.t(:first_name) %>
+            <%= f.text_field :bill_address_firstname_cont, class: 'form-control js-filterable' %>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :bill_address_lastname_cont, Spree.t(:last_name) %>
+            <%= f.text_field :bill_address_lastname_cont, class: 'form-control js-filterable' %>
+          </div>
+        </div>
+      </div>
+      <% if Spree::Config[:company] %>
+        <div class="form-group">
+          <%= f.label :bill_address_company_cont, Spree.t(:company) %>
+          <%= f.text_field :bill_address_company_cont, class: 'form-control js-filterable' %>
+        </div>
+      <% end %>
+      <div data-hook="admin_users_index_search_buttons" class="form-actions">
+        <%= button Spree.t(:search), 'search.svg' %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
 <% if @users.any? %>
   <div class="table-responsive border rounded bg-white mb-3">
     <table class="table" id="listing_users" data-hook>
@@ -28,7 +70,7 @@
         <% @users.each do |user| %>
           <tr id="<%= spree_dom_id user %>" data-hook="admin_users_index_rows">
             <td class='user_email'>
-              <%= link_to user.email, edit_admin_merchant_user_path(id: user.id) %>
+              <%= link_to user.email, edit_admin_merchant_user_path(user) %>
             </td>
             <td class='first_name'>
               <%= user.first_name %>
@@ -48,6 +90,12 @@
             </td>
             <td class='created_at'>
               <%= user.created_at %>
+            </td>
+            <td data-hook="admin_users_index_row_actions" class="actions">
+              <span class="d-flex justify-content-end">
+                <%= link_to_edit user ,url: edit_admin_merchant_user_path(user) ,no_text: true if can?(:edit,:merchant, user) %>
+                <%= link_to_delete user,url: admin_merchant_user_path(user), no_text: true if can?(:delete, user) %>
+              </span>
             </td>
           </tr>
         <% end %>
