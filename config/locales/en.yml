@@ -37,11 +37,8 @@ en:
 
   vectors:
     icons:
-      info_rules:
-        first: 'Only allow <b>.svg</b> files. Icons are stored inside "images/" folder, eg. app/assets/images/backend-adjust.svg.'
-        second: "Icons will be separated into [set] based on prefix:"
-        second_eg: "For example, backend-adjust.svg will automatically be marked as BACKEND set."
-        second_set_creation_info: "Currently, only [backend] & [cm] are supported, eg. backend-adjust.svg or cm-adjust.svg"
+      info_rules: 'Only allow <b>%{allow_extensions}</b> files. Icons are stored inside "images/" folder, eg. app/assets/images/backend-adjust.svg.'
+      total: 'Total: %{total_in_page} / %{total_count} icons'
 
   photo:
     empty_info: "No <b>Photos</b> found."

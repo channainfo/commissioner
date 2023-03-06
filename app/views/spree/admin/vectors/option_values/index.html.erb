@@ -22,13 +22,13 @@
               <tr>
                 <% page.each do |value| %>
                   <td style="cursor: pointer;" class="border-bottom option-value-toggler"
-                    data-id="<%= value.id %>" 
+                    data-id="<%= value.id %>"
                     data-value-presentation="<%= value.presentation %>"
-                    data-vector-icon="<%= value.icon %>" 
+                    data-vector-icon="<%= value.icon %>"
                     data-toggle="modal" data-target="#vector-icons-modal">
 
                     <div class="d-flex align-items-center justify-content-left" style="pointer-events: none;">
-                      <%= inline_svg_tag value.display_icon, size: "16px*16px", class: "mr-2" %>
+                      <%= render_vector_icon value.display_icon %>
                       <label class="ml-2 mr-2" ><%= value.presentation %></label>
                     </div>
                   </td>
@@ -87,7 +87,7 @@ function setCurrentSelectedIcon(selectVectorIcon) {
   var optionsContainer = document.getElementById("option_value_icon")
   var selectedOptionContainer = document.getElementById("select2-option_value_icon-container")
   var options = Array.from(optionsContainer.options).map((e) => { return e.value || e.innerHTML })
-  
+
   // # Set to index 0 for 'None' option
   var index = Math.max(options.indexOf(selectVectorIcon), 0)
 
