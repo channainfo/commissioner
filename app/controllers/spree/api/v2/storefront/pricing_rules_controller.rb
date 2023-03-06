@@ -24,7 +24,7 @@ module Spree
           end
 
           def collection_finder
-            SpreeCmCommissioner::AccommodationPriceRule
+            SpreeCmCommissioner::AccommodationPriceRuleCalculator
           end
 
           def serialize_collection(collection)

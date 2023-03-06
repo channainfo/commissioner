@@ -9,8 +9,8 @@ describe 'API V2 Storefront Pricing Rules Spec', type: :request do
 
   describe 'pricing_rules#index' do
     describe 'when hotels setup pricing rules' do
-      let!(:women_day_rule)    { create(:cm_vendor_pricing_rule, date_rule: { type: 'fixed_date', name: 'Women Day', value: '05/03/2023' }, length: 3, position: 1, vendor: phnom_penh_hotel) }
-      let!(:water_policy_rule) { create(:cm_vendor_pricing_rule, date_rule: { type: 'fixed_date', name: 'Water Policy Day', value: '04/03/2023' }, length: 2, position: 2, vendor: phnom_penh_hotel) }
+      let!(:women_day_rule)    { create(:cm_vendor_pricing_rule, date_rule: { type: 'fixed_date', name: 'Women Day', value: '2023-03-05' }, length: 3, position: 1, vendor: phnom_penh_hotel) }
+      let!(:water_policy_rule) { create(:cm_vendor_pricing_rule, date_rule: { type: 'fixed_date', name: 'Water Policy Day', value: '2023-03-04' }, length: 2, position: 2, vendor: phnom_penh_hotel) }
 
       context 'rules apply' do
         before { get "/api/v2/storefront/accommodations/#{phnom_penh_hotel.slug}/pricing_rules?from_date=2023-03-03&to_date=2023-03-09" }
