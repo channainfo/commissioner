@@ -1,8 +1,18 @@
-require 'spree_core'
+require 'spree'
+require 'spree_api_v1'
+require 'spree_backend'
+require 'spree_auth_devise'
+require 'spree_multi_vendor'
 require 'spree_extension'
+
 require 'spree_cm_commissioner/engine'
 require 'spree_cm_commissioner/version'
 require 'spree_cm_commissioner/passenger_option'
+
 require 'searchkick'
 require 'elasticsearch'
 require 'interactor'
+require 'phonelib'
+require 'jwt'
+
+require 'byebug' if Rails.env.development? || Rails.env.test?

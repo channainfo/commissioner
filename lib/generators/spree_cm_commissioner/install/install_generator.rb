@@ -4,7 +4,14 @@ module SpreeCmCommissioner
       class_option :migrate, type: :boolean, default: true
 
       def add_migrations
-        run 'bundle exec rake railties:install:migrations FROM=spree_cm_commissioner'
+        gems = %i[
+          spree_multi_vendor
+          spree_cm_commissioner
+        ]
+
+        gems.each do |gem|
+          run "bundle exec rake railties:install:migrations FROM=#{gem}"
+        end
       end
 
       def run_migrations
