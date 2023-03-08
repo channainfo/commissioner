@@ -2,8 +2,6 @@ module Spree
   module Admin
     module Vectors
       class OptionValuesController < Spree::Admin::ResourceController
-        include SpreeCmCommissioner::IconSetConcern
-
         skip_before_action :load_resource, only: :update
         before_action :load_object, only: :update
 
@@ -14,7 +12,7 @@ module Spree
 
         # @overrided
         def collection
-          @vector_icons = icon_objects
+          @vector_icons = SpreeCmCommissioner::VectorIcon.all
           @collection ||= Spree::OptionType.where(kind: kind)
         end
 

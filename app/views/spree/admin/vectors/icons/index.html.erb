@@ -4,49 +4,42 @@
 
 <%= render partial: 'spree/admin/shared/vectors_tabs', locals: { current: :icons } %>
 
+<% content_for :page_tabs do %>
+  <% SpreeCmCommissioner::VectorIcon::TYPES.each do |path_prefix| %>
+    <li class="nav-item">
+      <% default_params = { path_prefix: path_prefix, extension: '', page: 1, per_page: params[:per_page], query: '' } %>
+      <%= link_to path_prefix.humanize, params[:path_prefix] == path_prefix ? default_params : params.merge(default_params).permit!, class: "nav-link #{'active' if params[:path_prefix] == path_prefix}" %>
+    </li>
+  <% end  %>
+<% end  %>
+
 <small class="form-text text-muted">
   <ul>
-    <li><%= raw I18n.t('vectors.icons.info_rules.first') %></li>
-    <li><%= raw I18n.t('vectors.icons.info_rules.second') %>
-      <ul>
-        <li><%= raw I18n.t('vectors.icons.info_rules.second_eg') %></li>
-        <li><%= raw I18n.t('vectors.icons.info_rules.second_set_creation_info') %></li>
-      </ul>
-    </li>
+    <li><%= raw I18n.t('vectors.icons.info_rules', allow_extensions: SpreeCmCommissioner::VectorIcon::ACCEPTED_EXTENSIONS.to_sentence) %></li>
+    <li><%= raw I18n.t('vectors.icons.total', total_in_page: @collection.size, total_count: @collection.total_count) %></li>
   </ul>
 </small>
 
 <div class="table-responsive">
   <table class="table">
-    <% @collection.each do |set| %>
-      <thead>
+    <tbody class="pb-3">
+      <% @collection.each_slice(4).each do |page| %>
         <tr>
-          <th colspan="6">
-            <%= set.first.set_name %>
-          </th>
+          <% page.each do |vector_icon| %>
+            <td onclick="navigator.clipboard.writeText('<%= vector_icon.path %>');
+                    show_flash('success', '<%= vector_icon.path + ' copied' %>')">
+
+              <div class="d-flex align-items-center justify-content-left" >
+                <%= render_vector_icon vector_icon.path %>
+                <label class="ml-2 mr-2" ><%= vector_icon.icon_name %></label>
+              </div>
+            </td>
+          <% end %>
         </tr>
-      </thead>
-
-      <tbody class="pb-3">
-        <% set.each_slice(5).each do |page| %>
-          <tr>
-            <% page.each do |vector_icon| %>
-              <td class="border-bottom"
-                onclick="navigator.clipboard.writeText('<%= vector_icon.path %>'); 
-                      show_flash('success', '<%= vector_icon.path + ' copied' %>')">
-
-                <div class="d-flex align-items-center justify-content-left" >
-                  <%= inline_svg_tag vector_icon.path, size: "16px*16px" %>
-                  <label class="ml-2 mr-2" ><%= vector_icon.icon_name %></label>
-                </div>
-
-              </td>
-            <% end %>
-          </tr>
-        <% end %>
-        <tr><td colspan=3></td></tr>
-      </tbody>
-
-    <% end %>
+      <% end %>
+      <tr><td colspan=3></td></tr>
+    </tbody>
   </table>
+
+  <%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>
 </div>
