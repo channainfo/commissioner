@@ -6,7 +6,7 @@ RSpec.describe SpreeCmCommissioner::VectorIcon, type: :model do
       it 'construct correct attributes on base path' do
         path = 'backend-keyboard.svg'
         icon = SpreeCmCommissioner::VectorIcon.new(path: path)
-  
+
         expect(icon.path).to eq path
         expect(icon.set_name).to eq 'backend'
         expect(icon.icon_name).to eq 'keyboard'
@@ -15,7 +15,7 @@ RSpec.describe SpreeCmCommissioner::VectorIcon, type: :model do
       it 'construct correct attributes on more "-" on base path' do
         path = 'backend-arrow-up-down.svg'
         icon = SpreeCmCommissioner::VectorIcon.new(path: path)
-  
+
         expect(icon.path).to eq path
         expect(icon.set_name).to eq 'backend'
         expect(icon.icon_name).to eq 'arrow-up-down'
@@ -24,7 +24,7 @@ RSpec.describe SpreeCmCommissioner::VectorIcon, type: :model do
       it 'construct correct attributes on unstructured base path' do
         path = 'backend-arrow_up_down.svg'
         icon = SpreeCmCommissioner::VectorIcon.new(path: path)
-  
+
         expect(icon.path).to eq path
         expect(icon.set_name).to eq 'backend'
         expect(icon.icon_name).to eq 'arrow_up_down'
@@ -34,9 +34,9 @@ RSpec.describe SpreeCmCommissioner::VectorIcon, type: :model do
       it 'construct incorrect attributes on invalid base path' do
         path = 'backend_arrow_up_down.svg'
         icon = SpreeCmCommissioner::VectorIcon.new(path: path)
-  
+
         expect(icon.path).to eq path
-        expect(icon.set_name).to eq 'backend_arrow_up_down.svg'
+        expect(icon.set_name).to eq 'backend_arrow_up_down'
         expect(icon.icon_name).to eq 'backend_arrow_up_down'
       end
     end
@@ -45,7 +45,7 @@ RSpec.describe SpreeCmCommissioner::VectorIcon, type: :model do
       it 'construct correct attributes on nested path' do
         path = 'no-icon/backend-move.svg'
         icon = SpreeCmCommissioner::VectorIcon.new(path: path)
-  
+
         expect(icon.path).to eq path
         expect(icon.set_name).to eq 'backend'
         expect(icon.icon_name).to eq 'move'
@@ -54,7 +54,7 @@ RSpec.describe SpreeCmCommissioner::VectorIcon, type: :model do
       it 'construct correct attributes on root nest path' do
         path = '/heroku/central_market/commissioner/app/assets/images/cm-let-drawing.svg'
         icon = SpreeCmCommissioner::VectorIcon.new(path: path)
-  
+
         expect(icon.path).to eq path
         expect(icon.set_name).to eq 'cm'
         expect(icon.icon_name).to eq 'let-drawing'
