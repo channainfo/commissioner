@@ -1,0 +1,52 @@
+<%= form_for [:admin, @vendor] do |form| %>
+  <div class="table-responsive">
+    <table class="table sortable" data-hook="images_table" data-sortable-link="<%= update_positions_admin_vendor_nearby_places_url(@vendor) %>">
+      <thead>
+        <tr data-hook="images_header">
+          <th colspan="3">
+            <%= Spree.t(:name) %>
+          </th>
+            <th colspan="2">
+            <%= Spree.t(:type) %>
+          </th>
+            <th colspan="1">
+            <%= Spree.t(:rating) %>
+          </th>
+          <th colspan="2">
+            <%= Spree.t(:distance) %>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody class="pb-3">
+        <%= form.fields_for :nearby_places, @nearby_places do |f| %>
+          <%= f.fields_for :place do |p| %>
+            <%= p.hidden_field :reference, value: p.object.reference %>
+            <%= p.hidden_field :types, value: p.object.types %>
+            <%= p.hidden_field :name, value: p.object.name %>
+            <%= p.hidden_field :vicinity, value: p.object.vicinity %>
+            <%= p.hidden_field :lat, value: p.object.lat %>
+            <%= p.hidden_field :lon, value: p.object.lon %>
+            <%= p.hidden_field :icon, value: p.object.icon %>
+            <%= p.hidden_field :rating, value: p.object.rating %>
+          <% end %>
+
+          <%= f.hidden_field :distance, value: f.object.distance %>
+          <tr>
+            <td colspan="3" class="move-handle">
+              <%= svg_icon name: "sort.svg", width: '18', height: '18' %>
+              <label class="ml-2 mr-2" ><%= f.object.place.name %></label>
+            </td>
+            <td colspan="2"><%= f.object.place.types %></td>
+            <td colspan="1"><%= f.object.place.rating %></td>
+            <td colspan="2"><%= f.object.distance %> km</td>
+            <td><%= f.check_box :selected, {}, true, false %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class='form-actions' data-hook='buttons'>
+    <%= button Spree.t('actions.create'), 'save.svg', 'submit', { class: 'btn-success', data: { disable_with: "#{ Spree.t(:saving) }..." }} %>
+  </div>
+<% end %>

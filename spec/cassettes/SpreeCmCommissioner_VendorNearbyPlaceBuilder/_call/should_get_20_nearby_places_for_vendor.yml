@@ -1,0 +1,925 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyBt-OSnDZze6hxGjfiapSxpcyGzBo_COv8&location=10.63226396,104.16990577&radius=5000
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - maps.googleapis.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Mon, 06 Mar 2023 12:07:06 GMT
+      Expires:
+      - Mon, 06 Mar 2023 12:12:06 GMT
+      Cache-Control:
+      - public, max-age=300
+      Vary:
+      - Accept-Language
+      Server:
+      - scaffolding on HTTPServer2
+      Content-Length:
+      - '35380'
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      Server-Timing:
+      - gfet4t7; dur=259
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: UTF-8
+      string: |
+        {
+           "html_attributions" : [],
+           "next_page_token" : "AfLeUgPo4hrcS5IEAFZKQaxzwKP7P8vYJzP6k445r1VBJfpH6qQNJtG9tVKhpzF5726UrX-JI_w4Dy68_XtF1Uff0KgtXSEpXp7gQ530j3M8Rk1hT8xnkvlvephoq4sELNzhDU7dzlN_Hjds8LdsCiglFpZCQdS1FTkxt8HVcgxlgMY8ebf5nNUPWH9k7E_IZGELY9jg93UL60J8_Lm3pU1Pk4df7DdmmORNrKDs64qg0vQAiwcIEzFpkmAFPJ1E3m2M0sLoVmlPR-y8BPbYkUTB40aDRAJMRKUAR6hR5DXBaVer4zHAiN0jsOqiT8cu3vfpDWvP_rOc0FNtc4fmEqaUKuQpo_GXiw1m_cO-iX-cQqcI2Tsv0sG-aCYHolGL1luZq1qSE250YDc4IB9LX8cQ4XeUsRtX96umnuQDj-G2aHID",
+           "results" : [
+              {
+                 "geometry" : {
+                    "location" : {
+                       "lat" : 10.5942421,
+                       "lng" : 104.1640355
+                    },
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 10.64230360467809,
+                          "lng" : 104.2172313373805
+                       },
+                       "southwest" : {
+                          "lat" : 10.53956387382726,
+                          "lng" : 104.1190838501716
+                       }
+                    }
+                 },
+                 "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/geocode-71.png",
+                 "icon_background_color" : "#7B9EB0",
+                 "icon_mask_base_uri" : "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+                 "name" : "Krong Kampot",
+                 "photos" : [
+                    {
+                       "height" : 2272,
+                       "html_attributions" : [
+                          "\u003ca href=\"https://maps.google.com/maps/contrib/118264445122521583401\"\u003eMeta Duong\u003c/a\u003e"
+                       ],
+                       "photo_reference" : "AfLeUgOiZrRH7GsbbQVHP6ebNJBwFemNEbfSQ8guR2d2zyTYgy9aHlsr12y8ShrTTf_0tVrj2qJy4lvhFG6Tn8hAYBg7v1LDIzqa9038_TcuIpoSGegGwaNy8guFrK5tQsi9_etYG9X9jqYxZq3wAm_LbZtKrE2iqj-QO139fevmUHpn5BpF",
+                       "width" : 4608
+                    }
+                 ],
+                 "place_id" : "ChIJb9JffYk2CDER_wfWO0TtUG8",
+                 "reference" : "ChIJb9JffYk2CDER_wfWO0TtUG8",
+                 "scope" : "GOOGLE",
+                 "types" : [ "locality", "political" ],
+                 "vicinity" : "Krong Kampot"
+              },
+              {
+                 "business_status" : "OPERATIONAL",
+                 "geometry" : {
+                    "location" : {
+                       "lat" : 10.6444116,
+                       "lng" : 104.1721365
+                    },
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 10.6458739302915,
+                          "lng" : 104.1733625302915
+                       },
+                       "southwest" : {
+                          "lat" : 10.6431759697085,
+                          "lng" : 104.1706645697085
+                       }
+                    }
+                 },
+                 "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
+                 "icon_background_color" : "#909CE1",
+                 "icon_mask_base_uri" : "https://maps.gstatic.com/mapfiles/place_api/icons/v2/hotel_pinlet",
+                 "name" : "Champa Lodge",
+                 "photos" : [
+                    {
+                       "height" : 2268,
+                       "html_attributions" : [
+                          "\u003ca href=\"https://maps.google.com/maps/contrib/114120684105161756267\"\u003eThomas Santorelli\u003c/a\u003e"
+                       ],
+                       "photo_reference" : "AfLeUgOFLXz32luHyPOTP0i4_CM4EtuoD7iW-v9b5Fo4RUGS-vetCdqbcVIJpIMdei57kHtSYrYhobBhXR5orAaQbln7QzWqx3eUv3x3SaPDKfK3DjJFPOHzyx89T7ibbsQ_zigXiO-5zu3we8Bu-qY4-i9iCNldsFxGF_BtvZiPd7q3FqXI",
+                       "width" : 4032
+                    }
+                 ],
+                 "place_id" : "ChIJZduAPxg2CDERuu6vunT9ASU",
+                 "rating" : 4.6,
+                 "reference" : "ChIJZduAPxg2CDERuu6vunT9ASU",
+                 "scope" : "GOOGLE",
+                 "types" : [ "lodging", "point_of_interest", "establishment" ],
+                 "user_ratings_total" : 135,
+                 "vicinity" : "J5VC+QV6, Kampot River, Kampong Kreang Commune, Teuk Chhou District, Krong Kampot"
+              },
+              {
+                 "business_status" : "OPERATIONAL",
+                 "geometry" : {
+                    "location" : {
+                       "lat" : 10.6004054,
+                       "lng" : 104.1832478
+                    },
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 10.6018553802915,
+                          "lng" : 104.1845867802915
+                       },
+                       "southwest" : {
+                          "lat" : 10.5991574197085,
+                          "lng" : 104.1818888197085
+                       }
+                    }
+                 },
+                 "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
+                 "icon_background_color" : "#909CE1",
+                 "icon_mask_base_uri" : "https://maps.gstatic.com/mapfiles/place_api/icons/v2/hotel_pinlet",
+                 "name" : "Two Moons Hotel",
+                 "opening_hours" : {
+                    "open_now" : true
+                 },
+                 "photos" : [
+                    {
+                       "height" : 3024,
+                       "html_attributions" : [
+                          "\u003ca href=\"https://maps.google.com/maps/contrib/111565371564314995692\"\u003eSomontha Sim\u003c/a\u003e"
+                       ],
+                       "photo_reference" : "AfLeUgO_WabI0wXVZJKPMhptCIBPdr9PYgd5jDCz6FAusOkkMf8_HwxdpfrxyPaYkreldJtw4EV1UlrTyyzdX5wVphFsqEfRwMaiduNi606KKsPNAc9uV8d5RbW11dA__rqDpVa-7nqbOJiJmFeZQEysJIBwkM1wT8-H8ZDJpxFn9wKoaWJN",
+                       "width" : 4032
+                    }
+                 ],
+                 "place_id" : "ChIJz37saYU2CDERtXNF2uUvJx8",
+                 "plus_code" : {
+                    "compound_code" : "J52M+57 Krong Kampot, Cambodia",
+                    "global_code" : "7P26J52M+57"
+                 },
+                 "rating" : 4,
+                 "reference" : "ChIJz37saYU2CDERtXNF2uUvJx8",
+                 "scope" : "GOOGLE",
+                 "types" : [ "lodging", "bar", "point_of_interest", "establishment" ],
+                 "user_ratings_total" : 210,
+                 "vicinity" : "Riverside Rd"
+              },
+              {
+                 "business_status" : "OPERATIONAL",
+                 "geometry" : {
+                    "location" : {
+                       "lat" : 10.6147232,
+                       "lng" : 104.1749649
+                    },
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 10.6161396802915,
+                          "lng" : 104.1762839802915
+                       },
+                       "southwest" : {
+                          "lat" : 10.6134417197085,
+                          "lng" : 104.1735860197085
+                       }
+                    }
+                 },
+                 "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
+                 "icon_background_color" : "#909CE1",
+                 "icon_mask_base_uri" : "https://maps.gstatic.com/mapfiles/place_api/icons/v2/hotel_pinlet",
+                 "name" : "Natural Bungalows",
+                 "photos" : [
+                    {
+                       "height" : 3000,
+                       "html_attributions" : [
+                          "\u003ca href=\"https://maps.google.com/maps/contrib/116876498434909616131\"\u003eBouy Chutka\u003c/a\u003e"
+                       ],
+                       "photo_reference" : "AfLeUgMU7FWpUpjykupGpGGZzHW5jBHVYPYlvnsMSr0vxM8kZjFyXdHPeAd9WccENyUT6uPuA1vLXsuE9ZGG6cjOInRKPgaSU6Ck8k2VvEEQcHJx0vZDxNoLJ4B-RwrtaoSmlHDNlfKoetAuvYydEdtKqHCGHc0g6m8GvlbKs3Jj4pJf9gL1",
+                       "width" : 4000
+                    }
+                 ],
+                 "place_id" : "ChIJf7OKQ2E2CDER_lX0gD4CqRw",
+                 "plus_code" : {
+                    "compound_code" : "J57F+VX Krong Kampot, Cambodia",
+                    "global_code" : "7P26J57F+VX"
+                 },
+                 "rating" : 4,
+                 "reference" : "ChIJf7OKQ2E2CDER_lX0gD4CqRw",
+                 "scope" : "GOOGLE",
+                 "types" : [ "lodging", "point_of_interest", "establishment" ],
+                 "user_ratings_total" : 94,
+                 "vicinity" : "60 Meters North of the new bridge, Krong Kampot"
+              },
+              {
+                 "business_status" : "OPERATIONAL",
+                 "geometry" : {
+                    "location" : {
+                       "lat" : 10.6075068,
+                       "lng" : 104.1794899
+                    },
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 10.6089241302915,
+                          "lng" : 104.1808159802915
+                       },
+                       "southwest" : {
+                          "lat" : 10.6062261697085,
+                          "lng" : 104.1781180197085
+                       }
+                    }
+                 },
+                 "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
+                 "icon_background_color" : "#909CE1",
+                 "icon_mask_base_uri" : "https://maps.gstatic.com/mapfiles/place_api/icons/v2/hotel_pinlet",
+                 "name" : "Old Town Guest House",
+                 "photos" : [
+                    {
+                       "height" : 3024,
+                       "html_attributions" : [
+                          "\u003ca href=\"https://maps.google.com/maps/contrib/114093282798813801378\"\u003eRim Sarem\u003c/a\u003e"
+                       ],
+                       "photo_reference" : "AfLeUgOgfwT99Rp4e86gAvReXMHaY1UAnj047GJpa-nmYXm_Ac7anJl-Hq22tvGtUZy4G3D2Z5MBBMxOrWkm1KrcNobDw4B6lEnCG7rgBET60M-Wsxhivx10Il1-QMbu_dVoNc2JY1fbbSekIYFnvr29BWc5xRojlxsylIP-Xo3KOXHSuey-",
+                       "width" : 4032
+                    }
+                 ],
+                 "place_id" : "ChIJw_uaWJs2CDERCCci1UvA-uI",
+                 "plus_code" : {
+                    "compound_code" : "J55H+2Q Krong Kampot, Cambodia",
+                    "global_code" : "7P26J55H+2Q"
+                 },
+                 "rating" : 3.5,
+                 "reference" : "ChIJw_uaWJs2CDERCCci1UvA-uI",
+                 "scope" : "GOOGLE",
+                 "types" : [ "lodging", "point_of_interest", "establishment" ],
+                 "user_ratings_total" : 22,
+                 "vicinity" : "Road 16, Kampong Kandal Commune, Krong Kampot"
+              },
+              {
+                 "business_status" : "CLOSED_TEMPORARILY",
+                 "geometry" : {
+                    "location" : {
+                       "lat" : 10.60077,
+                       "lng" : 104.1831831
+                    },
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 10.6020363302915,
+                          "lng" : 104.1845402302915
+                       },
+                       "southwest" : {
+                          "lat" : 10.5993383697085,
+                          "lng" : 104.1818422697085
+                       }
+                    }
+                 },
+                 "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
+                 "icon_background_color" : "#909CE1",
+                 "icon_mask_base_uri" : "https://maps.gstatic.com/mapfiles/place_api/icons/v2/hotel_pinlet",
+                 "name" : "Mad Monkey Hostel Kampot",
+                 "permanently_closed" : true,
+                 "photos" : [
+                    {
+                       "height" : 444,
+                       "html_attributions" : [
+                          "\u003ca href=\"https://maps.google.com/maps/contrib/111419670888148965625\"\u003eMad Monkey Hostel Kampot\u003c/a\u003e"
+                       ],
+                       "photo_reference" : "AfLeUgNOZGsRjNhOlOi1iRI0gmZVHxGe_5g8dS8nBDDigYawBF3CLw3O7RF009RO3uQPEJ2WYkzyjNjBGndZ5_GZPGjg4gzpncGrtiiU02K9HHU_wizWg2K70ZP51W_CAEYHWNIieWp9ApkuLzvTGYLGb9yykam5Nu1s4VdRmYIjTK95JM4Q",
+                       "width" : 700
+                    }
+                 ],
+                 "place_id" : "ChIJQ5gAZYU2CDERA6ARtp_buoI",
+                 "plus_code" : {
+                    "compound_code" : "J52M+87 Krong Kampot, Cambodia",
+                    "global_code" : "7P26J52M+87"
+                 },
+                 "rating" : 4.1,
+                 "reference" : "ChIJQ5gAZYU2CDERA6ARtp_buoI",
+                 "scope" : "GOOGLE",
+                 "types" : [
+                    "cafe",
+                    "lodging",
+                    "bar",
+                    "food",
+                    "point_of_interest",
+                    "establishment"
+                 ],
+                 "user_ratings_total" : 475,
+                 "vicinity" : "Riverside Road, Krong Kampot"
+              },
+              {
+                 "business_status" : "CLOSED_TEMPORARILY",
+                 "geometry" : {
+                    "location" : {
+                       "lat" : 10.6097796,
+                       "lng" : 104.178103
+                    },
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 10.6111090802915,
+                          "lng" : 104.1794113302915
+                       },
+                       "southwest" : {
+                          "lat" : 10.6084111197085,
+                          "lng" : 104.1767133697085
+                       }
+                    }
+                 },
+                 "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
+                 "icon_background_color" : "#909CE1",
+                 "icon_mask_base_uri" : "https://maps.gstatic.com/mapfiles/place_api/icons/v2/hotel_pinlet",
+                 "name" : "Kampot Riverside Hotel",
+                 "permanently_closed" : true,
+                 "photos" : [
+                    {
+                       "height" : 1930,
+                       "html_attributions" : [
+                          "\u003ca href=\"https://maps.google.com/maps/contrib/117961469489987207923\"\u003eKampot Riverside Hotel\u003c/a\u003e"
+                       ],
+                       "photo_reference" : "AfLeUgM3ByXC4CxsazlMKbK1UvJGDZxsB8yJE30Hh4ePahv1QLCNJ57nmhONQSmP7wWXQ2B-vHArK8d5V-M0tv_dzUoiB8GnfPvgRv_rXtpmXyNgcpJiFm4TjUMnL64nmILMIe2vvJYm7ISp_C436zZWZIWcT-x0xsXbKlPuGvuI9Z_3sUo",
+                       "width" : 1225
+                    }
+                 ],
+                 "place_id" : "ChIJszG4eGI2CDERqNN5RwIk2nM",
+                 "plus_code" : {
+                    "compound_code" : "J55H+W6 Krong Kampot, Cambodia",
+                    "global_code" : "7P26J55H+W6"
+                 },
+                 "rating" : 4,
+                 "reference" : "ChIJszG4eGI2CDERqNN5RwIk2nM",
+                 "scope" : "GOOGLE",
+                 "types" : [ "lodging", "bar", "point_of_interest", "establishment" ],
+                 "user_ratings_total" : 85,
+                 "vicinity" : "Krong Kampot"
+              },
+              {
+                 "business_status" : "OPERATIONAL",
+                 "geometry" : {
+                    "location" : {
+                       "lat" : 10.6321058,
+                       "lng" : 104.1699165
+                    },
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 10.6333764302915,
+                          "lng" : 104.1712295802915
+                       },
+                       "southwest" : {
+                          "lat" : 10.6306784697085,
+                          "lng" : 104.1685316197085
+                       }
+                    }
+                 },
+                 "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
+                 "icon_background_color" : "#909CE1",
+                 "icon_mask_base_uri" : "https://maps.gstatic.com/mapfiles/place_api/icons/v2/hotel_pinlet",
+                 "name" : "Villa Vedici",
+                 "photos" : [
+                    {
+                       "height" : 3024,
+                       "html_attributions" : [
+                          "\u003ca href=\"https://maps.google.com/maps/contrib/100324496652635946427\"\u003eRaajeev Narayann\u003c/a\u003e"
+                       ],
+                       "photo_reference" : "AfLeUgPfHSQt2EdKFfJUBSP9vh2NoL2hInslubL2_dFucOVKmEZe6OSE23Yh7ui4BN1dYsViMDpvyT-R5KqujgOgJE_XdSJQR7OERD7UaIpR1HaHsNW-XZS1-za4WmIRnxmmIQcCwFb6vVSscdfCD4LW989r0AKSM0sx_l-krrQJ533asutg",
+                       "width" : 4032
+                    }
+                 ],
+                 "place_id" : "ChIJh--Ynmo2CDER8DO2PQq9oDY",
+                 "plus_code" : {
+                    "compound_code" : "J5J9+RX Krong Kampot, Cambodia",
+                    "global_code" : "7P26J5J9+RX"
+                 },
+                 "rating" : 4.1,
+                 "reference" : "ChIJh--Ynmo2CDER8DO2PQq9oDY",
+                 "scope" : "GOOGLE",
+                 "types" : [ "lodging", "point_of_interest", "establishment" ],
+                 "user_ratings_total" : 304,
+                 "vicinity" : "Riverfront"
+              },
+              {
+                 "business_status" : "OPERATIONAL",
+                 "geometry" : {
+                    "location" : {
+                       "lat" : 10.6068269,
+                       "lng" : 104.1807891
+                    },
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 10.6081757802915,
+                          "lng" : 104.1821380802915
+                       },
+                       "southwest" : {
+                          "lat" : 10.6054778197085,
+                          "lng" : 104.1794401197085
+                       }
+                    }
+                 },
+                 "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
+                 "icon_background_color" : "#909CE1",
+                 "icon_mask_base_uri" : "https://maps.gstatic.com/mapfiles/place_api/icons/v2/hotel_pinlet",
+                 "name" : "The Columns",
+                 "opening_hours" : {
+                    "open_now" : true
+                 },
+                 "photos" : [
+                    {
+                       "height" : 3048,
+                       "html_attributions" : [
+                          "\u003ca href=\"https://maps.google.com/maps/contrib/102335803123753974462\"\u003eThe Columns\u003c/a\u003e"
+                       ],
+                       "photo_reference" : "AfLeUgP-ZkFTVPHPFuBD1SgF2v-Y9SYlji2itmHrm5UVRD_Guhk5R0EbpUlSvVPsSGxvxj-Uky4w9lt71nr5zF2oZPXviDfxIUB23a2wT61k9EiVIqPJLg0UyHelSK-6YjbeQKZfvlaUgfmkVNA6KyBQQ4YhlYawJ79lD5ifQboKP59-h8bB",
+                       "width" : 5418
+                    }
+                 ],
+                 "place_id" : "ChIJC7ULvog2CDERfjt58pfj1b8",
+                 "plus_code" : {
+                    "compound_code" : "J54J+P8 Krong Kampot, Cambodia",
+                    "global_code" : "7P26J54J+P8"
+                 },
+                 "rating" : 4.5,
+                 "reference" : "ChIJC7ULvog2CDERfjt58pfj1b8",
+                 "scope" : "GOOGLE",
+                 "types" : [ "lodging", "point_of_interest", "establishment" ],
+                 "user_ratings_total" : 76,
+                 "vicinity" : "37 Phoum 1 Ouksophear, Kipling Ln, Krong Kampot"
+              },
+              {
+                 "business_status" : "OPERATIONAL",
+                 "geometry" : {
+                    "location" : {
+                       "lat" : 10.6072562,
+                       "lng" : 104.1804105
+                    },
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 10.6085437802915,
+                          "lng" : 104.1817814802915
+                       },
+                       "southwest" : {
+                          "lat" : 10.6058458197085,
+                          "lng" : 104.1790835197085
+                       }
+                    }
+                 },
+                 "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
+                 "icon_background_color" : "#909CE1",
+                 "icon_mask_base_uri" : "https://maps.gstatic.com/mapfiles/place_api/icons/v2/hotel_pinlet",
+                 "name" : "La Java Bleue Hotel Cafe",
+                 "photos" : [
+                    {
+                       "height" : 4000,
+                       "html_attributions" : [
+                          "\u003ca href=\"https://maps.google.com/maps/contrib/103981375094529245505\"\u003eJuan Leandro Nevares Peña\u003c/a\u003e"
+                       ],
+                       "photo_reference" : "AfLeUgN7hrwRK-CTMXYV0IsV2QKTisuqMTCoOtBTJUdi5ctdkhlYwtN5OhAvXatr4bJKGnarqLpHL6THKyo3nY18nP8XVEbrVlY8Ri3AiYv2gLZlf3I0Dr-KJZ8fRKcPJ_TGTF31vEzAJleB9XR5htQhkjcjsYy7iyfqviUnRvTv4ADZrAdw",
+                       "width" : 3000
+                    }
+                 ],
+                 "place_id" : "ChIJlW9uYog2CDER0uo0TatQhtY",
+                 "plus_code" : {
+                    "compound_code" : "J54J+W5 Krong Kampot, Cambodia",
+                    "global_code" : "7P26J54J+W5"
+                 },
+                 "rating" : 4.5,
+                 "reference" : "ChIJlW9uYog2CDER0uo0TatQhtY",
+                 "scope" : "GOOGLE",
+                 "types" : [ "lodging", "point_of_interest", "establishment" ],
+                 "user_ratings_total" : 67,
+                 "vicinity" : "Road 27, Phoum Ouksophear, Sangkat"
+              },
+              {
+                 "business_status" : "OPERATIONAL",
+                 "geometry" : {
+                    "location" : {
+                       "lat" : 10.6100816,
+                       "lng" : 104.1781539
+                    },
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 10.6115230802915,
+                          "lng" : 104.1794585302915
+                       },
+                       "southwest" : {
+                          "lat" : 10.6088251197085,
+                          "lng" : 104.1767605697085
+                       }
+                    }
+                 },
+                 "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
+                 "icon_background_color" : "#909CE1",
+                 "icon_mask_base_uri" : "https://maps.gstatic.com/mapfiles/place_api/icons/v2/hotel_pinlet",
+                 "name" : "Sotheara River Residence",
+                 "photos" : [
+                    {
+                       "height" : 755,
+                       "html_attributions" : [
+                          "\u003ca href=\"https://maps.google.com/maps/contrib/103458752150179967115\"\u003eSotheara River Residence\u003c/a\u003e"
+                       ],
+                       "photo_reference" : "AfLeUgOVIgqI1rvyZyKxm-EhsEhej_4hJPOFsQCc6pC1vq7gZSPZUpSgHFF5K9E23qLj-r2ERoK9tkxfyN6QcreJVWTag7Mih29SshxG0aqfjctEIbqQHgbC7AzlxKFqYzUYAx_M_XoiwMy6AitOcgcP1J9SPjXOCy9GrkSKoFMmjzP2b-0T",
+                       "width" : 754
+                    }
+                 ],
+                 "place_id" : "ChIJM0C9eGI2CDERLcyeJjfKAAM",
+                 "rating" : 3.8,
+                 "reference" : "ChIJM0C9eGI2CDERLcyeJjfKAAM",
+                 "scope" : "GOOGLE",
+                 "types" : [ "lodging", "point_of_interest", "establishment" ],
+                 "user_ratings_total" : 85,
+                 "vicinity" : "J56H+27J, 735, Krong Kampot"
+              },
+              {
+                 "business_status" : "OPERATIONAL",
+                 "geometry" : {
+                    "location" : {
+                       "lat" : 10.6108528,
+                       "lng" : 104.1738459
+                    },
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 10.6120593302915,
+                          "lng" : 104.1749940302915
+                       },
+                       "southwest" : {
+                          "lat" : 10.6093613697085,
+                          "lng" : 104.1722960697085
+                       }
+                    }
+                 },
+                 "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
+                 "icon_background_color" : "#909CE1",
+                 "icon_mask_base_uri" : "https://maps.gstatic.com/mapfiles/place_api/icons/v2/hotel_pinlet",
+                 "name" : "The River Lodge",
+                 "photos" : [
+                    {
+                       "height" : 1280,
+                       "html_attributions" : [
+                          "\u003ca href=\"https://maps.google.com/maps/contrib/101098143271582454746\"\u003eChantra Be\u003c/a\u003e"
+                       ],
+                       "photo_reference" : "AfLeUgOnbLY2S9Nq70-7Xi-SZi_5DR9G3OjxNzQ_uWJBLubMkjs-hu87lpC9NJKx6eG8JbOAxs_R95RMbrlHHde-ET_9Q4uJljw5NFFQrusMGaeTBvkfSfBt3QB4Ty9Bm-5WI-ApMmPwxRL0fuDOPA7Z09OJLvsiw9q-dauHLcR5IPvMLCKs",
+                       "width" : 2048
+                    }
+                 ],
+                 "place_id" : "ChIJywDaSYk2CDERI8E1RxrKs_U",
+                 "plus_code" : {
+                    "compound_code" : "J56F+8G Krong Kampot, Cambodia",
+                    "global_code" : "7P26J56F+8G"
+                 },
+                 "rating" : 4.3,
+                 "reference" : "ChIJywDaSYk2CDERI8E1RxrKs_U",
+                 "scope" : "GOOGLE",
+                 "types" : [
+                    "lodging",
+                    "bar",
+                    "restaurant",
+                    "food",
+                    "point_of_interest",
+                    "establishment"
+                 ],
+                 "user_ratings_total" : 27,
+                 "vicinity" : "81 ផ្លូវលេខ ៧២៤, Krong Kampot"
+              },
+              {
+                 "business_status" : "OPERATIONAL",
+                 "geometry" : {
+                    "location" : {
+                       "lat" : 10.6067221,
+                       "lng" : 104.1804406
+                    },
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 10.6080443802915,
+                          "lng" : 104.1818002802915
+                       },
+                       "southwest" : {
+                          "lat" : 10.6053464197085,
+                          "lng" : 104.1791023197085
+                       }
+                    }
+                 },
+                 "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
+                 "icon_background_color" : "#909CE1",
+                 "icon_mask_base_uri" : "https://maps.gstatic.com/mapfiles/place_api/icons/v2/hotel_pinlet",
+                 "name" : "Auberge du Soleil",
+                 "opening_hours" : {
+                    "open_now" : false
+                 },
+                 "photos" : [
+                    {
+                       "height" : 1200,
+                       "html_attributions" : [
+                          "\u003ca href=\"https://maps.google.com/maps/contrib/116169552857292809395\"\u003eAuberge du Soleil\u003c/a\u003e"
+                       ],
+                       "photo_reference" : "AfLeUgPToJXMYz7n-q7gBNWucqfNHxO7sLVTrOOhVY36QT0m98gWEhTiGUZpPGjiTe80xa16R7oESy4qYfFPAQnx-H7siBKzY33xT00YZhlNyowImVAwNys8BUnYxxqiEg0vhBqgGMBuQCyhpqcJjHKe61pnCqb3xI7tO9zWS9IYbgMfwW64",
+                       "width" : 1600
+                    }
+                 ],
+                 "place_id" : "ChIJ9xs0j4g2CDERHHIlunSwO1s",
+                 "plus_code" : {
+                    "compound_code" : "J54J+M5 Krong Kampot, Cambodia",
+                    "global_code" : "7P26J54J+M5"
+                 },
+                 "rating" : 4.5,
+                 "reference" : "ChIJ9xs0j4g2CDERHHIlunSwO1s",
+                 "scope" : "GOOGLE",
+                 "types" : [ "lodging", "restaurant", "food", "point_of_interest", "establishment" ],
+                 "user_ratings_total" : 162,
+                 "vicinity" : "23 Street 728, Krong Kampot"
+              },
+              {
+                 "business_status" : "OPERATIONAL",
+                 "geometry" : {
+                    "location" : {
+                       "lat" : 10.6143285,
+                       "lng" : 104.178153
+                    },
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 10.6156558302915,
+                          "lng" : 104.1794545302915
+                       },
+                       "southwest" : {
+                          "lat" : 10.6129578697085,
+                          "lng" : 104.1767565697085
+                       }
+                    }
+                 },
+                 "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
+                 "icon_background_color" : "#909CE1",
+                 "icon_mask_base_uri" : "https://maps.gstatic.com/mapfiles/place_api/icons/v2/hotel_pinlet",
+                 "name" : "Kampot Diamond Hotel",
+                 "photos" : [
+                    {
+                       "height" : 3024,
+                       "html_attributions" : [
+                          "\u003ca href=\"https://maps.google.com/maps/contrib/110253900002070917828\"\u003eSocheat Mean\u003c/a\u003e"
+                       ],
+                       "photo_reference" : "AfLeUgP1bzvnybTv9MyrTAXXe0OIWotkLvB41GSqjlDYdTCAvBfG16hJoXgT0zG-Sbw9GvIaAaddCE_3jjNQbwRgSNqigDoZwVSv4Qy2N1acakhq3w-2k5g4z7Q-sIg-5yBjUvrjUABU5ZppF-d66YxcPDOOFmtILDl1TtVZJGlbd8ykYfPD",
+                       "width" : 4032
+                    }
+                 ],
+                 "place_id" : "ChIJV3r0eq83CDER4Td82Pkef2w",
+                 "plus_code" : {
+                    "compound_code" : "J57H+P7 Krong Kampot, Cambodia",
+                    "global_code" : "7P26J57H+P7"
+                 },
+                 "rating" : 3.8,
+                 "reference" : "ChIJV3r0eq83CDER4Td82Pkef2w",
+                 "scope" : "GOOGLE",
+                 "types" : [ "lodging", "point_of_interest", "establishment" ],
+                 "user_ratings_total" : 178,
+                 "vicinity" : "36 ផ្លូវលេខ ៧១៤, Krong Kampot"
+              },
+              {
+                 "business_status" : "OPERATIONAL",
+                 "geometry" : {
+                    "location" : {
+                       "lat" : 10.6135796,
+                       "lng" : 104.1756678
+                    },
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 10.6150634802915,
+                          "lng" : 104.1769489802915
+                       },
+                       "southwest" : {
+                          "lat" : 10.6123655197085,
+                          "lng" : 104.1742510197085
+                       }
+                    }
+                 },
+                 "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+                 "icon_background_color" : "#FF9E67",
+                 "icon_mask_base_uri" : "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+                 "name" : "Ta Eou Restaurant",
+                 "opening_hours" : {
+                    "open_now" : true
+                 },
+                 "photos" : [
+                    {
+                       "height" : 3024,
+                       "html_attributions" : [
+                          "\u003ca href=\"https://maps.google.com/maps/contrib/105471207277007352720\"\u003eYting Ma\u003c/a\u003e"
+                       ],
+                       "photo_reference" : "AfLeUgNx8m6N8SCwL2PbYKhHM00z_LUAxqADW8aBzLwEjsm_KndC1cz6UA6uOUOMgTpZ2ev1g1oNKDeA6RpdY1qGz8OewbHObfyd0LchEno6Z9eLFU5EXHAiwVnkpXPecMap5sPOyeIwjXTrNr2nWlYQHN2HKr5RadnCteV8qOmM-ECOl8Gl",
+                       "width" : 4032
+                    }
+                 ],
+                 "place_id" : "ChIJrbP912M2CDERHDc8aHZpgMU",
+                 "price_level" : 2,
+                 "rating" : 3.7,
+                 "reference" : "ChIJrbP912M2CDERHDc8aHZpgMU",
+                 "scope" : "GOOGLE",
+                 "types" : [ "restaurant", "food", "point_of_interest", "establishment" ],
+                 "user_ratings_total" : 163,
+                 "vicinity" : "J57G+C7M, Krong Kampot"
+              },
+              {
+                 "business_status" : "OPERATIONAL",
+                 "geometry" : {
+                    "location" : {
+                       "lat" : 10.6079418,
+                       "lng" : 104.1791108
+                    },
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 10.6092604302915,
+                          "lng" : 104.1804706802915
+                       },
+                       "southwest" : {
+                          "lat" : 10.6065624697085,
+                          "lng" : 104.1777727197085
+                       }
+                    }
+                 },
+                 "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+                 "icon_background_color" : "#FF9E67",
+                 "icon_mask_base_uri" : "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+                 "name" : "Birds nest",
+                 "opening_hours" : {
+                    "open_now" : true
+                 },
+                 "photos" : [
+                    {
+                       "height" : 1754,
+                       "html_attributions" : [
+                          "\u003ca href=\"https://maps.google.com/maps/contrib/111208417929478088833\"\u003earnson lee\u003c/a\u003e"
+                       ],
+                       "photo_reference" : "AfLeUgOQr3CtaTh8F4V7Lb6h2bidu837YHQ3fMLBHKduoKafWYQXfy1l8akG0o8g_Rco6zCPJyhgxswf87d2FQ3iQq3dxvlm-UP3YaGntMeC1u7rutUUU2yLB_1YHCqOBZgtNG917pIw6OQp7m3BAzB6f4v0D6jiozUEdR3K_rs9piV3BA2v",
+                       "width" : 3118
+                    }
+                 ],
+                 "place_id" : "ChIJZZ1WCog2CDERuWaXqC0QvMk",
+                 "plus_code" : {
+                    "compound_code" : "J55H+5J Krong Kampot, Cambodia",
+                    "global_code" : "7P26J55H+5J"
+                 },
+                 "rating" : 4.1,
+                 "reference" : "ChIJZZ1WCog2CDERuWaXqC0QvMk",
+                 "scope" : "GOOGLE",
+                 "types" : [ "restaurant", "food", "point_of_interest", "establishment" ],
+                 "user_ratings_total" : 104,
+                 "vicinity" : "Old Market, Street"
+              },
+              {
+                 "business_status" : "OPERATIONAL",
+                 "geometry" : {
+                    "location" : {
+                       "lat" : 10.600445,
+                       "lng" : 104.1820166
+                    },
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 10.6017676302915,
+                          "lng" : 104.1833480302915
+                       },
+                       "southwest" : {
+                          "lat" : 10.5990696697085,
+                          "lng" : 104.1806500697085
+                       }
+                    }
+                 },
+                 "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
+                 "icon_background_color" : "#909CE1",
+                 "icon_mask_base_uri" : "https://maps.gstatic.com/mapfiles/place_api/icons/v2/hotel_pinlet",
+                 "name" : "Hai Li Bin Ya Hotel",
+                 "place_id" : "ChIJwY-qZ4U2CDER9TyWx0kS--w",
+                 "plus_code" : {
+                    "compound_code" : "J52J+5R Krong Kampot, Cambodia",
+                    "global_code" : "7P26J52J+5R"
+                 },
+                 "rating" : 5,
+                 "reference" : "ChIJwY-qZ4U2CDER9TyWx0kS--w",
+                 "scope" : "GOOGLE",
+                 "types" : [ "lodging", "point_of_interest", "establishment" ],
+                 "user_ratings_total" : 1,
+                 "vicinity" : "Street 720, Street 735, Krong Kampot"
+              },
+              {
+                 "business_status" : "OPERATIONAL",
+                 "geometry" : {
+                    "location" : {
+                       "lat" : 10.6199189,
+                       "lng" : 104.1672963
+                    },
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 10.6210263302915,
+                          "lng" : 104.1683742802915
+                       },
+                       "southwest" : {
+                          "lat" : 10.6183283697085,
+                          "lng" : 104.1656763197085
+                       }
+                    }
+                 },
+                 "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
+                 "icon_background_color" : "#909CE1",
+                 "icon_mask_base_uri" : "https://maps.gstatic.com/mapfiles/place_api/icons/v2/hotel_pinlet",
+                 "name" : "Salty River Resort",
+                 "opening_hours" : {
+                    "open_now" : true
+                 },
+                 "photos" : [
+                    {
+                       "height" : 960,
+                       "html_attributions" : [
+                          "\u003ca href=\"https://maps.google.com/maps/contrib/107323486945243360090\"\u003eSalty River Resort\u003c/a\u003e"
+                       ],
+                       "photo_reference" : "AfLeUgPSotQPJA3HAeox_ceilPE2EB6BV24NU-S9AhOOZ9y6cXnjxIFlMllVckMrLJwXw9cYRXivoRBvNPde6u2-OGN2TnYenchVlWPLZzNpIMfDtf1oLmfod9PU9WlWTyF71XbHiRc12htXwcaORKYQRZ0cvO13Lun8y3XGmglwK5UXk19I",
+                       "width" : 1280
+                    }
+                 ],
+                 "place_id" : "ChIJoTFr6V02CDERY6aMMqbuXdM",
+                 "plus_code" : {
+                    "compound_code" : "J598+XW Krong Kampot, Cambodia",
+                    "global_code" : "7P26J598+XW"
+                 },
+                 "rating" : 3.7,
+                 "reference" : "ChIJoTFr6V02CDERY6aMMqbuXdM",
+                 "scope" : "GOOGLE",
+                 "types" : [ "lodging", "point_of_interest", "establishment" ],
+                 "user_ratings_total" : 115,
+                 "vicinity" : "Terkchhu Road"
+              },
+              {
+                 "business_status" : "OPERATIONAL",
+                 "geometry" : {
+                    "location" : {
+                       "lat" : 10.6090257,
+                       "lng" : 104.1814373
+                    },
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 10.6103816302915,
+                          "lng" : 104.1827235302915
+                       },
+                       "southwest" : {
+                          "lat" : 10.6076836697085,
+                          "lng" : 104.1800255697085
+                       }
+                    }
+                 },
+                 "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
+                 "icon_background_color" : "#909CE1",
+                 "icon_mask_base_uri" : "https://maps.gstatic.com/mapfiles/place_api/icons/v2/hotel_pinlet",
+                 "name" : "RTK Guest House",
+                 "place_id" : "ChIJYYX8LH02CDER4ei7AlnRqOE",
+                 "plus_code" : {
+                    "compound_code" : "J55J+JH Krong Kampot, Cambodia",
+                    "global_code" : "7P26J55J+JH"
+                 },
+                 "rating" : 5,
+                 "reference" : "ChIJYYX8LH02CDER4ei7AlnRqOE",
+                 "scope" : "GOOGLE",
+                 "types" : [ "lodging", "point_of_interest", "establishment" ],
+                 "user_ratings_total" : 1,
+                 "vicinity" : "No. 729, Krong Kampot"
+              },
+              {
+                 "geometry" : {
+                    "location" : {
+                       "lat" : 10.656608,
+                       "lng" : 104.1509621
+                    },
+                    "viewport" : {
+                       "northeast" : {
+                          "lat" : 10.66069235729632,
+                          "lng" : 104.1659259225944
+                       },
+                       "southwest" : {
+                          "lat" : 10.65141362931806,
+                          "lng" : 104.148158947884
+                       }
+                    }
+                 },
+                 "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/geocode-71.png",
+                 "icon_background_color" : "#7B9EB0",
+                 "icon_mask_base_uri" : "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+                 "name" : "Snam Brampi",
+                 "photos" : [
+                    {
+                       "height" : 4128,
+                       "html_attributions" : [
+                          "\u003ca href=\"https://maps.google.com/maps/contrib/113956538391607018595\"\u003etith sapho\u003c/a\u003e"
+                       ],
+                       "photo_reference" : "AfLeUgO-NjmdPCyAE90_O7otXcCNCk3BmIMlDnQizmzoLADM5nHXSB6-eb9boad3KF5Bu_KLzqPXdHrDbrnz1qWOq4Bud4geYxBMmmdTMxxP3kJpG6VtUhYxQJNTLeo9RmD0SWIP_CwkcfwVBgQrsvaM-Rm63-QMTPryOzGcpUotEG8A-hGF",
+                       "width" : 3096
+                    }
+                 ],
+                 "place_id" : "ChIJS9fb0NdJCDERQM3AZxsYUJo",
+                 "reference" : "ChIJS9fb0NdJCDERQM3AZxsYUJo",
+                 "scope" : "GOOGLE",
+                 "types" : [ "locality", "political" ],
+                 "vicinity" : "Snam Brampi"
+              }
+           ],
+           "status" : "OK"
+        }
+  recorded_at: Mon, 06 Mar 2023 12:03:13 GMT
+recorded_with: VCR 6.1.0

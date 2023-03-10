@@ -32,6 +32,8 @@ module SpreeCmCommissioner
       base.has_many :promoted_option_values, -> { joins(:option_type).where('option_type.promoted' => true) },
                     through: :option_value_vendors, source: :option_value
 
+      base.accepts_nested_attributes_for :nearby_places, allow_destroy: true
+
       # TODO: we will need searchkick later
       # unless Rails.env.test?
       #   base.searchkick(
@@ -52,6 +54,10 @@ module SpreeCmCommissioner
 
       def lon
         stock_locations.first&.lon
+      end
+
+      def selected_place_references
+        places.pluck(:reference)
       end
 
       def search_data
