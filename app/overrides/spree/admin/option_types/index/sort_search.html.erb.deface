@@ -1,0 +1,32 @@
+<!-- insert_after "#new_option_type" -->
+
+<% content_for :page_tabs do %>
+  <% [nil, *Spree::OptionType.kinds.keys].each do |kind| %>
+    <li class="nav-item">
+      <%= link_to Spree.t("admin.option_types.#{kind.nil? ? 'all' : kind}"),
+                  params.merge({kind: kind}).permit!,
+                  class: "nav-link #{'active' if params[:kind] == kind}" %>
+    </li>
+  <% end %>
+<% end  %>
+
+<% content_for :table_filter do %>
+  <div data-hook="admin_option_types_sidebar">
+    <%= search_form_for [:admin, @search] do |f|%>
+      <div class="parent">
+        <div class="child">
+          <div data-hook="admin_option_types_kind_search" class="form-group">
+            <%= f.label :name_cont, Spree.t(:name) %>
+            <%= f.text_field :name_cont, class: "form-control js-quick-search-target js-filterable" %>
+          </div>
+        </div>
+
+        <div class="child">
+          <div class="form-actions" data-hook="admin_option_types_kind_search_buttons">
+            <%= button Spree.t(:search), 'search.svg' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
