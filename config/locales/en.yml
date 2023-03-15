@@ -50,3 +50,13 @@ en:
     validation:
       vendor_kind_option_types:
         empty_info: "<b>Note:</b> Set vendor option types to vendor first. To edit, go to <b>Details</b> tab > <b>Option Types</b>"
+
+  account_deletion:
+    title:
+      have_another_account: "I have another account"
+      too_many_notifications: "I recieved too mant notifications"
+      sth_broken: "Something broken"
+      other: "Other"
+    reason_description:
+      sth_broken: "Can you please share us what was not working? We will fix them as soon as possible as we spot them"
+      other: "Can you please share us your account deletion reason. If something slipped through our fingers, we'd be so grateful to be aware and fix it."
