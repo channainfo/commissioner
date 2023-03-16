@@ -59,6 +59,7 @@ Spree::Core::Engine.add_routes do
     namespace :v2 do
       namespace :storefront do
         resources :accommodations, only: %i[index show]
+        resources :account_checker
         resources :provinces, only: %i[index]
         resources :user_deletion_reasons, only: [:index]
         resources :vendors do

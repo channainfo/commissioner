@@ -2,6 +2,9 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  account_checker:
+    verify:
+      already_exist: "%{login} already exist"
   authenticator:
     incorrect_login: "Incorrect login"
     incorrect_password: "Incorrect password"
@@ -38,7 +41,7 @@ en:
   vectors:
     icons:
       info_rules: 'Only allow <b>%{allow_extensions}</b> files. Icons are stored inside "images/" folder, eg. app/assets/images/backend-adjust.svg.'
-      total: 'Total: %{total_in_page} / %{total_count} icons'
+      total: "Total: %{total_in_page} / %{total_count} icons"
 
   photo:
     empty_info: "No <b>Photos</b> found."
