@@ -6,6 +6,8 @@ module SpreeCmCommissioner
     def self.prepended(base)
       base.include SpreeCmCommissioner::ProductType
 
+      base.attr_accessor :service_availabilities
+
       base.has_many :photos, -> { order(:position) }, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorPhoto'
       base.has_many :option_values, through: :products
       base.has_many :vendor_option_types, class_name: 'SpreeCmCommissioner::VendorOptionType'
@@ -36,6 +38,8 @@ module SpreeCmCommissioner
       base.has_many :price_rules, class_name: 'SpreeCmCommissioner::PricingModelRule', dependent: :destroy
 
       base.accepts_nested_attributes_for :nearby_places, allow_destroy: true
+
+      base.has_many :service_calendars, as: :calendarable, dependent: :destroy, class_name: 'SpreeCmCommissioner::ServiceCalendar'
 
       # TODO: we will need searchkick later
       # unless Rails.env.test?

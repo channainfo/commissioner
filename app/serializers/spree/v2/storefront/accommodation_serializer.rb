@@ -4,7 +4,7 @@ module Spree
       class AccommodationSerializer < VendorSerializer
         has_one :state
 
-        attributes :total_inventory
+        attributes :total_inventory, :service_availabilities
 
         attribute :total_booking do |vendor|
           vendor.respond_to?(:total_booking) ? vendor.total_booking : 0

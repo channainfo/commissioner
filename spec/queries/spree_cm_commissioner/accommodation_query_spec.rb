@@ -23,9 +23,6 @@ RSpec.describe SpreeCmCommissioner::AccommodationQuery do
 
     context '.booked_vendors' do
       let(:records) { subject.booked_vendors.to_a }
-      before(:each) do
-        print_as_table(records, booking_fields)
-      end
 
       # left case 1 day: 2022_12_30 (phnom_penh_hotel: 0, sokha_pp_hotel: 0)
       context 'query on 2022_12_30' do
@@ -287,9 +284,6 @@ RSpec.describe SpreeCmCommissioner::AccommodationQuery do
 
     context '.max_booked_vendor_sql' do
       let(:records) { execute_sql(subject.max_booked_vendor_sql).to_a }
-      before(:each) do
-        print_as_table(records, booking_fields)
-      end
 
       context 'query between 2022_12_12 and 2022_12_15' do
         let(:subject) { described_class.new(from_date: date('2022_12_12'), to_date: date('2022_12_15'), province_id: phnom_penh.id)}
@@ -398,9 +392,6 @@ RSpec.describe SpreeCmCommissioner::AccommodationQuery do
 
     context '.with_available_inventory' do
       let(:records) { subject.with_available_inventory }
-      before(:each) do
-        print_as_table(records, inventory_fields)
-      end
 
       # left case 1 day: 2022_12_30 (phnom_penh_hotel: 0, sokha_pp_hotel: 0)
       context 'query on 2022_12_30' do
@@ -567,6 +558,7 @@ RSpec.describe SpreeCmCommissioner::AccommodationQuery do
         end
       end
     end
+
   end
 
   context 'validate date range' do
@@ -593,7 +585,6 @@ RSpec.describe SpreeCmCommissioner::AccommodationQuery do
     it 'generates day series as 1 record' do
       subject = described_class.new(from_date: date('2023_01_01'), to_date: date('2023_01_02'), province_id: siem_reap.id)
       records = execute_sql(subject.date_list_sql)
-      print_as_table(records)
 
       sql_statement = "SELECT day FROM generate_series('2023-01-01'::date, '2023-01-01', '1 day') AS day"
       expect(subject.date_list_sql).to eq sql_statement
@@ -603,7 +594,6 @@ RSpec.describe SpreeCmCommissioner::AccommodationQuery do
     it 'generates day series as 2 records' do
       subject = described_class.new(from_date: date('2023_01_01'), to_date: date('2023_01_03'), province_id: siem_reap.id)
       records = execute_sql(subject.date_list_sql)
-      print_as_table(records)
 
       sql_statement = "SELECT day FROM generate_series('2023-01-01'::date, '2023-01-02', '1 day') AS day"
       expect(subject.date_list_sql).to eq sql_statement

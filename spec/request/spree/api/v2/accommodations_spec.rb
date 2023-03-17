@@ -10,6 +10,9 @@ describe 'API V2 Storefront Accommodation Spec', type: :request do
   let(:params) {
     { from_date: date('2023-01-01'), to_date: date('2023-01-03'), province_id: phnom_penh.id, adult: 2, children: 1, room_qty: 1 }
   }
+  let(:monday) { date('2023-01-02') }
+  let(:sunday) { date('2023-01-02') + 6.days }
+
   let(:json_response) { JSON.parse(response.body) }
 
   describe 'accommodation#index' do
@@ -81,6 +84,84 @@ describe 'API V2 Storefront Accommodation Spec', type: :request do
         expect(data['attributes']['remaining']).to eq sokha_pp_hotel.total_inventory
       end
     end
+
+    context 'when no service_calendar' do
+      before { get '/api/v2/storefront/accommodations', params: params }
+
+      it 'should have service available for phnom penh hotel' do
+        data = json_response['data'].find {|h| h['id'].to_i == phnom_penh_hotel.id }
+
+        expect(data['attributes']['service_availabilities'].map {|a| a['date'] }).to eq ["2023-01-01", "2023-01-02", "2023-01-03"]
+        expect(data['attributes']['service_availabilities'].map {|a| a['available'] }).to eq [true, true, true]
+      end
+
+      it 'should have service available for sokha_pp_hotel' do
+        data = json_response['data'].find {|h| h['id'].to_i == sokha_pp_hotel.id }
+
+        expect(data['attributes']['service_availabilities'].map {|a| a['date'] }).to eq ["2023-01-01", "2023-01-02", "2023-01-03"]
+        expect(data['attributes']['service_availabilities'].map {|a| a['available'] }).to eq [true, true, true]
+      end
+    end
+
+    context 'when service_calendar permanant close' do
+      before { create(:cm_service_calendar_no_available, calendarable: phnom_penh_hotel) }
+      before { get '/api/v2/storefront/accommodations', params: params }
+
+      it 'phnom_penh_hotel is closed' do
+        data = json_response['data'].find {|h| h['id'].to_i == phnom_penh_hotel.id }
+        expect(data['attributes']['service_availabilities'].map {|a| a['date'] }).to eq ["2023-01-01", "2023-01-02", "2023-01-03"]
+        expect(data['attributes']['service_availabilities'].map {|a| a['available'] }).to eq [false, false, false]
+      end
+
+      it 'sokha_pp_hotel is open as normal' do
+        data = json_response['data'].find {|h| h['id'].to_i == sokha_pp_hotel.id }
+        expect(data['attributes']['service_availabilities'].map {|a| a['date'] }).to eq ["2023-01-01", "2023-01-02", "2023-01-03"]
+        expect(data['attributes']['service_availabilities'].map {|a| a['available'] }).to eq [true, true, true]
+      end
+    end
+
+    context 'when service_calendar close on weekend' do
+      before { create(:cm_service_calendar, saturday: false, sunday: false, calendarable: phnom_penh_hotel) }
+      before { get '/api/v2/storefront/accommodations', params:  { from_date: monday, to_date: sunday, province_id: phnom_penh.id, adult: 2, children: 1, room_qty: 1 } }
+
+      it 'phnom_penh_hotel should close on weekend' do
+        data = json_response['data'].find {|h| h['id'].to_i == phnom_penh_hotel.id }
+        expect(data['attributes']['service_availabilities'].map {|a| a['date'] }).to eq (monday..sunday).map(&:to_s)
+        expect(data['attributes']['service_availabilities'].map {|a| a['available'] }).to eq [true, true, true, true, true, false, false]
+      end
+    end
+
+    context 'when service_calendar overlap with close' do
+      let!(:setup) {
+        create(:cm_service_calendar, calendarable: phnom_penh_hotel) # available all
+        create(:cm_service_calendar, monday: false, wednesday: false, start_date: monday, end_date: sunday, calendarable: phnom_penh_hotel)
+      }
+      before { get '/api/v2/storefront/accommodations', params:  { from_date: monday, to_date: sunday, province_id: phnom_penh.id, adult: 2, children: 1, room_qty: 1 } }
+
+      it 'phnom_penh_hotel should close on monday & wednesday' do
+        data = json_response['data'].find {|h| h['id'].to_i == phnom_penh_hotel.id }
+        expect(data['attributes']['service_availabilities'].map {|a| a['date'] }).to eq (monday..sunday).map(&:to_s)
+        expect(data['attributes']['service_availabilities'].map {|a| a['available'] }).to eq [false, true, false, true, true, true, true]
+      end
+    end
+
+    context 'when service_calendar with exception' do
+      let(:regular_calendar)  { create(:cm_service_calendar, saturday: false, sunday: false, calendarable: phnom_penh_hotel) }
+      let!(:sunday_open)      { create(:cm_service_calendar_date, service_calendar: regular_calendar, date: sunday, exception_type: :inclusion) }
+      let!(:monday_close)     { create(:cm_service_calendar_date, service_calendar: regular_calendar, date: monday, exception_type: :exclusion) }
+      before { get '/api/v2/storefront/accommodations', params:  { from_date: monday, to_date: sunday, province_id: phnom_penh.id, adult: 2, children: 1, room_qty: 1 } }
+      let(:data) { json_response['data'].find {|h| h['id'].to_i == phnom_penh_hotel.id } }
+
+      it 'phnom_penh_hotel should open on Sunday' do
+        service = data['attributes']['service_availabilities'].find { |s| s['date'] == sunday.to_s }
+        expect(service['available']).to eq true
+      end
+
+      it 'phnom_penh_hotel should close on Monday' do
+        service = data['attributes']['service_availabilities'].find { |s| s['date'] == monday.to_s }
+        expect(service['available']).to eq false
+      end
+    end
   end
 
   describe 'accommodation#show' do
@@ -104,6 +185,11 @@ describe 'API V2 Storefront Accommodation Spec', type: :request do
       it 'should return json with stock information' do
         expect(json_response['data']['attributes']['total_booking']).to eq 0
         expect(json_response['data']['attributes']['remaining']).to eq vendor.total_inventory
+      end
+
+      it 'return service_availabilites of phnom penh hotel' do
+        expect(json_response['data']['attributes']['service_availabilities'].map {|a| a['date'] }).to eq ["2023-01-01", "2023-01-02"]
+        expect(json_response['data']['attributes']['service_availabilities'].map {|a| a['available'] }).to eq [true, true]
       end
     end
 
