@@ -1,0 +1,22 @@
+<% content_for :page_title do %>
+  <%= plural_resource_name(Spree::Order) %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:new_order), new_admin_order_url, class: "btn-success", icon: 'add.svg', id: 'admin_new_order' %>
+<% end if can? :create, Spree::Order %>
+
+<% content_for :sidebar do %>
+  <%= form_with method: :get, html: { class: 'card p-3 mb-3' } do |f| %>
+    <%= select_tag(:vendor_id,
+      options_from_collection_for_select(Spree::Vendor.active, :id, :name, params[:vendor_id]),
+      include_blank: Spree.t('match_choices.none'),
+      class: "select2") %>
+    <%= f.hidden_field :active_date, value: params[:active_date] %>
+    <div class="form-actions mt-2"><%= button Spree.t(:search), 'search.svg' %></div>
+  <% end %>
+<% end %>
+
+<%= render 'shared/calendar',
+  events: SpreeCmCommissioner::CalendarEvent.from_orders(@orders),
+  sidebar_partial: 'shared/calendar/orders_sidebar' %>

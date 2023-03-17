@@ -1,0 +1,25 @@
+<%# :events, [SpreeCmCommissioner::CalendarEvent] %>
+<%# :sidebar_partial, eg. 'calendar_sidebar/orders' %>
+
+<% active_date = params[:active_date].to_date %>
+
+<% content_for :sidebar do %>
+  <div id="c-sidebar"></div>
+<% end %>
+
+<%= month_calendar(attribute: :from_date, end_attribute: :to_date, events: events, start_date_param: :active_date) do |date, _events| %>
+  <% display_day = active_date.month != date.month ? date.strftime("%b %d") : date.day %>
+  <div class="c-date-container" >
+    <div class="c-date" id="c-date-<%= date.to_s %>" data-date='<%= date.to_s %>' data-content='<%= raw render_escape_html partial: sidebar_partial, locals: { events: _events } %>'><%= display_day %></div>
+    <div class="c-events-container">
+      <div class="c-events">
+        <% _events.each do |event| %>
+          <div class="c-event <%= event.options[:classes].join(" ") %>"
+            data-toggle="popover" data-trigger="focus" role="button" tabindex="0" data-title="<%= event.title %>" data-html="true"
+            data-content="<%= raw render_escape_html partial: event.options[:popover], locals: { event: event } %>">
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

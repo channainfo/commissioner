@@ -7,7 +7,7 @@
     <li class="nav-item">
       <% default_params = { path_prefix: path_prefix, extension: '', page: 1, per_page: params[:per_page], query: '' } %>
       <% selected = params[:path_prefix] == path_prefix %>
-      <% overrided_params = selected ? default_params : params.merge(default_params) %>
+      <% overrided_params = selected ? default_params : params.merge(default_params).permit(default_params.keys) %>
       <%= link_to path_prefix.humanize, overrided_params, class: "nav-link #{'active' if selected}" %>
     </li>
   <% end  %>

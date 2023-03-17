@@ -42,6 +42,7 @@ PATH
       phonelib
       rails (~> 7.0.4)
       searchkick (~> 5.1)
+      simple_calendar (~> 2.4)
       spree (>= 4.5.0)
       spree_api_v1 (>= 4.5.0)
       spree_auth_devise (>= 4.5.0)
@@ -490,6 +491,8 @@ GEM
       websocket (~> 1.0)
     shoulda-matchers (5.3.0)
       activesupport (>= 5.2.0)
+    simple_calendar (2.4.3)
+      rails (>= 3.0)
     simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)

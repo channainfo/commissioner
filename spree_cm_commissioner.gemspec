@@ -36,6 +36,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'searchkick', '~> 5.1'
   s.add_dependency 'byebug'
 
+  s.add_dependency 'simple_calendar', '~> 2.4'
+
   s.add_development_dependency 'pg'
   s.add_development_dependency 'spree_dev_tools'
   s.metadata['rubygems_mfa_required'] = 'true'
