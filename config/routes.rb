@@ -13,7 +13,6 @@ Spree::Core::Engine.add_routes do
     namespace :merchant do
       scope ':vendor_id' do
         resources :users do
-          resources :subscribed_products
           resources :subscriptions
         end
       end
