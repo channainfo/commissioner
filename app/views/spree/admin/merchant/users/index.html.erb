@@ -61,6 +61,9 @@
             <%= sort_link @search, :Roles, Spree.t(:roles), {}, {title: 'roles_title'} %>
           </th>
           <th>
+            <%= sort_link @search, :taxon_id, Spree.t(:taxon), {}, {title: 'taxon_title'} %>
+          </th>
+          <th>
             <%= sort_link @search, :created_at, Spree.t(:create_at), {}, {title: 'create_at_title'} %>
           </th>
           <th data-hook="admin_users_index_header_actions" class="actions"></th>
@@ -87,6 +90,9 @@
                   <%= role.name %>
                 <% end %>
               <% end %>
+            </td>
+            <td class='taxon'>
+              <%= user.taxon&.name %>
             </td>
             <td class='created_at'>
               <%= user.created_at %>

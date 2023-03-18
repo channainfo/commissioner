@@ -1,0 +1,12 @@
+<!-- insert_after "[data-hook='new_product_vendor']" -->
+
+<div data-hook="new_product_subscribable" class="col-12 col-md-4 mt-4 p-3 ">
+  <span>
+    <%= f.field_container :subscribable do %>
+      <%= f.label :subscribable do %>
+        <%= f.check_box :subscribable %>
+        <%= Spree.t(:subscribable) %>
+      <% end %>
+    <% end %>
+  </span>
+</div>

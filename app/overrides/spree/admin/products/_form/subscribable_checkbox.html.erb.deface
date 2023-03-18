@@ -1,0 +1,9 @@
+<!-- insert_after "[data-hook='admin_product_form_promotionable']" -->
+
+<div data-hook="admin_product_form_subscribable">
+  <%= f.field_container :subscribable do %>
+    <%= f.check_box :subscribable %>
+    <%= f.label :subscribable, Spree.t(:subscribable) %>
+    <%= f.error_message_on :subscribable %>
+  <% end %>
+</div>

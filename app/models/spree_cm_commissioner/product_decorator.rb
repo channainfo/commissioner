@@ -28,6 +28,7 @@ module SpreeCmCommissioner
           .where(vendor_id: vendor.id, product_type: vendor.primary_product_type)
           .maximum('spree_prices.price').to_f
       }
+      base.scope :subscribable, -> { where(subscribable: 1) }
     end
   end
 end

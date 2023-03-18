@@ -33,7 +33,7 @@ module Spree
         end
 
         def vendors
-          @vendors ||= spree_current_user.vendors.to_a
+          @vendors ||= spree_current_user.vendors&.to_a
         end
 
         def current_vendor

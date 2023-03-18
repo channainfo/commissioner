@@ -1,0 +1,15 @@
+<% content_for :page_title do %>
+  <%= page_header_back_button spree.admin_merchant_user_subscriptions_path %>
+  <%= Spree.t(:subscribe) %>
+<% end %>
+<div data-hook="admin_user_new_form_header">
+  <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+</div>
+<div data-hook="admin_user_new_form">
+  <%= form_for @object, url: spree.admin_merchant_user_subscriptions_path, method: :post do |f| %>
+    <%= render partial: 'form', locals: { f: f } %>
+    <div data-hook="admin_user_new_form_buttons">
+      <%= render partial: 'spree/admin/shared/new_resource_links' %>
+    </div>
+  <% end %>
+</div>
