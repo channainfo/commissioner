@@ -4,6 +4,8 @@ module SpreeCmCommissioner
       base.after_commit :update_vendor_price
       base.after_save   :update_vendor_total_inventory, if: :saved_change_to_permanent_stock?
       base.validate     :validate_option_types
+
+      base.scope        :subscribable, -> { joins(:product).where(product: { subscribable: true }) }
     end
 
     def selected_option_value_ids

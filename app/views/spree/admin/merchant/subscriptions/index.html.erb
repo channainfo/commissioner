@@ -1,0 +1,59 @@
+<%= render partial: 'spree/admin/merchant/shared/user_tabs', locals: { current: :products } %>
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:subscribe), new_admin_merchant_user_subscription_path, class: "btn-success", icon: 'add.svg', id: 'admin_merchant_user_subscription' %>
+<% end %>
+<% unless @search.nil? %>
+  <div class="table-responsive border rounded bg-white mb-3">
+    <table class="table" id="listing_users" data-hook>
+      <thead class="text-muted">
+        <tr data-hook="admin_users_index_headers">
+          <th>
+            <%= sort_link @search, :name, Spree.t(:name), {}, {title: 'subscription_title'} %>
+          </th>
+          <th>
+            <%= sort_link @search, :option_text, Spree.t(:option_text),{},{title: 'option_text_title'} %>
+          </th>
+          <th>
+            <%= sort_link @search, :price, Spree.t(:price),{},{title: 'price_title'} %>
+          </th>
+          <th>
+            <%= sort_link @search, :start_date, Spree.t(:start_date), {}, {title: 'start_date_title'} %>
+          </th>
+          <th>
+            <%= sort_link @search, :end_date, Spree.t(:end_date), {}, {title: 'end_date_title'} %>
+          </th>
+          <th>
+            <%= sort_link @search, :status, Spree.t(:status), {}, {title: 'status_title'} %>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @subscriptions.each do |s| %>
+          <tr id="<%= spree_dom_id s %>" data-hook="admin_users_index_rows">
+            <td class='p_name'>
+              <%= link_to s.variant.sku, edit_admin_merchant_user_subscription_path(s.user_id, s.id) %>
+            </td>
+            <td>
+              <%= s.variant.options_text%>
+            </td>
+            <td>
+              <%= s.variant.display_price%>
+            </td>
+            <td class='start_date'>
+              <%= s.start_date %>
+            </td>
+            <td class="end_date">
+              <%= s.end_date %>
+            </td>
+            <td>
+              <% @badge_class = 'badge-active' if s.status == "active" %>
+              <% @badge_class = 'badge-inactive' if s.status == "inactive" %>
+              <% @badge_class = 'badge-danger' if s.status == "suspended" %>
+              <%= content_tag(:strong, class: "badge #{@badge_class} text-uppercase ") do; s.status ; end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
