@@ -4,27 +4,34 @@
 <% content_for :page_actions do %>
   <%= button_link_to Spree.t(:new_user), new_admin_merchant_user_path, class: "btn-success", icon: 'add.svg', id: 'admin_new_user_link' %>
 <% end if can? :create, Spree::user_class %>
-<% content_for :table_filter_title do %>
-  <%= Spree.t(:search) %>
-<% end %>
 <% content_for :table_filter do %>
   <div data-hook="admin_users_index_search">
     <%= search_form_for [:admin, @search], url: spree.admin_merchant_users_path do |f| %>
-      <div class="form-group">
-        <%= f.label :email_cont, Spree.t(:email) %>
-        <%= f.email_field :email_cont, class: "form-control js-quick-search-target js-filterable" %>
-      </div>
       <div class="row">
         <div class="col-12 col-lg-6">
           <div class="form-group">
-            <%= f.label :bill_address_firstname_cont, Spree.t(:first_name) %>
-            <%= f.text_field :bill_address_firstname_cont, class: 'form-control js-filterable' %>
+            <%= f.label :email_cont, Spree.t(:email) %>
+            <%= f.email_field :email_cont, class: "form-control js-quick-search-target js-filterable" %>
           </div>
         </div>
         <div class="col-12 col-lg-6">
           <div class="form-group">
-            <%= f.label :bill_address_lastname_cont, Spree.t(:last_name) %>
-            <%= f.text_field :bill_address_lastname_cont, class: 'form-control js-filterable' %>
+            <%= f.label :phone_number_cont, Spree.t(:phone_number) %>
+            <%= f.telephone_field :phone_number_cont, class: "form-control js-filterable" %>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :first_name_cont, Spree.t(:first_name) %>
+            <%= f.text_field :first_name_cont, class: 'form-control js-filterable' %>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :last_name_cont, Spree.t(:last_name) %>
+            <%= f.text_field :last_name_cont, class: 'form-control js-filterable' %>
           </div>
         </div>
       </div>
@@ -58,7 +65,7 @@
             <%= sort_link @search, :gender, Spree.t(:gender), {}, {title: 'gender_title'} %>
           </th>
           <th>
-            <%= sort_link @search, :Roles, Spree.t(:roles), {}, {title: 'roles_title'} %>
+            <%= sort_link @search, :phone_number, Spree.t(:phone_number), {}, {title: 'phone_number_title'} %>
           </th>
           <th>
             <%= sort_link @search, :taxon_id, Spree.t(:taxon), {}, {title: 'taxon_title'} %>
@@ -85,11 +92,7 @@
               <%= user.gender %>
             </td>
             <td class='roles'>
-              <% user.spree_roles.each do |role| %>
-                <%= content_tag(:strong, class: "badge #{role.name == 'admin' ? 'badge-primary' : 'badge-secondary' } text-uppercase") do %>
-                  <%= role.name %>
-                <% end %>
-              <% end %>
+              <%= user.phone_number %>
             </td>
             <td class='taxon'>
               <%= user.taxon&.name %>

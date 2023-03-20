@@ -2,28 +2,28 @@
 <% content_for :page_actions do %>
   <%= button_link_to Spree.t(:subscribe), new_admin_merchant_user_subscription_path, class: "btn-success", icon: 'add.svg', id: 'admin_merchant_user_subscription' %>
 <% end %>
-<% unless @subscribed.nil? %>
+<% unless @search.nil? %>
   <div class="table-responsive border rounded bg-white mb-3">
     <table class="table" id="listing_users" data-hook>
       <thead class="text-muted">
         <tr data-hook="admin_users_index_headers">
           <th>
-            <%= sort_link @subscribed, :name, Spree.t(:name), {}, {title: 'subscription_title'} %>
+            <%= sort_link @search, :name, Spree.t(:name), {}, {title: 'subscription_title'} %>
           </th>
           <th>
-            <%= sort_link @subscribed, :option_text, Spree.t(:option_text),{},{title: 'option_text_title'} %>
+            <%= sort_link @search, :option_text, Spree.t(:option_text),{},{title: 'option_text_title'} %>
           </th>
           <th>
-            <%= sort_link @subscribed, :price, Spree.t(:price),{},{title: 'price_title'} %>
+            <%= sort_link @search, :price, Spree.t(:price),{},{title: 'price_title'} %>
           </th>
           <th>
-            <%= sort_link @subscribed, :start_date, Spree.t(:start_date), {}, {title: 'start_date_title'} %>
+            <%= sort_link @search, :start_date, Spree.t(:start_date), {}, {title: 'start_date_title'} %>
           </th>
           <th>
-            <%= sort_link @subscribed, :end_date, Spree.t(:end_date), {}, {title: 'end_date_title'} %>
+            <%= sort_link @search, :end_date, Spree.t(:end_date), {}, {title: 'end_date_title'} %>
           </th>
           <th>
-            <%= sort_link @subscribed, :status, Spree.t(:status), {}, {title: 'status_title'} %>
+            <%= sort_link @search, :status, Spree.t(:status), {}, {title: 'status_title'} %>
           </th>
         </tr>
       </thead>

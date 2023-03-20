@@ -10,7 +10,7 @@ module SpreeCmCommissioner
       base.has_one :profile, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::UserProfile'
       base.belongs_to :taxon
 
-      base.whitelisted_ransackable_attributes = %w[email first_name last_name gender]
+      base.whitelisted_ransackable_attributes = %w[email first_name last_name gender phone_number]
 
       def base.find_user_by_login(login)
         login = login.downcase

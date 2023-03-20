@@ -3,18 +3,13 @@
     <%= f.hidden_field :user_id, value: @user.id %>
     <%= f.field_container :variant_id do %>
       <%= f.label :variant, Spree.t(:variant) %>
-      <%= f.collection_select(:variant_id, Spree::Variant.joins(:product).where(product:{subscribable: true}), :id, :sku, { include_blank: Spree.t('match_choices.none') }, { class: 'select2' }) %>
+      <%= f.collection_select(:variant_id, Spree::Variant.subscribable, :id, :sku, { include_blank: Spree.t('match_choices.none') }, { class: 'select2' }) %>
       <%= f.error_message_on :product_id %>
     <% end %>
     <%= f.field_container :start_date do %>
       <%= f.label :start_date, Spree.t(:start_date) %>
       <%= f.date_field :start_date, class: 'form-control' %>
       <%= f.error_message_on :start_date %>
-    <% end %>
-    <%= f.field_container :end_date do %>
-      <%= f.label :end_date, Spree.t(:end_date) %>
-      <%= f.date_field :end_date, class: 'form-control' %>
-      <%= f.error_message_on :end_date %>
     <% end %>
   </div>
   <div data-hook="admin_user_form_password_fields" class="col-12 col-md-6">
