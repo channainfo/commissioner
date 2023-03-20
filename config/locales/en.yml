@@ -63,3 +63,16 @@ en:
     reason_description:
       sth_broken: "Can you please share us what was not working? We will fix them as soon as possible as we spot them"
       other: "Can you please share us your account deletion reason. If something slipped through our fingers, we'd be so grateful to be aware and fix it."
+
+  spree:
+    length: "Length"
+    promotion_rule_types:
+      fixed_date:
+        name: "Fixed Date"
+        description: "Fixed Date"
+    promotion_action_types:
+      create_listing_price_adjustment:
+        name: "Create listing price adjustment"
+    fixed_date_rule:
+      match_any: "Any of these date"
+      match_none: "None of these date"
