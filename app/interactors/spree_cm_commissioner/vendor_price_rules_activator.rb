@@ -9,13 +9,15 @@ module SpreeCmCommissioner
 
     # create listing prices for vendor on specific date
     def load_vendor_listing_prices
-      context.vendor_listing_prices = (from_date..to_date).map do |date|
-        SpreeCmCommissioner::ListingPrice.first_or_initialize(
-          price_source: vendor,
-          date: date,
-          currency: Spree::Store.default.default_currency
-        ) do |vendor_listing_price|
-          vendor_listing_price.price = vendor.max_price
+      context.vendor_listing_prices = (from_date..to_date).filter_map do |date|
+        if date_valid?(date)
+          SpreeCmCommissioner::ListingPrice.where(
+            price_source: vendor,
+            date: date,
+            currency: Spree::Store.default.default_currency
+          ).first_or_initialize do |vendor_listing_price|
+            vendor_listing_price.price = vendor.max_price
+          end
         end
       end
     end
@@ -44,6 +46,14 @@ module SpreeCmCommissioner
 
     def vendor
       context.vendor ||= Spree::Vendor.find(vendor_id)
+    end
+
+    def date_valid?(date)
+      begin
+        Date.parse(date)
+      rescue Date::Error
+        nil
+      end.present?
     end
   end
 end

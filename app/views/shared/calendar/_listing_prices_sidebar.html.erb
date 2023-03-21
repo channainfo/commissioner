@@ -1,0 +1,23 @@
+<div class="w-100 h-50">
+  <% events.each do |event| %>
+    <div class="card mb-2">
+      <% listing_price = event.options[:listing_price] %>
+      <ul class="list-group list-group-flush">
+        <% listing_price.adjustments.each do |adjustment| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <small><%= adjustment.source.promotion.name %></small>
+            <small class="text-capitalize">
+              <%= adjustment.display_amount %>
+            </small>
+          </li>
+        <% end %>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <small><strong><%= Spree.t(:total) %></strong></small>
+          <span class="state badge badge-pill badge-primary text-capitalize">
+            <%= listing_price.display_adjustment_total %>
+          </span>
+        </li>
+      </ul>
+    </div>
+  <% end %>
+<div>
