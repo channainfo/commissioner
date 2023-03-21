@@ -6,14 +6,25 @@ module Spree
           private
 
           def collection
-            collection_finder.call(params: params).value
+            @collection ||= collection_finder.call(params: params).value
+          end
+
+          def paginated_collection
+            @paginated_collection ||= apply_service_availability(collection)
           end
 
           def resource
             resource = resource_finder.call(params: params).value
             raise ActiveRecord::RecordNotFound if resource.nil?
 
-            resource
+            apply_service_availability(resource)
+          end
+
+          def apply_service_availability(resource)
+            SpreeCmCommissioner::ApplyServiceAvailability.call(calendarable: resource,
+                                                               from_date: params[:from_date].to_date,
+                                                               to_date: params[:to_date].to_date
+                                                              ).value
           end
 
           def model_class
