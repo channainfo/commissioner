@@ -1,0 +1,17 @@
+<div class="card-body">
+  <div class="form-group">
+    <%= label_tag Spree.t(:vendor) %>
+    <%= select_tag("#{param_prefix}[vendor_id]", options_from_collection_for_select(Spree::Vendor.active, :id, :name, promotion_rule.vendor_id), { class: 'form-control custom-select' }) %>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <%= label_tag Spree.t(:date) %>
+      <%= date_field_tag "#{param_prefix}[preferred_start_date]", promotion_rule.preferred_start_date, class: 'form-control' %>
+    </div>
+    <div class="form-group col-md-6">
+      <%= label_tag Spree.t(:length) %>
+      <%= number_field_tag "#{param_prefix}[preferred_length]", promotion_rule.preferred_length, class: 'form-control' %>
+    </div>
+    <%= select_tag("#{param_prefix}[preferred_match_policy]", options_for_select(SpreeCmCommissioner::PricingModel::Rules::FixedDate::MATCH_POLICIES.map{|s| [Spree.t("fixed_date_rule.match_#{s}"),s] }, promotion_rule.preferred_match_policy), {class: 'form-control custom-select'}) %>
+  </div>
+</div>

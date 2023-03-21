@@ -7,7 +7,7 @@ module SpreeCmCommissioner
 
         has_many :adjustments, as: :source, class_name: 'Spree::Adjustment'
 
-        before_validation -> { self.calculator ||= Calculator::FlatPercentItemTotal.new }
+        before_validation -> { self.calculator ||= Spree::Calculator::FlatPercentItemTotal.new }
 
         def perform(options = {})
           adjustable = options[:adjustable]
