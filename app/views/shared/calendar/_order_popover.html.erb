@@ -1,0 +1,18 @@
+<% order = event.options[:order] %>
+
+<div>
+  <div>
+    <a target="_blank" href="<%= cart_admin_order_url(order.number) %>"><strong><%= order.number %></strong></a>
+    <p class="ml-1 badge badge-primary badge-pill mb-0"><%= order.state %></p>
+    <p><%= order.display_total %></p>
+  </div>
+  <ul class="list-group m-0">
+    <% order.line_items.each do |item| %>
+      <li class="list-group-item p-2">
+        <small><%= item.name %></small><br>
+        <small><%= item.display_price %> x <%= item.quantity %></small>
+        <small><strong>(<%= item.from_date&.strftime("%d") %> - <%= item.to_date&.strftime("%d") %>)</strong></small>
+      </li>
+    <% end %>
+  </ul>
+</div>

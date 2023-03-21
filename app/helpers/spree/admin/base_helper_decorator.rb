@@ -6,6 +6,10 @@ module Spree
 
         image_tag asset_path, width: '24px'
       end
+
+      def render_escape_html(render_payload)
+        Rack::Utils.escape_html(render(render_payload))
+      end
     end
   end
 end

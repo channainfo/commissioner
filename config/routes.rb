@@ -48,6 +48,10 @@ Spree::Core::Engine.add_routes do
       end
     end
 
+    namespace :calendars do
+      resources :orders, only: %i[index]
+    end
+
     resources :taxonomies do
       resources :taxons do
         member do

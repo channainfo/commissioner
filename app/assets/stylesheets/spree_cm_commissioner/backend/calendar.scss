@@ -1,0 +1,108 @@
+.simple-calendar {
+  $day-background: theme-color("light");
+
+  table {
+    @extend .table-responsive-md;
+  }
+
+  .calendar-heading {
+    @extend .border;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: $day-background;
+    border-bottom: none !important;
+
+    a {
+      @extend .btn;
+      @extend .btn-link;
+    }
+  }
+
+  .day {
+    background-color: $day-background;
+
+    @include hover {
+      background-color: darken($day-background, 5%);
+    }
+
+    .c-date-container {
+      display: flex;
+      flex-flow: column;
+      height: 100%;
+
+      .c-date {
+        padding: 6px;
+        cursor: pointer;
+      }
+
+      .c-events-container {
+        flex-grow: 1;
+        display: flex;
+        align-items: flex-end;
+      }
+
+      .c-events {
+        display: flex;
+        align-items: flex-end;
+
+        .c-event {
+          width: 8px;
+          height: 8px;
+          border-radius: 4px;
+          background-color: theme-color("primary");
+          margin-right: 4px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  // .wday-0 {
+  // }
+
+  // .wday-1 {
+  // }
+
+  // .wday-2 {
+  // }
+
+  // .wday-3 {
+  // }
+
+  // .wday-4 {
+  // }
+
+  // .wday-5 {
+  // }
+
+  // .wday-6 {
+  // }
+
+  // .today {
+  // }
+
+  // .past {
+  // }
+
+  // .future {
+  // }
+
+  // known as active-date
+  .start-date {
+    background-color: darken($day-background, 5%);
+  }
+
+  // .prev-month {
+  // }
+
+  // .next-month {
+  // }
+
+  // .current-month {
+  // }
+
+  // .has-events {
+  // }
+}
