@@ -1,14 +1,14 @@
 module SpreeCmCommissioner
   class ApplyServiceAvailability < BaseInteractor
-    delegate :calendarable, :from_date, :to_date, to: :context
+    delegate :from_date, :to_date, to: :context
 
     before do
-      calendarable.respond_to?(:each) ? apply_availabilities : calculate_availabilities_for_date_range(calendarable)
+      apply_availabilities
     end
 
     # :calendarable
     def call
-      context.value = calendarable
+      context.value = context.calendarable
     end
 
     private
@@ -33,18 +33,14 @@ module SpreeCmCommissioner
     def regular_service_calendars
       @regular_service_calendars ||= SpreeCmCommissioner::ServiceCalendar.includes(:service_calendar_dates)
                                                                          .where('start_date <= ? AND end_date >= ?', from_date, to_date)
-                                                                         .where(calendarable_id: calendarable_ids)
-                                                                         .where(calendarable_type: calendarable_type)
-                                                                         .order(created_at: :desc)
+                                                                         .where(calendarable_id: calendarable.map(&:id))
+                                                                         .where(calendarable_type: calendarable.first.class.name)
+                                                                         .order(id: :desc)
                                                                          .to_a
     end
 
-    def calendarable_ids
-      calendarable.respond_to?(:each) ? calendarable.map(&:id).uniq : calendarable.id
-    end
-
-    def calendarable_type
-      calendarable.respond_to?(:each) ? calendarable.klass.name : calendarable.class.name
+    def calendarable
+      context.calendarable.respond_to?(:each) ? context.calendarable : [context.calendarable]
     end
   end
 end

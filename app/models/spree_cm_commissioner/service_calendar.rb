@@ -3,7 +3,7 @@ require_dependency 'spree_cm_commissioner'
 module SpreeCmCommissioner
   class ServiceCalendar < ApplicationRecord
     ## Callbacks
-    before_create :set_dates
+    before_save :set_dates
 
     belongs_to :calendarable, polymorphic: true
     has_many   :service_calendar_dates, class_name: 'SpreeCmCommissioner::ServiceCalendarDate'
