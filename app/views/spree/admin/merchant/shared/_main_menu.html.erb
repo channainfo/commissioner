@@ -11,8 +11,11 @@
     </button>
   </div>
   <% if Spree.user_class && can?(:admin, Spree.user_class) %>
+    <ul class="nav nav-sidebar" id="sidebarCustomer">
+      <%= tab :customers, url: admin_merchant_customers_path, icon: 'people-fill.svg' %>
+    </ul>
     <ul class="nav nav-sidebar" id="sidebarUser">
-      <%= tab *Spree::Backend::Configuration::USER_TABS, url: admin_merchant_users_path, icon: 'people-fill.svg' %>
+      <%= tab :users, url: admin_merchant_users_path, icon: 'users.svg' %>
     </ul>
   <% end %>
 </nav>

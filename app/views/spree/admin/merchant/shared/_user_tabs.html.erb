@@ -2,20 +2,12 @@
   <%= page_header_back_button spree.admin_merchant_users_path %>
   <%= @user.email %>
 <% end %>
+
 <% content_for :page_tabs do %>
   <li class="nav-item">
     <%= link_to_with_icon 'person.svg',
-      Spree.t(:"admin.user.account"),
+      Spree.t(:account),
       spree.edit_admin_merchant_user_path(@user),
       class: "nav-link #{'active' if current == :account}" %>
   </li>
 <% end %>
-<% content_for :page_tabs do %>
-  <li class="nav-item">
-    <%= link_to_with_icon 'tag.svg',
-      Spree.t(:"admin.user.account.subscription"),
-      spree.admin_merchant_user_subscriptions_path(@user),
-      class: "nav-link #{'active' if current == :products}" %>
-  </li>
-<% end %>
-<%  %>

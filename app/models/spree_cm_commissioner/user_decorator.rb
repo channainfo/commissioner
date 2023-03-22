@@ -5,10 +5,10 @@ module SpreeCmCommissioner
 
       base.enum gender: %i[male female other]
       base.has_many :user_identity_providers, dependent: :destroy, class_name: 'SpreeCmCommissioner::UserIdentityProvider'
-      base.has_many :user_subscriptions, class_name: 'SpreeCmCommissioner::UserSubscription'
+      base.has_many :customers, class_name: 'SpreeCmCommissioner::Customer'
+      base.has_many :subscriptions, through: :customers, class_name: 'SpreeCmCommissioner::Subscription'
 
       base.has_one :profile, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::UserProfile'
-      base.belongs_to :taxon
 
       base.whitelisted_ransackable_attributes = %w[email first_name last_name gender phone_number]
 

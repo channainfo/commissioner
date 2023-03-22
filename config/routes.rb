@@ -12,9 +12,10 @@ Spree::Core::Engine.add_routes do
 
     namespace :merchant do
       scope ':vendor_id' do
-        resources :users do
+        resources :customers do
           resources :subscriptions
         end
+        resources :users
       end
 
       get '/forbidden', to: 'errors#forbidden', as: :forbidden

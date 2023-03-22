@@ -1,14 +1,14 @@
 <% content_for :page_title do %>
-  <%= Spree.t(:users) %>
+  <%= Spree.t(:customers) %>
 <% end %>
 
 <% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:new_user), new_admin_merchant_user_path, class: "btn-success", icon: 'add.svg', id: 'admin_new_user_link' %>
-<% end if can? :create, Spree::user_class %>
+  <%= button_link_to Spree.t(:add_customer), new_admin_merchant_customer_path, class: "btn-success", icon: 'add.svg', id: 'admin_new_customer_link' %>
+<% end %>
 
 <% content_for :table_filter do %>
-  <div data-hook="admin_users_index_search">
-    <%= search_form_for [:admin, @search], url: spree.admin_merchant_users_path do |f| %>
+  <div data-hook="admin_customers_index_search">
+    <%= search_form_for [:admin, @search], url: spree.admin_merchant_customers_path do |f| %>
       <div class="row">
         <div class="col-12 col-lg-6">
           <div class="form-group">
@@ -18,8 +18,8 @@
         </div>
         <div class="col-12 col-lg-6">
           <div class="form-group">
-            <%= f.label :phone_number_cont, Spree.t(:phone_number) %>
-            <%= f.telephone_field :phone_number_cont, class: "form-control js-filterable" %>
+            <%= f.label :intel_phone_number_cont, Spree.t(:intel_phone_number) %>
+            <%= f.telephone_field :intel_phone_number_cont, class: "form-control js-filterable" %>
           </div>
         </div>
       </div>
@@ -37,25 +37,20 @@
           </div>
         </div>
       </div>
-      <% if Spree::Config[:company] %>
-        <div class="form-group">
-          <%= f.label :bill_address_company_cont, Spree.t(:company) %>
-          <%= f.text_field :bill_address_company_cont, class: 'form-control js-filterable' %>
-        </div>
-      <% end %>
-      <div data-hook="admin_users_index_search_buttons" class="form-actions">
+      <div data-hook="admin_customers_index_search_buttons" class="form-actions">
         <%= button Spree.t(:search), 'search.svg' %>
       </div>
     <% end %>
   </div>
 <% end %>
-<% if @users.any? %>
+
+<% if @customers.any? %>
   <div class="table-responsive border rounded bg-white mb-3">
-    <table class="table" id="listing_users" data-hook>
+    <table class="table" id="listing_customers" data-hook>
       <thead class="text-muted">
-        <tr data-hook="admin_users_index_headers">
+        <tr data-hook="admin_customers_index_headers">
           <th>
-            <%= sort_link @search, :email, Spree.t(:email), {}, {title: 'users_email_title'} %>
+            <%= sort_link @search, :email, Spree.t(:email), {}, {title: 'customers_email_title'} %>
           </th>
           <th>
             <%= sort_link @search, :first_name, Spree.t(:first_name), {}, {title: 'first_name_title'} %>
@@ -70,36 +65,36 @@
             <%= sort_link @search, :phone_number, Spree.t(:phone_number), {}, {title: 'phone_number_title'} %>
           </th>
           <th>
-            <%= sort_link @search, :created_at, Spree.t(:create_at), {}, {title: 'create_at_title'} %>
+            <%= sort_link @search, :taxon_id, Spree.t(:taxon), {}, {title: 'taxon_title'} %>
           </th>
-          <th data-hook="admin_users_index_header_actions" class="actions"></th>
+          <th data-hook="admin_customers_index_header_actions" class="actions"></th>
         </tr>
       </thead>
       <tbody>
-        <% @users.each do |user| %>
-          <tr id="<%= spree_dom_id user %>" data-hook="admin_users_index_rows">
-            <td class='user_email'>
-              <%= link_to user.email, edit_admin_merchant_user_path(user) %>
+        <% @customers.each do |customer| %>
+          <tr id="<%= spree_dom_id customer %>" data-hook="admin_customers_index_rows">
+            <td class='customer_email'>
+              <%= link_to customer.email, edit_admin_merchant_customer_path(customer) %>
             </td>
             <td class='first_name'>
-              <%= user.first_name %>
+              <%= customer.first_name %>
             </td>
             <td class='last_name'>
-              <%= user.last_name %>
+              <%= customer.last_name %>
             </td>
             <td class='gender'>
-              <%= user.gender %>
+              <%= customer.gender %>
             </td>
             <td class='roles'>
-              <%= user.phone_number %>
+              <%= customer.phone_number %>
             </td>
-            <td class='created_at'>
-              <%= user.created_at %>
+            <td class='taxon'>
+              <%= customer.taxon&.name %>
             </td>
-            <td data-hook="admin_users_index_row_actions" class="actions">
+            <td data-hook="admin_customers_index_row_actions" class="actions">
               <span class="d-flex justify-content-end">
-                <%= link_to_edit user ,url: edit_admin_merchant_user_path(user) ,no_text: true if can?(:edit,:merchant, user) %>
-                <%= link_to_delete user,url: admin_merchant_user_path(user), no_text: true if can?(:delete, user) %>
+                <%= link_to_edit customer ,url: edit_admin_merchant_customer_path(customer) ,no_text: true if can?(:edit,:merchant, customer) %>
+                <%= link_to_delete customer,url: admin_merchant_customer_path(customer), no_text: true if can?(:delete, customer) %>
               </span>
             </td>
           </tr>
@@ -107,10 +102,4 @@
       </tbody>
     </table>
   </div>
-<% else %>
-  <div class="text-center no-objects-found m-5 mb-3">
-    <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree.user_class)) %>,
-    <%= link_to Spree.t(:add_one), new_object_url %>!
-  </div>
 <% end %>
-<%= paginate @users, theme: 'admin-twitter-bootstrap-4' %>
