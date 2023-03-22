@@ -17,5 +17,6 @@ require 'phonelib'
 require 'jwt'
 
 require 'simple_calendar'
+require 'activerecord_json_validator'
 
 require 'byebug' if Rails.env.development? || Rails.env.test?

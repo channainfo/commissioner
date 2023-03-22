@@ -2,18 +2,33 @@ require_dependency 'spree_cm_commissioner'
 
 module SpreeCmCommissioner
   class ServiceCalendar < ApplicationRecord
+    # exception_rules = [
+    #   { 'from' => Date.parse('2023-1-01'), 'to'=> Date.parse('2023-1-31'), 'type' => 'exclusion', 'reason' => 'Company retreat' }
+    # ]
+    # inclusion: Service has been added for the specified date (default).
+    # exclusion: Service has been removed for the specified date.
+
+    COMMISSIONER_ROOT = Gem.loaded_specs['spree_cm_commissioner'].gem_dir
+    EXCEPTION_RULE_JSON_SCHEMA = Pathname.new("#{COMMISSIONER_ROOT}/config/schemas/service_calendar_exception_rule.json")
+
+    belongs_to :calendarable, polymorphic: true
+    validates :exception_rules, json: { schema: EXCEPTION_RULE_JSON_SCHEMA }
+
     ## Callbacks
     before_save :set_dates
 
-    belongs_to :calendarable, polymorphic: true
-    has_many   :service_calendar_dates, class_name: 'SpreeCmCommissioner::ServiceCalendarDate'
-
     def service_available?(date)
-      # date on exception_calendar is unique
-      exception_calendar = service_calendar_dates.to_a.find { |s| s.date.to_s == date.to_s }
-      return exception_calendar.inclusion? if exception_calendar.present?
+      exception_rule = get_exception_rule(date)
+      # return bases on exception_rule first
+      return exception_rule['type'] == 'inclusion' if exception_rule.present?
 
       service_started?(date) && in_weekly_service?(date)
+    end
+
+    def get_exception_rule(date)
+      exception_rules.find do |rule|
+        rule['from'].to_date <= date && date <= rule['to'].to_date
+      end
     end
 
     private

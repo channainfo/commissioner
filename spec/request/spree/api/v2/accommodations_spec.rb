@@ -145,20 +145,23 @@ describe 'API V2 Storefront Accommodation Spec', type: :request do
       end
     end
 
-    context 'when service_calendar with exception' do
-      let(:regular_calendar)  { create(:cm_service_calendar, saturday: false, sunday: false, calendarable: phnom_penh_hotel) }
-      let!(:sunday_open)      { create(:cm_service_calendar_date, service_calendar: regular_calendar, date: sunday, exception_type: :inclusion) }
-      let!(:monday_close)     { create(:cm_service_calendar_date, service_calendar: regular_calendar, date: monday, exception_type: :exclusion) }
-      before { get '/api/v2/storefront/accommodations', params:  { from_date: monday, to_date: sunday, province_id: phnom_penh.id, adult: 2, children: 1, room_qty: 1 } }
-      let(:data) { json_response['data'].find {|h| h['id'].to_i == phnom_penh_hotel.id } }
+    context 'when service_calendar with exception_rules' do
+      let(:params) { { from_date: monday, to_date: sunday, province_id: phnom_penh.id, adult: 2, children: 1, room_qty: 1 } }
+      let(:response_data) { json_response['data'].find {|h| h['id'].to_i == phnom_penh_hotel.id } }
 
       it 'phnom_penh_hotel should open on Sunday' do
-        service = data['attributes']['service_availabilities'].find { |s| s['date'] == sunday.to_s }
+        create(:cm_service_calendar, sunday: false, calendarable: phnom_penh_hotel, exception_rules: [{ from: sunday, to: sunday, type: 'inclusion' }])
+        get '/api/v2/storefront/accommodations', params: params
+
+        service = response_data['attributes']['service_availabilities'].find { |s| s['date'] == sunday.to_s }
         expect(service['available']).to eq true
       end
 
       it 'phnom_penh_hotel should close on Monday' do
-        service = data['attributes']['service_availabilities'].find { |s| s['date'] == monday.to_s }
+        create(:cm_service_calendar, calendarable: phnom_penh_hotel, exception_rules: [{ from: monday, to: monday, type: 'exclusion' }])
+        get '/api/v2/storefront/accommodations', params: params
+
+        service = response_data['attributes']['service_availabilities'].find { |s| s['date'] == monday.to_s }
         expect(service['available']).to eq false
       end
     end
