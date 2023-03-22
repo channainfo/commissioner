@@ -5,6 +5,13 @@ en:
   account_checker:
     verify:
       already_exist: "%{login} already exist"
+
+  sms:
+    to:
+      blank: "recipient can not be blank"
+    body:
+      blank: "sms content can not be blank"
+
   authenticator:
     incorrect_login: "Incorrect login"
     incorrect_password: "Incorrect password"

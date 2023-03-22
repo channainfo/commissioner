@@ -50,6 +50,7 @@ PATH
       spree_backend (>= 4.5.0)
       spree_extension
       spree_multi_vendor (>= 2.4.0)
+      twilio-ruby (~> 5.48.0)
 
 GEM
   remote: https://rubygems.org/
@@ -241,12 +242,11 @@ GEM
     execjs (2.8.1)
     factory_bot (4.11.1)
       activesupport (>= 3.0.0)
-    faraday (2.7.1)
-      faraday-net_http (>= 2.0, < 3.1)
-      ruby2_keywords (>= 0.0.4)
+    faraday (1.2.0)
+      multipart-post (>= 1.2, < 3)
+      ruby2_keywords
     faraday-http-cache (2.4.1)
       faraday (>= 0.8)
-    faraday-net_http (3.0.2)
     ffaker (2.21.0)
     ffi (1.15.5)
     fiber-local (1.0.0)
@@ -337,6 +337,7 @@ GEM
     money (6.16.0)
       i18n (>= 0.6.4, <= 2)
     multi_json (1.15.0)
+    multipart-post (2.3.0)
     net-imap (0.3.4)
       date
       net-protocol
@@ -623,6 +624,10 @@ GEM
       actionpack (>= 6.0.0)
       activejob (>= 6.0.0)
       railties (>= 6.0.0)
+    twilio-ruby (5.48.0)
+      faraday (>= 0.9, < 2.0)
+      jwt (>= 1.5, <= 2.5)
+      nokogiri (>= 1.6, < 2.0)
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.4.2)
