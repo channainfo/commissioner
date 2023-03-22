@@ -3,6 +3,7 @@ module Spree
     module Merchant
       class SubscriptionsController < Spree::Admin::Merchant::BaseController
         before_action :load_customer
+        before_action :load_subscription, if: -> { member_action? }
 
         protected
 
@@ -15,6 +16,10 @@ module Spree
 
         def load_customer
           customer
+        end
+
+        def load_subscription
+          @subscription = @object
         end
 
         def customer

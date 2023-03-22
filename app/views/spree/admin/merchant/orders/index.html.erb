@@ -1,0 +1,47 @@
+<%= render partial: 'spree/admin/merchant/shared/subscription_tabs', locals: { current: :order } %>
+<% unless @search.nil? %>
+  <div class="table-responsive border rounded bg-white mb-3">
+    <table class="table" id="listing_subscriptions">
+      <thead class="text-muted">
+        <tr data-hook="admin_subscriptions_index_headers">
+          <th>
+            <%= sort_link @search, :number, Spree.t(:number), {}, {title: 'number_title'} %>
+          </th>
+          <th>
+            <%= sort_link @search, :completed_at, Spree.t(:completed_at),{},{title: 'completed_at_title'} %>
+          </th>
+          <th>
+            <%= sort_link @search, :payment_state, Spree.t(:payment_state), {}, {title: 'payment_state_title'} %>
+          </th>
+          <th>
+            <%= sort_link @search, :phone_number, Spree.t(:phone_number),{},{title:"phone_number_title"} %>
+          </th>
+          <th>
+            <%= sort_link @search, :total, Spree.t(:total),{},{title: 'total_title'} %>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @orders.each do |order| %>
+          <tr id="<%= spree_dom_id order %>" data-hook="admin_subscriptions_index_rows">
+            <td>
+              <%= order.number%>
+            </td>
+            <td>
+              <%= order.completed_at %>
+            </td>
+            <td>
+              <%= order.payment_state %>
+            </td>
+            <td>
+              <%= order.phone_number %>
+            </td>
+            <td>
+              <%= order.display_total %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

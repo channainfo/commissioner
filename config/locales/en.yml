@@ -39,6 +39,7 @@ en:
     validation:
       option_type_is_not_variant: "%{option_type_name} / %{option_value_name} is not kind of variant"
       option_type_is_not_product: "%{option_type_name} / %{option_value_name} is not kind of product"
+      out_of_stock: "%{variant_name} is out of stock"
     product_kind_option_types:
       empty_info: "<b>Note:</b> Set product option types to product first. To edit, go to <b>Details</b> tab > <b>Option Types</b>"
 
@@ -46,6 +47,11 @@ en:
     icons:
       info_rules: 'Only allow <b>%{allow_extensions}</b> files. Icons are stored inside "images/" folder, eg. app/assets/images/backend-adjust.svg.'
       total: "Total: %{total_in_page} / %{total_count} icons"
+
+
+  product:
+    validation:
+      not_active: "%{product_name} is not active"
 
   photo:
     empty_info: "No <b>Photos</b> found."

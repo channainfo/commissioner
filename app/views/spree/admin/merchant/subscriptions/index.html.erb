@@ -1,9 +1,7 @@
 <%= render partial: 'spree/admin/merchant/shared/customer_tabs', locals: { current: :subscriptions } %>
-
 <% content_for :page_actions do %>
   <%= button_link_to Spree.t(:subscribe), new_admin_merchant_customer_subscription_path, class: "btn-success", icon: 'add.svg', id: 'admin_merchant_customer_subscription' %>
 <% end %>
-
 <% unless @search.nil? %>
   <div class="table-responsive border rounded bg-white mb-3">
     <table class="table" id="listing_subscriptions">
@@ -46,6 +44,12 @@
               <% @badge_class = "badge-inactive" if subscription.status == "inactive" %>
               <% @badge_class = "badge-danger" if subscription.status == "suspended" %>
               <%= content_tag(:strong, class: "badge #{@badge_class} text-uppercase ") do; subscription.status ; end %>
+            </td>
+            <td data-hook="admin_users_index_row_actions" class="actions">
+              <span class="d-flex justify-content-end">
+                <%= link_to_edit subscription ,url: edit_admin_merchant_customer_subscription_path(@customer.id,subscription.id) ,no_text: true if can?(:edit,:merchant, subscription) %>
+                <%= link_to_delete subscription,url: admin_merchant_customer_subscription_path(@customer.id, subscription.id), no_text: true if can?(:delete, subscription) %>
+              </span>
             </td>
           </tr>
         <% end %>
