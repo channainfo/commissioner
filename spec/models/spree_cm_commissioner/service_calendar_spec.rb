@@ -1,9 +1,57 @@
 require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::ServiceCalendar, type: :model do
-  describe 'associations' do
+  context 'associations' do
     it { should belong_to(:calendarable) }
-    it { should have_many(:service_calendar_dates) }
+  end
+
+  context 'validations' do
+    let(:calendar)   { build(:cm_service_calendar) }
+    let(:valid_rule) { {from: date('2023-01-01'), to: date('2023-01-02'), type: 'exclusion', reason: 'company retreat'} }
+
+    context 'exception_rules valid' do
+      it 'empty rules' do
+        calendar.exception_rules = []
+        expect(calendar).to be_valid
+      end
+
+      it 'valid rules' do
+        calendar.exception_rules = [valid_rule]
+        expect(calendar).to be_valid
+      end
+
+      it 'no reason' do
+        valid_rule.delete(:reason)
+        calendar.exception_rules = [valid_rule]
+        expect(calendar).to be_valid
+      end
+    end
+
+    context 'exception_rules invalid' do
+      it 'no from date' do
+        valid_rule.delete(:from)
+        calendar.exception_rules = [valid_rule]
+        expect(calendar).to be_invalid
+      end
+
+      it 'no to date' do
+        valid_rule.delete(:to)
+        calendar.exception_rules = [valid_rule]
+        expect(calendar).to be_invalid
+      end
+
+      it 'no type' do
+        valid_rule.delete(:type)
+        calendar.exception_rules = [valid_rule]
+        expect(calendar).to be_invalid
+      end
+
+      it 'from is not date format' do
+        valid_rule[:from] = '2023-01'
+        calendar.exception_rules = [valid_rule]
+        expect(calendar).to be_invalid
+      end
+    end
   end
 
   context 'service calendar' do
@@ -26,20 +74,25 @@ RSpec.describe SpreeCmCommissioner::ServiceCalendar, type: :model do
     end
   end
 
-  context 'exception calendar' do
-    let(:service_calendar) { create(:cm_service_calendar) }
-    let(:day) { date('2023-01-02') }
+  context 'exception rule' do
+    let(:exception_rules) { [
+        {from: date('2022-01-01'), to: date('2022-01-30'), type: 'inclusion' },
+        {from: date('2023-01-02'), to: date('2023-01-02'), type: 'exclusion' },
+      ]
+    }
+    let(:service_calendar) { create(:cm_service_calendar, exception_rules: exception_rules) }
 
     it 'inclusion' do
-      create(:cm_service_calendar_date, service_calendar: service_calendar, date: day)
-
-      expect(service_calendar.service_available?(day)).to eq true
+      expect(service_calendar.service_available?(date('2022-01-02'))).to eq true
     end
 
     it 'exclusion' do
-      create(:cm_service_calendar_date, service_calendar: service_calendar, date: day, exception_type: :exclusion)
+      calendar = create(:cm_service_calendar, exception_rules: exception_rules)
+      expect(calendar.service_available?(date('2023-01-02'))).to eq false
+    end
 
-      expect(service_calendar.service_available?(day)).to eq false
+    it 'no date in expection_rules' do
+      expect(service_calendar.service_available?(date('2024-01-01'))).to eq true # normal service
     end
   end
 end

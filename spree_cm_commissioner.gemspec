@@ -37,6 +37,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'byebug'
 
   s.add_dependency 'simple_calendar', '~> 2.4'
+  s.add_dependency 'activerecord_json_validator', '~> 2.1', '>= 2.1.3'
 
   s.add_development_dependency 'pg'
   s.add_development_dependency 'spree_dev_tools'

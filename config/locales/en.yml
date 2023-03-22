@@ -17,7 +17,7 @@ en:
 
   calendar:
     event:
-      empty_info:  "No <b>Events</b> found."
+      empty_info: "No <b>Events</b> found."
 
   option_type:
     kind_info: "<b>Once set</b>, it can't be updated."
@@ -80,3 +80,11 @@ en:
     fixed_date_rule:
       match_any: "Any of these date"
       match_none: "None of these date"
+
+  activerecord:
+    errors:
+      models:
+        spree_cm_commissioner/service_calendar:
+          attributes:
+            exception_rules:
+              invalid_json: "is not a valid format"

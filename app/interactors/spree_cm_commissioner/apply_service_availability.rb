@@ -24,19 +24,18 @@ module SpreeCmCommissioner
     end
 
     def check_availability(resource, date)
-      # no n+1 database query because regular_service_calendars is array
-      service_calendar = regular_service_calendars.find { |s| s.calendarable_id == resource.id }
+      # no n+1 database query because service_calendars is array
+      service_calendar = service_calendars.find { |s| s.calendarable_id == resource.id }
       # service is available as default
       service_calendar ? service_calendar.service_available?(date) : true
     end
 
-    def regular_service_calendars
-      @regular_service_calendars ||= SpreeCmCommissioner::ServiceCalendar.includes(:service_calendar_dates)
-                                                                         .where('start_date <= ? AND end_date >= ?', from_date, to_date)
-                                                                         .where(calendarable_id: calendarable.map(&:id))
-                                                                         .where(calendarable_type: calendarable.first.class.name)
-                                                                         .order(id: :desc)
-                                                                         .to_a
+    def service_calendars
+      @service_calendars ||= SpreeCmCommissioner::ServiceCalendar.where('start_date <= ? AND end_date >= ?', from_date, to_date)
+                                                                 .where(calendarable_id: calendarable.map(&:id))
+                                                                 .where(calendarable_type: calendarable.first.class.name)
+                                                                 .order(id: :desc)
+                                                                 .to_a
     end
 
     def calendarable
