@@ -1,12 +1,17 @@
 module SpreeCmCommissioner
   module PromotionDecorator
     def self.prepended(base)
-      Rails.application.config.after_initialize do
-        const_set(:RULES, Rails.application.config.spree.promotions.rules.select { |r| r.name.start_with?('Spree::Promotion::Rules::') })
-        const_set(:ACTIONS, Rails.application.config.spree.promotions.actions.select { |a| a.name.start_with?('Spree::Promotion::Actions::') })
-      end
-
       base.whitelisted_ransackable_attributes = %w[type path promotion_category_id code]
+
+      def base.set_constants
+        promotions = Rails.application.config.spree.promotions
+
+        rules = promotions.rules.select { |r| r.module_parents.include?(Spree::Promotion) }
+        actions = promotions.actions.select { |a| a.module_parents.include?(Spree::Promotion) }
+
+        const_set(:RULES, rules)
+        const_set(:ACTIONS, actions)
+      end
     end
   end
 end
