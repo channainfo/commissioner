@@ -5,6 +5,13 @@ module Spree
         before_action :load_customer
         before_action :load_subscription, if: -> { member_action? }
 
+        def orders
+          return @orders if defined?(@orders)
+
+          @search = @subscription.orders.ransack(params[:q])
+          @orders = @search.result.page(page).per(per_page)
+        end
+
         protected
 
         def collection

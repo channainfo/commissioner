@@ -14,7 +14,7 @@
   <li class="nav-item">
     <%= link_to_with_icon 'cart.svg',
       Spree.t(:orders),
-      spree.admin_merchant_customer_subscription_orders_path(@customer.id, @subscription.id),
+      spree.orders_admin_merchant_customer_subscription_path(@customer.id, @subscription.id),
       class: "nav-link #{'active' if current == :order}" %>
   </li>
 <% end %>

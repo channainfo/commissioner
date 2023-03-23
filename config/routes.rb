@@ -14,9 +14,12 @@ Spree::Core::Engine.add_routes do
       scope ':vendor_id' do
         resources :customers do
           resources :subscriptions do
-            resources :orders
+            member do
+              get :orders
+            end
           end
         end
+
         resources :users
       end
 
