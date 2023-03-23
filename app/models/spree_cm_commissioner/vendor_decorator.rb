@@ -42,6 +42,7 @@ module SpreeCmCommissioner
       base.has_many :service_calendars, as: :calendarable, dependent: :destroy, class_name: 'SpreeCmCommissioner::ServiceCalendar'
 
       base.has_many :customers, class_name: 'SpreeCmCommissioner::Customer', dependent: :destroy
+      base.has_many :invoices, class_name: 'SpreeCmCommissioner::Invoice', dependent: :destroy
 
       # TODO: we will need searchkick later
       # unless Rails.env.test?
