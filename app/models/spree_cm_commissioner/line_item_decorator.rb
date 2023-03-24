@@ -4,6 +4,7 @@ module SpreeCmCommissioner
       base.before_save :update_vendor_id
 
       base.delegate :product_type, :accommodation?, :service?, :ecommerce?, to: :product
+      base.delegate :subscribable?, to: :product
     end
 
     private

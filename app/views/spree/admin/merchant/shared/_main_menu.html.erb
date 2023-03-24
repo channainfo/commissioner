@@ -10,12 +10,22 @@
       <%= svg_icon name: "cancel.svg", width: '20', height: '20', classes: 'p-0 m-0' %>
     </button>
   </div>
-  <% if Spree.user_class && can?(:admin, Spree.user_class) %>
+
+  <% if can?(:admin, SpreeCmCommissioner::Customer) %>
     <ul class="nav nav-sidebar" id="sidebarCustomer">
       <%= tab :customers, url: admin_merchant_customers_path, icon: 'people-fill.svg' %>
     </ul>
+  <% end %>
+
+  <% if can?(:admin, Spree::User) %>
+    <ul class="nav nav-sidebar" id="sidebarOrders">
+      <%= tab :orders, url: admin_merchant_orders_path, icon: 'cart-fill.svg' %>
+    </ul>
+  <% end %>
+
+  <% if Spree.user_class && can?(:admin, Spree.user_class) %>
     <ul class="nav nav-sidebar" id="sidebarUser">
-      <%= tab :users, url: admin_merchant_users_path, icon: 'users.svg' %>
+      <%= tab :users, url: admin_merchant_users_path, icon: 'person-fill.svg' %>
     </ul>
   <% end %>
 </nav>

@@ -3,9 +3,12 @@ module SpreeCmCommissioner
     def self.prepended(base)
       base.include SpreeCmCommissioner::PhoneNumberSanitizer
 
+      base.belongs_to :subscription, class_name: 'SpreeCmCommissioner::Subscription', optional: true
+
       base.before_create :link_by_phone_number
 
       base.validates :phone_number, presence: true, if: :require_phone_number
+      base.validates_presence_of :subscription, if: :line_items_subscribable?
     end
 
     # required only in one case,
@@ -16,6 +19,10 @@ module SpreeCmCommissioner
 
     def contain_non_digital_ecommerce?
       line_items.select { |item| item.ecommerce? && !item.digital? }.size.positive?
+    end
+
+    def line_items_subscribable?
+      line_items.any?(&:subscribable?)
     end
 
     private

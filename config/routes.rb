@@ -20,6 +20,10 @@ Spree::Core::Engine.add_routes do
           end
         end
 
+        resources :orders do
+          get :cart
+        end
+
         resources :users
       end
 
