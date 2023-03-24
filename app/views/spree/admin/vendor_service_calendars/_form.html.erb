@@ -1,0 +1,65 @@
+<div data-hook="admin_vendor_service_calendar_form_fields" id="admin_vendor_service_calendar_form_fields">
+  <div class="border p-3">
+    <div class="row pb-0">
+      <div class="col-12 col-md-4">
+        <div id="start_date_field" data-hook="start_date" class="form-group">
+          <%= f.label :start_date %>
+          <%= f.date_field :start_date,
+                            class: 'form-control',
+                            required: true %>
+        </div>
+      </div>
+      <div class="col-12 col-md-4">
+        <div id="end_date_field" data-hook="end_date" class="form-group">
+          <%= f.label :end_date %>
+          <%= f.date_field :end_date,
+                            class: 'form-control',
+                            required: true %>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="custom-control custom-switch">
+          <%= f.check_box :monday, class: 'custom-control-input' %>
+          <%= f.label :monday, class: 'custom-control-label' %>
+        </div>
+
+        <div class="custom-control custom-switch">
+          <%= f.check_box :tuesday, class: 'custom-control-input' %>
+          <%= f.label :tuesday, class: 'custom-control-label' %>
+        </div>
+
+        <div class="custom-control custom-switch">
+          <%= f.check_box :wednesday, class: 'custom-control-input' %>
+          <%= f.label :wednesday, class: 'custom-control-label' %>
+        </div>
+
+        <div class="custom-control custom-switch">
+          <%= f.check_box :thursday, class: 'custom-control-input' %>
+          <%= f.label :thursday, class: 'custom-control-label' %>
+        </div>
+
+        <div class="custom-control custom-switch">
+          <%= f.check_box :friday, class: 'custom-control-input' %>
+          <%= f.label :friday, class: 'custom-control-label' %>
+        </div>
+
+        <div class="custom-control custom-switch">
+          <%= f.check_box :saturday, class: 'custom-control-input' %>
+          <%= f.label :saturday, class: 'custom-control-label' %>
+        </div>
+
+        <div class="custom-control custom-switch">
+          <%= f.check_box :sunday, class: 'custom-control-input' %>
+          <%= f.label :sunday, class: 'custom-control-label' %>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <h4 class="mt-5 mb-2">Execption Rules</h4>
+  <div class="mb-5">
+    <%= render partial: 'exception_rules', locals: { f: f, object: @object  } %>
+  </div>
+
+</div>

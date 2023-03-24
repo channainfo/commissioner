@@ -1,0 +1,9 @@
+<%= render partial: 'spree/admin/shared/vendor_tabs', locals: { current: :service_calendars } %>
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+
+<%= form_with model: @object, url: { action: 'create' } do |f| %>
+  <fieldset data-hook="new_vendor_service_calendar">
+    <%= render partial: 'form', locals: { f: f } %>
+    <%= render partial: 'spree/admin/shared/new_resource_links' %>
+  </fieldset>
+<% end %>

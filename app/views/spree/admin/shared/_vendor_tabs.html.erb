@@ -36,4 +36,12 @@
         class: "nav-link #{'active' if current == :nearby_places}"
       %>
     <% end if can?(:admin, SpreeCmCommissioner::VendorPlace) %>
+
+    <%= content_tag :li do %>
+      <%= link_to_with_icon 'images.svg',
+        Spree.t(:service_calendars),
+        admin_vendor_vendor_service_calendars_url(@vendor),
+        class: "nav-link #{'active' if current == :service_calendars}"
+      %>
+    <% end if can?(:admin, SpreeCmCommissioner::ServiceCalendar) %>
 <% end %>

@@ -1,0 +1,13 @@
+#admin_vendor_service_calendar_form_fields {
+  .custom-switch {
+    display: inline-block;
+    margin-right: 10px;
+  }
+}
+#service-calendar-index {
+  .btn-active [type="submit"]{
+    border: none;
+    background: transparent;
+    color: white;
+  }
+}
