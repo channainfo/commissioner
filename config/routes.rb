@@ -53,6 +53,7 @@ Spree::Core::Engine.add_routes do
 
     namespace :calendars do
       resources :orders, only: %i[index]
+      resources :listing_prices, only: %i[index]
     end
 
     resources :taxonomies do
