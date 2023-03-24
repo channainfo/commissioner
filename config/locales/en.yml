@@ -12,6 +12,18 @@ en:
     body:
       blank: "sms content can not be blank"
 
+      already_exist: "%{login} already exist"
+  authenticator:
+    incorrect_login: "Incorrect login"
+    incorrect_password: "Incorrect password"
+    invalid_or_missing_params: "Invalid or missing params"
+
+  sms:
+    to:
+      blank: "recipient can not be blank"
+    body:
+      blank: "sms content can not be blank"
+
       already_exist: '%{login} already exist'
   authenticator:
     incorrect_login: 'Incorrect login'
@@ -57,7 +69,6 @@ en:
       info_rules: 'Only allow <b>%{allow_extensions}</b> files. Icons are stored inside "images/" folder, eg. app/assets/images/backend-adjust.svg.'
       total: 'Total: %{total_in_page} / %{total_count} icons'
 
-
   product:
     validation:
       not_active: "%{product_name} is not active"
@@ -83,6 +94,16 @@ en:
       operations_day: 'Operations day'
       exception_rules: 'Exception Rules'
 
+    service_calendars:
+      empty_info: "No <b>Service calendars</b> found."
+      start_date: "Start date"
+      end_date: "End date"
+      from_date: "From date"
+      to_date: "To date"
+      new_calendar: "New Service calendar"
+      operations_day: "Operations day"
+      exception_rules: "Exception Rules"
+
   account_deletion:
     title:
       have_another_account: 'I have another account'
@@ -95,7 +116,7 @@ en:
 
   spree:
     listing_price: "Listing Price"
-    length: 'Length'
+    length: "Length"
     promotion_rule_types:
       fixed_date:
         name: 'Fixed Date'
@@ -104,8 +125,15 @@ en:
       create_listing_price_adjustment:
         name: 'Create listing price adjustment'
     fixed_date_rule:
-      match_any: 'Any of these date'
-      match_none: 'None of these date'
+      match_any: "Any of these date"
+      match_none: "None of these date"
+    admin:
+      merchant:
+        orders: "Order"
+        customers: "Customer"
+        roles: "Role"
+        subscriptions: "Subscription"
+        users: "User"
 
   activerecord:
     attributes:
