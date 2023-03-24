@@ -21,6 +21,9 @@ module SpreeCmCommissioner
       Rails.application.config.spree.promotions.actions.concat [
         SpreeCmCommissioner::PricingModel::Actions::CreateListingPriceAdjustment
       ]
+
+      SpreeCmCommissioner::PricingModel.set_constants
+      Spree::Promotion.set_constants
     end
 
     def self.activate
