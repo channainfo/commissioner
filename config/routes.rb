@@ -41,6 +41,11 @@ Spree::Core::Engine.add_routes do
           post :update_positions
         end
       end
+      resources :vendor_service_calendars, except: %i[update] do
+        member do
+          patch :update_status
+        end
+      end
     end
 
     resources :products do
