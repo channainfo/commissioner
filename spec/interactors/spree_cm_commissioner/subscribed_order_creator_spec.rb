@@ -29,4 +29,4 @@ RSpec.describe SpreeCmCommissioner::SubscribedOrderCreator do
       expect(context.order.id).to eq subscription.orders.first.id
     end
   end
-end
+end 

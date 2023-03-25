@@ -5,12 +5,17 @@ module SpreeCmCommissioner
     belongs_to :variant, class_name: 'Spree::Variant'
     belongs_to :customer, class_name: 'SpreeCmCommissioner::Customer'
 
-    has_many :orders, class_name: 'Spree::Order'
+    has_many :orders, class_name: 'Spree::Order', dependent: :nullify
 
     validates :start_date, :status, presence: true
 
-    validate :variant_in_stock?
-    validate :product_active?
+    validate :product_subscribed?
+
+    with_options  unless: :persisted? do
+      validate :variant_in_stock?
+      validate :product_active?
+      validate :variant_subscribed?
+    end
 
     after_create :create_order
 
@@ -22,6 +27,18 @@ module SpreeCmCommissioner
       return if variant.in_stock?
 
       errors.add(:variant, I18n.t('variant.validation.out_of_stock', variant_name: variant.name))
+    end
+
+    def variant_subscribed?
+      return if customer.subscriptions.where(variant: variant).blank?
+
+      errors.add(:variant, I18n.t('variant.validation.subscribed', product_name: variant.product.name))
+    end
+
+    def product_subscribed?
+      return if customer.active_variants.where.not(id: variant.id).where(product: variant.product).blank?
+
+      errors.add(:variant, I18n.t('variant.validation.subscribed', product_name: variant.product.name))
     end
 
     def product_active?

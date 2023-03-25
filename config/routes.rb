@@ -21,7 +21,7 @@ Spree::Core::Engine.add_routes do
       end
 
       get '/forbidden', to: 'errors#forbidden', as: :forbidden
-      root to: redirect('/admin/merchant/:vendor_id/users')
+      root to: redirect('/admin/merchant/:vendor_id/customers')
     end
 
     resources :vendors do
