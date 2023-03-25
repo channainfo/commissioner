@@ -5,9 +5,8 @@ module Spree
         before_action :set_vendor, if: -> { member_action? }
         before_action :load_customer, if: -> { member_action? }
 
-        protected
-
         def collection
+          return [] if current_vendor.blank?
           return @collection if defined?(@collection)
 
           @search = current_vendor.customers.ransack(params[:q])
