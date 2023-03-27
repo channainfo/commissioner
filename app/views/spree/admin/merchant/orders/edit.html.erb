@@ -1,0 +1,7 @@
+<%= render 'spree/admin/merchant/shared/order_tabs', current: :edit %>
+
+<div data-hook="admin_merchant_order_edit_header">
+  <%= render 'spree/admin/shared/error_messages', target: @order %>
+</div>
+
+<%= render 'spree/admin/shared/order_summary' %>
