@@ -1,0 +1,5 @@
+<% unless @invoice.nil? %>
+  <%= render partial: 'spree/admin/merchant/shared/invoice', invoice: @invoice %>
+<% else %>
+  <%= button_link_to Spree.t(:create_invoice), @invoice_path, method: :post, class: "btn-success" %>
+<% end %>

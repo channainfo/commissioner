@@ -25,7 +25,7 @@
         <% @orders.each do |order| %>
           <tr id="<%= spree_dom_id order %>" data-hook="admin_subscriptions_index_rows">
             <td>
-              <%= order.number%>
+              <%= link_to order.number, admin_merchant_customer_subscription_order_path(id:order.id) %>
             </td>
             <td>
               <%= order.completed_at %>

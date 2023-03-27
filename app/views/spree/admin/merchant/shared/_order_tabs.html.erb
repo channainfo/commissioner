@@ -1,0 +1,12 @@
+<% content_for :page_title do %>
+  <%= page_header_back_button spree.admin_merchant_customer_subscription_order_path %>
+  <%= @order.number %>
+<% end %>
+<% content_for :page_tabs do %>
+  <li class="nav-item">
+    <%= link_to_with_icon 'credit-card.svg',
+      Spree.t(:invoice),
+       admin_merchant_customer_subscription_order_invoice_path(@customer.id, @subscription.id, @order.id),
+      class: "nav-link active" %>
+  </li>
+<% end %>

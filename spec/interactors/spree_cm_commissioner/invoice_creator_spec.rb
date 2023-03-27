@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe SpreeCmCommissioner::InvoiceNumberCreator do
+RSpec.describe SpreeCmCommissioner::InvoiceCreator do
   let(:vendor) { create(:active_vendor, name: 'vendor') }
   let(:product) { create(:cm_product ) }
   let(:line_item1) { create(:line_item, variant: product.master, from_date: '2023-06-23') }

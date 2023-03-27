@@ -1,5 +1,5 @@
 module SpreeCmCommissioner
-  class InvoiceNumberCreator < BaseInteractor
+  class InvoiceCreator < BaseInteractor
     delegate :order, to: :context
 
     def call
