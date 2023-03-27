@@ -43,6 +43,8 @@ module SpreeCmCommissioner
 
       base.has_many :customers, class_name: 'SpreeCmCommissioner::Customer', dependent: :destroy
       base.has_many :invoices, class_name: 'SpreeCmCommissioner::Invoice', dependent: :destroy
+      base.has_many :subscriptions, through: :customers, class_name: 'SpreeCmCommissioner::Subscription'
+      base.has_many :subscription_orders, through: :subscriptions, class_name: 'Spree::Order', source: :orders
 
       # TODO: we will need searchkick later
       # unless Rails.env.test?

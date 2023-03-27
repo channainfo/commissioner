@@ -9,6 +9,8 @@ module SpreeCmCommissioner
     has_many :subscriptions, class_name: 'SpreeCmCommissioner::Subscription', dependent: :destroy
     has_many :active_subscriptions, -> { active }, class_name: 'SpreeCmCommissioner::Subscription', dependent: :destroy
 
+    has_many :orders, class_name: 'Spree::Order', through: :subscriptions
+
     has_many :variants, class_name: 'Spree::Variant', through: :subscriptions
     has_many :active_variants, class_name: 'Spree::Variant', through: :active_subscriptions, source: :variant
 
