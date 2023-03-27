@@ -25,7 +25,7 @@
             <% options = [['Open', 'inclusion'], ['Close', 'exclusion']] %>
             <%= exception_rule_fm.select("#{[index]}[type]", options, { selected: 'exclusion' }, class: 'form-control') %>
           </td>
-          <td class="reason"><%= exception_rule_fm.text_area "#{[index]}[reason]", class: "form-control" %></td>
+          <td class="reason"><%= exception_rule_fm.text_field "#{[index]}[reason]", class: "form-control" %></td>
           <td class="actions">
             <span class="d-flex justify-content-end">
               <%= link_to_icon_remove_fields f %>

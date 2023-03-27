@@ -66,7 +66,7 @@ module Spree
         @objects = model_class.where(
           calendarable_type: calendarable_type,
           calendarable_id: calendarable_id
-        )
+        ).order(id: :desc)
       end
 
       def set_exception_rules
