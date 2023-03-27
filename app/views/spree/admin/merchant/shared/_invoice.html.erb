@@ -3,140 +3,148 @@
   @title = @invoice.order.line_items.first.vendor.name
   @product = @invoice.order.line_items.first.variant.sku
   @price = @invoice.order.line_items.first.price
+  @from_date = @invoice.order.line_items.first.to_date.strftime("%B %Y")
   @date = @invoice.date.strftime('%Y-%m-%d')
   @address = @invoice.order.line_items.first.vendor.stock_locations.first.address1
+  @contact = @invoice.order.line_items.first.vendor.contact_us
+  @email = @invoice.order.line_items.first.vendor.notification_email
 %>
-
-
-<div class="d-flex justify-content-center align-items-center float-center">
-<div class="card w-75">
-  <div class="card-body">
-    <div class="container mb-5 mt-3">
-      <div class=" d-flex justify-content-between" style="font-size: 20px;">
-        <div class="col-xl-9">
-          <p><strong>Invoice</strong></p>
-        </div>
-         <div class="col-xl-9">
-          <strong>
-             <div class="d-flex flex-column text-primary">
-                <div class="ml-4">ព្រះរាជាណាចក្រកម្ពុជា</div>
-                <div>ជាតិ​​ សាសនា ព្រះមហាក្សត្រ</div>
+<div>
+  <div class="d-flex justify-content-center align-items-center">
+    <div class="card w-100">
+      <div class="card-body">
+        <div class="container mb-5 mt-3">
+          <div class=" d-flex justify-content-between" style="font-size: 20px;">
+            <div class="col-9">
+              <p><strong>Logo</strong></p>
             </div>
-          </strong>
-        </div>
-        <hr>
-      </div>
-
-      <div class="container">
-        <div class="col-md-12">
-          <div class="text-center">
-            <i class="fab fa-mdb fa-4x ms-0"></i>
-            <h4 class="pt-0">
-              <%= @title %>
-            </h4>
-          </div>
-        </div>
-
-        <div class="row " style="font-size: 13px;">
-          <div class="col-xl-8">
-            <ul class="list-unstyled">
-              <li>
-                <div> អាសយដ្ធានទទួលវិក្កយបត្រ​ / Address :</div>
-                <%= @address  %>
-              </li>
-              <li class="mt-4">
-                <div style="font-weight: bold"> ចំណាំ</div>
-              </li>
-            </ul>
-          </div>
-          <div class="" >
-            <ul class="list-unstyled">
-              <li>
-                <span>លេខវិក្កយបត្រ​​ / Invoice No :</span>
-                <strong> <%= @invoice_number %> </strong>
-              </li>
-              <li>
-                <span>កាលបរិច្ចេទ / Invoice Date : </span>
-                <%= @date %>
-              </li>
-              <li>លេខអតិថិជន / Customer No : </li>
-               <li>
-                <span>លេខកូខទីតាំង / Loc code : </span>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="row my-2 mx-1 justify-content-center">
-          <table class="table table-striped ">
-            <thead  class=" bg-light">
-              <tr>
-                <th scope="col">ល.រ​​​ / N</th>
-                <th scope="col">បរិយាយ / Description</th>
-                <th scope="col">ប្រចាំខែ / Month</th>
-                <th scope="col">ទឹកប្រាក់​ / Amount</th>
-              </tr>
-            </thead>
-            <tbody style="font-size: 13px;">
-              <tr>
-                <th scope="row">1</th>
-                <td>
-                  <ul class="list-unstyled">
-                     <li> <%= @product %></li>
-                  </ul>
-                </td>
-                <td>
-                  <ul class="list-unstyled">
-                      <li></li>
-                  </ul>
-                </td>
-                <td>
-                   <ul class="list-unstyled">
-                    <li>
-                      <span> $ <span>
-                      <%= @price %>
-                    </li>
-                   </ul>
-                </td>
-              </tr>
-              <tr>
-            </tbody>
-          </table>
-
-        </div>
-        <div style="font-size: 13px;">
-          <div class="d-flex justify-content-between align-items-start">
-            <p style="font-size: 13px;">បំណុលគិតត្រឺមកាលបរិច្ចេទចេញវិក្កយបត្រ​​​​ / Balance brought forward as of invoice date​ </p>
-            <div class="bg-success px-4 py-2">
-              <span> $ <span>
-              <%= @price %>
+            <div class="col-9">
+              <strong>
+                <div class="d-flex flex-column text-primary">
+                    <div class="ml-4">ព្រះរាជាណាចក្រកម្ពុជា</div>
+                    <div>ជាតិ​​ សាសនា ព្រះមហាក្សត្រ</div>
+                </div>
+              </strong>
             </div>
+            <hr>
           </div>
-          <br>
-          <div class="d-flex justify-content-between align-items-center bg-primary text-white pt-3 px-1"  style="font-weight: bold">
-                <p>ទឹកប្រាក់​ត្រូវទូទាត់​​ / Total Amount due</p>
-                <p>អត្រាដូរប្រាក់ / Exchange Rate 1$ = 4100$</p>
-                <p>
+
+          <div class="container">
+            <div class="col-md-12">
+              <div class="text-center">
+                <i class="fab fa-mdb fa-4x ms-0"></i>
+                <h4 class="pt-0">
+                  <%= @title %>
+                </h4>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between" style="font-size: 13px;">
+              <div>
+                <ul class="list-unstyled">
+                  <li>
+                    <div> អាសយដ្ធានទទួលវិក្កយបត្រ​ / Address :</div>
+                    <%= @address  %>
+                  </li>
+                  <li class="mt-4">
+                    <div style="font-weight: bold"> ចំណាំ</div>
+                  </li>
+                </ul>
+              </div>
+              <div >
+                <ul class="list-unstyled">
+                  <li>
+                    <span>លេខវិក្កយបត្រ​​ / Invoice No :</span>
+                    <strong> <%= @invoice_number %> </strong>
+                  </li>
+                  <li>
+                    <span>កាលបរិច្ចេទ / Invoice Date : </span>
+                    <%= @date %>
+                  </li>
+                  <li>លេខអតិថិជន / Customer No : </li>
+                  <li>
+                    <span>លេខកូខទីតាំង / Loc code : </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="row my-2 mx-1 justify-content-center">
+              <table class="table table-striped ">
+                <thead  class=" bg-light">
+                  <tr>
+                    <th scope="col">ល.រ​​​ / N</th>
+                    <th scope="col">បរិយាយ / Description</th>
+                    <th scope="col">ប្រចាំខែ / Month</th>
+                    <th scope="col">ទឹកប្រាក់​ / Amount</th>
+                  </tr>
+                </thead>
+                <tbody style="font-size: 13px;" class="list-unstyled">
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>
+                      <ul class="list-unstyled">
+                        <li> <%= @product %></li>
+                      </ul>
+                    </td>
+                    <td>
+                      <ul class="list-unstyled">
+                          <li> <%= @from_date %></li>
+                      </ul>
+                    </td>
+                    <td>
+                      <ul class="list-unstyled">
+                        <li>
+                          <span> $ <span>
+                          <%= @price %>
+                        </li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                </tbody>
+              </table>
+
+            </div>
+            <div style="font-size: 13px;">
+              <div class="d-flex justify-content-between align-items-start">
+                <p style="font-size: 13px;">បំណុលគិតត្រឺមកាលបរិច្ចេទចេញវិក្កយបត្រ​​​​ / Balance brought forward as of invoice date​ </p>
+                <div class="bg-success px-4 py-2 text-white">
                   <span> $ <span>
                   <%= @price %>
-                </p>
-          </div>
-            <div class="d-flex justify-content-between mt-4">
-              <div>
-                <p>អ្នកទទូលប្រាក់​​ / Received By : </p>
-                <p>កាលបរិច្ចេទ / Date : </p>
+                </div>
               </div>
-              <div>
-                <p>ទឹកប្រាក់​បានបង់ / Paid Amount: </p>
-                <p>កាលបរិច្ចេទ / Date : </p>
+              <br>
+              <div class="d-flex justify-content-between align-items-center bg-primary text-white pt-3 px-2"  style="font-weight: bold">
+                    <p>ទឹកប្រាក់​ត្រូវទូទាត់​​ / Total Amount due</p>
+                    <p>អត្រាដូរប្រាក់ / Exchange Rate 1$ = 4100$</p>
+                    <p>
+                      <span> $ <span>
+                      <%= @price %>
+                    </p>
+              </div>
+                <div class="d-flex justify-content-between mt-4">
+                  <div>
+                    <p>អ្នកទទូលប្រាក់​​ / Received By : </p>
+                    <p>កាលបរិច្ចេទ / Date : </p>
+                  </div>
+                  <div>
+                    <p>ទឹកប្រាក់​បានបង់ / Paid Amount: </p>
+                    <p>កាលបរិច្ចេទ / Date : </p>
+                  </div>
+                </div>
+              <div class="d-flex justify-content-center mt-4">
+                <div>
+                  <div> អាសយដ្ធាន / Address : <%= @address %> </div>
+                  <div>
+                    <span>ទំនាក់ទំនង / Contact : <%= @contact %></span>
+                    <span>, អុីមែល / Email : <%= @email %></span>
+                  </div>
+                </div>
               </div>
             </div>
-           <div class="d-flex justify-content-center mt-4">
-             <div> អាសយដ្ធានAddress : </div>
-             <%= @address  %>
-           </div>
+          </div>
         </div>
-      </div>
     </div>
   </div>
 </div>
