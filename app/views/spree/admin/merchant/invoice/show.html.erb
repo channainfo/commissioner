@@ -1,5 +1,11 @@
+
 <% unless @invoice.nil? %>
+  <div class="d-flex justify-content-end">
+    <%= link_to  Spree.t(:print), '#', onclick: 'window.print(); return false;', class: 'btn btn-success mb-3 no-print' %>
+  </div>
   <%= render partial: 'spree/admin/merchant/shared/invoice', invoice: @invoice %>
 <% else %>
-  <%= button_link_to Spree.t(:create_invoice), @invoice_path, method: :post, class: "btn-success" %>
+  <div class="d-flex justify-content-end">
+    <%= button_link_to Spree.t(:create_invoice), @invoice_path, method: :post, class: "btn-success" %>
+  </div>
 <% end %>
