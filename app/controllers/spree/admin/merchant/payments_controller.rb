@@ -3,6 +3,22 @@ module Spree
     module Merchant
       class PaymentsController < Spree::Admin::Merchant::BaseController
         include Spree::Admin::Merchant::OrderParentsConcern
+        include Spree::Admin::Merchant::PaymentCreatable
+        include Spree::Admin::Merchant::PaymentFireable
+
+        before_action :load_data
+
+        def load_data
+          @amount = params[:amount] || @order.total
+          @payment_methods = @order.collect_backend_payment_methods
+
+          if @payment&.payment_method
+            @payment_method = @payment.payment_method
+          else
+            @payment_method = @payment_methods.find { |p| p.id == params[:payment][:payment_method_id].to_i } if params[:payment]
+            @payment_method ||= @payment_methods.first
+          end
+        end
 
         # @overrided
 
