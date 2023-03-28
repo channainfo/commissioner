@@ -36,5 +36,19 @@ FactoryBot.define do
         product.reload
       end
     end
+
+    factory :cm_subscribable_product do
+      option_types { [Spree::OptionType.where(name: "month", attr_type: :integer, presentation: "Month").first_or_create!] }
+
+      before(:create) do |product|
+        product.subscribable = true
+
+        option_value = create(:option_value, name: "6 months", presentation: "6", option_type: product.option_types[0])
+        variant = create(:variant, option_values: [option_value])
+        variant.stock_items.first.adjust_count_on_hand(10)
+
+        product.variants << variant
+      end
+    end
   end
 end

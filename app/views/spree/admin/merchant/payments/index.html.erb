@@ -16,7 +16,7 @@
 
 <% if @payments.any? %>
   <div data-hook="payment_list" class="mb-3 table-responsive">
-    <%= render partial: 'spree/admin/payments/list', locals: { payments: @payments } %>
+    <%= render partial: 'list', locals: { payments: @payments } %>
   </div>
 
   <% if @refunds.any? %>

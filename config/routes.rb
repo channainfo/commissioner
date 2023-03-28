@@ -19,7 +19,13 @@ Spree::Core::Engine.add_routes do
         resources :users
         resources :orders do
           resource :invoice, only: %i[show create], controller: :invoice
-          resources :payments
+          resources :payments do
+            member do
+              put :fire
+            end
+
+            resources :refunds, only: %i[new create edit update]
+          end
         end
       end
 
