@@ -1,0 +1,8 @@
+en:
+  dry_validation:
+    errors:
+      rules:
+        from_date:
+          must_be_in_future: Start date must be today or in future
+          must_be_later_than_start_date: 'End Date must be later than or equal Start Date'
+          stay_is_too_long: 'Stay duration is too long'

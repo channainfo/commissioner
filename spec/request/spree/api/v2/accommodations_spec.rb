@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe 'API V2 Storefront Accommodation Spec', type: :request do
+  let(:next_month) { Time.zone.now.next_month }
+  let(:last_month) { Time.zone.now.last_month }
 
   let(:phnom_penh) { create(:state, name: 'Phnom Penh') }
   let(:siem_reap)  { create(:state, name: 'Siem Reap') }
@@ -8,10 +10,10 @@ describe 'API V2 Storefront Accommodation Spec', type: :request do
   let!(:sokha_pp_hotel)   { create(:cm_vendor_with_product, name: 'Sokha Phnom Penh Hotel', state_id: phnom_penh.id, permanent_stock: 20) }
   let!(:angkor_hotel)     { create(:cm_vendor_with_product, name: 'Angkor Hotel',           state_id: siem_reap.id,  permanent_stock: 15) }
   let(:params) {
-    { from_date: date('2023-01-01'), to_date: date('2023-01-03'), province_id: phnom_penh.id, adult: 2, children: 1, room_qty: 1 }
+    { from_date: next_month, to_date: next_month + 2.days, province_id: phnom_penh.id, adult: 2, children: 1, room_qty: 1 }
   }
-  let(:monday) { date('2023-01-02') }
-  let(:sunday) { date('2023-01-02') + 6.days }
+  let(:monday) { next_month.beginning_of_week }
+  let(:sunday) { next_month.end_of_week }
 
   let(:json_response) { JSON.parse(response.body) }
 
@@ -40,10 +42,10 @@ describe 'API V2 Storefront Accommodation Spec', type: :request do
     context "when match with booking dates" do
       let(:order) { create(:order) }
       let!(:pp_hotel_order) {
-        book_room(order, hotel: phnom_penh_hotel, quantity: 2,  from_date: date('2023_01_01'), to_date: date('2023_01_02'))
+        book_room(order, hotel: phnom_penh_hotel, quantity: 2,  from_date: next_month, to_date: next_month + 1.days)
       }
       let!(:sokha_pp_hotel_order) {
-        book_room(order, hotel: sokha_pp_hotel,   quantity: 5,  from_date: date('2023_01_01'), to_date: date('2023_01_02'))
+        book_room(order, hotel: sokha_pp_hotel,   quantity: 5,  from_date: next_month, to_date: next_month + 1.days)
       }
 
       before { get '/api/v2/storefront/accommodations', params: params }
@@ -64,10 +66,10 @@ describe 'API V2 Storefront Accommodation Spec', type: :request do
     context "when doesn't match with booking dates" do
       let(:order) { create(:order) }
       let!(:pp_hotel_order) {
-        book_room(order, hotel: phnom_penh_hotel, quantity: 2,  from_date: date('2023_02_01'), to_date: date('2023_02_02'))
+        book_room(order, hotel: phnom_penh_hotel, quantity: 2,  from_date: next_month.next_month, to_date: next_month.next_month + 1.days)
       }
       let!(:sokha_pp_hotel_order) {
-        book_room(order, hotel: sokha_pp_hotel,   quantity: 5,  from_date: date('2023_02_01'), to_date: date('2023_02_02'))
+        book_room(order, hotel: sokha_pp_hotel,   quantity: 5,  from_date: next_month.next_month, to_date: next_month.next_month + 1.days)
       }
 
       before { get '/api/v2/storefront/accommodations', params: params }
@@ -91,14 +93,14 @@ describe 'API V2 Storefront Accommodation Spec', type: :request do
       it 'should have service available for phnom penh hotel' do
         data = json_response['data'].find {|h| h['id'].to_i == phnom_penh_hotel.id }
 
-        expect(data['attributes']['service_availabilities'].map {|a| a['date'] }).to eq ["2023-01-01", "2023-01-02", "2023-01-03"]
+        expect(data['attributes']['service_availabilities'].map {|a| a['date'] }).to eq [day_to_s(next_month), day_to_s(next_month+1.days), day_to_s(next_month+2.days)]
         expect(data['attributes']['service_availabilities'].map {|a| a['available'] }).to eq [true, true, true]
       end
 
       it 'should have service available for sokha_pp_hotel' do
         data = json_response['data'].find {|h| h['id'].to_i == sokha_pp_hotel.id }
 
-        expect(data['attributes']['service_availabilities'].map {|a| a['date'] }).to eq ["2023-01-01", "2023-01-02", "2023-01-03"]
+        expect(data['attributes']['service_availabilities'].map {|a| a['date'] }).to eq [day_to_s(next_month), day_to_s(next_month+1.days), day_to_s(next_month+2.days)]
         expect(data['attributes']['service_availabilities'].map {|a| a['available'] }).to eq [true, true, true]
       end
     end
@@ -109,13 +111,13 @@ describe 'API V2 Storefront Accommodation Spec', type: :request do
 
       it 'phnom_penh_hotel is closed' do
         data = json_response['data'].find {|h| h['id'].to_i == phnom_penh_hotel.id }
-        expect(data['attributes']['service_availabilities'].map {|a| a['date'] }).to eq ["2023-01-01", "2023-01-02", "2023-01-03"]
+        expect(data['attributes']['service_availabilities'].map {|a| a['date'] }).to eq [day_to_s(next_month), day_to_s(next_month+1.days), day_to_s(next_month+2.days)]
         expect(data['attributes']['service_availabilities'].map {|a| a['available'] }).to eq [false, false, false]
       end
 
       it 'sokha_pp_hotel is open as normal' do
         data = json_response['data'].find {|h| h['id'].to_i == sokha_pp_hotel.id }
-        expect(data['attributes']['service_availabilities'].map {|a| a['date'] }).to eq ["2023-01-01", "2023-01-02", "2023-01-03"]
+        expect(data['attributes']['service_availabilities'].map {|a| a['date'] }).to eq [day_to_s(next_month), day_to_s(next_month+1.days), day_to_s(next_month+2.days)]
         expect(data['attributes']['service_availabilities'].map {|a| a['available'] }).to eq [true, true, true]
       end
     end
@@ -126,7 +128,8 @@ describe 'API V2 Storefront Accommodation Spec', type: :request do
 
       it 'phnom_penh_hotel should close on weekend' do
         data = json_response['data'].find {|h| h['id'].to_i == phnom_penh_hotel.id }
-        expect(data['attributes']['service_availabilities'].map {|a| a['date'] }).to eq (monday..sunday).map(&:to_s)
+
+        expect(data['attributes']['service_availabilities'].map {|a| a['date'] }).to eq ((monday.to_date)..(sunday.to_date)).map(&:to_s)
         expect(data['attributes']['service_availabilities'].map {|a| a['available'] }).to eq [true, true, true, true, true, false, false]
       end
     end
@@ -140,7 +143,7 @@ describe 'API V2 Storefront Accommodation Spec', type: :request do
 
       it 'phnom_penh_hotel should close on monday & wednesday' do
         data = json_response['data'].find {|h| h['id'].to_i == phnom_penh_hotel.id }
-        expect(data['attributes']['service_availabilities'].map {|a| a['date'] }).to eq (monday..sunday).map(&:to_s)
+        expect(data['attributes']['service_availabilities'].map {|a| a['date'] }).to eq ((monday.to_date)..(sunday.to_date)).map(&:to_s)
         expect(data['attributes']['service_availabilities'].map {|a| a['available'] }).to eq [false, true, false, true, true, true, true]
       end
     end
@@ -150,19 +153,36 @@ describe 'API V2 Storefront Accommodation Spec', type: :request do
       let(:response_data) { json_response['data'].find {|h| h['id'].to_i == phnom_penh_hotel.id } }
 
       it 'phnom_penh_hotel should open on Sunday' do
-        create(:cm_service_calendar, sunday: false, calendarable: phnom_penh_hotel, exception_rules: [{ from: sunday, to: sunday, type: 'inclusion' }])
+        create(:cm_service_calendar, sunday: false, calendarable: phnom_penh_hotel, exception_rules: [{ from: day_to_s(sunday), to: day_to_s(sunday), type: 'inclusion' }])
         get '/api/v2/storefront/accommodations', params: params
 
-        service = response_data['attributes']['service_availabilities'].find { |s| s['date'] == sunday.to_s }
+        service = response_data['attributes']['service_availabilities'].find { |s| s['date'] == day_to_s(sunday) }
         expect(service['available']).to eq true
       end
 
       it 'phnom_penh_hotel should close on Monday' do
-        create(:cm_service_calendar, calendarable: phnom_penh_hotel, exception_rules: [{ from: monday, to: monday, type: 'exclusion' }])
+        create(:cm_service_calendar, calendarable: phnom_penh_hotel, exception_rules: [{ from: day_to_s(monday), to: day_to_s(monday), type: 'exclusion' }])
         get '/api/v2/storefront/accommodations', params: params
 
-        service = response_data['attributes']['service_availabilities'].find { |s| s['date'] == monday.to_s }
+        service = response_data['attributes']['service_availabilities'].find { |s| s['date'] == day_to_s(monday) }
         expect(service['available']).to eq false
+      end
+    end
+
+    context 'validation error' do
+
+      it 'when from_date > to_date' do
+        get '/api/v2/storefront/accommodations', params: { from_date: monday, to_date: monday - 1, province_id: phnom_penh.id, adult: 2, children: 1, room_qty: 1 }
+
+        expect(response.status).to eq 422
+        expect(json_response['error']).to eq "End Date must be later than or equal Start Date"
+      end
+
+      it 'when from_date and to_date is too long' do
+        get '/api/v2/storefront/accommodations', params: { from_date: monday, to_date: monday + (max_stay_days+1).days, province_id: phnom_penh.id, adult: 2, children: 1, room_qty: 1 }
+
+        expect(response.status).to eq 422
+        expect(json_response['error']).to eq "Stay duration is too long"
       end
     end
   end
@@ -170,18 +190,8 @@ describe 'API V2 Storefront Accommodation Spec', type: :request do
   describe 'accommodation#show' do
     let!(:vendor) { create(:cm_vendor_with_product, permanent_stock: 10, with_logo: true) }
 
-    context "cannot find by id" do
-      before { get "/api/v2/storefront/accommodations/#{vendor.id}", params: { include: 'logo,variants', from_date: '2023-01-01', to_date: '2023-01-02'} }
-
-      it_behaves_like 'returns 404 HTTP status'
-
-      it 'should return json with error' do
-        expect(json_response['error']).to eq 'The resource you were looking for could not be found.'
-      end
-    end
-
     context "when the vendor's is all available" do
-      before { get "/api/v2/storefront/accommodations/#{vendor.slug}", params: { include: 'logo,variants', from_date: '2023-01-01', to_date: '2023-01-02'} }
+      before { get "/api/v2/storefront/accommodations/#{vendor.slug}", params: { include: 'logo,variants', from_date: next_month, to_date: next_month + 1.days} }
 
       it_behaves_like 'returns 200 HTTP status'
 
@@ -191,7 +201,7 @@ describe 'API V2 Storefront Accommodation Spec', type: :request do
       end
 
       it 'return service_availabilites of phnom penh hotel' do
-        expect(json_response['data']['attributes']['service_availabilities'].map {|a| a['date'] }).to eq ["2023-01-01", "2023-01-02"]
+        expect(json_response['data']['attributes']['service_availabilities'].map {|a| a['date'] }).to eq [day_to_s(next_month), day_to_s(next_month+1.days)]
         expect(json_response['data']['attributes']['service_availabilities'].map {|a| a['available'] }).to eq [true, true]
       end
     end
@@ -199,16 +209,39 @@ describe 'API V2 Storefront Accommodation Spec', type: :request do
     context "when match with booking dates" do
       let!(:booking) {
         order = create(:order)
-        book_room(order, hotel: vendor, quantity: 2,  from_date: date('2023_01_01'), to_date: date('2023_01_02'))
+        book_room(order, hotel: vendor, quantity: 2,  from_date: next_month, to_date: next_month + 2.days)
       }
 
-      before { get "/api/v2/storefront/accommodations/#{vendor.slug}", params: { include: 'logo,variants', from_date: '2023-01-01', to_date: '2023-01-02'} }
+      before { get "/api/v2/storefront/accommodations/#{vendor.slug}", params: { include: 'logo,variants', from_date: next_month, to_date: next_month + 2.days} }
 
       it_behaves_like 'returns 200 HTTP status'
 
       it 'should return json with stock information' do
         expect(json_response['data']['attributes']['total_booking']).to eq booking.quantity
         expect(json_response['data']['attributes']['remaining']).to eq (vendor.total_inventory - booking.quantity)
+      end
+    end
+
+    context 'validation error' do
+      it 'when from_date is in the past' do
+        get "/api/v2/storefront/accommodations/#{vendor.slug}", params: { from_date: last_month, to_date: last_month + 1.days }
+
+        expect(response.status).to eq 422
+        expect(json_response['error']).to eq "Start date must be today or in future"
+      end
+
+      it 'when from_date > to_date' do
+        get "/api/v2/storefront/accommodations/#{vendor.slug}", params: { from_date: monday, to_date: monday - 1.days }
+
+        expect(response.status).to eq 422
+        expect(json_response['error']).to eq "End Date must be later than or equal Start Date"
+      end
+
+      it 'when from_date and to_date is too long' do
+        get "/api/v2/storefront/accommodations/#{vendor.slug}", params: { from_date: next_month, to_date: next_month + (max_stay_days+1).days }
+
+        expect(response.status).to eq 422
+        expect(json_response['error']).to eq "Stay duration is too long"
       end
     end
   end
@@ -218,5 +251,13 @@ describe 'API V2 Storefront Accommodation Spec', type: :request do
   def book_room(order, hotel: , price: 100, quantity: , from_date:, to_date:)
     room = hotel.variants.first
     order.line_items.create(vendor_id: hotel.id, price: price, quantity: quantity, from_date: from_date, to_date: to_date, variant_id: room.id)
+  end
+
+  def day_to_s(day)
+    day.strftime("%F")
+  end
+
+  def max_stay_days
+    ENV.fetch('ACCOMMODATION_MAX_STAY_DAYS', 10).to_i
   end
 end

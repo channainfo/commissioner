@@ -40,9 +40,8 @@ module SpreeCmCommissioner
 
       return unless context.is_detail
 
-      resource = Spree::Vendor.find_by(slug: params[:id])
+      resource = Spree::Vendor.find_by(slug: params[:id]) || Spree::Vendor.find_by(id: params[:id])
 
-      context.fail! if resource.nil?
       context.properties[:vendor_id] = resource.id # accommodation id
     end
 

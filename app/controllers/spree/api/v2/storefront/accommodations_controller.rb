@@ -46,6 +46,10 @@ module Spree
           def resource_finder
             SpreeCmCommissioner::AccommodationSearchDetail
           end
+
+          def required_schema
+            SpreeCmCommissioner::AccommodationRequestSchema
+          end
         end
       end
     end

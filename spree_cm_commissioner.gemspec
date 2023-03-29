@@ -35,11 +35,12 @@ Gem::Specification.new do |s|
   s.add_dependency 'rails', '~> 7.0.4'
   s.add_dependency 'searchkick', '~> 5.1'
   s.add_dependency 'twilio-ruby', '~> 5.48.0'
+  s.add_dependency 'dry-validation', '~> 1.10'
   s.add_dependency 'byebug'
-  
+
   s.add_dependency 'simple_calendar', '~> 2.4'
   s.add_dependency 'activerecord_json_validator', '~> 2.1', '>= 2.1.3'
-  
+
   s.add_development_dependency 'pg'
   s.add_development_dependency 'spree_dev_tools'
   s.metadata['rubygems_mfa_required'] = 'true'

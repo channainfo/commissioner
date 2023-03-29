@@ -18,5 +18,6 @@ require 'jwt'
 
 require 'simple_calendar'
 require 'activerecord_json_validator'
+require 'dry-validation'
 
 require 'byebug' if Rails.env.development? || Rails.env.test?
