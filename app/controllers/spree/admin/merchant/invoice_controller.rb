@@ -2,7 +2,7 @@ module Spree
   module Admin
     module Merchant
       class InvoiceController < Spree::Admin::Merchant::BaseController
-        before_action :load_resource
+        include Spree::Admin::Merchant::OrderParentsConcern
 
         def show
           @invoice = @order.invoice
@@ -13,8 +13,9 @@ module Spree
           redirect_back fallback_location: admin_path
         end
 
-        def load_resource
-          @order ||= Spree::Order.find(params[:order_id])
+        # @overrided
+        def order
+          @order = Spree::Order.find_by!(number: params[:order_id])
         end
 
         def model_class

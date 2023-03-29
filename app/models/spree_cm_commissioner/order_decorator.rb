@@ -8,6 +8,10 @@ module SpreeCmCommissioner
       base.validates :phone_number, presence: true, if: :require_phone_number
 
       base.has_one :invoice, dependent: :destroy, class_name: 'SpreeCmCommissioner::Invoice'
+
+      base.belongs_to :subscription, class_name: 'SpreeCmCommissioner::Subscription', optional: true
+
+      base.delegate :customer, to: :subscription, allow_nil: true
     end
 
     # required only in one case,
