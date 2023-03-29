@@ -80,16 +80,19 @@ evm stop
 ```
 
 ### Visual Studio Code Editor && Rubocop
+
 - Install VScode Extensions: **ruby-rubocop**
 
 - Make sure have below settings in VScode User Settings. It will auto-correct with rubocop after save file
+
 ```json
 {
-  "ruby.rubocop.executePath": "/Users/USER_NAME/.rbenv/shims/",
+  "ruby.rubocop.executePath": "/Users/USER_NAME/.rbenv/shims/"
 }
 ```
 
 - We can run auto correction
+
 ```sh
 #  Autocorrect offenses (only when it's safe)
 $ bundle exec rubocop -a # or bundle exec rubocop --auto-correct
@@ -105,6 +108,7 @@ Following are required varialbles inside .env
 ```env
 GOOGLE_MAP_KEY = ""
 DEFAULT_LATLON = "10.627543,103.522141"
+ACCOMMODATION_MAX_STAY_DAYS = 10
 ```
 
 ## Using Deface DSL (.deface files)
@@ -126,7 +130,7 @@ Override file: app/overrides/spree/admin/vendors/_form/logo.html.erb.deface
 - Create a schedule to update vendor min and max price
 - Frequently: every 24 hours
 - Run time: mid night is preferable
-- Command: ``` rake "spree_cm_commissioner:vendor_update_price_range" ```
+- Command: `rake "spree_cm_commissioner:vendor_update_price_range"`
 
 ## Testing
 

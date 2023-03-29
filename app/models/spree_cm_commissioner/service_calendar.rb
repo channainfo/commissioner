@@ -8,7 +8,6 @@ module SpreeCmCommissioner
     # inclusion: Service has been added for the specified date (default).
     # exclusion: Service has been removed for the specified date.
 
-    COMMISSIONER_ROOT = Gem.loaded_specs['spree_cm_commissioner'].gem_dir
     EXCEPTION_RULE_JSON_SCHEMA = Pathname.new("#{COMMISSIONER_ROOT}/config/schemas/service_calendar_exception_rule.json")
 
     belongs_to :calendarable, polymorphic: true
