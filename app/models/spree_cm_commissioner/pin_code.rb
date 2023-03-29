@@ -1,5 +1,5 @@
 module SpreeCmCommissioner
-  class PinCode < ApplicationRecord
+  class PinCode < SpreeCmCommissioner::Base
     has_secure_token
 
     enum contact_type: { 'phone_number' => 0, 'email' => 1 }
