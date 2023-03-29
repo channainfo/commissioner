@@ -1,5 +1,13 @@
 @media print {
-  .no-print {
-    display: none;
+  body {
+      visibility: hidden;
   }
+  .print-area * {
+      visibility: visible;
+  }
+  .invoice-content {
+    margin-top: -260px;
+    margin-left: -35px;
+  }
+
 }

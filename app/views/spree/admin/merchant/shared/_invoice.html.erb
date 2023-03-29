@@ -1,18 +1,23 @@
  <%
-  @invoice_number = @invoice.invoice_number
-  @title = @invoice.order.line_items.first.vendor.name
   @product = @invoice.order.line_items.first.variant.sku
-  @price = @invoice.order.line_items.first.price
+  @price = @invoice.order.line_items.first.display_price
   @from_date = @invoice.order.line_items.first.to_date.strftime("%B %Y")
   @date = @invoice.date.strftime('%Y-%m-%d')
+
+  @invoice_number = @invoice.invoice_number
   @address = @invoice.order.line_items.first.vendor.stock_locations.first.address1
+  @location_code  = @invoice.order.line_items.first.vendor.stock_locations.first.reference
+  @customer_number = @customer.customer_number
+
+  @title = @invoice.order.line_items.first.vendor.name
   @contact = @invoice.order.line_items.first.vendor.contact_us
   @email = @invoice.order.line_items.first.vendor.notification_email
+  @note = @invoice.order.line_items.first.vendor.note
 %>
 <div>
-  <div class="d-flex justify-content-center align-items-center">
+  <div class="d-flex justify-content-center align-items-center invoice-content ms-0">
     <div class="card w-100">
-      <div class="card-body">
+      <div class="card-body print-area">
         <div class="container mb-5 mt-3">
           <div class=" d-flex justify-content-between" style="font-size: 20px;">
             <div class="col-9">
@@ -44,10 +49,11 @@
                 <ul class="list-unstyled">
                   <li>
                     <div> អាសយដ្ធានទទួលវិក្កយបត្រ​ / Address :</div>
-                    <%= @address  %>
+                    <%= @address %>
                   </li>
-                  <li class="mt-4">
+                  <li class="mt-4 p-2 bg-success text-white">
                     <div style="font-weight: bold"> ចំណាំ</div>
+                      <%= @note %>
                   </li>
                 </ul>
               </div>
@@ -61,9 +67,13 @@
                     <span>កាលបរិច្ចេទ / Invoice Date : </span>
                     <%= @date %>
                   </li>
-                  <li>លេខអតិថិជន / Customer No : </li>
+                  <li>
+                    <span> លេខអតិថិជន / Customer No : </span>
+                    <%= @customer_number %>
+                  </li>
                   <li>
                     <span>លេខកូខទីតាំង / Loc code : </span>
+                    <%= @location_code %>
                   </li>
                 </ul>
               </div>
@@ -95,7 +105,6 @@
                     <td>
                       <ul class="list-unstyled">
                         <li>
-                          <span> $ <span>
                           <%= @price %>
                         </li>
                       </ul>
@@ -107,30 +116,21 @@
 
             </div>
             <div style="font-size: 13px;">
-              <div class="d-flex justify-content-between align-items-start">
-                <p style="font-size: 13px;">បំណុលគិតត្រឺមកាលបរិច្ចេទចេញវិក្កយបត្រ​​​​ / Balance brought forward as of invoice date​ </p>
-                <div class="bg-success px-4 py-2 text-white">
-                  <span> $ <span>
-                  <%= @price %>
-                </div>
-              </div>
               <br>
               <div class="d-flex justify-content-between align-items-center bg-primary text-white pt-3 px-2"  style="font-weight: bold">
                     <p>ទឹកប្រាក់​ត្រូវទូទាត់​​ / Total Amount due</p>
-                    <p>អត្រាដូរប្រាក់ / Exchange Rate 1$ = 4100$</p>
                     <p>
-                      <span> $ <span>
                       <%= @price %>
                     </p>
               </div>
                 <div class="d-flex justify-content-between mt-4">
                   <div>
-                    <p>អ្នកទទូលប្រាក់​​ / Received By : </p>
-                    <p>កាលបរិច្ចេទ / Date : </p>
+                    <p>អ្នកទទូលប្រាក់​​ / Received By : ............................. </p>
+                    <p>កាលបរិច្ចេទ / Date : ............................. </p>
                   </div>
                   <div>
-                    <p>ទឹកប្រាក់​បានបង់ / Paid Amount: </p>
-                    <p>កាលបរិច្ចេទ / Date : </p>
+                    <p>ទឹកប្រាក់​បានបង់ / Paid Amount : ............................. </p>
+                    <p>កាលបរិច្ចេទ / Date : .............................  </p>
                   </div>
                 </div>
               <div class="d-flex justify-content-center mt-4">

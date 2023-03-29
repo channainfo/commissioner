@@ -13,7 +13,7 @@ describe Spree::V2::Storefront::StockLocationSerializer, type: :serializer do
   end
 
   it 'returns right stock location attributes' do
-    expect(subject.serializable_hash[:data][:attributes].keys).to contain_exactly(:lat, :lon, :name, :address1)
+    expect(subject.serializable_hash[:data][:attributes].keys).to contain_exactly(:lat, :lon, :name, :address1, :reference)
     expect(subject.serializable_hash[:data][:attributes][:lat]).to eq(0.0)
     expect(subject.serializable_hash[:data][:attributes][:lon]).to eq(0.0)
   end

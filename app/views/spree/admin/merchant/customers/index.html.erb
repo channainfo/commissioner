@@ -47,6 +47,9 @@
       <table class="table" id="listing_customers" data-hook>
         <thead class="text-muted">
           <tr data-hook="admin_customers_index_headers">
+           <th>
+              <%= sort_link @search, :customer_number, Spree.t(:customer_number), {}, {title: 'customers_sequence_number_title'} %>
+            </th>
             <th>
               <%= sort_link @search, :email, Spree.t(:email), {}, {title: 'customers_email_title'} %>
             </th>
@@ -71,6 +74,9 @@
         <tbody>
           <% @customers.each do |customer| %>
             <tr id="<%= spree_dom_id customer %>" data-hook="admin_customers_index_rows">
+              <td class='customer_number'>
+                <%= customer.customer_number %>
+              </td>
               <td class='customer_email'>
                 <%= link_to customer.email, edit_admin_merchant_customer_path(customer) %>
               </td>

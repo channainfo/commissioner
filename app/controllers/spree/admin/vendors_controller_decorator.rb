@@ -9,6 +9,8 @@ module Spree
       private
 
       def contruct_nearby_place
+        return unless permitted_resource_params.key?(:nearby_places_attributes)
+
         nearby_places_attributes = {}
         permitted_resource_params[:nearby_places_attributes].each do |id, vendor_place_attributes|
           nearby_places_attributes[id] = vendor_place_attributes.except(:selected) if
