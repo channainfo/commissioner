@@ -15,6 +15,7 @@ Spree::Core::Engine.add_routes do
         resources :customers do
           resources :subscriptions
         end
+        resources :roles
         resources :users
         resources :orders do
           resource :invoice, only: %i[show create], controller: :invoice

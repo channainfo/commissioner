@@ -4,3 +4,4 @@
 //= require map/map-picker
 //= require spree_cm_commissioner/calendar
 //= require spree_cm_commissioner/popover
+//= require spree_cm_commissioner/role_form
