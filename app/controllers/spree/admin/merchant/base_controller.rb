@@ -2,6 +2,8 @@ module Spree
   module Admin
     module Merchant
       class BaseController < Spree::Admin::ResourceController
+        include SpreeCmCommissioner::Admin::RoleAuthorization
+
         layout 'spree/layouts/merchant'
         helper_method :current_vendor, :vendors
 

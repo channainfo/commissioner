@@ -8,6 +8,8 @@ module SpreeCmCommissioner
       base.has_many :customers, class_name: 'SpreeCmCommissioner::Customer'
       base.has_many :subscriptions, through: :customers, class_name: 'SpreeCmCommissioner::Subscription'
       base.has_many :payments, as: :payable, class_name: 'Spree::Payment', dependent: :nullify
+      base.has_many :role_permissions, through: :spree_roles, class_name: 'SpreeCmCommissioner::RolePermission'
+      base.has_many :permissions, through: :role_permissions, class_name: 'SpreeCmCommissioner::Permission'
 
       base.has_one :profile, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::UserProfile'
 
