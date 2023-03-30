@@ -28,5 +28,16 @@ RSpec.describe SpreeCmCommissioner::SubscribedOrderCreator do
       expect(context.order.user_id).to eq customer.user_id
       expect(context.order.id).to eq subscription.orders.first.id
     end
+
+    it 'created a default payment' do
+      customer = create(:cm_customer)
+      subscription = create(:cm_subscription, customer: customer)
+
+      context = described_class.call(subscription: subscription)
+
+      expect(context.order.payments.size).to eq 1
+      expect(context.order.payments[0].amount).to eq context.order.order_total_after_store_credit
+      expect(context.order.payments[0].state).to eq 'checkout'
+    end
   end
-end 
+end

@@ -24,6 +24,22 @@ module SpreeCmCommissioner
       line_items.select { |item| item.ecommerce? && !item.digital? }.size.positive?
     end
 
+    # assume check is default payment method for subscription
+    def create_default_payment_if_eligble
+      return unless subscription?
+
+      default_payment_method = Spree::PaymentMethod::Check.available_on_back_end.first_or_create! do |method|
+        method.name ||= 'Invoice'
+        method.stores = [Spree::Store.default] if method.stores.empty?
+      end
+
+      payments.create!(payment_method: default_payment_method, amount: order_total_after_store_credit)
+    end
+
+    def subscription?
+      subscription.present?
+    end
+
     private
 
     def link_by_phone_number

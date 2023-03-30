@@ -5,12 +5,13 @@ module SpreeCmCommissioner
     def call
       create_order
       create_line_item
+
+      context.order.create_default_payment_if_eligble
       context.order.reload
     end
 
     def create_order
-      context.order = Spree::Order.create!(
-        state: :payment,
+      context.order = subscription.orders.create!(
         subscription_id: subscription.id,
         phone_number: subscription.customer.phone_number,
         user_id: subscription.customer.user_id
