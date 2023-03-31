@@ -42,8 +42,10 @@ en:
       label: "Latitude"
       hint: "Enter between 90 to -90"
     lon:
-      label: "Longitude"
-      hint: "Enter between 180 to -180"
+      label: 'Longitude'
+      hint: 'Enter between 180 to -180'
+    reference:
+      label: 'Reference'
 
   user_identity_provider:
     not_found: "User identity provider for %{identity_type} not found in the system"

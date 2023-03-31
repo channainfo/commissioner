@@ -8,6 +8,8 @@ module SpreeCmCommissioner
 
       base.attr_accessor :service_availabilities
 
+      base.before_save :generate_code
+
       base.has_many :photos, -> { order(:position) }, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorPhoto'
       base.has_many :option_values, through: :products
       base.has_many :vendor_option_types, class_name: 'SpreeCmCommissioner::VendorOptionType'
@@ -118,6 +120,10 @@ module SpreeCmCommissioner
 
     def selected_option_value_vendors_ids
       option_value_vendors.pluck(:option_value_id)
+    end
+
+    def generate_code
+      self.code = (code.presence || name[0, 3].upcase)
     end
   end
 end
