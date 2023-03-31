@@ -4,7 +4,7 @@ RSpec.describe SpreeCmCommissioner::PinCodeSender do
   describe '#call' do
     context 'when contact_type is email' do
       it 'send code to the given email' do
-        code = create(:pin_code, contact: 'admin@gmail.com', contact_type: :email, type: 'MyStore::PinCodeLogin')
+        code = create(:pin_code, contact: 'admin@gmail.com', contact_type: :email, type: 'SpreeCmCommissioner::PinCodeLogin')
         
         allow_any_instance_of(SpreeCmCommissioner::PinCodeSender).to receive(:send_email)
         
@@ -15,7 +15,7 @@ RSpec.describe SpreeCmCommissioner::PinCodeSender do
     context 'contact type is mobile number' do
       it 'send sms' do
         pin_code = create(:pin_code, contact: '087420441', contact_type: :phone_number,
-          type: 'MyStore::PinCodeLogin')
+          type: 'SpreeCmCommissioner::PinCodeLogin')
           
           options = {
             to: pin_code.contact,
