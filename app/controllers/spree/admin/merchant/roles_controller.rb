@@ -67,6 +67,9 @@ module Spree
           }
         end
 
+        # permissions:
+        # destroy: already in database & not selected
+        # save: not in database weather selected or not
         def construct_role_permissions
           role_permissions_attributes = {}
 
