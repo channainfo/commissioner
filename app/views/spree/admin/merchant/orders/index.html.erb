@@ -36,7 +36,7 @@
           <tr id="<%= spree_dom_id order %>" data-hook="admin_subscriptions_index_rows">
             <td><%= link_to order.number, edit_admin_merchant_order_path(order) %></td>
             <td><%= order_time(order.completed_at) %></td>
-            <td><%= order_time(order.created_at) %></td>
+            <td><%= order.line_items[0].from_date.to_date %></td>
             <td>
               <span class="badge badge-pill badge-<%= order.considered_risky ? 'considered_risky' : 'considered_safe' %>">
                 <%= order.considered_risky ? Spree.t("risky") : Spree.t("safe") %>

@@ -40,14 +40,18 @@ FactoryBot.define do
     factory :cm_subscribable_product do
       option_types { [Spree::OptionType.where(name: "month", attr_type: :integer, presentation: "Month").first_or_create!] }
 
-      before(:create) do |product|
+      transient do
+        month { 6 }
+      end
+
+      before(:create) do |product, _evaluator|
         product.subscribable = true
+      end
 
-        option_value = create(:option_value, name: "6 months", presentation: "6", option_type: product.option_types[0])
-        variant = create(:variant, option_values: [option_value])
+      after(:create) do |product, evaluator|
+        option_value = create(:cm_option_value, name: "#{evaluator.month}-months", presentation: evaluator.month.to_s, option_type: product.option_types[0])
+        variant = create(:variant, option_values: [option_value], price: product.price, product: product)
         variant.stock_items.first.adjust_count_on_hand(10)
-
-        product.variants << variant
       end
     end
   end

@@ -42,10 +42,10 @@ en:
       label: "Latitude"
       hint: "Enter between 90 to -90"
     lon:
-      label: 'Longitude'
-      hint: 'Enter between 180 to -180'
+      label: "Longitude"
+      hint: "Enter between 180 to -180"
     reference:
-      label: 'Reference'
+      label: "Reference"
 
   user_identity_provider:
     not_found: "User identity provider for %{identity_type} not found in the system"
@@ -89,6 +89,9 @@ en:
       operations_day: "Operations day"
       exception_rules: "Exception Rules"
 
+  orders:
+    total: "Total: %{orders_count} orders"
+
   account_deletion:
     title:
       have_another_account: "I have another account"
@@ -127,6 +130,7 @@ en:
     attributes:
       spree/order:
         phone_number: Phone number
+        payable: "Payable"
     errors:
       models:
         spree_cm_commissioner/service_calendar:
