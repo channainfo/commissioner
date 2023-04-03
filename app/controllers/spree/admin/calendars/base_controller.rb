@@ -20,7 +20,7 @@ module Spree
 
         # 2023-06-05
         def active_date
-          @active_date ||= Date.strptime(params[:active_date].to_s, '%Y-%m-%d')
+          @active_date ||= parse_date!(params[:active_date])
         end
       end
     end

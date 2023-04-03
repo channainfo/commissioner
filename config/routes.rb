@@ -27,10 +27,11 @@ Spree::Core::Engine.add_routes do
             resources :refunds, only: %i[new create edit update]
           end
         end
+        resource :report, only: %i[show], controller: :report
       end
 
       get '/forbidden', to: 'errors#forbidden', as: :forbidden
-      root to: redirect('/admin/merchant/:vendor_id/customers')
+      root to: redirect('/admin/merchant/:vendor_id/report')
     end
 
     resources :vendors do

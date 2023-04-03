@@ -19,8 +19,8 @@ module SpreeCmCommissioner
     end
 
     def create_line_item
-      from_date = subscription.start_date
-      to_date = from_date + subscription.months_count.months
+      from_date = renewal_date
+      to_date = from_date + months_count
 
       Spree::Cart::AddItem.call(
         order: context.order,
@@ -31,6 +31,16 @@ module SpreeCmCommissioner
           to_date: to_date
         }
       )
+    end
+
+    def renewal_date
+      return subscription.start_date if subscription.last_occurence.blank?
+
+      subscription.last_occurence + months_count
+    end
+
+    def months_count
+      subscription.months_count.months
     end
   end
 end

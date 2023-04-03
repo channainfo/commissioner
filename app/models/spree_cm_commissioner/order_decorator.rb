@@ -3,6 +3,8 @@ module SpreeCmCommissioner
     def self.prepended(base)
       base.include SpreeCmCommissioner::PhoneNumberSanitizer
 
+      base.scope :subscription, -> { where.not(subscription_id: nil) }
+
       base.before_create :link_by_phone_number
 
       base.validates :phone_number, presence: true, if: :require_phone_number
