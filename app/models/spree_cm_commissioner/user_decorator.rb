@@ -7,6 +7,7 @@ module SpreeCmCommissioner
       base.has_many :user_identity_providers, dependent: :destroy, class_name: 'SpreeCmCommissioner::UserIdentityProvider'
       base.has_many :customers, class_name: 'SpreeCmCommissioner::Customer'
       base.has_many :subscriptions, through: :customers, class_name: 'SpreeCmCommissioner::Subscription'
+      base.has_many :payments, as: :payable, class_name: 'Spree::Payment', dependent: :nullify
 
       base.has_one :profile, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::UserProfile'
 

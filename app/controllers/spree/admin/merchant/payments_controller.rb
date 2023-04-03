@@ -7,6 +7,11 @@ module Spree
         include Spree::Admin::Merchant::PaymentFireable
 
         before_action :load_data
+        before_action :set_current_user_instance, except: :index
+
+        def set_current_user_instance
+          @payment.current_user_instance = spree_current_user
+        end
 
         def load_data
           @amount = params[:amount] || @order.total
