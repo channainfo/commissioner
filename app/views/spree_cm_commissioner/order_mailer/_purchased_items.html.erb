@@ -1,0 +1,11 @@
+<% line_items.group_by(&:from_date).each do |date, line_items| %>
+   <div class="content-cell">
+      <div class="check-in">Check in: <span class="check-in-date"><%= format_date(date)%></span></div>
+      <% line_items.group_by(&:vendor_id).each do |vendor_id, items| %>
+         <table class="purchase order-info">
+            <%= render 'spree_cm_commissioner/order_mailer/purchased_items/vendor_info', vendor_id: vendor_id%>
+            <%= render collection: items, partial: 'spree_cm_commissioner/order_mailer/purchased_items/line_item', as: :line_item %>
+         </table>
+      <%end%>
+   </div>
+<%end%>
