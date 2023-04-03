@@ -1,5 +1,5 @@
 <div class="content-cell">
-  <p class="booking-summary">Booking Summary</p>
+  <p class="booking-summary"><%= I18n.t('mail.order_mailer.booking_summary') %></p>
   <table class="purchase">
     <% order.line_items.each do |line_item|%>
       <tr>
