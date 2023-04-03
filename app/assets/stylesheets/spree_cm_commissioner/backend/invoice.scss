@@ -1,3 +1,14 @@
+@font-face {
+  font-family: "Tacteng";
+  src: url(asset-path("tacteng.ttf")) format('truetype');
+}
+
+.tacteng {
+  font-family: "Tacteng";
+  font-size: 35px;
+  margin: -15px 0 0 60px;
+}
+
 @media print {
   body {
       visibility: hidden;
@@ -9,5 +20,4 @@
     margin-top: -260px;
     margin-left: -35px;
   }
-
 }
