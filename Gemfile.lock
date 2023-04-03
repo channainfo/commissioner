@@ -39,6 +39,7 @@ PATH
       byebug
       dry-validation (~> 1.10)
       elasticsearch (~> 8.5)
+      font-awesome-sass (~> 6.4.0)
       interactor (~> 3.1)
       jwt (>= 2.5.0)
       phonelib
@@ -286,6 +287,8 @@ GEM
     flag-icons-rails (3.4.6.1)
       sass-rails
     flatpickr (4.6.11.0)
+    font-awesome-sass (6.4.0)
+      sassc (~> 2.0)
     friendly_id (5.5.0)
       activerecord (>= 4.0.0)
     gem-release (2.2.2)

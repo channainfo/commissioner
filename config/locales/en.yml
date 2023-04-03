@@ -4,43 +4,43 @@
 en:
   account_checker:
     verify:
-      already_exist: "%{login} already exist"
+      already_exist: '%{login} already exist'
 
   sms:
     to:
-      blank: "recipient can not be blank"
+      blank: 'recipient can not be blank'
     body:
-      blank: "sms content can not be blank"
+      blank: 'sms content can not be blank'
 
-      already_exist: "%{login} already exist"
+      already_exist: '%{login} already exist'
 
   pincode_creator:
-    invalid_phone_number: "Invalid phone number"
-    invalid_email_address: "Invalid email address"
+    invalid_phone_number: 'Invalid phone number'
+    invalid_email_address: 'Invalid email address'
 
   authenticator:
-    incorrect_login: "Incorrect login"
-    incorrect_password: "Incorrect password"
-    invalid_or_missing_params: "Invalid or missing params"
+    incorrect_login: 'Incorrect login'
+    incorrect_password: 'Incorrect password'
+    invalid_or_missing_params: 'Invalid or missing params'
 
-  hello: "Hello world"
+  hello: 'Hello world'
 
   category_icon:
     field: Category icon (Square)
 
   calendar:
     event:
-      empty_info: "No <b>Events</b> found."
+      empty_info: 'No <b>Events</b> found.'
 
   option_type:
     kind_info: "<b>Once set</b>, it can't be updated."
     kind_validation: "Attribute can't be updated for %{option_type_name}"
-    empty_info: "No <b>Option Type</b> found for this kind"
+    empty_info: 'No <b>Option Type</b> found for this kind'
 
   stock_location:
     lat:
-      label: "Latitude"
-      hint: "Enter between 90 to -90"
+      label: 'Latitude'
+      hint: 'Enter between 90 to -90'
     lon:
       label: 'Longitude'
       hint: 'Enter between 180 to -180'
@@ -48,80 +48,80 @@ en:
       label: 'Reference'
 
   user_identity_provider:
-    not_found: "User identity provider for %{identity_type} not found in the system"
+    not_found: 'User identity provider for %{identity_type} not found in the system'
 
   variant:
     validation:
-      option_type_is_not_variant: "%{option_type_name} / %{option_value_name} is not kind of variant"
-      subscribed: "%{product_name} is subscribed."
-      option_type_is_not_product: "%{option_type_name} / %{option_value_name} is not kind of product"
-      out_of_stock: "%{variant_name} is out of stock"
+      option_type_is_not_variant: '%{option_type_name} / %{option_value_name} is not kind of variant'
+      subscribed: '%{product_name} is subscribed.'
+      option_type_is_not_product: '%{option_type_name} / %{option_value_name} is not kind of product'
+      out_of_stock: '%{variant_name} is out of stock'
     product_kind_option_types:
-      empty_info: "<b>Note:</b> Set product option types to product first. To edit, go to <b>Details</b> tab > <b>Option Types</b>"
+      empty_info: '<b>Note:</b> Set product option types to product first. To edit, go to <b>Details</b> tab > <b>Option Types</b>'
 
   vectors:
     icons:
       info_rules: 'Only allow <b>%{allow_extensions}</b> files. Icons are stored inside "images/" folder, eg. app/assets/images/backend-adjust.svg.'
-      total: "Total: %{total_in_page} / %{total_count} icons"
+      total: 'Total: %{total_in_page} / %{total_count} icons'
 
   product:
     validation:
-      not_active: "%{product_name} is not active"
+      not_active: '%{product_name} is not active'
 
   photo:
-    empty_info: "No <b>Photos</b> found."
+    empty_info: 'No <b>Photos</b> found.'
 
   nearby_place:
-    empty_info: "No <b>Nearby places</b> found."
+    empty_info: 'No <b>Nearby places</b> found.'
 
   vendor:
     validation:
       vendor_kind_option_types:
-        empty_info: "<b>Note:</b> Set vendor option types to vendor first. To edit, go to <b>Details</b> tab > <b>Option Types</b>"
+        empty_info: '<b>Note:</b> Set vendor option types to vendor first. To edit, go to <b>Details</b> tab > <b>Option Types</b>'
 
     service_calendars:
-      empty_info: "No <b>Service calendars</b> found."
-      start_date: "Start date"
-      end_date: "End date"
-      from_date: "From date"
-      to_date: "To date"
-      new_calendar: "New Service calendar"
-      operations_day: "Operations day"
-      exception_rules: "Exception Rules"
+      empty_info: 'No <b>Service calendars</b> found.'
+      start_date: 'Start date'
+      end_date: 'End date'
+      from_date: 'From date'
+      to_date: 'To date'
+      new_calendar: 'New Service calendar'
+      operations_day: 'Operations day'
+      exception_rules: 'Exception Rules'
 
   account_deletion:
     title:
-      have_another_account: "I have another account"
-      too_many_notifications: "I recieved too mant notifications"
-      sth_broken: "Something broken"
-      other: "Other"
+      have_another_account: 'I have another account'
+      too_many_notifications: 'I recieved too mant notifications'
+      sth_broken: 'Something broken'
+      other: 'Other'
     reason_description:
-      sth_broken: "Can you please share us what was not working? We will fix them as soon as possible as we spot them"
+      sth_broken: 'Can you please share us what was not working? We will fix them as soon as possible as we spot them'
       other: "Can you please share us your account deletion reason. If something slipped through our fingers, we'd be so grateful to be aware and fix it."
 
   spree:
-    listing_price: "Listing Price"
-    length: "Length"
+    listing_price: 'Listing Price'
+    length: 'Length'
     promotion_rule_types:
       fixed_date:
-        name: "Fixed Date"
-        description: "Fixed Date"
+        name: 'Fixed Date'
+        description: 'Fixed Date'
     promotion_action_types:
       create_listing_price_adjustment:
-        name: "Create listing price adjustment"
+        name: 'Create listing price adjustment'
     fixed_date_rule:
-      match_any: "Any of these date"
-      match_none: "None of these date"
+      match_any: 'Any of these date'
+      match_none: 'None of these date'
     admin:
       merchant:
-        orders: "Order"
-        customers: "Customer"
-        roles: "Role"
-        subscriptions: "Subscription"
-        users: "User"
-      match_any: "Any of these date"
-      match_none: "None of these date"
-    upsupported_payment: "Unsupported event"
+        orders: 'Order'
+        customers: 'Customer'
+        roles: 'Role'
+        subscriptions: 'Subscription'
+        users: 'User'
+      match_any: 'Any of these date'
+      match_none: 'None of these date'
+    upsupported_payment: 'Unsupported event'
 
   activerecord:
     attributes:
@@ -132,4 +132,13 @@ en:
         spree_cm_commissioner/service_calendar:
           attributes:
             exception_rules:
-              invalid_json: "is not a valid format"
+              invalid_json: 'is not a valid format'
+
+  mail:
+    order_mailer:
+      booking_confirm: 'Your booking is now confirmed!'
+      thanks: 'Thanks %{full_name},'
+      booking_reference: 'For reference, your booking ID is %{order_number}.'
+      booking_summary: 'Booking Summary'
+      check_in: 'Check in:'
+      check_out: 'Check out:'

@@ -1,0 +1,26 @@
+<div class="content-cell">
+   <div class="align-center">
+      <%#= image_tag logo_path, class: 'logo', alt: current_store.name, title: current_store.name %>
+      <%= inline_svg_tag "cm-default-icon.svg", size: "24px*24px", class: "icon-check" %>
+
+      <p class="booking-confirm">
+         <%= I18n.t('mail.order_mailer.booking_confirm') %>
+      </p>
+      <p><%= I18n.t('mail.order_mailer.thanks', full_name: user_full_name(@order))%></p>
+      <p>
+         <%= I18n.t('mail.order_mailer.booking_reference', order_number: @order.number) %>
+         <%= Spree.t('order_mailer.confirm_email.instructions') %>
+      </p>
+   </div>
+</div>
+
+<%= render 'spree_cm_commissioner/order_mailer/purchased_items', line_items: @order.line_items%>
+<%= render 'spree_cm_commissioner/order_mailer/purchased_summary', order: @order %>
+
+<div class="content-cell">
+   <p>
+      <%= Spree.t('order_mailer.confirm_email.thanks') %>
+      <br />
+      CM Market Team
+   </p>
+</div>

@@ -1,0 +1,115 @@
+#confirm-email {
+  background: #f2f4f6;
+  .content-cell {
+    background: white;
+    margin-bottom: 40px;
+    border-radius: 20px;
+    border: 1px solid #dddfe2;
+  }
+
+  .icon-check {
+    background: #32a923;
+    border-radius: 50px;
+    color: white;
+    padding: 5px;
+  }
+  .icon-check path {
+    stroke-width: 50;
+  }
+  .booking-summary {
+    font-size: 20px;
+    font-weight: bold;
+    color: #32a923;
+    margin: 0 0 30px;
+    text-align: center;
+  }
+  .booking-confirm {
+    font-size: 20px;
+    font-weight: bold;
+    color: #32a923;
+    margin-top: 20px;
+  }
+  .hotel-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2a2a2e;
+    text-decoration: none;
+  }
+
+  a.template-label {
+    text-decoration: none;
+  }
+  .check-in {
+    margin-bottom: 20px;
+    font-size: 14px;
+    .check-in-date {
+      color: #333333;
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+  .check-out {
+    font-size: 12px;
+    .check-out-date {
+      color: #333333;
+      font-weight: bold;
+    }
+  }
+  .order-info {
+    border: 1px solid #9c9c9c;
+    padding: 10px 20px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+  }
+  .vendor-info {
+    margin-bottom: 10px;
+    .vendor-name {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333333;
+      margin: 10px 0;
+    }
+    .vendor-logo {
+      width: 50px;
+      display: inline-block;
+      margin-right: 10px;
+    }
+    .vendor-description {
+      display: inline-block;
+      width: 80%;
+    }
+    .star-rating {
+      margin-left: 5px;
+    }
+    .fa-star {
+      font-size: 14px;
+      color: #9c9c9c;
+    }
+    .fa-star.rating {
+      color: #f7b002;
+    }
+  }
+  .purchase {
+    td {
+      line-height: 30px;
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  #confirm-email .content-cell {
+    background-color: #333333;
+    .check-in-date, .check-out-date {
+      color: #fff;
+    }
+  }
+
+}
+
+@page {
+  margin: 1cm;
+}
+
+.email-content,.email-body, .email-body_inner, .content-cell {
+  page-break-before: always;
+}
