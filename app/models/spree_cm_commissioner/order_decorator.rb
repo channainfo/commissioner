@@ -33,7 +33,12 @@ module SpreeCmCommissioner
         method.stores = [Spree::Store.default] if method.stores.empty?
       end
 
-      payments.create!(payment_method: default_payment_method, amount: order_total_after_store_credit)
+      payments.create!(
+        payment_method: default_payment_method,
+        amount: order_total_after_store_credit
+      )
+
+      Spree::Checkout::Advance.call(order: self)
     end
 
     def subscription?

@@ -1,0 +1,54 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:report) %>
+<% end %>
+
+<% content_for :sidebar do %>
+  <%= render partial: 'date_range_picker' %><br>
+  <% unless @orders.empty? %>
+    <small class='text-muted'><%= I18n.t('orders.total', orders_count: @orders.total_count) %></small>
+  <% end %>
+<% end %>
+
+<%= render partial: 'overview' %>
+
+<br>
+
+<% unless @search.nil? || @orders.empty? %>
+  <div class="table-responsive border rounded bg-whit mb-3">
+    <table class="table" id="listing_subscriptions">
+      <thead class="text-muted">
+        <tr data-hook="admin_subscriptions_index_headers">
+          <th><%= I18n.t(:number, scope: 'activerecord.attributes.spree/order') %></th>
+          <th><%= sort_link @search, :created_at, I18n.t(:created_at, scope: 'activerecord.attributes.spree/order') %></th>
+          <th><%= sort_link @search, :completed_at, I18n.t(:completed_at, scope: 'activerecord.attributes.spree/order') %></th>
+          <th><%= I18n.t(:payment_state, scope: 'activerecord.attributes.spree/order') %></th>
+          <th><%= I18n.t(:payable, scope: 'activerecord.attributes.spree/order') %></th>
+          <th><%= sort_link @search, :total, I18n.t(:total, scope: 'activerecord.attributes.spree/order') %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @orders.each do |order| %>
+          <tr id="<%= spree_dom_id order %>" data-hook="admin_subscriptions_index_rows">
+            <td><%= link_to order.number, edit_admin_merchant_order_path(order) %></td>
+            <td><%= order.line_items[0].from_date.to_date %></td>
+            <td><%= order.completed_at&.to_date %></td>
+            <td class="no-wrap">
+              <% if order.payment_state %>
+                <%= link_to Spree.t("payment_states.#{order.payment_state}"),
+                  admin_order_payments_path(order),
+                  class: "badge badge-pill badge-#{order.payment_state}" %>
+              <% end %>
+            </td>
+            <td><%= order.payments.map {|p| p.payable&.email }.to_sentence %></td>
+            <td><%= order.display_total.to_html %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @orders } %>
+<% else %>
+  <div class="text-center no-objects-found m-5">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree::Order)) %>
+  </div>
+<% end %>
