@@ -26,7 +26,7 @@ module Spree
         end
 
         def vendor
-          @vendor ||= Spree::Vendor.find(params[:vendor_id])
+          @vendor ||= Spree::Vendor.find_by(id: params[:vendor_id])
         end
 
         # @overrided
