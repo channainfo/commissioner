@@ -3,6 +3,9 @@ module SpreeCmCommissioner
     delegate :subscription, to: :context
 
     def call
+      # reject if locked?
+      return unless subscription.update(last_occurence: subscription.renewal_date)
+
       create_order
       create_line_item
 
@@ -19,8 +22,8 @@ module SpreeCmCommissioner
     end
 
     def create_line_item
-      from_date = renewal_date
-      to_date = from_date + months_count
+      from_date = subscription.last_occurence
+      to_date = from_date + subscription.months_count.months
 
       Spree::Cart::AddItem.call(
         order: context.order,

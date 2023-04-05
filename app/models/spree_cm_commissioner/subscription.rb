@@ -1,11 +1,14 @@
 module SpreeCmCommissioner
   class Subscription < SpreeCmCommissioner::Base
+    self.locking_column = :version
+
     enum status: { :active => 0, :suspended => 1, :inactive => 2 }
 
     belongs_to :variant, class_name: 'Spree::Variant'
     belongs_to :customer, class_name: 'SpreeCmCommissioner::Customer'
 
     has_many :orders, class_name: 'Spree::Order', dependent: :nullify
+    has_many :line_items, through: :orders, class_name: 'Spree::LineItem'
 
     validates :start_date, :status, presence: true
 
@@ -52,6 +55,12 @@ module SpreeCmCommissioner
       month_option_value = variant.option_values.find_by(option_type_id: month_option_type.id)
 
       month_option_value.presentation.to_i
+    end
+
+    def renewal_date
+      return start_date if last_occurence.blank?
+
+      last_occurence + months_count.months
     end
   end
 end

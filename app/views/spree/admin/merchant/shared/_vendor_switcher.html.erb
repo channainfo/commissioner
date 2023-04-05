@@ -10,7 +10,7 @@
   </a>
   <div class="dropdown-menu dropdown-menu-left overflow-hidden ml-2" aria-labelledby="storeSelectorDropdown">
     <% vendors.each do |merchant| %>
-      <%= link_to merchant.name, admin_merchant_users_path(vendor_id: merchant.slug),
+      <%= link_to merchant.name, admin_merchant_customers_path(vendor_id: merchant.slug),
                   class: "py-3 px-4 dropdown-item rounded", id: merchant.id, data: { turbo: false } %>
     <% end %>
   </div>
