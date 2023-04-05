@@ -2,14 +2,29 @@
   font-family: "Tacteng";
   src: url(asset-path("tacteng.ttf")) format('truetype');
 }
+@font-face {
+  font-family: "Moul-Regular";
+  src: url(asset-path("Moul-Regular.ttf")) format('truetype');
+}
 
+.moul {
+  font-family: 'Moul-Regular';
+  font-size: 16px;
+}
 .tacteng {
   font-family: "Tacteng";
   font-size: 35px;
   margin: -15px 0 0 60px;
 }
 
+.invoice-content{
+  width: 1200px;
+  font-size: 13px;
+  margin: auto;
+}
+
 @media print {
+
   body {
       visibility: hidden;
   }
@@ -17,7 +32,6 @@
       visibility: visible;
   }
   .invoice-content {
-    margin-top: -260px;
-    margin-left: -35px;
+    margin-top: -220px;
   }
 }

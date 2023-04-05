@@ -24,7 +24,7 @@
 
   <% if can?(:show, SpreeCmCommissioner::Invoice) %>
     <li class="nav-item" data-hook='admin_merchant_order_tabs_payments'>
-      <%= link_to_with_icon 'credit-card.svg',
+      <%= link_to_with_icon 'printer.svg',
         Spree.t(:invoice),
         admin_merchant_order_invoice_path(@order),
         class: "#{'active' if current == :invoice} nav-link" %>

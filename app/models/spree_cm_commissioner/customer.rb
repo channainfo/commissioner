@@ -2,7 +2,7 @@ module SpreeCmCommissioner
   class Customer < SpreeCmCommissioner::Base
     include SpreeCmCommissioner::PhoneNumberSanitizer
 
-    before_validation :generate_sequence_number, on: :create
+    before_validation :generate_sequence_number, if: :sequence_number.nil?
 
     belongs_to :vendor, class_name: 'Spree::Vendor'
     belongs_to :taxon, class_name: 'Spree::Taxon'
