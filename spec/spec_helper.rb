@@ -16,4 +16,8 @@ RSpec.configure do |config|
   config.include Helper
   config.include DoorkeeperAuthHelper
   config.extend Spree::TestingSupport::AuthorizationHelpers::Request, type: :request
+
+  # https://github.com/channainfo/commissioner/pull/316
+  config.order = :random
+  Kernel.srand config.seed
 end

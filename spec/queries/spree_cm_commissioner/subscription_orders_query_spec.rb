@@ -14,7 +14,7 @@ RSpec.describe SpreeCmCommissioner::SubscriptionOrdersQuery do
       subscription_feb4.orders.each {|o| o.payments.each{|p| p.capture! }}
 
       query = described_class.new(
-        current_date: '2023-04-21',
+        current_date: '2023-04-21'.to_date,
         vendor_id: customer.vendor.id,
         from_date: '2000-01-01',
         to_date: '2100-01-01',
@@ -37,7 +37,7 @@ RSpec.describe SpreeCmCommissioner::SubscriptionOrdersQuery do
       subscription.orders[2].payments.each{|p| p.void!} # march
 
       query = described_class.new(
-        current_date: '2023-04-21',
+        current_date: '2023-04-21'.to_date,
         vendor_id: customer.vendor.id,
         from_date: '2000-01-01',
         to_date: '2100-01-01',
