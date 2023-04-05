@@ -3,6 +3,7 @@ module SpreeCmCommissioner
     class InstallGenerator < Rails::Generators::Base
       class_option :migrate, type: :boolean, default: true
       source_root File.expand_path('../../../../spree/templates', __dir__)
+      source_root File.expand_path('templates', __dir__)
 
       def add_migrations
         gems = %i[
@@ -32,6 +33,11 @@ module SpreeCmCommissioner
 
         inject_into_file 'vendor/assets/javascripts/spree/backend/all.js', "\n//= require spree_cm_commissioner/backend",
                          after: %r{//= require spree/backend}, verbose: true
+
+        # For NPM support
+        template 'app/javascript/spree_cm_commissioner/utilities.js'
+        inject_into_file 'app/javascript/spree-dashboard.js', "\nimport \"./spree_cm_commissioner/utilities.js\"",
+                         after: %r{import "@spree/dashboard"}, verbose: true
       end
     end
   end
