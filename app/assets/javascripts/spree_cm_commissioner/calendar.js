@@ -13,7 +13,7 @@ const Calendar = {
     this.updateDateSidebarContent(content);
   },
   listenToDateClick: function () {
-    self = this;
+    const self = this;
 
     $(self.dateSelector).click(function () {
       const content = $(this).data("content");
@@ -32,7 +32,7 @@ const Calendar = {
     history.pushState(null, null, this.url);
   },
   updateDateSidebarContent: function (content) {
-    const selector = self.sidebarSelector;
+    const selector = this.sidebarSelector;
     $(selector)
       .fadeOut("fast", function () {
         $(selector).html(content);
