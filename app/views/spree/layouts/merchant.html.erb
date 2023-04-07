@@ -2,6 +2,7 @@
 <html lang="<%= I18n.locale %>">
   <head data-hook="admin_inside_head">
     <%= render partial: 'spree/admin/shared/head' %>
+    <%= yield :extra_head if content_for?(:extra_head) %>
   </head>
   <body class="admin" data-controller="spree">
     <%#-------------------------------------------------%>

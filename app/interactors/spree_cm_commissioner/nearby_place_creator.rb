@@ -16,7 +16,7 @@ module SpreeCmCommissioner
     protected
 
     def distance(loc1, loc2)
-      rad_per_deg = Math::PI / 180  # PI / 180
+      rad_per_deg = Math::PI / 180 # PI / 180
       rkm = 6371 # Earth radius in kilometers
 
       dlat_rad = (loc2[0] - loc1[0]) * rad_per_deg # Delta, converted to rad
