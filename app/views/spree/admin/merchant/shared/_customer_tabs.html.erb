@@ -20,3 +20,12 @@
       class: "nav-link #{'active' if current == :subscriptions}" %>
   </li>
 <% end %>
+
+<% content_for :page_tabs do %>
+  <li class="nav-item">
+    <%= link_to_with_icon 'pin-map.svg',
+      Spree.t(:addresses),
+      spree.admin_merchant_customer_addresses_path(@customer),
+      class: "nav-link #{'active' if current == :addresses}" %>
+  </li>
+<% end %>

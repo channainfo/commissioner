@@ -14,6 +14,7 @@ Spree::Core::Engine.add_routes do
       scope ':vendor_id' do
         resources :customers do
           resources :subscriptions
+          resources :addresses
         end
         resources :roles
         resources :users

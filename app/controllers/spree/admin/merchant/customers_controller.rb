@@ -31,6 +31,14 @@ module Spree
           admin_merchant_customers_url(options)
         end
 
+        def location_after_save
+          if permitted_resource_params.key?(:bill_address_attributes) && permitted_resource_params.key?(:ship_address_attributes)
+            admin_merchant_customer_addresses_url(@customer)
+          else
+            edit_admin_merchant_customer_url(@customer)
+          end
+        end
+
         def set_vendor
           permitted_resource_params[:vendor] = current_vendor
         end
