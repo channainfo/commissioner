@@ -5,9 +5,11 @@ module Spree
         include Spree::Admin::Merchant::OrderParentsConcern
         include Spree::Admin::Merchant::PaymentCreatable
         include Spree::Admin::Merchant::PaymentFireable
+        include Spree::Admin::OrderConcern
 
         before_action :load_data
         before_action :set_current_user_instance, except: :index
+        before_action :load_order, only: [:show]
 
         def set_current_user_instance
           @payment.current_user_instance = spree_current_user
@@ -32,6 +34,10 @@ module Spree
           @refunds = @payments.flat_map(&:refunds)
 
           redirect_to new_admin_merchant_order_payment_url(@order) if @payments.empty?
+        end
+
+        def show
+          @payment = @object
         end
 
         def load_resource_instance
