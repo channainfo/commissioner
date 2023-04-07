@@ -1,0 +1,5 @@
+<!-- replace "erb[loud]:contains('spree-icon.svg')" -->
+
+<span class='mr-2 ml-1'>
+  <%= svg_icon name: "building.svg", width: '25', height: '25' %>
+</span>
