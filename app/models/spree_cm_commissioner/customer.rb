@@ -17,6 +17,8 @@ module SpreeCmCommissioner
     has_many :active_variants, class_name: 'Spree::Variant', through: :active_subscriptions, source: :variant
 
     validates :sequence_number, presence: true, uniqueness: { scope: :vendor_id }
+    validates :email, uniqueness: { scope: :vendor_id }, allow_blank: true
+    validates :phone_number, uniqueness: { scope: :vendor_id }, allow_blank: true
 
     self.whitelisted_ransackable_attributes = %w[email intel_phone_number first_name last_name]
 

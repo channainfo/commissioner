@@ -7,7 +7,7 @@ module SpreeCmCommissioner
     belongs_to :variant, class_name: 'Spree::Variant'
     belongs_to :customer, class_name: 'SpreeCmCommissioner::Customer'
 
-    has_many :orders, class_name: 'Spree::Order', dependent: :nullify
+    has_many :orders, -> { order(:created_at) }, class_name: 'Spree::Order', dependent: :nullify
     has_many :line_items, through: :orders, class_name: 'Spree::LineItem'
 
     validates :start_date, :status, presence: true
