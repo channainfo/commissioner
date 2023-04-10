@@ -2,11 +2,14 @@ module SpreeCmCommissioner
   class Configuration < Spree::Preferences::Configuration
     # Some example preferences are shown below, for more information visit:
     # https://dev-docs.spreecommerce.org/internals/preferences
-
-    preference :enabled, :boolean, default: true
     # preference :dark_chocolate, :boolean, default: true
     # preference :color, :string, default: 'Red'
     # preference :favorite_number, :integer
     # preference :supported_locales, :array, default: [:en]
+    preference :enabled, :boolean, default: true
+    preference :top_category_taxon_ids, :array, default: []
+    preference :trending_category_taxon_ids, :array, default: []
+    preference :featured_brand_taxon_ids, :array, default: []
+    preference :featured_vendor_ids, :array, default: []
   end
 end
