@@ -58,5 +58,13 @@ module SpreeCmCommissioner
       end
       true
     end
+
+    def subscribable_variants
+      vendor.variants
+            .joins('INNER JOIN spree_products as p ON p.id = spree_variants.product_id AND p.subscribable = TRUE')
+            .joins('INNER JOIN spree_products_taxons as pt ON pt.product_id = p.id')
+            .joins("INNER JOIN cm_customers as c on c.taxon_id = pt.taxon_id AND c.id = #{id}")
+            .where('spree_variants.is_master = FALSE AND spree_variants.deleted_at IS NULL')
+    end
   end
 end
