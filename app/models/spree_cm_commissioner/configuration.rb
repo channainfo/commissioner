@@ -7,6 +7,7 @@ module SpreeCmCommissioner
     # preference :favorite_number, :integer
     # preference :supported_locales, :array, default: [:en]
     preference :enabled, :boolean, default: true
+    preference :displayed_product_taxon_ids, :array, default: []
     preference :top_category_taxon_ids, :array, default: []
     preference :trending_category_taxon_ids, :array, default: []
     preference :featured_brand_taxon_ids, :array, default: []

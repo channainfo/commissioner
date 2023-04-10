@@ -6,7 +6,7 @@ module SpreeCmCommissioner
                   :config,
                   :homepage_banners, :homepage_banner_ids,
                   :top_categories, :top_category_ids,
-                  :diplay_products, :diplay_product_ids,
+                  :display_products, :display_product_ids,
                   :trending_categories, :trending_category_ids,
                   :featured_brands, :featured_brand_ids,
                   :featured_vendors, :featured_vendor_ids
@@ -35,7 +35,7 @@ module SpreeCmCommissioner
       set_record_id
       set_homepage_banners
       set_top_catgories
-      set_diplay_products
+      set_display_products
       set_trending_categories
       set_featured_brands
       set_featured_vendors
@@ -92,9 +92,14 @@ module SpreeCmCommissioner
       @featured_vendor_ids = @featured_vendors.map(&:id)
     end
 
-    def set_diplay_products
-      @diplay_products = SpreeCmCommissioner::Feed::DisplayProduct.call
-      @diplay_product_ids = @diplay_products.map(&:id)
+    def set_display_products
+      config_taxon_ids = @config.displayed_product_taxon_ids
+      taxon_ids = config_taxon_ids.present? ? config_taxon_ids.split(',') : []
+
+      return @display_products = Spree::Taxon.none if taxon_ids.blank?
+
+      @display_products = SpreeCmCommissioner::Feed::TaxonProduct.call(taxon_ids, limit: 6, serialize_data: true)
+      @display_product_ids = @display_products.map(&:id)
     end
   end
 end

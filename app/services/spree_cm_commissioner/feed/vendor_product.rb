@@ -19,14 +19,14 @@ module SpreeCmCommissioner
         from_mobile = options[:from_mobile] || false
         return [] if vendor_ids.blank?
 
-        vendors = Spree::Vendor.includes(:translations).where(id: vendor_ids).order(priority: :desc)
+        vendors = Spree::Vendor.where(id: vendor_ids).order(priority: :desc)
         vendors = vendors.includes(app_promotion_banner: :attachment_blob) if from_mobile
 
         sub_query = query_product_in_vendor(vendor_ids).to_sql
 
         vendor_products = Spree::Product.select('*').from(" ( #{sub_query} ) AS spree_products")
                                         .where(['spree_products.product_top_rank <= ?', limit])
-                                        .includes(:translations, master: :prices)
+                                        .includes(master: :prices)
 
         vendor_products = vendor_products.to_a
 
@@ -39,7 +39,7 @@ module SpreeCmCommissioner
       end
 
       def self.serilize_class(serialize_data)
-        serialize_data ? SpreeCmCommissioner::Feed::VendorIncudeProduct : SpreeCmCommissioner::Feed::VendorProduct
+        serialize_data ? SpreeCmCommissioner::Feed::VendorIncludeProduct : SpreeCmCommissioner::Feed::VendorProduct
       end
 
       def self.query_product_in_vendor(vendor_ids)

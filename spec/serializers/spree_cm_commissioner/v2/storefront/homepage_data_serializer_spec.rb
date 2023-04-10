@@ -12,7 +12,7 @@ RSpec.describe SpreeCmCommissioner::V2::Storefront::HomepageDataSerializer, type
 
       it { expect(subject[:data][:relationships]).to include(:homepage_banners) }
       it { expect(subject[:data][:relationships]).to include(:top_categories) }
-      it { expect(subject[:data][:relationships]).to include(:diplay_products) }
+      it { expect(subject[:data][:relationships]).to include(:display_products) }
       it { expect(subject[:data][:relationships]).to include(:trending_categories) }
       it { expect(subject[:data][:relationships]).to include(:featured_brands) }
       it { expect(subject[:data][:relationships]).to include(:featured_vendors) }
