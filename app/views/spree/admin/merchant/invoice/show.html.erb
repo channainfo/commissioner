@@ -14,4 +14,8 @@
 
 <% unless @invoice.nil? %>
   <%= render partial: 'spree/admin/merchant/shared/invoice', invoice: @invoice %>
+<% else %>
+  <small class="form-text text-muted">
+    <%= raw I18n.t('invoice.empty_info') %>
+  </small>
 <% end %>

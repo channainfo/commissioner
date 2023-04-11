@@ -6,7 +6,7 @@
 <% content_for :page_tabs do %>
   <% if can? :update, @order %>
     <li class="nav-item" data-hook='admin_order_tabs_edit_details'>
-      <%= link_to_with_icon 'truck.svg',
+      <%= link_to_with_icon 'edit.svg',
         Spree.t(:edit),
         edit_admin_merchant_order_url(@order),
         class: "#{'active' if current == :edit} nav-link" %>

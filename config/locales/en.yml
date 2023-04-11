@@ -147,3 +147,5 @@ en:
       booking_summary: 'Booking Summary'
       check_in: 'Check in:'
       check_out: 'Check out:'
+  invoice:
+      empty_info: '<b>Invoice</b> not create yet'

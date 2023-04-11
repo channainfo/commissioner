@@ -15,6 +15,7 @@
 
   @invoice_number = @invoice.invoice_number
   @customer_number = @customer.customer_number
+  @customer_address = @order.billing_address&.address1
 %>
 
 
@@ -22,10 +23,12 @@
   <div class="invoice-content card p-5 invoice-content">
     <div class="print-area">
       <div class="d-flex justify-content-between align-items-start">
-        <%= render partial: 'spree/admin/merchant/shared/vendor_logo', locals: { size: :small } %>
         <div>
+          <%= render partial: 'spree/admin/merchant/shared/vendor_logo', locals: { size: :small } %>
+        </div>
+        <div class="align-self-end">
           <strong>
-            <div class="d-flex flex-column text-primary moul">
+            <div class="d-flex flex-column text-primary moul ">
                 <div class="ml-4">ព្រះរាជាណាចក្រកម្ពុជា</div>
                 <div>ជាតិ​​ សាសនា ព្រះមហាក្សត្រ</div>
                 <div class="tacteng font-weight-light">3</div>
@@ -41,7 +44,7 @@
           <ul class="list-unstyled">
             <li>
               <div> អាសយដ្ធានទទួលវិក្កយបត្រ​ / Address :</div>
-              <%= @address %>
+              <%= @customer_address %>
             </li>
             <li class="mt-4 p-2 bg-success text-white">
               <div class = "font-weight-bold"> ចំណាំ</div>

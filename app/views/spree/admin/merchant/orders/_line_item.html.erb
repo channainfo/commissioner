@@ -1,0 +1,46 @@
+
+<% if order.line_items.exists? %>
+  <div class="card mb-3">
+    <div class="card-header">
+      <h5 class="card-title mb-0 h6">
+        <%= Spree.t(:order_line_items) %>
+      </h5>
+    </div>
+    <div class="table-responsive border-0 rounded bg-white">
+      <table class="table line-items" data-hook="line-items">
+        <thead class="text-muted">
+          <tr>
+            <th class="text-center" colspan="2"><%= Spree.t(:name) %></th>
+            <th class="text-center"><%= Spree.t(:month) %></th>
+            <th class="text-center"><%= Spree.t(:price) %></th>
+            <th class="text-center"><%= Spree.t(:quantity) %></th>
+            <th class="text-center"><%= Spree.t(:total_price) %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% order.line_items.each do |item| %>
+            <tr class="line-item" id="line-item-<%= item.id %>">
+              <td class="line-item-image image text-center">
+                <%= link_to small_image(item.variant), edit_admin_product_path(item.variant.product) %>
+              </td>
+              <td class="line-item-name text-center">
+                <%= link_to item.name, edit_admin_product_path(item.variant.product) %>
+                <br>
+                <%= "(#{item.options_text})" if item.options_text.present? %>
+              </td>
+              <td class="text-center"><%= item.to_date.strftime("%B %Y") %></td>
+              <td class="line-item-price text-center"><%= item.single_money.to_html %></td>
+              <td class="line-item-qty-show text-center" style="width:120px;">
+                <%= item.quantity %>
+              </td>
+              <td class="line-item-qty-edit is-hidden" style="width:120px;">
+                <%= number_field_tag :quantity, item.quantity, min: 0, class: "line_item_quantity form-control", size: 5 %>
+              </td>
+              <td class="line-item-total text-center"><%= line_item_shipment_price(item, item.quantity) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>
