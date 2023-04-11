@@ -1,6 +1,10 @@
 <% if can?(:admin, current_store) %>
   <span class="d-none d-lg-inline text-light">
-    <%= svg_icon name: "building.svg", width: '25', height: '25' %>
+    <% if current_vendor.logo %>
+      <%= image_tag main_app.url_for(current_vendor.logo.url(:small)), :class => 'w-25 p-2' %>
+   <% else %>
+      <%= svg_icon name: "building.svg", width: '25', height: '25' %>
+   <% end %>
   </span>
   <a class="px-0 py-1 ml-1 btn text-light" id="storeSelectorDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     <span class="d-sm-none"><%= svg_icon name: "store.svg", width: '18', height: '18' %></span>
