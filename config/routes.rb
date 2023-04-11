@@ -79,6 +79,9 @@ Spree::Core::Engine.add_routes do
         end
       end
     end
+
+    resource :home_page_feed, only: %i[edit update], controller: :home_page_feed
+
   end
 
   namespace :api, defaults: { format: 'json' } do
