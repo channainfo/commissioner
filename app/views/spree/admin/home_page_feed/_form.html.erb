@@ -9,7 +9,7 @@
 
       <div class="card-body">
         <div class="form-group">
-          <%= f.label :trending_category_taxon_ids %>
+          <%= label_tag :trending_category %>
           <%= select_tag(:trending_category_taxon_ids,
             options_from_collection_for_select(@taxons, :id, :pretty_name, @config[:trending_category_taxon_ids]),
             include_hidden: true , multiple: true,
