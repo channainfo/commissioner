@@ -6,6 +6,7 @@ module SpreeCmCommissioner
       base.scope :subscription, -> { where.not(subscription_id: nil) }
 
       base.before_create :link_by_phone_number
+      base.before_create :associate_customer
 
       base.validates :phone_number, presence: true, if: :require_phone_number
       base.has_one :invoice, dependent: :destroy, class_name: 'SpreeCmCommissioner::Invoice'
@@ -66,6 +67,13 @@ module SpreeCmCommissioner
       return false if phone_number.present? || email.present?
 
       true unless new_record? || %w[cart address].include?(state)
+    end
+
+    def associate_customer
+      return unless customer
+
+      self.bill_address ||= customer.bill_address.try(:clone)
+      self.ship_address ||= customer.ship_address.try(:clone)
     end
   end
 end
