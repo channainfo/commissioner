@@ -1,0 +1,31 @@
+<% content_for :page_title do %>
+  <%= page_header_back_button spree.billing_customers_path %>
+  <%= @customer.email %>
+<% end %>
+
+<% content_for :page_tabs do %>
+  <li class="nav-item">
+    <%= link_to_with_icon 'person.svg',
+      Spree.t(:customer),
+      spree.edit_billing_customer_path(@customer),
+      class: "nav-link #{'active' if current == :account}" %>
+  </li>
+<% end %>
+
+<% content_for :page_tabs do %>
+  <li class="nav-item">
+    <%= link_to_with_icon 'tag.svg',
+      Spree.t(:subscriptions),
+      spree.billing_customer_subscriptions_path(@customer),
+      class: "nav-link #{'active' if current == :subscriptions}" %>
+  </li>
+<% end %>
+
+<% content_for :page_tabs do %>
+  <li class="nav-item">
+    <%= link_to_with_icon 'pin-map.svg',
+      Spree.t(:addresses),
+      spree.billing_customer_addresses_path(@customer),
+      class: "nav-link #{'active' if current == :addresses}" %>
+  </li>
+<% end %>

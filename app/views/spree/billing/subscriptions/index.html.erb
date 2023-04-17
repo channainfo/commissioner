@@ -1,0 +1,66 @@
+<%= render partial: 'spree/billing/shared/customer_tabs', locals: { current: :subscriptions } %>
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:subscribe), new_billing_customer_subscription_path, class: "btn-success", icon: 'add.svg', id: 'billing_customer_subscription' %>
+<% end %>
+<% if @subscriptions.any?  %>
+  <% unless @search.nil? %>
+    <div class="table-responsive border rounded bg-white mb-3">
+      <table class="table" id="listing_subscriptions">
+        <thead class="text-muted">
+          <tr data-hook="admin_subscriptions_index_headers">
+            <th>
+              <%= sort_link @search, :name, Spree.t(:name), {}, {title: 'subscription_title'} %>
+            </th>
+            <th>
+              <%= sort_link @search, :option_text, Spree.t(:option_text),{},{title: 'option_text_title'} %>
+            </th>
+            <th>
+              <%= sort_link @search, :price, Spree.t(:price),{},{title: 'price_title'} %>
+            </th>
+            <th>
+              <%= sort_link @search, :start_date, Spree.t(:start_date), {}, {title: 'start_date_title'} %>
+            </th>
+            <th>
+              <%= sort_link @search, :status, Spree.t(:status), {}, {title: 'status_title'} %>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @subscriptions.each do |subscription| %>
+            <tr id="<%= spree_dom_id subscription %>" data-hook="admin_subscriptions_index_rows">
+              <td class='p_name'>
+                <%= link_to subscription.variant.sku, edit_billing_customer_subscription_path(@customer.id, subscription.id) %>
+              </td>
+              <td>
+                <%= subscription.variant.options_text%>
+              </td>
+              <td>
+                <%= subscription.variant.display_price%>
+              </td>
+              <td data-hook="start_date">
+                <%= subscription.start_date %>
+              </td>
+              <td>
+                <% @badge_class = "badge-active" if subscription.status == "active" %>
+                <% @badge_class = "badge-inactive" if subscription.status == "inactive" %>
+                <% @badge_class = "badge-danger" if subscription.status == "suspended" %>
+                <%= content_tag(:strong, class: "badge #{@badge_class} text-uppercase ") do; subscription.status ; end %>
+              </td>
+              <td data-hook="admin_users_index_row_actions" class="actions">
+                <span class="d-flex justify-content-end">
+                  <%= link_to_edit subscription ,url: edit_billing_customer_subscription_path(@customer.id,subscription.id) ,no_text: true if can?(:edit, subscription) %>
+                  <%= link_to_delete subscription,url: billing_customer_subscription_path(@customer.id, subscription.id), no_text: true if can?(:delete, subscription) %>
+                </span>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+<% else %>
+  <div class="text-center no-objects-found m-5">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(SpreeCmCommissioner::Subscription)) %><% if can? :create, SpreeCmCommissioner::Subscription %>,
+      <%= link_to(Spree.t(:add_one), new_billing_customer_subscription_path) %>!<% end %>
+  </div>
+<% end %>

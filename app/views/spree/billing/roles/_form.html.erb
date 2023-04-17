@@ -1,0 +1,52 @@
+<%= form_for [:billing, @role] do |f| %>
+  <fieldset>
+    <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @role } %>
+
+    <div data-hook="billing_role_form_fields">
+      <%= f.field_container :name, 'data-hook' => "role_name" do %>
+        <%= f.label :name, raw(Spree.t(:name) + required_span_tag) %>
+        <%= f.text_field :name, class: 'form-control' %>
+        <%= f.error_message_on :name %>
+      <% end %>
+
+      <div data-hook="billing_role_form_permissions" class="form-group">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Entry</th>
+              <th>Permissions</th>
+              <th>
+                <div class="text-center">
+                  <%= check_box_tag nil, nil, false, id: "select_all_checkbox", class: "select-all" %>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @role_permissions.group_by(&:entry).each do |entry, entry_group_permissions| %>
+              <tr data-row="<%= entry %>">
+                <td><%= Spree.t(entry.gsub("/", ".")) %></td>
+                <td>
+                  <ul class="list-inline">
+                    <%= f.fields_for :role_permissions, entry_group_permissions do |ff| %>
+                      <%= ff.fields_for :permission, ff.object.permission do |fff| %>
+                        <% permission = fff.object %>
+                        <%= fff.hidden_field :entry, value: permission.entry %>
+                        <%= fff.hidden_field :action, value: permission.action %>
+                        <li class="list-inline-item">
+                          <%= ff.check_box :selected, { :class => "permission-checkbox #{entry}", :checked => @role.permission_ids.include?(permission.id) }, true, false %>
+                          <%= permission.action %>
+                        </li>
+                      <% end%>
+                    <% end %>
+                  </ul>
+                </td>
+                <td class="text-center"><%= check_box_tag nil, nil, false, id: "select_all_#{entry.parameterize}", class: "select-all", data: { row: entry } %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </fieldset>
+<% end %>

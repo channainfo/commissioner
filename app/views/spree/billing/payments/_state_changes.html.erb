@@ -1,0 +1,33 @@
+<div class="table-responsive border rounded bg-white">
+  <table class="table" id="listing_order_state_changes" data-hook>
+    <thead class="text-muted">
+      <tr data-hook="admin_orders_state_changes_headers">
+        <th><%= Spree::StateChange.human_attribute_name(:type) %></th>
+        <th><%= Spree::StateChange.human_attribute_name(:state_from) %></th>
+        <th><%= Spree::StateChange.human_attribute_name(:state_to) %></th>
+        <th><%= Spree::StateChange.human_attribute_name(:user) %></th>
+        <th><%= Spree::StateChange.human_attribute_name(:timestamp) %></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @payment.state_changes.each do |state_change| %>
+        <% scope = state_change.name == 'order'  ? "#{ state_change.name }_state" : "#{ state_change.name }_states" -%>
+        <tr>
+          <td><%= Spree.t("state_machine_states.#{state_change.name}") %></td>
+          <td><%= state_change.previous_state ? Spree.t(state_change.previous_state, scope: scope) : Spree.t(:previous_state_missing) %></td>
+          <td><%= Spree.t(state_change.next_state, scope: scope) %></td>
+          <td class='customer_email'>
+            <%= link_to state_change.user.phone_number || state_change.user.email, edit_billing_user_path(state_change.user) if state_change.user.present? %>
+          </td>
+          <td>
+            <%= pretty_time(state_change.created_at) %>
+            <% if state_change.created_at != state_change.updated_at %>
+              <small><%= Spree::StateChange.human_attribute_name(:updated) %>: <%= pretty_time(state_change.updated_at) %></small>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

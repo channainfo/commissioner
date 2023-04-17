@@ -1,0 +1,54 @@
+<div data-hook="billing_order_form_fields" class="row">
+  <div class="col-12">
+    <%= render "spree/billing/orders/line_item", order: @order %>
+  </div>
+  <% unless @order.bill_address.nil? %>
+    <div class="col-12">
+      <div class="row">
+        <div data-hook="bill_address_wrapper" class="col-12 col-lg-6">
+          <div class="card mb-3">
+            <div class="card-header">
+              <h5 class="card-title mb-0 h6"><%= Spree.t(:billing_address) %></h5>
+            </div>
+
+            <div class="card-body">
+              <% if can? :edit, @order.user %>
+                <%= f.fields_for :bill_address do |ba_form| %>
+                  <%= render 'spree/admin/shared/address_form', f: ba_form, type: "billing" %>
+                <% end %>
+              <% else %>
+                <%= render 'spree/admin/shared/address', address: @order.bill_address %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6" data-hook="ship_address_wrapper">
+          <div class="card mb-3">
+            <div class="card-header">
+              <h5 class="card-title mb-0 h6"><%= Spree.t(:shipping_address) %></h5>
+            </div>
+            <div class="card-body">
+              <% if can? :edit, @order.user %>
+                <%= f.fields_for :ship_address do |sa_form| %>
+                  <div class="form-group">
+                    <span data-hook="use_billing">
+                      <%= check_box_tag 'order[use_billing]', '1', @order.shipping_eq_billing_address?, class: 'checkbox' %>
+                      <%= label_tag 'order[use_billing]', Spree.t(:use_billing_address), class: 'form-check-label' %>
+                    </span>
+                  </div>
+
+                  <%= render 'spree/admin/shared/address_form', f: sa_form, type: 'shipping' %>
+                <% end %>
+              <% else %>
+                <%= render 'spree/admin/shared/address', address: @order.ship_address %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+
