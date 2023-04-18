@@ -10,7 +10,7 @@
       <%= svg_icon name: "cancel.svg", width: '20', height: '20', classes: 'p-0 m-0' %>
     </button>
   </div>
-  <% if Spree.user_class && can?(:admin, Spree.user_class) %>
+  <% if spree_current_user.has_spree_role?('admin') %>
     <ul class="nav nav-sidebar" id="sidebarReport">
       <%= tab :report, url: billing_report_path, icon: 'pie-chart-fill.svg' %>
     </ul>
@@ -26,5 +26,31 @@
     <ul class="nav nav-sidebar" id="sidebarRole">
       <%= tab :roles, url: billing_roles_path, icon: 'list-ul.svg' %>
     </ul>
+  <% else %>
+    <% if spree_current_user.permissions.exists?(entry: 'spree/billing/report') %>
+      <ul class="nav nav-sidebar" id="sidebarReport">
+        <%= tab :report, url: billing_report_path, icon: 'pie-chart-fill.svg' %>
+      </ul>
+    <% end %>
+    <% if spree_current_user.permissions.exists?(entry: 'spree/billing/customers') %>
+      <ul class="nav nav-sidebar" id="sidebarCustomer">
+        <%= tab :customers, url: billing_customers_path, icon: 'people-fill.svg' %>
+      </ul>
+    <% end %>
+    <% if spree_current_user.permissions.exists?(entry: 'spree/billing/orders') %>
+      <ul class="nav nav-sidebar" id="sidebarOrder">
+        <%= tab :orders, url: billing_orders_path, icon: 'inbox-fill.svg' %>
+      </ul>
+    <% end %>
+    <% if spree_current_user.permissions.exists?(entry: 'spree/billing/users') %>
+      <ul class="nav nav-sidebar" id="sidebarUser">
+        <%= tab :users, url: billing_users_path, icon: 'users.svg' %>
+      </ul>
+    <% end %>
+    <% if spree_current_user.permissions.exists?(entry: 'spree/billing/roles') %>
+      <ul class="nav nav-sidebar" id="sidebarRole">
+        <%= tab :roles, url: billing_roles_path, icon: 'list-ul.svg' %>
+      </ul>
+    <% end %>
   <% end %>
 </nav>
