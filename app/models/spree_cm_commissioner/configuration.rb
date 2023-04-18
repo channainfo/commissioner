@@ -16,7 +16,7 @@ module SpreeCmCommissioner
 
     def array_patch_value(value)
       return [] if value.blank?
-      return value.split(',').reject(&:blank?) if instance_of?(String)
+      return value.split(',').compact_blank if instance_of?(String)
 
       value.compact_blank
     end
