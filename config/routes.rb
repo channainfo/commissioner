@@ -10,31 +10,6 @@ Spree::Core::Engine.add_routes do
       end
     end
 
-    namespace :merchant do
-      scope ':vendor_id' do
-        resources :customers do
-          resources :subscriptions
-          resources :addresses
-        end
-        resources :roles
-        resources :users
-        resources :orders do
-          resource :invoice, only: %i[show create], controller: :invoice
-          resources :payments do
-            member do
-              put :fire
-            end
-
-            resources :refunds, only: %i[new create edit update]
-          end
-        end
-        resource :report, only: %i[show], controller: :report
-      end
-
-      get '/forbidden', to: 'errors#forbidden', as: :forbidden
-      root to: redirect('/admin/merchant/:vendor_id/report')
-    end
-
     resources :vendors do
       resources :vendor_photos do
         collection do
@@ -81,6 +56,30 @@ Spree::Core::Engine.add_routes do
     end
 
     resource :home_page_feed, only: %i[edit update], controller: :home_page_feed
+  end
+
+  namespace :billing do
+    resource :report, only: %i[show], controller: :report
+    resources :customers do
+      resources :subscriptions
+      resources :addresses
+    end
+    resources :roles
+    resources :users
+    resources :orders do
+      resource :invoice, only: %i[show create], controller: :invoice
+      resources :payments do
+        member do
+          put :fire
+        end
+
+        resources :refunds, only: %i[new create edit update]
+      end
+    end
+
+    put '/switch_vendor', to: 'base#switch_vendor'
+    get '/forbidden', to: 'errors#forbidden', as: :forbidden
+    root to: redirect('/billing/report')
   end
 
   namespace :api, defaults: { format: 'json' } do

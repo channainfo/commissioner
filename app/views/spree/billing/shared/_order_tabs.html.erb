@@ -1,0 +1,33 @@
+<% content_for :page_title do %>
+  <%= page_header_back_button spree.billing_orders_path(customer_id: @customer.id, subscription_id: @subscription.id) %>
+  <%= @order.number %>
+<% end %>
+
+<% content_for :page_tabs do %>
+  <% if can? :update, @order %>
+    <li class="nav-item" data-hook='admin_order_tabs_edit_details'>
+      <%= link_to_with_icon 'edit.svg',
+        Spree.t(:edit),
+        edit_billing_order_url(@order),
+        class: "#{'active' if current == :edit} nav-link" %>
+    </li>
+  <% end %>
+
+  <% if can?(:index, Spree::Payment) %>
+    <li class="nav-item" data-hook='billing_order_tabs_payments'>
+      <%= link_to_with_icon 'credit-card.svg',
+        Spree.t(:payments),
+        spree.billing_order_payments_url(@order),
+        class: "#{'active' if current == :payments} nav-link" %>
+    </li>
+  <% end %>
+
+  <% if can?(:show, SpreeCmCommissioner::Invoice) %>
+    <li class="nav-item" data-hook='billing_order_tabs_payments'>
+      <%= link_to_with_icon 'printer.svg',
+        Spree.t(:invoice),
+        billing_order_invoice_path(@order),
+        class: "#{'active' if current == :invoice} nav-link" %>
+    </li>
+  <% end %>
+<% end %>

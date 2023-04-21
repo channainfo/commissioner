@@ -30,7 +30,7 @@ module SpreeCmCommissioner
       end
 
       def handle_unauthorization
-        redirect_to admin_merchant_forbidden_url
+        redirect_to billing_forbidden_url
       end
     end
   end

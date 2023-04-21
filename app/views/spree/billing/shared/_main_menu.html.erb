@@ -1,0 +1,30 @@
+<nav class="pb-3 pt-lg-3 px-1">
+  <div class="text-right d-lg-none pl-3 py-2 border-bottom d-flex align-items-center">
+    <div class="d-flex flex-grow-1 text-primary"></div>
+    <button
+      id="sidebar-close"
+      class="btn btn-link d-flex"
+      type="button"
+      aria-expanded="false"
+      aria-label="Toggle navigation">
+      <%= svg_icon name: "cancel.svg", width: '20', height: '20', classes: 'p-0 m-0' %>
+    </button>
+  </div>
+  <% if Spree.user_class && can?(:admin, Spree.user_class) %>
+    <ul class="nav nav-sidebar" id="sidebarReport">
+      <%= tab :report, url: billing_report_path, icon: 'pie-chart-fill.svg' %>
+    </ul>
+    <ul class="nav nav-sidebar" id="sidebarCustomer">
+      <%= tab :customers, url: billing_customers_path, icon: 'people-fill.svg' %>
+    </ul>
+    <ul class="nav nav-sidebar" id="sidebarOrder">
+      <%= tab :orders, url: billing_orders_path, icon: 'inbox-fill.svg' %>
+    </ul>
+    <ul class="nav nav-sidebar" id="sidebarUser">
+      <%= tab :users, url: billing_users_path, icon: 'users.svg' %>
+    </ul>
+    <ul class="nav nav-sidebar" id="sidebarRole">
+      <%= tab :roles, url: billing_roles_path, icon: 'list-ul.svg' %>
+    </ul>
+  <% end %>
+</nav>
