@@ -14,6 +14,7 @@ module SpreeCmCommissioner
       base.belongs_to :subscription, class_name: 'SpreeCmCommissioner::Subscription', optional: true
 
       base.delegate :customer, to: :subscription, allow_nil: true
+      base.after_commit :create_invoice, if: :subscription?
     end
 
     # required only in one case,
@@ -74,6 +75,10 @@ module SpreeCmCommissioner
 
       self.bill_address ||= customer.bill_address.try(:clone)
       self.ship_address ||= customer.ship_address.try(:clone)
+    end
+
+    def create_invoice
+      SpreeCmCommissioner::InvoiceCreator.call(order: self)
     end
   end
 end

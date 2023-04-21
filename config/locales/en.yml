@@ -116,17 +116,22 @@ en:
     fixed_date_rule:
       match_any: "Any of these date"
       match_none: "None of these date"
-    billing:
-      orders: "Order"
-      customers: "Customer"
-      roles: "Role"
-      subscriptions: "Subscription"
-      users: "User"
+    admin:
+      merchant:
+        orders: "Order"
+        customers: "Customer"
+        roles: "Role"
+        subscriptions: "Subscription"
+        users: "User"
+      match_any: "Any of these date"
+      match_none: "None of these date"
     upsupported_payment: "Unsupported event"
 
   activerecord:
     attributes:
       spree/order:
+        start_date: "start date"
+        created_at: "created at"
         phone_number: "Phone number"
         payable: "Payable"
         invoice_id: "Invoice ID"

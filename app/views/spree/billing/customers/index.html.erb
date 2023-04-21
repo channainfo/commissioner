@@ -74,10 +74,10 @@
               <%= link_to customer.email, edit_billing_customer_path(customer) %>
             </td>
             <td class='first_name'>
-              <%= customer.first_name %>
+              <%= link_to customer.first_name, edit_billing_customer_path(customer) %>
             </td>
             <td class='last_name'>
-              <%= customer.last_name %>
+              <%= link_to customer.last_name, edit_billing_customer_path(customer) %>
             </td>
             <td class='gender'>
               <%= customer.gender %>
