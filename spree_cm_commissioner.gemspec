@@ -38,6 +38,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'dry-validation', '~> 1.10'
   s.add_dependency 'byebug'
   s.add_dependency 'font-awesome-sass', '~> 6.4.0'
+  s.add_dependency 'noticed', '~> 1.6'
+  s.add_dependency 'fcm'
 
   s.add_dependency 'simple_calendar', '~> 2.4'
   s.add_dependency 'activerecord_json_validator', '~> 2.1', '>= 2.1.3'

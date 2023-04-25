@@ -20,5 +20,7 @@ require 'simple_calendar'
 require 'activerecord_json_validator'
 require 'dry-validation'
 require 'font-awesome-sass'
+require 'noticed'
+require 'fcm'
 
 require 'byebug' if Rails.env.development? || Rails.env.test?

@@ -11,6 +11,8 @@ module SpreeCmCommissioner
       base.validates :phone_number, presence: true, if: :require_phone_number
       base.has_one :invoice, dependent: :destroy, class_name: 'SpreeCmCommissioner::Invoice'
 
+      base.has_many :notifications, class_name: 'SpreeCmCommissioner::Notification', as: :notificable, dependent: :destroy
+
       base.belongs_to :subscription, class_name: 'SpreeCmCommissioner::Subscription', optional: true
 
       base.delegate :customer, to: :subscription, allow_nil: true
