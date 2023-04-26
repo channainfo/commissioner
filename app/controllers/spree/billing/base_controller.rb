@@ -1,7 +1,7 @@
 module Spree
   module Billing
     class BaseController < Spree::Admin::ResourceController
-      include SpreeCmCommissioner::Admin::RoleAuthorization
+      include SpreeCmCommissioner::Billing::RoleAuthorization
 
       layout 'spree/layouts/billing'
       helper_method :current_vendor, :vendors

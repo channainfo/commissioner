@@ -1,5 +1,5 @@
 module SpreeCmCommissioner
-  module Admin
+  module Billing
     module RoleAuthorization
       extend ActiveSupport::Concern
 
