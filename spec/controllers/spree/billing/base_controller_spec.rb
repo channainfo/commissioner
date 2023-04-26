@@ -49,7 +49,7 @@ RSpec.describe Spree::Billing::BaseController, type: :controller do
       get :index
 
       expect(controller.authorize?).to be false
-      expect(response).to redirect_to 'http://test.host/admin/forbidden'
+      expect(response).to redirect_to billing_forbidden_url
     end
   end
 end

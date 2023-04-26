@@ -4,13 +4,16 @@ module SpreeCmCommissioner
       extend ActiveSupport::Concern
 
       included do
-        before_action :authorize_role!
-
         rescue_from SpreeCmCommissioner::UnauthorizationError, with: :handle_unauthorization
       end
 
       def authorize_role!
         raise SpreeCmCommissioner::UnauthorizationError unless authorize?
+      end
+
+      # overrided
+      def authorize_admin
+        authorize_role!
       end
 
       def authorize?
@@ -22,7 +25,7 @@ module SpreeCmCommissioner
       end
 
       def auth_entry
-        controller_name
+        controller_path
       end
 
       def auth_action
