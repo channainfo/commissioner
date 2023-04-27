@@ -103,6 +103,7 @@ en:
       other: "Can you please share us your account deletion reason. If something slipped through our fingers, we'd be so grateful to be aware and fix it."
 
   spree:
+    intel_phone_number: "Intel Phone Number"
     new_customer: "New Customer"
     listing_price: "Listing Price"
     length: "Length"
@@ -130,6 +131,8 @@ en:
   activerecord:
     attributes:
       spree/order:
+        customer_id: "Customer ID"
+        due_date: "Invoice Due Date"
         start_date: "start date"
         created_at: "created at"
         phone_number: "Phone number"

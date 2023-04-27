@@ -10,28 +10,34 @@
       <div class="row">
         <div class="col-12 col-lg-6">
           <div class="form-group">
-            <%= f.label :email_cont, Spree.t(:email) %>
-            <%= f.email_field :email_cont, class: "form-control js-quick-search-target js-filterable" %>
+            <%= f.label :intel_phone_number_cont, Spree.t(:intel_phone_number) %>
+            <%= f.telephone_field :intel_phone_number_cont, class: "form-control js-quick-search-target js-filterable" %>
           </div>
         </div>
         <div class="col-12 col-lg-6">
           <div class="form-group">
-            <%= f.label :intel_phone_number_cont, Spree.t(:intel_phone_number) %>
-            <%= f.telephone_field :intel_phone_number_cont, class: "form-control js-filterable" %>
+            <%= f.label :id_cont, Spree.t(:id) %>
+            <%= f.number_field :id_cont, class: "form-control js-filterable" %>
           </div>
         </div>
       </div>
       <div class="row">
-        <div class="col-12 col-lg-6">
+        <div class="col-12 col-lg-4">
           <div class="form-group">
             <%= f.label :first_name_cont, Spree.t(:first_name) %>
             <%= f.text_field :first_name_cont, class: 'form-control js-filterable' %>
           </div>
         </div>
-        <div class="col-12 col-lg-6">
+        <div class="col-12 col-lg-4">
           <div class="form-group">
             <%= f.label :last_name_cont, Spree.t(:last_name) %>
             <%= f.text_field :last_name_cont, class: 'form-control js-filterable' %>
+          </div>
+        </div>
+        <div class="col-12 col-lg-4">
+          <div class="form-group">
+            <%= f.label :taxon_cont, Spree.t(:taxon) %>
+            <%= f.text_field :taxon_cont, class: 'form-control js-filterable' %>
           </div>
         </div>
       </div>
@@ -39,6 +45,7 @@
         <%= button Spree.t(:search), 'search.svg' %>
       </div>
     <% end %>
+    <%=  %>
   </div>
 <% end %>
 <% if @customers.any? %>
@@ -47,22 +54,25 @@
       <thead class="text-muted">
         <tr data-hook="admin_customers_index_headers">
           <th>
-            <%= sort_link @search, :email, Spree.t(:email), {}, {title: 'customers_email_title'} %>
+            <%= sort_link @search, :id, Spree.t(:id), {}, {title:"id_title"} %>
           </th>
           <th>
-            <%= sort_link @search, :first_name, Spree.t(:first_name), {}, {title: 'first_name_title'} %>
-          </th>
-          <th>
-            <%= sort_link @search, :last_name, Spree.t(:last_name), {}, {title: 'last_name_title'} %>
-          </th>
-          <th>
-            <%= sort_link @search, :gender, Spree.t(:gender), {}, {title: 'gender_title'} %>
+            <%= sort_link @search, :full_name, Spree.t(:full_name), {}, {title: 'fullname_title'} %>
           </th>
           <th>
             <%= sort_link @search, :intel_phone_number, Spree.t(:intel_phone_number), {}, {title: 'intel_phone_number_title'} %>
           </th>
           <th>
-            <%= sort_link @search, :taxon_id, Spree.t(:taxon), {}, {title: 'taxon_title'} %>
+            <%= sort_link @search, :taxon, Spree.t(:type), {}, {title: 'taxon_title'} %>
+          </th>
+          <th>
+            <%= sort_link @search, :created_at, Spree.t(:created_at),{},{title:'created_at_title'} %>
+          </th>
+          <th>
+            <%= sort_link @search, :subscription_count, Spree.t(:subscription),{},{title:'susbcriptions_count_title'} %>
+          </th>
+          <th>
+            <%= sort_link @search, :latest_subscription, Spree.t(:latest_subscription), {},{title: 'latest_subscription_title'} %>
           </th>
           <th data-hook="admin_customers_index_header_actions" class="actions"></th>
         </tr>
@@ -70,23 +80,30 @@
       <tbody>
         <% @customers.each do |customer| %>
           <tr id="<%= spree_dom_id customer %>" data-hook="admin_customers_index_rows">
-            <td class='customer_email'>
-              <%= link_to customer.email, edit_billing_customer_path(customer) %>
+            <td>
+              <%= link_to customer.id, edit_billing_customer_path(customer) %>
             </td>
             <td class='first_name'>
-              <%= link_to customer.first_name, edit_billing_customer_path(customer) %>
-            </td>
-            <td class='last_name'>
-              <%= link_to customer.last_name, edit_billing_customer_path(customer) %>
-            </td>
-            <td class='gender'>
-              <%= customer.gender %>
+              <%= link_to customer.fullname, edit_billing_customer_path(customer) %>
             </td>
             <td class='roles'>
               <%= customer.intel_phone_number %>
             </td>
             <td class='taxon'>
-              <%= customer.taxon&.name %>
+              <%= customer.taxon.name %>
+            </td>
+            <td>
+              <%= customer.created_at.to_date %>
+            </td>
+            <td>
+              <% @badge_class = "badge-active" if customer.subscription_count > 0 %>
+              <% @badge_class = "badge-inactive" if customer.subscription_count == 0 %>
+              <%= content_tag(:strong, class: "badge #{@badge_class} ") do %>
+                <%= customer.subscription_count %>
+              <% end %>
+            </td>
+            <td>
+              <%= customer.latest_subscription&.variant&.sku || 'none' %>
             </td>
             <td data-hook="admin_customers_index_row_actions" class="actions">
               <span class="d-flex justify-content-end">
@@ -99,6 +116,7 @@
       </tbody>
     </table>
   </div>
+  <%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>
 <% end %>
 <% if @customers.empty? %>
   <div class="text-center no-objects-found m-5">

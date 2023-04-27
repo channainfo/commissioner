@@ -57,6 +57,14 @@ module SpreeCmCommissioner
       month_option_value.presentation.to_i
     end
 
+    def due_date
+      due_date_option_type = variant.product.option_types.find_by(name: 'due-date')
+      due_date_option_value = variant.option_values.find_by(option_type_id: due_date_option_type.id)
+
+      day = due_date_option_value.presentation.to_i
+      start_date + day.days
+    end
+
     def renewal_date
       return start_date if last_occurence.blank?
 

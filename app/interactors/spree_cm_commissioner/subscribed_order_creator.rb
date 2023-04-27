@@ -8,6 +8,7 @@ module SpreeCmCommissioner
 
       create_order
       create_line_item
+      create_invoice
 
       context.order.create_default_payment_if_eligble
       context.order.reload
@@ -34,6 +35,10 @@ module SpreeCmCommissioner
           to_date: to_date
         }
       )
+    end
+
+    def create_invoice
+      SpreeCmCommissioner::InvoiceCreator.call(order: context.order)
     end
 
     def renewal_date

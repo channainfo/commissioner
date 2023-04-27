@@ -31,7 +31,9 @@ module SpreeCmCommissioner
     validates :email, uniqueness: { scope: :vendor_id }, allow_blank: true
     validates :phone_number, uniqueness: { scope: :vendor_id }, allow_blank: true
 
-    self.whitelisted_ransackable_attributes = %w[email intel_phone_number first_name last_name]
+    acts_as_paranoid
+
+    self.whitelisted_ransackable_attributes = %w[id intel_phone_number first_name last_name taxon]
 
     accepts_nested_attributes_for :ship_address, :bill_address
 
@@ -65,6 +67,18 @@ module SpreeCmCommissioner
             .joins('INNER JOIN spree_products_taxons as pt ON pt.product_id = p.id')
             .joins("INNER JOIN cm_customers as c on c.taxon_id = pt.taxon_id AND c.id = #{id}")
             .where('spree_variants.is_master = FALSE AND spree_variants.deleted_at IS NULL')
+    end
+
+    def subscription_count
+      subscriptions.where(status: 'active').count
+    end
+
+    def latest_subscription
+      subscriptions.last
+    end
+
+    def fullname
+      "#{first_name} #{last_name}"
     end
   end
 end

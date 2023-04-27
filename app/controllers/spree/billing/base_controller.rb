@@ -36,7 +36,7 @@ module Spree
       end
 
       def per_page
-        params[:per_page] || 12
+        params[:per_page] || 15
       end
 
       # ajax
