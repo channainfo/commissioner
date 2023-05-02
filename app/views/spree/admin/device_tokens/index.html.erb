@@ -1,0 +1,59 @@
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:new_device_token), new_admin_user_device_token_path, class: "btn-success", icon: 'add.svg' %>
+<% end if can? :create, SpreeCmCommissioner::DeviceToken %>
+
+<%= render partial: 'spree/admin/users/tabs', locals: { current: :device_token } %>
+
+<% if @device_tokens.any? %>
+  <div class="table-responsive border rounded bg-white mb-3">
+    <table class="table" id="listing_users" data-hook>
+      <thead class="text-muted">
+        <tr data-hook="admin_users_index_headers">
+          <th>
+            <%=Spree.t(:client_name)%>
+          </th>
+          <th>
+            <%=Spree.t(:client_version)%>
+           </th>
+           <th>
+            <%=Spree.t(:meta)%>
+          </th>
+          <th>
+            <%=Spree.t(:registration_token)%>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @device_tokens.each do |device_token| %>
+          <tr id="<%= spree_dom_id device_token %>" data-hook="admin_device_token_index_rows">
+            <td>
+              <%= device_token.client_name  %>
+            </td>
+            <td>
+              <%= device_token.client_version  %>
+            </td>
+             <td>
+                <%= device_token.meta  %>
+            </td>
+             <td>
+              <small>
+                <%= device_token.registration_token.truncate(36)  %>
+              </small>
+            </td>
+
+            <td data-hook="admin_device_token_index_row_actions" class="actions">
+              <span class="d-flex justify-content-end">
+                <%= link_to_edit device_token, url: edit_admin_user_device_token_path(id:device_token.id), no_text: true if can?(:edit,:amdin ,device_token) %>
+                <%= link_to_delete device_token,url: admin_user_device_token_path(id:device_token.id), no_text: true if can?(:delete, device_token) %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <small class="form-text text-muted">
+      <%= raw I18n.t('device_token.empty_info') %>
+   </small>
+<% end %>

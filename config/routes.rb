@@ -34,6 +34,10 @@ Spree::Core::Engine.add_routes do
       end
     end
 
+    resources :users do
+      resources :device_tokens
+    end
+
     resources :products do
       resources :master_variant, only: %i[index update] do
         collection do
