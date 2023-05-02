@@ -88,6 +88,7 @@ Spree::Core::Engine.add_routes do
         resources :account_checker
         resources :provinces, only: %i[index]
         resources :user_deletion_reasons, only: [:index]
+        resources :user_device_token_registrations, only: %i[create destroy]
         resources :vendors do
           resources :nearby_places, only: %i[index]
         end
