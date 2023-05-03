@@ -127,8 +127,14 @@ en:
   activerecord:
     attributes:
       spree/order:
-        phone_number: Phone number
+        phone_number: "Phone number"
         payable: "Payable"
+        invoice_id: "Invoice ID"
+        status: "Status"
+        invoice_due_date: "Invoice Due Date"
+        customer_id: "Customer ID"
+        type: "Type"
+        select_date: "Select Date"
     errors:
       models:
         spree_cm_commissioner/service_calendar:
