@@ -1,8 +1,8 @@
 <ul data-hook="billing_settings_sidebar_menu" class="collapse nav nav-pills nav-stacked" id="sidebar-setting">
   <% if spree_current_user.has_spree_role?('admin') || spree_current_user.permissions.exists?(entry: 'spree/billing/users') %>
-    <%= tab :users, url: spree.billing_users_path %>
+    <%= configurations_sidebar_menu_item(Spree.t(:users), billing_users_url) %>
   <% end %>
   <% if spree_current_user.has_spree_role?('admin') || spree_current_user.permissions.exists?(entry: 'spree/billing/roles') %>
-    <%= tab :roles, url: spree.billing_roles_path %>
+    <%= configurations_sidebar_menu_item(Spree.t(:roles), billing_roles_url) %>
   <% end %>
 </ul>
