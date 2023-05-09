@@ -13,19 +13,6 @@ module SpreeCmCommissioner
       Config = Configuration.new
     end
 
-    config.after_initialize do
-      Rails.application.config.spree.promotions.rules.concat [
-        SpreeCmCommissioner::PricingModel::Rules::FixedDate
-      ]
-
-      Rails.application.config.spree.promotions.actions.concat [
-        SpreeCmCommissioner::PricingModel::Actions::CreateListingPriceAdjustment
-      ]
-
-      SpreeCmCommissioner::PricingModel.set_constants
-      Spree::Promotion.set_constants
-    end
-
     def self.activate
       Dir.glob(File.join(File.dirname(__FILE__), '../../app/**/*_decorator*.rb')) do |c|
         Rails.configuration.cache_classes ? require(c) : load(c)
