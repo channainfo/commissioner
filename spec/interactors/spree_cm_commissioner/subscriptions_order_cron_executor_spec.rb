@@ -3,13 +3,16 @@ require 'spec_helper'
 RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCronExecutor do
   let(:user) { create(:user) }
 
-  let(:option_type) {create(:option_type, name: "month", attr_type: :integer)}
-  let(:option_value){create(:option_value, name: "1 month", presentation: "1", option_type: option_type)}
+  let(:option_type_month) {create(:option_type, name: "month", attr_type: :integer)}
+  let(:option_value_month){create(:option_value, name: "1 month", presentation: "1", option_type: option_type_month)}
+  let(:option_type_day) {create(:option_type, name: "due-date", attr_type: :integer)}
+  let(:option_value_day){create(:option_value, name: "5 Days", presentation: "5", option_type: option_type_day)}
+
 
   let(:vendor) {create(:vendor)}
 
-  let(:product) { create(:base_product, option_types: [option_type], subscribable: true, vendor: vendor)}
-  let(:variant) { create(:base_variant, option_values: [option_value], price: 30, product: product)}
+  let(:product) { create(:base_product, option_types: [option_type_month,option_type_day], subscribable: true, vendor: vendor)}
+  let(:variant) { create(:base_variant, option_values: [option_value_month,option_value_day], price: 30, product: product)}
 
   before(:each) do
     variant.stock_items.first.adjust_count_on_hand(10)

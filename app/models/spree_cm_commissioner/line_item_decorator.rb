@@ -4,6 +4,7 @@ module SpreeCmCommissioner
       base.before_save :update_vendor_id
 
       base.delegate :product_type, :accommodation?, :service?, :ecommerce?, to: :product
+      base.before_create :add_due_date, if: :subscription?
     end
 
     private
@@ -14,6 +15,17 @@ module SpreeCmCommissioner
 
     def subscription?
       order.subscription.present?
+    end
+
+    def add_due_date
+      self.due_date = due_days
+    end
+
+    def due_days
+      due_date_option_type = order.subscription.variant.product.option_types.find_by(name: 'due-date')
+      due_date_option_value = order.subscription.variant.option_values.find_by(option_type_id: due_date_option_type.id)
+      day = due_date_option_value.presentation.to_i
+      from_date + day.days
     end
   end
 end

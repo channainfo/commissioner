@@ -13,7 +13,7 @@ module SpreeCmCommissioner
     # order.line_item.to_date < now
     def overdues
       @overdues ||= query_builder.where.not(payment_state: :paid)
-                                 .where('line_items.to_date < ?', current_date)
+                                 .where('line_items.due_date < ?', current_date)
     end
 
     def query_builder

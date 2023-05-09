@@ -103,6 +103,7 @@ en:
       other: "Can you please share us your account deletion reason. If something slipped through our fingers, we'd be so grateful to be aware and fix it."
 
   spree:
+    intel_phone_number: "Intel Phone Number"
     new_customer: "New Customer"
     listing_price: "Listing Price"
     length: "Length"
@@ -122,17 +123,21 @@ en:
       roles: "Role"
       subscriptions: "Subscription"
       users: "User"
-    upsupported_payment: "Unsupported event"
+      match_any: "Any of these date"
+      match_none: "None of these date"
 
   activerecord:
     attributes:
       spree/order:
+        customer_id: "Customer ID"
+        due_date: "Invoice Due Date"
+        start_date: "start date"
+        created_at: "created at"
         phone_number: "Phone number"
         payable: "Payable"
         invoice_id: "Invoice ID"
         status: "Status"
         invoice_due_date: "Invoice Due Date"
-        customer_id: "Customer ID"
         type: "Type"
         select_date: "Select Date"
     errors:
