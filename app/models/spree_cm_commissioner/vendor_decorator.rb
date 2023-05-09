@@ -61,9 +61,6 @@ module SpreeCmCommissioner
       #   }
       # end
 
-      extend Spree::DisplayMoney
-      money_methods :min_price, :max_price
-
       def lat
         stock_locations.first&.lat
       end
