@@ -6,6 +6,7 @@ FactoryBot.define do
     transient do
       price { 10.0 }
       month { 1 }
+      due_date { 5 }
     end
 
     before :create do |subscription, evaluator|
@@ -14,6 +15,7 @@ FactoryBot.define do
         vendor: subscription.customer.vendor,
         price: evaluator.price,
         month: evaluator.month,
+        due_date: evaluator.due_date,
       ).variants.last
     end
   end
