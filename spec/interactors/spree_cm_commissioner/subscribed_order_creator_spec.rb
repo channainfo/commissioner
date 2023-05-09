@@ -32,5 +32,16 @@ RSpec.describe SpreeCmCommissioner::SubscribedOrderCreator do
       expect(context.order.payments[0].amount).to eq context.order.order_total_after_store_credit
       expect(context.order.payments[0].state).to eq 'checkout'
     end
+
+    it 'create an invoice everytime a new order is created' do
+      subscription = create(:cm_subscription, customer: customer, start_date: '2023-01-02'.to_date, price: 13.0, month: 1)
+      expect(subscription.orders.size).to eq 1
+      expect(subscription.orders[0].invoice.date).to eq subscription.start_date
+
+      context = described_class.call(subscription: subscription)
+      expect(subscription.orders.size).to eq 2
+      expect(subscription.last_occurence).to eq subscription.start_date + 1.months
+      expect(subscription.orders[1].invoice.date).to eq subscription.last_occurence
+    end
   end
 end
