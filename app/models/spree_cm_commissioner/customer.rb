@@ -2,7 +2,8 @@ module SpreeCmCommissioner
   class Customer < SpreeCmCommissioner::Base
     include SpreeCmCommissioner::PhoneNumberSanitizer
 
-    before_validation :generate_sequence_number, if: :sequence_number.nil?
+    before_validation :generate_sequence_number, if: -> { sequence_number.nil? }
+    before_validation :assign_number, if: -> { number.nil? }
     before_validation :clone_billing_address, if: :use_billing?
 
     attr_accessor :use_billing
@@ -30,21 +31,30 @@ module SpreeCmCommissioner
     validates :sequence_number, presence: true, uniqueness: { scope: :vendor_id }
     validates :email, uniqueness: { scope: :vendor_id }, allow_blank: true
     validates :phone_number, uniqueness: { scope: :vendor_id }, allow_blank: true
+    validates :number, presence: true, uniqueness: { scope: :vendor_id }
 
     acts_as_paranoid
-    self.whitelisted_ransackable_attributes = %w[customer_number intel_phone_number first_name last_name taxon_id]
+    self.whitelisted_ransackable_attributes = %w[number intel_phone_number first_name last_name taxon_id]
 
     accepts_nested_attributes_for :ship_address, :bill_address
 
     def generate_sequence_number
       return if sequence_number.present?
 
-      last_customer = vendor.customers.last
+      last_customer = vendor.reload.customers.last
       self.sequence_number = last_customer.present? ? last_customer.sequence_number.to_i + 1 : 1
     end
 
     def customer_number
       "#{vendor.code}-#{sequence_number.to_s.rjust(6, '0')}"
+    end
+
+    def assign_number
+      self.number = customer_number
+    end
+
+    def update_number
+      update(number: customer_number)
     end
 
     def use_billing?

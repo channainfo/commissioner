@@ -15,9 +15,12 @@
           </div>
         </div>
         <div class="col-12 col-lg-6">
-          <div class="form-group">
-            <%= f.label :customer_number_cont, Spree.t(:id) %>
-            <%= f.text_field :customer_number_cont, class: "form-control js-filterable" %>
+          <%= f.label :number_cont, Spree.t(:customer_number) %>
+          <div class="form-group input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">VET-</span>
+            </div>
+            <%= f.text_field :number_cont, class: "form-control js-filterable" %>
           </div>
         </div>
       </div>
@@ -36,7 +39,7 @@
         </div>
         <div class="col-12 col-lg-4">
           <div class="form-group">
-            <%= f.label :taxon_id_cont, Spree.t(:taxon) %>
+            <%= f.label :taxon_id_eq, Spree.t(:type) %>
             <%= f.text_field :taxon_id_cont, class: 'form-control js-filterable' %>
           </div>
         </div>

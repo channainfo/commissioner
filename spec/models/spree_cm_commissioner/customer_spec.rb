@@ -11,25 +11,36 @@ RSpec.describe SpreeCmCommissioner::Customer, type: :model do
 
     context 'create customer number ' do
       it 'return customer increament by 1' do
-        expect(customer1.customer_number).to eq 'PPH-000001'
-        expect(customer2.customer_number).to eq 'PPH-000002'
-      end
-
-      it 'return first 3 letter of vendor_name if vendor_code is nil' do
-        expect(customer3.customer_number).to eq 'SIE-000001'
-      end
-
-      it 'return 2 different customer from 2 different vendor' do
-        expect(customer1.customer_number).to eq 'PPH-000001'
-        expect(customer3.customer_number).to eq 'SIE-000001'
-      end
-
-      it 'return 2 different customer from 2 different vendor' do
-        expect(customer1.customer_number).to eq 'PPH-000001'
-        expect(customer3.customer_number).to eq 'SIE-000001'
+        expect(customer1.number).to eq 'PPH-000001'
+        expect(customer2.number).to eq 'PPH-000002'
       end
     end
 
+      it "change customer number if vendor_code is change" do
+        vendor10 = Spree::Vendor.create(name: 'PhnomPenh Angkor',code: "PHN")
+        customer10 = SpreeCmCommissioner::Customer.create(vendor_id: vendor10.id)
+        customer20 = SpreeCmCommissioner::Customer.create(vendor_id: vendor10.id)
+        vendor10.update(code: 'PPP')
+        expect(customer10.reload.number).to eq 'PPP-000001'
+        expect(customer20.reload.number).to eq 'PPP-000002'
+        vendor10.update(code: 'PPH')
+        expect(customer10.reload.number).to eq 'PPH-000001'
+        expect(customer20.reload.number).to eq 'PPH-000002'
+      end
+
+      it 'return first 3 letter of vendor_name if vendor_code is nil' do
+        expect(customer3.number).to eq 'SIE-000001'
+      end
+
+      it 'return 2 different customer from 2 different vendor' do
+        expect(customer1.number).to eq 'PPH-000001'
+        expect(customer3.number).to eq 'SIE-000001'
+      end
+
+      it 'return 2 different customer from 2 different vendor' do
+        expect(customer1.number).to eq 'PPH-000001'
+        expect(customer3.number).to eq 'SIE-000001'
+      end
   end
 
   describe '#subscribable_variants' do
