@@ -23,22 +23,5 @@ module SpreeCmCommissioner
         )
       end
     end
-
-    def self.from_listing_prices(listing_prices)
-      listing_prices.filter_map do |listing_price|
-        if listing_price.persisted?
-          CalendarEvent.new(
-            from_date: listing_price.date,
-            to_date: listing_price.date,
-            title: Spree.t(:listing_price),
-            options: {
-              popover: 'shared/calendar/listing_price_popover',
-              classes: ['bg-success p-2'],
-              listing_price: listing_price
-            }
-          )
-        end
-      end
-    end
   end
 end
