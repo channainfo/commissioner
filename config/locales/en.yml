@@ -158,5 +158,4 @@ en:
   invoice:
     empty_info: "<b>Invoice</b> not create yet"
   device_token:
-      empty_info: 'No <b>Device_token</b> found'
-
+    empty_info: "No <b>Device_token</b> found"
