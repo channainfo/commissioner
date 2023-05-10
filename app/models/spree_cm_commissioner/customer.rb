@@ -25,6 +25,8 @@ module SpreeCmCommissioner
 
     has_many :orders, class_name: 'Spree::Order', through: :subscriptions
 
+    has_one :latest_subscription, -> { order(created_at: :desc) }, class_name: 'SpreeCmCommissioner::Subscription'
+
     has_many :variants, class_name: 'Spree::Variant', through: :subscriptions
     has_many :active_variants, class_name: 'Spree::Variant', through: :active_subscriptions, source: :variant
 
@@ -41,7 +43,7 @@ module SpreeCmCommissioner
     def generate_sequence_number
       return if sequence_number.present?
 
-      last_customer = vendor.reload.customers.last
+      last_customer = vendor.customers.last
       self.sequence_number = last_customer.present? ? last_customer.sequence_number.to_i + 1 : 1
     end
 
@@ -77,13 +79,7 @@ module SpreeCmCommissioner
             .joins("INNER JOIN cm_customers as c on c.taxon_id = pt.taxon_id AND c.id = #{id}")
             .where('spree_variants.is_master = FALSE AND spree_variants.deleted_at IS NULL')
     end
-    def subscription_count
-      subscriptions.where(status: 'active').count
-    end
 
-    def latest_subscription
-      subscriptions.last
-    end
     def fullname
       "#{first_name} #{last_name}"
     end

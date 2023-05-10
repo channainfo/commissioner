@@ -32,6 +32,9 @@ module SpreeCmCommissioner
       base.has_one  :logo, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorLogo'
       base.has_one  :web_promotion_banner, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorWebPromotionBanner'
       base.has_one  :app_promotion_banner, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorAppPromotionBanner'
+      base.has_one :stock_location, -> { where(active: true) }, class_name: 'Spree::StockLocation', dependent: :destroy
+
+      base.delegate :lat, :lon, to: :stock_location, allow_nil: true
 
       base.after_save :update_state_total_inventory, if: :saved_change_to_total_inventory?
       base.after_save :update_customer_numbers, if: :saved_change_to_code?
@@ -69,17 +72,7 @@ module SpreeCmCommissioner
       money_methods :min_price, :max_price
 
       def update_customer_numbers
-        customers.reload.each do |customer|
-          customer.update_number
-        end
-      end
-
-      def lat
-        stock_locations.first&.lat
-      end
-
-      def lon
-        stock_locations.first&.lon
+        customers.each(&:update_number)
       end
 
       def selected_place_references
@@ -132,7 +125,7 @@ module SpreeCmCommissioner
     end
 
     def generate_code
-      self.code = ( code.presence || name[0, 3].upcase)
+      self.code = (code.presence || name[0, 3].upcase)
     end
   end
 end
