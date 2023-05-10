@@ -123,8 +123,8 @@ en:
       roles: "Role"
       subscriptions: "Subscription"
       users: "User"
-      match_any: "Any of these date"
-      match_none: "None of these date"
+    upsupported_payment: "Unsupported event"
+    selected_item_not_available_on_date: "Selected item not available on %{date}"
 
   activerecord:
     attributes:
