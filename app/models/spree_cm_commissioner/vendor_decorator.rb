@@ -42,9 +42,6 @@ module SpreeCmCommissioner
       base.has_many :promoted_option_values, -> { joins(:option_type).where('option_type.promoted' => true) },
                     through: :option_value_vendors, source: :option_value
 
-      base.has_many :listing_prices, as: :price_source, class_name: 'SpreeCmCommissioner::ListingPrice', dependent: :destroy
-      base.has_many :price_rules, class_name: 'SpreeCmCommissioner::PricingModelRule', dependent: :destroy
-
       base.accepts_nested_attributes_for :nearby_places, allow_destroy: true
 
       base.has_many :service_calendars, as: :calendarable, dependent: :destroy, class_name: 'SpreeCmCommissioner::ServiceCalendar'

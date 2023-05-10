@@ -3,7 +3,6 @@ module Spree
     module Calendars
       class BaseController < Spree::Admin::ResourceController
         before_action :load_active_date
-
         rescue_from Date::Error, with: :redirect_to_current_date
 
         def redirect_to_current_date
