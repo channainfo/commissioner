@@ -14,6 +14,8 @@ module SpreeCmCommissioner
       base.belongs_to :subscription, class_name: 'SpreeCmCommissioner::Subscription', optional: true
 
       base.delegate :customer, to: :subscription, allow_nil: true
+
+      base.has_many :vendors, through: :products, class_name: 'Spree::Vendor'
     end
 
     # required only in one case,

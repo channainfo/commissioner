@@ -1,0 +1,6 @@
+<div class="card-body">
+  <div class="form-group">
+    <%= label_tag Spree.t(:vendor) %>
+    <%= select_tag("#{param_prefix}[vendor_id]", options_from_collection_for_select(Spree::Vendor.active, :id, :name, promotion_rule.vendor_id), { class: 'form-control custom-select' }) %>
+  </div>
+</div>
