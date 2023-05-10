@@ -19,6 +19,17 @@ module SpreeCmCommissioner
       end
     end
 
+    config.after_initialize do
+      Rails.application.config.spree.promotions.rules.concat [
+        SpreeCmCommissioner::Promotion::Rules::Vendor,
+        SpreeCmCommissioner::Promotion::Rules::FixedDate,
+      ]
+
+      Rails.application.config.spree.promotions.actions.concat [
+        SpreeCmCommissioner::Promotion::Actions::CreateDateSpecificItemAdjustments,
+      ]
+    end
+
     config.to_prepare(&method(:activate).to_proc)
   end
 end

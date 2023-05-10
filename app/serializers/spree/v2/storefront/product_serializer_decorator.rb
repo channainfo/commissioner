@@ -6,6 +6,7 @@ module Spree
           base.has_many :variant_kind_option_types, serializer: :option_type
           base.has_many :product_kind_option_types, serializer: :option_type
           base.has_many :promoted_option_types, serializer: :option_type
+          base.has_many :possible_promotions, serializer: SpreeCmCommissioner::V2::Storefront::PromotionSerializer
         end
       end
     end

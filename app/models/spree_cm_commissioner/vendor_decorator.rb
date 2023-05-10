@@ -5,6 +5,7 @@ module SpreeCmCommissioner
 
     def self.prepended(base)
       base.include SpreeCmCommissioner::ProductType
+      base.include SpreeCmCommissioner::VendorPromotable
 
       base.attr_accessor :service_availabilities
 
