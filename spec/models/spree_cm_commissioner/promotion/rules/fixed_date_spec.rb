@@ -13,13 +13,7 @@ RSpec.describe SpreeCmCommissioner::Promotion::Rules::FixedDate do
     )
   }
 
-  let(:normal_line_item) {
-    create(:line_item,
-      order: order,
-      quantity: 1,
-      product: product
-    )
-  }
+  let(:normal_line_item) { create(:line_item, order: order, quantity: 1) }
 
   describe '#applicable?' do
     it 'applicable when any of line items has date range present?' do
@@ -69,7 +63,7 @@ RSpec.describe SpreeCmCommissioner::Promotion::Rules::FixedDate do
       )
 
       expect(subject.line_item_eligible?(line_item_10_to_12)).to be true
-      expect(subject.eligible?(order)).to be true
+      expect(subject.eligible?(order.reload)).to be true
 
       expect(order.line_items.size).to eq 1
     end
@@ -84,7 +78,7 @@ RSpec.describe SpreeCmCommissioner::Promotion::Rules::FixedDate do
 
       expect(subject.line_item_eligible?(line_item_10_to_12)).to be true
       expect(subject.line_item_eligible?(normal_line_item)).to be false
-      expect(subject.eligible?(order)).to be false
+      expect(subject.eligible?(order.reload)).to be false
 
       expect(order.line_items.size).to eq 2
     end
@@ -99,7 +93,7 @@ RSpec.describe SpreeCmCommissioner::Promotion::Rules::FixedDate do
 
       expect(subject.line_item_eligible?(line_item_10_to_12)).to be true
       expect(subject.line_item_eligible?(normal_line_item)).to be false
-      expect(subject.eligible?(order)).to be true
+      expect(subject.eligible?(order.reload)).to be true
     end
 
     it 'not eligible when any of line items are not eligible' do
@@ -112,7 +106,7 @@ RSpec.describe SpreeCmCommissioner::Promotion::Rules::FixedDate do
 
       expect(subject.line_item_eligible?(line_item_10_to_12)).to be false
       expect(subject.line_item_eligible?(normal_line_item)).to be false
-      expect(subject.eligible?(order)).to be false
+      expect(subject.eligible?(order.reload)).to be false
     end
   end
 end
