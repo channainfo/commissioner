@@ -1,0 +1,49 @@
+module SpreeCmCommissioner
+  module Promotion
+    module Actions
+      class CreateDateSpecificItemAdjustments < Spree::PromotionAction
+        include Spree::CalculatedAdjustments
+        include Spree::AdjustmentSource
+
+        has_many :adjustments, as: :source, class_name: 'Spree::Adjustment'
+        before_validation -> { self.calculator ||= Spree::Calculator::PercentOnLineItem.new }
+
+        def self.calculators
+          spree_calculators.promotion_actions_create_item_adjustments
+        end
+
+        def perform(options = {})
+          order = options[:order]
+          promotion = options[:promotion]
+
+          create_unique_adjustments(order, order.line_items) do |line_item|
+            promotion.line_item_actionable?(order, line_item)
+          end
+        end
+
+        def compute_amount(line_item)
+          return 0 unless promotion.line_item_actionable?(line_item.order, line_item)
+
+          amounts = [line_item.amount, compute_line_item_amount(line_item)]
+          order = line_item.order
+
+          # Prevent negative order totals
+          amounts << (order.amount - order.adjustments.eligible.sum(:amount).abs) if order.adjustments.eligible.any?
+          amounts.min * -1
+        end
+
+        # compute only on eligible date
+        def compute_line_item_amount(line_item)
+          amount_per_date = line_item.amount / line_item.duration
+
+          line_item.date_range.filter_map do |date|
+            if promotion.date_eligible?(date)
+              object = Object.new.tap { |obj| obj.define_singleton_method(:amount) { amount_per_date } }
+              compute(object)
+            end
+          end.sum
+        end
+      end
+    end
+  end
+end

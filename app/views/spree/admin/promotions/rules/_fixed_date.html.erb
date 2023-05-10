@@ -1,0 +1,20 @@
+<div class="card-body">
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <%= label_tag Spree.t(:date) %>
+      <%= date_field_tag "#{param_prefix}[preferred_start_date]", promotion_rule.preferred_start_date, class: 'form-control bg-transparent datepicker' %>
+    </div>
+    <div class="form-group col-md-6">
+      <%= label_tag Spree.t(:length) %>
+      <div class="input-group">
+        <%= number_field_tag "#{param_prefix}[preferred_length]", promotion_rule.preferred_length, class: 'form-control' %>
+        <% if promotion_rule.end_rule_date.present? %>
+          <div class="input-group-append">
+            <span class="input-group-text"><%= (promotion_rule.end_rule_date) %></span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <%= select_tag("#{param_prefix}[preferred_match_policy]", options_for_select(promotion_rule.class::MATCH_POLICIES.map{|s| [Spree.t("fixed_date_rule.match_#{s}"),s] }, promotion_rule.preferred_match_policy), {class: 'form-control custom-select m-1'}) %>
+  </div>
+</div>
