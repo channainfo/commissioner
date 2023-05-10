@@ -8,6 +8,7 @@ module SpreeCmCommissioner
 
       create_order
       create_line_item
+      create_invoice
 
       context.order.create_default_payment_if_eligble
       context.order.reload
@@ -44,6 +45,10 @@ module SpreeCmCommissioner
 
     def months_count
       subscription.months_count.months
+    end
+
+    def create_invoice
+      SpreeCmCommissioner::InvoiceCreator.call(order: context.order)
     end
   end
 end
