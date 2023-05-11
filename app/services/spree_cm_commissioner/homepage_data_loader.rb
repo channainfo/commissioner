@@ -34,11 +34,12 @@ module SpreeCmCommissioner
     def call
       set_record_id
       set_homepage_banners
-      set_top_catgories
-      set_display_products
-      set_trending_categories
-      set_featured_brands
       set_featured_vendors
+      set_trending_categories
+
+      # set_top_catgories
+      # set_display_products
+      # set_featured_brands
 
       self
     end
@@ -88,8 +89,8 @@ module SpreeCmCommissioner
 
       return @featured_vendors = Spree::Vendor.none if vendor_ids.blank?
 
-      @featured_vendors = SpreeCmCommissioner::Feed::VendorProduct.call(vendor_ids, limit: 6, serialize_data: true, from_mobile: true)
-      @featured_vendor_ids = @featured_vendors.map(&:id)
+      @featured_vendors = Spree::Vendor.where(id: vendor_ids)
+      @featured_vendor_ids = @featured_vendors.pluck(:id)
     end
 
     def set_display_products

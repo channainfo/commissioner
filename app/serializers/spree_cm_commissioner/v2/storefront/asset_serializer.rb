@@ -2,9 +2,9 @@ module SpreeCmCommissioner
   module V2
     module Storefront
       class AssetSerializer < BaseSerializer
-        include ::Spree::Api::V2::ImageTransformationConcern
+        include Spree::Api::V2::ImageTransformationConcern
 
-        attributes :styles, :position, :alt, :original_url
+        attributes :alt, :original_url, :position, :styles
       end
     end
   end

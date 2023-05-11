@@ -1,10 +1,7 @@
 module Spree
   module V2
     module Storefront
-      class UserProfileSerializer < BaseSerializer
-        set_type :user_profile
-
-        attributes :styles
+      class UserProfileSerializer < SpreeCmCommissioner::V2::Storefront::AssetSerializer
       end
     end
   end
