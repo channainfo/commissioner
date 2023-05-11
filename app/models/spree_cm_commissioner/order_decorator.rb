@@ -12,8 +12,15 @@ module SpreeCmCommissioner
       base.has_one :invoice, dependent: :destroy, class_name: 'SpreeCmCommissioner::Invoice'
 
       base.belongs_to :subscription, class_name: 'SpreeCmCommissioner::Subscription', optional: true
+      base.has_many :customer, class_name: 'SpreeCmCommissioner::Customer', through: :subscription
+      base.has_many :taxon, class_name: 'Spree::Taxon', through: :customer
 
       base.delegate :customer, to: :subscription, allow_nil: true
+      base.delegate :permalink, to: :taxon, prefix: true
+      base.delegate :sequence_number, to: :customer, prefix: true
+
+      base.whitelisted_ransackable_associations |= %w[customer taxon]
+      base.whitelisted_ransackable_attributes |= %w[sequence_number permalink payment_state]
     end
 
     # required only in one case,

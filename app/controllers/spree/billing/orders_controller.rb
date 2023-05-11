@@ -7,7 +7,7 @@ module Spree
       protected
 
       def scope
-        @subscription&.orders || @customer&.orders || current_vendor&.subscription_orders
+        @subscription&.orders || @customer&.orders || current_vendor&.subscription_orders || @customer&.customer_numbers
       end
 
       # @overrided

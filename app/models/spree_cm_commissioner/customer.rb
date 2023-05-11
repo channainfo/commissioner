@@ -33,7 +33,8 @@ module SpreeCmCommissioner
 
     acts_as_paranoid
 
-    self.whitelisted_ransackable_attributes = %w[id intel_phone_number first_name last_name taxon]
+    self.whitelisted_ransackable_associations = %w[taxon]
+    self.whitelisted_ransackable_attributes = %w[id intel_phone_number first_name last_name permalink sequence_number]
 
     accepts_nested_attributes_for :ship_address, :bill_address
 

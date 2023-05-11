@@ -1,18 +1,17 @@
 <% content_for :table_filter do %>
   <div data-hook="billing_orders_index_search">
 
-    <%= search_form_for [:billing, @search] do |f| %>
+    <%= search_form_for [:billing, @search], url: spree.billing_orders_path do |f| %>
     <div class="row">
 
-      <div class="date-range-filter col-12 col-lg-4">
+      <div class="date-range-filter col-12 col-lg-6">
         <div class="form-group">
-          <%= label_tag :q_created_at_gt, Spree.t(:date_range) %>
           <div class="row pb-0">
             <div class="col-12 col-md-6 mb-3 mb-md-0">
+              <%= label_tag :q_created_at_gt, I18n.t(:start_date, scope: 'activerecord.attributes.spree/order') %>
               <div class="input-group datePickerFrom"
                   data-wrap="true"
                   data-alt-format="<%= Spree.t(:fpr_human_friendly_date_format, scope: 'date_picker', default: 'M j, Y') %>"
-                  <%# Check if params[:q] exists and has the necessary keys %>
                   <% if params[:q] && params[:q][:created_at_lt].present? %>
                     data-max-date="<%= params[:q][:created_at_lt] %>"
                   <% end %>>
@@ -25,6 +24,7 @@
               </div>
             </div>
             <div class="col-12 col-md-6 mt-3 mt-md-0">
+              <%= label_tag :q_created_at_gt, I18n.t(:due_date, scope: 'activerecord.attributes.spree/order') %>
               <div class="input-group datePickerTo"
                   data-wrap="true"
                   data-alt-format="<%= Spree.t(:fpr_human_friendly_date_format, scope: 'date_picker', default: 'M j, Y') %>"
@@ -43,34 +43,26 @@
         </div>
       </div>
 
-      <div class="col-12 col-lg-4">
+      <div class="col-12 col-lg-6">
         <div class="form-group">
-          <%= label_tag :q_number_cont, I18n.t(:phone_number, scope: 'activerecord.attributes.spree/order') %>
-          <%= f.text_field :number_cont, class: 'form-control js-quick-search-target js-filterable' %>
+          <%= f.label :customer_sequence_number_cont, I18n.t(:customer_id, scope: 'activerecord.attributes.spree/order') %>
+          <%= f.text_field :customer_sequence_number_cont, class: "form-control js-quick-search-target js-filterable" %>
         </div>
       </div>
-
     </div>
 
     <div class="row">
 
-      <div class="col-12 col-lg-4">
-       <div class="taxon-products-view">
-        <div id="taxonSearch" class="form-group">
-          <%= label_tag :q_taxon_cont, I18n.t(:type, scope: 'activerecord.attributes.spree/order') %>
-          <%= select_tag :taxon_id, nil, class: 'd-block w-100' %>
-        </div>
-
-        <ul id="taxon_products" class="taxon row"></ul>
-
-        <%= render partial: "spree/admin/products/autocomplete", formats: :js %>
-      </div>
-
-      </div>
-
-      <div class="col-12 col-lg-4">
+      <div class="col-12 col-lg-6">
         <div class="form-group">
-          <%= label_tag :q_payment_state_eq, Spree.t(:Status) %>
+          <%= f.label :taxon_permalink_cont, I18n.t(:taxon, scope: 'activerecord.attributes.spree/order') %>
+          <%= f.select :taxon_permalink_cont, Spree::Taxon.all.map{|s| [s.name, s.permalink]}, {include_blank: true}, class: 'select2-clear js-filterable' %>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6">
+        <div class="form-group">
+          <%= f.label :q_payment_state_eq, I18n.t(:status, scope: 'activerecord.attributes.spree/order') %>
           <%= f.select :payment_state_eq, Spree::Order::PAYMENT_STATES.map {|s| [Spree.t("payment_states.#{s}"), s]}, { include_blank: true }, class: 'select2-clear js-filterable' %>
         </div>
       </div>
