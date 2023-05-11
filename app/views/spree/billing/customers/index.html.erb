@@ -48,6 +48,7 @@
         <%= button Spree.t(:search), 'search.svg' %>
       </div>
     <% end %>
+    <%=  %>
   </div>
 <% end %>
 <% if @customers.any? %>
@@ -71,10 +72,7 @@
             <%= sort_link @search, :created_at, Spree.t(:created_at),{},{title:'created_at_title'} %>
           </th>
           <th>
-            <%= sort_link @search, :subscription_count, Spree.t(:subscription),{},{title:'susbcriptions_count_title'} %>
-          </th>
-          <th>
-            <%= sort_link @search, :latest_subscription, Spree.t(:latest_subscription), {},{title: 'latest_subscription_title'} %>
+            <%= sort_link @search, :active_subscriptions_count, Spree.t(:subscription),{},{title:'active_subscriptions_count_title'} %>
           </th>
           <th data-hook="admin_customers_index_header_actions" class="actions"></th>
         </tr>
@@ -98,18 +96,11 @@
               <%= customer.created_at.to_date %>
             </td>
             <td>
-              <% @badge_class = "badge-active" if customer.active_subscriptions.count > 0 %>
-              <% @badge_class = "badge-inactive" if customer.active_subscriptions.count == 0 %>
+              <% @badge_class = "badge-active" if customer.active_subscriptions_count > 0 %>
+              <% @badge_class = "badge-inactive" if customer.active_subscriptions_count == 0 %>
               <%= content_tag(:strong, class: "badge #{@badge_class} ") do %>
-                <%= customer.active_subscriptions.count %>
+                <%= customer.active_subscriptions_count %>
               <% end %>
-            </td>
-            <td>
-              <% if customer.latest_subscription.present? %>
-                <%= link_to customer.latest_subscription.variant.sku, edit_billing_customer_subscription_path(customer.id, customer.latest_subscription.id) %>
-              <% else %>
-                <%= 'none' %>
-              <% end  %>
             </td>
             <td data-hook="admin_customers_index_row_actions" class="actions">
               <span class="d-flex justify-content-end">
