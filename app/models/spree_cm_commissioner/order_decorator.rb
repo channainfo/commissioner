@@ -5,6 +5,8 @@ module SpreeCmCommissioner
 
       base.scope :subscription, -> { where.not(subscription_id: nil) }
 
+      base.after_save :send_order_complete_notification, if: :state_changed_to_complete?
+
       base.before_create :link_by_phone_number
       base.before_create :associate_customer
 
@@ -74,6 +76,14 @@ module SpreeCmCommissioner
 
       self.bill_address ||= customer.bill_address.try(:clone)
       self.ship_address ||= customer.ship_address.try(:clone)
+    end
+
+    def send_order_complete_notification
+      SpreeCmCommissioner::OrderCompleteNotificationSender.call(order: self)
+    end
+
+    def state_changed_to_complete?
+      saved_change_to_state? && state == 'complete'
     end
   end
 end
