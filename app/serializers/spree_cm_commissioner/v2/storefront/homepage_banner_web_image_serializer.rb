@@ -1,7 +1,7 @@
 module SpreeCmCommissioner
   module V2
     module Storefront
-      class TaxonWebBannerSerializer < AssetSerializer
+      class HomepageBannerWebImageSerializer < AssetSerializer
       end
     end
   end

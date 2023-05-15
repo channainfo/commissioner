@@ -47,7 +47,7 @@ RSpec.describe Spree::V2::Storefront::VendorSerializer, type: :serializer do
       }
 
       it { expect(subject[:included].select {|e| e[:type] == :vendor_logo}.size).to eq 1}
-      it { expect(subject[:included].select {|e| e[:type] == :photo}.size).to eq 1}
+      it { expect(subject[:included].select {|e| e[:type] == :vendor_photo}.size).to eq 1}
       it { expect(subject[:included].select {|e| e[:type] == :stock_location}.size).to eq 1}
       it { expect(subject[:included].select {|e| e[:type] == :nearby_place}.size).to eq 1}
       it { expect(subject[:included].select {|e| e[:type] == :place}.size).to eq 1}

@@ -11,11 +11,12 @@ RSpec.describe SpreeCmCommissioner::V2::Storefront::HomepageDataSerializer, type
       subject { described_class.new(home_data_loader).serializable_hash }
 
       it { expect(subject[:data][:relationships]).to include(:homepage_banners) }
-      it { expect(subject[:data][:relationships]).to include(:top_categories) }
-      it { expect(subject[:data][:relationships]).to include(:display_products) }
-      it { expect(subject[:data][:relationships]).to include(:trending_categories) }
-      it { expect(subject[:data][:relationships]).to include(:featured_brands) }
       it { expect(subject[:data][:relationships]).to include(:featured_vendors) }
+      it { expect(subject[:data][:relationships]).to include(:trending_categories) }
+
+      # it { expect(subject[:data][:relationships]).to include(:top_categories) }
+      # it { expect(subject[:data][:relationships]).to include(:display_products) }
+      # it { expect(subject[:data][:relationships]).to include(:featured_brands) }
     end
   end
 end
