@@ -1,10 +1,7 @@
 module Spree
   module V2
     module Storefront
-      class VendorLogoSerializer < BaseSerializer
-        set_type :vendor_logo
-
-        attributes :styles
+      class VendorLogoSerializer < SpreeCmCommissioner::V2::Storefront::AssetSerializer
       end
     end
   end

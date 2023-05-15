@@ -1,12 +1,7 @@
 module Spree
   module V2
     module Storefront
-      class VendorPhotoSerializer < BaseSerializer
-        include ::Spree::Api::V2::ImageTransformationConcern
-
-        set_type :photo
-
-        attributes :styles, :position, :alt, :original_url
+      class VendorPhotoSerializer < SpreeCmCommissioner::V2::Storefront::AssetSerializer
       end
     end
   end

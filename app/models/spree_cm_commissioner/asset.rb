@@ -9,7 +9,7 @@ module SpreeCmCommissioner
         width, height = size[/(\d+)x(\d+)/].split('x')
 
         {
-          url: polymorphic_path(attachment.variant(resize: size), only_path: true),
+          url: url_for(attachment.variant(resize_to_limit: [width.to_i, height.to_i])),
           width: width,
           height: height
         }

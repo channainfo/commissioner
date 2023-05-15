@@ -103,6 +103,7 @@ en:
       other: "Can you please share us your account deletion reason. If something slipped through our fingers, we'd be so grateful to be aware and fix it."
 
   spree:
+    new_homepage_banner: "Add New Banner"
     intel_phone_number: "Intel Phone Number"
     new_customer: "New Customer"
     listing_price: "Listing Price"
@@ -158,5 +159,4 @@ en:
   invoice:
     empty_info: "<b>Invoice</b> not create yet"
   device_token:
-      empty_info: 'No <b>Device_token</b> found'
-
+    empty_info: "No <b>Device_token</b> found"

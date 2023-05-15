@@ -59,7 +59,13 @@ Spree::Core::Engine.add_routes do
       end
     end
 
-    resource :home_page_feed, only: %i[edit update], controller: :home_page_feed
+    resource :homepage_feed, only: %i[edit update], controller: :homepage_feed do
+      resources :homepage_banner do
+        collection do
+          post :update_positions
+        end
+      end
+    end
   end
 
   namespace :billing do

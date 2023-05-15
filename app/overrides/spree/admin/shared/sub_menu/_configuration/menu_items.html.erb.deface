@@ -1,3 +1,4 @@
 <!-- insert_top "[data-hook='admin_configurations_sidebar_menu']" -->
 
+<%= configurations_sidebar_menu_item(Spree.t(:homepage), spree.edit_admin_homepage_feed_path) %>
 <%= configurations_sidebar_menu_item(Spree.t(:icons), spree.admin_vectors_icons_path) if can? :manage, Spree::Product %>
