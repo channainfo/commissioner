@@ -11,6 +11,7 @@ module SpreeCmCommissioner
       base.has_many :role_permissions, through: :spree_roles, class_name: 'SpreeCmCommissioner::RolePermission'
       base.has_many :permissions, through: :role_permissions, class_name: 'SpreeCmCommissioner::Permission'
       base.has_many :device_tokens, class_name: 'SpreeCmCommissioner::DeviceToken'
+      base.has_many :notifications, class_name: 'SpreeCmCommissioner::Notification', as: :recipient, dependent: :destroy
 
       base.has_one :profile, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::UserProfile'
 
@@ -28,6 +29,29 @@ module SpreeCmCommissioner
           where(login: login)
         end
       end
+    end
+
+    def device_tokens?
+      device_tokens.any?
+    end
+
+    def ensure_unique_database_delivery_method(attributes)
+      recipient = self
+
+      options = {
+        recipient_id: recipient.id,
+        notificable_id: attributes[:notificable].id,
+        notificable_type: attributes[:notificable].class.to_s
+      }
+
+      notification = recipient.notifications.where(options).first_or_initialize
+
+      return notification if notification.persisted?
+
+      notification.assign_attributes(attributes)
+      notification.save!
+
+      notification
     end
   end
 end

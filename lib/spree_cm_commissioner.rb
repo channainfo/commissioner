@@ -15,6 +15,7 @@ require 'elasticsearch'
 require 'interactor'
 require 'phonelib'
 require 'jwt'
+require 'noticed'
 
 require 'simple_calendar'
 require 'activerecord_json_validator'
