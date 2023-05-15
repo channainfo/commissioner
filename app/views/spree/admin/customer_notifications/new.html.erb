@@ -1,0 +1,17 @@
+<% content_for :page_title do %>
+  <%= page_header_back_button spree.admin_customer_notifications_path %>
+  <%= Spree.t(:new_customer_notification) %>
+<% end %>
+
+<div data-hook="admin_user_new_form_header">
+  <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @user } %>
+</div>
+
+<div data-hook="admin_customer_notifications_new_form">
+  <%= form_for [:admin, @object], url: { action: 'create'} do |f| %>
+    <%= render partial: 'form', locals: { f: f } %>
+    <div data-hook="admin_customer_notification_new_form_buttons">
+      <%= render partial: 'spree/admin/shared/new_resource_links' %>
+    </div>
+  <% end %>
+</div>

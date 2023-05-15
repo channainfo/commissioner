@@ -1,0 +1,51 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:customer_notification) %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:add_customer_notification), new_admin_customer_notification_path, class: "btn-success", icon: 'add.svg', id: 'admin_new_customer_notification_link' %>
+<% end if can? :create, SpreeCmCommissioner::CustomerNotification %>
+
+<% if @notifications.any? %>
+<div class="table-responsive border rounded bg-white">
+  <table class="table" id="listing_notifications">
+    <thead>
+      <tr data-hook="admin_notifications_index_headers">
+        <th scope="col"><%= Spree.t("customer_notification.title") %></th>
+        <th scope="col"><%= Spree.t("customer_notification.excerpt") %></th>
+        <th scope="col"><%= Spree.t("customer_notification.body") %></th>
+        <th scope="col"><%= Spree.t("customer_notification.notification_type") %></th>
+        <th scope="col"><%= Spree.t("customer_notification.url") %></th>
+        <th scope="col"><%= Spree.t("customer_notification.started_at") %></th>
+        <th scope="col"><%= Spree.t("customer_notification.created_at") %></th>
+        <th scope="col" data-hook="admin_notifications_index_header_actions" class="actions"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @notifications.each do |notification| %>
+          <tr data-hook="admin_notifications_index_rows" class="<%= cycle('odd', 'even') %>">
+            <td><%= link_to notification.try(:title), edit_admin_customer_notification_url(notification) %></td>
+            <td><%= truncate(notification.try(:excerpt).to_plain_text) %></td>
+            <td><%= truncate(notification.try(:body).to_plain_text) %></td>
+            <td><%= notification.notification_type %></td>
+            <td><%= notification.url %></td>
+            <td><%= notification.started_at %></td>
+            <td><%= notification.created_at %></td>
+            <td data-hook="admin_notifications_index_row_actions">
+              <span class="d-flex justify-content-end">
+                <%= link_to_edit notification, url:edit_admin_customer_notification_url(notification) , no_text: true, class: 'edit' if can?(:edit, notification) %>
+                &nbsp;
+                <%= link_to_delete notification, url:admin_customer_notification_url(notification) ,no_text: true if can?(:delete, notification) %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+    </tbody>
+  </table>
+</div>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+    <%= link_to Spree.t(:add_one), new_admin_customer_notification_url if can?(:create, SpreeCmCommissioner::CustomerNotification) %>!
+  </div>
+<% end %>
+
