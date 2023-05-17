@@ -34,7 +34,13 @@ Spree::Core::Engine.add_routes do
       end
     end
 
-    resources :customer_notifications
+    resources :customer_notifications do
+      resources :feature_images do
+        collection do
+          post :update_positions
+        end
+      end
+    end
 
     resources :users do
       resources :device_tokens

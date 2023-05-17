@@ -1,10 +1,7 @@
-<% content_for :page_title do %>
-  <%= page_header_back_button spree.admin_customer_notifications_url %>
-  <%= @object.title %>
-<% end %>
+<%= render partial: 'spree/admin/shared/customer_notification_tabs', locals: { current: :details , object: @object } %>
 
 <div data-hook="admin_customer_notification_edit_form_header">
-  <%= render partial: 'spree/admin/shared/error_messages', locals: { target:@object} %>
+  <%= render partial: 'spree/admin/shared/error_messages', locals: { target:@object } %>
 </div>
 <div data-hook="admin_customer_notification_edit_form">
   <%= form_with model: @object, url: { action: 'update' } do |f| %>
@@ -14,5 +11,4 @@
     </div>
   <% end %>
 </div>
-
 

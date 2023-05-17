@@ -1,0 +1,24 @@
+
+<% content_for :page_title do %>
+  <%= page_header_back_button spree.admin_customer_notifications_url %>
+  <%= object.title %>
+<% end %>
+
+<% content_for :sidebar do %>
+  <ul class="nav flex-column nav-pills" data-hook="admin_customer_notification_tabs">
+    <%= content_tag :li do %>
+      <%= link_to_with_icon 'edit.svg',
+        Spree.t(:details),
+        edit_admin_customer_notification_url(object),
+        class: "nav-link #{'active' if current == :details}" %>
+
+    <% end if can?(:admin, SpreeCmCommissioner::CustomerNotification) %>
+      <%= content_tag :li do %>
+        <%= link_to_with_icon 'images.svg',
+          Spree.t(:images),
+          admin_customer_notification_feature_images_url(object),
+          class: "nav-link #{'active' if current == :images}"
+      %>
+    <% end if can?(:admin, SpreeCmCommissioner::FeatureImage) %>
+  </ul>
+<% end%>
