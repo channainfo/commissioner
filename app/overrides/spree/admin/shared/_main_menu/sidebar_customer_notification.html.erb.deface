@@ -1,0 +1,7 @@
+<!-- insert_after "#sidebarUser" -->
+
+<% if can? :admin, SpreeCmCommissioner::CustomerNotification %>
+    <ul class="nav nav-sidebar" id="sidebarCustomerNotificaton">
+      <%= tab :customer_notification, url: spree.admin_customer_notifications_path, icon: 'bell' %>
+    </ul>
+<% end %>
