@@ -8,10 +8,6 @@ module SpreeCmCommissioner
         has_many :adjustments, as: :source, class_name: 'Spree::Adjustment'
         before_validation -> { self.calculator ||= Spree::Calculator::PercentOnLineItem.new }
 
-        def self.calculators
-          spree_calculators.promotion_actions_create_item_adjustments
-        end
-
         def perform(options = {})
           order = options[:order]
           promotion = options[:promotion]
@@ -42,6 +38,13 @@ module SpreeCmCommissioner
               compute(object)
             end
           end.sum
+        end
+
+        def self.calculators
+          [
+            Spree::Calculator::PercentOnLineItem,
+            Spree::Calculator::FlatRate
+          ]
         end
       end
     end

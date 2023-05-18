@@ -133,6 +133,15 @@ en:
     auto_apply: "Auto apply"
     auto_apply_info: "Path & code will be removed"
 
+  spree_cm_commissioner:
+    up_to: "Up to %{suffix}"
+    advertised_caculator:
+      percent_off: "%{percent}% Off"
+      amount_off: "%{amount} Off"
+      amount_off_on_eligible_items: "%{amount} Off on eligible items"
+      percent_off_on_minimum_amount: "%{percent}% Off on minimum %{minimum_amount}"
+      amount_off_on_minimum_amount: "%{amount} Off on minimum %{minimum_amount}"
+
   activerecord:
     attributes:
       spree/order:

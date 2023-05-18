@@ -2,9 +2,11 @@ module Spree
   module V2
     module Storefront
       class AccommodationSerializer < VendorSerializer
+        set_type :accommodation
+
         has_one :state
 
-        attributes :total_inventory, :service_availabilities
+        attributes :total_inventory, :service_availabilities, :promotions
 
         attribute :total_booking do |vendor|
           vendor.respond_to?(:total_booking) ? vendor.total_booking : 0

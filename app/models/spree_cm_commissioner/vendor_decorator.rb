@@ -8,6 +8,7 @@ module SpreeCmCommissioner
       base.include SpreeCmCommissioner::VendorPromotable
 
       base.attr_accessor :service_availabilities
+      base.attr_accessor :promotions
 
       base.before_save :generate_code
 
@@ -116,6 +117,14 @@ module SpreeCmCommissioner
       def update_state_total_inventory
         SpreeCmCommissioner::StateJob.perform_later(state_id) unless state_id.nil?
       end
+    end
+
+    def amount
+      min_price
+    end
+
+    def currency
+      Spree::Store.default.default_currency
     end
 
     def selected_option_value_vendors_ids
