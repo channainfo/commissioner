@@ -17,13 +17,16 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCronExecutor do
   before(:each) do
     variant.stock_items.first.adjust_count_on_hand(10)
 
-    customer = SpreeCmCommissioner::Customer.new(vendor: vendor, phone_number: "0962200288", user: user)
-    customer2 = SpreeCmCommissioner::Customer.new(vendor: vendor, phone_number: "0972200288", user: user)
-    customer3 = SpreeCmCommissioner::Customer.new(vendor: vendor, phone_number: "0982200288", user: user)
+    customer = create(:cm_customer, vendor: vendor, phone_number: "0962200288", user: user)
+    vendor.reload
+    customer2 = create(:cm_customer, vendor: vendor, phone_number: "0972200288", user: user)
+    vendor.reload
+    customer3 = create(:cm_customer, vendor: vendor, phone_number: "0982200288", user: user)
+    vendor.reload
 
-    subscription1 = SpreeCmCommissioner::Subscription.create(variant: variant, start_date: '2021-01-01', customer: customer)
-    subscription2 = SpreeCmCommissioner::Subscription.create(variant: variant, start_date: '2021-02-01', customer: customer2)
-    subscription3 = SpreeCmCommissioner::Subscription.create(variant: variant, start_date: '2021-03-01', customer: customer3)
+    subscription1 = SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: '2021-01-01', customer: customer)
+    subscription2 = SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: '2021-02-01', customer: customer2)
+    subscription3 = SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: '2021-03-01', customer: customer3)
   end
 
   describe ".call" do

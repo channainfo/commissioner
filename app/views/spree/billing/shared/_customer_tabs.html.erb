@@ -1,8 +1,7 @@
 <% content_for :page_title do %>
   <%= page_header_back_button spree.billing_customers_path %>
-  <%= @customer.email %>
+  <%= @customer.fullname %>
 <% end %>
-
 <% content_for :page_tabs do %>
   <li class="nav-item">
     <%= link_to_with_icon 'person.svg',
@@ -11,7 +10,6 @@
       class: "nav-link #{'active' if current == :account}" %>
   </li>
 <% end %>
-
 <% content_for :page_tabs do %>
   <li class="nav-item">
     <%= link_to_with_icon 'tag.svg',
@@ -20,7 +18,6 @@
       class: "nav-link #{'active' if current == :subscriptions}" %>
   </li>
 <% end %>
-
 <% content_for :page_tabs do %>
   <li class="nav-item">
     <%= link_to_with_icon 'pin-map.svg',

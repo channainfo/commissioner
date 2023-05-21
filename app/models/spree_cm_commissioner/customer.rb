@@ -2,7 +2,8 @@ module SpreeCmCommissioner
   class Customer < SpreeCmCommissioner::Base
     include SpreeCmCommissioner::PhoneNumberSanitizer
 
-    before_validation :generate_sequence_number, if: :sequence_number.nil?
+    before_validation :generate_sequence_number, if: -> { sequence_number.nil? }
+    before_validation :assign_number, if: -> { number.nil? }
     before_validation :clone_billing_address, if: :use_billing?
 
     attr_accessor :use_billing
@@ -24,14 +25,18 @@ module SpreeCmCommissioner
 
     has_many :orders, class_name: 'Spree::Order', through: :subscriptions
 
+    has_one :latest_subscription, -> { order(created_at: :desc) }, class_name: 'SpreeCmCommissioner::Subscription'
+
     has_many :variants, class_name: 'Spree::Variant', through: :subscriptions
     has_many :active_variants, class_name: 'Spree::Variant', through: :active_subscriptions, source: :variant
 
     validates :sequence_number, presence: true, uniqueness: { scope: :vendor_id }
     validates :email, uniqueness: { scope: :vendor_id }, allow_blank: true
     validates :phone_number, uniqueness: { scope: :vendor_id }, allow_blank: true
+    validates :number, presence: true, uniqueness: { scope: :vendor_id }
 
-    self.whitelisted_ransackable_attributes = %w[email intel_phone_number first_name last_name]
+    acts_as_paranoid
+    self.whitelisted_ransackable_attributes = %w[number intel_phone_number first_name last_name taxon_id]
 
     accepts_nested_attributes_for :ship_address, :bill_address
 
@@ -44,6 +49,14 @@ module SpreeCmCommissioner
 
     def customer_number
       "#{vendor.code}-#{sequence_number.to_s.rjust(6, '0')}"
+    end
+
+    def assign_number
+      self.number = customer_number
+    end
+
+    def update_number
+      update(number: customer_number)
     end
 
     def use_billing?
@@ -65,6 +78,10 @@ module SpreeCmCommissioner
             .joins('INNER JOIN spree_products_taxons as pt ON pt.product_id = p.id')
             .joins("INNER JOIN cm_customers as c on c.taxon_id = pt.taxon_id AND c.id = #{id}")
             .where('spree_variants.is_master = FALSE AND spree_variants.deleted_at IS NULL')
+    end
+
+    def fullname
+      "#{first_name} #{last_name}"
     end
   end
 end
