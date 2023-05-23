@@ -22,7 +22,7 @@ module Spree
         load_subscription
 
         @search = scope.ransack(params[:q])
-        @collection = @search.result.page(page).per(per_page)
+        @collection = @search.result.includes(:subscription, :customer, :invoice).page(page).per(per_page)
       end
 
       def load_resource_instance

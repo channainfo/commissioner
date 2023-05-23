@@ -21,6 +21,7 @@ module SpreeCmCommissioner
     end
 
     after_create :create_order
+    after_commit :update_customer_active_subscriptions_count
 
     def create_order
       SpreeCmCommissioner::SubscribedOrderCreator.call(subscription: self)
@@ -61,6 +62,10 @@ module SpreeCmCommissioner
       return start_date if last_occurence.blank?
 
       last_occurence + months_count.months
+    end
+
+    def update_customer_active_subscriptions_count
+      customer.update(active_subscriptions_count: customer.subscriptions.where(status: 'active').count)
     end
   end
 end
