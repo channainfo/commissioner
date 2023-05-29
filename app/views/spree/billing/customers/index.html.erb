@@ -18,7 +18,7 @@
           <%= f.label :number_cont, Spree.t(:customer_number) %>
           <div class="form-group input-group mb-3">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="basic-addon1">VET-</span>
+              <span class="input-group-text" id="basic-addon1"><%= @current_vendor.code %>-</span>
             </div>
             <%= f.text_field :number_cont, class: "form-control js-filterable" %>
           </div>
@@ -96,10 +96,10 @@
               <%= customer.created_at.to_date %>
             </td>
             <td>
-              <% @badge_class = "badge-active" if customer.active_subscriptions_count > 0 %>
-              <% @badge_class = "badge-inactive" if customer.active_subscriptions_count == 0 %>
+              <% @badge_class = "badge-active" if customer.active_subscriptions.count > 0 %>
+              <% @badge_class = "badge-inactive" if customer.active_subscriptions.count == 0 %>
               <%= content_tag(:strong, class: "badge #{@badge_class} ") do %>
-                <%= customer.active_subscriptions_count %>
+                <%= customer.active_subscriptions.count %>
               <% end %>
             </td>
             <td data-hook="admin_customers_index_row_actions" class="actions">
