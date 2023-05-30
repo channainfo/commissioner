@@ -77,7 +77,12 @@ Spree::Core::Engine.add_routes do
   end
 
   namespace :billing do
-    resource :report, only: %i[show], controller: :report
+    resource :report, only: %i[show], controller: :report do
+      get '/paid', to: 'report#paid', as: :paid
+      get '/balance_due', to: 'report#balance_due', as: :balance_due
+      get '/overdue', to: 'report#overdue', as: :overdue
+      get '/active_subscribers', to: 'report#active_subscribers', as: :active_subscribers
+    end
     resources :customers do
       resources :subscriptions
       resources :addresses

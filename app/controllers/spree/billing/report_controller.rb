@@ -1,8 +1,8 @@
 module Spree
   module Billing
     class ReportController < Spree::Billing::BaseController
-      before_action -> { parse_date!(params[:from_date]) }
-      before_action -> { parse_date!(params[:to_date]) }
+      before_action -> { parse_date!(params[:from_date]) }, only: [:show]
+      before_action -> { parse_date!(params[:to_date]) }, only: [:show]
 
       rescue_from Date::Error, with: :redirect_to_default_params
       helper_method :permitted_report_attributes
@@ -12,6 +12,26 @@ module Spree
 
         @search = searcher.ransack(params[:q])
         @orders = @search.result.page(page).per(per_page)
+      end
+
+      def paid
+        @search = Spree::Order.subscription.ransack(params[:q])
+        @orders = @search.result.where(payment_state: 'paid').page(page).per(per_page)
+      end
+
+      def balance_due
+        @search = Spree::Order.subscription.ransack(params[:q])
+        @orders = @search.result.where(payment_state: 'balance_due').page(page).per(per_page)
+      end
+
+      def overdue
+        @search = Spree::Order.subscription.joins(:line_items).where('spree_line_items.due_date < ?', Time.zone.today).ransack(params[:q])
+        @orders = @search.result.page(page).per(per_page)
+      end
+
+      def active_subscribers
+        @search = SpreeCmCommissioner::Customer.where('active_subscriptions_count > ?', 0).ransack(params[:q])
+        @customers = @search.result.page(page).per(per_page)
       end
 
       private
