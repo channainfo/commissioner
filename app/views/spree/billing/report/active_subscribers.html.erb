@@ -1,0 +1,73 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:active_subscribers) %>
+<% end %>
+
+<% if @customers.any? %>
+  <div class="table-responsive border rounded bg-white mb-3">
+    <table class="table" id="listing_customers" data-hook>
+      <thead class="text-muted">
+        <tr data-hook="admin_customers_index_headers">
+          <th>
+            <%= sort_link @search, :id, Spree.t(:id), {}, {title:"id_title"} %>
+          </th>
+          <th>
+            <%= sort_link @search, :full_name, Spree.t(:full_name), {}, {title: 'fullname_title'} %>
+          </th>
+          <th>
+            <%= sort_link @search, :intel_phone_number, Spree.t(:intel_phone_number), {}, {title: 'intel_phone_number_title'} %>
+          </th>
+          <th>
+            <%= sort_link @search, :taxon_id, Spree.t(:type), {}, {title: 'taxon_title'} %>
+          </th>
+          <th>
+            <%= sort_link @search, :created_at, Spree.t(:created_at),{},{title:'created_at_title'} %>
+          </th>
+          <th>
+            <%= sort_link @search, :active_subscriptions_count, Spree.t(:subscription),{},{title:'active_subscriptions_count_title'} %>
+          </th>
+          <th data-hook="admin_customers_index_header_actions" class="actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @customers.each do |customer| %>
+          <tr id="<%= spree_dom_id customer %>" data-hook="admin_customers_index_rows">
+            <td>
+              <%= link_to customer.customer_number, edit_billing_customer_path(customer) %>
+            </td>
+            <td>
+              <%= link_to customer.fullname, edit_billing_customer_path(customer) %>
+            </td>
+            <td>
+              <%= customer.intel_phone_number %>
+            </td>
+            <td class='taxon'>
+              <%= customer.taxon.name %>
+            </td>
+            <td>
+              <%= customer.created_at.to_date %>
+            </td>
+            <td>
+              <% @badge_class = "badge-active" if customer.active_subscriptions_count > 0 %>
+              <% @badge_class = "badge-inactive" if customer.active_subscriptions_count == 0 %>
+              <%= content_tag(:strong, class: "badge #{@badge_class} ") do %>
+                <%= customer.active_subscriptions_count %>
+              <% end %>
+            </td>
+            <td data-hook="admin_customers_index_row_actions" class="actions">
+              <span class="d-flex justify-content-end">
+                <%= link_to_edit customer ,url: edit_billing_customer_path(customer) ,no_text: true if can?(:edit, customer) %>
+                <%= link_to_delete customer,url: billing_customer_path(customer), no_text: true if can?(:delete, customer) %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+<% if @customers.empty? %>
+  <div class="text-center no-objects-found m-5">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(SpreeCmCommissioner::Customer)) %><% if can? :create, SpreeCmCommissioner::Customer %>,
+      <%= link_to(Spree.t(:add_one), new_billing_customer_path) %>!<% end %>
+  </div>
+<% end %>
