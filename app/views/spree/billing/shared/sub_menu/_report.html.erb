@@ -1,0 +1,7 @@
+<ul data-hook="billing_report_sidebar_menu" class="collapse nav nav-pills nav-stacked" id="sidebar-report">
+  <%= configurations_sidebar_menu_item(Spree.t(:report), spree.billing_report_path(@report)) %>
+  <%= configurations_sidebar_menu_item(Spree.t(:paid), spree.paid_billing_report_path(@report)) %>
+  <%= configurations_sidebar_menu_item(Spree.t(:balance_due), spree.balance_due_billing_report_path(@report)) %>
+  <%= configurations_sidebar_menu_item(Spree.t(:overdue), spree.overdue_billing_report_path(@report)) %>
+  <%= configurations_sidebar_menu_item(Spree.t(:active_subscribers), spree.active_subscribers_billing_report_path(@report)) %>
+</ul>

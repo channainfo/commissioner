@@ -12,7 +12,7 @@
   </div>
   <% if spree_current_user.has_spree_role?('admin') %>
     <ul class="nav nav-sidebar" id="sidebarReport">
-      <%= tab :report, url: billing_report_path, icon: 'pie-chart-fill.svg' %>
+      <%= billing_main_menu_tree Spree.t('billing.report'), icon: "pie-chart-fill.svg", sub_menu:"report", url: "#sidebar-report" %>
     </ul>
     <ul class="nav nav-sidebar" id="sidebarCustomer">
       <%= tab :customers, url: billing_customers_path, icon: 'people-fill.svg' %>
@@ -21,12 +21,12 @@
       <%= tab :orders, url: billing_orders_path, icon: 'inbox-fill.svg' %>
     </ul>
     <ul class="nav nav-sidebar" id="sidebarSetting">
-      <%= billing_main_menu_tree Spree.t('billing.settings'), icon: "gear-fill.svg", url: "#sidebar-setting" %>
+      <%= billing_main_menu_tree Spree.t('billing.settings'), icon: "gear-fill.svg", sub_menu:"setting", url: "#sidebar-setting" %>
     </ul>
   <% else %>
     <% if spree_current_user.permissions.exists?(entry: 'spree/billing/report') %>
       <ul class="nav nav-sidebar" id="sidebarReport">
-        <%= tab :report, url: billing_report_path, icon: 'pie-chart-fill.svg' %>
+        <%= billing_main_menu_tree Spree.t('billing.report'), icon: "pie-chart-fill.svg", sub_menu:"report", url: "#sidebar-report" %>
       </ul>
     <% end %>
     <% if spree_current_user.permissions.exists?(entry: 'spree/billing/customers') %>
@@ -40,7 +40,7 @@
       </ul>
     <% end %>
     <ul class="nav nav-sidebar" id="sidebarSetting">
-      <%= billing_main_menu_tree Spree.t('billing.settings'), icon: "gear-fill.svg", url: "#sidebar-setting" %>
+      <%= billing_main_menu_tree Spree.t('billing.settings'), icon: "gear-fill.svg", sub_menu:"setting", url: "#sidebar-setting" %>
     </ul>
   <% end %>
 </nav>
