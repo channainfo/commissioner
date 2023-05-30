@@ -5,6 +5,8 @@ module SpreeCmCommissioner
 
       base.delegate :product_type, :accommodation?, :service?, :ecommerce?, to: :product
       base.before_create :add_due_date, if: :subscription?
+
+      base.whitelisted_ransackable_attributes |= %w[to_date from_date]
     end
 
     private

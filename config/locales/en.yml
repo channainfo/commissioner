@@ -131,9 +131,11 @@ en:
     attributes:
       spree/order:
         customer_id: "Customer ID"
-        due_date: "Invoice Due Date"
-        start_date: "start date"
+        to_date: "To Date"
+        from_date: "From Date"
         created_at: "created at"
+        start_date: "Start Date"
+        start_date_range: "Start Date Range"
         phone_number: "Phone number"
         payable: "Payable"
         invoice_id: "Invoice ID"
@@ -141,6 +143,7 @@ en:
         invoice_due_date: "Invoice Due Date"
         type: "Type"
         select_date: "Select Date"
+        taxon: "Taxon"
     errors:
       models:
         spree_cm_commissioner/service_calendar:

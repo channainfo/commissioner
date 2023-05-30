@@ -9,7 +9,7 @@ module Spree
         return @collection if defined?(@collection)
 
         @search = current_vendor.customers.ransack(params[:q])
-        @collection = @search.result.page(page).per(per_page)
+        @collection = @search.result.includes(:subscriptions, :taxon).page(page).per(per_page)
       end
 
       def load_customer
