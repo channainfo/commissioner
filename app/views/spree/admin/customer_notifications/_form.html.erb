@@ -9,11 +9,9 @@
     </div>
 
    <div class="col-lg-12 col-sm-12">
-        <%= f.field_container :excerpt do %>
-          <%= f.label :excerpt, Spree.t(:excerpt) %>
-          <%= f.text_area :excerpt, class: "form-control spree-rte", rows: '20'  %>
-          <%= f.error_message_on :excerpt %>
-        <% end %>
+        <%= f.label :excerpt, class: "text-md" %>
+        <%= f.text_field :excerpt, class: 'form-control border-radius-5' %>
+        <%= f.error_message_on :excerpt %>
       </div>
 
      <div class="col-lg-12 col-sm-12">
@@ -22,7 +20,7 @@
           <%= f.text_area :body, class: "form-control spree-rte", rows: '20'  %>
           <%= f.error_message_on :body %>
         <% end %>
-      </div>
+    </div>
 
     <div class="col-lg-12 col-sm-12">
       <div class="form-group">
@@ -50,13 +48,13 @@
 
     <div class="col-lg-12 col-sm-12">
       <div class="form-group">
+        <%= f.label :started_at, class: "text-md" %>
         <div class="input-group datePickerTo"
               data-wrap="true"
               data-alt-input="true"
               data-min-date="<%= @object.started_at %>"
               data-enable-time="true"
         >
-
           <%= f.text_field :started_at,
                             value: @object.started_at,
                             placeholder: Spree.t(:select_a_date),
@@ -69,9 +67,8 @@
 
     <div class="col-lg-12 col-sm-12">
       <div class="form-group">
-        <%= f.label :receiver, class: "text-md" %>
-        <%= f.collection_select :user_ids, Spree::User.all, :id, :first_name,  {}, { multiple: true, class: "select2" } %>
-        <%= f.error_message_on :vendor_type, class: 'error-message' %>
+        <%= f.label :send_all %>
+        <%= f.check_box :send_all%>
       </div>
     </div>
   </div>
