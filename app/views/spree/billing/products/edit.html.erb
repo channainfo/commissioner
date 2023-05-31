@@ -1,0 +1,8 @@
+<%= render partial: 'spree/billing/shared/product_tabs', locals: {current: :details} %>
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+<%= form_with model: @product, url: { action: 'update' } do |f| %>
+  <%= render partial: 'form', locals: { f: f } %>
+  <div data-hook="admin_customer_edit_form_button">
+    <%= render partial: 'spree/admin/shared/edit_resource_links', locals: { collection_url: spree.billing_products_path } %>
+  </div>
+<% end %>
