@@ -1,0 +1,167 @@
+<div data-hook="admin_product_form_fields" data-controller="product-edit">
+  <div class="row">
+    <div class="col-12 col-md-8" data-hook="admin_product_form_left">
+      <div data-hook="admin_product_form_name">
+        <%= f.field_container :name do %>
+          <%= f.label :name, raw(Spree.t(:name) + required_span_tag) %>
+          <%= f.text_field :name, class: 'form-control title' %>
+          <%= f.error_message_on :name %>
+        <% end %>
+      </div>
+      <div data-hook="admin_product_form_slug">
+        <%= f.field_container :slug do %>
+          <%= f.label :slug, raw(Spree.t(:slug) + required_span_tag) %>
+          <%= f.text_field :slug, class: 'form-control title' %>
+          <%= f.error_message_on :slug %>
+        <% end %>
+      </div>
+      <div data-hook="admin_product_form_description">
+        <%= f.field_container :description do %>
+          <%= f.label :description, Spree.t(:description) %>
+          <%= f.text_area :description, { rows: "#{unless @product.has_variants? then '15' else '19' end}", class: "form-control #{"spree-rte" if product_wysiwyg_editor_enabled? }" } %>
+          <%= f.error_message_on :description %>
+        <% end %>
+      </div>
+    </div>
+    <div class="col-12 col-md-4" data-hook="admin_product_form_right">
+      <div data-hook="new_product_status">
+        <%= f.field_container :status do %>
+          <%= f.label :status, Spree.t(:status) %>
+          <% options = ['draft', 'active', 'archived'] %>
+          <% options.delete('active') if cannot? :activate, @product %>
+          <% select_html = { class: 'select2',
+                             data: {
+                               action: 'change->product-edit#switchAvailabilityDatesFields',
+                               'product-edit-target': 'status'
+                             } } %>
+          <%= f.select(:status, options.each_slice(1), { selected: @product.status }, select_html) %>
+          <%= f.error_message_on :status %>
+        <% end %>
+      </div>
+      <% if can?(:activate, @product) %>
+        <div data-hook="admin_product_form_make_active_at" data-product-edit-target="makeActiveAt">
+          <%= f.field_container :make_active_at do %>
+            <%= f.label :make_active_at, Spree.t(:make_active_at) %>
+            <%= f.error_message_on :make_active_at %>
+            <div class="input-group datePickerFrom"
+                 data-wrap="true"
+                 data-alt-format="<%= Spree.t(:fpr_human_friendly_date_format, scope: 'date_picker', default: 'M j, Y') %>"
+                 data-max-date="<%= @product.discontinue_on %>">
+              <%= f.text_field :make_active_at,
+                               value: datepicker_field_value(@product.make_active_at),
+                               placeholder: Spree.t(:select_a_date),
+                               class: 'form-control ',
+                               'data-input':'' %>
+              <%= render partial: 'spree/admin/shared/cal_close' %>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div data-hook="admin_product_form_make_active_at">
+          <%= f.field_container :make_active_at do %>
+            <%= f.label :make_active_at, Spree.t(:make_active_at) %>
+            <%= f.text_field :make_active_at, value: datepicker_field_value(@product.make_active_at), class: 'form-control', disabled: true %>
+            <%= f.error_message_on :make_active_at %>
+          <% end %>
+        </div>
+      <% end %>
+      <div data-hook="admin_product_form_price">
+        <%= f.field_container :price do %>
+          <%= f.label :price, raw(Spree.t(:master_price) + required_span_tag) %>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><%= currency_symbol(current_currency) %></span>
+            </div>
+            <%= f.text_field :price, value: number_to_currency(@product.amount_in(current_currency), unit: ''), class: 'form-control', disabled: (cannot? :update, @product.master.default_price) %>
+          </div>
+          <%= f.error_message_on :price %>
+        <% end %>
+      </div>
+      <div data-hook="admin_product_form_cost_currency" class="omega two columns">
+        <%= f.field_container :cost_currency do %>
+          <%= f.label :cost_currency, Spree.t(:cost_currency) %>
+          <%= f.select :cost_currency, currency_options(@product.cost_currency), {}, { class: 'select2' } %>
+          <%= f.error_message_on :cost_currency %>
+        <% end %>
+      </div>
+      <div data-hook="admin_product_form_promotionable">
+        <%= f.field_container :promotionable do %>
+          <%= f.check_box :promotionable %>
+          <%= f.label :promotionable, Spree.t(:promotionable) %>
+          <%= f.error_message_on :promotionable %>
+        <% end %>
+      </div>
+      <div data-hook="admin_product_form_sku">
+        <%= f.field_container :master_sku do %>
+          <%= f.label :master_sku, Spree.t(:master_sku) %>
+          <%= f.text_field :sku, size: 16, class: 'form-control' %>
+        <% end %>
+      </div>
+      <% if @product.has_variants? %>
+        <div data-hook="admin_product_form_multiple_variants" class="card bg-light mb-3">
+          <div class="card-body">
+            <h5 class="card-title"><%= f.label :skus, Spree.t(:sku).pluralize %></h5>
+            <h6 class="card-subtitle mb-2 text-muted"><%= Spree.t(:info_product_has_multiple_skus, count: @product.variants.size) %> </h6>
+            <ul class="list-unstyled">
+              <% @product.variants.first(5).each do |variant| %>
+                <li><%= variant.sku %></li>
+              <% end %>
+            </ul>
+            <% if @product.variants.size > 5 %>
+              <em>
+                <%= Spree.t(:info_number_of_skus_not_shown, count: @product.variants.size - 5) %>
+              </em>
+            <% end %>
+            <div class="info-actions">
+              <% if can?(:admin, Spree::Variant) %>
+                <%= link_to_with_icon 'adjust.svg', Spree.t(:manage_variants), spree.admin_product_variants_url(@product), class: "btn btn-light" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div data-hook="admin_product_form_taxons">
+    <%= f.field_container :taxons do %>
+      <%= f.label :taxon_ids, Spree.t(:taxons) %>
+      <% if can? :modify, Spree::Classification %>
+        <%= f.select :taxon_ids, options_from_collection_for_select(@product.taxons, :id, :pretty_name, @product.taxon_ids),
+                                  { include_hidden: true },
+                                    multiple: true,
+                                    data: { autocomplete_url_value: 'taxons_api_v2',
+                                            autocomplete_return_attr_value: 'pretty_name',
+                                            autocomplete_multiple_value: true } %>
+      <% elsif @product.taxons.any? %>
+        <ul class="text_list">
+          <% @product.taxons.each do |taxon| %>
+            <li><%= taxon.name %></li>
+          <% end %>
+        </ul>
+      <% else %>
+        <div class="alert alert-info"><%= Spree.t(:no_resource_found, resource: :taxons) %></div>
+      <% end %>
+    <% end %>
+  </div>
+  <% variant_kind_option_types = @product.variant_kind_option_types %>
+  <div data-hook="admin_product_form_variant_kind_option_types">
+    <%= render 'shared/option_type_field',
+    label: Spree.t(:option_types),
+    select: :variant_kind_option_type_ids,
+    option_types: variant_kind_option_types,
+    kind: 'variant',
+    f:f
+  %>
+  </div>
+  <% if @stores.count > 1 %>
+    <div data-hook="admin_product_form_stores">
+      <%= f.field_container :stores do %>
+        <%= f.label :product_stores, Spree.t(:stores) %>
+        <%= collection_select(:product, :store_ids, @stores, :id, :unique_name, {}, { multiple: true, class: 'select2' }) %>
+      <% end %>
+    </div>
+  <% end %>
+  <div data-hook="admin_product_form_meta">
+    <div data-hook="admin_product_form_additional_fields"></div>
+  </div>
+</div>

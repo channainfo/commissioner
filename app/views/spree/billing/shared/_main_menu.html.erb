@@ -20,6 +20,9 @@
     <ul class="nav nav-sidebar" id="sidebarOrder">
       <%= tab :orders, url: billing_orders_path, icon: 'inbox-fill.svg' %>
     </ul>
+    <ul class="nav nav-sidebar" id="sidebarBillingProduct">
+      <%= tab :products, url: billing_products_path, icon: 'tag-fill.svg' %>
+    </ul>
     <ul class="nav nav-sidebar" id="sidebarSetting">
       <%= billing_main_menu_tree Spree.t('billing.settings'), icon: "gear-fill.svg", sub_menu:"setting", url: "#sidebar-setting" %>
     </ul>
