@@ -2,6 +2,11 @@ module Spree
   module V2
     module Storefront
       class AccommodationSerializer < VendorSerializer
+        # set :vendor instead of :accomodation
+        # to prevent the serializer from confusion
+        # because its model still Spree::Vendor
+        set_type :vendor
+
         has_one :state
 
         attributes :total_inventory, :service_availabilities

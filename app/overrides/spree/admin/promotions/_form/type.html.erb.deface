@@ -1,9 +1,0 @@
-<!-- insert_after "erb[loud]:contains('field_container :path')" -->
-
-<%= f.field_container :type, :class => ['form-group'] do %>
-  <%= f.label :type, Spree.t(:type) %><br />
-  <%= f.collection_select :type, ['Spree::Promotion', 'SpreeCmCommissioner::PricingModel'], :to_s, :demodulize,
-    {:include_blank => true},
-    {:class => 'select2 fullwidth', :disabled => @object.type.present?, :required => true }.compact
-  %>
-<% end %>

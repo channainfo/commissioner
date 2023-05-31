@@ -1,0 +1,11 @@
+<!-- insert_before "erb[loud]:contains('field_container :advertise')" -->
+
+<%= f.field_container :auto_apply, class: ['checkbox'] do %>
+  <%= f.label :auto_apply do %>
+    <%= f.check_box :auto_apply %>
+    <%= Spree.t(:auto_apply) %>
+    <small class="form-text text-muted">
+      <%= raw Spree.t('auto_apply_info') %>
+    </small>
+  <% end %>
+<% end %>

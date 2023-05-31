@@ -117,19 +117,5 @@ RSpec.describe Spree::Vendor, type: :model do
         expect(vendor.state_id).to eq siem_reap.id
       end
     end
-
-    context '#price_rules' do
-      let!(:vendor) { create(:active_vendor, min_price: 10, max_price: 50) }
-      let!(:promotion_rule) { create(:promotion_rule, vendor_id: vendor.id) }
-      let!(:pricing_model_rule) { create(:cm_pricing_model_rule, vendor_id: vendor.id) }
-
-      it 'only return pricing rules' do
-        expect(vendor.price_rules.size).to eq 1
-        expect(vendor.price_rules[0].id).to eq pricing_model_rule.id
-
-        expect(SpreeCmCommissioner::PricingModelRule.all.size).to eq 1
-        expect(Spree::PromotionRule.all.size).to eq 2 # as it is base class
-      end
-    end
   end
 end

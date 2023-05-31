@@ -5,7 +5,36 @@ module SpreeCmCommissioner
 
       base.delegate :product_type, :accommodation?, :service?, :ecommerce?, to: :product
       base.before_create :add_due_date, if: :subscription?
+
       base.whitelisted_ransackable_attributes |= %w[to_date from_date]
+    end
+
+    def reservation?
+      date_present? && !subscription?
+    end
+
+    def date_present?
+      from_date.present? && to_date.present?
+    end
+
+    def duration
+      return nil unless date_present?
+
+      (to_date.to_date - from_date.to_date) + 1
+    end
+
+    def date_range
+      return [] unless date_present?
+
+      from_date.to_date..to_date.to_date
+    end
+
+    # override
+    def amount
+      base_price = price * quantity
+      return base_price unless reservation?
+
+      base_price * duration
     end
 
     private
