@@ -10,6 +10,8 @@ RSpec.describe Spree::V2::Storefront::AccommodationSerializer, type: :serializer
     context 'with no include' do
       subject { described_class.new(vendor).serializable_hash }
 
+      it { expect(subject[:data][:type]).to eq :vendor }
+
       it { expect(subject[:data][:attributes]).to include(:about_us) }
       it { expect(subject[:data][:attributes]).to include(:contact_us) }
       it { expect(subject[:data][:attributes]).to include(:name) }
@@ -39,6 +41,7 @@ RSpec.describe Spree::V2::Storefront::AccommodationSerializer, type: :serializer
         ]).serializable_hash
       }
 
+      it { expect(subject[:data][:type]).to eq :vendor }
       it { expect(subject[:included].select {|e| e[:type] == :vendor_logo}.size).to eq 1}
       it { expect(subject[:included].select {|e| e[:type] == :vendor_photo}.size).to eq 1}
       it { expect(subject[:included].select {|e| e[:type] == :stock_location}.size).to eq 1}
