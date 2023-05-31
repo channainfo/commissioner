@@ -163,3 +163,5 @@ en:
     empty_info: "<b>Invoice</b> not create yet"
   device_token:
     empty_info: "No <b>Device_token</b> found"
+  notification:
+    send_test_success: "Test Send Successfully"

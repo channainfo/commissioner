@@ -1,0 +1,30 @@
+<div class="actions">
+  <button class="btn btn-success" data-toggle="modal" data-target="#sendTestModal<%= notification.id %>">
+    Test
+  </button>
+
+  <div class="modal fade" id="sendTestModal<%= notification.id %>" tabindex="-1" role="dialog" aria-labelledby="sendTestModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="sendTestModalLabel">Send Test Notification</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <%= form_with(url: admin_customer_notification_send_test_path(notification), method: :post, class: "send-test-form") do |f| %>
+            <%= f.hidden_field :notification_id, value: notification.id %>
+            <div class="form-group">
+              <%= f.label :user_id, class: "text-md" %>
+              <%= f.select :user_ids, options_from_collection_for_select(users, :id, :first_name), { }, { multiple: true, class: "select2 form-control", 'data-dropdown-parent' => "#sendTestModal#{notification.id}" } %>
+            </div>
+            <%= f.submit "Send", class: "btn btn-primary" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
