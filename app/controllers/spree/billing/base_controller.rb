@@ -50,6 +50,16 @@ module Spree
       end
 
       # @overrided
+      def edit_object_url(object, options = {})
+        if parent_data.present?
+          spree.send "edit_billing_#{resource.model_name}_#{resource.object_name}_url",
+                     parent, object, options
+        else
+          spree.send "edit_billing_#{resource.object_name}_url", object, options
+        end
+      end
+
+      # @overrided
       def collection_url(options = {})
         if parent_data.present?
           spree.polymorphic_url([:billing, parent, model_class], options)
