@@ -603,9 +603,12 @@ RSpec.describe SpreeCmCommissioner::AccommodationQuery do
 
   private
 
+  # TODO: validate the line items & spec cases.
   def book_room(order, hotel: , price: 100, quantity: , from_date:, to_date:)
     room = hotel.variants.first # vip, air
-    order.line_items.create(vendor_id: hotel.id, price: price, quantity: quantity, from_date: from_date, to_date: to_date, variant_id: room.id)
+    line_item = order.line_items.build(vendor_id: hotel.id, price: price, quantity: quantity, from_date: from_date, to_date: to_date, variant_id: room.id)
+    line_item.save(validate: false)
+    line_item
   end
 
   def execute_sql(sql)

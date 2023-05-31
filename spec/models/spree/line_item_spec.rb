@@ -15,4 +15,24 @@ RSpec.describe Spree::LineItem, type: :model do
       end
     end
   end
+
+  describe '#amount' do
+    context 'product type: accommodation' do
+      let(:product) { create(:cm_accommodation_product, price: BigDecimal('10.0'), permanent_stock: 4) }
+      let(:line_item) { create(:line_item, price: BigDecimal('10.0'), quantity: 2, product: product, from_date: '2023-01-10'.to_date, to_date: '2023-01-12'.to_date) }
+
+      it 'caculate amount base on price, date range & quantity' do
+        expect(line_item.amount).to eq BigDecimal('60.0') # 10.0 * 2 * 3 days
+      end
+    end
+
+    context 'product type: ecommerce' do
+      let(:product) { create(:cm_product, price: BigDecimal('10.0'), product_type: :ecommerce) }
+      let(:line_item) { create(:line_item, price: BigDecimal('10.0'), quantity: 2, product: product) }
+
+      it 'caculate amount base on price & quantity' do
+        expect(line_item.amount).to eq BigDecimal('20.0') # 10.0 * 2
+      end
+    end
+  end
 end

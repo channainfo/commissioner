@@ -1,16 +1,23 @@
 module SpreeCmCommissioner
   module PromotionDecorator
     def self.prepended(base)
-      base.whitelisted_ransackable_attributes = %w[type path promotion_category_id code]
+      base.attr_accessor :auto_apply
 
-      def base.set_constants
-        promotions = Rails.application.config.spree.promotions
+      base.before_validation :setup_auto_apply_promotion, if: :auto_apply?
+    end
 
-        rules = promotions.rules.select { |r| r.module_parents.include?(Spree::Promotion) }
-        actions = promotions.actions.select { |a| a.module_parents.include?(Spree::Promotion) }
+    def setup_auto_apply_promotion
+      self.code = nil
+      self.path = nil
+    end
 
-        const_set(:RULES, rules)
-        const_set(:ACTIONS, actions)
+    def auto_apply?
+      auto_apply.in?([true, 'true', '1'])
+    end
+
+    def date_eligible?(date)
+      promotion_rules.any? do |rule|
+        rule.respond_to?(:date_eligible?) && rule.date_eligible?(date)
       end
     end
   end

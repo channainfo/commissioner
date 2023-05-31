@@ -64,5 +64,20 @@ FactoryBot.define do
         variant.stock_items.first.adjust_count_on_hand(10)
       end
     end
+
+    factory :cm_accommodation_product do
+      transient do
+        permanent_stock { 1 }
+      end
+
+      before(:create) do |product, _evaluator|
+        product.product_type = :accommodation
+      end
+
+      after(:create) do |product, evaluator|
+        product.master.permanent_stock = evaluator.permanent_stock
+        product.master.save!
+      end
+    end
   end
 end

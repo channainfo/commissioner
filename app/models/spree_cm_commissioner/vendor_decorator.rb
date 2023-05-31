@@ -5,6 +5,7 @@ module SpreeCmCommissioner
 
     def self.prepended(base)
       base.include SpreeCmCommissioner::ProductType
+      base.include SpreeCmCommissioner::VendorPromotable
 
       base.attr_accessor :service_availabilities
 
@@ -41,9 +42,6 @@ module SpreeCmCommissioner
 
       base.has_many :promoted_option_values, -> { joins(:option_type).where('option_type.promoted' => true) },
                     through: :option_value_vendors, source: :option_value
-
-      base.has_many :listing_prices, as: :price_source, class_name: 'SpreeCmCommissioner::ListingPrice', dependent: :destroy
-      base.has_many :price_rules, class_name: 'SpreeCmCommissioner::PricingModelRule', dependent: :destroy
 
       base.accepts_nested_attributes_for :nearby_places, allow_destroy: true
 
