@@ -90,6 +90,17 @@ Spree::Core::Engine.add_routes do
     end
     resources :roles
     resources :users
+    resources :products do
+      member do
+        get :stock
+      end
+      resources :variants do
+        collection do
+          post :update_positions
+        end
+      end
+      resources :variants_including_master, only: [:update]
+    end
     resources :orders do
       resource :invoice, only: %i[show create], controller: :invoice
       resources :payments do
@@ -100,7 +111,6 @@ Spree::Core::Engine.add_routes do
         resources :refunds, only: %i[new create edit update]
       end
     end
-
     put '/switch_vendor', to: 'base#switch_vendor'
     get '/forbidden', to: 'errors#forbidden', as: :forbidden
     root to: redirect('/billing/report')

@@ -18,7 +18,7 @@
           <%= f.label :number_cont, Spree.t(:customer_number) %>
           <div class="form-group input-group mb-3">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="basic-addon1">VET-</span>
+              <span class="input-group-text" id="basic-addon1"><%= @current_vendor.code %>-</span>
             </div>
             <%= f.text_field :number_cont, class: "form-control js-filterable" %>
           </div>
