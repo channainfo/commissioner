@@ -18,11 +18,11 @@ module Spree
             end
 
             def collection_finder
-              Spree::Orders::FindByState
+              SpreeCmCommissioner::Orders::FindByState
             end
 
             def resource_finder
-              Spree::Orders::FindByState
+              SpreeCmCommissioner::Orders::FindByState
             end
           end
         end

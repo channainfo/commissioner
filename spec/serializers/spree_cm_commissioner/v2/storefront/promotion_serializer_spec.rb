@@ -14,7 +14,9 @@ RSpec.describe SpreeCmCommissioner::V2::Storefront::PromotionSerializer, type: :
     it 'returns exact promotion attributes' do
       expect(subject[:data][:attributes].keys).to contain_exactly(
         :name,
-        :description
+        :description,
+        :match_policy,
+        :advertise
       )
     end
 
