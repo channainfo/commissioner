@@ -16,14 +16,11 @@ module SpreeCmCommissioner
       base.belongs_to :subscription, class_name: 'SpreeCmCommissioner::Subscription', optional: true
       base.has_many :customer, class_name: 'SpreeCmCommissioner::Customer', through: :subscription
       base.has_many :taxon, class_name: 'Spree::Taxon', through: :customer
+      base.has_many :vendors, through: :products, class_name: 'Spree::Vendor'
 
       base.delegate :customer, to: :subscription, allow_nil: true
 
-<<<<<<< HEAD
       base.whitelisted_ransackable_associations |= %w[customer taxon]
-=======
-      base.has_many :vendors, through: :products, class_name: 'Spree::Vendor'
->>>>>>> f1c5c43 (close #354 add fixed date rule & create date specific item adjustments (#358))
     end
 
     # required only in one case,
