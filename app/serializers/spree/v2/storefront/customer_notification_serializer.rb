@@ -6,7 +6,7 @@ module Spree
 
         attributes :title, :body, :payload, :url, :started_at, :send_at, :notification_type
 
-        has_many :feature_images, serializer: :feature_image
+        has_many :feature_image, serializer: :feature_image
       end
     end
   end
