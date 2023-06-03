@@ -72,7 +72,13 @@
             <%= sort_link @search, :created_at, Spree.t(:created_at),{},{title:'created_at_title'} %>
           </th>
           <th>
-            <%= sort_link @search, :active_subscriptions_count, Spree.t(:subscription),{},{title:'active_subscriptions_count_title'} %>
+            <%= sort_link @search, :active_subscriptions_count, I18n.t("spree.billing.active_subscription"),{},{title:'active_subscriptions_count_title'} %>
+          </th>
+          <th>
+            <%=sort_link @search, :suspended_subscriptions, I18n.t("spree.billing.suspended") %>
+          </th>
+          <th>
+            <%= I18n.t("spree.billing.overdue") %>
           </th>
           <th data-hook="admin_customers_index_header_actions" class="actions"></th>
         </tr>
@@ -100,6 +106,18 @@
               <% @badge_class = "badge-inactive" if customer.active_subscriptions_count == 0 %>
               <%= content_tag(:strong, class: "badge #{@badge_class} ") do %>
                 <%= customer.active_subscriptions_count %>
+              <% end %>
+            </td>
+            <td>
+              <%= content_tag(:strong, class: "badge badge-danger ") do %>
+                <%= customer.suspended_subscriptions.count %>
+              <% end %>
+            </td>
+            <td>
+              <% if customer.overdue_subscriptions == 'none'  %>
+                <%= customer.overdue_subscriptions %>
+              <% else %>
+                <%=link_to customer.overdue_subscriptions.number, edit_billing_order_path(customer.overdue_subscriptions)%>
               <% end %>
             </td>
             <td data-hook="admin_customers_index_row_actions" class="actions">

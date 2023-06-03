@@ -22,6 +22,7 @@ module SpreeCmCommissioner
 
     has_many :subscriptions, class_name: 'SpreeCmCommissioner::Subscription', dependent: :destroy
     has_many :active_subscriptions, -> { active }, class_name: 'SpreeCmCommissioner::Subscription', dependent: :destroy
+    has_many :suspended_subscriptions, -> { suspended }, class_name: 'SpreeCmCommissioner::Subscription', dependent: :destroy
 
     has_many :orders, class_name: 'Spree::Order', through: :subscriptions
 
@@ -70,6 +71,18 @@ module SpreeCmCommissioner
         ship_address.attributes = bill_address.attributes.except('id', 'updated_at', 'created_at')
       end
       true
+    end
+
+    def overdue_subscriptions
+      overdue_id = query_builder.where('li.due_date < ?', Time.zone.today).where.not("o.payment_state = 'paid'").where(customer_id: id).first&.id
+      return orders.where(subscription_id: overdue_id).first unless overdue_id.nil?
+
+      'none'
+    end
+
+    def query_builder
+      SpreeCmCommissioner::Subscription.joins('INNER JOIN spree_orders as o ON o.subscription_id = cm_subscriptions.id')
+                                       .joins('INNER JOIN spree_line_items as li ON li.order_id = o.id ')
     end
 
     def subscribable_variants
