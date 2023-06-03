@@ -26,13 +26,31 @@ module Spree
         scope.find_by(slug: params[:id])
       end
 
-      # @overrided
-      def collection_url(options = {})
-        billing_products_url(options)
-      end
-
       def location_after_save
         edit_billing_product_url(@product)
+      end
+
+      # def product_includes
+      #   {
+      #     variant_images: [],
+      #     tax_category: [],
+      #     master: [],
+      #     variants: [:prices]
+      #   }
+      # end
+
+      def variant_stock_includes
+        [:images, { stock_items: :stock_location, option_values: :option_type }]
+      end
+
+      def stock
+        @variants = @product.variants.includes(*variant_stock_includes)
+        @variants = [@product.master] if @variants.empty?
+        @stock_locations = StockLocation.accessible_by(current_ability)
+        return unless @stock_locations.empty?
+
+        flash[:error] = Spree.t(:stock_management_requires_a_stock_location)
+        redirect_to spree.admin_stock_locations_path
       end
 
       def model_class
