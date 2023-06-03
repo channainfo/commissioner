@@ -1,9 +1,6 @@
 class NoticedFcmBase < Noticed::Base
   deliver_by :database, format: :format_for_database, if: :push_notificable?
-
-  def push_notificable?
-    recipient.device_tokens?
-  end
+  delegate :push_notificable?, to: :recipient
 
   def format_for_database
     {
