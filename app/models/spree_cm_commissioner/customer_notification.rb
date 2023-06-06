@@ -17,4 +17,8 @@ module SpreeCmCommissioner
     image_attrs = feature_image.style(:mini)
     image_attrs[:url]
   end
+
+  def self.scheduled_items
+    where(sent_at: nil)
+  end
 end
