@@ -1,6 +1,6 @@
 module SpreeCmCommissioner
   class CustomerNotificationSender < BaseInteractor
-    delegate :customer_notification, to: :context
+    delegate :user_ids, :customer_notification, to: :context
 
     def call
       update_customer_notification_sent_at
@@ -15,7 +15,18 @@ module SpreeCmCommissioner
     end
 
     def send_notification
-      send_to_all_users
+      if user_ids.present?
+        send_to_specific_users(user_ids)
+      else
+        send_to_all_users
+      end
+    end
+
+    def send_to_specific_users(user_ids)
+      users = Spree::User.push_notificable.where(id: user_ids)
+      users.find_each do |user|
+        deliver_notification_to_user(user)
+      end
     end
 
     def send_to_all_users
@@ -25,9 +36,9 @@ module SpreeCmCommissioner
     end
 
     def deliver_notification_to_user(user)
-      SpreeCmCommissioner::CustomerContentNotificationCreatorJob.perform_later(
+      SpreeCmCommissioner::CustomerContentNotificationCreator.call(
         user_id: user.id,
-        customer_notification_id: customer_notification.ida
+        customer_notification_id: customer_notification.id
       )
     end
 

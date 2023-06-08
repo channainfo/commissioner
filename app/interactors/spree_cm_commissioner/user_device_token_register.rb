@@ -20,6 +20,13 @@ module SpreeCmCommissioner
     def create_device_token
       return if device_token_exist?
 
+      device_token_params = context.device_token.slice(:user_id,
+                                                       :registration_token,
+                                                       :client_name,
+                                                       :client_version
+                                                      )
+      context.device_token = SpreeCmCommissioner::DeviceToken.new(device_token_params)
+
       context.fail!(message: context.device_token.errors.full_messages.to_sentence) unless context.device_token.save
     end
   end
