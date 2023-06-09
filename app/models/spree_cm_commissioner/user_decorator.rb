@@ -29,6 +29,10 @@ module SpreeCmCommissioner
           where(login: login)
         end
       end
+
+      def full_name
+        [first_name, last_name].reject(&:empty?).join(' ')
+      end
     end
 
     def device_tokens?

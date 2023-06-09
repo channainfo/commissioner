@@ -106,9 +106,9 @@ Spree::Core::Engine.add_routes do
         member do
           put :fire
         end
-
         resources :refunds, only: %i[new create edit update]
       end
+      resources :adjustments
     end
     put '/switch_vendor', to: 'base#switch_vendor'
     get '/forbidden', to: 'errors#forbidden', as: :forbidden
