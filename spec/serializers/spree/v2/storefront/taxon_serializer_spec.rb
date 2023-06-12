@@ -1,9 +1,9 @@
-# frozen_string_literal: true
+require 'spec_helper'
 
 RSpec.describe Spree::V2::Storefront::TaxonSerializer, type: :serializer do
-  describe '.serializable_hash' do
-    let(:category_icon) { create(:cm_taxon_category_icon) }
-    let(:taxon) { create(:taxon, category_icon: category_icon) }
+  describe '#serializable_hash' do
+    let!(:category_icon) { create(:cm_taxon_category_icon) }
+    let!(:taxon) { create(:taxon, category_icon: category_icon) }
 
     subject {
       described_class.new(taxon, include: [

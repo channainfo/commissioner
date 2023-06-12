@@ -4,8 +4,8 @@ module SpreeCmCommissioner
       class HomepageBannerSerializer < BaseSerializer
         attributes :title, :redirect_url, :active, :priority
 
-        has_one :app_image, serializer: :homepage_banner_app_image
-        has_one :web_image, serializer: :homepage_banner_web_image
+        has_one :app_image, serializer: :asset
+        has_one :web_image, serializer: :asset
       end
     end
   end

@@ -3,7 +3,7 @@ module Spree
     module Storefront
       module TaxonSerializerDecorator
         def self.prepended(base)
-          base.has_one :category_icon, serializer: SpreeCmCommissioner::V2::Storefront::CategoryIconSerializer
+          base.has_one :category_icon, serializer: ::SpreeCmCommissioner::V2::Storefront::AssetSerializer
         end
       end
     end

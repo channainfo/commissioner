@@ -1,8 +1,8 @@
-# frozen_string_literal: true
+require 'spec_helper'
 
 RSpec.describe Spree::V2::Storefront::CartSerializer, type: :serializer do
-  describe '.serializable_hash' do
-    let(:cart) { create(:order_with_line_items) }
+  describe '#serializable_hash' do
+    let(:cart) { build(:order_with_line_items) }
 
     subject {
       described_class.new(cart, include: [
