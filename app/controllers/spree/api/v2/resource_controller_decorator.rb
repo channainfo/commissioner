@@ -7,6 +7,14 @@ module Spree
           base.rescue_from SpreeCmCommissioner::SchemaValidationError, with: :rescue_schema_validation_error
         end
 
+        def app_version
+          request.headers['Cm-App-Version']
+        end
+
+        def app_name
+          request.headers['Cm-App-Name']
+        end
+
         def required_schema_validation!
           return true if required_schema.nil?
 

@@ -36,7 +36,11 @@ module Spree
           end
 
           def filter_params
-            params.permit(:client_version, :registration_token, :client_name)
+            params.merge(
+              registration_token: params[:registration_token],
+              client_version: app_version,
+              client_name: app_name
+            )
           end
         end
       end

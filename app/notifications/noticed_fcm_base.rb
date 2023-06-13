@@ -1,5 +1,6 @@
 class NoticedFcmBase < Noticed::Base
   deliver_by :database, format: :format_for_database, if: :push_notificable?
+  deliver_by :fcm, credentials: :fcm_credentials, format: :format_for_fcm, if: :push_notificable?
   delegate :push_notificable?, to: :recipient
 
   def format_for_database
@@ -13,8 +14,34 @@ class NoticedFcmBase < Noticed::Base
     }
   end
 
+  def fcm_credentials
+    Rails.application.credentials.google_service_account
+  end
+
+  def fcm_device_tokens(recipient)
+    recipient.device_tokens.map(&:registration_token)
+  end
+
+  def format_for_fcm(device_token)
+    notification_data = {
+      title: title,
+      body: message
+    }
+    {
+      data: convert_hash_values_to_str(payload),
+      token: device_token,
+      notification: notification_data
+    }
+  end
+
   def notificable
     raise NotImplementedError, 'Notification must implement a notificable method'
+  end
+
+  def convert_hash_values_to_str(hash)
+    hash.each do |key, value|
+      hash[key] = value.to_s
+    end
   end
 
   def payload
@@ -26,16 +53,11 @@ class NoticedFcmBase < Noticed::Base
   end
 
   def extra_payload
-    {
-      order_id: order.id,
-      order_number: order.number
-    }
+    {}
   end
 
   def translatable_options
-    {
-      order_number: order.number
-    }
+    {}
   end
 
   def message
@@ -48,5 +70,9 @@ class NoticedFcmBase < Noticed::Base
 
   def type
     self.class.to_s.underscore
+  end
+
+  def cleanup_device_token(token:)
+    SpreeCmCommissioner::DeviceToken.where(registration_token: token).destroy_all
   end
 end

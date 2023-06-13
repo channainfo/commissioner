@@ -10,19 +10,21 @@ RSpec.describe Spree::Api::V2::Storefront::UserDeviceTokenRegistrationsControlle
 
     context 'when authorized' do
       it 'creates a new device token and returns a 200 status' do
+
+        request.headers['Cm-App-Name'] = 'test-app'
+        request.headers['Cm-App-Version'] = '1.0.0'
+
         post :create, params: {
-          client_version: '1.0.0',
           registration_token: 'device-token-id',
-          client_name: 'test'
         }
-        
+
         json_response = JSON.parse(response.body)
         device_attrs = json_response['data']['attributes']
 
         expect(response.status).to eq 200
         expect(device_attrs['user_id']).not_to be_nil
         expect(device_attrs['registration_token']).to eq 'device-token-id'
-        expect(device_attrs['client_name']).to eq 'test'
+        expect(device_attrs['client_name']).to eq 'test-app'
         expect(device_attrs['client_version']).to eq '1.0.0'
       end
     end
