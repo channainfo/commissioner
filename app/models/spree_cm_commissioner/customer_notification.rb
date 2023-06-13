@@ -11,14 +11,14 @@ module SpreeCmCommissioner
 
     validates :payload, presence: true
     validates :notification_type, presence: true
-  end
 
-  def push_notification_image_url
-    image_attrs = feature_image.style(:mini)
-    image_attrs[:url]
-  end
+    def push_notification_image_url
+      image_attrs = feature_image.style(:mini)
+      image_attrs[:url]
+    end
 
-  def self.scheduled_items
-    where(sent_at: nil)
+    def self.scheduled_items
+      where(['sent_at IS NULL AND started_at <= ? AND send_all = ?', Time.current, true])
+    end
   end
 end
