@@ -1,24 +1,25 @@
 require 'spec_helper'
 
 describe SpreeCmCommissioner::V2::Storefront::AssetSerializer do
-  let!(:vendor_logo) { create(:vendor_logo) }
-  let!(:vendor) { create(:active_vendor, name: 'vendor', logo: vendor_logo) }
+  describe '#serializable_hash' do
+    let!(:asset) { create(:cm_asset) }
 
-  subject { described_class.new(vendor_logo) }
+    subject {
+      described_class.new(asset).serializable_hash
+    }
 
-  it { expect(subject.serializable_hash).to be_kind_of(Hash) }
+    it 'returns exact asset attributes' do
+      expect(subject[:data][:attributes].keys).to contain_exactly(
+        :transformed_url,
+        :alt,
+        :original_url,
+        :position,
+        :styles
+      )
+    end
 
-  it 'returns right data attributes' do
-    expect(subject.serializable_hash[:data].keys).to contain_exactly(:id, :type, :attributes)
-  end
-
-  it 'returns right asset attributes' do
-    expect(subject.serializable_hash[:data][:attributes].keys).to contain_exactly(
-      :alt,
-      :original_url,
-      :position,
-      :styles,
-      :transformed_url
-    )
+    it 'does not have relationships' do
+      expect(subject[:data][:relationships]).to be nil
+    end
   end
 end

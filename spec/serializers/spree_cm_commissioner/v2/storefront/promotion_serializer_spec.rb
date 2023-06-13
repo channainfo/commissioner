@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe SpreeCmCommissioner::V2::Storefront::PromotionSerializer, type: :serializer do
-  describe '.serializable_hash' do
+  describe '#serializable_hash' do
     let(:promotion) { create(:promotion_with_item_total_rule) }
 
     subject {

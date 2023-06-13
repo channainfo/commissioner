@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Spree::V2::Storefront::UserSerializer, type: :serializer do
-  describe '.serializable_hash' do
+  describe '#serializable_hash' do
     let(:user) { create(:user) }
 
     subject {

@@ -1,39 +1,40 @@
-# frozen_string_literal: true
+require 'spec_helper'
 
 RSpec.describe Spree::V2::Storefront::PlaceSerializer, type: :serializer do
-  describe '.serializable_hash' do
-    let(:place) { create(:cm_place) }
-    let(:vendor) { create(:vendor) }
+  describe '#serializable_hash' do
+    let!(:place) { create(:cm_place) }
+    let!(:vendor) { create(:vendor) }
     let!(:nearby_place) { create(:cm_vendor_place, vendor: vendor, place: place) }
 
-    context 'with no include' do
-      subject { described_class.new(place).serializable_hash }
+    subject {
+      described_class.new(place, include: [
+        :vendors,
+        :nearby_places
+      ]).serializable_hash
+    }
 
-      it { expect(subject[:data][:attributes]).to include(:name) }
-      it { expect(subject[:data][:attributes]).to include(:vicinity) }
-      it { expect(subject[:data][:attributes]).to include(:lat) }
-      it { expect(subject[:data][:attributes]).to include(:lon) }
-      it { expect(subject[:data][:attributes]).to include(:icon) }
-      it { expect(subject[:data][:attributes]).to include(:url) }
-      it { expect(subject[:data][:attributes]).to include(:rating) }
-      it { expect(subject[:data][:attributes]).to include(:formatted_phone_number) }
-      it { expect(subject[:data][:attributes]).to include(:formatted_address) }
-      it { expect(subject[:data][:attributes]).to include(:address_components) }
-      it { expect(subject[:data][:attributes]).to include(:types) }
-      it { expect(subject[:data][:relationships]).to include(:vendors) }
-      it { expect(subject[:data][:relationships]).to include(:nearby_places) }
+    it 'returns exact attributes' do
+      expect(subject[:data][:attributes].keys).to contain_exactly(
+        :reference,
+        :name,
+        :vicinity,
+        :lat,
+        :lon,
+        :icon,
+        :url,
+        :rating,
+        :formatted_phone_number,
+        :formatted_address,
+        :address_components,
+        :types
+      )
     end
 
-    context 'with include' do
-      subject {
-        described_class.new(place, include: [
-          :vendors,
-          :nearby_places
-        ]).serializable_hash
-      }
-
-      it { expect(subject[:included].select {|e| e[:type] == :vendor}.size).to eq 1}
-      it { expect(subject[:included].select {|e| e[:type] == :nearby_place}.size).to eq 1}
+    it 'returns exact taxon relationships' do
+      expect(subject[:data][:relationships].keys).to contain_exactly(
+        :vendors,
+        :nearby_places
+      )
     end
   end
 end

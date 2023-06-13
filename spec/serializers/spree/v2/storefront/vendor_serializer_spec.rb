@@ -1,7 +1,7 @@
-# frozen_string_literal: true
+require 'spec_helper'
 
 RSpec.describe Spree::V2::Storefront::VendorSerializer, type: :serializer do
-  describe '.serializable_hash' do
+  describe '#serializable_hash' do
     let(:vendor) { create(:vendor) }
 
     subject {
