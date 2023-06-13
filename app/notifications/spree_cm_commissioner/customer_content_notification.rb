@@ -28,5 +28,13 @@ module SpreeCmCommissioner
         message: customer_notification.excerpt
       }
     end
+
+    def message
+      record.params[:translatable_options][:message]
+    end
+
+    def title
+      record.params[:translatable_options][:title]
+    end
   end
 end

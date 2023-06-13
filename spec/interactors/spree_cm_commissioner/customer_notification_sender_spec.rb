@@ -99,6 +99,29 @@ RSpec.describe SpreeCmCommissioner::CustomerNotificationSender do
     end
   end
 
+  describe '#send_to_specific_users' do
+    it 'calls send_to_specific_users if user_ids is present' do
+      user_ids = [1, 2, 3]
+      customer_notification = create(:customer_notification)
+      alert = described_class.new(customer_notification: customer_notification, user_ids: user_ids)
+
+      expect(alert).to receive(:send_to_specific_users).with(user_ids)
+      expect(alert).not_to receive(:send_to_all_users)
+
+      alert.send_notification
+    end
+
+    it 'calls send_to_all_users if user_ids is not present' do
+      customer_notification = create(:customer_notification)
+      alert = described_class.new(customer_notification: customer_notification)
+
+      expect(alert).not_to receive(:send_to_specific_users)
+      expect(alert).to receive(:send_to_all_users)
+
+      alert.send_notification
+    end
+  end
+
   describe '#call' do
     it 'sends notification and update record' do
       customer_notification = create(:customer_notification)

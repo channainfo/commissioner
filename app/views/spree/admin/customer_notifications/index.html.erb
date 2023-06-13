@@ -16,9 +16,8 @@
         <th scope="col"><%= Spree.t("customer_notification.body") %></th>
         <th scope="col"><%= Spree.t("customer_notification.notification_type") %></th>
         <th scope="col"><%= Spree.t("customer_notification.url") %></th>
-        <th scope="col"><%= Spree.t("customer_notification.started_at") %></th>
         <th scope="col"><%= Spree.t("customer_notification.created_at") %></th>
-        <th scope="col"><%= Spree.t("send_test") %></th>
+        <th scope="col"><%= Spree.t("send_to") %></th>
         <th scope="col" data-hook="admin_notifications_index_header_actions" class="actions"></th>
       </tr>
     </thead>
@@ -30,7 +29,6 @@
             <td><%= truncate(notification.try(:body).to_plain_text) %></td>
             <td><%= notification.notification_type %></td>
             <td><%= notification.url %></td>
-            <td><%= notification.started_at %></td>
             <td><%= notification.created_at %></td>
             <td>
               <%= render partial: 'spree/admin/shared/send_test_form', locals: {notification: notification , users: @users} %>
