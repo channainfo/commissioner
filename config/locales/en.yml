@@ -153,6 +153,8 @@ en:
         type: "Type"
         select_date: "Select Date"
         taxon: "Taxon"
+      spree/report:
+        cashier: "Cashier"
     errors:
       models:
         spree_cm_commissioner/service_calendar:

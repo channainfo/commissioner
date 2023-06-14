@@ -128,6 +128,8 @@ module Spree
         case params[:type]
         when 'overdue'
           query.overdues
+        when nil
+          query.query_builder
         else
           query.query_builder.where(payment_state: params[:type])
         end

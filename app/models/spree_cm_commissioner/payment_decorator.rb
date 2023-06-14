@@ -6,6 +6,8 @@ module SpreeCmCommissioner
       base.belongs_to :payable, polymorphic: true, optional: true
 
       base.before_save :set_payable
+
+      base.whitelisted_ransackable_attributes |= %w[payable_id]
     end
 
     # must set current_user_instance
