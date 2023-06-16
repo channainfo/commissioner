@@ -6,7 +6,7 @@ module SpreeCmCommissioner
 
         attributes :name, :description, :permalink, :pretty_name
 
-        has_many :products, serializer: Spree::V2::Storefront::ProductSerializer
+        has_many :products, serializer: ::Spree::V2::Storefront::ProductSerializer
       end
     end
   end
