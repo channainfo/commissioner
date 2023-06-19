@@ -1,7 +1,7 @@
 module SpreeCmCommissioner
   class Asset < Spree::Asset
-    include Spree::Image::Configuration::ActiveStorage
-    include Rails.application.routes.url_helpers
+    include ::Spree::Image::Configuration::ActiveStorage
+    include ::Rails.application.routes.url_helpers
     include ::Spree::ImageMethods
 
     def styles

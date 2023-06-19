@@ -1,11 +1,48 @@
 require 'spec_helper'
 
 describe Spree::V2::Storefront::VariantSerializer, type: :serializer do
-  let(:variant) { create(:cm_variant) }
+  describe '#serializable_hash' do
+    let!(:variant) { create(:cm_variant) }
 
-  context 'with no include' do
-    subject { described_class.new(variant).serializable_hash }
+    subject {
+      described_class.new(variant, params: { 'store': variant.product.stores.first }, include: [
+        :product,
+        :images,
+        :option_values,
+        :vendor
+      ]).serializable_hash
+    }
 
-    it { expect(subject[:data][:attributes]).to include(:permanent_stock) }
+    it 'returns exact attributes' do
+      expect(subject[:data][:attributes].keys).to contain_exactly(
+        :sku,
+        :barcode,
+        :weight,
+        :height,
+        :width,
+        :depth,
+        :is_master,
+        :options_text,
+        :public_metadata,
+        :purchasable,
+        :in_stock,
+        :backorderable,
+        :currency,
+        :price,
+        :display_price,
+        :compare_at_price,
+        :display_compare_at_price,
+        :permanent_stock
+      )
+    end
+
+    it 'returns exact relationships' do
+      expect(subject[:data][:relationships].keys).to contain_exactly(
+        :product,
+        :images,
+        :option_values,
+        :vendor
+      )
+    end
   end
 end
