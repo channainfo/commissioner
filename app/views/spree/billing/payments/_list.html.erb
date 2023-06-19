@@ -6,8 +6,8 @@
         <th><%= "#{Spree.t('date')}/#{Spree.t('time')}" %></th>
         <th class="text-center"><%= Spree.t(:amount) %></th>
         <th class="text-center"><%= Spree.t(:payment_method) %></th>
-        <th class="text-center"><%= Spree.t(:transaction_id) %></th>
         <th class="text-center"><%= Spree.t(:payment_state) %></th>
+        <th class="text-center"><%= Spree.t(:cashier) %></th>
         <th class="actions text-center"></th>
       </tr>
     </thead>
@@ -18,13 +18,13 @@
           <td><%= pretty_time(payment.created_at) %></td>
           <td class="amount text-center"><%= payment.display_amount %></td>
           <td class="text-center"><%= payment_method_name(payment) %></td>
-          <td class="text-center"><%= payment.transaction_id %></td>
           <td class="text-center">
             <span type="button" class="with-tip badge badge-pill badge-<%= payment.state %>"
               title='<%= payment.payable.is_a?(Spree::User) ? payment.payable.email : nil %>'>
               <%= Spree.t(payment.state, scope: :payment_states, default: payment.state.capitalize) %>
             </span>
           </td>
+          <td class="text-center"><%= payment.payable.is_a?(Spree::User) ? payment.payable.full_name : nil %></td>
           <td class="actions">
             <span class="d-flex justify-content-center payment-action-buttons">
               <% payment.actions.each do |action| %>
