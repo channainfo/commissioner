@@ -1,6 +1,6 @@
 <%= render partial: 'spree/billing/shared/customer_tabs', locals: { current: :subscriptions } %>
 <% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:subscribe), new_billing_customer_subscription_path, class: "btn-success", icon: 'add.svg', id: 'billing_customer_subscription' %>
+  <%= button_link_to I18n.t('spree.subscribe'), new_billing_customer_subscription_path, class: "btn-success", icon: 'add.svg', id: 'billing_customer_subscription' %>
 <% end %>
 <% if @subscriptions.any?  %>
   <% unless @search.nil? %>
@@ -18,7 +18,7 @@
               <%= sort_link @search, :price, Spree.t(:price),{},{title: 'price_title'} %>
             </th>
             <th>
-              <%= sort_link @search, :start_date, Spree.t(:start_date), {}, {title: 'start_date_title'} %>
+              <%= sort_link @search, :start_date, I18n.t('activerecord.attributes.spree/order.start_date'), {}, {title: 'start_date_title'} %>
             </th>
             <th>
               <%= sort_link @search, :status, Spree.t(:status), {}, {title: 'status_title'} %>

@@ -1,0 +1,13 @@
+<%= render partial: 'spree/billing/shared/order_tabs', locals: { current: :adjustment } %>
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @adjustment } %>
+
+<%= form_for @adjustment, url: billing_order_adjustment_path(@order, @adjustment), method: :put do |f| %>
+  <fieldset>
+    <%= render partial: 'form', locals: { f: f } %>
+    <div class="form-actions" data-hook="buttons">
+      <%= button Spree.t(:continue),'save.svg' %>
+      <span class="or"><%= Spree.t(:or) %></span>
+      <%= button_link_to Spree.t('actions.cancel'), spree.billing_order_adjustments_url(@order), icon: 'cancel.svg' %>
+    </div>
+  </fieldset>
+<% end %>

@@ -1,6 +1,6 @@
 <% content_for :page_title do %>
-  <%= link_to Spree.t(:roles), spree.billing_roles_url %> /
-  <%= Spree.t(:new_role) %>
+  <%= link_to I18n.t('spree.billing.roles'), spree.billing_roles_url %> /
+  <%= I18n.t('spree.billing.new_role') %>
 <% end %>
 
 <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @role } %>

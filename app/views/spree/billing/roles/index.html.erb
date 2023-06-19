@@ -1,9 +1,9 @@
 <% content_for :page_title do %>
-  <%= Spree.t(:roles) %>
+  <%= I18n.t('spree.billing.roles') %>
 <% end %>
 
 <% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:new_role), new_billing_role_path, class: "btn-success", icon: 'add.svg', id: 'billing_new_role_link' %>
+  <%= button_link_to I18n.t('spree.billing.new_role'), new_billing_role_path, class: "btn-success", icon: 'add.svg', id: 'billing_new_role_link' %>
 <% end if can? :create, Spree::Role %>
 
 <% if @roles.any? %>
@@ -11,8 +11,8 @@
     <table class="table">
       <thead class="text-muted">
         <tr data-hook="billing_roles_index_headers">
-          <th><%= Spree.t(:role) %></th>
-          <th><%= Spree.t(:role_id) %></th>
+          <th><%= I18n.t('spree.billing.roles') %></th>
+          <th><%= I18n.t('spree.billing.role_id') %></th>
           <th class="actions"></th>
         </tr>
       </thead>

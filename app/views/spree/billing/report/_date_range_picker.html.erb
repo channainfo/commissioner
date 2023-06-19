@@ -43,6 +43,13 @@
     </div>
   </div>
 
+  <div class="from-group payable-picker">
+    <div class="form-group">
+      <%= f.label :payments_payable_id_eq, I18n.t(:cashier, scope: 'activerecord.attributes.spree/report') %>
+      <%= f.select 'q[payments_payable_id_eq]', options_for_select(Spree::User.joins(:payments).all.uniq.map {|user| [user.full_name.presence || user.intel_phone_number.presence || user.email.presence, user.id]}, params.dig(:q, :payments_payable_id_eq)), { include_blank: true }, { class: 'payable-picker form-control select2-clear js-filterable' } %>
+    </div>
+  </div>
+
   <div class="form-actions">
     <%= button Spree.t(:search), 'search.svg', nil, { class: 'btn-outline-primary' } %>
   </div>
