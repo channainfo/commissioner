@@ -3,6 +3,6 @@
     <%= configurations_sidebar_menu_item(Spree.t(:users), billing_users_url) %>
   <% end %>
   <% if spree_current_user.has_spree_role?('admin') || spree_current_user.permissions.exists?(entry: 'spree/billing/roles') %>
-    <%= configurations_sidebar_menu_item(Spree.t(:roles), billing_roles_url) %>
+    <%= configurations_sidebar_menu_item(I18n.t('spree.billing.roles'), billing_roles_url) %>
   <% end %>
 </ul>

@@ -76,43 +76,52 @@ Spree::Core::Engine.add_routes do
     end
   end
 
-  namespace :billing do
-    resource :report, only: %i[show], controller: :report do
-      get '/paid', to: 'report#paid', as: :paid
-      get '/balance_due', to: 'report#balance_due', as: :balance_due
-      get '/overdue', to: 'report#overdue', as: :overdue
-      get '/active_subscribers', to: 'report#active_subscribers', as: :active_subscribers
-    end
-    resources :customers do
-      resources :subscriptions
-      resources :addresses
-    end
-    resources :roles
-    resources :users
-    resources :products do
-      member do
-        get :stock
+  scope '(:locale)', locale: /#{I18n.available_locales.join("|")}/ do
+    namespace :billing do
+      resource :report, only: %i[show], controller: :report do
+        get '/paid', to: 'report#paid', as: :paid
+        get '/balance_due', to: 'report#balance_due', as: :balance_due
+        get '/overdue', to: 'report#overdue', as: :overdue
+        get '/active_subscribers', to: 'report#active_subscribers', as: :active_subscribers
+      end
+      resources :customers do
+        resources :subscriptions
+        resources :addresses
+      end
+      resources :roles
+      resources :users
+      resources :products do
+        member do
+          get :stock
+        end
+        resources :variants do
+          collection do
+            post :update_positions
+          end
+        end
+        resources :refunds, only: %i[new create edit update]
       end
       resources :variants do
         collection do
           post :update_positions
         end
-      end
-      resources :variants_including_master, only: [:update]
-    end
-    resources :orders do
-      resource :invoice, only: %i[show create], controller: :invoice
-      resources :payments do
-        member do
-          put :fire
-        end
 
-        resources :refunds, only: %i[new create edit update]
+        resources :variants_including_master, only: [:update]
       end
+      resources :orders do
+        resource :invoice, only: %i[show create], controller: :invoice
+        resources :payments do
+          member do
+            put :fire
+          end
+          resources :refunds, only: %i[new create edit update]
+        end
+        resources :adjustments
+      end
+      put '/switch_vendor', to: 'base#switch_vendor'
+      get '/forbidden', to: 'errors#forbidden', as: :forbidden
+      root to: redirect('/billing/report')
     end
-    put '/switch_vendor', to: 'base#switch_vendor'
-    get '/forbidden', to: 'errors#forbidden', as: :forbidden
-    root to: redirect('/billing/report')
   end
 
   namespace :api, defaults: { format: 'json' } do

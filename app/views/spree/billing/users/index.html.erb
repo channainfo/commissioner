@@ -18,7 +18,7 @@
         </div>
         <div class="col-12 col-lg-6">
           <div class="form-group">
-            <%= f.label :phone_number_cont, Spree.t(:phone_number) %>
+            <%= f.label :phone_number_cont,  I18n.t('activerecord.attributes.spree/order.phone_number')  %>
             <%= f.telephone_field :phone_number_cont, class: "form-control js-filterable" %>
           </div>
         </div>
@@ -67,10 +67,10 @@
             <%= sort_link @search, :gender, Spree.t(:gender), {}, {title: 'gender_title'} %>
           </th>
           <th>
-            <%= sort_link @search, :phone_number, Spree.t(:phone_number), {}, {title: 'phone_number_title'} %>
+            <%= sort_link @search, :phone_number,  I18n.t('activerecord.attributes.spree/order.phone_number') , {}, {title: 'phone_number_title'} %>
           </th>
           <th>
-            <%= sort_link @search, :created_at, Spree.t(:create_at), {}, {title: 'create_at_title'} %>
+            <%= sort_link @search, :created_at,  I18n.t('activerecord.attributes.spree/order.created_at') , {}, {title: 'create_at_title'} %>
           </th>
           <th data-hook="admin_users_index_header_actions" class="actions"></th>
         </tr>

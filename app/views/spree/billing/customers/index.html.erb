@@ -1,5 +1,5 @@
 <% content_for :page_title do %>
-  <%= Spree.t(:customers) %>
+  <%= I18n.t('spree.billing.customers') %>
 <% end %>
 <% content_for :page_actions do %>
   <%= button_link_to Spree.t(:add_customer), new_billing_customer_path, class: "btn-success", icon: 'add.svg', id: 'admin_new_customer_link' %>
@@ -115,7 +115,7 @@
             </td>
             <td>
               <% if customer.overdue_subscriptions == 'none'  %>
-                <%= customer.overdue_subscriptions %>
+                <%= I18n.t('spree.none') %>
               <% else %>
                 <%=link_to customer.overdue_subscriptions.number, edit_billing_order_path(customer.overdue_subscriptions)%>
               <% end %>
