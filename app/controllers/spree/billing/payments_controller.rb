@@ -17,7 +17,7 @@ module Spree
       def load_data
         @amount = params[:amount] || @order.total
         @payment_methods = @order.collect_backend_payment_methods
-        @penalty_length = (Time.zone.now - @order.line_items.first.due_date).to_i / 1.day
+        @penalty_in_day = SpreeCmCommissioner::PenaltyCalculator.calculate_penalty_in_days(Time.zone.now, @order.line_items.first.due_date)
 
         if @payment&.payment_method
           @payment_method = @payment.payment_method

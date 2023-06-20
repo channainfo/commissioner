@@ -90,7 +90,7 @@ km:
       exception_rules: "ករណីលើកលែង"
 
   orders:
-    total: "សរុប: %{orders_count} វិក្កយប័ត្រ"
+    total: "សរុប: %{orders_count} វិក្កយបត្រ"
 
   account_deletion:
     title:
@@ -103,6 +103,24 @@ km:
       other: "តែអ្នកអាចប្រាប់ពីមូលហេតុដែលចង់លុបគណនីបានទេ? បើមានបញ្ហាធ្ងន់ធ្ងរណាមួយ ​ពួកយើងព្យាយាមដោះស្រាយឲ្យបានល្អបំផុត។"
 
   spree:
+    km: "ភាសារខ្មែរ"
+    date_of_birth: "ថ្ងៃខែឆ្នាំកំណើត"
+    kind: "ប្រភេទ"
+    vendor: "ក្រុមហ៊ុន"
+    total_price: "តម្លៃសរុប"
+    invoice: "វិក្កយបត្រ"
+    option_text: ""
+    none: "គ្មាន"
+    subscribe: "ជាវជាប្រចាំ"
+    full_name: "ឈ្មោះពេញ"
+    address: "អាសយដ្ឋាន"
+    billing_address: "អាសយដ្ឋានទូទាត់"
+    shipping_address: "អាសយដ្ឋានប្រើ​ប្រាស់"
+    use_billing_address: "ប្រើប្រាស់អាសយដ្ឋានទូទាត់"
+    add_customer: "បញ្ចូលអតិថិជន"
+    lastname: "នាមត្រកូល"
+    firstname: "នាមខ្លួន"
+    gender: "ភេទ"
     cashier: "អ្នកទទួលប្រាក់"
     new_homepage_banner: "បន្ថែមផ្ទាំងរូបភាពថ្មី"
     intel_phone_number: "លេខទូរសព្ទ"
@@ -124,7 +142,19 @@ km:
       match_any: "Match any of these date"
       match_all: "Must match all of these date"
     billing:
-      orders: "វិក្កយប័ត្រ"
+      new_role: "បង្កើតតួនាទីថ្មី"
+      role_id: "កូដតួនាទី"
+      settings: "ការកំណត់"
+      report: "របាយការណ៍"
+      paid: "បង់រួច"
+      balance_due: "មិនទាន់បង់"
+      penalty: "ពិន័យ"
+      add_penalty: "បន្ថែមពិន័យ"
+      active_subscribers: "ចំនួនអ្នកកំពុងប្រើ"
+      paid_orders: "វិក្កយបត្របង់រួច"
+      balance_due_orders: "វិក្កយបត្រមិនទាន់បង់"
+      overdue_orders: "វិក្កយបត្រហួសថ្ងៃបង់"
+      orders: "វិក្កយបត្រ"
       customers: "អតិថិជន"
       roles: "តួនាទី"
       subscriptions: "ជាវជាប្រចាំ"
@@ -133,8 +163,6 @@ km:
       suspended: "បានផ្អាក"
       users: "គណនីបុគ្គលិក"
       day: "ថ្ងៃ"
-      penalty: "Penalty"
-      add_penalty: "Add Penalty"
     upsupported_payment: "មិនស្គាល់ការបង់ប្រាក់"
     selected_item_not_available_on_date: "Selected item not available on %{date}"
     auto_apply: "ដាក់ប្រើដោយស្វ័យប្រវត្តិ"

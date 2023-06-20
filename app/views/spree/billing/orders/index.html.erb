@@ -26,7 +26,7 @@
           <tr id="<%= spree_dom_id order %>" data-hook="admin_subscriptions_index_rows">
             <td><%= link_to order.invoice&.invoice_number, edit_billing_order_path(order) %></td>
             <td>
-              <%= order.line_items[0].due_date.to_date %>
+              <%= order.line_items[0].due_date&.to_date %>
             </td>
             <td>
               <%= link_to order.customer.customer_number, edit_billing_customer_path(order.customer) %>

@@ -6,10 +6,10 @@
     </span>
   <% end %>
 <% end %>
-<% if @penalty_length > 0 && @order.payment_state != "paid" && !@order.adjustments.present?%>
+<% if @penalty_in_day > 0 && @order.payment_state != "paid" && !@order.adjustments.present?%>
   <div class="alert alert-info d-flex justify-content-between align-items-center" >
     <%= I18n.t('spree.billing.overdue')%>
-    <%= @penalty_length %>
+    <%= @penalty_in_day %>
     <%= I18n.t('spree.billing.day') %>
     <%= button_link_to(I18n.t('spree.billing.add_penalty'), new_billing_order_adjustment_path(@order), class: "btn-success", icon: 'add.svg') if can? :create, Spree::Adjustment %>
   </div>
