@@ -20,7 +20,7 @@ module SpreeCmCommissioner
 
       base.delegate :customer, to: :subscription, allow_nil: true
 
-      base.whitelisted_ransackable_associations |= %w[customer taxon]
+      base.whitelisted_ransackable_associations |= %w[customer taxon payments]
     end
 
     # required only in one case,

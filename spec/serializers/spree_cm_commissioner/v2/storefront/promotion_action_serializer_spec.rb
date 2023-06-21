@@ -1,7 +1,7 @@
-# frozen_string_literal: true
+require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::V2::Storefront::PromotionActionSerializer, type: :serializer do
-  describe '.serializable_hash' do
+  describe '#serializable_hash' do
     let(:promotion) { create(:promotion) }
     let(:calculator) { Spree::Calculator::FlatPercentItemTotal.new(preferred_flat_percent: 10) }
     let(:promotion_action) { Spree::Promotion::Actions::CreateAdjustment.create(promotion: promotion, calculator: calculator) }

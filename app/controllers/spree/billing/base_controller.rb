@@ -7,8 +7,17 @@ module Spree
       helper_method :current_vendor, :vendors
 
       before_action :required_vendor_user!
+      before_action :set_locale
 
       rescue_from SpreeCmCommissioner::UnauthorizedVendorError, with: :handle_unauthorized_vendor
+
+      def set_locale
+        I18n.locale = params[:locale] || I18n.default_locale
+      end
+
+      def default_url_options(options = {})
+        { locale: I18n.locale }.merge(options)
+      end
 
       def handle_unauthorized_vendor
         redirect_to billing_forbidden_url
@@ -47,6 +56,16 @@ module Spree
         session[:billing_current_vendor_slug] = params[:slug] if exists
 
         head exists ? :ok : :not_found
+      end
+
+      # @overrided
+      def edit_object_url(object, options = {})
+        if parent_data.present?
+          spree.send "edit_billing_#{resource.model_name}_#{resource.object_name}_url",
+                     parent, object, options
+        else
+          spree.send "edit_billing_#{resource.object_name}_url", object, options
+        end
       end
 
       # @overrided

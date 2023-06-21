@@ -29,8 +29,28 @@
       </div>
     </div>
   </div>
+  <div class="form-group period-range-filter">
+    <div class="form-group">
+      <%= f.select :period,
+                  options_for_select([['This Month', 'this_month'],
+                                      ['Last Month',  'last_month'],
+                                      ['This Week', 'this_week'],
+                                      ['Last Week', 'last_week'],
+                                      ['This Quarter', 'this_quarter'],
+                                      ['Last Quarter', 'last_quarter'],
+                                      ['This Year', 'this_year'],
+                                      ['Last Year', 'last_year']]), {include_blank: true}, for: 'period-select', class: 'period-select form-control select2-clear js-filterable', id: 'period-select' %>
+    </div>
+  </div>
+
+  <div class="from-group payable-picker">
+    <div class="form-group">
+      <%= f.label :payments_payable_id_eq, I18n.t(:cashier, scope: 'activerecord.attributes.spree/report') %>
+      <%= f.select 'q[payments_payable_id_eq]', options_for_select(Spree::User.joins(:payments).all.uniq.map {|user| [user.full_name.presence || user.intel_phone_number.presence || user.email.presence, user.id]}, params.dig(:q, :payments_payable_id_eq)), { include_blank: true }, { class: 'payable-picker form-control select2-clear js-filterable' } %>
+    </div>
+  </div>
 
   <div class="form-actions">
     <%= button Spree.t(:search), 'search.svg', nil, { class: 'btn-outline-primary' } %>
   </div>
-  <% end %>
+<% end %>

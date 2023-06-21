@@ -1,0 +1,209 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+km:
+  account_checker:
+    verify:
+      already_exist: "%{login} already exist"
+
+  sms:
+    to:
+      blank: "recipient can not be blank"
+    body:
+      blank: "sms content can not be blank"
+
+      already_exist: "%{login} already exist"
+
+  pincode_creator:
+    invalid_phone_number: "លេខទូរសព្ទមិនត្រឹមត្រូវ"
+    invalid_email_address: "អ៊ីមែលមិនត្រឹមត្រូវ"
+
+  authenticator:
+    incorrect_login: "ពត៌មានមិនត្រឹមត្រូវ"
+    incorrect_password: "ពាក្យសម្ងាត់មិនត្រឹមត្រូវ"
+    invalid_or_missing_params: "ពត៌មានមិនត្រឹមត្រូវ ឬមិនគ្រប់គ្រង"
+
+  hello: "Hello world"
+
+  category_icon:
+    field: Category icon (Square)
+
+  calendar:
+    event:
+      empty_info: "No <b>Events</b> found."
+
+  option_type:
+    kind_info: "<b>បន្តាប់ពីកំណត់រួច</b> អ្នកមិនអាចកែប្រែបានទៀតទេ"
+    kind_validation: "Attribute can't be updated for %{option_type_name}"
+    empty_info: "រក <b>Option Type</b> មិនឃើញសម្រាប់ប្រភេទ"
+
+  stock_location:
+    lat:
+      label: "Latitude"
+      hint: "បញ្ចូលនៅចន្លោះ 90 to -90"
+    lon:
+      label: "Longitude"
+      hint: "បញ្ចូលនៅចន្លោះ 180 to -180"
+    reference:
+      label: "Reference"
+
+  user_identity_provider:
+    not_found: "User identity provider for %{identity_type} not found in the system"
+
+  variant:
+    validation:
+      option_type_is_not_variant: "%{option_type_name} / %{option_value_name} មិនត្រូវជាមួយនឹងផលិតផល"
+      subscribed: "%{product_name} ជាប្រភេទជាវជាប្រចាំ"
+      option_type_is_not_product: "%{option_type_name} / %{option_value_name} មិនត្រូវជាមួយនឹងផលិតផល"
+      out_of_stock: "%{variant_name} អស់ស្តុកហើយ"
+    product_kind_option_types:
+      empty_info: "<b>ចំណាំ:</b> កំណត់ប្រភេទសម្រាប់ផលិតផល. ដើម្បីកែប្រែ, សូមចូលទៅ <b>លម្អិត</b> tab > <b>ប្រភេទ</b>"
+
+  vectors:
+    icons:
+      info_rules: 'Only allow <b>%{allow_extensions}</b> files. Icons are stored inside "images/" folder, eg. app/assets/images/backend-adjust.svg.'
+      total: "Total: %{total_in_page} / %{total_count} icons"
+
+  product:
+    validation:
+      not_active: "%{product_name} is not active"
+
+  photo:
+    empty_info: "រក <b>Photos</b> មិនឃើញទេ"
+
+  nearby_place:
+    empty_info: "រក <b>Nearby places</b> មិនឃើញទេ"
+
+  vendor:
+    validation:
+      vendor_kind_option_types:
+        empty_info: "<b>Note:</b> កំណត់ប្រភេទសម្រាប់ក្រុមហ៊ុនជាមុនសិន. ដើម្បីកែប្រែ, ចូលទៅ <b>លម្អិត</b> tab > <b>ប្រភេទ</b>"
+
+    service_calendars:
+      empty_info: "រក <b>ប្រតិទិនសេវាកម្ម</b> មិនឃើញទេ."
+      start_date: "ចាប់ពីថ្ងៃ"
+      end_date: "រហូតដល់ថ្ងៃ"
+      from_date: "ថ្ងើចាប់ផ្តើម"
+      to_date: "ថ្ងៃបញ្ចប់"
+      new_calendar: "ប្រតិទិនសេវាកម្មថ្មី"
+      operations_day: "ថ្ងៃបើកដំណើរការ"
+      exception_rules: "ករណីលើកលែង"
+
+  orders:
+    total: "សរុប: %{orders_count} វិក្កយបត្រ"
+
+  account_deletion:
+    title:
+      have_another_account: "ខ្ញុំមានគណនីផ្សេងទៀត"
+      too_many_notifications: "ខ្ញុំទទួលបានសារដំណឹងច្រើនពេក"
+      sth_broken: "មានមុខងារប្រើប្រាស់មិនបាន"
+      other: "ផ្សេងៗ"
+    reason_description:
+      sth_broken: "តើអ្នកអាចប្រាប់ពីមុខងារដែលមិនដំណើរការបានទេ? ក្រុមការងារនឹងមានដោះស្រាយនឹងពេលដែលយើងអាចកំណត់បញ្ហាបាន"
+      other: "តែអ្នកអាចប្រាប់ពីមូលហេតុដែលចង់លុបគណនីបានទេ? បើមានបញ្ហាធ្ងន់ធ្ងរណាមួយ ​ពួកយើងព្យាយាមដោះស្រាយឲ្យបានល្អបំផុត។"
+
+  spree:
+    km: "ភាសារខ្មែរ"
+    date_of_birth: "ថ្ងៃខែឆ្នាំកំណើត"
+    kind: "ប្រភេទ"
+    vendor: "ក្រុមហ៊ុន"
+    total_price: "តម្លៃសរុប"
+    invoice: "វិក្កយបត្រ"
+    option_text: ""
+    none: "គ្មាន"
+    subscribe: "ជាវជាប្រចាំ"
+    full_name: "ឈ្មោះពេញ"
+    address: "អាសយដ្ឋាន"
+    billing_address: "អាសយដ្ឋានទូទាត់"
+    shipping_address: "អាសយដ្ឋានប្រើ​ប្រាស់"
+    use_billing_address: "ប្រើប្រាស់អាសយដ្ឋានទូទាត់"
+    add_customer: "បញ្ចូលអតិថិជន"
+    lastname: "នាមត្រកូល"
+    firstname: "នាមខ្លួន"
+    gender: "ភេទ"
+    cashier: "អ្នកទទួលប្រាក់"
+    new_homepage_banner: "បន្ថែមផ្ទាំងរូបភាពថ្មី"
+    intel_phone_number: "លេខទូរសព្ទ"
+    new_customer: "អតិថិជនថ្មី"
+    listing_price: "តម្លៃលក់"
+    length: "ប្រវែង"
+    promotion_rule_types:
+      fixed_date:
+        name: "ថ្ងៃជាក់លាក់"
+        description: "Fixed Date"
+      vendor:
+        name: "ក្រុមហ៊ុន"
+        description: "Vendor"
+    promotion_action_types:
+      create_date_specific_item_adjustments:
+        name: "Create date specific item adjustment"
+        description: "Create date specific item adjustment"
+    fixed_date_rule:
+      match_any: "Match any of these date"
+      match_all: "Must match all of these date"
+    billing:
+      new_role: "បង្កើតតួនាទីថ្មី"
+      role_id: "កូដតួនាទី"
+      settings: "ការកំណត់"
+      report: "របាយការណ៍"
+      paid: "បង់រួច"
+      balance_due: "មិនទាន់បង់"
+      penalty: "ពិន័យ"
+      add_penalty: "បន្ថែមពិន័យ"
+      active_subscribers: "ចំនួនអ្នកកំពុងប្រើ"
+      paid_orders: "វិក្កយបត្របង់រួច"
+      balance_due_orders: "វិក្កយបត្រមិនទាន់បង់"
+      overdue_orders: "វិក្កយបត្រហួសថ្ងៃបង់"
+      orders: "វិក្កយបត្រ"
+      customers: "អតិថិជន"
+      roles: "តួនាទី"
+      subscriptions: "ជាវជាប្រចាំ"
+      active_subscription: "កំពុងប្រើប្រាស់"
+      overdue: "ហួសថ្ងៃបង់"
+      suspended: "បានផ្អាក"
+      users: "គណនីបុគ្គលិក"
+      day: "ថ្ងៃ"
+      
+    upsupported_payment: "មិនស្គាល់ការបង់ប្រាក់"
+    selected_item_not_available_on_date: "Selected item not available on %{date}"
+    auto_apply: "ដាក់ប្រើដោយស្វ័យប្រវត្តិ"
+    auto_apply_info: "Path & code will be removed"
+
+  activerecord:
+    attributes:
+      spree/order:
+        customer_id: "លេខកូដអតិថិជន"
+        to_date: "រហូតដល់ថ្ងៃ"
+        from_date: "ពីថ្ងៃ"
+        created_at: "បង្កើតនៅថ្ងៃ"
+        start_date: "ថ្ងៃចាប់ផ្តើម"
+        start_date_range: "ចន្លោះថ្ងៃចាប់ផ្តើម"
+        phone_number: "លេខទូរសព្ទ"
+        payable: "ត្រូវបង់"
+        invoice_id: "លេខកូដវិក្កយប័ត្រ"
+        status: "ស្ថានភាព"
+        invoice_due_date: "ថ្ងៃត្រូវបង់ប្រាក់"
+        type: "ប្រភេទ"
+        select_date: "ជ្រើសរើសថ្ងៃ"
+        taxon: "ប្រភេទ"
+    errors:
+      models:
+        spree_cm_commissioner/service_calendar:
+          attributes:
+            exception_rules:
+              invalid_json: "Format មិនត្រឹមត្រូវ"
+
+  mail:
+    order_mailer:
+      booking_confirm: "Your booking is now confirmed!"
+      thanks: "Thanks %{full_name},"
+      booking_reference: "For reference, your booking ID is %{order_number}."
+      booking_summary: "Booking Summary"
+      check_in: "Check in:"
+      check_out: "Check out:"
+  invoice:
+    empty_info: "<b>វិក្កយប័ត្រ</b> មិនទាន់បានបង្កើតទេ"
+  device_token:
+    empty_info: "រក <b>Device_token</b> មិនឃើញទេ"
+  notification:
+    send_test_success: "សាកផ្ញើរបានជោគជ័យ"
