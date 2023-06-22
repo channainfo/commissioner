@@ -30,15 +30,6 @@ module Spree
         edit_billing_product_url(@product)
       end
 
-      # def product_includes
-      #   {
-      #     variant_images: [],
-      #     tax_category: [],
-      #     master: [],
-      #     variants: [:prices]
-      #   }
-      # end
-
       def variant_stock_includes
         [:images, { stock_items: :stock_location, option_values: :option_type }]
       end

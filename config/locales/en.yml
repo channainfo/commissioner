@@ -95,7 +95,7 @@ en:
   account_deletion:
     title:
       have_another_account: "I have another account"
-      too_many_notifications: "I recieved too mant notifications"
+      too_many_notifications: "I recieved too many notifications"
       sth_broken: "Something broken"
       other: "Other"
     reason_description:
@@ -163,7 +163,6 @@ en:
       suspended: "Suspended"
       users: "User"
       day: "day"
-
     upsupported_payment: "Unsupported event"
     selected_item_not_available_on_date: "Selected item not available on %{date}"
     auto_apply: "Auto apply"
