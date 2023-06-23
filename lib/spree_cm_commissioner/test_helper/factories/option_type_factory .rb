@@ -13,6 +13,11 @@ FactoryBot.define do
       presentation { 'due-date' }
     end
 
+    trait :payment_option do
+      name { 'payment-option' }
+      presentation { 'payment-option' }
+    end
+
     initialize_with { Spree::OptionType.where(name: name).first_or_initialize }
   end
 end

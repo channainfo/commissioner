@@ -51,10 +51,24 @@ module SpreeCmCommissioner
       self.due_date = due_days
     end
 
+    def post_paid?
+      payment_option_type = order.subscription.variant.product.option_types.find_by(name: 'payment-option')
+      payment_option_value = order.subscription.variant.option_values.find_by(option_type_id: payment_option_type.id)
+      payment_option_value.name == 'post-paid'
+    end
+
     def due_days
       due_date_option_type = order.subscription.variant.product.option_types.find_by(name: 'due-date')
       due_date_option_value = order.subscription.variant.option_values.find_by(option_type_id: due_date_option_type.id)
+
       day = due_date_option_value.presentation.to_i
+
+      if post_paid?
+        month_option_type = order.subscription.variant.product.option_types.find_by(name: 'month')
+        month_option_value = order.subscription.variant.option_values.find_by(option_type_id: month_option_type.id)
+
+        return from_date + month_option_value.presentation.to_i.month + day.days
+      end
       from_date + day.days
     end
   end
