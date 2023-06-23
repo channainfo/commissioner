@@ -1,5 +1,4 @@
 <%= render partial: 'spree/billing/shared/order_tabs', locals: { current: :payments } %>
-
 <% content_for :page_actions do %>
   <% if @order.outstanding_balance? && can?(:create, Spree::Payment) %>
     <span id="new_payment_section">
@@ -7,27 +6,30 @@
     </span>
   <% end %>
 <% end %>
-
+<% if @penalty_in_day > 0 && @order.payment_state != "paid" && !@order.adjustments.present?%>
+  <div class="alert alert-info d-flex justify-content-between align-items-center" >
+    <%= I18n.t('spree.billing.overdue')%>
+    <%= @penalty_in_day %>
+    <%= I18n.t('spree.billing.day') %>
+    <%= button_link_to(I18n.t('spree.billing.add_penalty'), new_billing_order_adjustment_path(@order), class: "btn-success", icon: 'add.svg') if can? :create, Spree::Adjustment %>
+  </div>
+<% end %>
 <% if @order.outstanding_balance? %>
   <div class="alert alert-info outstanding-balance">
     <%= @order.outstanding_balance < 0 ? Spree.t(:credit_owed) : Spree.t(:balance_due) %>: <strong><%= @order.display_outstanding_balance %></strong>
   </div>
 <% end %>
-
 <% if @payments.any? %>
   <div data-hook="payment_list" class="mb-3 table-responsive">
     <%= render partial: 'list', locals: { payments: @payments } %>
   </div>
-
   <% if @refunds.any? %>
     <fieldset data-hook="payment_list" class="no-border-bottom">
       <legend><%= Spree.t(:refunds) %></legend>
       <%= render partial: 'spree/admin/shared/refunds', locals: { refunds: @refunds, show_actions: true } %>
     </fieldset>
   <% end %>
-
 <% else %>
   <div class="text-center no-objects-found m-5"><%= Spree.t(:order_has_no_payments) %></div>
 <% end %>
-
 <%= render partial: 'spree/admin/shared/order_summary' %>

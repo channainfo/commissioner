@@ -163,7 +163,6 @@ km:
       suspended: "បានផ្អាក"
       users: "គណនីបុគ្គលិក"
       day: "ថ្ងៃ"
-      
     upsupported_payment: "មិនស្គាល់ការបង់ប្រាក់"
     selected_item_not_available_on_date: "Selected item not available on %{date}"
     auto_apply: "ដាក់ប្រើដោយស្វ័យប្រវត្តិ"

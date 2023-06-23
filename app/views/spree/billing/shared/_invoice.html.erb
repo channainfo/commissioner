@@ -10,6 +10,7 @@
 
   @product = @invoice.order.line_items.first.variant.sku
   @price = @invoice.order.line_items.first.display_price
+  @total = @invoice.order.display_total
   @from_date = @invoice.order.line_items.first.to_date.strftime("%B %Y")
   @date = @invoice.date.strftime('%Y-%m-%d')
 
@@ -104,7 +105,24 @@
                 </ul>
               </td>
             </tr>
-            <tr>
+            <%  @order.adjustments.each do |adjustment|  %>
+              <tr>
+                <th scope="row">2</th>
+                <td>
+                  <ul class="list-unstyled">
+                    <li> <%= adjustment.label %></li>
+                  </ul>
+                </td>
+                <td></td>
+                <td>
+                  <ul class="list-unstyled">
+                    <li>
+                      <%= adjustment.display_amount %>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            <% end %>
           </tbody>
       </table>
 
@@ -113,7 +131,7 @@
           <div class="d-flex justify-content-between align-items-center bg-primary pt-3 px-2 font-weight-bold text-white">
                 <p>ទឹកប្រាក់​ត្រូវទូទាត់​​ / Total Amount due</p>
                 <p>
-                  <%= @price %>
+                  <%= @total %>
                 </p>
           </div>
             <div class="d-flex justify-content-between mt-4">
@@ -139,7 +157,3 @@
     </div>
   </div>
 </div>
-
-
-
-
