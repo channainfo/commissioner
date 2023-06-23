@@ -36,12 +36,14 @@ FactoryBot.define do
     factory :cm_subscribable_product do
       option_types { [
         create(:cm_option_type, :month),
-        create(:cm_option_type, :due_date)
+        create(:cm_option_type, :due_date),
+        create(:cm_option_type, :payment_option)
       ] }
 
       transient do
         month { 6 }
         due_date { 5 }
+        payment_option { 'pre-paid' }
       end
 
       before(:create) do |product, _evaluator|
@@ -52,9 +54,10 @@ FactoryBot.define do
         # p product.option_types
         option_value1 = create(:cm_option_value, name: "#{evaluator.month}-months", presentation: evaluator.month.to_s, option_type: product.option_types[0])
         option_value2 = create(:cm_option_value, name: "#{evaluator.due_date} Days", presentation: evaluator.due_date.to_s, option_type: product.option_types[1])
+        option_value3 = create(:cm_option_value, name: "#{evaluator.payment_option}", presentation: evaluator.payment_option.to_s, option_type: product.option_types[2])
 
         variant = create(:variant, price: product.price, product: product)
-        variant.option_values = [option_value1, option_value2]
+        variant.option_values = [option_value1, option_value2, option_value3]
         variant.save!
 
         variant.stock_items.first.adjust_count_on_hand(10)
