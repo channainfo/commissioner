@@ -43,13 +43,6 @@
 
             <td data-hook="admin_device_token_index_row_actions" class="actions">
               <span class="d-flex justify-content-end">
-                 <%= link_to_with_icon 'bell.svg', 'Send Notification',
-                                    admin_user_user_notifications_path(user_id: @user.id),
-                                    method: :post,
-                                    class: 'btn btn-success btn-sm',
-                                    data: {confirm: 'Are you sure to send notification to this user?'},
-                                    title: 'Send Notification',
-                                    no_text: true %>
                 <%= link_to_edit device_token, url: edit_admin_user_device_token_path(id:device_token.id), no_text: true if can?(:edit,:amdin ,device_token) %>
                 <%= link_to_delete device_token,url: admin_user_device_token_path(id:device_token.id), no_text: true if can?(:delete, device_token) %>
               </span>
