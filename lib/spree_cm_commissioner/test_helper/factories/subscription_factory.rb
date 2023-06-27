@@ -7,6 +7,7 @@ FactoryBot.define do
       price { 10.0 }
       month { 1 }
       due_date { 5 }
+      payment_option { 'pre-paid' }
     end
 
     before :create do |subscription, evaluator|
@@ -16,6 +17,7 @@ FactoryBot.define do
         price: evaluator.price,
         month: evaluator.month,
         due_date: evaluator.due_date,
+        payment_option: evaluator.payment_option
       ).variants.last
     end
   end
