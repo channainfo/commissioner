@@ -1,4 +1,5 @@
 <!-- insert_bottom "[data-hook='admin_user_form_password_fields']" -->
+
 <%= f.field_container :profile do %>
   <%= f.label :profile %><br>
   <%= image_tag main_app.url_for(@user.profile.url(:small)), :class => "rounded border mb-4" if @user.profile %>
