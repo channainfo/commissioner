@@ -163,6 +163,12 @@ en:
       suspended: "Suspended"
       users: "User"
       day: "day"
+      payment_state:
+        paid: "Paid"
+        balance_due: "Balance Due"
+        overdue: "Overdue"
+        failed: "Failed"
+        unknown: "Unknown"
     upsupported_payment: "Unsupported event"
     selected_item_not_available_on_date: "Selected item not available on %{date}"
     auto_apply: "Auto apply"
