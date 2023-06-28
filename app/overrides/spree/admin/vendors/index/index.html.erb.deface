@@ -24,7 +24,7 @@
         <tr id="<%= spree_dom_id vendor %>" data-hook="vendors_row">
           <td class="image">
             <div class="admin-product-image-container small-img">
-              <%= image_tag main_app.url_for(vendor.image.url(:small)) if vendor.image %>
+              <%= image_tag(main_app.cdn_image_url(vendor.image.try(:attachment))) %>
             </div>
           </td>
           <td>
