@@ -13,7 +13,7 @@
 <% content_for :page_tabs do %>
   <li class="nav-item">
     <%= link_to_with_icon 'tag.svg',
-      Spree.t(:subscriptions),
+      Spree.t('billing.subscriptions'),
       spree.billing_customer_subscriptions_path(@customer),
       class: "nav-link #{'active' if current == :subscriptions}" %>
   </li>
@@ -21,7 +21,7 @@
 <% content_for :page_tabs do %>
   <li class="nav-item">
     <%= link_to_with_icon 'pin-map.svg',
-      Spree.t(:addresses),
+      Spree.t(:address),
       spree.billing_customer_addresses_path(@customer),
       class: "nav-link #{'active' if current == :addresses}" %>
   </li>

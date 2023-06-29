@@ -1,7 +1,8 @@
 <ul data-hook="billing_report_sidebar_menu" class="collapse nav nav-pills nav-stacked" id="sidebar-report">
-  <%= configurations_sidebar_menu_item(Spree.t(:report), spree.billing_report_path(@report)) %>
-  <%= configurations_sidebar_menu_item(Spree.t(:paid), spree.paid_billing_report_path(@report)) %>
-  <%= configurations_sidebar_menu_item(Spree.t(:balance_due), spree.balance_due_billing_report_path(@report)) %>
-  <%= configurations_sidebar_menu_item(Spree.t(:overdue), spree.overdue_billing_report_path(@report)) %>
-  <%= configurations_sidebar_menu_item(Spree.t(:active_subscribers), spree.active_subscribers_billing_report_path(@report)) %>
+  <%= tab :report, selected: request.path.ends_with?('/report'), url: spree.billing_report_path, label: Spree.t('billing.report') %>
+  <%= tab :paid_report, selected: request.path.ends_with?('/paid'), url: spree.paid_billing_report_path, label: Spree.t('billing.paid') %>
+  <%= tab :balance_due_report, selected: request.path.ends_with?('/balance_due'), url: spree.balance_due_billing_report_path, label: Spree.t('billing.balance_due') %>
+  <%= tab :overdue_report, selected: request.path.ends_with?('/overdue'), url: spree.overdue_billing_report_path, label: Spree.t('billing.overdue') %>
+  <%= tab :active_subscribers_report, selected: request.path.ends_with?('/active_subscribers'), url: spree.active_subscribers_billing_report_path, label: Spree.t('billing.active_subscribers') %>
 </ul>
+

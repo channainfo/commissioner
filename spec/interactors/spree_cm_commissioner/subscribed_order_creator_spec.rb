@@ -43,5 +43,16 @@ RSpec.describe SpreeCmCommissioner::SubscribedOrderCreator do
       expect(subscription.last_occurence).to eq subscription.start_date + 1.months
       expect(subscription.orders[1].invoice.date).to eq subscription.last_occurence
     end
+
+    it 'create an order with the correct due date' do
+      subscription1 = create(:cm_subscription, customer: customer, start_date: '2023-01-02'.to_date, price: 13.0, month: 1)
+      subscription2 = create(:cm_subscription, customer: customer, start_date: '2023-01-02'.to_date, price: 13.0, month: 1, payment_option:'post-paid')
+      expect(subscription1.orders.last.line_items.last.due_date).to eq subscription1.orders.last.line_items.last.from_date + 5.days
+      expect(subscription2.orders.last.line_items.last.due_date.to_date).to eq Date.parse('2023-02-07')
+
+      context = described_class.call(subscription: subscription2)
+      expect(subscription2.orders.size).to eq 2
+      expect(subscription2.orders.last.line_items.last.due_date.to_date).to eq Date.parse('2023-03-07')
+    end
   end
 end

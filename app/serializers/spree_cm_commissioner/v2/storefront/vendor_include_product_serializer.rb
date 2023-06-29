@@ -6,8 +6,8 @@ module SpreeCmCommissioner
 
         attributes :name, :slug
 
-        has_one :app_promotion_banner, serializer: :vendor_promotion_banner
-        has_many :products, serializer: Spree::V2::Storefront::ProductSerializer
+        has_one :app_promotion_banner, serializer: :asset
+        has_many :products, serializer: ::Spree::V2::Storefront::ProductSerializer
       end
     end
   end

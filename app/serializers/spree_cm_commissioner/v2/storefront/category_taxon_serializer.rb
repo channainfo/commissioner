@@ -7,8 +7,8 @@ module SpreeCmCommissioner
         attributes :name, :pretty_name, :permalink, :seo_title, :description, :meta_title, :meta_description,
                    :meta_keywords, :left, :right, :position, :depth, :updated_at
 
-        has_one :web_banner, serializer: :taxon_web_banner
-        has_one :category_icon, serializer: :taxon_category_icon
+        has_one :web_banner, serializer: :asset
+        has_one :category_icon, serializer: :asset
       end
     end
   end

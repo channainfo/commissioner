@@ -31,6 +31,10 @@ module SpreeCmCommissioner
         end
       end
 
+      def full_name
+        [first_name, last_name].reject(&:empty?).join(' ')
+      end
+
       def base.end_users
         joins('LEFT JOIN spree_vendor_users ON spree_users.id = spree_vendor_users.user_id').where(spree_vendor_users: { user_id: nil })
       end

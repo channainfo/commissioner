@@ -17,7 +17,7 @@ module SpreeCmCommissioner
       end
 
       def authorize?
-        auth_user.admin? || auth_user.permissions.exists?(entry: auth_entry, action: auth_action)
+        auth_user.present? && (auth_user.admin? || auth_user.permissions.exists?(entry: auth_entry, action: auth_action))
       end
 
       # override cancancan
@@ -38,7 +38,13 @@ module SpreeCmCommissioner
       end
 
       def redirect_unauthorized_access
-        redirect_to billing_forbidden_url
+        store_location # store current location in session for redirect after login
+
+        if auth_user.nil?
+          redirect_to spree.admin_login_path
+        else
+          redirect_to billing_forbidden_url
+        end
       end
     end
   end

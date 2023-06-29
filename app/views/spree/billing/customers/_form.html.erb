@@ -21,13 +21,13 @@
       <%= f.error_message_on :gender %>
     <% end %>
     <%= f.field_container :phone_number do %>
-      <%= f.label :phone_number, Spree.t(:phone_number) %>
+      <%= f.label :phone_number, I18n.t('activerecord.attributes.spree/order.phone_number') %>
       <%= f.telephone_field :phone_number, class: 'form-control', required: true %>
       <%= f.error_message_on :phone_number %>
     <% end %>
     <%= f.hidden_field :vendor_id, value: current_vendor.id %>
     <%= f.field_container :taxon_id do %>
-      <%= f.label :taxon_id, Spree.t(:taxon_id) %>
+      <%= f.label :taxon_id, I18n.t('activerecord.attributes.spree/order.taxon') %>
       <%= f.collection_select(:taxon_id, Spree::Taxon.where(depth: 1), :id, :name, { include_blank: Spree.t('match_choices.none') }, { class: 'select2', required: true })%>
       <%= f.error_message_on :taxon_id %>
     <% end %>

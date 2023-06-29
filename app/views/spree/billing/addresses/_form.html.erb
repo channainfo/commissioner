@@ -22,7 +22,7 @@
           <%= Spree.t(:shipping_address) %>
         </h5>
       </div>
-
+      
       <div class="card-body">
         <%= f.fields_for :ship_address, @ship_address do |sa_form| %>
           <p class="form-group" data-hook="use_billing">

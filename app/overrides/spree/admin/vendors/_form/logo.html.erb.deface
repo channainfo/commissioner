@@ -1,6 +1,8 @@
 <!-- insert_before "erb[loud]:contains('field_container :commission_rate')" -->
-<%= f.field_container :logo do %>
-  <%= f.label :logo %>
-  <%= f.file_field :logo %>
-  <%= image_tag main_app.url_for(@vendor.logo.url(:small)) if @vendor.logo %>
-<% end %>
+
+<%= render 'shared/asset_field',
+  field: :logo,
+  label: Spree.t(:logo),
+  asset: @vendor.logo,
+  form:f
+%>

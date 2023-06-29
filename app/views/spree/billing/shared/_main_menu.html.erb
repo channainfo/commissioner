@@ -15,7 +15,7 @@
       <%= billing_main_menu_tree Spree.t('billing.report'), icon: "pie-chart-fill.svg", sub_menu:"report", url: "#sidebar-report" %>
     </ul>
     <ul class="nav nav-sidebar" id="sidebarCustomer">
-      <%= tab :customers, url: billing_customers_path, icon: 'people-fill.svg' %>
+      <%= tab Spree.t('billing.customers'), url: billing_customers_path, icon: 'people-fill.svg' %>
     </ul>
     <ul class="nav nav-sidebar" id="sidebarOrder">
       <%= tab :orders, url: billing_orders_path, icon: 'inbox-fill.svg' %>
