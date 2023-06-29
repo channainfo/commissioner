@@ -20,5 +20,9 @@ module SpreeCmCommissioner
         order_number: order.number
       }
     end
+
+    def type
+      'order_complete_notification'
+    end
   end
 end
