@@ -12,6 +12,7 @@ module SpreeCmCommissioner
         client_name: context.client_name
       ).first_or_initialize do |device_token|
         device_token.client_version = context.client_version
+        device_token.device_type = context.device_type
       end
 
       context.device_token.persisted?
@@ -23,10 +24,10 @@ module SpreeCmCommissioner
       device_token_params = context.device_token.slice(:user_id,
                                                        :registration_token,
                                                        :client_name,
-                                                       :client_version
+                                                       :client_version,
+                                                       :device_type
                                                       )
       context.device_token = SpreeCmCommissioner::DeviceToken.new(device_token_params)
-
       context.fail!(message: context.device_token.errors.full_messages.to_sentence) unless context.device_token.save
     end
   end

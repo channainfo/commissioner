@@ -36,11 +36,12 @@ module Spree
           end
 
           def filter_params
-            params.merge(
+            {
               registration_token: params[:registration_token],
+              device_type: params[:device_type],
               client_version: app_version,
               client_name: app_name
-            )
+            }
           end
         end
       end

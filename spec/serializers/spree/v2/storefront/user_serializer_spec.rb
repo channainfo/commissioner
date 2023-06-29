@@ -30,7 +30,8 @@ describe Spree::V2::Storefront::UserSerializer, type: :serializer do
       expect(subject[:data][:relationships].keys).to contain_exactly(
         :default_billing_address,
         :default_shipping_address,
-        :profile
+        :profile,
+        :device_tokens
       )
     end
   end
