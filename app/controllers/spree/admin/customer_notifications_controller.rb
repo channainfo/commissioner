@@ -23,8 +23,13 @@ module Spree
         customer_notification = SpreeCmCommissioner::CustomerNotification.find(params[:notification_id])
 
         context = { customer_notification: customer_notification, user_ids: user_ids }
-        SpreeCmCommissioner::CustomerNotificationSender.call(context)
-        redirect_to admin_customer_notifications_path, notice: I18n.t('notification.send_test_success')
+        response = SpreeCmCommissioner::CustomerNotificationSender.call(context)
+
+        if response.success?
+          redirect_to admin_customer_notifications_path, notice: I18n.t('notification.send_test_success')
+        else
+          redirect_to admin_customer_notifications_path, alert: response.error_message
+        end
       end
     end
   end
