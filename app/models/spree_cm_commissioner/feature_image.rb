@@ -1,12 +1,11 @@
 module SpreeCmCommissioner
-  class FeatureImage < Spree::Asset
-    include Spree::Image::Configuration::ActiveStorage
-    include Rails.application.routes.url_helpers
-
-    def mobile_styles
-      self.class.mobile_styles.each_with_object({}) do |(key, size), results|
-        results[key] = style(key) if size
-      end
+  class FeatureImage < SpreeCmCommissioner::Asset
+    def asset_styles
+      {
+        mini: '187x67>',
+        small: '375x135>',
+        large: '750x270>'
+      }
     end
   end
 end

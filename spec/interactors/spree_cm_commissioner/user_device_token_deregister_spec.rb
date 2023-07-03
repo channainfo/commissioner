@@ -15,7 +15,7 @@ RSpec.describe SpreeCmCommissioner::UserDeviceTokenDeregister do
     end
 
     it 'remove success if device_token found' do
-      context = described_class.call(device_token_id: device_token.id, user: user1)
+      context = described_class.call(registration_token: device_token.registration_token, user: user1)
       expect(context.success?).to be true
     end
   end

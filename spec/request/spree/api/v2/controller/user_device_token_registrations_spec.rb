@@ -44,7 +44,7 @@ RSpec.describe Spree::Api::V2::Storefront::UserDeviceTokenRegistrationsControlle
         client_name: 'jake mar',
         user_id: user.id
       )
-      delete :destroy, params: { id: device_token.id }
+      delete :destroy, params: { id: device_token.registration_token }
 
       expect(response.status).to eq 200
     end

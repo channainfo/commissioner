@@ -1,7 +1,5 @@
 module SpreeCmCommissioner
   class CustomerNotification < SpreeCmCommissioner::Base
-    has_rich_text :body
-
     has_many :notifications, as: :notificable, dependent: :destroy
     has_one :feature_image, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::FeatureImage'
 
