@@ -4,9 +4,9 @@ module Spree
       class CustomerNotificationSerializer < BaseSerializer
         set_type :customer_notification
 
-        attributes :title, :body, :payload, :url, :started_at, :send_at, :notification_type
+        attributes :title, :payload, :body, :url, :started_at, :sent_at, :notification_type
 
-        has_many :feature_image, serializer: :feature_image
+        has_one :feature_image, serializer: SpreeCmCommissioner::V2::Storefront::AssetSerializer
       end
     end
   end

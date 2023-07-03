@@ -19,7 +19,7 @@ module Spree
           def destroy
             options = {
               user: spree_current_user,
-              device_token_id: params[:id]
+              registration_token: params[:id]
             }
 
             context = SpreeCmCommissioner::UserDeviceTokenDeregister.call(options)

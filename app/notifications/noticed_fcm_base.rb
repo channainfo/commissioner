@@ -5,7 +5,6 @@ class NoticedFcmBase < Noticed::Base
 
   def format_for_database
     {
-      type: self.class.name,
       notificable: notificable,
       params: {
         payload: payload,

@@ -36,5 +36,9 @@ module SpreeCmCommissioner
     def title
       record.params[:translatable_options][:title]
     end
+
+    def type
+      'customer_notification'
+    end
   end
 end
