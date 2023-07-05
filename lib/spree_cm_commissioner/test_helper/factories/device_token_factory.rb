@@ -4,6 +4,7 @@ FactoryBot.define do
     sequence(:registration_token) { |n| "device-token=#{n}" }
     client_name {'cm-market'}
     client_version {'1.0.0'}
+    device_type {'ios'}
     meta {'first-notification'}
   end
 end
