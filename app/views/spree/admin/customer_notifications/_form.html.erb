@@ -15,11 +15,9 @@
       </div>
 
      <div class="col-lg-12 col-sm-12">
-        <%= f.field_container :body do %>
           <%= f.label :body, Spree.t(:body) %>
-          <%= f.text_area :body, class: "form-control spree-rte", rows: '20'  %>
+          <%= f.text_area :body, class: "form-control  border-radius-5" %>
           <%= f.error_message_on :body %>
-        <% end %>
     </div>
 
     <div class="col-lg-12 col-sm-12">
