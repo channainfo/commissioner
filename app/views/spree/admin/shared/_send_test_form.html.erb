@@ -1,7 +1,5 @@
 <div class="actions">
-  <button class="btn btn-success" data-toggle="modal" data-target="#sendTestModal<%= notification.id %>">
-    Test
-  </button>
+  <%= link_to_with_icon 'bell.svg','','Send Notification', no_text: true, class: 'btn btn-success', data: { toggle: 'modal', target: "#sendTestModal#{notification.id}" } %>
 
   <div class="modal fade" id="sendTestModal<%= notification.id %>" tabindex="-1" role="dialog" aria-labelledby="sendTestModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
