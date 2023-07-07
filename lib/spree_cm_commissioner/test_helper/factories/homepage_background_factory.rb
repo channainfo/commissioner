@@ -1,7 +1,6 @@
 FactoryBot.define do
   factory :cm_homepage_background, class: SpreeCmCommissioner::HomepageBackground do
     title         {FFaker::Name.unique.name}
-    redirect_url  {FFaker::Internet.http_url}
     active        {true}
     
     trait :with_app_image do
