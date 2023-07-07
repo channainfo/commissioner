@@ -8,20 +8,7 @@ module Spree
               collection_finder.new(user: spree_current_user, store: current_store, state: params.delete(:state)).execute
             end
 
-            def resource
-              resource = resource_finder.new(user: spree_current_user, number: params[:id], store: current_store,
-                                             state: params.delete(:state)
-              ).execute.take
-              raise ActiveRecord::RecordNotFound if resource.nil?
-
-              resource
-            end
-
             def collection_finder
-              SpreeCmCommissioner::Orders::FindByState
-            end
-
-            def resource_finder
               SpreeCmCommissioner::Orders::FindByState
             end
           end
