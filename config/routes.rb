@@ -73,6 +73,12 @@ Spree::Core::Engine.add_routes do
           post :update_positions
         end
       end
+
+      resources :homepage_background do
+        collection do
+          post :update_positions
+        end
+      end
     end
   end
 
