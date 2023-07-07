@@ -3,10 +3,6 @@
     <%= f.label :title %>
     <%= f.text_field :title, class: 'form-control' %>
   <% end %>
-  <%= f.field_container :redirect_url do %>
-    <%= f.label :redirect_url %>
-    <%= f.text_field :redirect_url, class: 'form-control' %>
-  <% end %>
   <%= f.field_container :app_image do %>
     <%= f.label :mobile_image %> <span>(750x270)</span>
     <%= f.file_field :app_image %>
