@@ -1,55 +1,45 @@
 module SpreeCmCommissioner
   module Stock
     module AvailabilityValidatorDecorator
-      def display_name(line_item)
-        display_name = line_item.variant.name.to_s
-        display_name += " (#{line_item.variant.options_text})" if line_item.variant.options_text.present?
-        display_name.inspect
-      end
-
       # override
       def validate(line_item)
-        return super unless line_item.reservation?
+        return validate_reservation(line_item) if line_item.reservation?
 
-        return unless validate_perminent_stock(line_item)
-        return unless validate_with_booked_dates(line_item)
+        super
       end
 
-      def validate_perminent_stock(line_item)
-        exceed_perminent_stock = line_item.quantity > line_item.variant.permanent_stock
-        return true unless exceed_perminent_stock
+      private
 
-        line_item.errors.add(:quantity, :selected_quantity_not_available,
-                             message: Spree.t(:selected_quantity_not_available, item: display_name(line_item))
-        )
+      def validate_reservation(line_item)
+        booked_variants = find_booked_variants(line_item.variant_id, line_item.from_date, line_item.to_date)
 
-        line_item.errors.none?
-      end
+        line_item.date_range.each do |booking_date|
+          next if booked_variants[booking_date].nil?
 
-      def validate_with_booked_dates(line_item)
-        booked_line_items = booked_line_items(line_item)
-        return true if booked_line_items.none?
+          available_quantity = booked_variants[booking_date][:available_quantity]
 
-        booked_line_items.each do |booked_line_item|
-          booked_line_item.date_range.each do |booked_date|
-            next unless line_item.date_range.include?(booked_date)
+          # Example of "available_quantity - line_item.quantity"
+          #
+          # 3 - 1 = 2 -> available
+          # 5 - 1 = 4 -> available
+          #
+          # 3 - 4 = -1 -> [booking_date] only available 3 rooms
+          # 3 - 5 = -2 -> [booking_date] only available 3 rooms
 
-            line_item.errors.add(
-              :quantity, :selected_item_not_available_on_date,
-              message: Spree.t(
-                :selected_item_not_available_on_date,
-                item: display_name(line_item),
-                date: booked_date.to_date
-              )
-            )
-          end
+          remaining_quantity = available_quantity - line_item.quantity
+          can_supply = remaining_quantity >= 0
+
+          next if can_supply
+
+          line_item.errors.add(
+            :quantity, :exceeded_available_quantity_on_date,
+            message: Spree.t(:exceeded_available_quantity_on_date, count: [0, available_quantity].max, date: booking_date)
+          )
         end
-
-        line_item.errors.none?
       end
 
-      def booked_line_items(line_item)
-        line_item.variant.line_items.where('(from_date <= ? AND to_date >= ?)', line_item.to_date, line_item.from_date)
+      def find_booked_variants(variant_id, from_date, to_date)
+        VariantQuantityAvailabilityQuery.new(variant_id, from_date, to_date).booked_variants
       end
     end
   end

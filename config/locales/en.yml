@@ -170,7 +170,10 @@ en:
         failed: "Failed"
         unknown: "Unknown"
     upsupported_payment: "Unsupported event"
-    selected_item_not_available_on_date: "Selected item not available on %{date}"
+    exceeded_available_quantity_on_date:
+      zero: "Rooms are not available on %{date}"
+      one: "Only 1 room available on %{date}"
+      other: "Only %{count} rooms available on %{date}"
     auto_apply: "Auto apply"
     auto_apply_info: "Path & code will be removed"
 
