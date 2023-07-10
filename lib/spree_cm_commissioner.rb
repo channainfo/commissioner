@@ -19,6 +19,7 @@ require 'noticed'
 
 require 'simple_calendar'
 require 'activerecord_json_validator'
+require 'googleauth'
 require 'dry-validation'
 require 'font-awesome-sass'
 

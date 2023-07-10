@@ -15,7 +15,10 @@
           <th>
             <%=Spree.t(:client_version)%>
            </th>
-           <th>
+          <th>
+              <%=Spree.t(:device_type)%>
+          </th>
+          <th>
             <%=Spree.t(:meta)%>
           </th>
           <th>
@@ -31,6 +34,9 @@
             </td>
             <td>
               <%= device_token.client_version  %>
+            </td>
+             <td>
+              <%= device_token.device_type %>
             </td>
              <td>
                 <%= device_token.meta  %>
@@ -57,3 +63,5 @@
       <%= raw I18n.t('device_token.empty_info') %>
    </small>
 <% end %>
+
+

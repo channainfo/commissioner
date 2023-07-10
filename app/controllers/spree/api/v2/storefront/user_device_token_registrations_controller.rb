@@ -19,7 +19,7 @@ module Spree
           def destroy
             options = {
               user: spree_current_user,
-              device_token_id: params[:id]
+              registration_token: params[:id]
             }
 
             context = SpreeCmCommissioner::UserDeviceTokenDeregister.call(options)
@@ -36,7 +36,12 @@ module Spree
           end
 
           def filter_params
-            params.permit(:client_version, :registration_token, :client_name)
+            {
+              registration_token: params[:registration_token],
+              device_type: params[:device_type],
+              client_version: app_version,
+              client_name: app_name
+            }
           end
         end
       end

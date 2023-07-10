@@ -1,0 +1,16 @@
+<div class="form-group">
+  <%= f.field_container :title do %>
+    <%= f.label :title %>
+    <%= f.text_field :title, class: 'form-control' %>
+  <% end %>
+  <%= f.field_container :app_image do %>
+    <%= f.label :mobile_image %> <span>(750x270)</span>
+    <%= f.file_field :app_image %>
+    <%= image_tag main_app.url_for(@object.app_image.url(:small)) if @object.app_image %>
+  <% end %>
+  <%= f.field_container :web_image do %>
+    <%= f.label :web_image %> <span>(1440x400)</span>
+    <%= f.file_field :web_image %>
+    <%= image_tag main_app.url_for(@object.web_image.url(:small)) if @object.web_image %>
+  <% end %>
+</div>

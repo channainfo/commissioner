@@ -163,6 +163,12 @@ km:
       suspended: "បានផ្អាក"
       users: "គណនីបុគ្គលិក"
       day: "ថ្ងៃ"
+      payment_state:
+        paid: "បង់រួច"
+        balance_due: "មិនទាន់បង់"
+        overdue: "ហួសថ្ងៃបង់"
+        failed: "បរាជ័យ"
+        unknown: "មិនស្គាល់"
     upsupported_payment: "មិនស្គាល់ការបង់ប្រាក់"
     selected_item_not_available_on_date: "Selected item not available on %{date}"
     auto_apply: "ដាក់ប្រើដោយស្វ័យប្រវត្តិ"
@@ -185,6 +191,8 @@ km:
         type: "ប្រភេទ"
         select_date: "ជ្រើសរើសថ្ងៃ"
         taxon: "ប្រភេទ"
+      spree/report:
+        cashier: "អ្នកគិតលុយ"
     errors:
       models:
         spree_cm_commissioner/service_calendar:

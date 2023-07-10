@@ -3,7 +3,7 @@
     <thead class="text-muted">
       <tr>
         <% @revenue_totals.each_with_index do |hash, index| %>
-          <% label = hash[:state] || Spree.t(:unknown) %>
+          <% label = Spree.t("billing.payment_state.#{hash[:state].presence || :unknown}").to_s %>
           <% label += " (#{hash[:orders_count]})" if hash[:orders_count] != 0 %>
 
           <% classes = [] %>
