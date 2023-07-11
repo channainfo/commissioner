@@ -141,6 +141,7 @@ Spree::Core::Engine.add_routes do
         resources :notifications, only: %i[index show]
         resources :customer_notifications, only: [:show]
         resources :user_device_token_registrations, only: %i[create destroy]
+        resources :pin_code_checkers, only: [:update]
         resources :vendors do
           resources :nearby_places, only: %i[index]
         end
