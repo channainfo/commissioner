@@ -4,6 +4,7 @@ module SpreeCmCommissioner
 
     attr_accessor :id,
                   :config,
+                  :homepage_backgrounds, :homepage_background_ids,
                   :homepage_banners, :homepage_banner_ids,
                   :top_categories, :top_category_ids,
                   :display_products, :display_product_ids,
@@ -27,16 +28,16 @@ module SpreeCmCommissioner
       Rails.cache.fetch(cache_key) do
         data_loader = new
         data_loader.call
-        yield(data_loader)
       end
     end
 
     def call
       set_record_id
+      set_homepage_backgrounds
       set_homepage_banners
       set_featured_vendors
-      set_trending_categories
 
+      # set_trending_categories
       # set_top_catgories
       # set_display_products
       # set_featured_brands
@@ -46,6 +47,11 @@ module SpreeCmCommissioner
 
     def set_record_id
       @id = SecureRandom.hex
+    end
+
+    def set_homepage_backgrounds
+      @homepage_backgrounds = SpreeCmCommissioner::HomepageBackground.active.includes(app_image: :attachment_blob).order(:priority)
+      @homepage_background_ids = @homepage_backgrounds.pluck(:id)
     end
 
     def set_homepage_banners

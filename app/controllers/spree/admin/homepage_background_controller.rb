@@ -11,7 +11,7 @@ module Spree
 
       def create_images
         @object.build_app_image(attachment: permitted_resource_params.delete(:app_image)) if permitted_resource_params[:app_image]
-        @object.build_web_image(attachment: permitted_resource_params.delete(:web_image)) if permitted_resource_params[:web_image_image]
+        @object.build_web_image(attachment: permitted_resource_params.delete(:web_image)) if permitted_resource_params[:web_image]
       end
 
       def model_class
@@ -36,7 +36,9 @@ module Spree
         @collection = super.order(priority: :asc)
         @search = @collection.ransack(params[:q])
 
-        @collection = @search.result.page(params[:page]).per(params[:per_page])
+        @collection = @search.result
+                             .page(params[:page])
+                             .per(params[:per_page])
       end
     end
   end
