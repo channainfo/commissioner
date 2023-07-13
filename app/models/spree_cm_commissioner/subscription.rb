@@ -28,25 +28,25 @@ module SpreeCmCommissioner
     end
 
     def variant_in_stock?
-      return if variant.in_stock?
+      return false if variant.in_stock?
 
       errors.add(:variant, I18n.t('variant.validation.out_of_stock', variant_name: variant.name))
     end
 
     def variant_subscribed?
-      return if customer.subscriptions.where(variant: variant).blank?
+      return false if customer.subscriptions.where(variant: variant).blank?
 
       errors.add(:variant, I18n.t('variant.validation.subscribed', product_name: variant.product.name))
     end
 
     def product_subscribed?
-      return if customer.active_variants.where.not(id: variant.id).where(product: variant.product).blank?
+      return false if customer.active_variants.where.not(id: variant.id).where(product: variant.product).blank?
 
       errors.add(:variant, I18n.t('variant.validation.subscribed', product_name: variant.product.name))
     end
 
     def product_active?
-      return if variant.product.active?
+      return false if variant.product.active?
 
       errors.add(:product, I18n.t('product.validation.not_active', product_name: product.name))
     end
