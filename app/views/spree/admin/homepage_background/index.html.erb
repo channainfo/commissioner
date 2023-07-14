@@ -28,12 +28,12 @@
           </td>
           <td>
             <div class="admin-product-image-container small-img">
-              <%= image_tag(main_app.rails_blob_url(homepage_background.app_image.attachment)) %>
+              <%= image_tag (main_app.rails_blob_url(homepage_background.app_image.attachment)) if homepage_background&.app_image&.attachment %>
             </div>
           </td>
           <td>
             <div class="admin-product-image-container small-img">
-              <%= image_tag(main_app.rails_blob_url(homepage_background.web_image.attachment)) %>
+              <%= image_tag (main_app.rails_blob_url(homepage_background.web_image.attachment)) if homepage_background&.web_image&.attachment %>
             </div>
           </td>
           <td>

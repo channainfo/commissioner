@@ -4,10 +4,10 @@ module Spree
       module Storefront
         class HomepageDataController < ::Spree::Api::V2::ResourceController
           def show
+            home_data_loader = SpreeCmCommissioner::HomepageDataLoader.with_cache
+
             render_serialized_payload do
-              SpreeCmCommissioner::HomepageDataLoader.with_cache do |home_data_loader|
-                serialize_resource(home_data_loader)
-              end
+              serialize_resource(home_data_loader)
             end
           end
 
