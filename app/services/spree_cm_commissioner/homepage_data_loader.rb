@@ -37,7 +37,7 @@ module SpreeCmCommissioner
       set_homepage_banners
       set_featured_vendors
 
-      set_trending_categories
+      # set_trending_categories
       # set_top_catgories
       # set_display_products
       # set_featured_brands
