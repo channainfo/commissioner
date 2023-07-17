@@ -2,11 +2,15 @@
 <%# :label, eg. 'Icon', Spree.t(:icon), I18n.t('icon.field') %>
 <%# :asset %>
 <%# :remove_url, optional %>
+<%# :classes, optional %>
 <%# :form %>
 
-<%= form.field_container field, class: ['rounded', 'border', 'p-3'] do %>
+<% @classes = ['rounded', 'border', 'p-3']  %>
+<% @classes = @classes + classes if defined?(classes) %>
+
+<%= form.field_container field, class: @classes do %>
   <%= image_tag(main_app.rails_blob_url(asset.attachment),
-    class: 'rounded border mb-4 mw-100', 
+    class: 'rounded border mb-4 mw-100',
     style: 'max-height: 100px') if asset %>
 
   <div data-hook="file" class="form-group">
