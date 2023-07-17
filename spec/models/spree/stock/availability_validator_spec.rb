@@ -9,8 +9,8 @@ RSpec.describe Spree::Stock::AvailabilityValidator do
         let(:reservation1) { build(:order, state: :complete) }
         let(:reservation2) { build(:order, state: :complete) }
 
-        let!(:line_item1) { create(:line_item, quantity: 3, order: reservation1, product: product, from_date: date('2023-01-10'), to_date: date('2023-01-10')) }
-        let!(:line_item2) { create(:line_item, quantity: 1, order: reservation2, product: product, from_date: date('2023-01-11'), to_date: date('2023-01-12')) }
+        let!(:line_item1) { create(:line_item, quantity: 3, order: reservation1, product: product, from_date: date('2023-01-10'), to_date: date('2023-01-11')) }
+        let!(:line_item2) { create(:line_item, quantity: 1, order: reservation2, product: product, from_date: date('2023-01-11'), to_date: date('2023-01-13')) }
 
         it 'error when at least one day could not supply 3 quantity' do
           line_item = build(:line_item, quantity: 3, product: product, from_date: '2023-01-10'.to_date, to_date: '2023-01-12'.to_date)
