@@ -1,11 +1,11 @@
 module SpreeCmCommissioner
   class VendorPhoto < Asset
-    # 4x3
+    # 16x9
     def asset_styles
       {
-        mini: '160x120>',
-        small: '480x360>',
-        medium: '960x720>'
+        mini: '160x90>',
+        small: '480x270>',
+        medium: '960x540>'
       }
     end
   end

@@ -1,10 +1,11 @@
 module SpreeCmCommissioner
   class HomepageBannerAppImage < Asset
+    # 2x1
     def asset_styles
       {
-        mini: '187x67>',
-        small: '375x135>',
-        large: '750x270>'
+        mini: '240x120>',
+        small: '480x240>',
+        large: '960x480>>'
       }
     end
   end
