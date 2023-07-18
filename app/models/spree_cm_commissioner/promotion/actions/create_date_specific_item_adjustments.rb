@@ -34,11 +34,9 @@ module SpreeCmCommissioner
 
         # compute only on eligible date
         def compute_line_item_amount(line_item)
-          amount_per_date = line_item.amount / line_item.duration
-
           line_item.date_range.filter_map do |date|
             if promotion.date_eligible?(date)
-              object = Object.new.tap { |obj| obj.define_singleton_method(:amount) { amount_per_date } }
+              object = Object.new.tap { |obj| obj.define_singleton_method(:amount) { line_item.amount_per_date_unit } }
               compute(object)
             end
           end.sum

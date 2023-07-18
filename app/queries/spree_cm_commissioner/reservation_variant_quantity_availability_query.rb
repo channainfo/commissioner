@@ -1,5 +1,5 @@
 module SpreeCmCommissioner
-  class VariantQuantityAvailabilityQuery
+  class ReservationVariantQuantityAvailabilityQuery
     attr_reader :variant_id, :from_date, :to_date
 
     def initialize(variant_id, from_date, to_date)
@@ -21,8 +21,7 @@ module SpreeCmCommissioner
           '(spree_variants.permanent_stock - SUM(spree_line_items.quantity)) AS available_quantity',
           'd.date AS reservation_date'
         )
-        .joins("INNER JOIN (#{ActiveRecord::Base.sanitize_sql(date_list_sql)}) d ON d.date >= from_date AND d.date <= to_date")
-        .where('(from_date <= d.date AND d.date <= to_date)')
+        .joins(date_range_by_date_unit)
         .where(order: { state: :complete })
         .where(variant_id: variant_id)
         .group(:variant_id, :permanent_stock, :reservation_date)
@@ -38,7 +37,14 @@ module SpreeCmCommissioner
 
     private
 
-    def date_list_sql
+    # only support accomodation.
+    # should extend to support other reservation units like hours, week, etc.
+
+    def date_range_by_date_unit
+      "INNER JOIN (#{date_range_by_date_unit_series}) d ON d.date >= from_date AND d.date < to_date"
+    end
+
+    def date_range_by_date_unit_series
       "SELECT date FROM generate_series('#{from_date}'::date, '#{to_date}'::date, '1 day') AS date"
     end
   end

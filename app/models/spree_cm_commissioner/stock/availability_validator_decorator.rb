@@ -39,7 +39,7 @@ module SpreeCmCommissioner
       end
 
       def find_booked_variants(variant_id, from_date, to_date)
-        VariantQuantityAvailabilityQuery.new(variant_id, from_date, to_date).booked_variants
+        SpreeCmCommissioner::ReservationVariantQuantityAvailabilityQuery.new(variant_id, from_date, to_date).booked_variants
       end
     end
   end

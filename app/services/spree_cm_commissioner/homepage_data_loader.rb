@@ -28,7 +28,6 @@ module SpreeCmCommissioner
       Rails.cache.fetch(cache_key) do
         data_loader = new
         data_loader.call
-        yield(data_loader)
       end
     end
 
@@ -37,8 +36,8 @@ module SpreeCmCommissioner
       set_homepage_backgrounds
       set_homepage_banners
       set_featured_vendors
-      set_trending_categories
 
+      # set_trending_categories
       # set_top_catgories
       # set_display_products
       # set_featured_brands

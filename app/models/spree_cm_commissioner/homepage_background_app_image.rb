@@ -1,5 +1,5 @@
 module SpreeCmCommissioner
-  class HomepageBackgroundAppImage < Asset
+  class HomepageBackgroundAppImage < SpreeCmCommissioner::Asset
     def asset_styles
       {
         mini: '187x67>',

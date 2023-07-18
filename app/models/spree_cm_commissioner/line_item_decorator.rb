@@ -1,6 +1,8 @@
 module SpreeCmCommissioner
   module LineItemDecorator
     def self.prepended(base)
+      base.include SpreeCmCommissioner::LineItemDurationable
+
       base.before_save :update_vendor_id
 
       base.delegate :product_type, :accommodation?, :service?, :ecommerce?, to: :product
@@ -13,28 +15,20 @@ module SpreeCmCommissioner
       date_present? && !subscription?
     end
 
-    def date_present?
-      from_date.present? && to_date.present?
-    end
-
-    def duration
-      return nil unless date_present?
-
-      (to_date.to_date - from_date.to_date) + 1
-    end
-
-    def date_range
-      return [] unless date_present?
-
-      from_date.to_date..to_date.to_date
-    end
-
+    # date_unit could be number of nights, or days or hours depending on usecases
+    # For example:
+    # - accomodation uses number of nights.
+    # - appointment uses number of hours, etc.
+    #
     # override
     def amount
       base_price = price * quantity
-      return base_price unless reservation?
 
-      base_price * duration
+      if reservation?
+        base_price * date_unit
+      else
+        base_price
+      end
     end
 
     private
