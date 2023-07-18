@@ -1,0 +1,18 @@
+<!-- replace "erb[loud]:contains('field_container :image')" closing_selector "erb[silent]:contains('end')" -->
+
+<div class="row p-2">
+  <%= render 'shared/asset_field',
+    field: :logo,
+    label: Spree.t(:logo),
+    asset: @vendor.logo,
+    classes: ['col m-2'],
+    form:f
+  %>
+  <%= render 'shared/asset_field',
+    field: :image,
+    label: Spree.t(:image),
+    asset: @vendor.image,
+    classes: ['col m-2'],
+    form:f
+  %>
+</div>
