@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe SpreeCmCommissioner::VariantQuantityAvailabilityQuery do
+RSpec.describe SpreeCmCommissioner::ReservationVariantQuantityAvailabilityQuery do
   describe '#booked_variants' do
     let!(:product) { create(:cm_accommodation_product, permanent_stock: 3) }
 
@@ -8,8 +8,8 @@ RSpec.describe SpreeCmCommissioner::VariantQuantityAvailabilityQuery do
       let(:reservation1) { build(:order, state: :complete) }
       let(:reservation2) { build(:order, state: :complete) }
 
-      let!(:line_item1) { create(:line_item, quantity: 3, order: reservation1, product: product, from_date: date('2023-01-10'), to_date: date('2023-01-10')) }
-      let!(:line_item2) { create(:line_item, quantity: 1, order: reservation1, product: product, from_date: date('2023-01-11'), to_date: date('2023-01-12')) }
+      let!(:line_item1) { create(:line_item, quantity: 3, order: reservation1, product: product, from_date: date('2023-01-10'), to_date: date('2023-01-11')) }
+      let!(:line_item2) { create(:line_item, quantity: 1, order: reservation1, product: product, from_date: date('2023-01-11'), to_date: date('2023-01-13')) }
 
       it 'return 2 available_quantity on 11th when inputs 9-11th' do
         subject = described_class.new(product.master.id, date('2023-01-09'), date('2023-01-11'))
