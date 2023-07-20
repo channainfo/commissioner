@@ -18,6 +18,14 @@ en:
     invalid_phone_number: "Invalid phone number"
     invalid_email_address: "Invalid email address"
 
+  pincode_checker:
+    error_type:
+      not_found: "Verification Code not found!"
+      expired: "Verification Code already expired!"
+      reached_max_attempt: "Verification Code already reach max attempt!"
+      not_match: "Verification code is not valid"
+      ok: "Verification code is valid"
+
   authenticator:
     incorrect_login: "Incorrect login"
     incorrect_password: "Incorrect password"
