@@ -25,7 +25,7 @@ module Spree
           def user_with_pin_code_params
             results = params.permit(
               :pin_code, :pin_code_token, :email, :phone_number, :first_name, :last_name,
-              :password, :password_confirmation, :gender, :dob
+              :password, :password_confirmation, :gender, :dob, :locale, :format
             )
             results.to_h
           end

@@ -2,8 +2,8 @@ module SpreeCmCommissioner
   class UserPinCodeAuthenticator < BaseInteractor
     def call
       validate_pin_code!
-      mark_pin_code_expired!
       register_user!
+      mark_pin_code_expired!
     end
 
     def sanitize_contact
