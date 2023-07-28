@@ -102,6 +102,9 @@ km:
       sth_broken: "តើអ្នកអាចប្រាប់ពីមុខងារដែលមិនដំណើរការបានទេ? ក្រុមការងារនឹងមានដោះស្រាយនឹងពេលដែលយើងអាចកំណត់បញ្ហាបាន"
       other: "តែអ្នកអាចប្រាប់ពីមូលហេតុដែលចង់លុបគណនីបានទេ? បើមានបញ្ហាធ្ងន់ធ្ងរណាមួយ ​ពួកយើងព្យាយាមដោះស្រាយឲ្យបានល្អបំផុត។"
 
+  user:
+    invalid_password: "Current password is not valid"
+
   spree:
     km: "ភាសារខ្មែរ"
     date_of_birth: "ថ្ងៃខែឆ្នាំកំណើត"
@@ -214,3 +217,21 @@ km:
     empty_info: "រក <b>Device_token</b> មិនឃើញទេ"
   notification:
     send_test_success: "សាកផ្ញើរបានជោគជ័យ"
+
+  pincode_sender:
+    sms:
+      body: "លេខកូដ %{code} គឺជា %{readable_type} របស់អ្នក"
+
+  pincode:
+    readable_type:
+      contact_update: "ធ្វើបច្ចុប្បន្នភាព ទំនាក់ទំនង"
+      login: "ចូលលេខកូដ"
+      reset_password: "កំណត់លេខកូដសំងាត់ឡើងវិញ"
+      registration_code: "លេខកូដចុះឈ្មោះ"
+      confirmation_code: "លេខកូដបញ្ជាក់"
+      update_user_login: "ធ្វើបច្ចុប្បន្នភាពលេខកូដអ្នកប្រើប្រាស់"
+      contact_update: "ធ្វើបច្ចុប្បន្នភាពមធ្យោបាយទំនាក់ទំនង"
+
+  pincode_creator:
+    invalid_phone_number: "លេខទូរសព្ទមិនត្រឹមត្រូវ"
+    invalid_email_address: "អាសយដ្ឋាន Email មិនត្រឹមត្រូវ"
