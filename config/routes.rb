@@ -143,7 +143,9 @@ Spree::Core::Engine.add_routes do
         resource :user_registration_with_pin_codes, only: [:create]
         resources :user_device_token_registrations, only: %i[create destroy]
         resources :pin_code_generators, only: [:create]
-        resource :pin_code_checkers, only: [:update]
+
+        resources :pin_code_checkers, only: [:update]
+        resource :change_passwords, only: [:update]
 
         resources :vendors do
           resources :nearby_places, only: %i[index]
