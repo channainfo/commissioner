@@ -110,6 +110,9 @@ en:
       sth_broken: "Can you please share us what was not working? We will fix them as soon as possible as we spot them"
       other: "Can you please share us your account deletion reason. If something slipped through our fingers, we'd be so grateful to be aware and fix it."
 
+  user:
+    invalid_password: "ពាក្យសង្ងាត់បច្ចុប្បន្នមិនត្រឹមត្រូវ"
+
   spree:
     en: "English"
     date_of_birth: "Date of Birth"
@@ -225,3 +228,23 @@ en:
     empty_info: "No <b>Device_token</b> found"
   notification:
     send_test_success: "Test Send Successfully"
+
+  pincode_sender:
+    sms:
+      body: "%{code} is your %{readable_type}"
+
+  pincode:
+    readable_type:
+      contact_update: "contact update"
+      login: "login code"
+      reset_password: "reset password code"
+      registration_code: "registration code"
+      confirmation_code: "confirmation code"
+      update_user_login: "update user code"
+      contact_update: "update contact code"
+      
+  pincode_creator:
+    invalid_phone_number: "Invalid phone number"
+    invalid_email_address: "Invalid email address"
+  actions:
+    login: "Login"
