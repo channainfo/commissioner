@@ -14,7 +14,7 @@ module SpreeCmCommissioner
 
     validate :product_subscribed?
 
-    with_options  unless: :persisted? do
+    with_options unless: :persisted? do
       validate :variant_in_stock?
       validate :product_active?
       validate :variant_subscribed?

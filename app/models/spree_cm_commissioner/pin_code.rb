@@ -123,13 +123,13 @@ module SpreeCmCommissioner
 
     def type_mapper
       {
-        'MyStore::PinCodeContactUpdate' => I18n.t('pincode.readable_type.contact_update'),
-        'MyStore::PinCodeLogin' => I18n.t('pincode.readable_type.login'),
-        'MyStore::PinCodeForgetPassword' => I18n.t('pincode.readable_type.reset_password'),
-        'MyStore::PinCodeRegistration' => I18n.t('pincode.readable_type.registration_code'),
-        'MyStore::PinCodeMobileConfirm' => I18n.t('pincode.readable_type.confirmation_code'),
-        'MyStore::PinCodeUpdateUserLogin' => I18n.t('pincode.readable_type.update_user_login'),
-        'MyStore::PinCodeEmailConfirm' => I18n.t('pincode.readable_type.confirmation_code')
+        'SpreeCmCommissioner::PinCodeContactUpdate' => I18n.t('pincode.readable_type.contact_update'),
+        'SpreeCmCommissioner::PinCodeLogin' => I18n.t('pincode.readable_type.login'),
+        'SpreeCmCommissioner::PinCodeForgetPassword' => I18n.t('pincode.readable_type.reset_password'),
+        'SpreeCmCommissioner::PinCodeRegistration' => I18n.t('pincode.readable_type.registration_code'),
+        'SpreeCmCommissioner::PinCodeMobileConfirm' => I18n.t('pincode.readable_type.confirmation_code'),
+        'SpreeCmCommissioner::PinCodeUpdateUserLogin' => I18n.t('pincode.readable_type.update_user_login'),
+        'SpreeCmCommissioner::PinCodeEmailConfirm' => I18n.t('pincode.readable_type.confirmation_code')
       }
     end
 
