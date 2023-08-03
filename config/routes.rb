@@ -139,6 +139,7 @@ Spree::Core::Engine.add_routes do
         resources :provinces, only: %i[index]
         resources :user_deletion_reasons, only: [:index]
         resource :profile_images, only: [:update]
+        resource :user_profiles, only: [:update]
 
         resources :notifications, only: %i[index show]
         resources :customer_notifications, only: [:show]
