@@ -135,8 +135,10 @@ Spree::Core::Engine.add_routes do
       namespace :storefront do
         resources :accommodations, only: %i[index show]
         resources :account_checker
+        resource :s3_signed_urls
         resources :provinces, only: %i[index]
         resources :user_deletion_reasons, only: [:index]
+        resource :profile_images, only: [:update]
 
         resources :notifications, only: %i[index show]
         resources :customer_notifications, only: [:show]
