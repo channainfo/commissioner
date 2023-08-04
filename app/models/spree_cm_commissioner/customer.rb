@@ -37,7 +37,7 @@ module SpreeCmCommissioner
     validates :number, presence: true, uniqueness: { scope: :vendor_id }
 
     acts_as_paranoid
-    self.whitelisted_ransackable_attributes = %w[number intel_phone_number first_name last_name taxon_id sequence_number]
+    self.whitelisted_ransackable_attributes = %w[number phone_number first_name last_name taxon_id sequence_number]
 
     accepts_nested_attributes_for :ship_address, :bill_address
 

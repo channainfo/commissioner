@@ -3,7 +3,7 @@
     <%= f.hidden_field :customer_id, value: @customer.id %>
     <%= f.field_container :variant_id do %>
       <%= f.label :variant, Spree.t(:variant) %>
-      <%= f.collection_select(:variant_id, @customer.subscribable_variants, :id, :sku, { include_blank: false }, { class: 'select2' ,disabled: @subscription.persisted?}) %>
+      <%= f.collection_select(:variant_id, @customer.subscribable_variants, :id, :display_variant, { include_blank: false }, { class: 'select2' ,disabled: @subscription.persisted?}) %>
       <%= f.error_message_on :product_id %>
     <% end %>
     <%= f.field_container :start_date do %>

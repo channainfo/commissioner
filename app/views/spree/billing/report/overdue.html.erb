@@ -6,18 +6,18 @@
   <div data-hook="billing_report_index_search">
 
     <%= search_form_for [:billing, @search], url: spree.overdue_billing_report_path do |f| %>
-    <div class="date-range-filter col-10 col-lg-10">
-      <div class="form-group">
-        <%= f.label :line_items_from_date_gteq, I18n.t(:start_date_range, scope: 'activerecord.attributes.spree/order') %>
-        <%= f.date_field :line_items_from_date_gteq, class: 'form-control js-quick-search-target js-filterable datepicker', data: {behavior: 'datepicker', format: 'yyyy-mm-dd'}, placeholder: 'Select Date' %>
+      <div class="date-range-filter col-10 col-lg-10">
+        <div class="form-group">
+          <%= f.label :line_items_from_date_gteq, I18n.t(:start_date_range, scope: 'activerecord.attributes.spree/order') %>
+          <%= f.date_field :line_items_from_date_gteq, class: 'form-control js-quick-search-target js-filterable datepicker', data: {behavior: 'datepicker', format: 'yyyy-mm-dd'}, placeholder: 'Select Date' %>
+        </div>
+        <div class="form-group">
+          <%= f.date_field :line_items_from_date_lteq, class: 'form-control js-quick-search-target js-filterable datepicker', data: {behavior: 'datepicker', format: 'yyyy-mm-dd'}, placeholder: 'Select Date' %>
+        </div>
+        <div class="form-actions">
+          <%= button Spree.t(:search), 'search.svg', nil, { class: 'btn-outline-primary' } %>
+        </div>
       </div>
-      <div class="form-group">
-        <%= f.date_field :line_items_from_date_lteq, class: 'form-control js-quick-search-target js-filterable datepicker', data: {behavior: 'datepicker', format: 'yyyy-mm-dd'}, placeholder: 'Select Date' %>
-      </div>
-      <div class="form-actions">
-        <%= button Spree.t(:search), 'search.svg', nil, { class: 'btn-outline-primary' } %>
-      </div>
-    </div>
     <% end %>
   </div>
 <% end %>
@@ -41,7 +41,7 @@
             <td><%= link_to order.number, edit_billing_order_path(order) %></td>
             <td><%= order.line_items[0].from_date.to_date %></td>
             <td><%= order.created_at.to_date %></td>
-            <td><%= order.customer&.intel_phone_number %></td>
+            <td><%= order.customer&.phone_number %></td>
             <td class="no-wrap">
               <% if order.payment_state %>
                 <%= link_to Spree.t("payment_states.#{order.payment_state}"),

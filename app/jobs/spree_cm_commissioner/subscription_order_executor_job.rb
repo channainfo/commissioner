@@ -1,7 +1,7 @@
 module SpreeCmCommissioner
   class SubscriptionOrderExecutorJob < ApplicationJob
     def perform
-      SubscriptionOrderCronExecutor.call
+      SubscriptionsOrderCronExecutor.call
     end
   end
 end
