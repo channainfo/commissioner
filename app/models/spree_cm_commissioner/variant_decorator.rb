@@ -12,6 +12,12 @@ module SpreeCmCommissioner
       option_value_variants.pluck(:option_value_id)
     end
 
+    def display_variant
+      display_sku = sku.split('-').join(' ')
+      display_price = price.to_i == price ? price.to_i : price
+      "#{display_sku} - $#{display_price}"
+    end
+
     private
 
     def update_vendor_price

@@ -14,7 +14,7 @@
             <%= sort_link @search, :full_name, Spree.t(:full_name), {}, {title: 'fullname_title'} %>
           </th>
           <th>
-            <%= sort_link @search, :intel_phone_number, Spree.t(:intel_phone_number), {}, {title: 'intel_phone_number_title'} %>
+            <%= sort_link @search, :phone_number, Spree.t(:phone_number), {}, {title: 'phone_number_title'} %>
           </th>
           <th>
             <%= sort_link @search, :taxon_id, Spree.t(:type), {}, {title: 'taxon_title'} %>
@@ -38,7 +38,7 @@
               <%= link_to customer.fullname, edit_billing_customer_path(customer) %>
             </td>
             <td>
-              <%= customer.intel_phone_number %>
+              <%= customer.phone_number %>
             </td>
             <td class='taxon'>
               <%= customer.taxon.name %>
