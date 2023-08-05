@@ -5,6 +5,7 @@ module Spree
         def self.prepended(base)
           base.before_action :required_schema_validation!
           base.rescue_from SpreeCmCommissioner::SchemaValidationError, with: :rescue_schema_validation_error
+          base.attr_reader :schema
         end
 
         def app_version
