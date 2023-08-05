@@ -127,6 +127,7 @@ km:
     cashier: "អ្នកទទួលប្រាក់"
     new_homepage_banner: "បន្ថែមផ្ទាំងរូបភាពថ្មី"
     intel_phone_number: "លេខទូរសព្ទ"
+    phone_number: "លេខទូរសព្ទ"
     new_customer: "អតិថិជនថ្មី"
     listing_price: "តម្លៃលក់"
     length: "ប្រវែង"
@@ -230,8 +231,3 @@ km:
       registration_code: "លេខកូដចុះឈ្មោះ"
       confirmation_code: "លេខកូដបញ្ជាក់"
       update_user_login: "ធ្វើបច្ចុប្បន្នភាពលេខកូដអ្នកប្រើប្រាស់"
-      contact_update: "ធ្វើបច្ចុប្បន្នភាពមធ្យោបាយទំនាក់ទំនង"
-
-  pincode_creator:
-    invalid_phone_number: "លេខទូរសព្ទមិនត្រឹមត្រូវ"
-    invalid_email_address: "អាសយដ្ឋាន Email មិនត្រឹមត្រូវ"

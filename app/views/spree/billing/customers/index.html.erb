@@ -10,8 +10,8 @@
       <div class="row">
         <div class="col-12 col-lg-6">
           <div class="form-group">
-            <%= f.label :intel_phone_number_cont, Spree.t(:intel_phone_number) %>
-            <%= f.telephone_field :intel_phone_number_cont, class: "form-control js-quick-search-target js-filterable" %>
+            <%= f.label :phone_number_cont, Spree.t(:phone_number) %>
+            <%= f.telephone_field :phone_number_cont, class: "form-control js-quick-search-target js-filterable" %>
           </div>
         </div>
         <div class="col-12 col-lg-6">
@@ -63,7 +63,7 @@
             <%= sort_link @search, :full_name, Spree.t(:full_name), {}, {title: 'fullname_title'} %>
           </th>
           <th>
-            <%= sort_link @search, :intel_phone_number, Spree.t(:intel_phone_number), {}, {title: 'intel_phone_number_title'} %>
+            <%= sort_link @search, :phone_number, Spree.t(:phone_number), {}, {title: 'phone_number_title'} %>
           </th>
           <th>
             <%= sort_link @search, :taxon_id, Spree.t(:type), {}, {title: 'taxon_title'} %>
@@ -93,7 +93,7 @@
               <%= link_to customer.fullname, edit_billing_customer_path(customer) %>
             </td>
             <td>
-              <%= customer.intel_phone_number %>
+              <%= customer.phone_number %>
             </td>
             <td class='taxon'>
               <%= customer.taxon.name %>
