@@ -25,9 +25,14 @@ module Spree
       end
 
       def overdue
-        @search = Spree::Order.subscription.joins(:line_items).where.not(payment_state: :paid).where('spree_line_items.due_date < ?',
-                                                                                                     Time.zone.today
-                                                                                                    ).ransack(params[:q])
+        @search = Spree::Order.subscription.joins(:line_items).where.not(payment_state: %w[paid failed])
+                              .where('spree_line_items.due_date < ?', Time.zone.today)
+                              .ransack(params[:q])
+        @orders = @search.result.page(page).per(per_page)
+      end
+
+      def failed_orders
+        @search = Spree::Order.subscription.joins(:line_items).where(payment_state: 'failed').ransack(params[:q])
         @orders = @search.result.page(page).per(per_page)
       end
 

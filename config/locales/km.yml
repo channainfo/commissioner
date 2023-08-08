@@ -156,6 +156,7 @@ km:
       add_penalty: "បន្ថែមពិន័យ"
       active_subscribers: "ចំនួនអ្នកកំពុងប្រើ"
       paid_orders: "វិក្កយបត្របង់រួច"
+      failed_orders: "Failed Orders"
       balance_due_orders: "វិក្កយបត្រមិនទាន់បង់"
       overdue_orders: "វិក្កយបត្រហួសថ្ងៃបង់"
       orders: "វិក្កយបត្រ"
