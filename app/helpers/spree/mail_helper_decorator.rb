@@ -1,9 +1,7 @@
 module Spree
   module MailHelperDecorator
     def user_full_name(order)
-      current_user = order.user
-
-      "#{current_user.first_name} #{current_user.last_name}"
+      order.name
     end
 
     def vendor(vendor_id)
