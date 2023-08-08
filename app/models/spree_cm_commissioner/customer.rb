@@ -74,7 +74,9 @@ module SpreeCmCommissioner
     end
 
     def overdue_subscriptions
-      overdue_id = query_builder.where('li.due_date < ?', Time.zone.today).where.not("o.payment_state = 'paid'").where(customer_id: id).first&.id
+      overdue_id = query_builder.where('li.due_date < ?', Time.zone.today)
+                                .where.not("o.payment_state = 'paid' or o.payment_state = 'failed'")
+                                .where(customer_id: id).first&.id
       return orders.where(subscription_id: overdue_id).first unless overdue_id.nil?
 
       'none'

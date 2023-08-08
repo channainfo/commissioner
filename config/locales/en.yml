@@ -164,6 +164,7 @@ en:
       add_penalty: "Add Penalty"
       active_subscribers: "Active Subscribers"
       paid_orders: "Paid Orders"
+      failed_orders: "Failed Orders"
       balance_due_orders: "Balance Due Orders"
       overdue_orders: "Overdue Orders"
       orders: "Order"
@@ -242,6 +243,6 @@ en:
       confirmation_code: "confirmation code"
       update_user_login: "update user code"
       contact_update: "update contact code"
-      
+
   actions:
     login: "Login"

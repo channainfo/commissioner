@@ -34,7 +34,7 @@
     <% end %>
     <% if spree_current_user.permissions.exists?(entry: 'spree/billing/customers') %>
       <ul class="nav nav-sidebar" id="sidebarCustomer">
-        <%= tab :customers, url: billing_customers_path, icon: 'people-fill.svg' %>
+        <%= tab :customers, Spree.t('billing.customers'), url: billing_customers_path, icon: 'people-fill.svg' %>
       </ul>
     <% end %>
     <% if spree_current_user.permissions.exists?(entry: 'spree/billing/orders') %>

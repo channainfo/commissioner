@@ -50,12 +50,13 @@
             <%= f.field_container :taxons do %>
               <%= f.label :taxon_ids, Spree.t(:taxons) %>
               <% if can? :modify, Spree::Classification %>
-                <%= f.select :taxon_ids, options_from_collection_for_select(@product.taxons, :id, :pretty_name, @product.taxon_ids),
-                                  { include_hidden: true },
-                                    multiple: true,
-                                    data: { autocomplete_url_value: 'taxons_api_v2',
-                                            autocomplete_return_attr_value: 'pretty_name',
-                                            autocomplete_multiple_value: true } %>
+                <%= f.collection_select :taxon_ids,
+                        Spree::Taxon.where(depth: 1),
+                        :id,
+                        :pretty_name,
+                        { selected: @product.taxon_ids },
+                        { multiple: true,
+                          data: { minimum_input_length: 0 } } %>
               <% elsif @product.taxons.any? %>
                 <ul class="text_list">
                   <% @product.taxons.each do |taxon| %>
@@ -91,10 +92,6 @@
               <% end %>
             <% end %>
           </span>
-        </div>
-        <div data-hook="product-from-prototype" id="product-from-prototype" class="col-3" >
-          <% @prototype = @prototype || Spree::Prototype.new(option_types: []) %>
-          <%= render template: 'spree/admin/prototypes/show' %>
         </div>
         <%= render partial: 'spree/admin/shared/new_resource_links' %>
       </fieldset>

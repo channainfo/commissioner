@@ -85,6 +85,7 @@ Spree::Core::Engine.add_routes do
   scope '(:locale)', locale: /#{I18n.available_locales.join("|")}/ do
     namespace :billing do
       resource :report, only: %i[show], controller: :report do
+        get '/failed', to: 'report#failed_orders', as: :failed
         get '/paid', to: 'report#paid', as: :paid
         get '/balance_due', to: 'report#balance_due', as: :balance_due
         get '/overdue', to: 'report#overdue', as: :overdue
