@@ -85,6 +85,7 @@ Spree::Core::Engine.add_routes do
   scope '(:locale)', locale: /#{I18n.available_locales.join("|")}/ do
     namespace :billing do
       resource :report, only: %i[show], controller: :report do
+        get '/failed', to: 'report#failed_orders', as: :failed
         get '/paid', to: 'report#paid', as: :paid
         get '/balance_due', to: 'report#balance_due', as: :balance_due
         get '/overdue', to: 'report#overdue', as: :overdue
@@ -135,9 +136,11 @@ Spree::Core::Engine.add_routes do
       namespace :storefront do
         resources :accommodations, only: %i[index show]
         resources :account_checker
+        resource :s3_signed_urls
         resources :provinces, only: %i[index]
         resources :user_deletion_reasons, only: [:index]
-
+        resource :profile_images, only: [:update]
+        resource :user_profiles, only: [:update]
         resources :notifications, only: %i[index show]
         resources :customer_notifications, only: [:show]
         resource :user_registration_with_pin_codes, only: [:create]

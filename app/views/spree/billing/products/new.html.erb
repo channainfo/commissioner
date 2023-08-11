@@ -1,6 +1,6 @@
 <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @product } %>
 <% content_for :page_title do %>
-  <%= link_to Spree.t(:products), spree.admin_products_url %> /
+  <%= page_header_back_button billing_products_path %>
   <%= Spree.t(:new_product) %>
 <% end %>
 <div class="card">
@@ -14,7 +14,7 @@
         <% end %>
         <div data-hook="new_product_attrs" class="row">
           <% unless @product.has_variants? %>
-            <div data-hook="new_product_sku" class="col-12 col-md-4">
+            <div data-hook="new_product_sku" class="col-12 col-md-6">
               <%= f.field_container :sku do %>
                 <%= f.label :sku, Spree.t(:sku) %>
                 <%= f.text_field :sku, size: 16, class: 'form-control' %>
@@ -22,7 +22,7 @@
               <% end %>
             </div>
           <% end %>
-          <div data-hook="new_product_price" class="col-12 col-md-4">
+          <div data-hook="new_product_price" class="col-12 col-md-6">
             <%= f.field_container :price do %>
               <%= f.label :price, raw(Spree.t(:master_price) + required_span_tag) %>
               <div class="input-group">
@@ -35,10 +35,10 @@
             <% end %>
           </div>
           <% if current_spree_user.respond_to?(:has_spree_role?) && current_spree_user.has_spree_role?(:admin) %>
-            <div data-hook="new_product_vendor" class="col-12 col-md-4">
-              <%= f.field_container :vendor, class: ['form-group'] do %>
+            <div data-hook="new_product_vendor">
+              <%= f.hidden_field(:vendor_id,value: @vendors.first.id, class: ['form-group']) do %>
                 <%= f.label :vendor_id, Spree.t(:vendor) %>
-                <%= f.collection_select(:vendor_id, @vendors, :id, :name, { include_blank: Spree.t('match_choices.none') }, { class: 'select2' }) %>
+                <%= f.collection_select(:vendor_id, @vendors, :id, :name, { include_blank: false}, { class: 'select2' }) %>
                 <%= f.error_message_on :vendor %>
               <% end %>
             </div>
@@ -46,23 +46,17 @@
           <div>
             <%= f.hidden_field :status,value: 'active' %>
           </div>
-          <div data-hook="new_product_shipping_category" class="col-4">
-            <%= f.field_container :shipping_category do %>
-              <%= f.label :shipping_category_id, raw(Spree.t(:shipping_categories) + required_span_tag) %>
-              <%= f.collection_select(:shipping_category_id, @shipping_categories, :id, :name, { selected: @product.shipping_category_id }, { class: 'select2 w-100' }) %>
-              <%= f.error_message_on :shipping_category_id %>
-            <% end %>
-          </div>
-          <div data-hook="admin_product_form_taxons" class="col-4">
+          <div data-hook="admin_product_form_taxons" class="col-6">
             <%= f.field_container :taxons do %>
               <%= f.label :taxon_ids, Spree.t(:taxons) %>
               <% if can? :modify, Spree::Classification %>
-                <%= f.select :taxon_ids, options_from_collection_for_select(@product.taxons, :id, :pretty_name, @product.taxon_ids),
-                                  { include_hidden: true },
-                                    multiple: true,
-                                    data: { autocomplete_url_value: 'taxons_api_v2',
-                                            autocomplete_return_attr_value: 'pretty_name',
-                                            autocomplete_multiple_value: true } %>
+                <%= f.collection_select :taxon_ids,
+                        Spree::Taxon.where(depth: 1),
+                        :id,
+                        :pretty_name,
+                        { selected: @product.taxon_ids },
+                        { multiple: true,
+                          data: { minimum_input_length: 0 } } %>
               <% elsif @product.taxons.any? %>
                 <ul class="text_list">
                   <% @product.taxons.each do |taxon| %>
@@ -75,14 +69,18 @@
             <% end %>
           </div>
           <% variant_kind_option_types = @product.variant_kind_option_types %>
-          <div data-hook="admin_product_form_variant_kind_option_types" class="col-4" >
-            <%= render 'shared/option_type_field',
-              label: Spree.t(:option_types),
-              select: :variant_kind_option_type_ids,
-              option_types: variant_kind_option_types,
-              kind: 'variant',
-              f:f
-            %>
+          <div data-hook="admin_product_form_variant_kind_option_types" class="col-6" >
+            <%= f.field_container :variant_kind_option_type_ids do %>
+              <%= f.label Spree.t(:option_types) %>
+              <%= f.select(:variant_kind_option_type_ids, options_for_select(Spree::OptionType.all.pluck(:name, :id), @selected_option_type_ids),{include_blank:false},{class: "select2", multiple:true}) %>
+            <% end %>
+          </div>
+          <div data-hook="new_product_shipping_category">
+            <%= f.hidden_field(:shipping_category_id, value: @shipping_categories.first.id) do%>
+              <%= f.label :shipping_category_id, raw(Spree.t(:shipping_categories) + required_span_tag) %>
+              <%= f.collection_select(:shipping_category_id, @shipping_categories, :id, :name, { class: 'select2 w-100', include_blank: true }) %>
+              <%= f.error_message_on :shipping_category_id %>
+            <% end %>
           </div>
         </div>
         <div data-hook="new_product_subscribable" class="col-3">
@@ -94,10 +92,6 @@
               <% end %>
             <% end %>
           </span>
-        </div>
-        <div data-hook="product-from-prototype" id="product-from-prototype" class="col-3" >
-          <% @prototype = @prototype || Spree::Prototype.new(option_types: []) %>
-          <%= render template: 'spree/admin/prototypes/show' %>
         </div>
         <%= render partial: 'spree/admin/shared/new_resource_links' %>
       </fieldset>

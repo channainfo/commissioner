@@ -111,7 +111,7 @@ en:
       other: "Can you please share us your account deletion reason. If something slipped through our fingers, we'd be so grateful to be aware and fix it."
 
   user:
-    invalid_password: "ពាក្យសង្ងាត់បច្ចុប្បន្នមិនត្រឹមត្រូវ"
+    invalid_password: "Invalid Password"
 
   spree:
     en: "English"
@@ -135,6 +135,7 @@ en:
     cashier: "Cashier"
     new_homepage_banner: "Add New Banner"
     intel_phone_number: "Intel Phone Number"
+    phone_number: "Phone Number"
     new_customer: "New Customer"
     listing_price: "Listing Price"
     length: "Length"
@@ -163,6 +164,7 @@ en:
       add_penalty: "Add Penalty"
       active_subscribers: "Active Subscribers"
       paid_orders: "Paid Orders"
+      failed_orders: "Failed Orders"
       balance_due_orders: "Balance Due Orders"
       overdue_orders: "Overdue Orders"
       orders: "Order"
@@ -235,16 +237,12 @@ en:
 
   pincode:
     readable_type:
-      contact_update: "contact update"
       login: "login code"
       reset_password: "reset password code"
       registration_code: "registration code"
       confirmation_code: "confirmation code"
       update_user_login: "update user code"
       contact_update: "update contact code"
-      
-  pincode_creator:
-    invalid_phone_number: "Invalid phone number"
-    invalid_email_address: "Invalid email address"
+
   actions:
     login: "Login"

@@ -37,7 +37,7 @@ module SpreeCmCommissioner
     validates :number, presence: true, uniqueness: { scope: :vendor_id }
 
     acts_as_paranoid
-    self.whitelisted_ransackable_attributes = %w[number intel_phone_number first_name last_name taxon_id sequence_number]
+    self.whitelisted_ransackable_attributes = %w[number phone_number first_name last_name taxon_id sequence_number]
 
     accepts_nested_attributes_for :ship_address, :bill_address
 
@@ -74,7 +74,9 @@ module SpreeCmCommissioner
     end
 
     def overdue_subscriptions
-      overdue_id = query_builder.where('li.due_date < ?', Time.zone.today).where.not("o.payment_state = 'paid'").where(customer_id: id).first&.id
+      overdue_id = query_builder.where('li.due_date < ?', Time.zone.today)
+                                .where.not("o.payment_state = 'paid' or o.payment_state = 'failed'")
+                                .where(customer_id: id).first&.id
       return orders.where(subscription_id: overdue_id).first unless overdue_id.nil?
 
       'none'

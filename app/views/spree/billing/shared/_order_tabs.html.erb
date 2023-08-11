@@ -1,6 +1,6 @@
 <% content_for :page_title do %>
   <%= page_header_back_button spree.billing_orders_path %>
-  <%= @order.number %>
+  <%= @order.invoice.invoice_number %>
 <% end %>
 <% content_for :page_tabs do %>
   <% if can? :update, @order %>

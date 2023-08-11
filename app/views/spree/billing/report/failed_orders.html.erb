@@ -1,10 +1,9 @@
 <% content_for :page_title do %>
-  <%= Spree.t('billing.paid_orders') %>
+  <%= Spree.t('billing.failed_orders') %>
 <% end %>
-
 <% content_for :sidebar do %>
   <div data-hook="billing_report_index_search">
-    <%= search_form_for [:billing, @search], url: spree.paid_billing_report_path do |f| %>
+    <%= search_form_for [:billing, @search], url: spree.balance_due_billing_report_path do |f| %>
       <div class="date-range-filter col-10 col-lg-10">
         <div class="form-group">
           <%= f.label :line_items_from_date_gteq, I18n.t(:start_date_range, scope: 'activerecord.attributes.spree/order') %>
@@ -20,7 +19,6 @@
     <% end %>
   </div>
 <% end %>
-
 <% unless @orders.empty? %>
   <div class="table-responsive border rounded bg-whit mb-3">
     <table class="table" id="listing_subscriptions">

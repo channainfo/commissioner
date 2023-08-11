@@ -16,6 +16,7 @@ require 'interactor'
 require 'phonelib'
 require 'jwt'
 require 'noticed'
+require 'aws-sdk-s3'
 
 require 'simple_calendar'
 require 'activerecord_json_validator'

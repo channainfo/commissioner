@@ -18,6 +18,7 @@
       <%= Spree.t("state_machine_states.#{adjustment.state}") %>
     </span>
   </td>
+  <td class="text-center"><%= adjustment.payable.is_a?(Spree::User) ? adjustment.payable.full_name : nil %></td>
   <td class="actions">
     <span class="d-flex justify-content-center">
       <% if adjustment.open? %>
