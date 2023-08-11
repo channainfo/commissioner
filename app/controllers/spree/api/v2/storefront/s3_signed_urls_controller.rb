@@ -12,7 +12,7 @@ module Spree
           end
 
           def resource
-            ::S3SignedUrl.new(params[:file_name])
+            SpreeCmCommissioner::S3SignedUrl.new(params[:file_name])
           end
 
           def resource_serializer

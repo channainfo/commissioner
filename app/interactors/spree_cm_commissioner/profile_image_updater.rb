@@ -1,23 +1,25 @@
 module SpreeCmCommissioner
   class ProfileImageUpdater < BaseInteractor
     def call
-      begin
-        io = File.open(context.url)
-      rescue StandardError => e
-        context.fail!(message: e.message)
+      response = Faraday.get(context.url)
+
+      if response.success?
+        user = context.user
+        io = StringIO.new(response.body)
+        filename = File.basename(context.url)
+
+        profile = user.profile || SpreeCmCommissioner::UserProfile.new(viewable: user)
+
+        profile.attachment.attach(io: io, filename: filename)
+
+        if profile.save
+          context.result = profile
+        else
+          context.fail!(message: profile.errors.full_messages.join(','))
+        end
       end
-
-      user = context.user
-      profile = user.profile || SpreeCmCommissioner::UserProfile.new(viewable: user)
-
-      filename = context.url.split('/').last
-      profile.attachment.attach(io: io, filename: filename)
-
-      if profile.save
-        context.result = profile
-      else
-        context.fail!(message: profile.errors.full_messages.join(','))
-      end
+    rescue StandardError => e
+      context.fail!(message: "Error fetching the remote image: #{e.message}")
     end
   end
 end
