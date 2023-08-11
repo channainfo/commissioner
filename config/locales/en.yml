@@ -65,7 +65,7 @@ en:
       option_type_is_not_product: "%{option_type_name} / %{option_value_name} is not kind of product"
       out_of_stock: "%{variant_name} is out of stock"
     product_kind_option_types:
-      empty_info: "<b>Note:</b> Set product option types to product first. To edit, go to <b>Details</b> tab > <b>Option Types</b>"
+      empty_info: "<b>Note:</b> Set service option types to service first. To edit, go to <b>Details</b> tab > <b>Option Types</b>"
 
   vectors:
     icons:
@@ -98,7 +98,7 @@ en:
       exception_rules: "Exception Rules"
 
   orders:
-    total: "Total: %{orders_count} orders"
+    total: "Total: %{orders_count} invoices"
 
   account_deletion:
     title:
@@ -122,7 +122,7 @@ en:
     invoice: "Invoice"
     option_text: "Option Text"
     none: "none"
-    subscribe: "Subscribe"
+    subscribe: "Use Service"
     full_name: "name"
     address: "Address"
     billing_address: "Billing Address"
@@ -154,6 +154,7 @@ en:
       match_any: "Match any of these date"
       match_all: "Must match all of these date"
     billing:
+      order_line_items: "Order Line Items"
       new_role: "New Role"
       role_id: "Role ID"
       settings: "Settings"
@@ -162,20 +163,21 @@ en:
       balance_due: "Balance Due"
       penalty: "Penalty"
       add_penalty: "Add Penalty"
-      active_subscribers: "Active Subscribers"
-      paid_orders: "Paid Orders"
-      failed_orders: "Failed Orders"
-      balance_due_orders: "Balance Due Orders"
-      overdue_orders: "Overdue Orders"
-      orders: "Order"
+      active_subscribers: "Active Customers"
+      paid_orders: "Paid Invoices"
+      failed_orders: "Failed Invoices"
+      balance_due_orders: "Balance Due Invoices"
+      overdue_orders: "Overdue Invoices"
+      orders: "Invoices"
       customers: "Customers"
       roles: "Role"
-      subscriptions: "Subscription"
+      subscriptions: "Service Usage"
       active_subscription: "Active"
       overdue: "Overdue"
       suspended: "Suspended"
       users: "User"
       day: "day"
+      products: "Products"
       payment_state:
         paid: "Paid"
         balance_due: "Balance Due"
