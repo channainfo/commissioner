@@ -14,7 +14,7 @@ RSpec.describe SpreeCmCommissioner::InvoiceCreator do
       result = described_class.new(order: order1)
       result.load_invoice_number
 
-      expect(result.context.invoice_number).to eq '0623000001'
+      expect(result.context.invoice_number).to eq '0623-00001'
     end
   end
 
@@ -24,15 +24,15 @@ RSpec.describe SpreeCmCommissioner::InvoiceCreator do
       context2 = described_class.call(order: order1)
 
       expect(SpreeCmCommissioner::Invoice.count).to eq 1
-      expect(context1.invoice.invoice_number).to eq '0623000001'
-      expect(context2.invoice.invoice_number).to eq '0623000001'
+      expect(context1.invoice.invoice_number).to eq '0623-00001'
+      expect(context2.invoice.invoice_number).to eq '0623-00001'
     end
 
     it 'return invoice with 2 different order ' do
       context1 = described_class.call(order: order1)
       context2 = described_class.call(order: order2)
-      expect(context1.invoice.invoice_number).to eq '0623000001'
-      expect(context2.invoice.invoice_number).to eq '0723000001'
+      expect(context1.invoice.invoice_number).to eq '0623-00001'
+      expect(context2.invoice.invoice_number).to eq '0723-00001'
     end
 
   end

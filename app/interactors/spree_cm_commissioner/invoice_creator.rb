@@ -12,7 +12,7 @@ module SpreeCmCommissioner
       load_prefix
       load_invoices_count
 
-      context.invoice_number = context.prefix + rjust_number(context.invoices_count)
+      context.invoice_number = "#{context.prefix}-#{rjust_number(context.invoices_count)}"
     end
 
     # 04-12-2023 -> 0412
@@ -42,7 +42,7 @@ module SpreeCmCommissioner
 
     # 1 -> 000001
     def rjust_number(invoices_count)
-      (invoices_count + 1).to_s.rjust(6, '0')
+      (invoices_count + 1).to_s.rjust(5, '0')
     end
   end
 end
