@@ -60,11 +60,11 @@ class NoticedFcmBase < Noticed::Base
   end
 
   def message
-    t('.message', record.params[:translatable_options] || {})
+    t('.message', **(record.params[:translatable_options] || {}))
   end
 
   def title
-    t('.title', record.params[:translatable_options] || {})
+    t('.title', **(record.params[:translatable_options] || {}))
   end
 
   def type
