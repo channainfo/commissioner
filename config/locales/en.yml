@@ -246,5 +246,11 @@ en:
       update_user_login: "update user code"
       contact_update: "update contact code"
 
+  notifications:
+    spree_cm_commissioner:
+      order_complete_notification:
+        title: "💸 Order Complete!"
+        message: "Your Order numer is  %{order_number}"
+
   actions:
     login: "Login"

@@ -234,3 +234,9 @@ km:
       registration_code: "លេខកូដចុះឈ្មោះ"
       confirmation_code: "លេខកូដបញ្ជាក់"
       update_user_login: "ធ្វើបច្ចុប្បន្នភាពលេខកូដអ្នកប្រើប្រាស់"
+
+  notifications:
+    spree_cm_commissioner:
+      order_complete_notification:
+        title: "💸 ការបញ្ជាទិញទទួលបានជោគជ័យ!"
+        message: "លេខបញ្ជាទិញរបស់អ្នកគឺ ​%{order_number}"
