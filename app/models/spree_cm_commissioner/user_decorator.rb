@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/MethodLength
 module SpreeCmCommissioner
   module UserDecorator
     def self.prepended(base)
@@ -35,6 +36,12 @@ module SpreeCmCommissioner
       def base.end_users
         joins('LEFT JOIN spree_vendor_users ON spree_users.id = spree_vendor_users.user_id').where(spree_vendor_users: { user_id: nil })
       end
+
+      def normal_user?
+        system_user = admin? || !vendors.empty?
+        normal_user = spree_roles.length == 1 ? spree_roles[0].name == 'user' : spree_roles.empty?
+        normal_user && !system_user
+      end
     end
 
     def full_name
@@ -69,7 +76,15 @@ module SpreeCmCommissioner
     def email_required?
       phone_number.blank?
     end
+
+    def validate_current_password!(password)
+      return if valid_password?(password)
+
+      errors.add(:password, I18n.t('spree_user.invalid_password'))
+    end
   end
 end
 
 Spree::User.prepend(SpreeCmCommissioner::UserDecorator) unless Spree::User.included_modules.include?(SpreeCmCommissioner::UserDecorator)
+
+# rubocop:enable Metrics/MethodLength

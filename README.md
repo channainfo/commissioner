@@ -170,3 +170,8 @@ If you'd like to contribute, please take a look at the
 pull request.
 
 Copyright (c) 2022 [name of extension creator], released under the New BSD License
+
+### Account Deletion Cron Job
+-  ```  AccountDeletionCronJob ```
+- Frequently: every 24 hours
+- Deleted Account will last for 1 month before it is permanently deleted

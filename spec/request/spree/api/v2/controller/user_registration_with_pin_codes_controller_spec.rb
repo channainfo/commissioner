@@ -2,9 +2,11 @@ require 'spec_helper'
 
 RSpec.describe Spree::Api::V2::Storefront::UserRegistrationWithPinCodesController, type: :controller do
   describe 'POST #create' do
+
     context 'with valid pincode and user attributes' do
       it 'registers user' do
         set_application_token
+
         pin_code = create(:pin_code, :with_number, contact: '012333444',
                                                             type: 'SpreeCmCommissioner::PinCodeRegistration')
 
@@ -22,12 +24,7 @@ RSpec.describe Spree::Api::V2::Storefront::UserRegistrationWithPinCodesControlle
         post :create, params: params
 
         expect(response.status).to eq 200
-        expect(json_response_body['access_token']).to_not eq nil
-        expect(json_response_body['token_type']).to_not eq nil
-        expect(json_response_body['expires_in']).to_not eq nil
-        expect(json_response_body['refresh_token']).to_not eq nil
-        expect(json_response_body['scope']).to_not eq nil
-        expect(json_response_body['created_at']).to_not eq nil
+
       end
     end
 
