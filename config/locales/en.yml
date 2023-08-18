@@ -254,3 +254,7 @@ en:
 
   actions:
     login: "Login"
+
+  spree_user:
+    invalid_password: 'Current password is not valid'
+    cannot_delete_account: 'You cannot delete this account because you own a special role'
