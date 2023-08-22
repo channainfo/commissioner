@@ -15,4 +15,11 @@
     classes: ['col m-2'],
     form:f
   %>
+  <%= render 'shared/asset_field',
+    field: :qrcode,
+    label: Spree.t(:qrcode),
+    asset: @vendor.qrcode,
+    classes: ['col m-2'],
+    form:f
+  %>
 </div>
