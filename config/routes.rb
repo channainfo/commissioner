@@ -82,6 +82,18 @@ Spree::Core::Engine.add_routes do
     end
   end
 
+  namespace :telegram do
+    resources :orders, only: %i[show update] do
+      member do
+        patch :reject
+        patch :approve
+      end
+    end
+
+    get '/forbidden', to: 'errors#forbidden'
+    get '/resource_not_found', to: 'errors#resource_not_found'
+  end
+
   scope '(:locale)', locale: /#{I18n.available_locales.join("|")}/ do
     namespace :billing do
       resource :report, only: %i[show], controller: :report do
