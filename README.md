@@ -109,6 +109,7 @@ Following are required varialbles inside .env
 GOOGLE_MAP_KEY = ""
 DEFAULT_LATLON = "10.627543,103.522141"
 ACCOMMODATION_MAX_STAY_DAYS = 10
+DEFAULT_TELEGRAM_BOT_API_TOKEN = ""
 ```
 
 ## Using Deface DSL (.deface files)

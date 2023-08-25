@@ -54,6 +54,10 @@ module SpreeCmCommissioner
       subscription.present?
     end
 
+    def customer_address
+      bill_address || ship_address
+    end
+
     private
 
     def link_by_phone_number

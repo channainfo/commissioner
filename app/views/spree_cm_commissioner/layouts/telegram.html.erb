@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <%= csrf_meta_tags %>
+
+  <title>
+  <% if content_for? :title %>
+    <%= yield :title %>
+  <% else %>
+    <%= "Spree #{Spree.t('administration')}: " %>
+    <%= Spree.t(controller.controller_name, default: controller.controller_name.titleize) %>
+  <% end %>
+  </title>
+
+  <%= stylesheet_link_tag 'spree_cm_commissioner/telegram/all', media: :all %>
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <%= javascript_include_tag 'spree_cm_commissioner/telegram/all', data: { turbo_track: "reload" } %>
+</head>
+
+<body>
+  <%= yield %>
+</body>
+
+</html>

@@ -1,0 +1,95 @@
+@import 'bootstrap';
+
+// Green
+.badge-completed,
+.badge-complete,
+.badge-resumed,
+.badge-considered_safe,
+.badge-paid,
+.badge-shipped,
+.badge-ready,
+.badge-active,
+.badge-success,
+.badge-sold,
+.badge-open,
+.badge-authorized,
+.badge-published,
+.badge-live,
+.badge-approved {
+  @include badge-variant(theme-color('success'));
+}
+
+// Red
+.badge-failed,
+.badge-considered_risky,
+.badge-error,
+.badge-invalid,
+.badge-rejected,
+.badge-closed {
+  @include badge-variant(theme-color('danger'));
+}
+
+// Orange
+.badge-processing,
+.badge-pending,
+.badge-awaiting_return,
+.badge-returned,
+.badge-credit_owed,
+.badge-balance_due,
+.badge-backorder,
+.badge-checkout,
+.badge-cart,
+.badge-address,
+.badge-delivery,
+.badge-payment,
+.badge-confirm,
+.badge-canceled,
+.badge-void,
+.badge-inactive,
+.badge-notice,
+.badge-suspended,
+.badge-partial {
+  @include badge-variant(theme-color('warning'));
+}
+
+:root {
+  --color-border: color-mix(in srgb, var(--tg-theme-text-color) 10%, transparent);
+}
+
+body {
+  background-color: var(--tg-theme-secondary-bg-color);
+  color: var(--tg-theme-text-color);
+}
+
+a {
+  color: var(--tg-theme-link-color);
+}
+
+.card {
+  background-color: var(--tg-theme-bg-color);
+}
+
+.card-header {
+  background-color: var(--tg-theme-bg-color);
+  border-color: var(--color-border);
+}
+
+.btn-primary {
+  background-color: var(--tg-theme-button-color);
+  border-color: var(--tg-theme-button-color);
+  color: var(--tg-theme-button-text-color);
+}
+
+.btn-outline-primary {
+  border-color: var(--tg-theme-button-color);
+  color: var(--tg-theme-button-color);
+}
+
+.badge-primary {
+  background-color: var(--tg-theme-button-color);
+}
+
+.list-group-item {
+  background-color: var(--tg-theme-bg-color);
+  border-color: var(--color-border);
+}
