@@ -1,5 +1,5 @@
 module SpreeCmCommissioner
-  class VendorQrcode < Asset
+  class VendorPaymentQrcode < Asset
     # 16x9
     def asset_styles
       {

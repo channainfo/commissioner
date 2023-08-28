@@ -18,9 +18,9 @@
       form:f
      %>
       <%= render 'shared/asset_field',
-      field: :qrcode,
-      label: Spree.t("billing.qrcode"),
-      asset: @vendor.qrcode,
+      field: :payment_qrcode,
+      label: Spree.t("billing.payment_qrcode"),
+      asset: @vendor.payment_qrcode,
       classes: ['col m-2'],
       form:f
      %>

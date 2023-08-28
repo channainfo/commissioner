@@ -31,7 +31,7 @@ module SpreeCmCommissioner
                     through: :nearby_places, source: :place, class_name: 'SpreeCmCommissioner::Place'
 
       base.has_one  :logo, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorLogo'
-      base.has_one  :qrcode, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorQrcode'
+      base.has_one  :payment_qrcode, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorPaymentQrcode'
       base.has_one  :web_promotion_banner, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorWebPromotionBanner'
       base.has_one  :app_promotion_banner, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorAppPromotionBanner'
       base.has_one  :stock_location, -> { where(active: true) }, class_name: 'Spree::StockLocation', dependent: :destroy

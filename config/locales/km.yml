@@ -149,7 +149,7 @@ km:
       code: "code"
       name: "name"
       logo: "logo"
-      qrcode: "qrcode"
+      payment_qrcode: "Payment QRCode"
       image: "image"
       order_line_items: "Order Line Items"
       new_role: "បង្កើតតួនាទីថ្មី"

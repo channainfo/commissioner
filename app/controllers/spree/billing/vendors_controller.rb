@@ -2,7 +2,7 @@ module Spree
   module Billing
     class VendorsController < Spree::Billing::BaseController
       before_action :build_logo, only: %i[create update]
-      before_action :build_qrcode, only: %i[create update]
+      before_action :build_payment_qrcode, only: %i[create update]
 
       def create
         @vendor.build_image(attachment: permitted_resource_params.delete(:image)) if permitted_resource_params[:image]
@@ -69,10 +69,10 @@ module Spree
         @vendor.build_logo(attachment: permitted_resource_params.delete(:logo))
       end
 
-      def build_qrcode
-        return unless permitted_resource_params[:qrcode]
+      def build_payment_qrcode
+        return unless permitted_resource_params[:payment_qrcode]
 
-        @vendor.build_qrcode(attachment: permitted_resource_params.delete(:qrcode))
+        @vendor.build_payment_qrcode(attachment: permitted_resource_params.delete(:payment_qrcode))
       end
 
       def location_after_save

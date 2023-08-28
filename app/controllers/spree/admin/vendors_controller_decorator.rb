@@ -3,7 +3,7 @@ module Spree
     module VendorsControllerDecorator
       def self.prepended(base)
         base.before_action :build_logo, only: %i[create update]
-        base.before_action :build_qrcode, only: %i[create update]
+        base.before_action :build_payment_qrcode, only: %i[create update]
         base.before_action :contruct_nearby_place, only: %i[create update]
       end
 
@@ -26,10 +26,10 @@ module Spree
         @vendor.build_logo(attachment: permitted_resource_params.delete(:logo))
       end
 
-      def build_qrcode
-        return unless permitted_resource_params[:qrcode]
+      def build_payment_qrcode
+        return unless permitted_resource_params[:payment_qrcode]
 
-        @vendor.build_qrcode(attachment: permitted_resource_params.delete(:qrcode))
+        @vendor.build_payment_qrcode(attachment: permitted_resource_params.delete(:payment_qrcode))
       end
     end
   end
