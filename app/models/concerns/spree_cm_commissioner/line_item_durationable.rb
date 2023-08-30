@@ -13,7 +13,7 @@ module SpreeCmCommissioner
     def date_unit
       return nil unless reservation?
 
-      return number_of_nights if accommodation?
+      number_of_nights if accommodation?
     end
 
     # Example:

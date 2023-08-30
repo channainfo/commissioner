@@ -11,7 +11,7 @@ module Spree
         order = order_scope.find_by(number: params[:id])
         raise ActiveRecord::RecordNotFound if order.nil?
 
-        result = Spree::Orders::Cancel.call(order: order, canceler: authorizer_context.user)
+        result = SpreeCmCommissioner::OrderRejectedStateUpdater.call(order: order, authorized_user: authorizer_context.user)
         if result.success?
           head :ok
         else
@@ -23,7 +23,7 @@ module Spree
         order = order_scope.find_by(number: params[:id])
         raise ActiveRecord::RecordNotFound if order.nil?
 
-        result = Spree::Orders::Approve.call(order: order, approver: authorizer_context.user)
+        result = SpreeCmCommissioner::OrderAcceptedStateUpdater.call(order: order, authorized_user: authorizer_context.user)
         if result.success?
           head :ok
         else

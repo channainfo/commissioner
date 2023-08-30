@@ -2,6 +2,7 @@ module SpreeCmCommissioner
   module OrderDecorator
     def self.prepended(base)
       base.include SpreeCmCommissioner::PhoneNumberSanitizer
+      base.include SpreeCmCommissioner::OrderRequestable
 
       base.scope :subscription, -> { where.not(subscription_id: nil) }
 
