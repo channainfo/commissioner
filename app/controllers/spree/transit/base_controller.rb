@@ -9,8 +9,8 @@ module Spree
       end
 
       def current_vendor
-        @current_vendor ||= vendors.find { |v| v[:slug] == session[:billing_current_vendor_slug] } || vendors.first
-        session[:billing_current_vendor_slug] ||= @current_vendor&.slug
+        @current_vendor ||= vendors.find { |v| v[:slug] == session[:transit_current_vendor_slug] } || vendors.first
+        session[:transit_current_vendor_slug] ||= @current_vendor&.slug
 
         @current_vendor
       end
