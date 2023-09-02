@@ -15,7 +15,7 @@ module Spree
           private
 
           def pin_code_attrs
-            results = params.slice(:id, :phone_number, :email, :code, :type)
+            results = params.slice(:phone_number, :email, :token, :pin_code, :pin_code_token, :type)
             results[:long_life_pin_code] = true
             results
           end
