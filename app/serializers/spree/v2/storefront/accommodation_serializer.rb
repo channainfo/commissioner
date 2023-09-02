@@ -7,12 +7,16 @@ module Spree
         # because its model still Spree::Vendor
         set_type :vendor
 
-        has_one :state
-
         attributes :total_inventory, :service_availabilities
 
         attribute :total_booking do |vendor|
           vendor.respond_to?(:total_booking) ? vendor.total_booking : 0
+        end
+
+        attribute :state_name do |vendor|
+          state = Spree::State.find_by(id: vendor.state_id)
+          state ||= vendor.stock_locations.first.presence&.state
+          state&.name
         end
 
         attribute :remaining do |vendor|

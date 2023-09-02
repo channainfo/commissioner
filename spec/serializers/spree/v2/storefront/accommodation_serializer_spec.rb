@@ -38,6 +38,7 @@ RSpec.describe Spree::V2::Storefront::AccommodationSerializer, type: :serializer
         :total_inventory,
         :service_availabilities,
         :total_booking,
+        :state_name,
         :remaining
       )
     end
@@ -56,8 +57,7 @@ RSpec.describe Spree::V2::Storefront::AccommodationSerializer, type: :serializer
         :promoted_option_values,
         :vendor_kind_option_values,
         :active_promotions,
-        :logo,
-        :state
+        :logo
       )
     end
   end

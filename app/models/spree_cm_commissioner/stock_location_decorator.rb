@@ -9,6 +9,10 @@ module SpreeCmCommissioner
         vendor&.update_location
       end
     end
+
+    def state_name
+      super.presence || state&.name
+    end
   end
 end
 

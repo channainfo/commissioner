@@ -15,6 +15,7 @@ describe Spree::V2::Storefront::StockLocationSerializer, type: :serializer do
         :name,
         :lat,
         :lon,
+        :state_name,
         :address1,
         :reference
       )
