@@ -11,7 +11,7 @@ RSpec.describe Spree::Api::V2::Storefront::PinCodeCheckersController, type: :con
     it 'return status ok' do
       set_application_token
 
-      post :update, params: { id: pin_code.token, email: 'panhachom@gmail.com', code: pin_code.code,
+      post :update, params: { pin_code_token: pin_code.token, email: 'panhachom@gmail.com', pin_code: pin_code.code,
                      type: 'SpreeCmCommissioner::PinCodeLogin' }
 
       expect(response.status).to eq 200
@@ -22,7 +22,7 @@ RSpec.describe Spree::Api::V2::Storefront::PinCodeCheckersController, type: :con
       set_application_token
 
       post :update,
-           params: { id: pin_code.token, email: 'panhachom@gmail.com', code: '134122',
+           params: { pin_code_token: pin_code.token, email: 'panhachom@gmail.com', pin_code: '134122',
                      type: 'SpreeCmCommissioner::PinCodeLogin' }
 
       expect(response.status).to eq 400

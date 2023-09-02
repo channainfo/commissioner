@@ -9,9 +9,9 @@ RSpec.describe SpreeCmCommissioner::PinCodeChecker do
   context 'when the given info is matched with the pin code' do
     it 'return ok' do
       options = {
-        id: pin_code.token,
+        pin_code_token: pin_code.token,
         phone_number: '0123456789',
-        code: pin_code.code,
+        pin_code: pin_code.code,
         type: 'SpreeCmCommissioner::PinCodeLogin',
         long_life_pin_code: true
       }
@@ -23,9 +23,9 @@ RSpec.describe SpreeCmCommissioner::PinCodeChecker do
   context 'when the given type is not correct' do
     it 'return not_found' do
       options = {
-        id: pin_code.token ,
+        pin_code_token: pin_code.token ,
         phone_number: '0123456789',
-        code: pin_code.code,
+        pin_code: pin_code.code,
         type: 'SpreeCmCommissioner::PinCodeRegistration',
         long_life_pin_code: true
       }
@@ -40,9 +40,9 @@ RSpec.describe SpreeCmCommissioner::PinCodeChecker do
   context 'when pin code is expired' do
     it 'return expired' do
       options = {
-        id: pin_code.token,
+        pin_code_token: pin_code.token,
         phone_number: '0123456789',
-        code: pin_code.code,
+        pin_code: pin_code.code,
         type: 'SpreeCmCommissioner::PinCodeLogin',
         long_life_pin_code: true
       }
@@ -58,9 +58,9 @@ RSpec.describe SpreeCmCommissioner::PinCodeChecker do
   context 'when pin code reach max attempt allowed (3 times)' do
     it 'return reached_max_attempt' do
       options = {
-        id: pin_code.token,
+        pin_code_token: pin_code.token,
         phone_number: '0123456789',
-        code: pin_code.code,
+        pin_code: pin_code.code,
         type: 'SpreeCmCommissioner::PinCodeLogin',
         long_life_pin_code: true
       }
@@ -78,9 +78,9 @@ RSpec.describe SpreeCmCommissioner::PinCodeChecker do
   context 'when the given code is not matched' do
     it 'return not_match' do
       options = {
-        id: pin_code.token,
+        pin_code_token: pin_code.token,
         phone_number: '0123456789',
-        code: '000001',
+        pin_code: '000001',
         type: 'SpreeCmCommissioner::PinCodeLogin',
         long_life_pin_code: true
       }

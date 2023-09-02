@@ -12,7 +12,9 @@ module SpreeCmCommissioner
 
     def validate_pin_code!
       options = context.to_h.slice(:email, :phone_number)
-      options[:code] = context.pin_code
+
+      options[:pin_code] = context.pin_code
+      options[:pin_code_token] = context.pin_code_token
       options[:id] = context.pin_code_token
       options[:type] = 'SpreeCmCommissioner::PinCodeRegistration'
       options[:long_life_pin_code] = true
