@@ -3,6 +3,12 @@ module Spree
     module V2
       module Storefront
         class UserRegistrationWithPinCodesController < Spree::Api::V2::ResourceController
+          before_action :validate_token_client!
+
+          def validate_token_client!
+            raise Doorkeeper::Errors::DoorkeeperError if doorkeeper_token&.application.nil?
+          end
+
           def create
             options = user_with_pin_code_params
             context = SpreeCmCommissioner::UserPinCodeAuthenticator.call(options)

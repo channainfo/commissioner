@@ -15,7 +15,7 @@ module Spree
           end
 
           def filter_params
-            params.permit(:login)
+            params.permit(:login, :locale, :format)
           end
         end
       end
