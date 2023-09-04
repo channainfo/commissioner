@@ -94,7 +94,7 @@ Spree::Core::Engine.add_routes do
     get '/resource_not_found', to: 'errors#resource_not_found'
   end
 
-  scope '(:locale)', locale: /#{I18n.available_locales.join("|")}/ do
+  scope '(:locale)', locale: /#{I18n.available_locales.join('|')}/ do
     namespace :billing do
       resource :report, only: %i[show], controller: :report do
         get '/failed', to: 'report#failed_orders', as: :failed
