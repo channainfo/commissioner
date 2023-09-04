@@ -82,7 +82,19 @@ Spree::Core::Engine.add_routes do
     end
   end
 
-  scope '(:locale)', locale: /#{I18n.available_locales.join("|")}/ do
+  namespace :telegram do
+    resources :orders, only: %i[show update] do
+      member do
+        patch :reject
+        patch :approve
+      end
+    end
+
+    get '/forbidden', to: 'errors#forbidden'
+    get '/resource_not_found', to: 'errors#resource_not_found'
+  end
+
+  scope '(:locale)', locale: /#{I18n.available_locales.join('|')}/ do
     namespace :billing do
       resource :report, only: %i[show], controller: :report do
         get '/failed', to: 'report#failed_orders', as: :failed
@@ -153,7 +165,7 @@ Spree::Core::Engine.add_routes do
         resource :user_registration_with_pin_codes, only: [:create]
         resources :user_device_token_registrations, only: %i[create destroy]
         resources :pin_code_generators, only: [:create]
-        resources :pin_code_checkers, only: [:update]
+        resource :pin_code_checkers, only: [:update]
 
         resource :change_passwords, only: [:update]
         resource :account_deletions, only: %i[destroy]

@@ -39,6 +39,11 @@ module SpreeCmCommissioner
         inject_into_file 'app/javascript/spree-dashboard.js', "\nimport \"./spree_cm_commissioner/utilities.js\"",
                          after: %r{import "@spree/dashboard"}, verbose: true
       end
+
+      def install_telegram_web_bot
+        template 'vendor/assets/javascript/spree_cm_commissioner/telegram/all.js'
+        template 'vendor/assets/stylesheets/spree_cm_commissioner/telegram/all.css'
+      end
     end
   end
 end

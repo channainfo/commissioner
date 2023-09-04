@@ -253,6 +253,12 @@ en:
       order_complete_notification:
         title: "💸 Order Complete!"
         message: "Your Order numer is  %{order_number}"
+      order_accepted_notification:
+        title: "Confirm!"
+        message: "Your request has been confirmed; please check your upcoming trip."
+      order_rejected_notification:
+        title: "Request Reject!"
+        message: "Oops! The room you requested to book with [%{vendor_name}] is not available on your selected date."
 
   actions:
     login: "Login"
