@@ -13,4 +13,7 @@
   <ul class="nav nav-sidebar" id="sidebarReport">
     <%= tab :reservations, label: I18n.t('spree.transit.reservations'), url: transit_reservations_path, icon: "list.svg", selected: request.path.include?('/transit/reservations') %>
   </ul>
+  <ul class="nav nav-sidebar" id="sidebarLocations">
+    <%= tab :locations, label: I18n.t('spree.transit.locations'), url: transit_locations_path, icon: "location.svg", selected: request.path.include?('locations') %>
+  </ul>
 </nav>
