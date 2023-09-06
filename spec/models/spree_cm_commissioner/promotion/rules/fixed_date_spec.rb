@@ -19,7 +19,7 @@ RSpec.describe SpreeCmCommissioner::Promotion::Rules::FixedDate do
     it 'applicable when any of line items has date range present?' do
       subject = described_class.new
 
-      expect(subject.applicable?(line_item_10_to_12.order))
+      expect(subject.applicable?(line_item_10_to_12.order.reload))
       expect(order.line_items.any?(&:date_present?)).to be true
     end
   end

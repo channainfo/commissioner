@@ -3,10 +3,10 @@ require 'spec_helper'
 RSpec.describe SpreeCmCommissioner::AccommodationQuery do
   let(:phnom_penh) { create(:state, name: 'Phnom Penh') }
   let(:siem_reap)  { create(:state, name: 'Siem Reap') }
-  let!(:phnom_penh_hotel) { create(:cm_vendor_with_product, name: 'Phnom Penh Hotel',       state_id: phnom_penh.id, permanent_stock: 20) }
-  let!(:sokha_pp_hotel)   { create(:cm_vendor_with_product, name: 'Sokha Phnom Penh Hotel', state_id: phnom_penh.id, permanent_stock: 20) }
-  let!(:angkor_hotel)     { create(:cm_vendor_with_product, name: 'Angkor Hotel',           state_id: siem_reap.id,  permanent_stock: 20) }
-  let!(:siemreap_hotel)   { create(:cm_vendor_with_product, name: 'Siem Reap Hotel',        state_id: siem_reap.id,  permanent_stock: 20) }
+  let!(:phnom_penh_hotel) { create(:cm_vendor_with_product, name: 'Phnom Penh Hotel',       default_state_id: phnom_penh.id, permanent_stock: 20) }
+  let!(:sokha_pp_hotel)   { create(:cm_vendor_with_product, name: 'Sokha Phnom Penh Hotel', default_state_id: phnom_penh.id, permanent_stock: 20) }
+  let!(:angkor_hotel)     { create(:cm_vendor_with_product, name: 'Angkor Hotel',           default_state_id: siem_reap.id,  permanent_stock: 20) }
+  let!(:siemreap_hotel)   { create(:cm_vendor_with_product, name: 'Siem Reap Hotel',        default_state_id: siem_reap.id,  permanent_stock: 20) }
   let(:order1) { create(:order) }
   let(:order2) { create(:order) }
   let(:booking_fields)   { [:vendor_id, :day, :total_booking] }

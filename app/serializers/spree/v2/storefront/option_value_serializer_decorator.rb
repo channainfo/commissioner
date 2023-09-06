@@ -8,6 +8,8 @@ module Spree
         def self.prepended(base)
           base.attribute :display_icon do |option_value|
             ActionController::Base.helpers.image_url(option_value.display_icon)
+          rescue StandardError
+            nil
           end
         end
       end

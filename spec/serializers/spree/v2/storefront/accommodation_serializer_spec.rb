@@ -22,6 +22,7 @@ RSpec.describe Spree::V2::Storefront::AccommodationSerializer, type: :serializer
         :vendor_kind_option_values,
         :active_promotions,
         :logo,
+        :default_state,
       ]).serializable_hash
     }
 
@@ -57,7 +58,7 @@ RSpec.describe Spree::V2::Storefront::AccommodationSerializer, type: :serializer
         :vendor_kind_option_values,
         :active_promotions,
         :logo,
-        :state
+        :default_state
       )
     end
   end
