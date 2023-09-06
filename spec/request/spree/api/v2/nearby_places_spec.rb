@@ -3,8 +3,8 @@ require 'spec_helper'
 describe 'API V2 Storefront Nearby Places Spec', type: :request do
   let(:place) { create(:cm_place) }
   let(:phnom_penh) { create(:state, name: 'Phnom Penh') }
-  let!(:phnom_penh_hotel) { create(:cm_vendor_with_product, name: 'Phnom Penh Hotel', state_id: phnom_penh.id) }
-  let!(:sokha_pp_hotel)   { create(:cm_vendor_with_product, name: 'Sokha Phnom Penh Hotel', state_id: phnom_penh.id, permanent_stock: 20) }
+  let!(:phnom_penh_hotel) { create(:cm_vendor_with_product, name: 'Phnom Penh Hotel', default_state_id: phnom_penh.id) }
+  let!(:sokha_pp_hotel)   { create(:cm_vendor_with_product, name: 'Sokha Phnom Penh Hotel', default_state_id: phnom_penh.id, permanent_stock: 20) }
 
   let(:json_response) { JSON.parse(response.body) }
 

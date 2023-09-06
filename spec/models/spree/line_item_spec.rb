@@ -3,7 +3,7 @@ require 'spec_helper'
 RSpec.describe Spree::LineItem, type: :model do
   describe '#callback before_save' do
     let(:phnom_penh) { create(:state, name: 'Phnom Penh') }
-    let!(:vendor) { create(:cm_vendor_with_product, name: 'Phnom Penh Hotel', state_id: phnom_penh.id) }
+    let!(:vendor) { create(:cm_vendor_with_product, name: 'Phnom Penh Hotel', default_state_id: phnom_penh.id) }
     let!(:variant) { vendor.variants.first }
     let!(:order) { create(:order) }
     let(:line_item) { order.line_items.build(variant_id: variant.id) }

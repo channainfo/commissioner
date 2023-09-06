@@ -22,7 +22,8 @@ describe Spree::V2::Storefront::StockLocationSerializer, type: :serializer do
 
     it 'returns exact relationships' do
       expect(subject[:data][:relationships].keys).to contain_exactly(
-        :vendor
+        :vendor,
+        :state
       )
     end
   end

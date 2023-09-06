@@ -3,9 +3,9 @@ require 'spec_helper'
 RSpec.describe SpreeCmCommissioner::AccommodationSearchDetail do
   let(:phnom_penh) { create(:state, name: 'Phnom Penh') }
   let(:siem_reap) { create(:state, name: 'Siem Reap') }
-  let!(:phnom_penh_hotel) { create(:cm_vendor_with_product, name: 'Phnom Penh Hotel', state_id: phnom_penh.id, permanent_stock: 10) }
-  let!(:sokha_pp_hotel) { create(:cm_vendor_with_product, name: 'Sokha Phnom Penh Hotel', state_id: phnom_penh.id, permanent_stock: 20) }
-  let!(:angkor_hotel) { create(:cm_vendor_with_product, name: 'Angkor Hotel', state_id: siem_reap.id, permanent_stock: 15) }
+  let!(:phnom_penh_hotel) { create(:cm_vendor_with_product, name: 'Phnom Penh Hotel', default_state_id: phnom_penh.id, permanent_stock: 10) }
+  let!(:sokha_pp_hotel) { create(:cm_vendor_with_product, name: 'Sokha Phnom Penh Hotel', default_state_id: phnom_penh.id, permanent_stock: 20) }
+  let!(:angkor_hotel) { create(:cm_vendor_with_product, name: 'Angkor Hotel', default_state_id: siem_reap.id, permanent_stock: 15) }
   let(:passenger_options) { SpreeCmCommissioner::PassengerOption.new(adult: 2, children: 1, room_qty: 1) }
 
   context '.call' do
