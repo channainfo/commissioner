@@ -139,6 +139,7 @@ en:
     new_customer: "New Customer"
     listing_price: "Listing Price"
     length: "Length"
+    name: "Name"
     promotion_rule_types:
       fixed_date:
         name: "Fixed Date"
@@ -193,6 +194,7 @@ en:
     auto_apply_info: "Path & code will be removed"
     transit:
       reservations: "Reservations"
+      locations: "Locations"
 
   activerecord:
     attributes:
