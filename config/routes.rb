@@ -145,6 +145,11 @@ Spree::Core::Engine.add_routes do
     end
   end
 
+  namespace :transit do
+    resources :reservations
+    root to: redirect('/transit/reservations')
+  end
+
   namespace :api, defaults: { format: 'json' } do
     namespace :v2 do
       namespace :storefront do

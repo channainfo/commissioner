@@ -191,6 +191,8 @@ en:
       other: "Only %{count} rooms available on %{date}"
     auto_apply: "Auto apply"
     auto_apply_info: "Path & code will be removed"
+    transit:
+      reservations: "Reservations"
 
   activerecord:
     attributes:
