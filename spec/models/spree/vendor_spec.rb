@@ -85,7 +85,7 @@ RSpec.describe Spree::Vendor, type: :model do
   describe '#update' do
     let(:phnom_penh) { create(:state, name: 'Phnom Penh') }
     let(:siem_reap) { create(:state, name: 'Siem Reap') }
-    let!(:vendor) { create(:vendor, total_inventory: 0, state_id: phnom_penh.id)  }
+    let!(:vendor) { create(:vendor, total_inventory: 0, default_state_id: phnom_penh.id)  }
     let!(:stock_location) { vendor.stock_locations.first }
     let!(:product1) { create(:product, vendor: vendor)}
     let!(:product2) { create(:product, vendor: vendor)}
@@ -114,7 +114,7 @@ RSpec.describe Spree::Vendor, type: :model do
         stock_location.update(state_id: siem_reap.id)
 
         subject { vendor.update_location }
-        expect(vendor.state_id).to eq siem_reap.id
+        expect(vendor.default_state_id).to eq siem_reap.id
       end
     end
   end
