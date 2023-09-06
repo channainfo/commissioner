@@ -54,7 +54,8 @@ module SpreeCmCommissioner
       options = {
         recipient_id: recipient.id,
         notificable_id: attributes[:notificable].id,
-        notificable_type: attributes[:notificable].class.to_s
+        notificable_type: attributes[:notificable].class.to_s,
+        type: attributes[:type]
       }
 
       notification = recipient.notifications.where(options).first_or_initialize

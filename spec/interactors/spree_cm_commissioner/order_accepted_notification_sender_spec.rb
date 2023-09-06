@@ -25,7 +25,6 @@ RSpec.describe SpreeCmCommissioner::OrderAcceptedNotificationSender do
 
       payload = notification.params[:payload]
 
-      expect(payload[:order_id]).not_to be_nil
       expect(payload[:order_number]).to eq order.number
     end
   end

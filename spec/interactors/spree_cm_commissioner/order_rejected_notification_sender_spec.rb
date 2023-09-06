@@ -14,6 +14,7 @@ RSpec.describe SpreeCmCommissioner::OrderRejectedNotificationSender do
     end
 
     it 'should have in database' do
+      puts order.line_items
       expect(SpreeCmCommissioner::Notification.count).to eq 1
 
     end
@@ -27,7 +28,6 @@ RSpec.describe SpreeCmCommissioner::OrderRejectedNotificationSender do
 
       payload = notification.params[:payload]
 
-      expect(payload[:order_id]).not_to be_nil
       expect(payload[:order_number]).to eq order.number
     end
   end

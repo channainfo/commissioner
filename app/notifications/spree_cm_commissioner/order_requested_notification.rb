@@ -1,5 +1,5 @@
 module SpreeCmCommissioner
-  class OrderRejectedNotification < NoticedFcmBase
+  class OrderRequestedNotification < NoticedFcmBase
     def notificable
       order
     end
@@ -22,11 +22,11 @@ module SpreeCmCommissioner
     end
 
     def notification_title
-      I18n.t('notifications.spree_cm_commissioner.order_rejected_notification.title')
+      I18n.t('notifications.spree_cm_commissioner.order_requested_notification.title')
     end
 
     def notification_message
-      I18n.t('notifications.spree_cm_commissioner.order_rejected_notification.message',
+      I18n.t('notifications.spree_cm_commissioner.order_requested_notification.message',
              vendor_name: vendor&.name
             )
     end
@@ -39,7 +39,7 @@ module SpreeCmCommissioner
     end
 
     def type
-      'order_rejected_notification'
+      'order_requested_notification'
     end
   end
 end

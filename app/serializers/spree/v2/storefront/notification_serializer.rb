@@ -4,7 +4,7 @@ module Spree
       class NotificationSerializer < BaseSerializer
         set_type :notification
 
-        attributes :read_at, :created_at, :params
+        attributes :read_at, :created_at, :params, :type
       end
     end
   end

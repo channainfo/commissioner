@@ -91,10 +91,6 @@ module SpreeCmCommissioner
     def send_order_complete_notification
       SpreeCmCommissioner::OrderCompleteNotificationSender.call(order: self)
     end
-
-    def state_changed_to_complete?
-      saved_change_to_state? && state == 'complete'
-    end
   end
 end
 

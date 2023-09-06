@@ -56,7 +56,8 @@ RSpec.describe Spree::V2::Storefront::CartSerializer, type: :serializer do
         :public_metadata,
         :phone_number,
         :intel_phone_number,
-        :country_code
+        :country_code,
+        :request_state
       )
     end
 
