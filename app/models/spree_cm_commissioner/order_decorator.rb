@@ -6,6 +6,12 @@ module SpreeCmCommissioner
 
       base.scope :subscription, -> { where.not(subscription_id: nil) }
 
+      base.scope :filter_by_event, lambda { |event|
+        where(state: :complete, payment_state: :paid).where.not(approved_by: nil) if event == 'upcomming'
+      }
+
+      base.scope :filter_by_request_state, -> { where(state: :complete, payment_state: :paid).where.not(request_state: nil) }
+
       base.after_save :send_order_complete_notification, if: :state_changed_to_complete?
 
       base.before_create :link_by_phone_number
