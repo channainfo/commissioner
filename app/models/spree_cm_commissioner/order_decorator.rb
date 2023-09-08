@@ -61,6 +61,14 @@ module SpreeCmCommissioner
 
     private
 
+    # override :spree_api
+    def webhook_payload_body
+      resource_serializer.new(
+        self,
+        include: included_relationships.reject { |e| %i[shipments state_changes].include?(e) }
+      ).serializable_hash.to_json
+    end
+
     def link_by_phone_number
       return if phone_number.present?
 
