@@ -157,6 +157,11 @@ en:
       match_any: "Match any of these date"
       match_all: "Must match all of these date"
     billing:
+      code: "code"
+      name: "name"
+      logo: "logo"
+      payment_qrcode: "Payment QRCode"
+      image: "image"
       order_line_items: "Order Line Items"
       new_role: "New Role"
       role_id: "Role ID"
@@ -181,6 +186,7 @@ en:
       users: "User"
       day: "day"
       products: "Products"
+      vendor: "vendor"
       payment_state:
         paid: "Paid"
         balance_due: "Balance Due"

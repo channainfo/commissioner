@@ -6,6 +6,12 @@ module SpreeCmCommissioner
 
       base.scope :subscription, -> { where.not(subscription_id: nil) }
 
+      base.scope :filter_by_event, lambda { |event|
+        where(state: :complete, payment_state: :paid).where.not(approved_by: nil) if event == 'upcomming'
+      }
+
+      base.scope :filter_by_request_state, -> { where(state: :complete, payment_state: :paid).where.not(request_state: nil) }
+
       base.after_save :send_order_complete_notification, if: :state_changed_to_complete?
 
       base.before_create :link_by_phone_number
@@ -60,6 +66,14 @@ module SpreeCmCommissioner
     end
 
     private
+
+    # override :spree_api
+    def webhook_payload_body
+      resource_serializer.new(
+        self,
+        include: included_relationships.reject { |e| %i[shipments state_changes].include?(e) }
+      ).serializable_hash.to_json
+    end
 
     def link_by_phone_number
       return if phone_number.present?

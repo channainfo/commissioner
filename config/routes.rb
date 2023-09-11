@@ -103,6 +103,7 @@ Spree::Core::Engine.add_routes do
         get '/overdue', to: 'report#overdue', as: :overdue
         get '/active_subscribers', to: 'report#active_subscribers', as: :active_subscribers
       end
+      resources :vendors
       resources :customers do
         resources :subscriptions
         resources :addresses

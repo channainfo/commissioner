@@ -4,7 +4,7 @@ module Spree
       before_action :load_data, except: :index
 
       def scope
-        current_vendor.products
+        current_vendor.products.where(subscribable: true)
       end
 
       def collection

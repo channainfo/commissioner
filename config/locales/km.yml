@@ -146,6 +146,11 @@ km:
       match_any: "Match any of these date"
       match_all: "Must match all of these date"
     billing:
+      code: "code"
+      name: "name"
+      logo: "logo"
+      payment_qrcode: "Payment QRCode"
+      image: "image"
       order_line_items: "Order Line Items"
       new_role: "បង្កើតតួនាទីថ្មី"
       role_id: "កូដតួនាទី"
@@ -170,6 +175,7 @@ km:
       users: "គណនីបុគ្គលិក"
       day: "ថ្ងៃ"
       products: "ទំនិញ"
+      vendor: "vendor"
       payment_state:
         paid: "បង់រួច"
         balance_due: "មិនទាន់បង់"
@@ -247,6 +253,5 @@ km:
         title: "ត្រូវបានបដិសេធ!"
         message: "សូមអធ្យាស្រ័យ! បន្ទប់ដែលអ្នកបានស្នើសុំកក់ជាមួយ [%{vendor_name}] មិនមាននៅកាលបរិច្ឆេទដែលអ្នកបានជ្រើសរើសទេ"
   spree_user:
-    invalid_password: 'ពាក្យសង្ងាត់បច្ចុប្បន្នមិនត្រឹមត្រូវ'
-    cannot_delete_account: 'អ្នកមិនអាចលុបគណនីនេះបានទេ ដោយសារអ្នកមានតួនាទីពិសេស'
-
+    invalid_password: "ពាក្យសង្ងាត់បច្ចុប្បន្នមិនត្រឹមត្រូវ"
+    cannot_delete_account: "អ្នកមិនអាចលុបគណនីនេះបានទេ ដោយសារអ្នកមានតួនាទីពិសេស"

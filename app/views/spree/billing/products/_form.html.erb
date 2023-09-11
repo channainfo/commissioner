@@ -22,9 +22,7 @@
             <%= f.select :taxon_ids, options_from_collection_for_select(@product.taxons, :id, :pretty_name, @product.taxon_ids),
                                   { include_hidden: true },
                                     multiple: true,
-                                    data: { autocomplete_url_value: 'taxons_api_v2',
-                                            autocomplete_return_attr_value: 'pretty_name',
-                                            autocomplete_multiple_value: true } %>
+                                    data: { minimum_input_length: 0 } %>
           <% elsif @product.taxons.any? %>
             <ul class="text_list">
               <% @product.taxons.each do |taxon| %>
@@ -38,13 +36,10 @@
       </div>
       <% variant_kind_option_types = @product.variant_kind_option_types %>
       <div data-hook="admin_product_form_variant_kind_option_types">
-        <%= render 'shared/option_type_field',
-          label: Spree.t(:option_types),
-          select: :variant_kind_option_type_ids,
-          option_types: variant_kind_option_types,
-          kind: 'variant',
-          f:f
-        %>
+        <%= f.field_container :variant_kind_option_type_ids do %>
+          <%= f.label Spree.t(:option_types) %>
+          <%= f.select(:variant_kind_option_type_ids, options_for_select(Spree::OptionType.all.pluck(:name, :id), @selected_option_type_ids),{include_blank:false},{class: "select2", multiple:true}) %>
+        <% end %>
       </div>
       <% if @stores.count > 1 %>
         <div data-hook="admin_product_form_stores">
@@ -129,7 +124,7 @@
             <% end %>
             <div class="info-actions">
               <% if can?(:admin, Spree::Variant) %>
-                <%= link_to_with_icon 'adjust.svg', Spree.t(:manage_variants), spree.admin_product_variants_url(@product), class: "btn btn-light" %>
+                <%= link_to_with_icon 'adjust.svg', Spree.t(:manage_variants), spree.billing_product_variants_url(@product), class: "btn btn-light" %>
               <% end %>
             </div>
           </div>
