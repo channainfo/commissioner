@@ -1,0 +1,3 @@
+<ul data-hook="billing_settings_sidebar_menu" class="collapse nav nav-pills nav-stacked" id="sidebar-setting">
+  <%= tab :vendor, selected: request.path.include?('/vendors'), url: edit_transit_vendor_url(@current_vendor.id), label: Spree.t('transit.vendor') %>
+</ul>

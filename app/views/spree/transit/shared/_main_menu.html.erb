@@ -16,4 +16,7 @@
   <ul class="nav nav-sidebar" id="sidebarLocations">
     <%= tab :locations, label: I18n.t('spree.transit.locations'), url: transit_locations_path, icon: "location.svg", selected: request.path.include?('locations') %>
   </ul>
+  <ul class="nav nav-sidebar" id="sidebarSetting">
+    <%= transit_main_menu_tree I18n.t('spree.transit.settings'), icon: "gear.svg", sub_menu:"setting", url: "#sidebar-setting" %>
+  </ul>
 </nav>

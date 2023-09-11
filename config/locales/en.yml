@@ -114,6 +114,8 @@ en:
     invalid_password: "Invalid Password"
 
   spree:
+    logo: "Logo"
+    image: "Image"
     en: "English"
     date_of_birth: "Date of Birth"
     kind: "Kind"
@@ -195,6 +197,8 @@ en:
     transit:
       reservations: "Reservations"
       locations: "Locations"
+      settings: "Setting"
+      vendor: "Vendor"
 
   activerecord:
     attributes:

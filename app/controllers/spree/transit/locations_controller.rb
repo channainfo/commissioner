@@ -4,7 +4,15 @@ module Spree
       before_action :load_location
 
       def load_location
-        @locations = Spree::State.where(country_id: Spree::Country.find_by(iso: 'KH'))
+        @locations = Spree::State.all
+      end
+
+      def load_country
+        @countries = Spree::Country.where(id: current_vendor.default_country)
+      end
+
+      def new
+        @object.country_id = Spree::Country.find_by(id: current_vendor.default_country)&.id
       end
 
       def collection
