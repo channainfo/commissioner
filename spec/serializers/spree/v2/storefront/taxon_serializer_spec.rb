@@ -11,7 +11,9 @@ RSpec.describe Spree::V2::Storefront::TaxonSerializer, type: :serializer do
         :taxonomy,
         :children,
         :image,
-        :category_icon
+        :category_icon,
+        :app_banner,
+        :web_banner,
       ]).serializable_hash
     }
 
@@ -43,7 +45,9 @@ RSpec.describe Spree::V2::Storefront::TaxonSerializer, type: :serializer do
         :taxonomy,
         :children,
         :image,
-        :category_icon
+        :category_icon,
+        :app_banner,
+        :web_banner,
       )
     end
   end
