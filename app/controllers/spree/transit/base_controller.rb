@@ -2,11 +2,17 @@ module Spree
   module Transit
     class BaseController < Spree::Admin::ResourceController
       helper_method :current_vendor, :vendors
-      before_action :current_vendor
+      before_action :required_vendor_user!
       layout 'spree/layouts/transit'
 
       def vendors
         @vendors ||= spree_current_user.vendors.to_a
+      end
+
+      def required_vendor_user!
+        return unless vendors.empty?
+
+        raise SpreeCmCommissioner::UnauthorizedVendorError
       end
 
       def current_vendor

@@ -149,6 +149,7 @@ Spree::Core::Engine.add_routes do
     resources :reservations
     resources :locations
     resources :vendors
+    resources :branches
     root to: redirect('/transit/reservations')
   end
 
