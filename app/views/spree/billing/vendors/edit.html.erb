@@ -1,0 +1,9 @@
+<% content_for :page_title do %>
+  <%= @vendor.name %>
+<% end %>
+<%= form_for [:billing, @vendor] do |f| %>
+  <fieldset>
+    <%= render partial: 'form', locals: { f: f } %>
+    <%= render partial: 'spree/admin/shared/edit_resource_links',locals: { collection_url: spree.edit_billing_vendor_url(@current_vendor.id) }  %>
+  </fieldset>
+<% end %>

@@ -8,6 +8,7 @@ module Spree
 
       before_action :required_vendor_user!
       before_action :set_locale
+      before_action :current_vendor
 
       rescue_from SpreeCmCommissioner::UnauthorizedVendorError, with: :handle_unauthorized_vendor
 
