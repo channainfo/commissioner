@@ -17,7 +17,8 @@ RSpec.describe Spree::V2::Storefront::ProductSerializer, type: :serializer do
         :variant_kind_option_types,
         :product_kind_option_types,
         :promoted_option_types,
-        :possible_promotions
+        :possible_promotions,
+        :default_state,
       ]).serializable_hash
     }
 
@@ -58,7 +59,8 @@ RSpec.describe Spree::V2::Storefront::ProductSerializer, type: :serializer do
         :variant_kind_option_types,
         :product_kind_option_types,
         :promoted_option_types,
-        :possible_promotions
+        :possible_promotions,
+        :default_state,
       )
     end
   end
