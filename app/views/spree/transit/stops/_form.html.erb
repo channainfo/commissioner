@@ -1,0 +1,72 @@
+<div data-hook="admin_user_form_fields" class="row">
+  <div class="col-6 ">
+    <%= f.field_container :code do %>
+      <%= f.label :code, Spree.t(:code) %>
+      <%= f.text_field :code, class: 'form-control', required: true %>
+      <%= f.error_message_on :code %>
+    <% end %>
+
+    <%= f.field_container :name do %>
+      <%= f.label :name, Spree.t(:name) %>
+      <%= f.text_field :name, class: 'form-control', required: true %>
+      <%= f.error_message_on :name %>
+    <% end %>
+
+    <%= f.field_container :formatted_phone_number do %>
+      <%= f.label :formatted_phone_number, Spree.t(:phone_number) %>
+      <%= f.text_field :formatted_phone_number, class: 'form-control', required: true %>
+      <%= f.error_message_on :formatted_phone_number %>
+    <% end %>
+
+    <%= f.field_container :formatted_address do %>
+      <%= f.label :formatted_address, Spree.t(:address) %>
+      <%= f.text_area :formatted_address, class: 'form-control', required: true %>
+      <%= f.error_message_on :formatted_address %>
+    <% end %>
+
+    <%= f.field_container :location_id do %>
+      <%= f.label :location_id %>
+      <%= f.collection_select(:location_id, @locations, :id, :name, {prompt: "Select a Location"}, { class: 'form-control select2'} )%>
+      <%= f.error_message_on :location_id %>
+    <% end %>
+
+    <%= f.field_container :branch_id do %>
+      <%= f.label :branch_id %>
+      <%= f.collection_select(:branch_id, @locations, :id, :name, {prompt: "Select a Branch"}, { class: 'form-control select2'} )%>
+      <%= f.error_message_on :branch_id %>
+    <% end %>
+  </div>
+
+  <div class="col-6">
+    <div class="row pb-0">
+      <div class="col-6">
+        <div class="form-group" data-hook="lat">
+          <%= f.field_container :lat do %>
+            <%= f.label :lat, t("stock_location.lat.label") %>
+            <%= f.text_field :lat, class: 'form-control', placeholder: t("stock_location.lat.hint"), required: true, id: "stock_location_lat" %>
+          <% end %>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="form-group" data-hook="lon">
+          <%= f.field_container :lon do %>
+            <%= f.label :lon, t("stock_location.lon.label") %>
+            <%= f.text_field :lon, class: 'form-control', placeholder: t("stock_location.lon.hint"), required: true, id: "stock_location_lon" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="form-group" data-hook="go">
+          <%= f.field_container :reference do %>
+            <%= f.label :reference, t("stock_location.reference.label") %>
+            <%= f.text_field :reference, class: 'form-control', id: "location-input" %>
+          <% end %>
+        </div>
+        <%= render 'shared/map', lat: f.object.lat, lon: f.object.lon %>
+      </div>
+    </div>
+  </div>
+</div>
+

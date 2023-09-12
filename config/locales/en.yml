@@ -195,6 +195,7 @@ en:
     transit:
       reservations: "Reservations"
       locations: "Locations"
+      stops: "Stops"
 
   activerecord:
     attributes:

@@ -1,0 +1,17 @@
+<div data-hook="admin_products_sidebar">
+
+  <%= search_form_for [@search], url: transit_stops_path do |f| %>
+    <div data-hook="admin_products_index_search" class="row">
+      <div class="col-12 col-lg-6">
+        <div class="form-group">
+          <%= f.label :name, Spree.t(:name) %>
+          <%= f.text_field :name, size: 15, class: "form-control js-quick-search-target js-filterable" %>
+        </div>
+      </div>
+    </div>
+    <div data-hook="admin_products_index_search_buttons" class="form-actions">
+      <%= button Spree.t(:search), 'search.svg' %>
+    </div>
+  <% end %>
+
+</div>
