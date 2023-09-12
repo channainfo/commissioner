@@ -17,6 +17,8 @@ module SpreeCmCommissioner
                                                 order('spree_variants.position, spree_variants.id, currency')
                                               }, source: :prices, through: :variants_including_master
 
+      base.has_one :default_state, through: :vendor
+
       base.scope :min_price, lambda { |vendor|
         joins(:prices_including_master)
           .where(vendor_id: vendor.id, product_type: vendor.primary_product_type)
