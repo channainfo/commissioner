@@ -82,7 +82,19 @@ Spree::Core::Engine.add_routes do
     end
   end
 
-  scope '(:locale)', locale: /#{I18n.available_locales.join("|")}/ do
+  namespace :telegram do
+    resources :orders, only: %i[show update] do
+      member do
+        patch :reject
+        patch :approve
+      end
+    end
+
+    get '/forbidden', to: 'errors#forbidden'
+    get '/resource_not_found', to: 'errors#resource_not_found'
+  end
+
+  scope '(:locale)', locale: /#{I18n.available_locales.join('|')}/ do
     namespace :billing do
       resource :report, only: %i[show], controller: :report do
         get '/failed', to: 'report#failed_orders', as: :failed
@@ -91,12 +103,15 @@ Spree::Core::Engine.add_routes do
         get '/overdue', to: 'report#overdue', as: :overdue
         get '/active_subscribers', to: 'report#active_subscribers', as: :active_subscribers
       end
+      resources :vendors
       resources :customers do
         resources :subscriptions
         resources :addresses
       end
       resources :roles
-      resources :users
+      resources :users do
+        resource :account_deletions, only: [:destroy]
+      end
       resources :products do
         member do
           get :stock
@@ -142,13 +157,16 @@ Spree::Core::Engine.add_routes do
         resource :profile_images, only: [:update]
         resource :user_profiles, only: [:update]
         resources :notifications, only: %i[index show]
+        resources :order_request_notifications, only: %i[index show]
+
         resources :customer_notifications, only: [:show]
         resource :user_registration_with_pin_codes, only: [:create]
         resources :user_device_token_registrations, only: %i[create destroy]
         resources :pin_code_generators, only: [:create]
+        resource :pin_code_checkers, only: [:update]
 
-        resources :pin_code_checkers, only: [:update]
         resource :change_passwords, only: [:update]
+        resource :account_deletions, only: %i[destroy]
 
         resources :vendors do
           resources :nearby_places, only: %i[index]

@@ -6,9 +6,12 @@ class NoticedFcmBase < Noticed::Base
   def format_for_database
     {
       notificable: notificable,
+      type: type,
+
       params: {
         payload: payload,
         translatable_options: translatable_options
+
       }
     }
   end
@@ -45,7 +48,6 @@ class NoticedFcmBase < Noticed::Base
 
   def payload
     default_payload = {
-      type: type,
       id: notificable.id.to_s
     }
     default_payload.merge(extra_payload)
@@ -60,11 +62,11 @@ class NoticedFcmBase < Noticed::Base
   end
 
   def message
-    t('.message', record.params[:translatable_options] || {})
+    t('.message', **(record.params[:translatable_options] || {}))
   end
 
   def title
-    t('.title', record.params[:translatable_options] || {})
+    t('.title', **(record.params[:translatable_options] || {}))
   end
 
   def type

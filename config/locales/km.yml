@@ -146,6 +146,11 @@ km:
       match_any: "Match any of these date"
       match_all: "Must match all of these date"
     billing:
+      code: "code"
+      name: "name"
+      logo: "logo"
+      payment_qrcode: "Payment QRCode"
+      image: "image"
       order_line_items: "Order Line Items"
       new_role: "បង្កើតតួនាទីថ្មី"
       role_id: "កូដតួនាទី"
@@ -170,6 +175,7 @@ km:
       users: "គណនីបុគ្គលិក"
       day: "ថ្ងៃ"
       products: "ទំនិញ"
+      vendor: "vendor"
       payment_state:
         paid: "បង់រួច"
         balance_due: "មិនទាន់បង់"
@@ -234,3 +240,21 @@ km:
       registration_code: "លេខកូដចុះឈ្មោះ"
       confirmation_code: "លេខកូដបញ្ជាក់"
       update_user_login: "ធ្វើបច្ចុប្បន្នភាពលេខកូដអ្នកប្រើប្រាស់"
+
+  notifications:
+    spree_cm_commissioner:
+      order_complete_notification:
+        title: "💸 ការបញ្ជាទិញទទួលបានជោគជ័យ!"
+        message: "លេខបញ្ជាទិញរបស់អ្នកគឺ ​%{order_number}"
+      order_accepted_notification:
+        title: "បានយល់ព្រម!"
+        message: "សំណើរបស់អ្នកត្រូវបានបញ្ជាក់; សូមពិនិត្យមើលការធ្វើដំណើរនាពេលខាងមុខរបស់អ្នក"
+      order_rejected_notification:
+        title: "ត្រូវបានបដិសេធ!"
+        message: "សូមអធ្យាស្រ័យ! បន្ទប់ដែលអ្នកបានស្នើសុំកក់ជាមួយ [%{vendor_name}] មិនមាននៅកាលបរិច្ឆេទដែលអ្នកបានជ្រើសរើសទេ"
+      order_requested_notification:
+        title: "សំណេីរត្រូវបានផ្ញេីរ"
+        message: "[%{vendor_name}] កំពុងពិនិត្យមើលសំណើកក់របស់អ្នក"
+  spree_user:
+    invalid_password: "ពាក្យសង្ងាត់បច្ចុប្បន្នមិនត្រឹមត្រូវ"
+    cannot_delete_account: "អ្នកមិនអាចលុបគណនីនេះបានទេ ដោយសារអ្នកមានតួនាទីពិសេស"

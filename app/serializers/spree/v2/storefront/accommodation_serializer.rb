@@ -7,7 +7,7 @@ module Spree
         # because its model still Spree::Vendor
         set_type :vendor
 
-        has_one :state
+        has_one :default_state, serializer: :state
 
         attributes :total_inventory, :service_availabilities
 

@@ -1,0 +1,3 @@
+<%= render partial: 'line_items' %>
+<%= render partial: 'order_summary' %>
+<%= render partial: 'order_confirmation_script' if @order.can_approve? %>

@@ -109,6 +109,7 @@ Following are required varialbles inside .env
 GOOGLE_MAP_KEY = ""
 DEFAULT_LATLON = "10.627543,103.522141"
 ACCOMMODATION_MAX_STAY_DAYS = 10
+DEFAULT_TELEGRAM_BOT_API_TOKEN = ""
 ```
 
 ## Using Deface DSL (.deface files)
@@ -170,3 +171,8 @@ If you'd like to contribute, please take a look at the
 pull request.
 
 Copyright (c) 2022 [name of extension creator], released under the New BSD License
+
+### Account Deletion Cron Job
+-  ```  AccountDeletionCronJob ```
+- Frequently: every 24 hours
+- Deleted Account will last for 1 month before it is permanently deleted

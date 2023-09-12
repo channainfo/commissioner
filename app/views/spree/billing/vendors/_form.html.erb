@@ -1,0 +1,36 @@
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @vendor } %>
+<div class="form-group">
+  <%= f.field_container :name do %>
+    <%= f.label Spree.t('billing.name') %>
+    <%= f.text_field :name, class: 'form-control' %>
+  <% end %>
+  <%= f.field_container :code do %>
+    <%= f.label Spree.t('billing.code') %>
+    <%= f.text_field :code, class: 'form-control' %>
+  <% end %>
+  <% if Spree.version.to_f >= 3.6 %>
+    <div class="row p-2">
+      <%= render 'shared/asset_field',
+      field: :logo,
+      label: Spree.t("billing.logo"),
+      asset: @vendor.logo,
+      classes: ['col m-2'],
+      form:f
+     %>
+      <%= render 'shared/asset_field',
+      field: :payment_qrcode,
+      label: Spree.t("billing.payment_qrcode"),
+      asset: @vendor.payment_qrcode,
+      classes: ['col m-2'],
+      form:f
+     %>
+      <%= render 'shared/asset_field',
+      field: :image,
+      label: Spree.t('billing.image'),
+      asset: @vendor.image,
+      classes: ['col m-2'],
+      form:f
+     %>
+    </div>
+  <% end %>
+</div>

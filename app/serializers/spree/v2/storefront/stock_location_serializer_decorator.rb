@@ -4,6 +4,8 @@ module Spree
       module StockLocationSerializerDecorator
         def self.prepended(base)
           base.attributes :lat, :lon, :name, :address1, :reference
+
+          base.has_one :state
         end
       end
     end

@@ -79,7 +79,7 @@ module SpreeCmCommissioner
     end
 
     def self.check?(options)
-      pin_code = find_by(token: options[:id])
+      pin_code = find_by(token: options[:pin_code_token])
 
       return PIN_CODE_NOT_FOUND if pin_code.nil?
 
@@ -90,7 +90,7 @@ module SpreeCmCommissioner
       end
 
       pin_code.long_life_pin_code = options[:long_life_pin_code]
-      pin_code.check?(options[:code])
+      pin_code.check?(options[:pin_code])
     end
 
     def max_attempt_allowed

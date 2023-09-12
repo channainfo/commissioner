@@ -13,4 +13,8 @@
     <%= f.file_field :web_image %>
     <%= image_tag main_app.url_for(@object.web_image.url(:small)) if @object.web_image %>
   <% end %>
+  <%= f.field_container :active do %>
+    <%= f.label :active %>
+    <%= f.check_box :active %>
+  <% end %>
 </div>

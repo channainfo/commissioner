@@ -6,7 +6,7 @@ module Spree
           before_action :require_spree_current_user
 
           def collection
-            spree_current_user.notifications.newest_first
+            spree_current_user.notifications.newest_first.user_notifications
           end
 
           def serialize_collection(collection)

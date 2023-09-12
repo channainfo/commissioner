@@ -1,0 +1,48 @@
+<script>
+  OrderConfirmation.initialize({
+    canApprove: "<%= @order.can_approve? %>",
+    canCancel: "<%= @order.allow_cancel? %>",
+    onApprove: function () {
+      window.Telegram.WebApp.MainButton.showProgress();
+      $.ajax({
+        url: "<%= approve_telegram_order_path(@order) %>",
+        type: "PATCH",
+        data: {
+          telegram_init_data: window.Telegram.WebApp.initData,
+          authenticity_token: "<%= form_authenticity_token %>",
+        },
+        success: function (response) {
+          location.reload();
+          window.Telegram.WebApp.MainButton.hideProgress();
+          window.Telegram.WebApp.showAlert("Success");
+        },
+        error: function (xhr, status, error) {
+          location.reload();
+          window.Telegram.WebApp.MainButton.hideProgress();
+          window.Telegram.WebApp.showAlert("Failed");
+        },
+      });
+    },
+    onReject: function () {
+      window.Telegram.WebApp.MainButton.showProgress();
+      $.ajax({
+        url: "<%= reject_telegram_order_path(@order) %>",
+        type: "PATCH",
+        data: {
+          telegram_init_data: window.Telegram.WebApp.initData,
+          authenticity_token: "<%= form_authenticity_token %>",
+        },
+        success: function (response) {
+          location.reload();
+          window.Telegram.WebApp.MainButton.hideProgress();
+          window.Telegram.WebApp.showAlert("Success");
+        },
+        error: function (xhr, status, error) {
+          location.reload();
+          window.Telegram.WebApp.MainButton.hideProgress();
+          window.Telegram.WebApp.showAlert("Failed");
+        },
+      });
+    },
+  });
+</script>

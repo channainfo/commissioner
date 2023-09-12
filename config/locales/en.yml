@@ -154,6 +154,11 @@ en:
       match_any: "Match any of these date"
       match_all: "Must match all of these date"
     billing:
+      code: "code"
+      name: "name"
+      logo: "logo"
+      payment_qrcode: "Payment QRCode"
+      image: "image"
       order_line_items: "Order Line Items"
       new_role: "New Role"
       role_id: "Role ID"
@@ -178,6 +183,7 @@ en:
       users: "User"
       day: "day"
       products: "Products"
+      vendor: "vendor"
       payment_state:
         paid: "Paid"
         balance_due: "Balance Due"
@@ -246,5 +252,23 @@ en:
       update_user_login: "update user code"
       contact_update: "update contact code"
 
+  notifications:
+    spree_cm_commissioner:
+      order_complete_notification:
+        title: "💸 Order Complete!"
+        message: "Your Order numer is  %{order_number}"
+      order_accepted_notification:
+        title: "Confirm!"
+        message: "Your request has been confirmed; please check your upcoming trip."
+      order_rejected_notification:
+        title: "Request Reject!"
+        message: "Oops! The room you requested to book with [%{vendor_name}] is not available on your selected date."
+      order_requested_notification:
+        title: "Request Send!"
+        message: "[%{vendor_name}] is reviewing your booking request."
   actions:
     login: "Login"
+
+  spree_user:
+    invalid_password: "Current password is not valid"
+    cannot_delete_account: "You cannot delete this account because you own a special role"
