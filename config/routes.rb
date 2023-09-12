@@ -63,6 +63,8 @@ Spree::Core::Engine.add_routes do
       resources :taxons do
         member do
           delete :remove_category_icon
+          delete :remove_app_banner
+          delete :remove_web_banner
         end
       end
     end

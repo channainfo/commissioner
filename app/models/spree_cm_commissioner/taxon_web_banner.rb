@@ -1,12 +1,11 @@
 module SpreeCmCommissioner
   class TaxonWebBanner < Asset
+    # 10x2
     def asset_styles
       {
-        mini: '85x85>',
-        extra_small: '170x170>',
-        small: '250x250',
-        medium: '340x340>',
-        large: '680x680>'
+        mini: '160x32>',
+        small: '720x90>',
+        medium: '1440x180>'
       }
     end
   end
