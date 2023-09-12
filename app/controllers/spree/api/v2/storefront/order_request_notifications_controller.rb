@@ -2,11 +2,11 @@ module Spree
   module Api
     module V2
       module Storefront
-        class NotificationsController < Spree::Api::V2::ResourceController
+        class OrderRequestNotificationsController < Spree::Api::V2::ResourceController
           before_action :require_spree_current_user
 
           def collection
-            spree_current_user.notifications.newest_first.user_notifications
+            spree_current_user.notifications.top_3_request_notifications
           end
 
           def serialize_collection(collection)

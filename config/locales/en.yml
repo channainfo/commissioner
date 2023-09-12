@@ -263,7 +263,9 @@ en:
       order_rejected_notification:
         title: "Request Reject!"
         message: "Oops! The room you requested to book with [%{vendor_name}] is not available on your selected date."
-
+      order_requested_notification:
+        title: "Request Send!"
+        message: "[%{vendor_name}] is reviewing your booking request."
   actions:
     login: "Login"
 

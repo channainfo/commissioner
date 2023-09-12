@@ -10,9 +10,19 @@ module SpreeCmCommissioner
 
     def extra_payload
       {
-        order_id: order.id,
-        order_number: order.number
+        order_number: order.number,
+        title: notification_title,
+        message: notification_message
+
       }
+    end
+
+    def notification_title
+      I18n.t('notifications.spree_cm_commissioner.order_accepted_notification.title')
+    end
+
+    def notification_message
+      I18n.t('notifications.spree_cm_commissioner.order_accepted_notification.message')
     end
 
     def translatable_options

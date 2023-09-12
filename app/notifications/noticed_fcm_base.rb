@@ -6,9 +6,12 @@ class NoticedFcmBase < Noticed::Base
   def format_for_database
     {
       notificable: notificable,
+      type: type,
+
       params: {
         payload: payload,
         translatable_options: translatable_options
+
       }
     }
   end
@@ -45,7 +48,6 @@ class NoticedFcmBase < Noticed::Base
 
   def payload
     default_payload = {
-      type: type,
       id: notificable.id.to_s
     }
     default_payload.merge(extra_payload)
