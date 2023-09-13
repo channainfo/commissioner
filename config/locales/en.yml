@@ -205,6 +205,17 @@ en:
       locations: "Locations"
       settings: "Setting"
       vendor: "Vendor"
+      branch:
+        branches: "Branches"
+        address: "Address"
+        lat:
+          label: "Latitude"
+          hint: "Enter between -90 to 90"
+        lon:
+          label: "Longitude"
+          hint: "Enter between -180 to 180"
+        reference:
+          label: "Reference"
 
   activerecord:
     attributes:
