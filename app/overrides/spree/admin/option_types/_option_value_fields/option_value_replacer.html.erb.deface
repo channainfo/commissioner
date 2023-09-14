@@ -15,10 +15,14 @@
     <td class="presentation"><%= f.number_field :presentation, step: 1, class: "form-control", required: true %></td>
   <% when "string" %>
     <td class="presentation"><%= f.text_field :presentation, class: "form-control", required: true %></td>
+  <% when "origin" %>
+    <td class="presentation"><%= f.text_field :presentation, class: "form-control", required: true %></td>
+  <% when "destination" %>
+    <td class="presentation"><%= f.text_field :presentation, class: "form-control", required: true %></td>
   <% when "boolean" %>
     <td class="presentation">
       <div class="form-control">
-        <%= f.radio_button :presentation, '1' %> 
+        <%= f.radio_button :presentation, '1' %>
         <%= f.label :presentation, 'true', :value => '1' %>
 
         <%= f.radio_button :presentation, '0' %>

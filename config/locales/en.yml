@@ -204,6 +204,8 @@ en:
     auto_apply: "Auto apply"
     auto_apply_info: "Path & code will be removed"
     transit:
+      new:
+        route: "New Route"
       reservations: "Reservations"
       locations: "Locations"
       settings: "Setting"
@@ -220,6 +222,7 @@ en:
         reference:
           label: "Reference"
       stops: "Stops"
+      routes: "Routes"
 
   activerecord:
     attributes:
