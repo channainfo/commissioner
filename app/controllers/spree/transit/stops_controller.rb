@@ -7,18 +7,15 @@ module Spree
         @stops = SpreeCmCommissioner::Stop.order(:name)
       end
 
-      def new
+      def new; end
 
-      end
-
-      def edit
-
-      end
+      def edit; end
 
       def collection
         load_location
         return [] if current_vendor.blank?
         return @collection if defined?(@collection)
+
         @search = @locations.ransack(params[:q])
         @collection = @search.result
       end

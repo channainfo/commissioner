@@ -33,8 +33,11 @@ en:
 
   hello: "Hello world"
 
-  category_icon:
-    field: Category icon (Square)
+  taxon:
+    icon: Icon (Square)
+    category_icon: Category icon (Square)
+    app_banner: App Banner (16x9)
+    web_banner: Web banner (10x2)
 
   calendar:
     event:
@@ -283,7 +286,9 @@ en:
       order_rejected_notification:
         title: "Request Reject!"
         message: "Oops! The room you requested to book with [%{vendor_name}] is not available on your selected date."
-
+      order_requested_notification:
+        title: "Request Send!"
+        message: "[%{vendor_name}] is reviewing your booking request."
   actions:
     login: "Login"
 

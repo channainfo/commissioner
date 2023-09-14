@@ -63,6 +63,8 @@ Spree::Core::Engine.add_routes do
       resources :taxons do
         member do
           delete :remove_category_icon
+          delete :remove_app_banner
+          delete :remove_web_banner
         end
       end
     end
@@ -166,6 +168,8 @@ Spree::Core::Engine.add_routes do
         resource :profile_images, only: [:update]
         resource :user_profiles, only: [:update]
         resources :notifications, only: %i[index show]
+        resources :order_request_notifications, only: %i[index show]
+
         resources :customer_notifications, only: [:show]
         resource :user_registration_with_pin_codes, only: [:create]
         resources :user_device_token_registrations, only: %i[create destroy]

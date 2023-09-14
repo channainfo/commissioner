@@ -1,7 +1,6 @@
 module Spree
   module Transit
     class BranchesController < Spree::Transit::BaseController
-
       def new
         @branch = SpreeCmCommissioner::Branch.new
         super
@@ -9,6 +8,7 @@ module Spree
 
       def collection
         return @collection if defined?(@collection)
+
         current_vendor.branches
 
         @search = current_vendor.branches.ransack(params[:q])

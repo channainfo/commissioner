@@ -25,8 +25,11 @@ km:
 
   hello: "Hello world"
 
-  category_icon:
-    field: Category icon (Square)
+  taxon:
+    icon: Icon (Square)
+    category_icon: Category icon (Square)
+    app_banner: App Banner (16x9)
+    web_banner: Web banner (10x2)
 
   calendar:
     event:
@@ -252,6 +255,9 @@ km:
       order_rejected_notification:
         title: "ត្រូវបានបដិសេធ!"
         message: "សូមអធ្យាស្រ័យ! បន្ទប់ដែលអ្នកបានស្នើសុំកក់ជាមួយ [%{vendor_name}] មិនមាននៅកាលបរិច្ឆេទដែលអ្នកបានជ្រើសរើសទេ"
+      order_requested_notification:
+        title: "សំណេីរត្រូវបានផ្ញេីរ"
+        message: "[%{vendor_name}] កំពុងពិនិត្យមើលសំណើកក់របស់អ្នក"
   spree_user:
     invalid_password: "ពាក្យសង្ងាត់បច្ចុប្បន្នមិនត្រឹមត្រូវ"
     cannot_delete_account: "អ្នកមិនអាចលុបគណនីនេះបានទេ ដោយសារអ្នកមានតួនាទីពិសេស"

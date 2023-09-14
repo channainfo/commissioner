@@ -7,6 +7,8 @@ module Spree
           base.has_many :product_kind_option_types, serializer: :option_type
           base.has_many :promoted_option_types, serializer: :option_type
           base.has_many :possible_promotions, serializer: ::SpreeCmCommissioner::V2::Storefront::PromotionSerializer
+
+          base.has_one :default_state, serializer: :state
         end
       end
     end
