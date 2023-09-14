@@ -2,7 +2,7 @@ module SpreeCmCommissioner
   module LineItemDecorator
     def self.prepended(base)
       base.include SpreeCmCommissioner::LineItemDurationable
-      base.delegate :need_confirmation?, to: :product
+      base.delegate :need_confirmation, to: :product
 
       base.belongs_to :accepted_by, class_name: 'Spree::User', optional: true
       base.belongs_to :rejected_by, class_name: 'Spree::User', optional: true

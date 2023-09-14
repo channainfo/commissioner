@@ -42,7 +42,8 @@ RSpec.describe Spree::V2::Storefront::ProductSerializer, type: :serializer do
         :price,
         :display_price,
         :compare_at_price,
-        :display_compare_at_price
+        :display_compare_at_price,
+        :need_confirmation
       )
     end
 
