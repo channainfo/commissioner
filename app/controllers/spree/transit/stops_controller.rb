@@ -7,10 +7,6 @@ module Spree
         @stops = SpreeCmCommissioner::Stop.order(:name)
       end
 
-      def new; end
-
-      def edit; end
-
       def collection
         load_location
         return [] if current_vendor.blank?
@@ -21,7 +17,7 @@ module Spree
       end
 
       def load_location
-        @locations = Spree::State.where(country_id: Spree::Country.find_by(iso: 'KH'))
+        @locations = Spree::State.all
       end
 
       def location_after_save
