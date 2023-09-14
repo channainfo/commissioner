@@ -3,6 +3,7 @@ module Spree
     class BaseController < Spree::Admin::ResourceController
       helper_method :current_vendor, :vendors
       before_action :required_vendor_user!
+      before_action :current_vendor
       layout 'spree/layouts/transit'
 
       def vendors
