@@ -50,7 +50,7 @@ module SpreeCmCommissioner
       end
 
       def need_confirmation?
-        line_items.any?(&:need_confirmation?)
+        line_items.any?(&:need_confirmation)
       end
     end
   end
