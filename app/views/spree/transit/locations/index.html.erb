@@ -6,29 +6,7 @@
   <%= button_link_to Spree.t(:add_location), new_transit_location_path, class: "btn-success", icon: 'add.svg', id: 'admin_new_customer_link' %>
 <% end %>
 
-<% content_for :table_filter do %>
-  <div data-hook="admin_customers_index_search">
-    <%= search_form_for [@search], url: spree.transit_locations_path do |f| %>
-      <div class="row">
-        <div class="col-12 col-lg-6">
-          <div class="form-group">
-            <%= f.label :name, I18n.t('spree.name') %>
-            <%= f.text_field :name, class: "form-control js-quick-search-target js-filterable" %>
-          </div>
-        </div>
-        <div class="col-12 col-lg-6">
-          <%= f.label :abbreviation, Spree.t(:abbreviation) %>
-          <div class="form-group input-group mb-3">
-            <%= f.text_field :abbr_cont, class: "form-control js-filterable" %>
-          </div>
-        </div>
-      </div>
-      <div data-hook="admin_customers_index_search_buttons" class="form-actions">
-        <%= button Spree.t(:search), 'search.svg' %>
-      </div>
-    <% end %>
-  </div>
-<% end %>
+<% render 'filter_form' %>
 <% if @locations.any? %>
   <div class="table-responsive border rounded bg-white mb-3">
     <table class="table" id="listing_customers" data-hook>
