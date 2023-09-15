@@ -1,0 +1,10 @@
+<!-- insert_after "[data-hook='new_product_vendor']" -->
+
+<div  class="col-12 col-md-4">
+  <%= f.field_container :need_confirmation do %>
+    <%= f.label :need_confirmation do %>
+      <%= f.check_box :need_confirmation %>
+      <%= Spree.t(:need_confirmation) %>
+    <% end %>
+  <% end %>
+</div>

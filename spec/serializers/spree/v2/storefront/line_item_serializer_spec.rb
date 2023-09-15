@@ -38,7 +38,8 @@ RSpec.describe Spree::V2::Storefront::LineItemSerializer, type: :serializer do
         :public_metadata,
         :from_date,
         :to_date,
-        :vendor_id
+        :vendor_id,
+        :need_confirmation
       )
     end
 
