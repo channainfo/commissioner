@@ -1,8 +1,6 @@
 module Spree
   module Transit
     class LocationsController < Spree::Transit::BaseController
-      before_action :load_location
-
       def load_location
         @locations = Spree::State.all
       end
@@ -16,9 +14,8 @@ module Spree
       end
 
       def collection
-        load_location
-        return [] if current_vendor.blank?
         return @collection if defined?(@collection)
+        load_location
 
         @search = @locations.ransack(params[:q])
         @collection = @search.result

@@ -206,6 +206,7 @@ en:
     transit:
       new:
         route: "New Route"
+      abbreviation: "Abbreviation"
       reservations: "Reservations"
       locations: "Locations"
       location: "Location"
