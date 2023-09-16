@@ -16,7 +16,7 @@ module SpreeCmCommissioner
                                                .order(created_at: :desc)
                                            }
 
-      base.after_save :send_order_complete_notification, if: :state_changed_to_complete?
+      base.state_machine.after_transition to: :complete, do: :send_order_complete_notification
 
       base.before_create :link_by_phone_number
       base.before_create :associate_customer
