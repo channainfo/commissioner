@@ -6,23 +6,8 @@
   <%= button_link_to Spree.t(:add_branch), new_transit_branch_path, class: "btn-success", icon: 'add.svg', id: 'admin_new_customer_link' %>
 <% end %>
 
-<% content_for :table_filter do %>
-  <div data-hook="transit_branch_index_search">
-    <%= search_form_for [@search], url: spree.transit_branches_path do |f| %>
-      <div class="row">
-        <div class="col-12 col-lg-6">
-          <div class="form-group">
-            <%= f.label :name, I18n.t('spree.name') %>
-            <%= f.text_field :name_cont, class: "form-control js-quick-search-target js-filterable" %>
-          </div>
-        </div>
-      </div>
-      <div data-hook="transit_branch_index_search_buttons" class="form-actions">
-        <%= button Spree.t(:search), 'search.svg' %>
-      </div>
-    <% end %>
-  </div>
-<% end %>
+<% render 'filter_form' %>
+
 <% if @branches.any? %>
   <div class="table-responsive border rounded bg-white mb-3">
     <table class="table" id="listing_customers" data-hook>
@@ -43,7 +28,7 @@
             <td><%= branch.name %></td>
             <td><%= branch.formatted_phone_number %></td>
             <td><%= branch.formatted_address %></td>
-            <td><%= Spree::State.find_by(id: branch.state_id)&.abbr %></td>
+            <td><%= branch.state.name %></td>
             <td class="actions " data-hook="admin_products_index_row_actions">
               <span class="d-flex justify-content-end">
                 <%= link_to_edit branch, url: edit_transit_branch_path(branch), no_text: true, class: 'edit' if can?(:edit, branch) %>

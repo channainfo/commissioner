@@ -34,7 +34,7 @@
 
     <%= f.field_container :branch_id do %>
       <%= f.label :branch_id %>
-      <%= f.collection_select(:branch_id, SpreeCmCommissioner::Branch.all, :id, :name, {prompt: "Select a Branch"}, { class: 'form-control select2'} )%>
+      <%= f.collection_select(:branch_id, SpreeCmCommissioner::Branch.where(vendor_id: current_vendor.id), :id, :name, {prompt: "Select a Branch"}, { class: 'form-control select2'} )%>
       <%= f.error_message_on :branch_id %>
     <% end %>
   </div>

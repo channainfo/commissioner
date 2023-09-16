@@ -208,6 +208,7 @@ en:
         route: "New Route"
       reservations: "Reservations"
       locations: "Locations"
+      location: "Location"
       settings: "Setting"
       vendor: "Vendor"
       branch:
