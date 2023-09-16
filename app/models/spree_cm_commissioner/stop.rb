@@ -5,8 +5,18 @@ module SpreeCmCommissioner
     belongs_to :branch, class_name: 'SpreeCmCommissioner::Branch'
     belongs_to :state,  class_name: 'Spree::State', optional: true
 
+    after_save :add_to_option_value
+
     def validate_reference?
       false
+    end
+
+    def add_to_option_value
+      origin = Spree::OptionType.find_by(attr_type: 'origin')&.id
+      destination = Spree::OptionType.find_by(attr_type: 'destination')&.id
+
+      Spree::OptionValue.create(option_type_id: origin, name: name, presentation: id)
+      Spree::OptionValue.create(option_type_id: destination, name: name, presentation: id)
     end
   end
 end
