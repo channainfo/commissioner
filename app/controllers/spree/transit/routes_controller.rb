@@ -1,20 +1,20 @@
 module Spree
   module Transit
     class RoutesController < Spree::Transit::BaseController
-      before_action :load_data, except: :index
-
-      def scope
-        current_vendor.products.where(product_type: :transit)
-      end
-
-      def index
-        @routes = scope
-      end
+      before_action :load_data
 
       def load_data
         @option_types = OptionType.order(:name)
         @shipping_categories = ShippingCategory.order(:name)
         @selected_option_type_ids = Spree::OptionType.where(name: %w[origin destination route-type]).ids
+      end
+
+      def collection
+        return @collection if defined?(@collection)
+        current_vendor.products.where(product_type: :transit)
+
+        @search = current_vendor.products.where(product_type: :transit).ransack(params[:q])
+        @collection = @search.result
       end
 
       # overrided

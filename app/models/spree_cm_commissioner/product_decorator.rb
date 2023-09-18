@@ -31,6 +31,8 @@ module SpreeCmCommissioner
           .maximum('spree_prices.price').to_f
       }
       base.scope :subscribable, -> { where(subscribable: 1) }
+
+      base.whitelisted_ransackable_attributes |= %w[short_name]
     end
   end
 end
