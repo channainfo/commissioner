@@ -4,6 +4,7 @@ module SpreeCmCommissioner
   class Stop < SpreeCmCommissioner::Place
     belongs_to :branch, class_name: 'SpreeCmCommissioner::Branch'
     belongs_to :state,  class_name: 'Spree::State', optional: true
+    belongs_to :vendor, class_name: 'Spree::Vendor'
 
     after_save :add_to_option_value
 

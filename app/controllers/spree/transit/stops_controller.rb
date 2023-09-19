@@ -3,16 +3,11 @@ module Spree
     class StopsController < Spree::Transit::BaseController
       before_action :load_location
 
-      def index
-        @stops = SpreeCmCommissioner::Stop.order(:name)
-      end
-
       def collection
-        load_location
-        return [] if current_vendor.blank?
         return @collection if defined?(@collection)
+        current_vendor.stops
 
-        @search = @locations.ransack(params[:q])
+        @search = current_vendor.stops.includes(:state).ransack(params[:q])
         @collection = @search.result
       end
 
