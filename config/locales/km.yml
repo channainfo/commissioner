@@ -31,6 +31,10 @@ km:
     app_banner: App Banner (16x9)
     web_banner: Web banner (10x2)
 
+  user_update_contact:
+    phone_number_is_already_used: "លេខទូរស័ព្ធបានប្រើប្រាស់រួច"
+    email_is_already_used: "Email បានប្រើប្រាស់រួច"
+
   calendar:
     event:
       empty_info: "No <b>Events</b> found."
