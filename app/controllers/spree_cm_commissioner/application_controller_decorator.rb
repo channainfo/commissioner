@@ -3,6 +3,11 @@ module SpreeCmCommissioner
     def self.prepended(base)
       base.include SpreeCmCommissioner::ExceptionNotificable
     end
+
+    # Annonymous block: https://www.rubydoc.info/gems/rubocop/RuboCop/Cop/Naming/BlockForwarding
+    def set_writing_role(&)
+      ActiveRecord::Base.connected_to(role: :writing, &)
+    end
   end
 end
 
