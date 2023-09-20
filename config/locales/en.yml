@@ -200,6 +200,9 @@ en:
       other: "Only %{count} rooms available on %{date}"
     auto_apply: "Auto apply"
     auto_apply_info: "Path & code will be removed"
+    device_tokens: "Device Tokens"
+    user_identity_providers: "Identity Providers"
+    new_user_identity_provider: "New Identity Providers"
 
   activerecord:
     attributes:
@@ -239,6 +242,8 @@ en:
     empty_info: "<b>Invoice</b> not create yet"
   device_token:
     empty_info: "No <b>Device_token</b> found"
+  user_identity_providers:
+    empty_info: "No <b>User identity providers</b> found"
   notification:
     send_test_success: "Test Send Successfully"
 

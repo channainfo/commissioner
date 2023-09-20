@@ -189,6 +189,9 @@ km:
     selected_item_not_available_on_date: "Selected item not available on %{date}"
     auto_apply: "ដាក់ប្រើដោយស្វ័យប្រវត្តិ"
     auto_apply_info: "Path & code will be removed"
+    device_tokens: "Device Tokens"
+    user_identity_providers: "Identity Providers"
+    new_user_identity_provider: "New Identity Providers"
 
   activerecord:
     attributes:
@@ -228,6 +231,8 @@ km:
     empty_info: "<b>វិក្កយប័ត្រ</b> មិនទាន់បានបង្កើតទេ"
   device_token:
     empty_info: "រក <b>Device_token</b> មិនឃើញទេ"
+  user_identity_providers:
+    empty_info: "រក <b>User identity providers</b> មិនឃើញទេ"
   notification:
     send_test_success: "សាកផ្ញើរបានជោគជ័យ"
 

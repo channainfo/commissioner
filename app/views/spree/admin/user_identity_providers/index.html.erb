@@ -1,0 +1,47 @@
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:new_user_identity_provider), new_admin_user_user_identity_provider_path, class: "btn-success", icon: 'add.svg' %>
+<% end if can? :create, SpreeCmCommissioner::UserIdentityProvider %>
+
+<%= render partial: 'spree/admin/users/tabs', locals: { current: :user_identity_providers } %>
+
+<% if @user_identity_providers.any? %>
+  <div class="table-responsive border rounded bg-white mb-3">
+    <table class="table" id="listing_user_identity_providers" data-hook>
+      <thead class="text-muted">
+        <tr data-hook="admin_user_user_identity_providers_index_headers">
+          <th><%= Spree.t(:id) %></th>
+          <th><%= Spree.t(:identity_type) %></th>
+          <th><%= Spree.t(:sub) %></th>
+          <th><%= Spree.t(:email) %></th>
+          <th><%= Spree.t(:created_at) %></th>
+          <th><%= Spree.t(:updated_at) %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @user_identity_providers.each do |user_identity_provider| %>
+          <tr id="<%= spree_dom_id user_identity_provider %>" data-hook="admin_user_identity_providers_index_rows">
+            <td><%= user_identity_provider.id %></td>
+            <td><%= user_identity_provider.identity_type %></td>
+            <td><%= user_identity_provider.sub %></td>
+            <td><%= user_identity_provider.email %></td>
+            <td><%= user_identity_provider.created_at %></td>
+            <td><%= user_identity_provider.updated_at %></td>
+
+            <td data-hook="admin_user_identity_providers_index_row_actions" class="actions">
+              <span class="d-flex justify-content-end">
+                <%= link_to_edit user_identity_provider, url: edit_admin_user_user_identity_provider_path(@user, user_identity_provider), no_text: true if can?(:edit, user_identity_provider) %>
+                <%= link_to_delete user_identity_provider, url: admin_user_user_identity_provider_path(@user, user_identity_provider), no_text: true if can?(:delete, user_identity_provider) %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <small class="form-text text-muted">
+      <%= raw I18n.t('user_identity_providers.empty_info') %>
+   </small>
+<% end %>
+
+

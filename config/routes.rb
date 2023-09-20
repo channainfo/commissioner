@@ -45,6 +45,7 @@ Spree::Core::Engine.add_routes do
 
     resources :users do
       resources :device_tokens
+      resources :user_identity_providers
     end
 
     resources :products do
