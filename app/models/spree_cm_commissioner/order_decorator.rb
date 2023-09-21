@@ -16,7 +16,7 @@ module SpreeCmCommissioner
                                                .order(created_at: :desc)
                                            }
 
-      base.state_machine.after_transition to: :complete, do: :send_order_complete_notification
+      base.after_commit :send_order_complete_notification, if: :order_completed?
 
       base.before_create :link_by_phone_number
       base.before_create :associate_customer
@@ -28,6 +28,7 @@ module SpreeCmCommissioner
       base.has_many :customer, class_name: 'SpreeCmCommissioner::Customer', through: :subscription
       base.has_many :taxon, class_name: 'Spree::Taxon', through: :customer
       base.has_many :vendors, through: :products, class_name: 'Spree::Vendor'
+      base.has_many :taxons, through: :products, class_name: 'Spree::Taxon'
 
       base.delegate :customer, to: :subscription, allow_nil: true
 
@@ -67,6 +68,10 @@ module SpreeCmCommissioner
 
     def customer_address
       bill_address || ship_address
+    end
+
+    def order_completed?
+      state_changed_to_complete? && need_confirmation? == false
     end
 
     private

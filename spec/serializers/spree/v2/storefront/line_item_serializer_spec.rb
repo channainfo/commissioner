@@ -39,7 +39,8 @@ RSpec.describe Spree::V2::Storefront::LineItemSerializer, type: :serializer do
         :from_date,
         :to_date,
         :vendor_id,
-        :need_confirmation
+        :need_confirmation,
+        :product_type
       )
     end
 

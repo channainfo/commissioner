@@ -9,7 +9,7 @@ module Spree
           base.has_many :possible_promotions, serializer: ::SpreeCmCommissioner::V2::Storefront::PromotionSerializer
 
           base.has_one :default_state, serializer: :state
-          base.attributes :need_confirmation
+          base.attributes :need_confirmation, :product_type
         end
       end
     end
