@@ -39,6 +39,10 @@ en:
     app_banner: App Banner (16x9)
     web_banner: Web banner (10x2)
 
+  user_update_contact:
+    phone_number_is_already_used: "Phone number is already used"
+    email_is_already_used: "Email is already used"
+
   calendar:
     event:
       empty_info: "No <b>Events</b> found."
@@ -206,7 +210,30 @@ en:
     transit:
       new:
         route: "New Route"
-      abbreviation: "Abbreviation"
+        routes:
+          details: "Detail"
+          trip: "Trip"
+          trip:
+            new_trip: New Trip
+            stop_seat: Must select intermediate stop seat
+            auto_assigned_seat: Auto assigned seat
+            auto_sent_ticket: Auto sent Ticket
+            published: Published
+            service_calendar: Service Calendar
+            allow_booking: Allow Booking
+            transfer: Transfer
+            disallow_pickup: Disallow pickup
+            show_gender: Show Gender
+            skip_select_seat: Skip select seat
+            logs: Logs
+            show: Show
+            unpublish: Unpublish
+            more_option: Moe Option
+            origin: Origin
+            destination: Destination
+            choose_the_origin: Choose the origin
+            choose_the_destination: Choose the Destination
+
       reservations: "Reservations"
       locations: "Locations"
       location: "Location"
@@ -225,6 +252,9 @@ en:
           label: "Reference"
       stops: "Stops"
       routes: "Routes"
+    device_tokens: "Device Tokens"
+    user_identity_providers: "Identity Providers"
+    new_user_identity_provider: "New Identity Providers"
 
   activerecord:
     attributes:
@@ -264,6 +294,8 @@ en:
     empty_info: "<b>Invoice</b> not create yet"
   device_token:
     empty_info: "No <b>Device_token</b> found"
+  user_identity_providers:
+    empty_info: "No <b>User identity providers</b> found"
   notification:
     send_test_success: "Test Send Successfully"
 

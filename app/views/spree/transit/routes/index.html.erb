@@ -36,7 +36,7 @@
             </td>
             <td class="actions " data-hook="admin_products_index_row_actions">
               <span class="d-flex justify-content-end">
-                <%= link_to_edit route, url: edit_transit_route_path(route), no_text: true, class: 'edit' if can?(:edit, route) %>
+                <%= link_to_edit route, url: edit_transit_route_path(route.id), no_text: true, class: 'edit' if can?(:edit, route.id) && !route.deleted? %>
               </span>
             </td>
           </tr>

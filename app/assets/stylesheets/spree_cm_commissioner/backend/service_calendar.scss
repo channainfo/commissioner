@@ -4,10 +4,22 @@
     margin-right: 10px;
   }
 }
+
 #service-calendar-index {
-  .btn-active [type="submit"]{
+  .btn-active [type="submit"] {
     border: none;
     background: transparent;
     color: white;
+  }
+}
+
+.allow-booking {
+  .custom-control-input {
+    transform: translateY(8px);
+  }
+
+  .custom-control-label {
+    display: block;
+    text-align: center;
   }
 }

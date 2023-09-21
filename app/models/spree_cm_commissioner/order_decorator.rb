@@ -10,9 +10,13 @@ module SpreeCmCommissioner
         where(state: :complete, payment_state: :paid).where.not(approved_by: nil) if event == 'upcomming'
       }
 
-      base.scope :filter_by_request_state, -> { where(state: :complete, payment_state: :paid).where.not(request_state: nil) }
+      base.scope :filter_by_request_state, lambda {
+                                             where(state: :complete, payment_state: :paid)
+                                               .where.not(request_state: nil)
+                                               .order(created_at: :desc)
+                                           }
 
-      base.after_save :send_order_complete_notification, if: :state_changed_to_complete?
+      base.state_machine.after_transition to: :complete, do: :send_order_complete_notification
 
       base.before_create :link_by_phone_number
       base.before_create :associate_customer

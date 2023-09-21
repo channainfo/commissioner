@@ -3,7 +3,7 @@ module Spree
     module Storefront
       module LineItemSerializerDecorator
         def self.prepended(base)
-          base.attributes :from_date, :to_date, :vendor_id
+          base.attributes :from_date, :to_date, :vendor_id, :need_confirmation
         end
       end
     end

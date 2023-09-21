@@ -13,6 +13,7 @@ module SpreeCmCommissioner
     preference :trending_category_taxon_ids, :array, default: []
     preference :featured_brand_taxon_ids, :array, default: []
     preference :featured_vendor_ids, :array, default: []
+    preference :variants_per_page, :integer, default: Kaminari.config.default_per_page
 
     def array_patch_value(value)
       return [] if value.blank?

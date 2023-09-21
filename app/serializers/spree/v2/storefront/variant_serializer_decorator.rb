@@ -3,7 +3,7 @@ module Spree
     module Storefront
       module VariantSerializerDecorator
         def self.prepended(base)
-          base.attributes :permanent_stock
+          base.attributes :permanent_stock, :need_confirmation
         end
       end
     end

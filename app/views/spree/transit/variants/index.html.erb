@@ -1,0 +1,73 @@
+<%= render partial: 'spree/transit/shared/product_tabs', locals: {current: :variants} %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to I18n.t('spree.transit.new.routes.trip.new_trip'), new_transit_route_variant_path, { class: "btn-success", icon: 'add.svg', id: 'admin_new_trip' } %>
+<% end %>
+
+<div id="new_variant" data-hook></div>
+<% if @variants.any? %>
+  <div class="table-responsive border rounded bg-white">
+    <table class="table sortable" data-sortable-link="">
+      <thead data-hook="variants_header" class="text-muted">
+        <tr>
+          <th></th>
+          <th><%= sort_link @search, :id, Spree.t(:id) %></th>
+          <th><%= Spree.t(:name) %></th>
+          <th><%= Spree.t(:stop_leg) %></th>
+          <th><%= Spree.t(:service_calendar) %></th>
+          <th><%= Spree.t(:created_at) %></th>
+          <th><%= Spree.t(:visibility) %></th>
+          <th><%= Spree.t(:sync) %></th>
+          <th class="actions"><%= Spree.t(:action) %></th>
+        </tr>
+      </thead>
+      <tbody id="sortVert">
+        <% @route.variants.each do |variant| %>
+          <tr id="<%= spree_dom_id variant %>" <%= 'style="color:red;"' if variant.deleted? %> data-hook="variants_row">
+            <td class="move-handle">
+              <% if can? :edit, variant %>
+                <%= svg_icon name: "grip-vertical.svg", width: '18', height: '18' %>
+              <% end %>
+            </td>
+            <td><%= variant.id %></td>
+            <td><%= variant.trip_headsign %></td>
+            <td><%= variant.trip_short_name %></td>
+            <td>
+              <span class="badge badge-pill badge-primary">
+                Everyday
+              </span>
+            </td>
+            <td>
+              <%= variant.created_at.to_date %>
+            </td>
+            <td></td>
+            <td></td>
+            <td class="actions">
+              <span class="d-flex justify-content-end">
+                <%= button_tag Spree.t('spree.transit.new.routes.trip.logs'), type: "button", class: "btn btn-info btn-sm" %>
+
+                <%= link_to_edit variant, url: edit_transit_route_variant_url(id: variant.id), no_text: true, class: 'edit' if can?(:edit, variant.id) %>
+
+                <%= button_tag Spree.t('spree.transit.new.routes.trip.unpublish'), type: "button", class: "btn btn-warning text-white btn-sm" %>
+
+                <%= content_tag(:div, class: "dropdown") do %>
+                  <%= link_to("#", class: "btn btn-secondary btn-sm dropdown-toggle", id: "dropdownMenuLink", data: { toggle: "dropdown" }, aria: { haspopup: "true", expanded: "false" }) do %>
+                    <%= Spree.t('spree.transit.new.routes.trip.more_option') %>
+                  <% end %>
+
+                  <%= content_tag(:div, class: "dropdown-menu", aria: { labelledby: "dropdownMenuLink" }) do %>
+                    <%= link_to("Action", "#", class: "dropdown-item") %>
+                    <%= link_to("Another action", "#", class: "dropdown-item") %>
+                    <%= link_to("Something else here", "#", class: "dropdown-item") %>
+                  <% end %>
+                <% end %>
+
+              </span>
+            </td>
+          </tr>
+        <% end %>
+
+      </tbody>
+    </table>
+  </div>
+<% end %>
