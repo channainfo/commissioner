@@ -1,11 +1,27 @@
 <div data-hook="admin_products_sidebar">
 
-  <%= search_form_for [@search], url: transit_stops_path do |f| %>
-    <div data-hook="admin_products_index_search" class="row">
-      <div class="col-12 col-lg-6">
-        <div class="form-group">
-          <%= f.label :name, Spree.t(:name) %>
-          <%= f.text_field :name, size: 15, class: "form-control js-quick-search-target js-filterable" %>
+  <%= search_form_for [:transit, @search], url: spree.transit_stops_path do |f| %>
+    <div data-hook="admin_products_index_search">
+      <div  class="row">
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :name_cont, Spree.t(:name) %>
+            <%= f.text_field :name_cont, placeholder: "Stop Name", class: "form-control js-quick-search-target js-filterable" %>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :branch_id, I18n.t('spree.transit.branch') %>
+            <%= f.select :branch_id_eq, SpreeCmCommissioner::Branch.where(vendor_id: current_vendor.id).map{|s| [s.name, s.id]}, { prompt: "Select a branch" } , class: "form-control select2 js-filterable" %>
+          </div>
+        </div>
+      </div>
+      <div  class="row">
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :state_id_eq, I18n.t('spree.transit.location') %>
+            <%= f.select :state_id_eq, Spree::State.all.map{|s| [s.name, s.id]}, { prompt: "Select a location" } , class: "form-control select2 js-filterable" %>
+          </div>
         </div>
       </div>
     </div>
