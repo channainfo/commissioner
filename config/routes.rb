@@ -45,6 +45,7 @@ Spree::Core::Engine.add_routes do
 
     resources :users do
       resources :device_tokens
+      resources :user_identity_providers
     end
 
     resources :products do
@@ -172,8 +173,10 @@ Spree::Core::Engine.add_routes do
         resources :order_request_notifications, only: %i[index show]
 
         resources :customer_notifications, only: [:show]
+        resource :user_contacts, only: [:update]
         resource :user_registration_with_pin_codes, only: [:create]
         resources :user_device_token_registrations, only: %i[create destroy]
+        resources :user_account_linkages, only: %i[index create destroy]
         resources :pin_code_generators, only: [:create]
         resource :pin_code_checkers, only: [:update]
 

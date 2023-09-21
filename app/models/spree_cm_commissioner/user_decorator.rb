@@ -8,6 +8,7 @@ module SpreeCmCommissioner
       base.enum gender: %i[male female other]
 
       base.validates :email, presence: true, if: :email_required?
+      base.validates :phone_number, uniqueness: { allow_blank: true }
 
       base.has_many :user_identity_providers, dependent: :destroy, class_name: 'SpreeCmCommissioner::UserIdentityProvider'
       base.has_many :customers, class_name: 'SpreeCmCommissioner::Customer'
