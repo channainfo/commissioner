@@ -3,7 +3,7 @@ module SpreeCmCommissioner
     extend ActiveSupport::Concern
 
     included do
-      state_machine.after_transition to: :complete, do: :update_and_notify_if_confirmation_needed
+      after_commit  :update_and_notify_if_confirmation_needed
 
       state_machine :request_state, initial: nil, use_transactions: false do
         event :request do
@@ -32,6 +32,10 @@ module SpreeCmCommissioner
         SpreeCmCommissioner::OrderRejectedNotificationSender.call(order: self)
       end
 
+      def state_changed_to_complete?
+        saved_change_to_state? && state == 'complete'
+      end
+
       def requested_state?
         request_state == 'requested'
       end
@@ -44,13 +48,13 @@ module SpreeCmCommissioner
         return unless request_state != 'requested'
 
         request!
+        send_order_requested_notification
       end
 
       def update_and_notify_if_confirmation_needed
-        return unless need_confirmation?
+        return unless need_confirmation? && state_changed_to_complete?
 
         update_request_state_to_requested
-        send_order_requested_notification
       end
     end
   end

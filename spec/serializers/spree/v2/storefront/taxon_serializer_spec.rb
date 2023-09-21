@@ -35,7 +35,8 @@ RSpec.describe Spree::V2::Storefront::TaxonSerializer, type: :serializer do
         :public_metadata,
         :is_root,
         :is_child,
-        :is_leaf
+        :is_leaf,
+        :custom_redirect_url
       )
     end
 

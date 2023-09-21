@@ -33,7 +33,8 @@ describe Spree::V2::Storefront::VariantSerializer, type: :serializer do
         :compare_at_price,
         :display_compare_at_price,
         :permanent_stock,
-        :need_confirmation
+        :need_confirmation,
+        :product_type
       )
     end
 
