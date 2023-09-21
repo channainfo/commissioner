@@ -33,8 +33,14 @@
   </li>
   <li class="nav-item">
     <%= link_to_with_icon 'key.svg',
-      Spree.t(:device_token),
+      Spree.t(:device_tokens),
       spree.admin_user_device_tokens_path(@user),
       class: "nav-link #{'active' if current == :device_token}" %>
+  </li>
+  <li class="nav-item">
+    <%= link_to_with_icon 'telegram.svg',
+      Spree.t(:user_identity_providers),
+      spree.admin_user_user_identity_providers_path(@user),
+      class: "nav-link #{'active' if current == :user_identity_providers}" %>
   </li>
 <% end %>

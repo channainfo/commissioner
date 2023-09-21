@@ -1,0 +1,13 @@
+<%= render partial: 'spree/admin/users/tabs', locals: { current: :user_identity_providers } %>
+
+<div data-hook="admin_new_user_identity_provider_new_form_header">
+  <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+</div>
+<div data-hook="admin_new_user_identity_provider_new_form">
+  <%= form_with model: @object, url: { action: 'create' } do |f| %>
+    <%= render partial: 'form', locals: { f: f } %>
+    <div data-hook="admin_new_user_identity_provider_new_form_buttons">
+      <%= render partial: 'spree/admin/shared/new_resource_links' %>
+    </div>
+  <% end %>
+</div>
