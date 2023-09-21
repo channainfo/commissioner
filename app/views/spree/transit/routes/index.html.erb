@@ -1,0 +1,47 @@
+<% content_for :page_title do %>
+  <%= I18n.t('spree.transit.routes') %>
+<% end %>
+<% content_for :page_actions do %>
+  <%= button_link_to I18n.t('spree.transit.new.route'), new_transit_route_path, { class: "btn-success", icon: 'add.svg', id: 'admin_new_product' } %>
+<% end %>
+<% render 'filter_form' %>
+<% if @routes.any? %>
+  <div class="table-responsive border rounded bg-white mb-3">
+    <table class="table" id="listing_customers" data-hook>
+      <thead class="text-muted">
+        <tr data-hook="admin_customers_index_headers">
+          <th>
+            <%= Spree.t(:name)%>
+          </th>
+          <th>
+            <%= Spree.t(:short_name) %>
+          </th>
+          <th>
+            <%= Spree.t(:price) %>
+          </th>
+          <th scope="col" class="text-center" data-hook="admin_products_index_header_actions" class="actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @routes.each do |route| %>
+          <tr data-hook="admin_customers_index_rows">
+            <td>
+              <%= route.name %>
+            </td>
+            <td>
+              <%= route.short_name %>
+            </td>
+            <td>
+              <%= display_price(route) %>
+            </td>
+            <td class="actions " data-hook="admin_products_index_row_actions">
+              <span class="d-flex justify-content-end">
+                <%= link_to_edit route, url: edit_transit_route_path(route), no_text: true, class: 'edit' if can?(:edit, route) %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

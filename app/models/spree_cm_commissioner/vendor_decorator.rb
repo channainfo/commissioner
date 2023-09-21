@@ -27,6 +27,9 @@ module SpreeCmCommissioner
       base.has_many :vendor_kind_option_values,
                     through: :option_value_vendors, source: :option_value
 
+      base.has_many :branches, class_name: 'SpreeCmCommissioner::Branch'
+      base.has_many :stops, class_name: 'SpreeCmCommissioner::Stop'
+
       base.has_many :places,
                     through: :nearby_places, source: :place, class_name: 'SpreeCmCommissioner::Place'
 

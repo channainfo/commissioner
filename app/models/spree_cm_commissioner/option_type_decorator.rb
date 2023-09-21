@@ -1,6 +1,6 @@
 module SpreeCmCommissioner
   module OptionTypeDecorator
-    ATTRIBUTE_TYPES = %w[float integer string boolean date coordinate state_selection].freeze
+    ATTRIBUTE_TYPES = %w[float integer string boolean date coordinate state_selection origin destination].freeze
 
     def self.prepended(base)
       base.include SpreeCmCommissioner::ParameterizeName

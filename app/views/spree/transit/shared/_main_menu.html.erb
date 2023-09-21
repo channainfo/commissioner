@@ -1,0 +1,31 @@
+<nav class="pb-3 pt-lg-3 px-1 h6">
+  <div class="text-right d-lg-none pl-3 py-2 border-bottom d-flex align-items-center">
+    <div class="d-flex flex-grow-1 text-primary"></div>
+    <button
+      id="sidebar-close"
+      class="btn btn-link d-flex"
+      type="button"
+      aria-expanded="false"
+      aria-label="Toggle navigation">
+      <%= svg_icon name: "cancel.svg", width: '20', height: '20', classes: 'p-0 m-0' %>
+    </button>
+  </div>
+  <ul class="nav nav-sidebar" id="sidebarReport">
+    <%= tab :reservations, label: I18n.t('spree.transit.reservations'), url: transit_reservations_path, icon: "list.svg", selected: request.path.include?('/transit/reservations') %>
+  </ul>
+  <ul class="nav nav-sidebar" id="sidebarRoutes">
+    <%= tab :routes, label: I18n.t('spree.transit.routes'), url: transit_routes_path, icon: "location.svg", selected: request.path.include?('routes') %>
+  </ul>
+  <ul class="nav nav-sidebar" id="sidebarLocations">
+    <%= tab :locations, label: I18n.t('spree.transit.locations'), url: transit_locations_path, icon: "location.svg", selected: request.path.include?('locations') %>
+  </ul>
+  <ul class="nav nav-sidebar" id="sidebarStop">
+    <%= tab :stops, label: I18n.t('spree.transit.stops'), url: transit_stops_path, icon: "location.svg", selected: request.path.include?('stops') %>
+  </ul>
+  <ul class="nav nav-sidebar" id="sidebarBranches">
+    <%= tab :branches, label: I18n.t('spree.transit.branch.branches'), url: transit_branches_path, icon: "shop.svg", selected: request.path.include?('branches') %>
+  </ul>
+  <ul class="nav nav-sidebar" id="sidebarSetting">
+    <%= transit_main_menu_tree I18n.t('spree.transit.settings'), icon: "gear.svg", sub_menu:"setting", url: "#sidebar-setting" %>
+  </ul>
+</nav>

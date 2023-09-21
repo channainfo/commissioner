@@ -121,6 +121,8 @@ en:
     invalid_password: "Invalid Password"
 
   spree:
+    logo: "Logo"
+    image: "Image"
     en: "English"
     date_of_birth: "Date of Birth"
     kind: "Kind"
@@ -146,6 +148,7 @@ en:
     new_customer: "New Customer"
     listing_price: "Listing Price"
     length: "Length"
+    name: "Name"
     promotion_rule_types:
       fixed_date:
         name: "Fixed Date"
@@ -204,6 +207,28 @@ en:
       other: "Only %{count} rooms available on %{date}"
     auto_apply: "Auto apply"
     auto_apply_info: "Path & code will be removed"
+    transit:
+      new:
+        route: "New Route"
+      abbreviation: "Abbreviation"
+      reservations: "Reservations"
+      locations: "Locations"
+      location: "Location"
+      settings: "Setting"
+      vendor: "Vendor"
+      branch:
+        branches: "Branches"
+        address: "Address"
+        lat:
+          label: "Latitude"
+          hint: "Enter between -90 to 90"
+        lon:
+          label: "Longitude"
+          hint: "Enter between -180 to 180"
+        reference:
+          label: "Reference"
+      stops: "Stops"
+      routes: "Routes"
     device_tokens: "Device Tokens"
     user_identity_providers: "Identity Providers"
     new_user_identity_provider: "New Identity Providers"

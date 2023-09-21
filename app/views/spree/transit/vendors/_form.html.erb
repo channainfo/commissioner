@@ -1,0 +1,34 @@
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @vendor } %>
+<div class="form-group">
+  <%= f.field_container :name do %>
+    <%= f.label Spree.t('name') %>
+    <%= f.text_field :name, class: 'form-control' %>
+  <% end %>
+  <%= f.field_container :code do %>
+    <%= f.label Spree.t('code') %>
+    <%= f.text_field :code, class: 'form-control' %>
+  <% end %>
+  <% if Spree.version.to_f >= 3.6 %>
+    <div class="row p-2">
+      <%= render 'shared/asset_field',
+      field: :logo,
+      label: Spree.t("logo"),
+      asset: @vendor.logo,
+      classes: ['col m-2'],
+      form:f
+     %>
+      <%= render 'shared/asset_field',
+      field: :image,
+      label: Spree.t('image'),
+      asset: @vendor.image,
+      classes: ['col m-2'],
+      form:f
+     %>
+    </div>
+  <% end %>
+  <%= f.field_container :default_country do %>
+    <%= f.label :default_country %>
+    <%= f.collection_select(:default_country, Spree::Country.all, :id, :name, {prompt: "Select a country"}, { class: 'form-control select2'} )%>
+    <%= f.error_message_on :default_country %>
+  <% end %>
+</div>
