@@ -6,7 +6,7 @@ module SpreeCmCommissioner
       @base_options = options
       @token = options.delete(:token)
       @channel_id = options.delete(:channel_id)
-      @telegram_client = ::Telegram::Bot::Client.wrap(token)
+      @telegram_client = ::Telegram.bots[:exception_notifier]
     end
 
     def call(exception, opts = {})

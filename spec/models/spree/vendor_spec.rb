@@ -37,6 +37,28 @@ RSpec.describe Spree::Vendor, type: :model do
     end
   end
 
+  describe '.by_vendor_id!' do
+    it 'return vendor by slug or id' do
+      vendor = create(:vendor, slug: 'vendor')
+
+      result1 = described_class.by_vendor_id!(vendor.slug)
+      result2 = described_class.by_vendor_id!(vendor.id)
+
+      expect(result1.id).to eq vendor.id
+      expect(result2.id).to eq vendor.id
+    end
+
+    it 'raise error when id in int not found' do
+      vendor = create(:vendor, slug: 'vendor')
+      expect { described_class.by_vendor_id!(1000) }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it 'raise error when id in slug-from not found' do
+      vendor = create(:vendor, slug: 'vendor')
+      expect { described_class.by_vendor_id!('wrong-vendor-slug') }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   describe '#primary_product_type' do
     it 'raise error on enter invalid primary_product_type' do
       expect{create(:vendor, primary_product_type: :fake)}

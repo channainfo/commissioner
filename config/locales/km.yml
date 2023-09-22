@@ -81,10 +81,15 @@ km:
   nearby_place:
     empty_info: "រក <b>Nearby places</b> មិនឃើញទេ"
 
+  telegram_chat_bot:
+    vendor_channel_group_info: "This channel/group will be recieve order notifications"
+    only_for_authorized_user_info: "Only authorized users can approve/reject line items, make sure to input their telegram username"
+
   vendor:
     validation:
       vendor_kind_option_types:
         empty_info: "<b>Note:</b> កំណត់ប្រភេទសម្រាប់ក្រុមហ៊ុនជាមុនសិន. ដើម្បីកែប្រែ, ចូលទៅ <b>លម្អិត</b> tab > <b>ប្រភេទ</b>"
+      could_not_find_telegram_chat: "Could not find telegram channel, try remove Bot from Telegram channel and add again as admin."
 
     service_calendars:
       empty_info: "រក <b>ប្រតិទិនសេវាកម្ម</b> មិនឃើញទេ."
