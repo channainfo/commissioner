@@ -89,10 +89,15 @@ en:
   nearby_place:
     empty_info: "No <b>Nearby places</b> found."
 
+  telegram_chat_bot:
+    vendor_channel_group_info: "This channel/group will be recieve order notifications"
+    only_for_authorized_user_info: "Only authorized users can approve/reject line items, make sure to input their telegram username"
+
   vendor:
     validation:
       vendor_kind_option_types:
         empty_info: "<b>Note:</b> Set vendor option types to vendor first. To edit, go to <b>Details</b> tab > <b>Option Types</b>"
+      could_not_find_telegram_chat: "Could not find telegram channel, try remove Bot from Telegram channel and add again as admin."
 
     service_calendars:
       empty_info: "No <b>Service calendars</b> found."

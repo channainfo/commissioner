@@ -38,10 +38,18 @@
     <% end if can?(:admin, SpreeCmCommissioner::VendorPlace) %>
 
     <%= content_tag :li do %>
-      <%= link_to_with_icon 'images.svg',
+      <%= link_to_with_icon 'calendar2-week.svg',
         Spree.t(:service_calendars),
         admin_vendor_vendor_service_calendars_url(@vendor),
         class: "nav-link #{'active' if current == :service_calendars}"
       %>
     <% end if can?(:admin, SpreeCmCommissioner::ServiceCalendar) %>
+
+    <%= content_tag :li do %>
+      <%= link_to_with_icon 'telegram.svg',
+        Spree.t(:telegram),
+        admin_vendor_vendor_authorized_users_url(@vendor),
+        class: "nav-link #{'active' if current == :vendor_authorized_users }"
+      %>
+    <% end if can?(:admin, Spree::Vendor) %>
 <% end %>

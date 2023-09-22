@@ -6,6 +6,7 @@ module SpreeCmCommissioner
     def self.prepended(base)
       base.include SpreeCmCommissioner::ProductType
       base.include SpreeCmCommissioner::VendorPromotable
+      base.include SpreeCmCommissioner::VendorPreference
 
       base.attr_accessor :service_availabilities
 
@@ -54,6 +55,14 @@ module SpreeCmCommissioner
       base.has_many :invoices, class_name: 'SpreeCmCommissioner::Invoice', dependent: :destroy
       base.has_many :subscriptions, through: :customers, class_name: 'SpreeCmCommissioner::Subscription'
       base.has_many :subscription_orders, through: :subscriptions, class_name: 'Spree::Order', source: :orders
+
+      def base.by_vendor_id!(vendor_id)
+        if vendor_id.to_s =~ /^\d+$/
+          find(vendor_id)
+        else
+          find_by!(slug: vendor_id)
+        end
+      end
 
       # TODO: we will need searchkick later
       # unless Rails.env.test?

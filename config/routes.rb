@@ -32,6 +32,11 @@ Spree::Core::Engine.add_routes do
           patch :update_status
         end
       end
+      resources :vendor_authorized_users do
+        collection do
+          patch :update_telegram_chat
+        end
+      end
     end
 
     resources :customer_notifications do
