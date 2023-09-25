@@ -71,7 +71,7 @@ module SpreeCmCommissioner
     end
 
     def order_completed?
-      state_changed_to_complete? && need_confirmation? == false
+      complete? && need_confirmation? == false
     end
 
     private

@@ -8,7 +8,7 @@ module Spree
           end
 
           def order
-            Spree::Order.find(order_params[:id])
+            @order ||= Spree::Order.find_by!(number: order_params[:number])
           end
 
           def collection_serializer
@@ -16,7 +16,7 @@ module Spree
           end
 
           def order_params
-            params.permit(:id)
+            params.permit(:number)
           end
         end
       end
