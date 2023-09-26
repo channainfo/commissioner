@@ -17,6 +17,7 @@ describe Spree::V2::Storefront::UserSerializer, type: :serializer do
         :email,
         :first_name,
         :last_name,
+        :gender,
         :public_metadata,
         :store_credits,
         :completed_orders,
