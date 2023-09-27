@@ -3,7 +3,7 @@ module SpreeCmCommissioner
   class UserAuthenticator
     # :username, :password
     # :id_token
-    def self.call?(params)
+    def self.call!(params)
       context = auth_context(params)
       raise exception(context.message) unless context.success?
 
@@ -12,7 +12,7 @@ module SpreeCmCommissioner
 
     def self.auth_context(params)
       case flow_type(params)
-      when 'email_auth'
+      when 'login_auth'
         options = { login: params[:username], password: params[:password] }
         SpreeCmCommissioner::UserPasswordAuthenticator.call(options)
       when 'social_auth'
@@ -22,7 +22,7 @@ module SpreeCmCommissioner
     end
 
     def self.flow_type(params)
-      return 'email_auth' if params.key?(:username) && params.key?(:password)
+      return 'login_auth' if params.key?(:username) && params.key?(:password)
       return 'social_auth' if params.key?(:id_token)
 
       raise exception(I18n.t('authenticator.invalid_or_missing_params'))

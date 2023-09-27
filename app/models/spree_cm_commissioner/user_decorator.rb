@@ -1,16 +1,11 @@
-# rubocop:disable Metrics/MethodLength
 module SpreeCmCommissioner
   module UserDecorator
     def self.prepended(base)
-      base.include SpreeCmCommissioner::PhoneNumberSanitizer
       base.include SpreeCmCommissioner::UserNotification
+      base.include SpreeCmCommissioner::UserIdentity
 
       base.enum gender: %i[male female other]
 
-      base.validates :email, presence: true, if: :email_required?
-      base.validates :phone_number, uniqueness: { allow_blank: true }
-
-      base.has_many :user_identity_providers, dependent: :destroy, class_name: 'SpreeCmCommissioner::UserIdentityProvider'
       base.has_many :customers, class_name: 'SpreeCmCommissioner::Customer'
       base.has_many :subscriptions, through: :customers, class_name: 'SpreeCmCommissioner::Subscription'
       base.has_many :payments, as: :payable, class_name: 'Spree::Payment', dependent: :nullify
@@ -20,19 +15,6 @@ module SpreeCmCommissioner
       base.has_one :profile, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::UserProfile'
 
       base.whitelisted_ransackable_attributes = %w[email first_name last_name gender phone_number]
-
-      def base.find_user_by_login(login)
-        login = login.downcase
-        parser = PhoneNumberParser.call(phone_number: login)
-
-        if parser.intel_phone_number.present?
-          where(intel_phone_number: parser.intel_phone_number)
-        elsif login =~ URI::MailTo::EMAIL_REGEXP
-          where(email: login)
-        else
-          where(login: login)
-        end
-      end
 
       def base.end_users
         joins('LEFT JOIN spree_vendor_users ON spree_users.id = spree_vendor_users.user_id').where(spree_vendor_users: { user_id: nil })
@@ -75,10 +57,6 @@ module SpreeCmCommissioner
       device_tokens_count.positive?
     end
 
-    def email_required?
-      phone_number.blank?
-    end
-
     def validate_current_password!(password)
       return if valid_password?(password)
 
@@ -88,5 +66,3 @@ module SpreeCmCommissioner
 end
 
 Spree::User.prepend(SpreeCmCommissioner::UserDecorator) unless Spree::User.included_modules.include?(SpreeCmCommissioner::UserDecorator)
-
-# rubocop:enable Metrics/MethodLength

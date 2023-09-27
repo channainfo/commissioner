@@ -6,7 +6,6 @@ module Spree
           def index
             checker = SpreeCmCommissioner::ExistingAccountChecker.call(filter_params.to_h)
 
-            Rails.logger.debug filter_params
             if checker.success?
               head :ok
             else

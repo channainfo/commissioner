@@ -4,7 +4,7 @@ module SpreeCmCommissioner
     extend ActiveSupport::Concern
 
     included do
-      before_save :sanitize_phone_number
+      before_validation :sanitize_phone_number
     end
 
     private
