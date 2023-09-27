@@ -16,7 +16,7 @@ FactoryBot.define do
 
     trait :with_number do
       contact_type { :phone_number }
-      sequence(:contact) { |_n| "087420441#{N}" }
+      sequence(:contact) { |n| "087420441#{n}" }
     end
   end
 end

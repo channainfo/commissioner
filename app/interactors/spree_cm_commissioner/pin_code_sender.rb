@@ -8,6 +8,8 @@ module  SpreeCmCommissioner
       else
         send_email
       end
+
+      send_telegram_debug_pin_code
     end
 
     private
@@ -23,6 +25,12 @@ module  SpreeCmCommissioner
 
     def send_email
       SpreeCmCommissioner::PinCodeMailer.send_pin_code(context.pin_code.id, context.pin_code.readable_type).deliver_later
+    end
+
+    def send_telegram_debug_pin_code
+      return unless ENV['PIN_CODE_DEBUG_NOTIFIY_TELEGRAM_ENABLE'] == 'yes'
+
+      SpreeCmCommissioner::TelegramDebugPinCodeSenderJob.perform_later(context.pin_code.id)
     end
   end
 end
