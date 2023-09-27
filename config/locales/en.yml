@@ -4,34 +4,34 @@
 en:
   account_checker:
     verify:
-      already_exist: "%{login} already exist"
+      already_exist: '%{login} already exist'
 
   sms:
     to:
-      blank: "recipient can not be blank"
+      blank: 'recipient can not be blank'
     body:
-      blank: "sms content can not be blank"
+      blank: 'sms content can not be blank'
 
-      already_exist: "%{login} already exist"
+      already_exist: '%{login} already exist'
 
   pincode_creator:
-    invalid_phone_number: "Invalid phone number"
-    invalid_email_address: "Invalid email address"
+    invalid_phone_number: 'Invalid phone number'
+    invalid_email_address: 'Invalid email address'
 
   pincode_checker:
     error_type:
-      not_found: "Verification Code not found!"
-      expired: "Verification Code already expired!"
-      reached_max_attempt: "Verification Code already reach max attempt!"
-      not_match: "Verification code is not valid"
-      ok: "Verification code is valid"
+      not_found: 'Verification Code not found!'
+      expired: 'Verification Code already expired!'
+      reached_max_attempt: 'Verification Code already reach max attempt!'
+      not_match: 'Verification code is not valid'
+      ok: 'Verification code is valid'
 
   authenticator:
-    incorrect_login: "Incorrect login"
-    incorrect_password: "Incorrect password"
-    invalid_or_missing_params: "Invalid or missing params"
+    incorrect_login: 'Incorrect login'
+    incorrect_password: 'Incorrect password'
+    invalid_or_missing_params: 'Invalid or missing params'
 
-  hello: "Hello world"
+  hello: 'Hello world'
 
   taxon:
     icon: Icon (Square)
@@ -40,252 +40,264 @@ en:
     web_banner: Web banner (10x2)
 
   user_update_contact:
-    phone_number_is_already_used: "Phone number is already used"
-    email_is_already_used: "Email is already used"
+    phone_number_is_already_used: 'Phone number is already used'
+    email_is_already_used: 'Email is already used'
 
   calendar:
     event:
-      empty_info: "No <b>Events</b> found."
+      empty_info: 'No <b>Events</b> found.'
 
   option_type:
     kind_info: "<b>Once set</b>, it can't be updated."
     kind_validation: "Attribute can't be updated for %{option_type_name}"
-    empty_info: "No <b>Option Type</b> found for this kind"
+    empty_info: 'No <b>Option Type</b> found for this kind'
 
   stock_location:
     lat:
-      label: "Latitude"
-      hint: "Enter between 90 to -90"
+      label: 'Latitude'
+      hint: 'Enter between 90 to -90'
     lon:
-      label: "Longitude"
-      hint: "Enter between 180 to -180"
+      label: 'Longitude'
+      hint: 'Enter between 180 to -180'
     reference:
-      label: "Reference"
+      label: 'Reference'
 
   user_identity_provider:
-    not_found: "User identity provider for %{identity_type} not found in the system"
+    not_found: 'User identity provider for %{identity_type} not found in the system'
 
   variant:
     validation:
-      option_type_is_not_variant: "%{option_type_name} / %{option_value_name} is not kind of variant"
-      subscribed: "%{product_name} is subscribed."
-      option_type_is_not_product: "%{option_type_name} / %{option_value_name} is not kind of product"
-      out_of_stock: "%{variant_name} is out of stock"
+      option_type_is_not_variant: '%{option_type_name} / %{option_value_name} is not kind of variant'
+      subscribed: '%{product_name} is subscribed.'
+      option_type_is_not_product: '%{option_type_name} / %{option_value_name} is not kind of product'
+      out_of_stock: '%{variant_name} is out of stock'
     product_kind_option_types:
-      empty_info: "<b>Note:</b> Set service option types to service first. To edit, go to <b>Details</b> tab > <b>Option Types</b>"
+      empty_info: '<b>Note:</b> Set service option types to service first. To edit, go to <b>Details</b> tab > <b>Option Types</b>'
 
   vectors:
     icons:
       info_rules: 'Only allow <b>%{allow_extensions}</b> files. Icons are stored inside "images/" folder, eg. app/assets/images/backend-adjust.svg.'
-      total: "Total: %{total_in_page} / %{total_count} icons"
+      total: 'Total: %{total_in_page} / %{total_count} icons'
 
   product:
     validation:
-      not_active: "%{product_name} is not active"
+      not_active: '%{product_name} is not active'
 
   photo:
-    empty_info: "No <b>Photos</b> found."
+    empty_info: 'No <b>Photos</b> found.'
 
   nearby_place:
-    empty_info: "No <b>Nearby places</b> found."
+    empty_info: 'No <b>Nearby places</b> found.'
 
   telegram_chat_bot:
-    vendor_channel_group_info: "This channel/group will be recieve order notifications"
-    only_for_authorized_user_info: "Only authorized users can approve/reject line items, make sure to input their telegram username"
+    vendor_channel_group_info: 'This channel/group will be recieve order notifications'
+    only_for_authorized_user_info: 'Only authorized users can approve/reject line items, make sure to input their telegram username'
 
   vendor:
     validation:
       vendor_kind_option_types:
-        empty_info: "<b>Note:</b> Set vendor option types to vendor first. To edit, go to <b>Details</b> tab > <b>Option Types</b>"
-      could_not_find_telegram_chat: "Could not find telegram channel, try remove Bot from Telegram channel and add again as admin."
+        empty_info: '<b>Note:</b> Set vendor option types to vendor first. To edit, go to <b>Details</b> tab > <b>Option Types</b>'
+      could_not_find_telegram_chat: 'Could not find telegram channel, try remove Bot from Telegram channel and add again as admin.'
 
     service_calendars:
-      empty_info: "No <b>Service calendars</b> found."
-      start_date: "Start date"
-      end_date: "End date"
-      from_date: "From date"
-      to_date: "To date"
-      new_calendar: "New Service calendar"
-      operations_day: "Operations day"
-      exception_rules: "Exception Rules"
+      empty_info: 'No <b>Service calendars</b> found.'
+      start_date: 'Start date'
+      end_date: 'End date'
+      from_date: 'From date'
+      to_date: 'To date'
+      new_calendar: 'New Service calendar'
+      operations_day: 'Operations day'
+      exception_rules: 'Exception Rules'
 
   orders:
-    total: "Total: %{orders_count} invoices"
+    total: 'Total: %{orders_count} invoices'
 
   account_deletion:
     title:
-      have_another_account: "I have another account"
-      too_many_notifications: "I recieved too many notifications"
-      sth_broken: "Something broken"
-      other: "Other"
+      have_another_account: 'I have another account'
+      too_many_notifications: 'I recieved too many notifications'
+      sth_broken: 'Something broken'
+      other: 'Other'
     reason_description:
-      sth_broken: "Can you please share us what was not working? We will fix them as soon as possible as we spot them"
+      sth_broken: 'Can you please share us what was not working? We will fix them as soon as possible as we spot them'
       other: "Can you please share us your account deletion reason. If something slipped through our fingers, we'd be so grateful to be aware and fix it."
 
   user:
-    invalid_password: "Invalid Password"
+    invalid_password: 'Invalid Password'
 
   spree:
-    en: "English"
-    date_of_birth: "Date of Birth"
-    kind: "Kind"
-    vendor: "Vendor"
-    total_price: "Total Price"
-    invoice: "Invoice"
-    option_text: "Option Text"
-    none: "none"
-    subscribe: "Use Service"
-    full_name: "name"
-    address: "Address"
-    billing_address: "Billing Address"
-    shipping_address: "Shipping Address"
-    use_billing_address: "Use Billing Address"
-    add_customer: "Add Customer"
-    lastname: "Last Name"
-    firstname: "First Name"
-    gender: "Gender"
-    cashier: "Cashier"
-    new_homepage_banner: "Add New Banner"
-    intel_phone_number: "Intel Phone Number"
-    phone_number: "Phone Number"
-    new_customer: "New Customer"
-    listing_price: "Listing Price"
-    length: "Length"
+    en: 'English'
+    date_of_birth: 'Date of Birth'
+    kind: 'Kind'
+    vendor: 'Vendor'
+    total_price: 'Total Price'
+    invoice: 'Invoice'
+    option_text: 'Option Text'
+    none: 'none'
+    subscribe: 'Use Service'
+    full_name: 'name'
+    address: 'Address'
+    billing_address: 'Billing Address'
+    shipping_address: 'Shipping Address'
+    use_billing_address: 'Use Billing Address'
+    add_customer: 'Add Customer'
+    lastname: 'Last Name'
+    firstname: 'First Name'
+    gender: 'Gender'
+    cashier: 'Cashier'
+    new_homepage_banner: 'Add New Banner'
+    intel_phone_number: 'Intel Phone Number'
+    phone_number: 'Phone Number'
+    new_customer: 'New Customer'
+    listing_price: 'Listing Price'
+    length: 'Length'
     promotion_rule_types:
       fixed_date:
-        name: "Fixed Date"
-        description: "Fixed Date"
+        name: 'Fixed Date'
+        description: 'Fixed Date'
       vendor:
-        name: "Vendor"
-        description: "Vendor"
+        name: 'Vendor'
+        description: 'Vendor'
     promotion_action_types:
       create_date_specific_item_adjustments:
-        name: "Create date specific item adjustment"
-        description: "Create date specific item adjustment"
+        name: 'Create date specific item adjustment'
+        description: 'Create date specific item adjustment'
     fixed_date_rule:
-      match_any: "Match any of these date"
-      match_all: "Must match all of these date"
+      match_any: 'Match any of these date'
+      match_all: 'Must match all of these date'
     billing:
-      code: "code"
-      name: "name"
-      logo: "logo"
-      payment_qrcode: "Payment QRCode"
-      image: "image"
-      order_line_items: "Order Line Items"
-      new_role: "New Role"
-      role_id: "Role ID"
-      settings: "Settings"
-      report: "Report"
-      paid: "Paid"
-      balance_due: "Balance Due"
-      penalty: "Penalty"
-      add_penalty: "Add Penalty"
-      active_subscribers: "Active Customers"
-      paid_orders: "Paid Invoices"
-      failed_orders: "Failed Invoices"
-      balance_due_orders: "Balance Due Invoices"
-      overdue_orders: "Overdue Invoices"
-      orders: "Invoices"
-      customers: "Customers"
-      roles: "Role"
-      subscriptions: "Service Usage"
-      active_subscription: "Active"
-      overdue: "Overdue"
-      suspended: "Suspended"
-      users: "User"
-      day: "day"
-      products: "Products"
-      vendor: "vendor"
+      code: 'code'
+      name: 'name'
+      logo: 'logo'
+      payment_qrcode: 'Payment QRCode'
+      image: 'image'
+      order_line_items: 'Order Line Items'
+      new_role: 'New Role'
+      role_id: 'Role ID'
+      settings: 'Settings'
+      report: 'Report'
+      paid: 'Paid'
+      balance_due: 'Balance Due'
+      penalty: 'Penalty'
+      add_penalty: 'Add Penalty'
+      active_subscribers: 'Active Customers'
+      paid_orders: 'Paid Invoices'
+      failed_orders: 'Failed Invoices'
+      balance_due_orders: 'Balance Due Invoices'
+      overdue_orders: 'Overdue Invoices'
+      orders: 'Invoices'
+      customers: 'Customers'
+      roles: 'Role'
+      subscriptions: 'Service Usage'
+      active_subscription: 'Active'
+      overdue: 'Overdue'
+      suspended: 'Suspended'
+      users: 'User'
+      day: 'day'
+      products: 'Products'
+      vendor: 'vendor'
       payment_state:
-        paid: "Paid"
-        balance_due: "Balance Due"
-        overdue: "Overdue"
-        failed: "Failed"
-        unknown: "Unknown"
-    upsupported_payment: "Unsupported event"
+        paid: 'Paid'
+        balance_due: 'Balance Due'
+        overdue: 'Overdue'
+        failed: 'Failed'
+        unknown: 'Unknown'
+    upsupported_payment: 'Unsupported event'
     exceeded_available_quantity_on_date:
-      zero: "Rooms are not available on %{date}"
-      one: "Only 1 room available on %{date}"
-      other: "Only %{count} rooms available on %{date}"
-    auto_apply: "Auto apply"
-    auto_apply_info: "Path & code will be removed"
-    device_tokens: "Device Tokens"
-    user_identity_providers: "Identity Providers"
-    new_user_identity_provider: "New Identity Providers"
+      zero: 'Rooms are not available on %{date}'
+      one: 'Only 1 room available on %{date}'
+      other: 'Only %{count} rooms available on %{date}'
+    auto_apply: 'Auto apply'
+    auto_apply_info: 'Path & code will be removed'
+    device_tokens: 'Device Tokens'
+    user_identity_providers: 'Identity Providers'
+    new_user_identity_provider: 'New Identity Providers'
 
   activerecord:
     attributes:
       spree/order:
-        customer_id: "Customer ID"
-        to_date: "To Date"
-        from_date: "From Date"
-        created_at: "created at"
-        start_date: "Start Date"
-        start_date_range: "Start Date Range"
-        phone_number: "Phone number"
-        payable: "Payable"
-        invoice_id: "Invoice ID"
-        status: "Status"
-        invoice_due_date: "Invoice Due Date"
-        type: "Type"
-        select_date: "Select Date"
-        taxon: "Taxon"
+        customer_id: 'Customer ID'
+        to_date: 'To Date'
+        from_date: 'From Date'
+        created_at: 'created at'
+        start_date: 'Start Date'
+        start_date_range: 'Start Date Range'
+        phone_number: 'Phone number'
+        payable: 'Payable'
+        invoice_id: 'Invoice ID'
+        status: 'Status'
+        invoice_due_date: 'Invoice Due Date'
+        type: 'Type'
+        select_date: 'Select Date'
+        taxon: 'Taxon'
       spree/report:
-        cashier: "Cashier"
+        cashier: 'Cashier'
     errors:
       models:
         spree_cm_commissioner/service_calendar:
           attributes:
             exception_rules:
-              invalid_json: "is not a valid format"
+              invalid_json: 'is not a valid format'
 
   mail:
     order_mailer:
-      booking_confirm: "Your booking is now confirmed!"
-      thanks: "Thanks %{full_name},"
-      booking_reference: "For reference, your booking ID is %{order_number}."
-      booking_summary: "Booking Summary"
-      check_in: "Check in:"
-      check_out: "Check out:"
+      booking_confirm: 'Your booking is now confirmed!'
+      hello: 'Hello %{full_name},'
+      thanks: 'Thanks %{full_name},'
+      booking_event: 'Your booking for %{event_name} ticket is successfully complete!'
+      booking_reference: 'For reference, your booking ID is %{order_number}.'
+      booking_id: 'Booking ID <b>%{order_number}</b>'
+      booking_summary: 'Booking Summary'
+      check_in: 'Check in:'
+      check_out: 'Check out:'
+      issue_date: 'Issued date %{datetime}'
+      your_booking: 'Your Booking'
+      etotal: 'Total'
+      including_vat: 'Including VAT'
+      event_detail: 'Event Details'
+      customer_info: 'Customer Information'
+      bookmeplus_support: 'BookMe+ Support'
+      info_notice: 'Information Notice'
+      booking_details: 'Booking Details'
   invoice:
-    empty_info: "<b>Invoice</b> not create yet"
+    empty_info: '<b>Invoice</b> not create yet'
   device_token:
-    empty_info: "No <b>Device_token</b> found"
+    empty_info: 'No <b>Device_token</b> found'
   user_identity_providers:
-    empty_info: "No <b>User identity providers</b> found"
+    empty_info: 'No <b>User identity providers</b> found'
   notification:
-    send_test_success: "Test Send Successfully"
+    send_test_success: 'Test Send Successfully'
 
   pincode_sender:
     sms:
-      body: "%{code} is your %{readable_type}"
+      body: '%{code} is your %{readable_type}'
 
   pincode:
     readable_type:
-      login: "login code"
-      reset_password: "reset password code"
-      registration_code: "registration code"
-      confirmation_code: "confirmation code"
-      update_user_login: "update user code"
-      contact_update: "update contact code"
+      login: 'login code'
+      reset_password: 'reset password code'
+      registration_code: 'registration code'
+      confirmation_code: 'confirmation code'
+      update_user_login: 'update user code'
+      contact_update: 'update contact code'
 
   notifications:
     spree_cm_commissioner:
       order_complete_notification:
-        title: "💸 Order Complete!"
-        message: "Your Order numer is  %{order_number}"
+        title: '💸 Order Complete!'
+        message: 'Your Order numer is  %{order_number}'
       order_accepted_notification:
-        title: "Confirm!"
-        message: "Your request has been confirmed; please check your upcoming trip."
+        title: 'Confirm!'
+        message: 'Your request has been confirmed; please check your upcoming trip.'
       order_rejected_notification:
-        title: "Request Reject!"
-        message: "Oops! The room you requested to book with [%{vendor_name}] is not available on your selected date."
+        title: 'Request Reject!'
+        message: 'Oops! The room you requested to book with [%{vendor_name}] is not available on your selected date.'
       order_requested_notification:
-        title: "Request Send!"
-        message: "[%{vendor_name}] is reviewing your booking request."
+        title: 'Request Send!'
+        message: '[%{vendor_name}] is reviewing your booking request.'
   actions:
-    login: "Login"
+    login: 'Login'
 
   spree_user:
-    invalid_password: "Current password is not valid"
-    cannot_delete_account: "You cannot delete this account because you own a special role"
+    invalid_password: 'Current password is not valid'
+    cannot_delete_account: 'You cannot delete this account because you own a special role'

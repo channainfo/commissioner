@@ -1,0 +1,37 @@
+<div class="email-footer_inner">
+  <div class="mb-24"><%= store.description%></div>
+  <div class="mb-24 f-14"><%= store.address%></div>
+  <h2 class="mb-24">Connect with us</h2>
+  <div class="mb-24 social_icons">
+    <% if store.facebook?%>
+      <div class="social_icon">
+        <%= link_to store.facebook, target: :_blank do %>
+          <i class="fa-brands fa-facebook-f"></i>
+        <% end %>
+      </div>
+    <% end %>
+    <% if store.instagram?%>
+      <div class="social_icon">
+        <%= link_to store.instagram, target: :_blank do %>
+          <i class="fa-brands fa-instagram"></i>
+        <% end %>
+      </div>
+    <% end %>
+    <% if store.twitter?%>
+      <div class="social_icon">
+        <%= link_to store.twitter, target: :_blank do %>
+          <i class="fa-brands fa-twitter"></i>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  <div class="email-footer_links">
+    <% length = store.cms_pages.size %>
+    <% store.cms_pages.each_with_index do |page, index| %>
+      <%= link_to( page.title, spree_storefront_resource_url(page)) %>
+      <% if index + 1 != length%>
+        <span>|</span>
+      <%end%>
+    <%end%>
+  </div>
+</div>

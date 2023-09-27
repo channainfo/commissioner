@@ -1,0 +1,11 @@
+<div class="content-cell">
+    <div class="container">
+      <% if show_booking_header %>
+        <p><%= raw I18n.t('mail.order_mailer.booking_id', order_number: order.number) %></p>
+        <p><%= I18n.t('mail.order_mailer.issue_date', datetime: order.approved_at.strftime("%d %B, %Y %T")) %></p>
+      <%end%>
+      <h2 class="<%= show_booking_header ? 'mtb-24' : ''%>"><%= I18n.t('mail.order_mailer.your_booking')%></h2>
+    </div>
+    <%= render 'spree_cm_commissioner/order_mailer/purchased_items/items', line_items: order.line_items%>
+    <%= render 'spree_cm_commissioner/order_mailer/purchased_items/summary', order: order%>
+</div>
