@@ -41,7 +41,7 @@ module Spree
     end
 
     def generate_qr(order)
-      qrcode = RQRCode::QRCode.new("https://bookme.plus/orders/#{order.number}")
+      qrcode = RQRCode::QRCode.new("#{order.store.url}/orders/#{order.number}")
       qrcode.as_svg(
         color: '000',
         shape_rendering: 'crispEdges',
