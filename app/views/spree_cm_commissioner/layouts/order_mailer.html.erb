@@ -8,16 +8,6 @@
     <%= stylesheet_link_tag "spree_cm_commissioner/mailer/base.css", media: 'all' %>
   </head>
   <body>
-    <div class="email-wrapper">
-      <div class="email-content">
-        <%= render partial: 'spree_cm_commissioner/order_mailer/header' %>
-        <div class="email-body">
-          <div class="email-body_inner" id="confirm-email">
-            <%= yield %>
-          </div>
-        </div>
-      </div>
-    </div>
-
+    <%= yield%>
   </body>
 </html>

@@ -1,97 +1,186 @@
 #confirm-email {
-  background: #f2f4f6;
+  @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+  p {
+    margin: 0;
+  }
+  h2 {
+    margin-bottom: 24px;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 28px;
+  }
+  hr {
+    height: 1.5px;
+    background-color: #dddfe2;
+    border: none;
+    margin: 24px 0;
+  }
+  .email-body_inner {
+    background: transparent;
+  }
   .content-cell {
     background: white;
-    margin-bottom: 40px;
-    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 24px;
+    border-radius: 25px;
     border: 1px solid #dddfe2;
   }
-
-  .icon-check {
-    background: #32a923;
-    border-radius: 50px;
-    color: white;
-    padding: 5px;
+  .flex {
+    display: flex;
   }
-  .icon-check path {
-    stroke-width: 50;
+  .mtb-24 {
+    margin: 24px 0;
   }
-  .booking-summary {
-    font-size: 20px;
-    font-weight: bold;
-    color: #32a923;
-    margin: 0 0 30px;
-    text-align: center;
+  .mb-24 {
+    margin-bottom: 24px;
   }
-  .booking-confirm {
-    font-size: 20px;
-    font-weight: bold;
-    color: #32a923;
+  .mb-16 {
+    margin-bottom: 16px;
+  }
+  .f-14 {
+    font-size: 14px;
+  }
+  .view-map {
+    text-decoration: none;
+    color: #6444D8
+  }
+  #greeting-card {
+    color: #fff;
+    margin-top: 40px;
+    background: image-url("event-mailer-bg.png"),
+                linear-gradient(45deg, #653ed7, rgba(0, 0, 255, 0) 70.71%),
+                linear-gradient(225deg, #653ed7, rgba(0, 0, 255, 0) 70.71%),
+                linear-gradient(330deg, #35ace0, rgba(0, 0, 255, 0) 70.71%),
+                linear-gradient(150deg, #35ace0, rgba(0, 0, 255, 0) 70.71%) ;
+    p {
+      color: #fff;
+    }
+  }
+  .align-right {
+    vertical-align: top;
+  }
+  .icon-bookme-plus {
+    width: 212px;
+    margin-bottom: 56px;
     margin-top: 20px;
   }
-  .hotel-name {
-    font-size: 20px;
-    font-weight: bold;
-    color: #2a2a2e;
-    text-decoration: none;
+  .hello {
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 28px;
+    margin-bottom: 12px;
   }
-
-  a.template-label {
-    text-decoration: none;
+  .qr-container {
+    padding: 20px 20px 0;
+    text-align: center;
+    .qr-code {
+      width: 200px;
+      border-radius: 26px;
+      background-color: #fff;
+      margin-bottom: 12px;
+      padding: 10px;
+    }
   }
-  .check-in {
-    margin-bottom: 20px;
-    font-size: 14px;
-    .check-in-date {
-      color: #333333;
+  .purchase_image {
+    padding: 0 10px 0 0;
+  }
+  .purchase_item_price {
+    margin-bottom: 8px;
+  }
+  .purchase-summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    .purchase_total {
+      font-weight: normal;
+    }
+  }
+  .purchase-summary_sub_total {
+    margin-bottom: 14px;
+  }
+  .vertical-separater {
+    margin: 0 18px;
+    svg {
+      background-color: #F2F2F2;
+    }
+  }
+  .two-columns {
+    .two-columns-item {
+      width: 45%;
+    }
+    .two-columns-item_detail {
+      margin-bottom: 16px;
+    }
+  }
+  .two-columns_icon {
+    min-width: 48px;
+    height: 48px;
+    background: #f1f1f1;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    i {
+      color: #6444D8;
+      font-size: 24px;
+    }
+  }
+  .two-columns_text-container {
+    margin-left: 14px;
+  }
+  .two-columns_title {
+    color: #49454F;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0.1px;
+  }
+  .two-columns_description {
+    color: #000;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0.1px;
+  }
+  .email-footer {
+    padding: 24px;
+    .email-footer_inner {
+      color: #49454F;
+      text-align: center;
       font-size: 16px;
-      font-weight: bold;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 24px;
+      letter-spacing: 0.1px;
+      h2 {
+        text-align: center;
+      }
     }
-  }
-  .check-out {
-    font-size: 12px;
-    .check-out-date {
-      color: #333333;
-      font-weight: bold;
+    .social_icons {
+      display: flex;
+      justify-content: center;
     }
-  }
-  .order-info {
-    border: 1px solid #9c9c9c;
-    padding: 10px 20px;
-    border-radius: 15px;
-    margin-bottom: 30px;
-  }
-  .vendor-info {
-    margin-bottom: 10px;
-    .vendor-name {
-      font-size: 18px;
-      font-weight: bold;
-      color: #333333;
-      margin: 10px 0;
+    .social_icon {
+      width: 40px;
+      height: 40px;
+      background: #fff;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      i {
+        color: #939393;
+        font-size: 22px;
+      }
     }
-    .vendor-logo {
-      width: 50px;
-      display: inline-block;
-      margin-right: 10px;
-    }
-    .vendor-description {
-      display: inline-block;
-      width: 80%;
-    }
-    .star-rating {
-      margin-left: 5px;
-    }
-    .fa-star {
-      font-size: 14px;
-      color: #9c9c9c;
-    }
-    .fa-star.rating {
-      color: #f7b002;
-    }
-  }
-  .purchase {
-    td {
-      line-height: 30px;
+    .email-footer_links {
+      a {
+        color: #6444D8;
+        text-decoration: none;
+      }
     }
   }
 }
@@ -99,17 +188,5 @@
 @media (prefers-color-scheme: dark) {
   #confirm-email .content-cell {
     background-color: #333333;
-    .check-in-date, .check-out-date {
-      color: #fff;
-    }
   }
-
-}
-
-@page {
-  margin: 1cm;
-}
-
-.email-content,.email-body, .email-body_inner, .content-cell {
-  page-break-before: always;
 }

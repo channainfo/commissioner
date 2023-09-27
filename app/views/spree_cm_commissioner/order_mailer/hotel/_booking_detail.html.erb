@@ -1,0 +1,69 @@
+<div class="content-cell">
+    <div class="container">
+      <p><%= raw I18n.t('mail.order_mailer.booking_id', order_number: order.number) %></p>
+      <p class="mb-24"><%= I18n.t('mail.order_mailer.issue_date', datetime: order.approved_at.strftime("%d %B, %Y %T")) %></p>
+      <h2><%= I18n.t('mail.order_mailer.booking_details')%></h2>
+    </div>
+    <div>
+      <% line_item_group = line_items.group_by(&:vendor_id) %>
+      <% line_item_group.each_with_index do |(vendor_id, line_items), index| %>
+        <% vendor = vendor(vendor_id)%>
+        <div class="flex mb-16">
+          <div class="two-columns_icon"><i class="fa-solid fa-bed"></i></div>
+          <div class="two-columns_text-container">
+            <p class="two-columns_title">Hotel Name</p>
+            <p class="two-columns_description"><%= vendor.name %></p>
+          </div>
+        </div>
+        <% line_items.each do |line_item| %>
+          <div class="flex mb-16">
+            <div class="two-columns_icon"><i class="fa-solid fa-calendar"></i></div>
+            <div class="two-columns_text-container">
+              <p class="two-columns_title">Check in/out date</p>
+              <p class="two-columns_description">
+                <b>
+                  <%= line_item.from_date.strftime("%d %B, %Y %T") %> <br>
+                  <%= line_item.to_date.strftime("%d %B, %Y %T") %>
+                </b>
+              </p>
+            </div>
+          </div>
+          <div class="flex mb-16">
+            <div class="two-columns_icon"><i class="fa-solid fa-user-group"></i></div>
+            <div class="two-columns_text-container">
+              <p class="two-columns_title">Guest</p>
+              <p class="two-columns_description">
+                <% if line_item.variant.option_value('adults') %>
+                  <%= line_item.variant.option_value('adults')%> adults
+                <% end %>
+                <% if line_item.variant.option_value('kids') %>
+                  , <%= line_item.variant.option_value('kids')%> kids
+                <% end %>
+              </p>
+            </div>
+          </div>
+        <%end%>
+        <div class="flex mb-16">
+          <div class="two-columns_icon"><i class="fa-solid fa-location-dot"></i></div>
+          <div class="two-columns_text-container">
+            <p class="two-columns_title">Location</p>
+            <p class="two-columns_description">
+              <%= full_address(vendor.stock_location) %>
+              <br>
+              <%= link_to 'View Map', google_map(vendor.stock_location.lat, vendor.stock_location.lon), target: '_blank', class: 'view-map'%>
+            </p>
+          </div>
+        </div>
+        <div class="flex mb-16">
+          <div class="two-columns_icon"><i class="fa-solid fa-phone"></i></div>
+          <div class="two-columns_text-container">
+            <p class="two-columns_title">Contact</p>
+            <p class="two-columns_description"><%= vendor.contact_us %></p>
+          </div>
+        </div>
+        <% if index + 1 != line_item_group.count%>
+          <hr>
+        <%end%>
+      <%end%>
+    </div>
+</div>
