@@ -158,6 +158,7 @@ Spree::Core::Engine.add_routes do
     namespace :v2 do
       namespace :storefront do
         resources :accommodations, only: %i[index show]
+        resources :line_items, only: %i[index]
         resources :account_checker
         resource :s3_signed_urls
         resources :provinces, only: %i[index]

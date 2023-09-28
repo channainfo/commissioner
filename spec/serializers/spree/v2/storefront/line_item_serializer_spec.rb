@@ -8,7 +8,8 @@ RSpec.describe Spree::V2::Storefront::LineItemSerializer, type: :serializer do
       described_class.new(line_item, include: [
         :variant,
         :digital_links,
-        :vendor
+        :vendor,
+        :order
       ]).serializable_hash
     }
 
@@ -38,9 +39,9 @@ RSpec.describe Spree::V2::Storefront::LineItemSerializer, type: :serializer do
         :public_metadata,
         :from_date,
         :to_date,
-        :vendor_id,
         :need_confirmation,
-        :product_type
+        :product_type,
+        :event_status
       )
     end
 
@@ -48,7 +49,8 @@ RSpec.describe Spree::V2::Storefront::LineItemSerializer, type: :serializer do
       expect(subject[:data][:relationships].keys).to contain_exactly(
         :variant,
         :digital_links,
-        :vendor
+        :vendor,
+        :order,
       )
     end
   end

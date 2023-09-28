@@ -7,8 +7,6 @@ module Spree
             def collection
               if params[:request_state].present?
                 spree_current_user.orders.filter_by_request_state
-              elsif params[:event].present?
-                spree_current_user.orders.filter_by_event(event: params[:event])
               else
                 collection_finder.new(user: spree_current_user, store: current_store, state: params.delete(:state)).execute
               end

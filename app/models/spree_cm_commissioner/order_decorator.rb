@@ -6,10 +6,6 @@ module SpreeCmCommissioner
 
       base.scope :subscription, -> { where.not(subscription_id: nil) }
 
-      base.scope :filter_by_event, lambda { |event|
-        where(state: :complete, payment_state: :paid).where.not(approved_by: nil) if event == 'upcomming'
-      }
-
       base.scope :filter_by_request_state, lambda {
                                              where(state: :complete, payment_state: :paid)
                                                .where.not(request_state: nil)
