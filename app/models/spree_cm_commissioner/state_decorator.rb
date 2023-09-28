@@ -4,7 +4,7 @@ module SpreeCmCommissioner
       base.has_many :vendors, foreign_key: 'default_state_id', class_name: 'Spree::Vendor', inverse_of: :default_state, dependent: :nullify
 
       def update_total_inventory
-        update(total_inventory: vendors.pluck(:total_inventory).sum)
+        update(total_inventory: vendors.pluck(:total_inventory).compact.sum)
       end
     end
   end
