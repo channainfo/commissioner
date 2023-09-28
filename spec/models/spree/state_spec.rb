@@ -16,4 +16,18 @@ RSpec.describe Spree::State, type: :model do
       end
     end
   end
+
+  describe '#update_total_inventory' do
+    it 'do' do
+      state = create(:state)
+
+      vendor1 = build(:cm_vendor, total_inventory: 1)
+      vendor2 = build(:cm_vendor, total_inventory: nil)
+
+      state.vendors = [vendor1, vendor2]
+
+      expect(state.update_total_inventory).to be true
+      expect(state.total_inventory).to be 1
+    end
+  end
 end
