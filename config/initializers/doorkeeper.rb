@@ -13,8 +13,7 @@ Doorkeeper.configure do
   use_polymorphic_resource_owner
 
   resource_owner_from_credentials do
-    user = SpreeCmCommissioner::UserAuthenticator.call?(params)
-    user
+    SpreeCmCommissioner::UserAuthenticator.call!(params)
   end
 
   admin_authenticator do |routes|

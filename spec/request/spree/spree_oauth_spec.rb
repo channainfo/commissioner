@@ -4,8 +4,46 @@ describe 'Spree Oauth Spec', type: :request do
 
   # :password
   context 'grant_type: password' do
-    it 'successfully log user in' do
-      user = create(:user)
+    let(:user) { build(:cm_user) }
+
+    it 'successfully log user in with email' do
+      allow(Spree.user_class).to receive(:find_user_by_login).with(user.email).and_return(user)
+
+      post "/spree_oauth/token", params: {
+        "grant_type": "password",
+        "username": user.email,
+        "password": user.password,
+      }
+
+      expect(json_response_body.keys).to contain_exactly(
+        'access_token',
+        'token_type',
+        'expires_in',
+        'refresh_token',
+        'created_at'
+      )
+    end
+
+    it 'successfully log user in with phone_number' do
+      allow(Spree.user_class).to receive(:find_user_by_login).with(user.phone_number).and_return(user)
+
+      post "/spree_oauth/token", params: {
+        "grant_type": "password",
+        "username": user.phone_number,
+        "password": user.password,
+      }
+
+      expect(json_response_body.keys).to contain_exactly(
+        'access_token',
+        'token_type',
+        'expires_in',
+        'refresh_token',
+        'created_at'
+      )
+    end
+
+    it 'successfully log user in with login' do
+      allow(Spree.user_class).to receive(:find_user_by_login).with(user.login).and_return(user)
 
       post "/spree_oauth/token", params: {
         "grant_type": "password",
@@ -23,7 +61,7 @@ describe 'Spree Oauth Spec', type: :request do
     end
 
     it 'return error on incorrect password' do
-      user = create(:user)
+      allow(Spree.user_class).to receive(:find_user_by_login).with(user.login).and_return(user)
 
       post "/spree_oauth/token", params: {
         "grant_type": "password",
@@ -37,7 +75,7 @@ describe 'Spree Oauth Spec', type: :request do
     end
 
     it 'return error on params missing' do
-      user = create(:user)
+      allow(Spree.user_class).to receive(:find_user_by_login).with(user.login).and_return(user)
 
       post "/spree_oauth/token", params: {
         "grant_type": "password",

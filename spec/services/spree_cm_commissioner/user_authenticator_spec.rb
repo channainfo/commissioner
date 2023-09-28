@@ -2,7 +2,7 @@ require 'spec_helper'
 
 # only for test execeptions, check: spec/request/spree/spree_oauth_spec.rb
 RSpec.describe SpreeCmCommissioner::UserAuthenticator do
-  let!(:user) { create(:user, password: '12345678', email: 'abc@vtenh.com') }
+  let!(:user) { create(:user, password: '12345678', email: 'abc@cm.com') }
 
   context 'no exceptions' do
     it 'log into user when email & password valid' do
@@ -13,17 +13,17 @@ RSpec.describe SpreeCmCommissioner::UserAuthenticator do
           .and_return(context)
 
       params = { grant_type: 'password', username: user.email, password: user.password }
-      authenticated_user = described_class.call?(params)
+      authenticated_user = described_class.call!(params)
 
-      expect(authenticated_user.email).to eq 'abc@vtenh.com'
+      expect(authenticated_user.email).to eq 'abc@cm.com'
     end
   end
 
   context 'no exceptions' do
     it 'log into user when email & password valid' do
       params = { grant_type: 'password', username: user.email, password: "wrong-password" }
-      expect { described_class.call?(params) }.to raise_error(
-                                                    Doorkeeper::Errors::DoorkeeperError, 
+      expect { described_class.call!(params) }.to raise_error(
+                                                    Doorkeeper::Errors::DoorkeeperError,
                                                     I18n.t('authenticator.incorrect_password')
                                                   )
     end
