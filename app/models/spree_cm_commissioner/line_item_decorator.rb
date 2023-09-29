@@ -2,6 +2,7 @@ module SpreeCmCommissioner
   module LineItemDecorator
     def self.prepended(base)
       base.include SpreeCmCommissioner::LineItemDurationable
+      base.include SpreeCmCommissioner::LineItemsFilterScope
       base.delegate :need_confirmation, :product_type, to: :product
 
       base.belongs_to :accepted_by, class_name: 'Spree::User', optional: true
