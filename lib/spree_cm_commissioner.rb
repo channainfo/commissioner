@@ -11,6 +11,7 @@ require 'spree_cm_commissioner/passenger_option'
 require 'spree_cm_commissioner/calendar_event'
 
 require 'searchkick'
+require 'twilio-ruby'
 require 'elasticsearch'
 require 'interactor'
 require 'phonelib'
