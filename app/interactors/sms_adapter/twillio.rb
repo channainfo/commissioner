@@ -3,7 +3,7 @@ module SmsAdapter
     include ActiveSupport::Concern
 
     def create_message(options)
-      client.messages.create(options)
+      client.messages.create(**options)
     end
 
     def client
