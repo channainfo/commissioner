@@ -8,8 +8,7 @@
           <div class="two-columns_text-container">
             <p class="two-columns_title">Contact</p>
             <div class="two-columns_description">
-              <p class="two-columns_description">+855 10 318 316</p>
-              <p class="two-columns_description">+855 12 318 316</p>
+              <p class="two-columns_description"><%= current_store.contact_phone%></p>
             </div>
           </div>
         </div>
@@ -22,7 +21,7 @@
           <div class="two-columns_icon"><i class="fa-solid fa-envelope"></i></div>
           <div class="two-columns_text-container">
             <p class="two-columns_title">Email</p>
-            <p class="two-columns_description">Support@bookme+.com</p>
+            <p class="two-columns_description"><%= current_store.customer_support_email%></p>
           </div>
         </div>
       </div>

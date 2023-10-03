@@ -26,12 +26,16 @@
     <% end %>
   </div>
   <div class="email-footer_links">
-    <% length = store.cms_pages.size %>
-    <% store.cms_pages.each_with_index do |page, index| %>
-      <%= link_to( page.title, spree_storefront_resource_url(page)) %>
-      <% if index + 1 != length%>
-        <span>|</span>
-      <%end%>
+    <% policy_page = store.cms_pages.find_by(slug: 'privacy-policy')%>
+    <% terms_page = store.cms_pages.find_by(slug: 'terms-of-use')%>
+
+    <% if terms_page.present? %>
+      <%= link_to( terms_page.title, spree_storefront_resource_url(terms_page)) %>
+      <span>|</span>
+    <%end%>
+
+    <% if policy_page.present? %>
+      <%= link_to( policy_page.title, spree_storefront_resource_url(policy_page)) %>
     <%end%>
   </div>
 </div>

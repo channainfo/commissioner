@@ -33,7 +33,7 @@ module Spree
     end
 
     def format_date(day)
-      day.strftime('%A %d, %B, %Y')
+      day&.strftime('%A %d, %B, %Y')
     end
 
     def google_map(lat, lon)
@@ -50,6 +50,12 @@ module Spree
         use_path: true,
         viewbox: '0 0 20 10'
       )
+    end
+
+    def notice_info(current_store, product_type)
+      notice_page = current_store.cms_pages.find_by(slug: 'hotel-notice')
+      notice_page = current_store.cms_pages.find_by(slug: 'event-notice') if product_type == 'ecommerce'
+      notice_page.content
     end
   end
 end

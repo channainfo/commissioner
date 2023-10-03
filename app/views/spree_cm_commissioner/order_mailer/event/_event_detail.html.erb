@@ -32,7 +32,7 @@
           <div class="two-columns_icon"><i class="fa-solid fa-calendar"></i></div>
           <div class="two-columns_text-container">
             <p class="two-columns_title">Event Start</p>
-            <p class="two-columns_description"><%= product.available_on.strftime("%d %B, %Y") %></p>
+            <p class="two-columns_description"><%= product.available_on&.strftime("%d %B, %Y") %></p>
           </div>
         </div>
         <div class="flex two-columns-item_detail">

@@ -5,22 +5,15 @@ module Spree
       return false if @order.email.blank?
 
       current_store = @order.store
-      @product_type = order.products.first.product_type
+      @product_type = @order.products.first.product_type || 'accommodation'
 
-      subject = subject_title(resend, @order.number)
+      subject = (resend ? "[#{Spree.t(:resend).upcase}] " : '')
+      subject += "BookMe+ Booking Confirmation ##{order.number}"
 
       mail(to: @order.email, from: from_address, subject: subject, store_url: current_store.url) do |format|
         format.html { render layout: 'spree_cm_commissioner/layouts/order_mailer' }
         format.text
       end
-    end
-
-    private
-
-    def subject_title(resend, order_number)
-      title = (resend ? "[#{Spree.t(:resend).upcase}] " : '')
-      title += (@product_type == 'ecommerce' ? "BookMe+ Booking Confirmation ##{order_number}" : "Confirmation for Booking ID ##{order_number}")
-      title
     end
   end
 end
