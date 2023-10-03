@@ -1,5 +1,7 @@
 module SpreeCmCommissioner
   module OauthAccessTokenDecorator
+    # override
+    # lib/doorkeeper/models/access_token_mixin.rb
     def revoke_previous_refresh_token!
       ActiveRecord::Base.connected_to(role: :writing) do
         super
