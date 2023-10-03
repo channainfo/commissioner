@@ -29,7 +29,7 @@ module SpreeCmCommissioner
     def amount
       base_price = price * quantity
 
-      if reservation?
+      if reservation? && date_unit
         base_price * date_unit
       else
         base_price

@@ -1,7 +1,7 @@
 <div class="content-cell">
     <div class="container">
       <p><%= raw I18n.t('mail.order_mailer.booking_id', order_number: order.number) %></p>
-      <p class="mb-24"><%= I18n.t('mail.order_mailer.issue_date', datetime: order.approved_at.strftime("%d %B, %Y %T")) %></p>
+      <p class="mb-24"><%= I18n.t('mail.order_mailer.issue_date', datetime: order.approved_at&.strftime("%d %B, %Y %T")) %></p>
       <h2><%= I18n.t('mail.order_mailer.booking_details')%></h2>
     </div>
     <div>
@@ -22,8 +22,8 @@
               <p class="two-columns_title">Check in/out date</p>
               <p class="two-columns_description">
                 <b>
-                  <%= line_item.from_date.strftime("%d %B, %Y %T") %> <br>
-                  <%= line_item.to_date.strftime("%d %B, %Y %T") %>
+                  <%= line_item.from_date&.strftime("%d %B, %Y %T") %> <br>
+                  <%= line_item.to_date&.strftime("%d %B, %Y %T") %>
                 </b>
               </p>
             </div>

@@ -183,6 +183,15 @@
       }
     }
   }
+  .notice-info {
+    .description {
+      padding-left: 12px;
+    }
+    a {
+      color: #6444D8;
+      text-decoration: none;
+    }
+  }
 }
 
 @media (prefers-color-scheme: dark) {
