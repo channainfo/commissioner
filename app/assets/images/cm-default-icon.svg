@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="New" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <path d="M12,4c4.41,0,8,3.59,8,8s-3.59,8-8,8-8-3.59-8-8,3.59-8,8-8m0-2C6.48,2,2,6.48,2,12s4.48,10,10,10,10-4.48,10-10S17.52,2,12,2h0Z"/>
-  <polyline points="8.22 12.7 10.81 15.05 15.56 10.18" style="fill: none; stroke: #000; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;"/>
+<svg fill="currentcolor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+  <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier">
+    <path d="M7.8 10a2.2 2.2 0 0 0 4.4 0 2.2 2.2 0 0 0-4.4 0z"></path>
+  </g>
 </svg>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg id="New" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <rect x="3" y="11.18" width="18" height="4.25" rx="1.34" ry="1.34" style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: 1.5px;"/>
-  <path d="M17.52,5.99s-.78,.9-.78,1.27c0,.25,.78,.46,.78,.84s-.78,1.36-.78,1.36" style="fill: none; stroke: #000; stroke-linecap: round; stroke-linejoin: round;"/>
-  <path d="M19.46,5.42s-.78,.9-.78,1.27c0,.25,.78,.46,.78,.84s-.78,1.36-.78,1.36" style="fill: none; stroke: #000; stroke-linecap: round; stroke-linejoin: round;"/>
-  <polygon points="9.25 11.18 8.11 11.18 8.11 15.62 9.25 15.62 9.25 11.18 9.25 11.18"/>
+  <rect x="3" y="11.18" width="18" height="4.25" rx="1.34" ry="1.34" style="fill: none; stroke: currentcolor; stroke-miterlimit: 10; stroke-width: 1.5px;"/>
+  <path fill="currentcolor" d="M17.52,5.99s-.78,.9-.78,1.27c0,.25,.78,.46,.78,.84s-.78,1.36-.78,1.36" style="fill: none; stroke: currentcolor; stroke-linecap: round; stroke-linejoin: round;"/>
+  <path fill="currentcolor" d="M19.46,5.42s-.78,.9-.78,1.27c0,.25,.78,.46,.78,.84s-.78,1.36-.78,1.36" style="fill: none; stroke: currentcolor; stroke-linecap: round; stroke-linejoin: round;"/>
+  <polygon fill="currentcolor" points="9.25 11.18 8.11 11.18 8.11 15.62 9.25 15.62 9.25 11.18 9.25 11.18"/>
 </svg>
