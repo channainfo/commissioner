@@ -1,7 +1,7 @@
 # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
 module SpreeCmCommissioner
   module VendorDecorator
-    STAR_RATING = [1, 2, 3, 4, 5].freeze
+    STAR_RATING = [0, 1, 2, 3, 4, 5].freeze
 
     def self.prepended(base)
       base.include SpreeCmCommissioner::ProductType
