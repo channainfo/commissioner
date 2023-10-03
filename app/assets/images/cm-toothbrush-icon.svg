@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <path d="M19.4,20.21c-.24,0-.48-.09-.66-.27L4.07,5.7c-.38-.37-.39-.97-.02-1.35,.37-.38,.97-.39,1.35-.02l14.67,14.24c.38,.37,.39,.97,.02,1.35-.19,.19-.44,.29-.68,.29Z"/>
-  <line x1="5.37" y1="5.34" x2="8.04" y2="2.67" style="fill: none; stroke: #000; stroke-linecap: round; stroke-miterlimit: 10; stroke-width: 1.66px;"/>
-  <line x1="7.03" y1="7.01" x2="9.7" y2="4.33" style="fill: none; stroke: #000; stroke-linecap: round; stroke-miterlimit: 10; stroke-width: 1.66px;"/>
-  <line x1="8.7" y1="8.68" x2="11.37" y2="6" style="fill: none; stroke: #000; stroke-linecap: round; stroke-miterlimit: 10; stroke-width: 1.66px;"/>
+  <path fill="currentcolor" d="M19.4,20.21c-.24,0-.48-.09-.66-.27L4.07,5.7c-.38-.37-.39-.97-.02-1.35,.37-.38,.97-.39,1.35-.02l14.67,14.24c.38,.37,.39,.97,.02,1.35-.19,.19-.44,.29-.68,.29Z"/>
+  <line x1="5.37" y1="5.34" x2="8.04" y2="2.67" style="fill: none; stroke: currentcolor; stroke-linecap: round; stroke-miterlimit: 10; stroke-width: 1.66px;"/>
+  <line x1="7.03" y1="7.01" x2="9.7" y2="4.33" style="fill: none; stroke: currentcolor; stroke-linecap: round; stroke-miterlimit: 10; stroke-width: 1.66px;"/>
+  <line x1="8.7" y1="8.68" x2="11.37" y2="6" style="fill: none; stroke: currentcolor; stroke-linecap: round; stroke-miterlimit: 10; stroke-width: 1.66px;"/>
 </svg>
