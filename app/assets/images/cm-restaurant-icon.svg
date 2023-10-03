@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg id="New" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <path d="M9.23,12.98v8.02h-2.46V12.98h2.46m0-1.15h-2.46c-.64,0-1.15,.52-1.15,1.15v8.02c0,.64,.52,1.15,1.15,1.15h2.46c.64,0,1.15-.52,1.15-1.15V12.98c0-.64-.52-1.15-1.15-1.15h0Z"/>
-  <line x1="8" y1="12.07" x2="8" y2="9.13" style="fill: none; stroke: #000; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5px;"/>
-  <line x1="16" y1="12.07" x2="16" y2="9.13" style="fill: none; stroke: #000; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5px;"/>
-  <ellipse cx="16" cy="5.45" rx="2.24" ry="2.94" style="fill: none; stroke: #000; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5px;"/>
-  <path d="M10.66,2.74v3.48c0,1.2-1.2,2.17-2.66,2.17h0c-1.46,0-2.66-.98-2.66-2.17V2.74" style="fill: none; stroke: #000; stroke-linecap: round; stroke-miterlimit: 10; stroke-width: 1.5px;"/>
-  <line x1="8" y1="2.74" x2="8" y2="7.82" style="fill: none; stroke: #000; stroke-linecap: round; stroke-miterlimit: 10; stroke-width: 1.5px;"/>
-  <path d="M17.23,12.98v8.02h-2.46V12.98h2.46m0-1.15h-2.46c-.64,0-1.15,.52-1.15,1.15v8.02c0,.64,.52,1.15,1.15,1.15h2.46c.64,0,1.15-.52,1.15-1.15V12.98c0-.64-.52-1.15-1.15-1.15h0Z"/>
+  <path fill="currentcolor" d="M9.23,12.98v8.02h-2.46V12.98h2.46m0-1.15h-2.46c-.64,0-1.15,.52-1.15,1.15v8.02c0,.64,.52,1.15,1.15,1.15h2.46c.64,0,1.15-.52,1.15-1.15V12.98c0-.64-.52-1.15-1.15-1.15h0Z"/>
+  <line x1="8" y1="12.07" x2="8" y2="9.13" style="fill: none; stroke: currentcolor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5px;"/>
+  <line x1="16" y1="12.07" x2="16" y2="9.13" style="fill: none; stroke: currentcolor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5px;"/>
+  <ellipse cx="16" cy="5.45" rx="2.24" ry="2.94" style="fill: none; stroke: currentcolor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5px;"/>
+  <path fill="currentcolor" d="M10.66,2.74v3.48c0,1.2-1.2,2.17-2.66,2.17h0c-1.46,0-2.66-.98-2.66-2.17V2.74" style="fill: none; stroke: currentcolor; stroke-linecap: round; stroke-miterlimit: 10; stroke-width: 1.5px;"/>
+  <line x1="8" y1="2.74" x2="8" y2="7.82" style="fill: none; stroke: currentcolor; stroke-linecap: round; stroke-miterlimit: 10; stroke-width: 1.5px;"/>
+  <path fill="currentcolor" d="M17.23,12.98v8.02h-2.46V12.98h2.46m0-1.15h-2.46c-.64,0-1.15,.52-1.15,1.15v8.02c0,.64,.52,1.15,1.15,1.15h2.46c.64,0,1.15-.52,1.15-1.15V12.98c0-.64-.52-1.15-1.15-1.15h0Z"/>
 </svg>

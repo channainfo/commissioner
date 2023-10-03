@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg id="New" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <polyline points="4 15.3 4.57 15.3 11.25 15.3 12.75 15.3 19.37 15.3 20 15.3" style="fill: none; stroke: #000; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5px;"/>
-  <path d="M20.75,4.87c0,.41-.33,.75-.75,.75H4c-.41,0-.75-.34-.75-.75s.34-.75,.75-.75H20c.42,0,.75,.33,.75,.75Z"/>
-  <rect x="11.25" y="15.3" width="1.5" height="6.29"/>
-  <path d="M12.75,2.75v1.89c0,.23-.1,.44-.27,.57h-.96c-.16-.13-.27-.34-.27-.57v-1.89c0-.42,.34-.75,.75-.75s.75,.33,.75,.75Z"/>
-  <line x1="4.57" y1="5.34" x2="4.57" y2="14.85" style="fill: none; stroke: #000; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.57px;"/>
-  <line x1="19.36" y1="5.34" x2="19.36" y2="14.85" style="fill: none; stroke: #000; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.57px;"/>
-  <polyline points="8.07 12.08 10.6 9.79 13.15 12.03 15.93 9.61" style="fill: none; stroke: #000; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5px;"/>
-  <path d="M14.93,21.25c0,.41-.33,.75-.75,.75h-4.36c-.42,0-.75-.34-.75-.75s.33-.75,.75-.75h4.36c.42,0,.75,.33,.75,.75Z"/>
+  <polyline points="4 15.3 4.57 15.3 11.25 15.3 12.75 15.3 19.37 15.3 20 15.3" style="fill: none; stroke: currentcolor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5px;"/>
+  <path fill="currentcolor" d="M20.75,4.87c0,.41-.33,.75-.75,.75H4c-.41,0-.75-.34-.75-.75s.34-.75,.75-.75H20c.42,0,.75,.33,.75,.75Z"/>
+  <rect fill="currentcolor" x="11.25" y="15.3" width="1.5" height="6.29"/>
+  <path fill="currentcolor" d="M12.75,2.75v1.89c0,.23-.1,.44-.27,.57h-.96c-.16-.13-.27-.34-.27-.57v-1.89c0-.42,.34-.75,.75-.75s.75,.33,.75,.75Z"/>
+  <line x1="4.57" y1="5.34" x2="4.57" y2="14.85" style="fill: none; stroke: currentcolor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.57px;"/>
+  <line x1="19.36" y1="5.34" x2="19.36" y2="14.85" style="fill: none; stroke: currentcolor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.57px;"/>
+  <polyline points="8.07 12.08 10.6 9.79 13.15 12.03 15.93 9.61" style="fill: none; stroke: currentcolor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5px;"/>
+  <path fill="currentcolor" d="M14.93,21.25c0,.41-.33,.75-.75,.75h-4.36c-.42,0-.75-.34-.75-.75s.33-.75,.75-.75h4.36c.42,0,.75,.33,.75,.75Z"/>
 </svg>
