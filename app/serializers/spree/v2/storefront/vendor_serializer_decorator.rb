@@ -3,7 +3,7 @@ module Spree
     module Storefront
       module VendorSerializerDecorator
         def self.prepended(base)
-          base.attributes :min_price, :max_price, :star_rating, :short_description
+          base.attributes :min_price, :max_price, :star_rating, :short_description, :image_url
 
           base.has_many :stock_locations
           base.has_many :variants, serializer: 'Spree::Variant'
@@ -17,6 +17,12 @@ module Spree
           base.has_many :active_promotions, serializer: ::SpreeCmCommissioner::V2::Storefront::PromotionSerializer
 
           base.has_one :logo, serializer: ::SpreeCmCommissioner::V2::Storefront::AssetSerializer
+
+          base.attribute :image_url do |vendor|
+            image = vendor.image || vendor.logo
+
+            Rails.application.routes.url_helpers.url_for(image.url(:default)) if image
+          end
         end
       end
     end
