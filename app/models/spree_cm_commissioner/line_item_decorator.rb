@@ -8,6 +8,8 @@ module SpreeCmCommissioner
       base.belongs_to :accepted_by, class_name: 'Spree::User', optional: true
       base.belongs_to :rejected_by, class_name: 'Spree::User', optional: true
 
+      base.has_many :taxons, class_name: 'Spree::Taxon', through: :product
+
       base.before_save :update_vendor_id
 
       base.delegate :product_type, :accommodation?, :service?, :ecommerce?, to: :product

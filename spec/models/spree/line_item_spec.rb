@@ -16,6 +16,31 @@ RSpec.describe Spree::LineItem, type: :model do
     end
   end
 
+  describe '#set_duration' do
+    let(:taxon) {
+      taxon = create(:taxon, name: 'events', from_date: '2023-01-10'.to_date, to_date: '2023-01-13'.to_date)
+      taxon.update_column(:permalink, 'events/run-with-si')
+      taxon
+    }
+
+    let(:product) { create(:product, taxons: [taxon]) }
+    let(:order) { create(:order) }
+
+    it 'save duration to line item base on event' do
+      line_item = order.line_items.create(variant: product.master)
+
+      expect(line_item.from_date).to eq taxon.from_date
+      expect(line_item.to_date).to eq taxon.to_date
+    end
+
+    it 'not save duration to line item already has duration' do
+      line_item = order.line_items.create(variant: product.master, from_date: '2024-03-11'.to_date, to_date: '2024-03-15'.to_date)
+
+      expect(line_item.from_date).to eq '2024-03-11'.to_date
+      expect(line_item.to_date).to eq '2024-03-15'.to_date
+    end
+  end
+
   describe '#amount' do
     context 'product type: accommodation' do
       let(:product) { create(:cm_accommodation_product, price: BigDecimal('10.0'), permanent_stock: 4) }
