@@ -8,14 +8,6 @@ module Spree
       Spree::Vendor.find(vendor_id)
     end
 
-    def full_address(stock_location)
-      address = stock_location.address1 || stock_location.address2
-      address += "  #{stock_location.city}" if stock_location.city.present?
-      state_name = Spree::State.find(stock_location.state_id)&.name
-      country_name = Spree::Country.find(stock_location.country_id)&.name
-      "#{address} #{state_name}, #{country_name}"
-    end
-
     def vendor_rating_stars(vendor)
       rating_stars = vendor.star_rating.to_i
       blank_stars = 5 - rating_stars

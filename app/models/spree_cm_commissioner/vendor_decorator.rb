@@ -137,6 +137,14 @@ module SpreeCmCommissioner
     def generate_code
       self.code = (code.presence || name[0, 3].upcase)
     end
+
+    def full_address
+      address = stock_location.address1 || stock_location.address2
+      address += "  #{stock_location.city}" if stock_location.city.present?
+      state_name = Spree::State.find(stock_location.state_id)&.name if stock_location.state_id.present?
+      country_name = Spree::Country.find(stock_location.country_id)&.name if stock_location.country_id.present?
+      "#{address} #{state_name}, #{country_name}"
+    end
   end
 end
 
