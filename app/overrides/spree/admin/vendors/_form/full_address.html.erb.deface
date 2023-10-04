@@ -1,0 +1,6 @@
+<!-- insert_after "erb[loud]:contains('field_container :about_us')" -->
+
+<%= f.field_container :full_address do %>
+    <%= f.label :full_address %>
+    <%= f.text_area :full_address, class: 'form-control' %>
+<% end %>
