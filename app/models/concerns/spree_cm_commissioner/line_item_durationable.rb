@@ -2,6 +2,10 @@ module SpreeCmCommissioner
   module LineItemDurationable
     extend ActiveSupport::Concern
 
+    included do
+      before_validation :set_duration, if: -> { event.present? }
+    end
+
     def date_present?
       from_date.present? && to_date.present?
     end
@@ -36,6 +40,15 @@ module SpreeCmCommissioner
       return [] unless date_present?
 
       from_date.to_date..to_date.to_date
+    end
+
+    def event
+      taxons.event.first
+    end
+
+    def set_duration
+      self.from_date ||= event.from_date
+      self.to_date ||= event.to_date
     end
   end
 end

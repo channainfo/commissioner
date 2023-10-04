@@ -7,6 +7,11 @@ module SpreeCmCommissioner
       base.has_one :app_banner, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::TaxonAppBanner'
 
       base.validates_associated :category_icon
+      base.scope :event, -> { where('permalink LIKE ?', 'events%') }
+    end
+
+    def event?
+      permalink.start_with?('events')
     end
   end
 end
