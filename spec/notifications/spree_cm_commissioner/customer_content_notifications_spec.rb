@@ -65,7 +65,7 @@ RSpec.describe SpreeCmCommissioner::CustomerContentNotification do
     it 'removes selected device token' do
       device_token = create(:cm_device_token, user: user, registration_token: 'registration_token')
 
-      noticed_customer.send(:cleanup_device_token, token: device_token.registration_token)
+      noticed_customer.send(:cleanup_device_token, token: device_token.registration_token, platform: 'fcm')
       expect { device_token.reload }.to raise_error ActiveRecord::RecordNotFound
     end
   end

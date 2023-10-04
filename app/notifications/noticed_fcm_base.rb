@@ -73,7 +73,9 @@ class NoticedFcmBase < Noticed::Base
     self.class.to_s.underscore
   end
 
-  def cleanup_device_token(token:)
+  # rubocop:disable Lint/UnusedMethodArgument
+  def cleanup_device_token(token:, platform:)
     SpreeCmCommissioner::DeviceToken.where(registration_token: token).destroy_all
   end
+  # rubocop:enable Lint/UnusedMethodArgument
 end
