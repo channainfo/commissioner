@@ -6,13 +6,7 @@ RSpec.describe SpreeCmCommissioner::JsonLd::VendorSerializer, type: :serializer 
 
     subject {
       described_class.new(vendor, include: [
-        :image,
-        :logo,
-        :photos,
-        :products,
-        :stock_locations,
-        :nearby_places,
-        :places
+        :image
       ]).serializable_hash
     }
 
@@ -27,25 +21,13 @@ RSpec.describe SpreeCmCommissioner::JsonLd::VendorSerializer, type: :serializer 
         :star_rating,
         :short_description,
         :full_address,
-        :image_url
+        :image_id
       )
     end
 
     it 'returns exact vendor relationships' do
       expect(subject[:data][:relationships].keys).to contain_exactly(
-        :image,
-        :products,
-        :stock_locations,
-        :variants,
-        :photos,
-        :vendor_kind_option_types,
-        :promoted_option_types,
-        :nearby_places,
-        :places,
-        :promoted_option_values,
-        :vendor_kind_option_values,
-        :active_promotions,
-        :logo
+        :image
       )
     end
   end

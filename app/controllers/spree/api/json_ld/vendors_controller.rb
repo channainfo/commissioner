@@ -9,6 +9,10 @@ module Spree
         def collection_serializer
           SpreeCmCommissioner::JsonLd::VendorSerializer
         end
+
+        def scope
+          ::Spree::Vendor.active.includes(:image)
+        end
       end
     end
   end
