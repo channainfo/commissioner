@@ -48,7 +48,7 @@
           <div class="two-columns_text-container">
             <p class="two-columns_title">Location</p>
             <p class="two-columns_description">
-              <%= full_address(vendor.stock_location) %>
+              <%= vendor.full_address %>
               <br>
               <%= link_to 'View Map', google_map(vendor.stock_location.lat, vendor.stock_location.lon), target: '_blank', class: 'view-map'%>
             </p>

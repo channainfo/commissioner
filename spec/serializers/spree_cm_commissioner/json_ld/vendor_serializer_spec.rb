@@ -1,18 +1,12 @@
 require 'spec_helper'
 
-RSpec.describe Spree::V2::Storefront::VendorSerializer, type: :serializer do
+RSpec.describe SpreeCmCommissioner::JsonLd::VendorSerializer, type: :serializer do
   describe '#serializable_hash' do
     let(:vendor) { create(:vendor) }
 
     subject {
       described_class.new(vendor, include: [
-        :image,
-        :logo,
-        :photos,
-        :products,
-        :stock_locations,
-        :nearby_places,
-        :places
+        :image
       ]).serializable_hash
     }
 
@@ -26,25 +20,14 @@ RSpec.describe Spree::V2::Storefront::VendorSerializer, type: :serializer do
         :max_price,
         :star_rating,
         :short_description,
-        :full_address
+        :full_address,
+        :image_id
       )
     end
 
     it 'returns exact vendor relationships' do
       expect(subject[:data][:relationships].keys).to contain_exactly(
-        :image,
-        :products,
-        :stock_locations,
-        :variants,
-        :photos,
-        :vendor_kind_option_types,
-        :promoted_option_types,
-        :nearby_places,
-        :places,
-        :promoted_option_values,
-        :vendor_kind_option_values,
-        :active_promotions,
-        :logo
+        :image
       )
     end
   end
