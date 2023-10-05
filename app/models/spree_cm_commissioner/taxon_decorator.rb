@@ -7,11 +7,13 @@ module SpreeCmCommissioner
       base.has_one :app_banner, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::TaxonAppBanner'
 
       base.validates_associated :category_icon
-      base.scope :event, -> { where('permalink LIKE ?', 'events%') }
+      base.before_save :set_kind
+
+      base.enum kind: { category: 0, cms: 1, event: 2 }
     end
 
-    def event?
-      permalink.start_with?('events')
+    def set_kind
+      self.kind = taxonomy.kind
     end
   end
 end

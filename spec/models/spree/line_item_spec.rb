@@ -17,16 +17,14 @@ RSpec.describe Spree::LineItem, type: :model do
   end
 
   describe '#set_duration' do
-    let(:taxon) {
-      taxon = create(:taxon, name: 'events', from_date: '2023-01-10'.to_date, to_date: '2023-01-13'.to_date)
-      taxon.update_column(:permalink, 'events/run-with-si')
-      taxon
-    }
 
+    let(:taxonomy) { create(:taxonomy, kind: :event) }
+    let(:taxon) { taxon = create(:taxon, name: 'events', from_date: '2023-01-10'.to_date, to_date: '2023-01-13'.to_date, taxonomy: taxonomy) }
     let(:product) { create(:product, taxons: [taxon]) }
     let(:order) { create(:order) }
 
     it 'save duration to line item base on event' do
+
       line_item = order.line_items.create(variant: product.master)
 
       expect(line_item.from_date).to eq taxon.from_date
