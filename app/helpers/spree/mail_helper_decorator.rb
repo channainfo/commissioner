@@ -32,18 +32,6 @@ module Spree
       "https://www.google.com/maps/@#{lat},#{lon},15z?entry=ttu"
     end
 
-    def generate_qr(order)
-      qrcode = RQRCode::QRCode.new("#{order.store.url}/orders/#{order.number}")
-      qrcode.as_svg(
-        color: '000',
-        shape_rendering: 'crispEdges',
-        module_size: 5,
-        standalone: true,
-        use_path: true,
-        viewbox: '0 0 20 10'
-      )
-    end
-
     def notice_info(current_store, product_type)
       notice_page = current_store.cms_pages.find_by(slug: 'hotel-notice')
       notice_page = current_store.cms_pages.find_by(slug: 'event-notice') if product_type == 'ecommerce'
