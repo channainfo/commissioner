@@ -6,7 +6,7 @@ module Spree
           before_action :require_spree_current_user
 
           def collection
-            spree_current_user.line_items.filter_by_event(params[:event])
+            spree_current_user.line_items.complete.filter_by_event(params[:event])
           end
 
           def allowed_sort_attributes

@@ -3,6 +3,8 @@ module SpreeCmCommissioner
     extend ActiveSupport::Concern
 
     included do
+      scope :complete, -> { joins(:order).merge(Spree::Order.complete) }
+
       scope :filter_by_event, lambda { |event|
         case event
         when 'upcoming'
