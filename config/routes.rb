@@ -187,5 +187,9 @@ Spree::Core::Engine.add_routes do
         resource :homepage_data, only: [:show]
       end
     end
+
+    namespace :json_ld do
+      resources :vendors, only: %i[index show]
+    end
   end
 end

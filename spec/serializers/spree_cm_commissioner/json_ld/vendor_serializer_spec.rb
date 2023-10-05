@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Spree::V2::Storefront::VendorSerializer, type: :serializer do
+RSpec.describe SpreeCmCommissioner::JsonLd::VendorSerializer, type: :serializer do
   describe '#serializable_hash' do
     let(:vendor) { create(:vendor) }
 
@@ -26,7 +26,8 @@ RSpec.describe Spree::V2::Storefront::VendorSerializer, type: :serializer do
         :max_price,
         :star_rating,
         :short_description,
-        :full_address
+        :full_address,
+        :image_url
       )
     end
 
