@@ -36,9 +36,9 @@
 <% end %>
 <div class="row">
   <div class="col-6">
-    <%= f.field_container :product_type, :class => ['form-group'] do %>
-      <%= f.label :product_type, Spree.t('product_type') %><br />
-      <%= f.collection_select :product_type, SpreeCmCommissioner::ProductType::PRODUCT_TYPES, :to_s, :capitalize,
+    <%= f.field_container :route_type, :class => ['form-group'] do %>
+      <%= f.label :route_type, Spree.t('route_type') %><br />
+      <%= f.collection_select :route_type, SpreeCmCommissioner::RouteType::ROUTE_TYPES, :to_s, :capitalize,
             {:include_blank => true},
             {:class => 'select2 fullwidth',
               :disabled => defined?(disabled) && disabled == true ? 'disable' : nil }.compact %>

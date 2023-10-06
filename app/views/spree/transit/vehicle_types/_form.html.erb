@@ -1,0 +1,18 @@
+<div data-hook="admin_user_form_fields" class="row">
+  <div class='col-6'>
+    <%= f.hidden_field :vendor_id, value: current_vendor.id %>
+    <%= f.field_container :name do %>
+      <%= f.label :name, Spree.t(:name) %>
+      <%= f.text_field :name, class: 'form-control', required: true %>
+      <%= f.error_message_on :name %>
+    <% end %>
+  </div>
+  <div class='col-6'>
+    <%= f.field_container :route_type, :class => ['form-group'] do %>
+      <%= f.label :route_type, Spree.t('route_type') %><br />
+      <%= f.collection_select :route_type, SpreeCmCommissioner::RouteType::ROUTE_TYPES, :to_s, :capitalize,
+            {:include_blank => false},
+            {:class => 'select2 fullwidth',
+              :disabled => defined?(disabled) && disabled == true ? 'disable' : nil }.compact %>
+    <% end %>
+  </div>

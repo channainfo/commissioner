@@ -1,0 +1,79 @@
+`<% content_for :page_title do %>
+  <%= page_header_back_button spree.transit_vehicle_types_path %>
+  <%= I18n.t('spree.transit.vehicle_types') %>
+<% end %>
+<div data-hook="admin_user_new_form_header">
+  <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+</div>
+<div data-hook="admin_user_new_form">
+  <%= form_with model: @object, url: { action: 'update' } do |f| %>
+    <%= render partial: 'form', locals: { f: f } %>
+  <% end %>
+  <div>
+    <div class="p-2 layer-list">
+      <% @seats.each do |layer| %>
+        <div class="m-2 d-flex">
+          <div class="m-1">
+            <label for="layer">Layer</label>
+            <input disabled type="text" class="form-control" name="layer" value= "<%= layer.first.first[:layer] %>">
+          </div>
+          <div class="m-1">
+            <label for="Row">Row</label>
+            <input disabled type="text" class="form-control" name="Row" value= "<%= layer.size %>">
+          </div>
+          <div class="m-1">
+            <label for="Column">Column</label>
+            <input disabled type="text" class="form-control" name="Column" value= "<%= layer.first.size %>">
+          </div>
+          <div class="mt-auto mb-1 mx-1">
+            <button type="button" class="btn btn-primary view-layer-btn"
+            data-toggle="modal"
+            data-target="#viewSeatModal"
+            data-layer="<%= layer.to_json %>"
+            data-layer-name="<%= layer.first.first[:layer] %>"
+            data-layer-row="<%= layer.size %>"
+            data-layer-column="<%= layer.first.size %>"
+            >
+              View Layer
+            </button>
+          </div>
+        </div>
+      <% end %>
+      <button type="button" class="btn btn-primary m-2" data-toggle="modal" data-target="#createSeatModal">
+        add layer
+      </button>
+    </div>
+  </div>
+  <div  style="width:100%;" class="col-12" data-hook="admin_user_new_form_buttons">
+    <%= render partial: 'spree/admin/shared/edit_resource_links', locals: { collection_url: spree.transit_vehicle_types_path } %>
+  </div>
+</div>
+<div class="modal fade" id="viewSeatModal" tabindex="-1" role="dialog" aria-labelledby="view" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="view">View layer</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="createSeatModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add new layer</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <%= render 'spree/transit/vehicle_seats/form' %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,83 @@
+<div class="container mt-5">
+  <form class="row">
+    <div class="col-4">
+      <div class="form-group">
+        <label for="layer">Layer</label>
+        <input disabled value="<%= @layer_name %>" type="text" required class="form-control" id="viewlayer" name="layer">
+      </div>
+      <div class="form-group">
+        <label for="row">Row</label>
+        <input disabled value="<%= @row %>" type="number" class="form-control" id="viewrow" name="row">
+      </div>
+      <div class="form-group">
+        <label for="column">Column</label>
+        <input disabled value="<%= @column %>" type="number" class="form-control" id="viewcolumn" name="column">
+      </div>
+    </div>
+    <div class="col-8 p-5">
+      <div class="grid">
+        <% @seats.each do |rows| %>
+          <div class="row">
+            <% rows.each do |seat| %>
+              <div class="column ml-4">
+                <% if seat['seat_type'] == 0 %>
+                  <div class="seat-container">
+                    <div class="seat-icon" data-seat-row="<%= seat['row'] %>" data-seat-column="<%= seat['column'] %>">
+                      <%= inline_svg_tag "cm-normal-seat-icons.svg", size: "35px" %>
+                    </div>
+                    <div class="text-center">
+                      <input id="<%= seat['row'] %><%= seat['column'] %>"
+                        type="text" class="seat-label text-center border-0"
+                        value="<%= seat['label'] %>"
+                        disabled
+                        size="<%= seat['label'].length %>">
+                    </div>
+                  </div>
+                <% elsif seat['seat_type'] == 1 %>
+                  <div class="seat-container">
+                    <div class="seat-icon" data-seat-row="<%= seat['row'] %>" data-seat-column="<%= seat['column'] %>">
+                      <div class="hidden-seat"></div>
+                    </div>
+                    <div class="text-center hidden-input">
+                      <input id="<%= seat['row'] %><%= seat['column'] %>"
+                        type="text" class="seat-label text-center border-0"
+                        value="<%= seat['label'] %>"
+                        disabled
+                        size="<%= seat['label'].length %>">
+                    </div>
+                  </div>
+                <% elsif seat['seat_type'] == 2 %>
+                  <div class="seat-container">
+                    <div class="seat-icon" data-seat-row="<%= seat['row'] %>" data-seat-column="<%= seat['column'] %>">
+                      <%= inline_svg_tag "cm-vip-seat-icons.svg", size: "35px" %>
+                    </div>
+                    <div class="text-center">
+                      <input id="<%= seat['row'] %><%= seat['column'] %>"
+                        type="text" class="seat-label text-center border-0"
+                        value="<%= seat['label'] %>"
+                        disabled
+                        size="<%= seat['label'].length %>">
+                    </div>
+                  </div>
+                <% else%>
+                  <div class="seat-container">
+                    <div class="seat-icon" data-seat-row="<%= seat['row'] %>" data-seat-column="<%= seat['column'] %>">
+                      <%= inline_svg_tag "cm-driver-seat-icons.svg", size: "35px" %>
+                    </div>
+                    <div class="text-center">
+                      <input id="<%= seat['row'] %><%= seat['column'] %>"
+                        type="text" class="seat-label text-center border-0"
+                        value="<%= seat['label'] %>"
+                        disabled
+                        size="<%= seat['label'].length %>">
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </form>
+</div>
