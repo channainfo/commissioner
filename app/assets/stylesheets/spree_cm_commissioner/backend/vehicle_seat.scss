@@ -1,0 +1,14 @@
+/* seats.css */
+
+.seat {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #ccc;
+  margin: 2px;
+  cursor: pointer;
+}
+
+.selected_seat {
+  background-color: #f00;
+}

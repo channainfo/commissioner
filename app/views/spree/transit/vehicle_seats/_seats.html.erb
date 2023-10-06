@@ -1,0 +1,27 @@
+<div class="grid">
+  <% @seats.each do |rows| %>
+    <div class="row">
+      <% rows.each do |seat| %>
+        <div class="column ml-4">
+          <% if seat["status"] == true %>
+            <div>
+              <div class="seat-icon" data-seat-row="<%= seat['row'] %>" data-seat-column="<%= seat['column'] %>">
+                <%= inline_svg_tag "cm-seat-icons.svg", size: "35px" %>
+              </div>
+              <div class="text-center">
+                <input id="<%= seat['row'] %><%= seat['column'] %>"
+                      type="text" class="seat-label text-center border-0"
+                      value="<%= seat['label'] %>"
+                      size="<%= seat['label'].length %>">
+              </div>
+            </div>
+          <% elsif seat["status"] == false %>
+            <div class="seat-icon" data-seat-row="<%= seat['row'] %>" data-seat-column="<%= seat['column'] %>">
+              <%= inline_svg_tag "backend-cancel.svg", size: "35px" %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

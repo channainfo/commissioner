@@ -2,6 +2,7 @@ module SpreeCmCommissioner
   module ProductDecorator
     def self.prepended(base)
       base.include SpreeCmCommissioner::ProductType
+      base.include SpreeCmCommissioner::RouteType
 
       base.has_many :variant_kind_option_types, -> { where(kind: :variant).order(:position) },
                     through: :product_option_types, source: :option_type
@@ -32,7 +33,7 @@ module SpreeCmCommissioner
       }
       base.scope :subscribable, -> { where(subscribable: 1) }
 
-      base.whitelisted_ransackable_attributes |= %w[short_name]
+      base.whitelisted_ransackable_attributes |= %w[short_name route_type ]
     end
   end
 end

@@ -210,6 +210,7 @@ en:
     transit:
       new:
         route: "New Route"
+        vehicle_type: "New Vehicle Type"
       abbreviation: "Abbreviation"
       reservations: "Reservations"
       locations: "Locations"
@@ -229,6 +230,7 @@ en:
           label: "Reference"
       stops: "Stops"
       routes: "Routes"
+      vehicle_types: "Vehicle Types"
     device_tokens: "Device Tokens"
     user_identity_providers: "Identity Providers"
     new_user_identity_provider: "New Identity Providers"

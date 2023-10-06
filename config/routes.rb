@@ -156,7 +156,11 @@ Spree::Core::Engine.add_routes do
     resources :branches
     resources :stops
     resources :routes
+    resources :vehicle_types do
+      resources :vehicle_seats
+    end
     root to: redirect('/transit/reservations')
+    post "/vehicle_types/vehicle_seats/load_seat", to: "vehicle_seats#load_seat"
   end
 
   namespace :api, defaults: { format: 'json' } do
