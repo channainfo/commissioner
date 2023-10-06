@@ -185,6 +185,7 @@ Spree::Core::Engine.add_routes do
           resources :nearby_places, only: %i[index]
         end
         resource :homepage_data, only: [:show]
+        resources :order_qrs, only: [:show]
       end
     end
 
