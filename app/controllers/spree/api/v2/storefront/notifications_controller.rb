@@ -3,6 +3,7 @@ module Spree
     module V2
       module Storefront
         class NotificationsController < Spree::Api::V2::ResourceController
+          around_action :set_writing_role, only: %i[show]
           before_action :require_spree_current_user
 
           def collection
