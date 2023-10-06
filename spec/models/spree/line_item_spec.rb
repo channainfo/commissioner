@@ -58,4 +58,16 @@ RSpec.describe Spree::LineItem, type: :model do
       end
     end
   end
+
+  describe '.complete' do
+    let!(:complete_order) { create(:order, completed_at: '2024-03-11'.to_date) }
+    let!(:incomplete_order) { create(:order, completed_at: nil) }
+
+    it 'filter only complete line items base on complete order' do
+      line_item1 = create(:line_item, order: complete_order)
+      line_item2 = create(:line_item, order: incomplete_order)
+
+      expect(described_class.complete).to eq [line_item1]
+    end
+  end
 end
