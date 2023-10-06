@@ -6,12 +6,11 @@ module Spree
       def load_data
         @option_types = OptionType.order(:name)
         @shipping_categories = ShippingCategory.order(:name)
-        @selected_option_type_ids = Spree::OptionType.where(name: %w[origin destination route-type]).ids
+        @selected_option_type_ids = Spree::OptionType.where(name: %w[origin destination]).ids
       end
 
       def collection
         return @collection if defined?(@collection)
-        current_vendor.products.where(product_type: :transit)
 
         @search = current_vendor.products.where(product_type: :transit).ransack(params[:q])
         @collection = @search.result
@@ -19,7 +18,7 @@ module Spree
 
       # overrided
       def find_resource
-        scope.find_by(slug: params[:id])
+        current_vendor.products.find_by(slug: params[:id])
       end
 
       def new
