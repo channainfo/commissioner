@@ -1,0 +1,7 @@
+<%= f.field_container field, :class => ['form-group'] do %>
+  <%= f.label field, Spree.t(field) %> <span class="text-danger">*</span> <br />
+  <%= f.collection_select field, Spree::Taxonomy::kinds.keys, :to_s, :capitalize,
+    {:include_blank => true},
+    {:class => 'select2 fullwidth', :disabled => defined?(disabled) && disabled == true ? 'disable' : nil }.compact
+  %>
+<% end %>
