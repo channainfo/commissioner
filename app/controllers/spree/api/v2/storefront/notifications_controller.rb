@@ -11,7 +11,7 @@ module Spree
 
           def serialize_collection(collection)
             options_data = collection_options(collection).merge(params: serializer_params)
-            options_data[:meta][:unread_count] = SpreeCmCommissioner::Notification.user_notifications.select(&:unread?).count
+            options_data[:meta][:unread_count] = collection.select(&:unread?).count
 
             collection_serializer.new(
               collection,
@@ -25,8 +25,12 @@ module Spree
 
           def show
             notification = SpreeCmCommissioner::Notification.find(params[:id])
-            SpreeCmCommissioner::NotificationReader.call(notification: notification)
+
             render_serialized_payload { serialize_resource(notification) }
+          end
+
+          def mark_as_read
+            SpreeCmCommissioner::NotificationReader.call(id: params[:id])
           end
 
           def resource_serializer

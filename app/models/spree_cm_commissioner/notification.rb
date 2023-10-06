@@ -2,11 +2,11 @@ module SpreeCmCommissioner
   class Notification < SpreeCmCommissioner::Base
     include Noticed::Model
 
-    scope :top_3_request_notifications, lambda {
+    scope :request_notifications, lambda {
       where(
         type: %w[order_requested_notification order_rejected_notification order_accepted_notification],
         read_at: nil
-      ).newest_first.limit(3)
+      ).newest_first
     }
 
     scope :user_notifications, lambda {

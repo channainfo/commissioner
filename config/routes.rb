@@ -165,7 +165,11 @@ Spree::Core::Engine.add_routes do
         resources :user_deletion_reasons, only: [:index]
         resource :profile_images, only: [:update]
         resource :user_profiles, only: [:update]
-        resources :notifications, only: %i[index show]
+        resources :notifications do
+          member do
+            patch :mark_as_read
+          end
+        end
         resources :order_request_notifications, only: %i[index show]
 
         resources :customer_notifications, only: [:show]

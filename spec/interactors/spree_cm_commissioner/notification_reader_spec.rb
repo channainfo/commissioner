@@ -5,13 +5,14 @@ RSpec.describe SpreeCmCommissioner::NotificationReader do
   describe '.call' do
     context 'notification is unread' do
       it 'marks notification to read and set read_at value' do
-        read_at = nil
-        notification = create(:notification, read_at: read_at)
+        notification = create(:notification , read_at: nil)
 
-       SpreeCmCommissioner::NotificationReader.call(notification: notification)
+        SpreeCmCommissioner::NotificationReader.call(id: notification.id)
+
+        notification.reload
 
         expect(notification.read?).to eq true
-        expect(notification.read_at).to_not eq read_at
+        expect(notification.read_at).to_not eq nil
       end
     end
   end
@@ -21,7 +22,7 @@ RSpec.describe SpreeCmCommissioner::NotificationReader do
       notification = create(:notification, read_at: Time.zone.now)
       read_at = notification.read_at
 
-      SpreeCmCommissioner::NotificationReader.call(notification: notification)
+      SpreeCmCommissioner::NotificationReader.call(id: notification.id)
 
       expect(notification.read?).to eq true
       expect(notification.read_at).to eq read_at
