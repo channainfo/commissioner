@@ -10,6 +10,7 @@ require 'spree_cm_commissioner/version'
 require 'spree_cm_commissioner/passenger_option'
 require 'spree_cm_commissioner/calendar_event'
 
+require 'google/cloud/recaptcha_enterprise'
 require 'searchkick'
 require 'twilio-ruby'
 require 'elasticsearch'

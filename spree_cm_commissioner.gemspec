@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'spree_extension'
 
   s.add_dependency 'phonelib'
+  s.add_dependency 'google-cloud-recaptcha_enterprise'
   s.add_dependency 'jwt', '>= 2.5.0'
   s.add_dependency 'elasticsearch', '~> 8.5'
   s.add_dependency 'interactor', '~> 3.1'
