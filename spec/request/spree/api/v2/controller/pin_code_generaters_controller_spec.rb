@@ -4,6 +4,8 @@ RSpec.describe Spree::Api::V2::Storefront::PinCodeGeneratorsController, type: :c
   describe 'POST create' do
     context 'with valid params' do
       it 'create new pin code' do
+        allow(controller).to receive(:validate_recaptcha).and_return(true)
+
         set_application_token
 
         post :create, params: { email: 'john@gmail.com' , type: 'SpreeCmCommissioner::PinCodeLogin' }
@@ -15,6 +17,8 @@ RSpec.describe Spree::Api::V2::Storefront::PinCodeGeneratorsController, type: :c
     end
     context 'with ininvalid params' do
       it 'return error' do
+        allow(controller).to receive(:validate_recaptcha).and_return(true)
+
         set_application_token
 
         post :create, params: { email: '0964103875', type: 'SpreeCmCommissioner::PinCodeLogin' }

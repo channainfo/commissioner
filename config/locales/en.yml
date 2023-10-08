@@ -34,6 +34,12 @@ en:
 
   hello: 'Hello world'
 
+  recaptcha:
+    request_failed: "Request failed"
+    invalid_code: "Invalid code"
+    score_not_qualify: "Score is not qualify"
+    action_not_matched: "Action is not matched"
+
   taxon:
     icon: Icon (Square)
     category_icon: Category icon (Square)
