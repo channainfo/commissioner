@@ -30,7 +30,7 @@ module SpreeCmCommissioner
     end
 
     def project_id
-      context.project_id ||= Rails.application.credentials.google_service_account[:project_id]
+      context.project_id ||= Rails.application.credentials.recaptcha_enterprise_service_account[:project_id]
     end
 
     def client
