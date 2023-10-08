@@ -70,4 +70,37 @@ RSpec.describe Spree::LineItem, type: :model do
       expect(described_class.complete).to eq [line_item1]
     end
   end
+
+  describe '#reservation?' do
+    let(:ecommerce) { build(:product, product_type: :ecommerce)}
+    let(:service) { build(:product, product_type: :service)}
+    let(:accommodation) { build(:product, product_type: :accommodation)}
+
+    it 'not considered reservation if it not either service or accommodation' do
+      line_item = build(:line_item, variant: ecommerce.master)
+      expect(line_item.reservation?).to be false
+    end
+
+    it 'not considered reservation if it not contains duration' do
+      line_item1 = build(:line_item, variant: accommodation.master)
+      line_item2 = build(:line_item, variant: accommodation.master)
+
+      expect(line_item1.reservation?).to be false
+      expect(line_item2.reservation?).to be false
+    end
+
+    it 'not considered reservation if it ecommerce [even it has duration]' do
+      line_item = build(:line_item, variant: ecommerce.master, from_date: '2024-03-11'.to_date, to_date: '2024-03-13'.to_date)
+
+      expect(line_item.reservation?).to be false
+    end
+
+    it 'considered reservation if it service / accomodation, has date & not subscription' do
+      line_item1 = build(:line_item, variant: accommodation.master, from_date: '2024-03-11'.to_date, to_date: '2024-03-13'.to_date)
+      line_item2 = build(:line_item, variant: service.master, from_date: '2024-03-11'.to_date, to_date: '2024-03-13'.to_date)
+
+      expect(line_item1.reservation?).to be true
+      expect(line_item2.reservation?).to be true
+    end
+  end
 end
