@@ -19,7 +19,7 @@ module SpreeCmCommissioner
     end
 
     def reservation?
-      date_present? && !subscription?
+      (accommodation? || service?) && date_present? && !subscription?
     end
 
     # date_unit could be number of nights, or days or hours depending on usecases
