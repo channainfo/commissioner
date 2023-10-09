@@ -19,6 +19,11 @@ module SpreeCmCommissioner
         parse_mode: 'HTML',
         text: body(exception, formatter, data)
       )
+    rescue ::Telegram::Bot::Error
+      telegram_client.send_message(
+        chat_id: channel_id,
+        text: body(exception, formatter, data)
+      )
     end
 
     def body(exception, formatter, data)
