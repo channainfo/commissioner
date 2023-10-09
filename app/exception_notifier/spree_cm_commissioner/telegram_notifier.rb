@@ -17,7 +17,7 @@ module SpreeCmCommissioner
       telegram_client.send_message(
         chat_id: channel_id,
         parse_mode: 'HTML',
-        text: body(exception, formatter, data)
+        text: body(exception, formatter, data, nil)
       )
     rescue ::Telegram::Bot::Error => e
       # when telegram bot error, we try to send again without parse (raw text),
