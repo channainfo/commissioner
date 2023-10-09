@@ -19,9 +19,16 @@ module SpreeCmCommissioner
         parse_mode: 'HTML',
         text: body(exception, formatter, data)
       )
+    rescue ::Telegram::Bot::Error => e
+      # when telegram bot error, we try to send again without parse (raw text),
+      # so we still can get exceptions and know what cause telegram error.
+      telegram_client.send_message(
+        chat_id: channel_id,
+        text: body(exception, formatter, data, e)
+      )
     end
 
-    def body(exception, formatter, data)
+    def body(exception, formatter, data, telegram_exception)
       text = []
 
       text << "<b>Application #{formatter.app_name}</b>"
@@ -52,6 +59,8 @@ module SpreeCmCommissioner
         text << "<code>#{formatter.backtrace_message}</code>"
         text << "\n"
       end
+
+      text << telegram_exception.to_s if telegram_exception.present?
 
       text.compact.join("\n")
     end
