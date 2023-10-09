@@ -7,6 +7,10 @@ module SpreeCmCommissioner
       base.delegate :need_confirmation, to: :product
 
       base.scope :subscribable, -> { active.joins(:product).where(product: { subscribable: true, status: :active }) }
+      base.has_many :stop_times, class_name: 'SpreeCmCommissioner::StopTime', foreign_key: :trip_id
+
+      base.accepts_nested_attributes_for :stop_times, allow_destroy: true
+
     end
 
     def selected_option_value_ids

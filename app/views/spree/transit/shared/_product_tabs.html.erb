@@ -11,9 +11,9 @@
   <% end %>
   <%= content_tag :li, class: 'nav-item' do %>
     <%= link_to_with_icon 'adjust.svg',
-      Spree.t(:variants),
-      spree.transit_route_variants_path(@route.id),
-      class: "nav-link #{'active' if current == :variants}" %>
+      Spree.t(:trips),
+      spree.transit_route_trips_path(@route.id),
+      class: "nav-link #{'active' if current == :trips}" %>
   <% end %>
 <% end %>
 

@@ -233,6 +233,7 @@ en:
             destination: Destination
             choose_the_origin: Choose the origin
             choose_the_destination: Choose the Destination
+            departure_time: Select departure time
 
       reservations: "Reservations"
       locations: "Locations"

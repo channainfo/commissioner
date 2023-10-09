@@ -1,0 +1,166 @@
+<div class="row border-bottom mb-4">
+  <div data-hook="transit_variant_form_fields" class="col-lg-6 col-sm-12">
+    <div data-hook="variants">
+      <div class="form-group " data-hook="head_sign">
+        <%= f.label :trip_headsign, Spree.t(:trip_headsign) %>
+        <%= f.text_field :trip_headsign, class: 'form-control' %>
+      </div>
+      <div class="form-group " data-hook="short_name">
+        <%= f.label :short_name, Spree.t(:short_name) %>
+        <%= f.text_field :trip_short_name, class: 'form-control' %>
+      </div>
+
+      <div data-hook="admin_product_form_description">
+        <%= f.field_container :trip_description do %>
+          <%= f.label :trip_description, Spree.t(:trip_description) %>
+          <%= f.text_area :trip_description, { rows: "#{unless @route.has_variants? then '10' else '10' end}", class: "form-control #{"spree-rte" if product_wysiwyg_editor_enabled? }" } %>
+          <%= f.error_message_on :trip_description %>
+        <% end %>
+      </div>
+
+      <div data-hook="admin_product_form_variant_kind_option_types" >
+        <%= f.field_container :service_id do %>
+          <div id="serviceCalendar">
+            <div class="custom-control custom-switch mb-2">
+                <%= f.check_box :service_id, class: "custom-control-input", id: "service_id" %>
+                <%= f.label :service_id, Spree.t('transit.routes.trip.service_calendar'), class: "custom-control-label", for: "service_id" %>
+            </div>
+            <div id="seviceCalendarSelect">
+              <%= f.select(:service_calendar_id, options_for_select(Spree::OptionType.all.pluck(:name, :id), @selected_option_type_ids), { include_blank: false }, { class: "select2", multiple: true })%>
+            </div>
+          </div>
+          <div id="datePicker" style="display: none" >
+            <div class="input-group datePickerFrom"
+              data-wrap="true"
+              data-mode="range"
+              data-alt-format="<%= Spree.t(:fpr_human_friendly_date_format, scope: 'date_picker', default: 'M j, Y') %>"
+              >
+              <%= f.text_field :service_id,
+                                placeholder: Spree.t(:select_a_date),
+                                class: 'form-control ',
+                                'data-input':'' %>
+
+              <%= render partial: 'spree/admin/shared/cal_close' %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <div class="row">
+      <% @route.variant_kind_option_types.each do |option_type| %>
+        <div class="col-5">
+          <div class="form-group" data-hook="presentation">
+            <%= label :new_variant, option_type.presentation %>
+            <% if option_type.name == 'color' %>
+              <%= f.collection_select 'option_value_ids', option_type.option_values, :id, :name,
+                { include_blank: true }, { name: 'variant[option_value_ids][]', class: 'select2-clear', id: "option_value_ids-#{option_type.id}" } %>
+            <% else %>
+              <%= f.collection_select 'option_value_ids', option_type.option_values, :id, :name,
+                { include_blank: true }, { name: 'variant[option_value_ids][]', class: 'select2-clear', id: "option_value_ids-#{option_type.id}"  } %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+      <div class="col-2">
+        <div class="form-group allow-booking" data-hook="from">
+          <%= f.label :allow_booking, "Booking", class: "font-weight-normal" %>
+          <div class="custom-control custom-switch">
+            <%= f.check_box :instant_book, class: "custom-control-input", id: "allo w_booking" %>
+            <label class="custom-control-label" for="allow_booking"></label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div data-hook="transit_varaint_option_types_field" class="col-lg-6 col-sm-12">
+
+    <div class="custom-control custom-switch mb-2">
+      <%= f.check_box :must_select_intermediate_stop_seat, class: "custom-control-input", id: "must_select_intermediate_stop_seat" %>
+      <%= f.label :must_select_intermediate_stop_seat, Spree.t('transit.routes.trip.stop_seat'), class: "custom-control-label", for: "must_select_intermediate_stop_seat" %>
+    </div>
+
+    <div class="custom-control custom-switch mb-2">
+      <%= f.check_box :auto_assigned_seat, class: "custom-control-input", id: "auto_assigned_seat" %>
+      <%= f.label :auto_assigned_seat, Spree.t('transit.routes.trip.auto_assigned_seat'), class: "custom-control-label", for: "auto_assigned_seat" %>
+    </div>
+
+    <div class="custom-control custom-switch mb-2">
+      <%= f.check_box :auto_sent_ticket, class: "custom-control-input", id: "auto_sent_ticket" %>
+      <%= f.label :auto_sent_ticket, Spree.t('transit.routes.trip.auto_sent_ticket'), class: "custom-control-label", for: "auto_sent_ticket" %>
+    </div>
+
+    <div class="custom-control custom-switch mb-2">
+      <%= f.check_box :status, class: "custom-control-input", id: "published" %>
+      <%= f.label :status, Spree.t('transit.routes.trip.published'), class: "custom-control-label", for: "published" %>
+    </div>
+  </div>
+</div>
+
+<%= f.fields_for :stop_times, @stop_times do |p| %>
+  <div class="row border-bottom mb-4">
+    <div class="col-lg-6 col-sm-12">
+      <div class="row">
+        <div class="col">
+          <div id="departure_field" class="form-group">
+              <%= p.label :departure_time, raw(Spree.t(:departure_time) + required_span_tag) %>
+              <div class="input-group datePickerFrom"
+                  data-wrap="true"
+                  data-enable-time="true"
+                  data-no-calendar="true"
+                  data-alt-format="H:i"
+                  data-date-format="U">
+                  <%= p.text_field :departure_time,
+                                    dateFormat: "H:i",
+                                    class: 'form-control form-control-sm',
+                                    placeholder: "HH:mm",
+                                    required: true,
+                                    'data-input':'' %>
+                <%= render partial: 'spree/admin/shared/cal_close' %>
+              </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="form-group " data-hook="duration_hour">
+            <%= p.label :duration, raw(Spree.t(:duration_hour) + required_span_tag) %>
+            <%= p.text_field :duration, type: "number", min: 1,class: 'form-control form-control-sm', required: true %>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group " data-hook="vechicle_type">
+            <%= p.label :vechicle_type, raw(Spree.t(:vechicle_type) + required_span_tag) %>
+            <%= p.text_field :vehicle_type_id, class: 'form-control form-control-sm',  required: true %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4 col-sm-6">
+      <div class="form-group " data-hook="signature">
+        <%= p.label :signature, Spree.t(:signature) %>
+        <%= p.text_field :signature, class: 'form-control form-control-sm'%>
+      </div>
+    </div>
+
+    <div class="col-lg-2 col-sm-6">
+      <div class="custom-control custom-switch mb-2">
+        <%= p.check_box :is_transfer, class: "custom-control-input", id: "transfer" %>
+        <%= p.label :transfer, Spree.t('transit.routes.trip.transfer'), class: "custom-control-label", for: "transfer" %>
+      </div>
+      <div class="custom-control custom-switch mb-2">
+        <%= p.check_box :disallow_pickup, class: "custom-control-input", id: "disallow_pickup" %>
+        <%= p.label :disallow_pickup, Spree.t('transit.routes.trip.disallow_pickup'), class: "custom-control-label", for: "disallow_pickup" %>
+      </div>
+      <div class="custom-control custom-switch mb-2">
+        <%= p.check_box :is_gender_sensitivity, class: "custom-control-input", id: "show_gender" %>
+        <%= p.label :show_gender, Spree.t('transit.routes.trip.show_gender'), class: "custom-control-label", for: "show_gender" %>
+      </div>
+      <div class="custom-control custom-switch mb-2">
+        <%= p.check_box :skip_must_select_intermediate_stop_seat, class: "custom-control-input", id: "skip_must_select_intermediate_stop_seat" %>
+        <%= p.label :skip_must_select_intermediate_stop_seat, Spree.t('transit.routes.trip.skip_select_seat'), class: "custom-control-label", for: "skip_must_select_intermediate_stop_seat" %>
+      </div>
+    </div>
+  </div>
+<% end %>
+

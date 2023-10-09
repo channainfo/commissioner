@@ -17,7 +17,7 @@ module Spree
                              .page(params[:page])
                              .per(params[:per_page] || Spree::Backend::Config[:variants_per_page])
       end
-z 
+
       private
 
       def load_data
