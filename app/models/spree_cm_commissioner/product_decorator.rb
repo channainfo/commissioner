@@ -33,12 +33,13 @@ module SpreeCmCommissioner
       base.scope :subscribable, -> { where(subscribable: 1) }
 
       base.validate :validate_event_taxons, if: -> { taxons.event.present? }
+
+      base.whitelisted_ransackable_attributes = %w[description name slug discontinue_on status vendor_id]
     end
 
     def validate_event_taxons
       errors.add(:taxons, 'Event Taxon can\'t not be more than 1') if taxons.event.size > 1
       errors.add(:taxons, 'Must add event date to taxon') if taxons.event.first.from_date.nil? || taxons.event.first.to_date.nil?
-      base.whitelisted_ransackable_attributes = %w[description name slug discontinue_on status vendor_id]
     end
   end
 end
