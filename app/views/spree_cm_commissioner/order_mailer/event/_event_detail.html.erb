@@ -13,7 +13,7 @@
           </div>
         </div>
         <div class="flex two-columns-item_detail">
-          <div class="two-columns_icon"><i class="fa-solid fa-location-dot"></i></div>
+          <div class="two-columns_icon"><%= image_tag "mailer/map-marker.png", class: "mail-icon"%></div>
           <div class="two-columns_text-container">
             <p class="two-columns_title">Location</p>
             <p class="two-columns_description">
@@ -24,19 +24,17 @@
           </div>
         </div>
       </div>
-      <div class="vertical-separater">
-        <%= inline_svg_tag "cm-striaght-line-icon.svg" %>
-      </div>
+      <div class="vertical-separater"></div>
       <div class="two-columns-item">
         <div class="flex two-columns-item_detail">
-          <div class="two-columns_icon"><i class="fa-solid fa-calendar"></i></div>
+          <div class="two-columns_icon"><%= image_tag "mailer/calendar.png", class: "mail-icon"%></div>
           <div class="two-columns_text-container">
             <p class="two-columns_title">Event Start</p>
             <p class="two-columns_description"><%= product.available_on&.strftime("%d %B, %Y") %></p>
           </div>
         </div>
         <div class="flex two-columns-item_detail">
-          <div class="two-columns_icon"><i class="fa-solid fa-phone"></i></div>
+          <div class="two-columns_icon"><%= image_tag "mailer/phone.png", class: "mail-icon"%></div>
           <div class="two-columns_text-container">
             <p class="two-columns_title">Contact</p>
             <p class="two-columns_description"><%= vendor.contact_us %></p>

@@ -1,15 +1,14 @@
 <div class="content-cell flex" id="greeting-card">
   <div>
-    <%= inline_svg_tag "cm-bookme-plus-icon.svg", size: "24px*24px", class: "icon-bookme-plus" %>
+    <%= image_tag "mailer/bookme-plus.png", class: "icon-bookme-plus"%>
     <div class="hello"><%= I18n.t('mail.order_mailer.hello', full_name: user_full_name(order))%></div>
     <div class="description">
-      <%= I18n.t('mail.order_mailer.booking_event', event_name: order.products.first.name) %>
+      <%= I18n.t('mail.order_mailer.booking_event', event_name: order.products.first&.name || 'NA') %>
     </div>
   </div>
-  <div class="qr-container">
-    <div class='qr-code'>
-      <%= raw order.generate_svg_qr %>
-    </div>
-    <p>Show your QR to enter</p>
-  </div>
+  <%# TODO we need to render qr image  %>
+  <%# <div class="qr-container"> %>
+    <%# <%= image_tag order.generate_base64_qr, class: 'qr-code' %>
+    <%# <p>Show your QR to enter</p> %>
+  <%# </div> %>
 </div>
