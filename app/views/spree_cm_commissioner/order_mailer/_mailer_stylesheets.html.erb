@@ -1,0 +1,236 @@
+<style type="text/css" rel="stylesheet" media="all">
+  /* Custom Mailer ------------------------------ */
+
+  #confirm-email {
+    font-family: "Poppins", "Nunito Sans", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+  }
+  #confirm-email p {
+    margin: 0;
+  }
+  #confirm-email h2 {
+    margin-bottom: 24px;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 28px;
+  }
+  #confirm-email hr {
+    height: 1.5px;
+    background-color: #dddfe2;
+    border: none;
+    margin: 24px 0;
+  }
+  #confirm-email .email-body_inner {
+    background: transparent;
+    padding-top: 40px;
+  }
+  #confirm-email .content-cell {
+    background: white;
+    padding: 24px;
+    margin-bottom: 24px;
+    border-radius: 25px;
+    border: 1px solid #dddfe2;
+  }
+  #confirm-email .flex {
+    display: flex;
+  }
+  #confirm-email .mtb-24 {
+    margin: 24px 0;
+  }
+  #confirm-email .mb-24 {
+    margin-bottom: 24px;
+  }
+  #confirm-email .mb-16 {
+    margin-bottom: 16px;
+  }
+  #confirm-email .f-14 {
+    font-size: 14px;
+  }
+  #confirm-email .view-map {
+    text-decoration: none;
+    color: #6444D8
+  }
+  #confirm-email #greeting-card {
+    color: #fff;
+    margin-top: 40px;
+    background: url(<%= image_path("event-mailer-bg.png") %>),
+                linear-gradient(45deg, #653ed7, rgba(0, 0, 255, 0) 70.71%),
+                linear-gradient(225deg, #653ed7, rgba(0, 0, 255, 0) 70.71%),
+                linear-gradient(330deg, #35ace0, rgba(0, 0, 255, 0) 70.71%),
+                linear-gradient(150deg, #35ace0, rgba(0, 0, 255, 0) 70.71%);
+  }
+  #confirm-email #greeting-card p,
+  #confirm-email #greeting-card .hello,
+  #confirm-email #greeting-card .description {
+    color: #fff;
+  }
+  #confirm-email .align-right {
+    vertical-align: top;
+  }
+  #confirm-email .icon-bookme-plus {
+    width: 212px;
+    margin-bottom: 56px;
+    margin-top: 20px;
+  }
+  #confirm-email #greeting-card .hello {
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 28px;
+    margin-bottom: 12px;
+  }
+  #confirm-email .qr-container {
+    padding: 20px 20px 0;
+    text-align: center;
+  }
+  #confirm-email .qr-container .qr-code {
+    width: 200px;
+    border-radius: 26px;
+    background-color: #fff;
+    margin-bottom: 12px;
+  }
+  #confirm-email .purchase_image {
+    padding: 0 10px 0 0;
+  }
+  #confirm-email .purchase_item_price {
+    margin-bottom: 8px;
+  }
+  #confirm-email .purchase-summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  #confirm-email .purchase-summary-item .purchase_total {
+    font-weight: normal;
+  }
+  #confirm-email .purchase-summary_sub_total {
+    margin-bottom: 14px;
+  }
+  #confirm-email .vertical-separater {
+    margin: 0 18px;
+    width: 2px;
+    height: auto;
+    background: #F2F2F2;
+  }
+  #confirm-email .two-columns .two-columns-item {
+    width: 45%;
+  }
+  #confirm-email .two-columns .two-columns-item_left {
+    width: 43%;
+  }
+  #confirm-email .two-columns  .two-columns-item_detail {
+    margin-bottom: 16px;
+  }
+  #confirm-email .two-columns_icon {
+    min-width: 48px;
+    height: 48px;
+    background: #f1f1f1;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #confirm-email .two-columns_icon i {
+    color: #6444D8;
+    font-size: 24px;
+  }
+  #confirm-email .two-columns_text-container {
+    margin-left: 14px;
+  }
+  #confirm-email .two-columns_title {
+    color: #49454F;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0.1px;
+  }
+  #confirm-email .two-columns_description {
+    color: #000;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0.1px;
+  }
+  #confirm-email .email-footer {
+    padding: 24px;
+  }
+  #confirm-email .email-footer .email-footer_inner {
+    color: #49454F;
+    text-align: center;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0.1px;
+  }
+  #confirm-email .email-footer .email-footer_inner h2 {
+    text-align: center;
+  }
+  #confirm-email .email-footer  .social_icons {
+    display: inline-block;
+    text-align: center;
+  }
+  #confirm-email .email-footer .social_icon {
+    background: #fff;
+    border-radius: 50%;
+    display: inline-block;
+    padding: 12px;
+  }
+  #confirm-email .email-footer  .social_icon  i {
+    color: #939393;
+    font-size: 22px;
+  }
+  #confirm-email .email-footer  .email-footer_links a {
+    color: #6444D8;
+    text-decoration: none;
+  }
+  #confirm-email .notice-info .description {
+    padding-left: 12px;
+  }
+  #confirm-email .notice-info  a {
+    color: #6444D8;
+    text-decoration: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    #confirm-email .content-cell {
+      background-color: #333333;
+    }
+  }
+
+  .mail-icon {
+    background: url(<%= image_path("mail-icons.png") %>) no-repeat top left;
+    width: 24px;
+    height: 24px;
+    display: block;
+  }
+  .mail-icon.twitter {
+    background-position: 0 -1px;
+  }
+  .mail-icon.facebook {
+    background-position: 0 -26px;
+  }
+  .mail-icon.instagram {
+    background-position: 0 -53px;
+  }
+  .mail-icon.bed {
+    background-position: 0 -78px;
+  }
+  .mail-icon.user {
+    background-position: 0 -104px;
+  }
+  .mail-icon.phone {
+    background-position: 0 -130px;
+  }
+  .mail-icon.map-marker {
+    background-position: 0 -156px;
+  }
+  .mail-icon.envelope {
+    background-position: 0 -182px;
+  }
+  .mail-icon.calendar {
+    background-position: 0 -208px;
+  }
+</style>

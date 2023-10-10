@@ -5,7 +5,7 @@ module Spree
       return false if @order.email.blank?
 
       current_store = @order.store
-      @product_type = @order.products.first.product_type || 'accommodation'
+      @product_type = @order.products.first&.product_type || 'accommodation'
 
       subject = (resend ? "[#{Spree.t(:resend).upcase}] " : '')
       subject += "#{current_store&.name} Booking Confirmation ##{@order.number}"

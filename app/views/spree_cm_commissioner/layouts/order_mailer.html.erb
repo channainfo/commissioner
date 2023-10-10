@@ -4,8 +4,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="x-apple-disable-message-reformatting"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <%= render partial: 'spree/shared/base_mailer_stylesheets' %>
-    <%= stylesheet_link_tag "spree_cm_commissioner/mailer/base.css", media: 'all' %>
+    <%= render partial: 'spree_cm_commissioner/order_mailer/mailer_stylesheets' %>
   </head>
   <body>
     <%= yield%>

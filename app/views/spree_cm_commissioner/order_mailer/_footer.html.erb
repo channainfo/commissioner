@@ -2,29 +2,34 @@
   <div class="mb-24"><%= store.description%></div>
   <div class="mb-24 f-14"><%= store.address%></div>
   <h2 class="mb-24">Connect with us</h2>
-  <div class="mb-24 social_icons">
-    <% if store.facebook?%>
-      <div class="social_icon">
-        <%= link_to store.facebook, target: :_blank do %>
-          <i class="fa-brands fa-facebook-f"></i>
-        <% end %>
-      </div>
-    <% end %>
-    <% if store.instagram?%>
-      <div class="social_icon">
-        <%= link_to store.instagram, target: :_blank do %>
-          <i class="fa-brands fa-instagram"></i>
-        <% end %>
-      </div>
-    <% end %>
-    <% if store.twitter?%>
-      <div class="social_icon">
-        <%= link_to store.twitter, target: :_blank do %>
-          <i class="fa-brands fa-twitter"></i>
-        <% end %>
-      </div>
-    <% end %>
-  </div>
+  <table class="mb-24 social_icons">
+  <tbody>
+    <tr>
+      <% if store.facebook? %>
+        <td class="social_icon">
+          <%= link_to store.facebook, target: :_blank do %>
+            <i class="mail-icon facebook"></i>
+          <% end %>
+        </td>
+      <% end %>
+      <% if store.instagram?%>
+        <td class="social_icon">
+          <%= link_to store.instagram, target: :_blank do %>
+            <i class="mail-icon instagram"></i>
+          <% end %>
+        </td>
+      <% end %>
+      <% if store.twitter?%>
+        <td class="social_icon">
+          <%= link_to store.twitter, target: :_blank do %>
+            <i class="mail-icon twitter"></i>
+          <% end %>
+        </td>
+      <% end %>
+    </tr>
+  </tbody>
+</table>
+
   <div class="email-footer_links">
     <% policy_page = store.cms_pages.find_by(slug: 'privacy-policy')%>
     <% terms_page = store.cms_pages.find_by(slug: 'terms-of-use')%>

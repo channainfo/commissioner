@@ -4,26 +4,24 @@
     <div class="flex two-columns">
       <div class="two-columns-item">
         <div class="flex two-columns-item_detail">
-          <div class="two-columns_icon"><i class="fa-solid fa-user"></i></div>
+          <div class="two-columns_icon"><i class="mail-icon user"></i></div>
           <div class="two-columns_text-container">
             <p class="two-columns_title">Name</p>
             <p class="two-columns_description"><%= user_full_name(order) %></p>
           </div>
         </div>
         <div class="flex two-columns-item_detail">
-          <div class="two-columns_icon"><i class="fa-solid fa-envelope"></i></div>
+          <div class="two-columns_icon"><i class="mail-icon envelope"></i></div>
           <div class="two-columns_text-container">
             <p class="two-columns_title">Email</p>
             <p class="two-columns_description"><%= order.email %></p>
           </div>
         </div>
       </div>
-      <div class="vertical-separater">
-        <%= inline_svg_tag "cm-striaght-line-icon.svg" %>
-      </div>
+      <div class="vertical-separater"></div>
       <div class="two-columns-item">
         <div class="flex two-columns-item_detail">
-          <div class="two-columns_icon"><i class="fa-solid fa-phone"></i></div>
+          <div class="two-columns_icon"><i class="mail-icon phone"></i></div>
           <div class="two-columns_text-container">
             <p class="two-columns_title">Contact</p>
             <p class="two-columns_description"><%= order.phone_number || order.intel_phone_number || 'N/A' %></p>
