@@ -10,6 +10,26 @@
     <%= render partial: 'spree_cm_commissioner/order_mailer/mailer_stylesheets' %>
   </head>
   <body>
-    <%= yield%>
+    <table class="email-wrapper" width="100%" cellpadding="0" cellspacing="0" role="presentation" id="confirm-email">
+      <tr>
+        <td align="center">
+          <table class="email-content" width="100%" cellpadding="0" cellspacing="0" role="presentation">
+            <!-- Email Body -->
+            <%= yield%>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td height="60px">
+          <table class="email-footer" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
+            <tr>
+              <td>
+                  <%= render 'spree_cm_commissioner/order_mailer/footer', store: @order.store%>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
   </body>
 </html>
