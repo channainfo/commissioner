@@ -13,7 +13,15 @@ module Spree
         @config[:trending_category_taxon_ids] = params[:trending_category_taxon_ids]
         @config[:featured_vendor_ids] = params[:featured_vendor_ids]
 
+        clear_cache
+
         redirect_to spree.edit_admin_homepage_feed_path
+      end
+
+      def clear_cache
+        SpreeCmCommissioner::HomepageDataLoader.clear_cache
+
+        @config[:cleared_cache_at] = Time.current.strftime('%H:%M:%S, %d %B %Y')
       end
 
       def model_class
