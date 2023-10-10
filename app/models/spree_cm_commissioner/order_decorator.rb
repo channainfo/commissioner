@@ -82,19 +82,19 @@ module SpreeCmCommissioner
       )
     end
 
-    def generate_png_qr
+    def generate_png_qr(size = 120)
       qrcode = RQRCode::QRCode.new("#{store.url}/orders/#{number}")
       qrcode.as_png(
         bit_depth: 1,
-        border_modules: 4,
+        border_modules: 1,
         color_mode: ChunkyPNG::COLOR_GRAYSCALE,
         color: 'black',
         file: nil,
         fill: 'white',
-        module_px_size: 6,
+        module_px_size: 4,
         resize_exactly_to: false,
         resize_gte_to: false,
-        size: 120
+        size: size
       )
     end
 

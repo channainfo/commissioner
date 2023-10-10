@@ -197,4 +197,6 @@ Spree::Core::Engine.add_routes do
       resources :vendors, only: %i[index show]
     end
   end
+
+  get 'qr_images/:id', to: 'qr_images#show', as: 'qr_image'
 end
