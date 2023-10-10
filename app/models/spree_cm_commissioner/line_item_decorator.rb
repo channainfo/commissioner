@@ -3,16 +3,15 @@ module SpreeCmCommissioner
     def self.prepended(base)
       base.include SpreeCmCommissioner::LineItemDurationable
       base.include SpreeCmCommissioner::LineItemsFilterScope
-      base.delegate :need_confirmation, :product_type, to: :product
+      base.include SpreeCmCommissioner::ProductDelegation
 
-      base.belongs_to :accepted_by, class_name: 'Spree::User', optional: true
-      base.belongs_to :rejected_by, class_name: 'Spree::User', optional: true
+      base.belongs_to :accepter, class_name: 'Spree::User', optional: true
+      base.belongs_to :rejecter, class_name: 'Spree::User', optional: true
 
       base.has_many :taxons, class_name: 'Spree::Taxon', through: :product
 
       base.before_save :update_vendor_id
 
-      base.delegate :product_type, :accommodation?, :service?, :ecommerce?, to: :product
       base.before_create :add_due_date, if: :subscription?
 
       base.whitelisted_ransackable_attributes |= %w[to_date from_date]
@@ -36,6 +35,24 @@ module SpreeCmCommissioner
       else
         base_price
       end
+    end
+
+    def accepted_by(user)
+      return if accepted_at.present? && accepter_id.present?
+
+      update(
+        accepted_at: Time.current,
+        accepter: user
+      )
+    end
+
+    def rejected_by(user)
+      return if rejected_at.present? && rejecter_id.present?
+
+      update(
+        rejected_at: Time.current,
+        rejecter: user
+      )
     end
 
     private

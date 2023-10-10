@@ -16,10 +16,7 @@ module SpreeCmCommissioner
 
     def update_line_item_rejected_at_and_rejected_by
       order.line_items.each do |line_item|
-        line_item.update(
-          rejected_at: Time.current,
-          rejected_by: authorized_user
-        )
+        line_item.rejected_by(authorized_user)
       end
     end
   end

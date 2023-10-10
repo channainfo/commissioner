@@ -3,6 +3,7 @@ module SpreeCmCommissioner
     module AvailabilityValidatorDecorator
       # override
       def validate(line_item)
+        return if line_item.need_confirmation?
         return validate_reservation(line_item) if line_item.reservation?
 
         super

@@ -12,8 +12,6 @@ module SpreeCmCommissioner
                                                .order(created_at: :desc)
                                            }
 
-      base.after_commit :send_order_complete_notification, if: :order_completed?
-
       base.before_create :link_by_phone_number
       base.before_create :associate_customer
 
@@ -133,10 +131,6 @@ module SpreeCmCommissioner
 
       self.bill_address ||= customer.bill_address.try(:clone)
       self.ship_address ||= customer.ship_address.try(:clone)
-    end
-
-    def send_order_complete_notification
-      SpreeCmCommissioner::OrderCompleteNotificationSender.call(order: self)
     end
   end
 end
