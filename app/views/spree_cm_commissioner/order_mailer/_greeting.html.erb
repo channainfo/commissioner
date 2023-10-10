@@ -1,6 +1,6 @@
 <div class="content-cell flex" id="greeting-card">
   <div>
-    <%= image_tag "cm-bookme-plus.png", class: "icon-bookme-plus"%>
+    <%= image_tag "mailer/bookme-plus.png", class: "icon-bookme-plus"%>
     <div class="hello"><%= I18n.t('mail.order_mailer.hello', full_name: user_full_name(order))%></div>
     <div class="description">
       <%= I18n.t('mail.order_mailer.booking_event', event_name: order.products.first&.name || 'NA') %>

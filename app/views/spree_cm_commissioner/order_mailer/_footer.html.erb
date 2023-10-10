@@ -8,21 +8,21 @@
       <% if store.facebook? %>
         <td class="social_icon">
           <%= link_to store.facebook, target: :_blank do %>
-            <i class="mail-icon facebook"></i>
+            <%= image_tag "mailer/facebook.png", class: "mail-icon"%>
           <% end %>
         </td>
       <% end %>
       <% if store.instagram?%>
         <td class="social_icon">
           <%= link_to store.instagram, target: :_blank do %>
-            <i class="mail-icon instagram"></i>
+            <%= image_tag "mailer/instagram.png", class: "mail-icon"%>
           <% end %>
         </td>
       <% end %>
       <% if store.twitter?%>
         <td class="social_icon">
           <%= link_to store.twitter, target: :_blank do %>
-            <i class="mail-icon twitter"></i>
+            <%= image_tag "mailer/twitter.png", class: "mail-icon"%>
           <% end %>
         </td>
       <% end %>

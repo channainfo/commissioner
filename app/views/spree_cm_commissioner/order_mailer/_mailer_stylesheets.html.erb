@@ -53,7 +53,7 @@
   #confirm-email #greeting-card {
     color: #fff;
     margin-top: 40px;
-    background: url(<%= image_path("event-mailer-bg.png") %>),
+    background: url(<%= image_path("mailer/event-mailer-bg.png") %>),
                 linear-gradient(45deg, #653ed7, rgba(0, 0, 255, 0) 70.71%),
                 linear-gradient(225deg, #653ed7, rgba(0, 0, 255, 0) 70.71%),
                 linear-gradient(330deg, #35ace0, rgba(0, 0, 255, 0) 70.71%),
@@ -96,15 +96,20 @@
     margin-bottom: 8px;
   }
   #confirm-email .purchase-summary-item {
-    display: flex;
-    justify-content: space-between;
     margin-top: 10px;
   }
-  #confirm-email .purchase-summary-item .purchase_total {
+  #confirm-email .purchase_total {
     font-weight: normal;
+    text-align: right;
   }
   #confirm-email .purchase-summary_sub_total {
     margin-bottom: 14px;
+  }
+  #confirm-email .purchase_footer {
+    border-top: none;
+  }
+  #confirm-email .purchase_total--label {
+    text-align: left;
   }
   #confirm-email .vertical-separater {
     margin: 0 18px;
@@ -127,12 +132,6 @@
     background: #f1f1f1;
     border-radius: 50%;
     display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  #confirm-email .two-columns_icon i {
-    color: #6444D8;
-    font-size: 24px;
   }
   #confirm-email .two-columns_text-container {
     margin-left: 14px;
@@ -201,36 +200,8 @@
   }
 
   .mail-icon {
-    background: url(<%= image_path("mail-icons.png") %>) no-repeat top left;
     width: 24px;
     height: 24px;
-    display: block;
-  }
-  .mail-icon.twitter {
-    background-position: 0 -1px;
-  }
-  .mail-icon.facebook {
-    background-position: 0 -26px;
-  }
-  .mail-icon.instagram {
-    background-position: 0 -53px;
-  }
-  .mail-icon.bed {
-    background-position: 0 -78px;
-  }
-  .mail-icon.user {
-    background-position: 0 -104px;
-  }
-  .mail-icon.phone {
-    background-position: 0 -130px;
-  }
-  .mail-icon.map-marker {
-    background-position: 0 -156px;
-  }
-  .mail-icon.envelope {
-    background-position: 0 -182px;
-  }
-  .mail-icon.calendar {
-    background-position: 0 -208px;
+    margin: auto;
   }
 </style>
