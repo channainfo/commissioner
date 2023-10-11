@@ -6,7 +6,7 @@
     </div>
     <div>
       <% line_item_group = line_items.group_by(&:vendor_id) %>
-      <% line_item_group.each_with_index do |(vendor_id, line_items), index| %>
+      <% line_item_group.each_with_index do |(vendor_id, items), index| %>
         <% vendor = vendor(vendor_id)%>
         <div class="flex mb-16">
           <div class="two-columns_icon"><%= image_tag "mailer/bed.png", class: "mail-icon"%></div>
@@ -15,7 +15,7 @@
             <p class="two-columns_description"><%= vendor.name %></p>
           </div>
         </div>
-        <% line_items.each do |line_item| %>
+        <% items.each do |line_item| %>
           <div class="flex mb-16">
             <div class="two-columns_icon"><%= image_tag "mailer/calendar.png", class: "mail-icon"%></div>
             <div class="two-columns_text-container">

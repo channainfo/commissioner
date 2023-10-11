@@ -47,6 +47,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'telegram-bot'
   s.add_dependency 'exception_notification'
   s.add_dependency "rqrcode", "~> 2.0"
+  s.add_dependency "premailer-rails"
 
   s.add_development_dependency 'pg'
   s.add_development_dependency 'spree_dev_tools'

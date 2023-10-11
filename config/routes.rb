@@ -198,3 +198,7 @@ Spree::Core::Engine.add_routes do
     end
   end
 end
+
+Rails.application.routes.draw do
+  get 'i/:id', to: 'spree_cm_commissioner/qr_images#show', as: 'qr_image'
+end
