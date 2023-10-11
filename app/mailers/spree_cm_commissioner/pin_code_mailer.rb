@@ -5,7 +5,7 @@ module SpreeCmCommissioner
 
       return unless @pin_code.email?
 
-      subject = "#{ENV.fetch('APP_NAME', nil)} #{action.titlecase}"
+      subject = "#{Spree::Store.default.name} #{action.titlecase}"
 
       mail(from: from_address, to: @pin_code.contact, subject: subject)
     end
