@@ -118,4 +118,102 @@ RSpec.describe Spree::Order, type: :model do
       end
     end
   end
+
+  describe "#payment_required?" do
+    let(:order) { build(:order) }
+
+    it "not required payment when need_confirmation?" do
+      allow(order).to receive(:need_confirmation?).and_return(true)
+
+      expect(order.payment_required?).to be false
+    end
+  end
+
+  describe "#confirmation_delivered?" do
+    let(:order) { build(:order) }
+
+    it "return true if confirmation_delivered column is true" do
+      allow(order).to receive(:confirmation_delivered).and_return(true)
+
+      expect(order.confirmation_delivered?).to be true
+    end
+
+    it "return true if order.need_confirmation? is true" do
+      allow(order).to receive(:need_confirmation?).and_return(true)
+
+      expect(order.confirmation_delivered?).to be true
+    end
+
+    it "return false neither order.need_confirmation? or confirmation_delivered true" do
+      allow(order).to receive(:need_confirmation?).and_return(false)
+      allow(order).to receive(:confirmation_delivered).and_return(false)
+
+      expect(order.confirmation_delivered?).to be false
+    end
+  end
+
+  context 'when transition to state :complete' do
+    let(:order) { create(:order_with_line_items, state: :address) }
+
+    # make sure order can transition from cart to complete
+    before do
+      allow(order).to receive(:delivery_required?).and_return(false)
+      allow(order).to receive(:payment_required?).and_return(false)
+      allow(order).to receive(:confirmation_required?).and_return(false)
+    end
+
+    it "calls request! when order need_confirmation?" do
+      allow(order).to receive(:need_confirmation?).and_return(true)
+      allow(order).to receive(:request!).and_return(true)
+
+      order.next!
+
+      expect(order).to have_received(:request!)
+    end
+
+    it "notify user when order does not need_confirmation?" do
+      allow(order).to receive(:need_confirmation?).and_return(false)
+      allow(order).to receive(:notify_order_complete_app_notification_to_user).and_return(true)
+
+      order.next!
+
+      expect(order).to have_received(:notify_order_complete_app_notification_to_user)
+    end
+  end
+
+  context 'when transition to request_state :accepted' do
+    let!(:order) { create(:order, state: :address, request_state: :requested) }
+    let!(:line_item) { create(:cm_need_confirmation_line_item, order: order) }
+
+    it "calls deliver_order_confirmation_email if confirmation_delivered is false" do
+      allow(order).to receive(:confirmation_delivered).and_return(true)
+      allow(order).to receive(:deliver_order_confirmation_email).and_return(true)
+
+      order.accept!
+
+      expect(order).to have_received(:deliver_order_confirmation_email)
+    end
+
+    it "not call deliver_order_confirmation_email if confirmation_delivered is true" do
+      allow(order).to receive(:confirmation_delivered).and_return(false)
+      allow(order).to receive(:deliver_order_confirmation_email).and_return(true)
+
+      order.accept!
+
+      expect(order).not_to have_received(:deliver_order_confirmation_email)
+    end
+  end
+
+  describe '#state_changes' do
+    let!(:order) { create(:order, state: :address, request_state: :requested, state_changes: []) }
+
+    it 'create a state change on request_state transition' do
+      order.accept!
+
+      expect(order.reload.state_changes.size).to eq 1
+      expect(order.reload.state_changes.first.name).to eq "request"
+      expect(order.reload.state_changes.first.previous_state).to eq "requested"
+      expect(order.reload.state_changes.first.next_state).to eq "accepted"
+    end
+  end
 end

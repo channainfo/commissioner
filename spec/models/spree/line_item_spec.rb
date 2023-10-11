@@ -103,4 +103,62 @@ RSpec.describe Spree::LineItem, type: :model do
       expect(line_item2.reservation?).to be true
     end
   end
+
+  describe '#accepted_by' do
+    let(:user1) { create(:user) }
+    let(:user2) { create(:user) }
+
+    it "save accepter & date to database if both yet present" do
+      line_item = create(:line_item, accepted_at: nil, accepter: nil)
+      line_item.accepted_by(user1)
+
+      expect(line_item.accepted_at).to_not be_nil
+      expect(line_item.accepter_id).to eq user1.id
+    end
+
+    it "save new accepter & date to database if only accepted_at present" do
+      line_item = create(:line_item, accepted_at: '2024-03-11'.to_date, accepter: nil)
+      line_item.accepted_by(user1)
+
+      expect(line_item.accepted_at).to_not be_nil
+      expect(line_item.accepter_id).to eq user1.id
+    end
+
+    it "save new accepter & date to database if only accepter present" do
+      line_item = create(:line_item, accepted_at: nil, accepter: user1)
+      line_item.accepted_by(user2)
+
+      expect(line_item.accepted_at).to_not be_nil
+      expect(line_item.accepter_id).to eq(user2.id)
+    end
+  end
+
+  describe '#rejected_by' do
+    let(:user1) { create(:user) }
+    let(:user2) { create(:user) }
+
+    it "save rejecter & date to database if both yet present" do
+      line_item = create(:line_item, rejected_at: nil, rejecter: nil)
+      line_item.rejected_by(user1)
+
+      expect(line_item.rejected_at).to_not be_nil
+      expect(line_item.rejecter_id).to eq user1.id
+    end
+
+    it "save new rejecter & date to database if only rejected_at present" do
+      line_item = create(:line_item, rejected_at: '2024-03-11'.to_date, rejecter: nil)
+      line_item.rejected_by(user1)
+
+      expect(line_item.rejected_at).to_not be_nil
+      expect(line_item.rejecter_id).to eq user1.id
+    end
+
+    it "save new rejecter & date to database if only rejecter present" do
+      line_item = create(:line_item, rejected_at: nil, rejecter: user1)
+      line_item.rejected_by(user2)
+
+      expect(line_item.rejected_at).to_not be_nil
+      expect(line_item.rejecter_id).to eq(user2.id)
+    end
+  end
 end
