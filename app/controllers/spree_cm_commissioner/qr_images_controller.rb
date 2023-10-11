@@ -1,4 +1,4 @@
-class Spree::QrImagesController < ApplicationController
+class SpreeCmCommissioner::QrImagesController < ApplicationController
   def show
     order = Spree::Order.find_by!(token: params[:id])
 
