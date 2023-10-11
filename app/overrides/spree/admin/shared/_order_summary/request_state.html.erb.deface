@@ -1,0 +1,16 @@
+<!-- insert_before "erb[silent]:contains('if @order.shipment_state.present?')" -->
+
+<% if @order.request_state.present? %>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    <small><%= Spree.t(:request) %></small>
+    <% badge_class = nil %>
+
+    <% badge_class = 'badge-warning' if @order.requested? %>
+    <% badge_class = 'badge-danger' if @order.rejected? %>
+    <% badge_class = 'badge-success' if @order.accepted? %>
+
+    <span class="state badge badge-pill <%= badge_class %> badge-pill text-capitalize" id="request_status">
+      <%= @order.request_state %>
+    </span>
+  </li>
+<% end %>

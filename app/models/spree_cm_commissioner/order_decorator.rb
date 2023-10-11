@@ -39,6 +39,19 @@ module SpreeCmCommissioner
       line_items.select { |item| item.ecommerce? && !item.digital? }.size.positive?
     end
 
+    # overrided not to send email yet to user if order needs confirmation
+    # it will send after vendors accepted.
+    def confirmation_delivered?
+      confirmation_delivered || need_confirmation?
+    end
+
+    # overrided
+    def payment_required?
+      return false if need_confirmation?
+
+      super
+    end
+
     # assume check is default payment method for subscription
     def create_default_payment_if_eligble
       return unless subscription?

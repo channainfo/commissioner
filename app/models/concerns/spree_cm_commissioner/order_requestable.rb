@@ -4,18 +4,14 @@ module SpreeCmCommissioner
 
     included do
       state_machine.after_transition to: :complete do |order, _transition|
-        if order.need_confirmation?
-          order.request!
-        else
-          order.notify_order_complete_app_notification_to_user
-        end
+        order.notify_order_complete_app_notification_to_user
+        order.request! if order.need_confirmation?
       end
 
       state_machine :request_state, initial: nil, use_transactions: false do
         event :request do
           transition from: nil, to: :requested
         end
-        after_transition to: :requested, do: :send_order_request_telegram_confirmation_alert_to_vendor
         after_transition to: :requested, do: :send_order_requested_app_notification_to_user
         after_transition to: :requested, do: :send_order_requested_telegram_alert_store
 
@@ -44,29 +40,24 @@ module SpreeCmCommissioner
       end
     end
 
-    # overrided not to send email yet to user if order needs confirmation
-    # it will send after vendors accepted.
-    def confirmation_delivered?
-      confirmation_delivered || need_confirmation?
-    end
-
-    # overrided
-    def payment_required?
-      return false if need_confirmation?
-
-      super
-    end
-
-    # overrided
-    def approved_by(user)
+    # allow authorized user to accept all requested line items
+    def accepted_by(user)
       transaction do
-        super
+        accept!
 
-        # line items is considered accepted if admin approve whole order
         line_items.each do |line_item|
           line_item.accepted_by(user)
         end
       end
+    end
+
+    # can_accepted? already use by ransack/visitor.rb
+    def can_accept_all?
+      approved? && !accepted? && need_confirmation?
+    end
+
+    def can_alert_request_to_vendor?
+      !accepted? && approved? && need_confirmation?
     end
 
     def requested_state?

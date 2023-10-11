@@ -48,6 +48,7 @@ PATH
       jwt (>= 2.5.0)
       noticed (~> 1.6)
       phonelib
+      premailer-rails
       rails (~> 7.0.4)
       rqrcode (~> 2.0)
       searchkick (~> 5.1)
@@ -233,6 +234,8 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
+    css_parser (1.16.0)
+      addressable
     database_cleaner (2.0.2)
       database_cleaner-active_record (>= 2, < 3)
     database_cleaner-active_record (2.1.0)
@@ -417,6 +420,7 @@ GEM
       rails (>= 6.0.0)
       stimulus-rails
       turbo-rails
+    htmlentities (4.3.4)
     http (5.1.1)
       addressable (~> 2.8)
       http-cookie (~> 1.0)
@@ -532,6 +536,14 @@ GEM
     phonelib (0.8.4)
     polyglot (0.3.5)
     popper_js (1.16.1)
+    premailer (1.21.0)
+      addressable
+      css_parser (>= 1.12.0)
+      htmlentities (>= 4.0.0)
+    premailer-rails (1.12.0)
+      actionmailer (>= 3)
+      net-smtp
+      premailer (~> 1.7, >= 1.7.9)
     protocol-hpack (1.4.2)
     protocol-http (0.24.7)
     protocol-http1 (0.15.1)
