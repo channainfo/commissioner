@@ -32,7 +32,7 @@ module Spree
           end
 
           def resource_serializer
-            SpreeCmCommissioner::V2::Storefront::ProfileImageSerializer
+            Spree::V2::Storefront::UserProfileSerializer
           end
         end
       end
