@@ -88,6 +88,13 @@ Spree::Core::Engine.add_routes do
         end
       end
     end
+
+    resources :orders, except: [:show] do
+      member do
+        put :accept_all
+        put :alert_request_to_vendor
+      end
+    end
   end
 
   namespace :telegram do

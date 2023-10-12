@@ -129,6 +129,19 @@ RSpec.describe Spree::Order, type: :model do
     end
   end
 
+  describe "#accepted_by" do
+    let(:order) { create(:order_with_line_items, state: :complete, request_state: :requested) }
+    let(:user) { create(:user) }
+
+    it "transition request state to :accepted and accept all line item" do
+      order.accepted_by(user)
+      order.reload
+
+      expect(order.request_state).to eq "accepted"
+      expect(order.line_items.map(&:accepted?)).to eq [true]
+    end
+  end
+
   describe "#confirmation_delivered?" do
     let(:order) { build(:order) }
 
@@ -171,7 +184,16 @@ RSpec.describe Spree::Order, type: :model do
       expect(order).to have_received(:request!)
     end
 
-    it "notify user when order does not need_confirmation?" do
+    it "notify user when need confirmation" do
+      allow(order).to receive(:need_confirmation?).and_return(true)
+      allow(order).to receive(:notify_order_complete_app_notification_to_user).and_return(true)
+
+      order.next!
+
+      expect(order).to have_received(:notify_order_complete_app_notification_to_user)
+    end
+
+    it "notify user when not need confirmation" do
       allow(order).to receive(:need_confirmation?).and_return(false)
       allow(order).to receive(:notify_order_complete_app_notification_to_user).and_return(true)
 

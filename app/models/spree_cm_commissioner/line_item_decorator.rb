@@ -37,6 +37,14 @@ module SpreeCmCommissioner
       end
     end
 
+    def accepted?
+      accepted_at.present?
+    end
+
+    def rejected?
+      rejected_at.present?
+    end
+
     def accepted_by(user)
       return if accepted_at.present? && accepter_id.present?
 
