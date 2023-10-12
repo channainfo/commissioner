@@ -20,8 +20,7 @@ module SpreeCmCommissioner
                                            .bucket(ENV.fetch('AWS_BUCKET_NAME', nil))
                                            .presigned_post(
                                              key: "uploads/#{@id}/#{file_name}",
-                                             success_action_status: '201',
-                                             acl: 'public-read'
+                                             success_action_status: '201'
                                            )
       end
     end
