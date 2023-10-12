@@ -8,8 +8,9 @@ module Spree
       end
 
       def new
-        context = SpreeCmCommissioner::VendorNearbyPlaceBuilder.call(vendor: @vendor)
-        @nearby_places = context.nearby_places
+        @name = params[:name]
+        context = SpreeCmCommissioner::VendorNearbyPlaceBuilder.call(vendor: @vendor, name: @name)
+        @nearby_places = context.nearby_places.sort_by(&:distance)
       end
 
       def model_class
