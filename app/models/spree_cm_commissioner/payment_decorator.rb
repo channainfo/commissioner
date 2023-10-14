@@ -10,6 +10,10 @@ module SpreeCmCommissioner
       base.whitelisted_ransackable_attributes |= %w[payable_id]
     end
 
+    def can_void?
+      state.in? %i[pending processing completed checkout]
+    end
+
     # must set current_user_instance
     # before hand
     def set_payable
