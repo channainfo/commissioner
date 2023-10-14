@@ -1,6 +1,6 @@
 module SpreeCmCommissioner
   class VendorNearbyPlaceBuilder < BaseInteractor
-    delegate :vendor, to: :context
+    delegate :vendor, :name, to: :context
 
     def call
       context.nearby_places = []
@@ -44,7 +44,7 @@ module SpreeCmCommissioner
     end
 
     def fetch_nearby_places
-      url = URI("#{GOOGLE_MAP_API_URL}/place/nearbysearch/json?location=#{vendor.lat}%2C#{vendor.lon}&radius=5000&key=#{google_map_key}")
+      url = URI("#{GOOGLE_MAP_API_URL}/place/nearbysearch/json?location=#{vendor.lat}%2C#{vendor.lon}&radius=5000&key=#{google_map_key}&name=#{name}")
       https = Net::HTTP.new(url.host, url.port)
       https.use_ssl = true
 
