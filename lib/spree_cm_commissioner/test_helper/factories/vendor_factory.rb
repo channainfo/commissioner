@@ -2,6 +2,7 @@ FactoryBot.define do
   factory :cm_vendor, parent: :vendor do
     state { :active }
     default_state_id { Spree::State.first&.id }
+    primary_product_type { :ecommerce }
 
     transient do
       with_logo { false }
@@ -23,11 +24,10 @@ FactoryBot.define do
     factory :cm_vendor_with_product do
       transient do
         permanent_stock { 10 }
-        product_type { :accommodation }
       end
 
       after :create do |vendor, evaluator|
-        product = create(:product, vendor: vendor, product_type: evaluator.product_type)
+        product = create(:product, vendor: vendor, product_type: vendor.primary_product_type)
 
         variant = product.master
         variant.permanent_stock = evaluator.permanent_stock
