@@ -6,9 +6,10 @@ describe 'API V2 Storefront Accommodation Spec', type: :request do
 
   let(:phnom_penh) { create(:state, name: 'Phnom Penh') }
   let(:siem_reap)  { create(:state, name: 'Siem Reap') }
-  let!(:phnom_penh_hotel) { create(:cm_vendor_with_product, name: 'Phnom Penh Hotel',       default_state_id: phnom_penh.id, permanent_stock: 10) }
-  let!(:sokha_pp_hotel)   { create(:cm_vendor_with_product, name: 'Sokha Phnom Penh Hotel', default_state_id: phnom_penh.id, permanent_stock: 20) }
-  let!(:angkor_hotel)     { create(:cm_vendor_with_product, name: 'Angkor Hotel',           default_state_id: siem_reap.id,  permanent_stock: 15) }
+  let!(:phnom_penh_hotel) { create(:cm_vendor_with_product, name: 'Phnom Penh Hotel',       default_state_id: phnom_penh.id, permanent_stock: 10, primary_product_type: :accommodation) }
+  let!(:sokha_pp_hotel)   { create(:cm_vendor_with_product, name: 'Sokha Phnom Penh Hotel', default_state_id: phnom_penh.id, permanent_stock: 20, primary_product_type: :accommodation) }
+  let!(:angkor_hotel)     { create(:cm_vendor_with_product, name: 'Angkor Hotel',           default_state_id: siem_reap.id,  permanent_stock: 15, primary_product_type: :accommodation) }
+  let!(:run_with_sai)     { create(:cm_vendor_with_product, name: 'Run with Sai',           default_state_id: siem_reap.id,  permanent_stock: 20) }
   let(:params) {
     { from_date: next_month, to_date: next_month + 2.days, province_id: phnom_penh.id, adult: 2, children: 1, room_qty: 1 }
   }
@@ -188,7 +189,8 @@ describe 'API V2 Storefront Accommodation Spec', type: :request do
   end
 
   describe 'accommodation#show' do
-    let!(:vendor) { create(:cm_vendor_with_product, permanent_stock: 10, with_logo: true) }
+    let!(:vendor)       { create(:cm_vendor_with_product, permanent_stock: 10, with_logo: true, primary_product_type: :accommodation) }
+    let!(:run_with_sai) { create(:cm_vendor_with_product, name: 'Run with Sai',        default_state_id: siem_reap.id,  permanent_stock: 20) }
 
     context "when the vendor's is all available" do
       before { get "/api/v2/storefront/accommodations/#{vendor.slug}", params: { include: 'logo,variants', from_date: next_month, to_date: next_month + 1.days} }
@@ -204,6 +206,12 @@ describe 'API V2 Storefront Accommodation Spec', type: :request do
         expect(json_response['data']['attributes']['service_availabilities'].map {|a| a['date'] }).to eq [day_to_s(next_month), day_to_s(next_month+1.days)]
         expect(json_response['data']['attributes']['service_availabilities'].map {|a| a['available'] }).to eq [true, true]
       end
+    end
+
+    context "when the vendor primary product type is ecommerce" do
+      before { get "/api/v2/storefront/accommodations/#{run_with_sai.slug}", params: { include: 'logo,variants', from_date: next_month, to_date: next_month + 1.days} }
+
+      it_behaves_like 'returns 404 HTTP status'
     end
 
     context "when match with booking dates" do
