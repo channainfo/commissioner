@@ -6,6 +6,9 @@ module SpreeCmCommissioner
       state_machine.after_transition to: :complete do |order, _transition|
         order.notify_order_complete_app_notification_to_user
         order.request! if order.need_confirmation?
+
+        order.send_order_complete_telegram_alert_to_vendors unless order.need_confirmation?
+        order.send_order_complete_telegram_alert_to_store unless order.need_confirmation?
       end
 
       state_machine :request_state, initial: nil, use_transactions: false do
@@ -70,6 +73,15 @@ module SpreeCmCommissioner
 
     def send_order_request_telegram_confirmation_alert_to_vendor; end
 
+    def send_order_complete_telegram_alert_to_vendors
+      vendor_list.each do |vendor|
+        title = '🎫--- [NEW ORDER FROM BOOKME+] ---'
+        chat_id = vendor.preferred_telegram_chat_id
+        factory = OrderTelegramMessageFactory.new(title: title, order: self, vendor: vendor)
+        TelegramNotificationSenderJob.perform_later(chat_id: chat_id, message: factory.message, parse_mode: factory.parse_mode)
+      end
+    end
+
     def notify_order_complete_app_notification_to_user
       SpreeCmCommissioner::OrderCompleteNotificationSender.call(order: self)
     end
@@ -89,5 +101,12 @@ module SpreeCmCommissioner
     def send_order_requested_telegram_alert_store; end
     def send_order_accepted_telegram_alert_to_store; end
     def send_order_rejected_telegram_alert_to_store; end
+
+    def send_order_complete_telegram_alert_to_store
+      title = '🎫--- [NEW ORDER] ---'
+      chat_id = store.preferred_telegram_order_alert_chat_id
+      factory = OrderTelegramMessageFactory.new(title: title, order: self)
+      TelegramNotificationSenderJob.perform_later(chat_id: chat_id, message: factory.message, parse_mode: factory.parse_mode)
+    end
   end
 end
