@@ -93,6 +93,9 @@ Spree::Core::Engine.add_routes do
       member do
         put :accept_all
         put :alert_request_to_vendor
+
+        get :notifications
+        put :fire_notification
       end
     end
   end

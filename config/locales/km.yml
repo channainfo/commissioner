@@ -136,6 +136,8 @@ km:
     alert_request_to_vendor: 'Alert request to vendor'
     alerted_to_vendor: 'Alerted to vendor Telegram'
     accept_all: 'Accept all'
+    sent: 'Sent'
+    send_failed_or_method_not_support: 'Send failed or method not support'
     subscribe: 'ប្រើសេវាកម្ម'
     full_name: 'ឈ្មោះពេញ'
     address: 'អាសយដ្ឋាន'
@@ -153,6 +155,8 @@ km:
     new_customer: 'អតិថិជនថ្មី'
     listing_price: 'តម្លៃលក់'
     length: 'ប្រវែង'
+    preference: "Preference"
+    notification: "Notification"
     promotion_rule_types:
       fixed_date:
         name: 'ថ្ងៃជាក់លាក់'
