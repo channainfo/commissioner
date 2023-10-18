@@ -1,0 +1,18 @@
+<!-- insert_bottom "[data-hook='admin_store_form_fields']" -->
+
+<% if @store.persisted? %>
+<div class="card mb-4">
+  <div class="card-header">
+    <h5 class="card-title mb-0 h6">
+      <%= Spree.t(:preference).pluralize %>
+    </h5>
+  </div>
+  <div class="card-body">
+    <div id="preference-settings" data-hook class="form-group">
+      <% unless preference_fields(@store, f).empty? %>
+        <%= preference_fields(@store, f) %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<% end %>
