@@ -1,0 +1,28 @@
+<%= render 'spree/admin/shared/order_tabs', current: :notifications %>
+
+<div class="table-responsive border rounded bg-white">
+  <table class="table">
+    <thead class="text-muted">
+      <th><%= Spree.t(:notification).pluralize %></th>
+      <th class="d-flex justify-content-end"><%= Spree.t(:action).pluralize %></th>
+    </thead>
+    <tbody>
+      <% @notification_methods.each do |notification_method| %>
+        <tr>
+          <td><%= notification_method.humanize %></td>
+          <td class="methods">
+            <span class="d-flex justify-content-end">
+              <%= link_to_with_icon "send.svg",
+                notification_method.humanize,
+                fire_notification_admin_order_path(@order, notification_method: notification_method),
+                method: :put,
+                no_text: true,
+                data: { confirm: Spree.t(:order_sure_want_to, event: notification_method.humanize) },
+                class: "btn btn-light btn-sm" %>
+            </span>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
