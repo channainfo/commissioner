@@ -82,7 +82,7 @@ module SpreeCmCommissioner
     end
 
     def generate_svg_qr
-      qrcode = RQRCode::QRCode.new("#{store.url}/orders/#{number}")
+      qrcode = RQRCode::QRCode.new("#{store.url}/orders/#{number}-#{token}")
       qrcode.as_svg(
         color: '000',
         shape_rendering: 'crispEdges',
@@ -94,7 +94,7 @@ module SpreeCmCommissioner
     end
 
     def generate_png_qr(size = 120)
-      qrcode = RQRCode::QRCode.new("#{store.url}/orders/#{number}")
+      qrcode = RQRCode::QRCode.new("#{store.url}/orders/#{number}-#{token}")
       qrcode.as_png(
         bit_depth: 1,
         border_modules: 1,
