@@ -3,13 +3,13 @@ module SpreeCmCommissioner
     extend ActiveSupport::Concern
 
     included do
-      state_machine.after_transition to: :complete do |order, _transition|
-        order.notify_order_complete_app_notification_to_user
-        order.request! if order.need_confirmation?
+      # use after_update instead of after_transition
+      # since it has usecase that order state is forced to update which not fire after_transition
 
-        order.send_order_complete_telegram_alert_to_vendors unless order.need_confirmation?
-        order.send_order_complete_telegram_alert_to_store unless order.need_confirmation?
-      end
+      after_update :notify_order_complete_app_notification_to_user, if: -> { state_changed_to_complete? }
+      after_update :request!, if: -> { state_changed_to_complete? && need_confirmation? }
+      after_update :send_order_complete_telegram_alert_to_vendors, if: -> { state_changed_to_complete? && !need_confirmation? }
+      after_update :send_order_complete_telegram_alert_to_store, if: -> { state_changed_to_complete? && !need_confirmation? }
 
       state_machine :request_state, initial: nil, use_transactions: false do
         event :request do

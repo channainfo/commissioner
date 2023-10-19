@@ -165,7 +165,7 @@ RSpec.describe Spree::Order, type: :model do
     end
   end
 
-  context 'when transition to state :complete' do
+  context 'when update state to :complete' do
     let(:order) { create(:order_with_line_items, state: :address) }
 
     # make sure order can transition from cart to complete
@@ -200,6 +200,24 @@ RSpec.describe Spree::Order, type: :model do
       order.next!
 
       expect(order).to have_received(:notify_order_complete_app_notification_to_user)
+    end
+
+    it "trigger send_order_complete_telegram_alert_to_vendors when not need confirmation" do
+      allow(order).to receive(:need_confirmation?).and_return(false)
+      allow(order).to receive(:send_order_complete_telegram_alert_to_vendors).and_return(true)
+
+      order.next!
+
+      expect(order).to have_received(:send_order_complete_telegram_alert_to_vendors)
+    end
+
+    it "trigger send_order_complete_telegram_alert_to_store when not need confirmation" do
+      allow(order).to receive(:need_confirmation?).and_return(false)
+      allow(order).to receive(:send_order_complete_telegram_alert_to_store).and_return(true)
+
+      order.next!
+
+      expect(order).to have_received(:send_order_complete_telegram_alert_to_store)
     end
   end
 
