@@ -1,22 +1,25 @@
-# 🎫--- [NEW ORDER FROM BOOKME+] ---
-
+# 🎫 --- [NEW ORDER] ---
+#
 # Order Number:
-# R221881958
-
+# <code>R621016753</code>
+#
 # [ x1 ]
-# Product Name: Deluxe River View Bungalow
-# Options: Payment: pay-at-hotel, Adults: 2, and Kids: 2
-# Date: October 19, 2023 ---> October 21, 2023
+# <b>5km Running Ticket</b>
+# <i>👉 Distance: 5km, T-shirt: M</i>
+# <i>🗓️ Nov 15, 2023</i>
+# <i>🏪 Temple Run with Sai</i>
 #
 # [ x2 ]
-# Product Name: River Amazing View
-# Options: Payment: pay-at-hotel, Adults: 2, and Kids: 2
-# Date: October 19, 2023 ---> October 21, 2023
-
-# Customer Info
-# Name: Thea Choem
-# Tel: 0123468889
+# <b>5km Running Ticket</b>
+# <i>👉 Distance: 5km, T-shirt: S</i>
+# <i>🗓️ Nov 15, 2023 -> Nov 17, 2023</i>
+# <i>🏪 Temple Run with Sai</i>
 #
+# <b>🙍 Customer Info</b>
+# Name: Vaneath Awesome
+# Tel: <code>+85570760548</code>
+# Email: <code>admin_dev@cm.com</code>
+
 module SpreeCmCommissioner
   class OrderTelegramMessageFactory < TelegramMessageFactory
     attr_reader :order, :vendor
@@ -34,10 +37,11 @@ module SpreeCmCommissioner
       order.line_items
     end
 
+    # override
     def body
       text = []
-      text << "Order Number:\n<code>#{order.number}</code>\n"
-      text << selected_line_items.map { |item| line_item_content(item) }.compact.join("\n")
+      text << "Order Number:\n#{inline_code(order.number)}\n"
+      text << selected_line_items.map { |item| line_item_content(item) }.compact.join("\n\n")
       text.compact.join("\n")
     end
 
@@ -45,21 +49,35 @@ module SpreeCmCommissioner
       text = []
 
       text << "[ x#{line_item.quantity} ]"
-      text << "Product Name: #{line_item.product.name}"
-      text << "Options: #{line_item.options_text}" if line_item.options_text.present?
-      text << "Date: #{pretty_date(line_item.from_date)} ---> #{pretty_date(line_item.to_date)}" if line_item.date_present?
-      text << "Vendor: #{line_item.vendor.name}" if line_item.vendor&.name.present? && vendor.blank?
+      text << bold(line_item.product.name.to_s)
+      text << italic("👉 #{line_item.options_text}") if line_item.options_text.present?
+      text << italic(pretty_date_for(line_item)) if pretty_date_for(line_item).present?
+      text << italic("🏪 #{line_item.vendor.name}") if line_item.vendor&.name.present? && vendor.blank?
 
       text.compact.join("\n")
     end
 
+    def pretty_date_for(line_item)
+      return nil unless line_item.date_present?
+
+      from_date = pretty_date(line_item.from_date)
+      to_date = pretty_date(line_item.to_date)
+
+      if from_date == to_date
+        "🗓️ #{from_date}"
+      else
+        "🗓️ #{from_date} -> #{to_date}"
+      end
+    end
+
+    # override
     def footer
       text = []
 
-      text << '<b>Customer Info</b>'
+      text << bold('🙍 Customer Info')
       text << "Name: #{order.name}"
-      text << "Tel: #{order.phone_number}"
-      text << "Email: #{order.email}" if order.email.present?
+      text << "Tel: #{inline_code(order.intel_phone_number || order.phone_number)}"
+      text << "Email: #{inline_code(order.email)}" if order.email.present?
 
       text.compact.join("\n")
     end

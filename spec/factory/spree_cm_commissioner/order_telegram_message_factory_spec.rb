@@ -3,8 +3,8 @@ require "spec_helper"
 RSpec.describe SpreeCmCommissioner::OrderTelegramMessageFactory do
   describe '#header' do
     it 'return header' do
-      subject = described_class.new(title: '🎫--- [NEW ORDER FROM BOOKME+] ---', order: nil)
-      expect(subject.header).to eq "<b>🎫--- [NEW ORDER FROM BOOKME+] ---</b>"
+      subject = described_class.new(title: '🎫 --- [NEW ORDER FROM BOOKME+] ---', order: nil)
+      expect(subject.header).to eq "<b>🎫 --- [NEW ORDER FROM BOOKME+] ---</b>"
     end
   end
 
@@ -16,9 +16,9 @@ RSpec.describe SpreeCmCommissioner::OrderTelegramMessageFactory do
       let(:order) { create(:order, line_items: [line_item]) }
 
       it 'return body of all line items' do
-        subject = described_class.new(title: '🎫--- [NEW ORDER FROM BOOKME+] ---', order: order)
+        subject = described_class.new(title: '🎫 --- [NEW ORDER FROM BOOKME+] ---', order: order)
 
-        expect(subject.body).to eq "Order Number:\n<code>#{order.number}</code>\n\n[ x1 ]\nProduct Name: 5km Running Ticket\nDate: January 11, 2023 ---> January 12, 2023\nVendor: Sai"
+        expect(subject.body).to eq "Order Number:\n<code>#{order.number}</code>\n\n[ x1 ]\n<b>5km Running Ticket</b>\n<i>🗓️ Jan 11, 2023 -> Jan 12, 2023</i>\n<i>🏪 Sai</i>"
       end
     end
 
@@ -35,9 +35,22 @@ RSpec.describe SpreeCmCommissioner::OrderTelegramMessageFactory do
       let(:order) { create(:order, line_items: [line_item1, line_item2]) }
 
       it 'return body with line item of vendor1' do
-        subject = described_class.new(title: '🎫--- [NEW ORDER FROM BOOKME+] ---', order: order, vendor: vendor1)
+        subject = described_class.new(title: '🎫 --- [NEW ORDER FROM BOOKME+] ---', order: order, vendor: vendor1)
 
-        expect(subject.body).to eq "Order Number:\n<code>#{order.number}</code>\n\n[ x1 ]\nProduct Name: #{product1.name}\nDate: January 11, 2023 ---> January 12, 2023"
+        expect(subject.body).to eq "Order Number:\n<code>#{order.number}</code>\n\n[ x1 ]\n<b>#{product1.name}</b>\n<i>🗓️ Jan 11, 2023 -> Jan 12, 2023</i>"
+      end
+    end
+
+    context 'line item with same from date & to date' do
+      let(:vendor) { create(:vendor, name: "Sai") }
+      let(:product) { create(:product_with_option_types, name: "5km Running Ticket", vendor: vendor, product_type: :accommodation) }
+      let(:line_item) { build(:line_item, product: product, from_date: date('2023-01-11'), to_date: date('2023-01-11')) }
+      let(:order) { create(:order, line_items: [line_item]) }
+
+      it 'return body of all line items' do
+        subject = described_class.new(title: '🎫 --- [NEW ORDER FROM BOOKME+] ---', order: order)
+
+        expect(subject.body).to eq "Order Number:\n<code>#{order.number}</code>\n\n[ x1 ]\n<b>5km Running Ticket</b>\n<i>🗓️ Jan 11, 2023</i>\n<i>🏪 Sai</i>"
       end
     end
   end
@@ -48,7 +61,7 @@ RSpec.describe SpreeCmCommissioner::OrderTelegramMessageFactory do
     it 'return footer with customer infos' do
       subject = described_class.new(title: '🎫--- [NEW ORDER FROM BOOKME+] ---', order: order)
 
-      expect(subject.footer).to eq "<b>Customer Info</b>\nName: #{order.name}\nTel: #{order.phone_number}\nEmail: #{order.email}"
+      expect(subject.footer).to eq "<b>🙍 Customer Info</b>\nName: #{order.name}\nTel: <code>+85512345678</code>\nEmail: <code>#{order.email}</code>"
     end
   end
 
@@ -58,10 +71,10 @@ RSpec.describe SpreeCmCommissioner::OrderTelegramMessageFactory do
     let(:line_item) { build(:line_item, product: product, from_date: date('2023-01-11'), to_date: date('2023-01-12')) }
     let(:order) { create(:order, line_items: [line_item], phone_number: "012345678") }
 
-    it 'return footer with customer infos' do
+    it 'return message by combine header, body, footer' do
       subject = described_class.new(title: '🎫--- [NEW ORDER FROM BOOKME+] ---', order: order)
 
-      expect(subject.message).to eq "<b>🎫--- [NEW ORDER FROM BOOKME+] ---</b>\n\nOrder Number:\n<code>#{order.number}</code>\n\n[ x1 ]\nProduct Name: 5km Running Ticket\nDate: January 11, 2023 ---> January 12, 2023\nVendor: Sai\n\n<b>Customer Info</b>\nName: #{order.name}\nTel: #{order.phone_number}\nEmail: #{order.email}"
+      expect(subject.message).to eq [subject.header, subject.body, subject.footer].join("\n\n")
     end
   end
 end
