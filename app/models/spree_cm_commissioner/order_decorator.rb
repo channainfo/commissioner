@@ -27,6 +27,14 @@ module SpreeCmCommissioner
       base.delegate :customer, to: :subscription, allow_nil: true
 
       base.whitelisted_ransackable_associations |= %w[customer taxon payments]
+
+      def base.search_by_qr_data(data)
+        token = data.match(/^R\d{9,}-([A-Za-z0-9_\-]+)$/)&.captures
+
+        raise ActiveRecord::RecordNotFound, "Couldn't find Spree::Order with QR data: #{data}" unless token
+
+        find_by!(token: token)
+      end
     end
 
     # required only in one case,
@@ -82,7 +90,7 @@ module SpreeCmCommissioner
     end
 
     def generate_svg_qr
-      qrcode = RQRCode::QRCode.new("#{store.url}/orders/#{number}")
+      qrcode = RQRCode::QRCode.new("#{store.url}/orders/#{qr_data}")
       qrcode.as_svg(
         color: '000',
         shape_rendering: 'crispEdges',
@@ -94,7 +102,7 @@ module SpreeCmCommissioner
     end
 
     def generate_png_qr(size = 120)
-      qrcode = RQRCode::QRCode.new("#{store.url}/orders/#{number}")
+      qrcode = RQRCode::QRCode.new("#{store.url}/orders/#{qr_data}")
       qrcode.as_png(
         bit_depth: 1,
         border_modules: 1,
@@ -107,6 +115,10 @@ module SpreeCmCommissioner
         resize_gte_to: false,
         size: size
       )
+    end
+
+    def qr_data
+      "#{number}-#{token}"
     end
 
     private
