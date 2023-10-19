@@ -75,7 +75,7 @@ module SpreeCmCommissioner
 
     def send_order_complete_telegram_alert_to_vendors
       vendor_list.each do |vendor|
-        title = '🎫--- [NEW ORDER FROM BOOKME+] ---'
+        title = '🎫 --- [NEW ORDER FROM BOOKME+] ---'
         chat_id = vendor.preferred_telegram_chat_id
         factory = OrderTelegramMessageFactory.new(title: title, order: self, vendor: vendor)
         TelegramNotificationSenderJob.perform_later(chat_id: chat_id, message: factory.message, parse_mode: factory.parse_mode)
@@ -103,7 +103,7 @@ module SpreeCmCommissioner
     def send_order_rejected_telegram_alert_to_store; end
 
     def send_order_complete_telegram_alert_to_store
-      title = '🎫--- [NEW ORDER] ---'
+      title = '🎫 --- [NEW ORDER] ---'
       chat_id = store.preferred_telegram_order_alert_chat_id
       factory = OrderTelegramMessageFactory.new(title: title, order: self)
       TelegramNotificationSenderJob.perform_later(chat_id: chat_id, message: factory.message, parse_mode: factory.parse_mode)

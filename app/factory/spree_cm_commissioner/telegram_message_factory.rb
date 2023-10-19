@@ -23,6 +23,18 @@ module SpreeCmCommissioner
     def body; end
     def footer; end
 
+    def bold(text)
+      "<b>#{text}</b>"
+    end
+
+    def italic(text)
+      "<i>#{text}</i>"
+    end
+
+    def inline_code(text)
+      "<code>#{text}</code>"
+    end
+
     def parse_mode
       'HTML'
     end
@@ -30,7 +42,7 @@ module SpreeCmCommissioner
     def pretty_date(date)
       return '' if date.blank?
 
-      [I18n.l(date.to_date, format: :long)].join(' ')
+      date.to_date.strftime('%b %d, %Y')
     end
   end
 end
