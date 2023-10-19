@@ -238,4 +238,37 @@ RSpec.describe Spree::Order, type: :model do
       expect(order.reload.state_changes.first.next_state).to eq "accepted"
     end
   end
+
+  describe '.search_by_qr_data' do
+    let(:number) { 'R4348234995' }
+    let(:token) { 'd9CgNOEWLD-hrGQZduLy6Q1693558578189' }
+    let!(:order) { create(:order, number: number, token: token) }
+
+    context 'when the qr_data is invalid format' do
+      it 'raises ActiveRecord::RecordNotFound' do
+        qr_data = "4348234995-#{token}"
+
+        expect do
+          Spree::Order.search_by_qr_data(qr_data)
+        end.to raise_error(ActiveRecord::RecordNotFound, "Couldn't find Spree::Order with QR data: #{qr_data}")
+      end
+    end
+
+    context 'when the record is not found' do
+      it 'raises ActiveRecord::RecordNotFound' do
+        qr_data = "#{number}-T#{token}"
+
+        expect do
+          Spree::Order.search_by_qr_data(qr_data)
+        end.to raise_error(ActiveRecord::RecordNotFound, 'Couldn\'t find Spree::Order with [WHERE "spree_orders"."token" = $1]')
+      end
+    end
+
+    context 'when the record is found' do
+      it 'returns the record' do
+        found_record = Spree::Order.search_by_qr_data("#{number}-#{token}")
+        expect(found_record).to eq(order)
+      end
+    end
+  end
 end

@@ -27,6 +27,14 @@ module SpreeCmCommissioner
       base.delegate :customer, to: :subscription, allow_nil: true
 
       base.whitelisted_ransackable_associations |= %w[customer taxon payments]
+
+      def base.search_by_qr_data(data)
+        token = data.match(/^R\d{9,}-([A-Za-z0-9_\-]+)$/)&.captures
+
+        raise ActiveRecord::RecordNotFound, "Couldn't find Spree::Order with QR data: #{data}" unless token
+
+        find_by!(token: token)
+      end
     end
 
     # required only in one case,
