@@ -8,7 +8,7 @@
   </div>
   <%# TODO we need to render qr image  %>
   <div class="qr-container">
-    <%= image_tag main_app.url_for("/i/#{order.token}"), class: 'qr-code' %>
+    <%= image_tag main_app.url_for("/i/#{order.qr_data}"), class: 'qr-code' %>
     <p>Show your QR to enter</p>
   </div>
 </div>
