@@ -3,6 +3,8 @@ module SpreeCmCommissioner
     extend ActiveSupport::Concern
 
     included do
+      scope :accepted, -> { where(request_state: 'accepted') }
+
       # use after_update instead of after_transition
       # since it has usecase that order state is forced to update which not fire after_transition
 

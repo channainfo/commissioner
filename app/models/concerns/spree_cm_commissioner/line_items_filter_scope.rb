@@ -4,6 +4,7 @@ module SpreeCmCommissioner
 
     included do
       scope :complete, -> { joins(:order).merge(Spree::Order.complete) }
+      scope :accepted, -> { joins(:order).merge(Spree::Order.accepted) }
 
       scope :filter_by_event, lambda { |event|
         case event
