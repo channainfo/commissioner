@@ -118,7 +118,11 @@ module SpreeCmCommissioner
       end
 
       def update_min_max_price
-        update(min_price: Spree::Product.min_price(self), max_price: Spree::Product.max_price(self))
+        min_price = Spree::Product.min_price(self)
+        max_price = Spree::Product.max_price(self)
+        min_price = max_price if min_price.zero?
+
+        update(min_price: min_price, max_price: max_price)
       end
 
       def update_location
