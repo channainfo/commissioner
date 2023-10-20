@@ -37,6 +37,10 @@ module SpreeCmCommissioner
       end
     end
 
+    def state_changed_to_complete?
+      saved_change_to_state? && state == 'complete'
+    end
+
     # required only in one case,
     # some of line_items are ecommerce & not digital.
     def delivery_required?
