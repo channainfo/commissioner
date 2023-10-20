@@ -129,6 +129,27 @@ RSpec.describe Spree::Vendor, type: :model do
         expect(vendor.min_price.to_f).to eq 10.0
         expect(vendor.max_price.to_f).to eq 30.0
       end
+
+      it 'should update min and max price the same value when min price 0' do
+        vendor = create(:vendor, min_price: 0, max_price: 0)
+        product = create(:base_product, vendor: vendor, price: 40)
+
+        vendor.update_min_max_price
+
+        expect(vendor.min_price.to_f).to eq 40.0
+        expect(vendor.max_price.to_f).to eq 40.0
+      end
+
+      it 'should update min and max price to 0' do
+        vendor = create(:vendor, min_price: 0, max_price: 0)
+        product1 = create(:base_product, vendor: vendor, price: 0)
+        product2 = create(:base_product, vendor: vendor, price: 0)
+
+        vendor.update_min_max_price
+
+        expect(vendor.min_price.to_f).to eq 0
+        expect(vendor.max_price.to_f).to eq 0
+      end
     end
 
     context '#update_location' do
