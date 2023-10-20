@@ -5,9 +5,10 @@ RSpec.describe SpreeCmCommissioner::AccommodationQuery do
   let(:siem_reap)  { create(:state, name: 'Siem Reap') }
   let!(:phnom_penh_hotel) { create(:cm_vendor_with_product, name: 'Phnom Penh Hotel',       default_state_id: phnom_penh.id, permanent_stock: 20, primary_product_type: :accommodation) }
   let!(:sokha_pp_hotel)   { create(:cm_vendor_with_product, name: 'Sokha Phnom Penh Hotel', default_state_id: phnom_penh.id, permanent_stock: 20, primary_product_type: :accommodation) }
+  let!(:sokha_hotel)      { create(:cm_vendor_with_product, name: 'Sokha Hotel', state: :pending, default_state_id: phnom_penh.id, permanent_stock: 20, primary_product_type: :accommodation) }
   let!(:angkor_hotel)     { create(:cm_vendor_with_product, name: 'Angkor Hotel',           default_state_id: siem_reap.id,  permanent_stock: 20, primary_product_type: :accommodation) }
   let!(:siemreap_hotel)   { create(:cm_vendor_with_product, name: 'Siem Reap Hotel',        default_state_id: siem_reap.id,  permanent_stock: 20, primary_product_type: :accommodation) }
-  let!(:siemreap_hotel1)   { create(:cm_vendor_with_product, name: 'Siem Reap Hotel1',        default_state_id: siem_reap.id,  permanent_stock: 20, primary_product_type: :accommodation) }
+  let!(:siemreap_hotel1)  { create(:cm_vendor_with_product, name: 'Siem Reap Hotel1',        default_state_id: siem_reap.id,  permanent_stock: 20, primary_product_type: :accommodation) }
   let!(:run_with_sai)     { create(:cm_vendor_with_product, name: 'Run with Sai',        default_state_id: siem_reap.id,  permanent_stock: 20) }
   let(:order1) { create(:order) }
   let(:order2) { create(:order) }
@@ -23,8 +24,21 @@ RSpec.describe SpreeCmCommissioner::AccommodationQuery do
     let!(:line_item5) { book_room(order2, hotel: sokha_pp_hotel,   quantity: 7,  from_date: date('2023_01_07'), to_date: date('2023_01_10')) }
     let!(:line_item6) { book_room(order2, hotel: sokha_pp_hotel,   quantity: 9,  from_date: date('2023_01_15'), to_date: date('2023_01_20')) }
 
+    let!(:line_item7) { book_room(order2, hotel: sokha_hotel,   quantity: 9,  from_date: date('2023_01_15'), to_date: date('2023_01_20')) }
+
     context '.booked_vendors' do
       let(:records) { subject.booked_vendors.to_a }
+
+      context 'query vendors' do
+        let(:subject) { described_class.new(from_date: date('2022_12_29'), to_date: date('2023_01_02'), province_id: phnom_penh.id) }
+
+        it 'should not return inactive vendors' do
+          vendor_ids = records.map(&:vendor_id)
+
+          expect(vendor_ids).to include(phnom_penh_hotel.id, sokha_pp_hotel.id)
+          expect(vendor_ids).not_to include(sokha_hotel.id)
+        end
+      end
 
       # left case 1 day: 2022_12_30 (phnom_penh_hotel: 0, sokha_pp_hotel: 0)
       context 'query on 2022_12_30' do
