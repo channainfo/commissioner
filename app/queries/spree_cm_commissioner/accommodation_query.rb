@@ -53,7 +53,7 @@ module SpreeCmCommissioner
     end
 
     def apply_filter(scope)
-      scope = scope.where(spree_vendors: { primary_product_type: :accommodation })
+      scope = scope.where(spree_vendors: { primary_product_type: :accommodation, state: :active })
       scope = scope.where(spree_vendors: { default_state_id: province_id }) if province_id.present?
       scope = scope.where(spree_vendors: { id: vendor_id }) if vendor_id.present?
       scope
