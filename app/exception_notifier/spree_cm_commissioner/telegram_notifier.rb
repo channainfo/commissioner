@@ -4,7 +4,6 @@ module SpreeCmCommissioner
 
     def initialize(options)
       @base_options = options
-      @token = options.delete(:token)
       @channel_id = options.delete(:channel_id)
       @telegram_client = ::Telegram.bots[:exception_notifier]
     end
@@ -54,15 +53,29 @@ module SpreeCmCommissioner
         text << "\n"
       end
 
-      if formatter.backtrace_message.present? && formatter.backtrace_message != "```\n```"
+      backtrace = backtrace_message(exception)
+      if backtrace.present?
         text << '<b>Backtrace:</b>'
-        text << "<code>#{formatter.backtrace_message}</code>"
+        text << "<code>#{backtrace}</code>"
         text << "\n"
       end
 
       text << telegram_exception.to_s if telegram_exception.present?
 
       text.compact.join("\n")
+    end
+
+    def backtrace_message(exception)
+      backtrace = exception.backtrace
+      return if backtrace.blank?
+
+      text = []
+
+      text << '```'
+      backtrace.first(5).each { |line| text << "* #{line}" }
+      text << '```'
+
+      text.join("\n")
     end
   end
 end
