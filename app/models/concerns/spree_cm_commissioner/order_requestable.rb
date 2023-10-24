@@ -18,7 +18,7 @@ module SpreeCmCommissioner
           transition from: nil, to: :requested
         end
         after_transition to: :requested, do: :send_order_requested_app_notification_to_user
-        after_transition to: :requested, do: :send_order_requested_telegram_alert_store
+        after_transition to: :requested, do: :send_order_requested_telegram_alert_to_store
 
         event :accept do
           transition from: :requested, to: :accepted
@@ -45,6 +45,16 @@ module SpreeCmCommissioner
       end
     end
 
+    def rejected_by(user)
+      transaction do
+        reject!
+
+        line_items.each do |line_item|
+          line_item.rejected_by(user)
+        end
+      end
+    end
+
     # allow authorized user to accept all requested line items
     def accepted_by(user)
       transaction do
@@ -58,7 +68,11 @@ module SpreeCmCommissioner
 
     # can_accepted? already use by ransack/visitor.rb
     def can_accept_all?
-      approved? && !accepted? && need_confirmation?
+      approved? && requested?
+    end
+
+    def can_reject_all?
+      approved? && requested?
     end
 
     def can_alert_request_to_vendor?
@@ -100,9 +114,26 @@ module SpreeCmCommissioner
       SpreeCmCommissioner::OrderRejectedNotificationSender.call(order: self)
     end
 
-    def send_order_requested_telegram_alert_store; end
-    def send_order_accepted_telegram_alert_to_store; end
-    def send_order_rejected_telegram_alert_to_store; end
+    def send_order_requested_telegram_alert_to_store
+      title = '🔔 --- [NEW REQUESTED BY USER] ---'
+      chat_id = store.preferred_telegram_order_request_alert_chat_id
+      factory = OrderTelegramMessageFactory.new(title: title, order: self)
+      TelegramNotificationSenderJob.perform_later(chat_id: chat_id, message: factory.message, parse_mode: factory.parse_mode)
+    end
+
+    def send_order_accepted_telegram_alert_to_store
+      title = '✅ --- [ORDER ACCEPTED BY VENDOR] ---'
+      chat_id = store.preferred_telegram_order_request_alert_chat_id
+      factory = OrderTelegramMessageFactory.new(title: title, order: self)
+      TelegramNotificationSenderJob.perform_later(chat_id: chat_id, message: factory.message, parse_mode: factory.parse_mode)
+    end
+
+    def send_order_rejected_telegram_alert_to_store
+      title = '❌ --- [ORDER REJECTED BY VENDOR] ---'
+      chat_id = store.preferred_telegram_order_request_alert_chat_id
+      factory = OrderTelegramMessageFactory.new(title: title, order: self)
+      TelegramNotificationSenderJob.perform_later(chat_id: chat_id, message: factory.message, parse_mode: factory.parse_mode)
+    end
 
     def send_order_complete_telegram_alert_to_store
       title = '🎫 --- [NEW ORDER] ---'

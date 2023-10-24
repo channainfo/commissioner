@@ -4,8 +4,8 @@
 en:
   account_checker:
     verify:
-      already_exist: "%{login} already exist"
-      not_exist: "%{login} not exist"
+      already_exist: '%{login} already exist'
+      not_exist: '%{login} not exist'
 
   sms:
     to:
@@ -35,10 +35,10 @@ en:
   hello: 'Hello world'
 
   recaptcha:
-    request_failed: "Request failed"
-    invalid_code: "Invalid code"
-    score_not_qualify: "Score is not qualify"
-    action_not_matched: "Action is not matched"
+    request_failed: 'Request failed'
+    invalid_code: 'Invalid code'
+    score_not_qualify: 'Score is not qualify'
+    action_not_matched: 'Action is not matched'
 
   taxon:
     icon: Icon (Square)
@@ -144,6 +144,7 @@ en:
     alert_request_to_vendor: 'Alert request to vendor'
     alerted_to_vendor: 'Alerted to vendor Telegram'
     accept_all: 'Accept all'
+    reject_all: 'Reject all'
     sent: 'Sent'
     send_failed_or_method_not_support: 'Send failed or method not support'
     subscribe: 'Use Service'
@@ -163,8 +164,8 @@ en:
     new_customer: 'New Customer'
     listing_price: 'Listing Price'
     length: 'Length'
-    preference: "Preference"
-    notification: "Notification"
+    preference: 'Preference'
+    notification: 'Notification'
     promotion_rule_types:
       fixed_date:
         name: 'Fixed Date'
