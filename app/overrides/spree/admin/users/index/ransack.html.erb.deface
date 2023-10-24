@@ -33,6 +33,12 @@
           <%= f.text_field :bill_address_lastname_cont, class: 'form-control js-filterable' %>
         </div>
       </div>
+      <div class="col-12 col-lg-6">
+        <div class="form-group">
+          <%= f.label :phone_number_cont, Spree.t(:phone_number) %>
+          <%= f.text_field :phone_number_cont, class: 'form-control js-filterable' %>
+        </div>
+      </div>
     </div>
     <% if Spree::Config[:company] %>
       <div class="form-group">

@@ -16,6 +16,9 @@
     <th>
       <%= sort_link @search, :Roles, Spree.t(:roles), {}, {title: 'roles_title'} %>
     </th>
+     <th>
+      <%= sort_link @search, :phone_number, Spree.t(:phone_number), {}, {title: 'phone_number_title'} %>
+    </th>
     <th>
       <%= sort_link @search, :created_at, Spree.t(:create_at), {}, {title: 'create_at_title'} %>
     </th>
