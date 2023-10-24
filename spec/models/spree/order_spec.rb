@@ -45,6 +45,16 @@ RSpec.describe Spree::Order, type: :model do
     end
   end
 
+  describe 'paid' do
+    let!(:order1) { create(:order, payment_state: :paid) }
+    let!(:order2) { create(:order, payment_state: :void) }
+
+    it 'it only return paid order' do
+      expect(described_class.paid.size).to eq 1
+      expect(described_class.paid.first).to eq order1
+    end
+  end
+
   describe '#delivery_required?' do
     let(:product1) { create(:product, name: 'Product 1') }
     let(:product2) { create(:product, name: 'Product 2') }

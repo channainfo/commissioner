@@ -5,6 +5,7 @@ module SpreeCmCommissioner
       base.include SpreeCmCommissioner::OrderRequestable
 
       base.scope :subscription, -> { where.not(subscription_id: nil) }
+      base.scope :paid, -> { where(payment_state: :paid) }
 
       base.scope :filter_by_request_state, lambda {
                                              where(state: :complete, payment_state: :paid)
