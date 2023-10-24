@@ -4,5 +4,7 @@
   <h5 class="card-title mb-0 h6">
     <%= Spree.t(:order_line_items) %>
   </h5>
-  <%= event_links(@order, [:accept_all]) %>
+  <div class="page-actions d-flex justify-content-center flex-wrap">
+    <%= event_links(@order, [:accept_all, :reject_all]) %>
+  </div>
 </div>

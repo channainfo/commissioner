@@ -8,7 +8,7 @@ module SpreeCmCommissioner
         base.before_action :load_order, only: %i[
           edit update cancel resume approve resend open_adjustments
           close_adjustments cart channel set_channel
-          accept_all alert_request_to_vendor
+          accept_all reject_all alert_request_to_vendor
           notifications fire_notification
         ]
 
@@ -18,6 +18,12 @@ module SpreeCmCommissioner
       def accept_all
         @order.accepted_by(try_spree_current_user)
         flash[:success] = Spree.t(:accepted)
+        redirect_back fallback_location: spree.edit_admin_order_url(@order)
+      end
+
+      def reject_all
+        @order.rejected_by(try_spree_current_user)
+        flash[:success] = Spree.t(:rejected)
         redirect_back fallback_location: spree.edit_admin_order_url(@order)
       end
 
@@ -51,6 +57,10 @@ module SpreeCmCommissioner
         @notification_methods = %w[
           send_order_complete_telegram_alert_to_vendors
           send_order_complete_telegram_alert_to_store
+
+          send_order_requested_telegram_alert_to_store
+          send_order_accepted_telegram_alert_to_store
+          send_order_rejected_telegram_alert_to_store
         ]
       end
     end
