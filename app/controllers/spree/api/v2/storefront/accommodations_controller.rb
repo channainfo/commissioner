@@ -10,7 +10,10 @@ module Spree
           end
 
           def paginated_collection
-            @paginated_collection ||= apply_service_availability(collection)
+            return @paginated_collection if defined?(@paginated_collection)
+
+            @paginated_collection = super
+            @paginated_collection = apply_service_availability(@paginated_collection)
           end
 
           def resource
@@ -25,6 +28,10 @@ module Spree
                                                                from_date: params[:from_date].to_date,
                                                                to_date: params[:to_date].to_date
                                                               ).value
+          end
+
+          def allowed_sort_attributes
+            super << :min_price << :max_price
           end
 
           def model_class
