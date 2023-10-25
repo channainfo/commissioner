@@ -36,7 +36,7 @@
       <div class="col-12 col-lg-6">
         <div class="form-group">
           <%= f.label :phone_number_cont, Spree.t(:phone_number) %>
-          <%= f.text_field :phone_number_cont, class: 'form-control js-filterable' %>
+          <%= f.telephone_field :phone_number_cont, class: 'form-control js-filterable', autofocus: true, placeholder: 'xxx-xxx-xxxx'%>
         </div>
       </div>
     </div>
