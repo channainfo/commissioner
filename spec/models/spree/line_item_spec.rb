@@ -71,6 +71,16 @@ RSpec.describe Spree::LineItem, type: :model do
     end
   end
 
+  describe 'paid' do
+    let!(:order1) { create(:order_with_line_items, payment_state: :paid, line_items_count: 1) }
+    let!(:order2) { create(:order_with_line_items, payment_state: :void, line_items_count: 1) }
+
+    it 'it only return paid line items' do
+      expect(described_class.paid.size).to eq 1
+      expect(described_class.paid).to eq order1.line_items
+    end
+  end
+
   describe '#reservation?' do
     let(:ecommerce) { build(:product, product_type: :ecommerce)}
     let(:service) { build(:product, product_type: :service)}
