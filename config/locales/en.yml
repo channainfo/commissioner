@@ -141,6 +141,7 @@ en:
     invoice: 'Invoice'
     option_text: 'Option Text'
     none: 'none'
+    print: 'Print'
     alert_request_to_vendor: 'Alert request to vendor'
     alerted_to_vendor: 'Alerted to vendor Telegram'
     accept_all: 'Accept all'

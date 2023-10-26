@@ -15,7 +15,7 @@
                   <%= render 'spree_cm_commissioner/order_mailer/your_booking', order: @order, show_booking_header: false%>
                <% end %>
                <%= render 'spree_cm_commissioner/order_mailer/customer_info', order: @order%>
-               <%= render 'spree_cm_commissioner/order_mailer/info_notice'%>
+               <%= render 'spree_cm_commissioner/order_mailer/info_notice', product_type: @product_type%>
                <%= render 'spree_cm_commissioner/order_mailer/support_contact'%>
             </div>
          </td>
