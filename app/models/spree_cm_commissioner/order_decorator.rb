@@ -8,10 +8,11 @@ module SpreeCmCommissioner
       base.scope :paid, -> { where(payment_state: :paid) }
 
       base.scope :filter_by_request_state, lambda {
-                                             where(state: :complete, payment_state: :paid)
-                                               .where.not(request_state: nil)
-                                               .order(created_at: :desc)
-                                           }
+        where(state: :complete)
+          .where.not(request_state: nil)
+          .where.not(payment_state: :paid)
+          .order(created_at: :desc)
+      }
 
       base.before_create :link_by_phone_number
       base.before_create :associate_customer
