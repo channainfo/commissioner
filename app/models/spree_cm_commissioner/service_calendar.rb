@@ -12,6 +12,7 @@ module SpreeCmCommissioner
 
     belongs_to :calendarable, polymorphic: true
     validates :exception_rules, json: { schema: EXCEPTION_RULE_JSON_SCHEMA }
+    has_many :variants, class_name: 'Spree::Variant'
 
     ## Callbacks
     before_save :set_dates

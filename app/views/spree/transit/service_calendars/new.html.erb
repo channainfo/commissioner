@@ -1,0 +1,12 @@
+<% content_for :page_title do %>
+  <%= page_header_back_button spree.transit_service_calendars_path %>
+  <%= Spree.t(:service_calendar) %>
+<% end %>
+<%= form_with model: @object, url: { action: 'create' } do |f| %>
+  <div class="mb-3">
+    <div data-hook="admin_variant_new_form">
+      <%= render partial: 'form', locals: { f: f } %>
+      <%= render partial: 'spree/admin/shared/new_resource_links',locals: { collection_url: spree.transit_service_calendars_path }  %>
+    </div>
+  </div>
+<% end %>

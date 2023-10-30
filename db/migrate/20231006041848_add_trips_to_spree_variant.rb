@@ -8,6 +8,6 @@ class AddTripsToSpreeVariant < ActiveRecord::Migration[7.0]
     add_column :spree_variants, :auto_sent_ticket, :boolean, default: true
     add_column :spree_variants, :must_select_intermediate_stop_seat, :boolean, default: true
     add_column :spree_variants, :skip_must_select_intermediate_stop_seat, :boolean, default: true
-    add_column :spree_variants, :status, :boolean, default: false, if_not_exists: true
+    add_column :spree_variants, :status, :boolean, default: true
   end
 end

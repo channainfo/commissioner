@@ -1,0 +1,106 @@
+<div data-hook="admin_vendor_service_calendar_form_fields" id="admin_vendor_service_calendar_form_fields">
+  <div class="card mb-4">
+    <div class="p-3 card-body">
+      <div class="row pb-0">
+        <div class="col-12 col-md-4">
+          <div class="form-group " data-hook="name">
+            <%= f.label :name, raw(Spree.t(:name) + required_span_tag) %>
+            <%= f.text_field :name, class: 'form-control', required: true %>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="form-group " data-hook="name">
+            <%= f.label :is_transit, raw(Spree.t(:is_transit) + required_span_tag) %>
+            <%= f.select :is_transit, [['Transit', true], ['No Transit', false]], {}, class: 'form-control select2-clear' %>
+          </div>
+        </div>
+      </div>
+      <div class="row pb-0">
+        <div class="col-12 col-md-4">
+          <div id="">
+            <%= f.label :start_date %>
+            <div class="input-group datePickerFrom"
+              id="start_date_field"
+              data-hook="start_date"
+              data-wrap="true"
+              data-alt-format="d/m/Y"
+              >
+              <%= f.date_field  :start_date,
+                                placeholder: Spree.t(:select_a_date),
+                                class: 'form-control ',
+                                'data-input':'' %>
+
+              <%= render partial: 'spree/admin/shared/cal_close' %>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+          <div id="">
+            <%= f.label :end_date %>
+            <div class="input-group datePickerFrom"
+              id="end_date_field"
+              data-hook="end_date"
+              data-wrap="true"
+              data-alt-format="d/m/Y"
+              >
+              <%= f.date_field :end_date,
+                                placeholder: Spree.t(:select_a_date),
+                                class: 'form-control ',
+                                'data-input':'' %>
+
+              <%= render partial: 'spree/admin/shared/cal_close' %>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 pt-4">
+          <div class="custom-control custom-switch">
+            <%= f.check_box :monday, class: 'custom-control-input' %>
+            <%= f.label :monday, class: 'custom-control-label' %>
+          </div>
+
+          <div class="custom-control custom-switch">
+            <%= f.check_box :tuesday, class: 'custom-control-input' %>
+            <%= f.label :tuesday, class: 'custom-control-label' %>
+          </div>
+
+          <div class="custom-control custom-switch">
+            <%= f.check_box :wednesday, class: 'custom-control-input' %>
+            <%= f.label :wednesday, class: 'custom-control-label' %>
+          </div>
+
+          <div class="custom-control custom-switch">
+            <%= f.check_box :thursday, class: 'custom-control-input' %>
+            <%= f.label :thursday, class: 'custom-control-label' %>
+          </div>
+
+          <div class="custom-control custom-switch">
+            <%= f.check_box :friday, class: 'custom-control-input' %>
+            <%= f.label :friday, class: 'custom-control-label' %>
+          </div>
+
+          <div class="custom-control custom-switch">
+            <%= f.check_box :saturday, class: 'custom-control-input' %>
+            <%= f.label :saturday, class: 'custom-control-label' %>
+          </div>
+
+          <div class="custom-control custom-switch">
+            <%= f.check_box :sunday, class: 'custom-control-input' %>
+            <%= f.label :sunday, class: 'custom-control-label' %>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <div class="mb-2">
+       <h5>Execption Rules</h5>
+    </div>
+    <div class="">
+      <%= render partial: 'exception_rules', locals: { f: f, object: @object  } %>
+    </div>
+  </div>
+</div>

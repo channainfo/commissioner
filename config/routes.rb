@@ -156,7 +156,16 @@ Spree::Core::Engine.add_routes do
     resources :branches
     resources :stops
     resources :routes do
-      resources :trips
+      resources :trips do
+        member do
+          patch :public_status, only: [:update]
+        end
+      end
+    end
+    resources :service_calendars, except: %i[index, update] do
+      member do
+        patch 'update_status'
+      end
     end
     root to: redirect('/transit/reservations')
   end

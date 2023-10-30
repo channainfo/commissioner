@@ -95,6 +95,7 @@ en:
         empty_info: "<b>Note:</b> Set vendor option types to vendor first. To edit, go to <b>Details</b> tab > <b>Option Types</b>"
 
     service_calendars:
+      name: "Name"
       empty_info: "No <b>Service calendars</b> found."
       start_date: "Start date"
       end_date: "End date"
@@ -210,6 +211,7 @@ en:
     transit:
       new:
         route: "New Route"
+        service_calendar: "New Service Calendar"
         routes:
           details: "Detail"
           trip: "Trip"
@@ -240,6 +242,7 @@ en:
       location: "Location"
       settings: "Setting"
       vendor: "Vendor"
+      service_calendar: "Service Calendar"
       branch:
         branches: "Branches"
         address: "Address"

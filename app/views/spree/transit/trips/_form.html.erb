@@ -19,28 +19,14 @@
       </div>
 
       <div data-hook="admin_product_form_variant_kind_option_types" >
-        <%= f.field_container :service_id do %>
+        <%= f.field_container :service_calendar_id do %>
           <div id="serviceCalendar">
-            <div class="custom-control custom-switch mb-2">
-                <%= f.check_box :service_id, class: "custom-control-input", id: "service_id" %>
-                <%= f.label :service_id, Spree.t('transit.routes.trip.service_calendar'), class: "custom-control-label", for: "service_id" %>
+            <div class="mb-2">
+                <%= f.label :service_calendar_id, raw(Spree.t('transit.routes.trip.service_calendar') + required_span_tag), for: "service_calendar_id" %>
             </div>
             <div id="seviceCalendarSelect">
-              <%= f.select(:service_calendar_id, options_for_select(Spree::OptionType.all.pluck(:name, :id), @selected_option_type_ids), { include_blank: false }, { class: "select2", multiple: true })%>
-            </div>
-          </div>
-          <div id="datePicker" style="display: none" >
-            <div class="input-group datePickerFrom"
-              data-wrap="true"
-              data-mode="range"
-              data-alt-format="<%= Spree.t(:fpr_human_friendly_date_format, scope: 'date_picker', default: 'M j, Y') %>"
-              >
-              <%= f.text_field :service_id,
-                                placeholder: Spree.t(:select_a_date),
-                                class: 'form-control ',
-                                'data-input':'' %>
-
-              <%= render partial: 'spree/admin/shared/cal_close' %>
+              <%= f.select(:service_calendar_id, options_for_select(SpreeCmCommissioner::ServiceCalendar.where(active: true).order(start_date: :asc).pluck(:name, :id),
+                  @variant.service_calendar_id), { include_blank: true }, { class: "select2", required: true })%>
             </div>
           </div>
         <% end %>
@@ -65,7 +51,7 @@
         <div class="form-group allow-booking" data-hook="from">
           <%= f.label :allow_booking, "Booking", class: "font-weight-normal" %>
           <div class="custom-control custom-switch">
-            <%= f.check_box :instant_book, class: "custom-control-input", id: "allo w_booking" %>
+            <%= f.check_box :instant_book, class: "custom-control-input", id: "allow_booking" %>
             <label class="custom-control-label" for="allow_booking"></label>
           </div>
         </div>

@@ -8,9 +8,10 @@ module SpreeCmCommissioner
 
       base.scope :subscribable, -> { active.joins(:product).where(product: { subscribable: true, status: :active }) }
       base.has_many :stop_times, class_name: 'SpreeCmCommissioner::StopTime', foreign_key: :trip_id
+      base.belongs_to :service_calendar, -> { unscope(where: :deleted_at) }, class_name: 'SpreeCmCommissioner::ServiceCalendar'
 
       base.accepts_nested_attributes_for :stop_times, allow_destroy: true
-
+      base.accepts_nested_attributes_for :service_calendar
     end
 
     def selected_option_value_ids
