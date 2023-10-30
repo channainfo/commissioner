@@ -86,10 +86,14 @@ module SpreeCmCommissioner
 
       provider_name = claim['firebase']['sign_in_provider']
       sub = claim['firebase']['identities'][provider_name].first
+      email = claim['email']
+      name = claim['name']
 
       {
         identity_type: provider_name.split('.').first,
-        sub: sub
+        sub: sub,
+        name: name,
+        email: email
       }
     end
 

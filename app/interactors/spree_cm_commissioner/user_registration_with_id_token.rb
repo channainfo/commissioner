@@ -6,7 +6,7 @@ module SpreeCmCommissioner
 
       if firebase_context.success?
         ActiveRecord::Base.transaction do
-          register_user!
+          register_user!(firebase_context.provider[:name])
           link_user_account!(firebase_context.provider)
         end
       else
@@ -14,13 +14,28 @@ module SpreeCmCommissioner
       end
     end
 
-    def register_user!
-      user = Spree.user_class.new(password: SecureRandom.base64(16))
+    def register_user!(name)
+      user = Spree.user_class.new(password: SecureRandom.base64(16), **name_attributes(name))
       if user.save(validate: false)
         context.user = user
       else
         context.fail!(message: user.errors.full_messages.join('\n'))
       end
+    end
+
+    def name_attributes(name)
+      full_name = name&.strip
+      return {} if full_name.blank?
+
+      split = full_name.split
+      first_name = split[0]
+      last_name = split[1..].join(' ')
+
+      attributes = {}
+      attributes[:first_name] = first_name if first_name.present?
+      attributes[:last_name] = last_name if last_name.present?
+
+      attributes
     end
 
     # provider object
@@ -39,6 +54,8 @@ module SpreeCmCommissioner
       ).first_or_initialize
 
       user_identity_provider.sub = provider[:sub]
+      user_identity_provider.email = provider[:email]
+      user_identity_provider.name = provider[:name]
 
       if user_identity_provider.save
         context.user_identity_provider = user_identity_provider
