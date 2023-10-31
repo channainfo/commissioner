@@ -31,6 +31,7 @@ module SpreeCmCommissioner
 
       identity_provider.sub = provider[:sub]
       identity_provider.email = provider[:email]
+      identity_provider.name = provider[:name]
 
       if identity_provider.save
         context.identity_provider = identity_provider

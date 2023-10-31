@@ -4,7 +4,7 @@ module SpreeCmCommissioner
       class UserIdentityProviderSerializer < BaseSerializer
         set_type :user_identity_provider
 
-        attributes :identity_type, :sub
+        attributes :identity_type, :sub, :email, :name
       end
     end
   end

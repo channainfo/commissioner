@@ -9,7 +9,8 @@ RSpec.describe SpreeCmCommissioner::AccountLinkage do
         provider = {
           identity_type: 'google',
           email: 'channa.info@gmail.com',
-          sub: '104389993318125584446'
+          sub: '104389993318125584446',
+          name: 'BookMe Plus'
         }
 
         firebase_id_token_context = double(:firebase_context, 'success?': true, provider: provider)
@@ -25,6 +26,7 @@ RSpec.describe SpreeCmCommissioner::AccountLinkage do
 
         expect(uips.length).to eq 1
         expect(uips[0].user_id).to eq user.id
+        expect(uips[0].name).to eq 'BookMe Plus'
         expect(uips[0].email).to eq 'channa.info@gmail.com'
         expect(uips[0].sub).to eq '104389993318125584446'
         expect(uips[0].identity_type).to eq 'google'
@@ -36,7 +38,8 @@ RSpec.describe SpreeCmCommissioner::AccountLinkage do
         provider = {
           identity_type: 'google',
           email: 'channa.info@gmail.com',
-          sub: '104389993318125584446'
+          sub: '104389993318125584446',
+          name: 'BookMe Plus'
         }
 
         firebase_id_token_context = double(:firebase_context, 'success?': true, provider: provider)
@@ -52,6 +55,7 @@ RSpec.describe SpreeCmCommissioner::AccountLinkage do
 
         expect(user.user_identity_providers.length).to eq 1
         expect(uip.user_id).to eq user.id
+        expect(uip.name).to eq 'BookMe Plus'
         expect(uip.email).to eq 'channa.info@gmail.com'
         expect(uip.sub).to eq '104389993318125584446'
         expect(uip.identity_type).to eq 'google'
@@ -64,7 +68,8 @@ RSpec.describe SpreeCmCommissioner::AccountLinkage do
         provider = {
           identity_type: 'google',
           sub: uip.sub,
-          email: other_user.email
+          email: other_user.email,
+          name: 'BookMe Plus',
         }
 
         firebase_id_token_context = double(:firebase_context, 'success?': true, provider: provider)

@@ -8,7 +8,8 @@ RSpec.describe SpreeCmCommissioner::UserRegistrationWithIdToken do
       it 'return user provider info' do
         provider = {
           identity_type: 'google',
-          sub: 'helloworldthisissub'
+          sub: 'helloworldthisissub',
+          name: 'BookMe Plus'
         }
 
         subject = described_class.new(id_token: id_token)
@@ -17,13 +18,59 @@ RSpec.describe SpreeCmCommissioner::UserRegistrationWithIdToken do
 
         response = subject.call
         context = subject.context
-        user_context = context.user
+        user = context.user
 
         expect(response['identity_type']).to eq(provider[:identity_type])
         expect(response['sub']).to eq(provider[:sub])
-        expect(user_context).to_not eq(nil)
+        expect(user).to_not eq(nil)
+        expect(user.first_name).to eq "BookMe"
+        expect(user.last_name).to eq "Plus"
       end
-    end 
+
+      it 'return user provider info with only first name' do
+        provider = {
+          identity_type: 'google',
+          sub: 'helloworldthisissub',
+          name: 'BookMe'
+        }
+
+        subject = described_class.new(id_token: id_token)
+        firebase_context = double(:firebase_context, success?: true, provider: provider)
+        allow(SpreeCmCommissioner::FirebaseIdTokenProvider).to receive(:call).and_return(firebase_context)
+
+        response = subject.call
+        context = subject.context
+        user = context.user
+
+        expect(response['identity_type']).to eq(provider[:identity_type])
+        expect(response['sub']).to eq(provider[:sub])
+        expect(user).to_not eq(nil)
+        expect(user.first_name).to eq "BookMe"
+        expect(user.last_name).to eq nil
+      end
+
+      it 'return user provider info with only first name & multi last name' do
+        provider = {
+          identity_type: 'google',
+          sub: 'helloworldthisissub',
+          name: 'BookMe Plus Plus'
+        }
+
+        subject = described_class.new(id_token: id_token)
+        firebase_context = double(:firebase_context, success?: true, provider: provider)
+        allow(SpreeCmCommissioner::FirebaseIdTokenProvider).to receive(:call).and_return(firebase_context)
+
+        response = subject.call
+        context = subject.context
+        user = context.user
+
+        expect(response['identity_type']).to eq(provider[:identity_type])
+        expect(response['sub']).to eq(provider[:sub])
+        expect(user).to_not eq(nil)
+        expect(user.first_name).to eq "BookMe"
+        expect(user.last_name).to eq "Plus Plus"
+      end
+    end
 
     context 'return error' do
       it 'firebase verify id token fail' do
@@ -62,11 +109,12 @@ RSpec.describe SpreeCmCommissioner::UserRegistrationWithIdToken do
     it 'return user identity provider' do
       provider = {
         identity_type: 'google',
-        sub: 'helloworldthisissub'
+        sub: 'helloworldthisissub',
+        name: 'BookMe Plus'
       }
 
       subject = described_class.new(id_token: id_token)
-      user = subject.register_user!
+      user = subject.register_user!(provider[:name])
       response = subject.link_user_account!(provider)
 
       expect(response['user_id']).to match(user.id)
