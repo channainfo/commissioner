@@ -3,10 +3,9 @@ module SpreeCmCommissioner
     include Noticed::Model
 
     scope :request_notifications, lambda {
-      where(
-        type: %w[order_requested_notification order_rejected_notification order_accepted_notification],
-        read_at: nil
-      ).newest_first
+      select('DISTINCT ON (notificable_id) *')
+        .where(type: %w[order_requested_notification order_rejected_notification order_accepted_notification], read_at: nil)
+        .order('notificable_id, created_at DESC')
     }
 
     scope :user_notifications, lambda {
