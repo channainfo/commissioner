@@ -8,10 +8,9 @@ module SpreeCmCommissioner
       json_response = fetch_nearby_places
       json_response['results'].each_with_index do |json, _|
         place = SpreeCmCommissioner::Place.find_or_initialize_by(reference: json['reference'])
-
         place.assign_attributes(
           reference: json['reference'],
-          types: json['types'][0],
+          types: json['types'].blank? ? '' : json['types'][0],
           name: json['name'],
           vicinity: json['vicinity'],
           lat: json['geometry']['location']['lat'],
