@@ -1,0 +1,10 @@
+<!-- insert_after "[data-hook='admin_product_form_description']" -->
+
+<div>
+  <%= f.field_container :reveal_description do %>
+    <%= f.label :reveal_description do %>
+      <%= f.check_box :reveal_description %>
+      <%= Spree.t(:reveal_description) %>
+    <% end %>
+  <% end %>
+</div>

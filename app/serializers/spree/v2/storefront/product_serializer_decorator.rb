@@ -10,6 +10,7 @@ module Spree
 
           base.has_one :default_state, serializer: :state
           base.attributes :need_confirmation, :product_type
+          base.attributes :reveal_description
         end
       end
     end
