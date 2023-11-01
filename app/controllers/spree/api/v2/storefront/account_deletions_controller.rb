@@ -10,7 +10,6 @@ module Spree
           def destroy
             context = SpreeCmCommissioner::AccountDeletion.call(
               user: @user,
-              password: params[:password],
               is_from_backend: false,
               user_deletion_reason_id: params[:user_deletion_reason_id],
               optional_reason: params[:optional_reason]
@@ -24,7 +23,6 @@ module Spree
           private
 
           def validate_params
-            params.require(:password)
             params.require(:user_deletion_reason_id)
           end
 
