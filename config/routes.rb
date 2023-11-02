@@ -97,6 +97,7 @@ Spree::Core::Engine.add_routes do
 
         get :notifications
         put :fire_notification
+        put :queue_webhooks_requests
       end
     end
 
