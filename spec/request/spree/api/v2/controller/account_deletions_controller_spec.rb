@@ -21,17 +21,6 @@ RSpec.describe Spree::Api::V2::Storefront::AccountDeletionsController, type: :co
 
         expect(json_response_body['error']).to eq 'param is missing or the value is empty: user_deletion_reason_id'
       end
-
-      it 'return error message when password is incorrect' do
-
-        delete :destroy, params: {
-          password: 'wrong password',
-          user_deletion_reason_id: reason.id
-        }
-
-        expect(json_response_body['error']).to eq 'Current password is not valid'
-      end
-
     end
 
     context 'with valid params' do

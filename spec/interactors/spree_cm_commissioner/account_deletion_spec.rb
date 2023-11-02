@@ -2,38 +2,12 @@ require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::AccountDeletion do
   let!(:user) { create(:cm_user) }
-  let!(:current_password) { '12345678' }
 
-  before do
-    user.password = current_password
-    user.password_confirmation = current_password
-    user.save!
-  end
-
-  describe '#validate_user_account' do
-    it 'success when password correct' do
-
-      subject = described_class.new(
-        password: current_password,
-        user: user,
-      )
-      subject.validate_user_account
-
-      expect(subject.context.success?).to eq true
-    end
-
-    it 'fail when password incorrect' do
-
-      subject = described_class.new(password: '87654321' , user: user , is_from_backend: true )
-      expect { subject.validate_user_account }.to raise_error(Interactor::Failure)
-    end
-  end
 
   describe '# save_survey' do
     it 'save surveys when password, params are validated' do
       reason = create(:user_deletion_reason)
       subject = described_class.new(
-        password: current_password,
         user: user ,
         user_deletion_reason_id: reason.id
 
@@ -49,7 +23,7 @@ RSpec.describe SpreeCmCommissioner::AccountDeletion do
 
   describe '#destroy_user' do
     it 'success when delete user' do
-      subject = described_class.new(password: current_password, user: user)
+      subject = described_class.new(user: user)
       subject.destroy_user
       user.reload
       expect(user.account_deletion_at).to_not eq nil
@@ -58,7 +32,7 @@ RSpec.describe SpreeCmCommissioner::AccountDeletion do
 
   describe '#call' do
     it 'return account_deletion_at not nil when destroy user success' do
-      subject = described_class.new(password: current_password, user: user, is_from_backend: true)
+      subject = described_class.new(user: user, is_from_backend: true)
       allow(subject).to receive(:validate_user_account).and_return(user)
       subject.call
       expect(subject.context.user.account_deletion_at).to_not eq nil
