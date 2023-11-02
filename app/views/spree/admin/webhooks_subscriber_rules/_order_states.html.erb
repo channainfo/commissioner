@@ -1,0 +1,8 @@
+<%= f.field_container :preferred_states, class: ['form-group'] do %>
+  <%= f.label :preferred_states, Spree.t(:states) %></span>
+  <%= f.select :preferred_states, rule.class::DEFAULT_STATES,
+    { :include_hidden => false },
+    multiple: true,
+    class: 'fullwidth select2'
+  %>
+<% end %>
