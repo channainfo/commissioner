@@ -9,10 +9,14 @@ module SpreeCmCommissioner
           edit update cancel resume approve resend open_adjustments
           close_adjustments cart channel set_channel
           accept_all reject_all alert_request_to_vendor
-          notifications fire_notification
+          notifications fire_notification queue_webhooks_requests
         ]
 
-        base.before_action :initialize_notification_methods, only: %i[notifications fire_notification]
+        base.before_action :initialize_notification_methods, only: %i[
+          notifications
+          fire_notification
+          queue_webhooks_requests
+        ]
       end
 
       def accept_all
@@ -46,6 +50,23 @@ module SpreeCmCommissioner
         redirect_back fallback_location: notifications_admin_order_url(@order)
       end
 
+      def queue_webhooks_requests
+        event = @webhook_events.find { |e| e == params['event'] }
+
+        if event.present?
+          Spree::Webhooks::Subscribers::QueueRequests.call(
+            event_name: event,
+            webhook_payload_body: @order.send(:webhook_payload_body),
+            **@order.send(:webhooks_request_options)
+          )
+          flash[:success] = Spree.t(:sent)
+        else
+          flash[:error] = Spree.t(:send_failed_or_method_not_support)
+        end
+
+        redirect_back fallback_location: notifications_admin_order_url(@order)
+      end
+
       def notifications; end
 
       # override
@@ -61,6 +82,16 @@ module SpreeCmCommissioner
           send_order_requested_telegram_alert_to_store
           send_order_accepted_telegram_alert_to_store
           send_order_rejected_telegram_alert_to_store
+        ]
+
+        @webhook_events = [
+          'order.create',
+          'order.delete',
+          'order.update',
+          'order.canceled',
+          'order.placed',
+          'order.resumed',
+          'order.shipped'
         ]
       end
     end

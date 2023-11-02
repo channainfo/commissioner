@@ -26,3 +26,31 @@
     </tbody>
   </table>
 </div>
+
+<div class="table-responsive border rounded bg-white mt-3">
+  <table class="table">
+    <thead class="text-muted">
+      <th><%= Spree.t(:webhook) %></th>
+      <th class="d-flex justify-content-end"><%= Spree.t(:action).pluralize %></th>
+    </thead>
+    <tbody>
+      <% @webhook_events.each do |event| %>
+        <tr>
+          <td><%= event.humanize %></td>
+          <td class="actions methods">
+            <span class="d-flex justify-content-end">
+              <%= link_to_with_icon 'activity.svg', Spree.t(:event).pluralize, admin_webhooks_events_path({q: {name_eq: event}}), class: 'btn btn-light btn-sm', no_text: true %>
+              <%= link_to_with_icon "send.svg",
+                event.humanize,
+                queue_webhooks_requests_admin_order_path(@order, event: event),
+                method: :put,
+                no_text: true,
+                data: { confirm: Spree.t(:order_sure_want_to, event: event.humanize) },
+                class: "btn btn-light btn-sm" %>
+            </span>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
