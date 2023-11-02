@@ -269,6 +269,8 @@ km:
     empty_info: 'រក <b>Device_token</b> មិនឃើញទេ'
   user_identity_providers:
     empty_info: 'រក <b>User identity providers</b> មិនឃើញទេ'
+  webhooks_subscriber_rules:
+    empty_info: 'រក <b>Webhooks Subscriber Rules</b> មិនឃើញទេ'
   notification:
     send_test_success: 'សាកផ្ញើរបានជោគជ័យ'
 

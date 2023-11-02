@@ -99,6 +99,10 @@ Spree::Core::Engine.add_routes do
         put :fire_notification
       end
     end
+
+    resources :webhooks_subscribers do
+      resources :rules, controller: :webhooks_subscriber_rules
+    end
   end
 
   namespace :telegram do

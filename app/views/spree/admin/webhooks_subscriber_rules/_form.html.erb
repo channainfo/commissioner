@@ -1,0 +1,18 @@
+<div data-hook="admin_webhooks_subscriber_rules_form_fields">
+  <% unless @object.persisted? %>
+    <%= f.field_container :type, class: ['form-group'] do %>
+      <%= f.label :type, Spree.t(:type) %> <span class="required">*</span>
+      <%= f.select :type, @webhooks_subscriber.available_rule_types.map { |type| [type.demodulize, type] }, {}, :class => "fullwidth select2" %>
+      <%= f.error_message_on :type %>
+    <% end %>
+  <% else %>
+    <%= f.field_container :type, class: ['form-group'] do %>
+      <%= f.label :type, Spree.t(:type) %> <span class="required">*</span>
+      <%= f.text_field :type, value: @object.type.demodulize,class: 'form-control', disabled: true %>
+    <% end %>
+  <% end %>
+
+  <% if @object.persisted? %>
+    <%= render partial: @object.class.name.demodulize.underscore,  locals: { rule: @object, f: f } %>
+  <% end %>
+</div>

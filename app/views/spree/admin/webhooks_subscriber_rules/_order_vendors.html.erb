@@ -1,0 +1,14 @@
+<%= f.field_container :preferred_vendors, class: ['form-group'] do %>
+  <%= f.label :preferred_vendors, Spree.t(:vendors) %></span>
+  <%= f.select :preferred_vendors,
+    options_from_collection_for_select(Spree::Vendor.all, :id, :name, rule.preferred_vendors),
+    { :include_hidden => false },
+    multiple: true,
+    class: 'fullwidth select2'
+  %>
+<% end %>
+
+<%= f.field_container :preferred_match_policy, class: ['form-group'] do %>
+  <%= f.label :preferred_match_policy, Spree.t(:match_policy) %></span>
+  <%= f.select :preferred_match_policy, @webhooks_subscriber.class::MATCH_POLICIES, {}, :class => "fullwidth select2" %>
+<% end %>

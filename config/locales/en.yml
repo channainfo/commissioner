@@ -281,6 +281,8 @@ en:
     empty_info: 'No <b>Device_token</b> found'
   user_identity_providers:
     empty_info: 'No <b>User identity providers</b> found'
+  webhooks_subscriber_rules:
+    empty_info: 'No <b>Webhooks Subscriber Rules</b> found'
   notification:
     send_test_success: 'Test Send Successfully'
 

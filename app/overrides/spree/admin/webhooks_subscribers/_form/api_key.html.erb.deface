@@ -1,0 +1,7 @@
+<!-- insert_top "[data-hook='admin_webhooks_subscriber_form_fields']" -->
+
+<%= f.field_container :api_key, class: ['form-group'] do %>
+  <%= f.label :api_key, '3rd API key' %>
+  <%= f.text_field :api_key, class: 'form-control', placeholder: 'Headers : X-Api-key' %>
+  <%= f.error_message_on :api_key %>
+<% end %>

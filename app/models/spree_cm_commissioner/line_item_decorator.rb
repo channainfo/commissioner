@@ -15,6 +15,12 @@ module SpreeCmCommissioner
       base.before_create :add_due_date, if: :subscription?
 
       base.whitelisted_ransackable_attributes |= %w[to_date from_date]
+
+      def base.json_api_columns
+        json_api_columns = column_names.reject { |c| c.match(/_id$|id|preferences|(.*)password|(.*)token|(.*)api_key/) }
+        json_api_columns << :options_text
+        json_api_columns << :vendor_id
+      end
     end
 
     def reservation?
