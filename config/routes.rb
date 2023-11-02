@@ -89,6 +89,8 @@ Spree::Core::Engine.add_routes do
       end
     end
 
+    resources :webhooks_events
+
     resources :orders, except: [:show] do
       member do
         put :accept_all
