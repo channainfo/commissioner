@@ -1,0 +1,69 @@
+<% content_for :page_title do %>
+  <%= link_to Spree.t('admin.webhooks_subscribers.webhooks_subscribers'), admin_webhooks_subscribers_path %> /
+  <%= Spree.t('admin.webhooks_subscribers.webhooks_events') %>
+<% end %>
+
+<div data-hook="admin_webhooks_events_sidebar" class="card mb-4">
+  <div data-hook="admin_webhooks_events_sidebar" class="card-body">
+    <%= search_form_for [:admin, @q] do |f| %>
+      <div data-hook="admin_webhooks_events_index_search" class="row">
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :name_eq, Spree.t(:name) %>
+            <%= f.select :name_eq, Spree::Webhooks::Event.distinct.pluck(:name), { include_blank: true }, { class: 'form-control js-filterable select2', size: 15 } %>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :subscriber_id_eq, Spree.t(:subscriber) %>
+            <%= f.select :subscriber_id_eq, Spree::Webhooks::Subscriber.all.map { |s| [s.name, s.id] }, { include_blank: true }, { class: 'form-control js-filterable select2', size: 15 } %>
+          </div>
+        </div>
+      </div>
+      <div data-hook="admin_webhooks_events_index_search_buttons" class="form-actions">
+        <%= button Spree.t(:search), 'search.svg' %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<% if @webhooks_events.any? %>
+<div class="table-responsive border rounded bg-white">
+  <table class="table" id="listing_order_webhooks_events" data-hook>
+    <thead class="text-muted">
+      <tr data-hook="admin_orders_webhooks_events_headers">
+        <th><%= sort_link @q, :name, Spree.t(:name) %></th>
+        <th><%= sort_link @q, :response_code, Spree.t(:response_code) %></th>
+        <th><%= sort_link @q, :subscriber_id, Spree.t(:subscriber_id) %></th>
+        <th><%= sort_link @q, :success, Spree.t(:success) %></th>
+        <th><%= sort_link @q, :execution_time, Spree.t(:execution_time) %></th>
+        <th><%= sort_link @q, :created_at, Spree.t(:created_at) %></th>
+        <th><%= sort_link @q, :url, Spree.t(:url) %></th>
+        <th><%= sort_link @q, :request_errors, Spree.t(:request_errors) %></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @webhooks_events.each do |webhooks_event| %>
+        <tr>
+          <td><%= webhooks_event.name %></td>
+          <td><small class="badge badge-pill badge-secondary"><%= webhooks_event.response_code %></small></td>
+          <td><%= link_to webhooks_event.subscriber.name, edit_admin_webhooks_subscriber_path(webhooks_event.subscriber) if webhooks_event.subscriber.present? %></td>
+          <td><%= active_badge(webhooks_event.success) %></td>
+          <td><%= webhooks_event.execution_time %></td>
+          <td><%= pretty_time(webhooks_event.created_at) %></td>
+          <td><code><%= webhooks_event.url %></code></td>
+          <td><code><%= webhooks_event.request_errors %></code></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= render 'spree/admin/shared/index_table_options', collection: @collection, simple: true %>
+
+<% else %>
+  <div class="text-center no-objects-found m-5">
+    <%= Spree.t(:no_webhooks_events) %>
+  </div>
+<% end %>
