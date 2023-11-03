@@ -3,6 +3,10 @@ module SpreeCmCommissioner
     module SubscriberDecorator
       def self.prepended(base)
         base.include SpreeCmCommissioner::Webhooks::SubscriberRulable
+
+        def base.authorized?(name, api_key)
+          find_by(name: name, api_key: api_key).present?
+        end
       end
     end
   end

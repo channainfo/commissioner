@@ -1,6 +1,30 @@
 require 'spec_helper'
 
 RSpec.describe Spree::Webhooks::Subscriber, type: :model do
+  describe '.authorized?' do
+    let!(:subscriber) { create(:cm_webhook_subscriber, name: "SubName", api_key: "SubToken") }
+
+    it 'return true when api_key and name is found' do
+      authorized = described_class.authorized?('SubName', 'SubToken')
+      expect(authorized).to be true
+    end
+
+    it 'return false when name is not found' do
+      authorized = described_class.authorized?('WrongName', 'SubToken')
+      expect(authorized).to be false
+    end
+
+    it 'return false when api_key is not found' do
+      authorized = described_class.authorized?('SubName', 'WrongToken')
+      expect(authorized).to be false
+    end
+
+    it 'return false both name & api_key is not found' do
+      authorized = described_class.authorized?('WrongName', 'WrongToken')
+      expect(authorized).to be false
+    end
+  end
+
   describe '#matches?' do
     let(:order) { build(:order) }
     let(:rule1) { build(:cm_webhook_subscriber_order_vendors_rule) }

@@ -214,6 +214,10 @@ Spree::Core::Engine.add_routes do
     namespace :json_ld do
       resources :vendors, only: %i[index show]
     end
+
+    namespace :webhook do
+      resources :orders, only: [:show]
+    end
   end
 end
 
