@@ -8,6 +8,23 @@ module SpreeCmCommissioner
             base.before_action :ensure_cart_exist, only: :add_item
           end
 
+          # one usecase where this neccessary is when order.state is 'complete', but complated_at & payment_state is null,
+          # this cause app to be stuck at book page because cart is not considered cart or completed.
+          #
+          # solution is to restart it back to cart.
+          def restart_checkout_flow
+            spree_authorize! :update, spree_current_order, order_token
+
+            if spree_current_order.completed_at.present?
+              render_error_payload('Cart already completed!')
+            else
+              spree_current_order.restart_checkout_flow
+              spree_current_order.update_with_updater!
+
+              render_serialized_payload { serialized_current_order }
+            end
+          end
+
           # we required only user can create cart
           # in case there is no cart, and user try to add item to cart,
           # it should create one instead of raising error.
