@@ -26,6 +26,10 @@ module SpreeCmCommissioner
         normal_user = spree_roles.length == 1 ? spree_roles[0].name == 'user' : spree_roles.empty?
         normal_user && !system_user
       end
+
+      def soft_deleted?
+        !account_deletion_at.nil?
+      end
     end
 
     def full_name
