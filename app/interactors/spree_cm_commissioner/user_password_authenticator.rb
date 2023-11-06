@@ -9,6 +9,7 @@ module SpreeCmCommissioner
         context.fail!(message: I18n.t('authenticator.incorrect_password'))
       end
       context.fail!(message: I18n.t('authenticator.incorrect_password')) unless validate_password(context.user)
+      context.fail!(message: 'account_temporarily_deleted') if context.user.soft_deleted?
     end
 
     private

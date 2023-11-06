@@ -182,6 +182,8 @@ Spree::Core::Engine.add_routes do
         resources :accommodations, only: %i[index show]
         resources :line_items, only: %i[index show]
         resources :account_checker
+        resource :account_recovers, only: [:update]
+
         resource :s3_signed_urls
         resources :provinces, only: %i[index]
         resources :user_deletion_reasons, only: [:index]
@@ -202,6 +204,7 @@ Spree::Core::Engine.add_routes do
         resources :user_account_linkages, only: %i[index create destroy]
         resources :pin_code_generators, only: [:create]
         resource :pin_code_checkers, only: [:update]
+
         resources :order_products_taxons, only: [:index]
 
         resource :change_passwords, only: [:update]

@@ -7,6 +7,7 @@ module SpreeCmCommissioner
                      else
                        checker.user
                      end
+      context.fail!(message: 'account_temporarily_deleted') if context.user.soft_deleted?
     end
 
     def register_user
