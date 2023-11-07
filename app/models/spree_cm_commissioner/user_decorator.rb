@@ -33,7 +33,7 @@ module SpreeCmCommissioner
     end
 
     def full_name
-      [first_name, last_name].reject(&:empty?).join(' ')
+      [first_name, last_name].compact_blank.join(' ')
     end
 
     def ensure_unique_database_delivery_method(attributes)
