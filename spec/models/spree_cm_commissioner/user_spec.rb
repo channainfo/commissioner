@@ -47,4 +47,42 @@ RSpec.describe Spree::User, type: :model do
       expect(described_class.find_user_by_login('invalid')).to eq nil
     end
   end
+
+  describe '#full_name' do
+    it 'return full name empty string when both first name and last name is empty or nil' do
+      user1 = create(:user, first_name: '', last_name: '')
+      user2 = create(:user, first_name: ' ', last_name: ' ')
+      user3 = create(:user, first_name: nil, last_name: nil)
+
+      expect(user1.full_name).to eq ''
+      expect(user2.full_name).to eq ''
+      expect(user3.full_name).to eq ''
+    end
+
+    it 'return only return first name when last name is empty or nil' do
+      user1 = create(:user, first_name: 'First', last_name: '')
+      user2 = create(:user, first_name: 'First', last_name: ' ')
+      user3 = create(:user, first_name: 'First', last_name: nil)
+
+      expect(user1.full_name).to eq 'First'
+      expect(user2.full_name).to eq 'First'
+      expect(user3.full_name).to eq 'First'
+    end
+
+    it 'return only return last name when first name is empty or nil' do
+      user1 = create(:user, first_name: '', last_name: 'Last')
+      user2 = create(:user, first_name: ' ', last_name: 'Last')
+      user3 = create(:user, first_name: nil, last_name: 'Last')
+
+      expect(user1.full_name).to eq 'Last'
+      expect(user2.full_name).to eq 'Last'
+      expect(user3.full_name).to eq 'Last'
+    end
+
+    it 'return full name when both first name and last name exist' do
+      user = create(:user, first_name: 'First', last_name: 'Last')
+
+      expect(user.full_name).to eq 'First Last'
+    end
+  end
 end
