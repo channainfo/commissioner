@@ -10,10 +10,15 @@ module SpreeCmCommissioner
         SpreeCmCommissioner::Webhooks::Rules::OrderVendors
       ].map(&:to_s)
 
+      AUTHORIZER_RULE_TYPES = [
+        SpreeCmCommissioner::Webhooks::Rules::OrderVendors
+      ].map(&:to_s)
+
       included do
         enum match_policy: MATCH_POLICIES, _prefix: true
 
         has_many :rules, autosave: true, dependent: :destroy, class_name: 'SpreeCmCommissioner::Webhooks::SubscriberRule'
+        has_many :authorizer_rules, -> { where(type: AUTHORIZER_RULE_TYPES) }, class_name: 'SpreeCmCommissioner::Webhooks::SubscriberRule'
       end
 
       def available_rule_types
@@ -40,11 +45,26 @@ module SpreeCmCommissioner
 
         if match_all?
           supported_rules.all? do |rule|
-            rule.matches?(event, webhook_payload_body, options)
+            rule.matches?(webhook_payload_body, options)
           end
         elsif match_any?
           supported_rules.any? do |rule|
-            rule.matches?(event, webhook_payload_body, options)
+            rule.matches?(webhook_payload_body, options)
+          end
+        end
+      end
+
+      def authorized_to?(resource)
+        # subscriber does not have access to resource if it has no rules
+        return false if authorizer_rules.none?
+
+        if match_all?
+          authorizer_rules.all? do |rule|
+            rule.matches?(resource.send(:webhook_payload_body), **resource.send(:webhooks_request_options))
+          end
+        elsif match_any?
+          authorizer_rules.any? do |rule|
+            rule.matches?(resource.send(:webhook_payload_body), **resource.send(:webhooks_request_options))
           end
         end
       end

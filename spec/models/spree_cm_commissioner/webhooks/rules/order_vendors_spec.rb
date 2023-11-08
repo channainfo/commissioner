@@ -16,14 +16,14 @@ RSpec.describe SpreeCmCommissioner::Webhooks::Rules::OrderVendors, type: :model 
     context 'all' do
       it 'matched when all preferred vendors are in order' do
         rule =  build(:cm_webhook_subscriber_order_vendors_rule, vendors: [vendor1, vendor2], match_policy: 'all')
-        matched = rule.matches?('order.placed', order.send(:webhook_payload_body), **order.send(:webhooks_request_options))
+        matched = rule.matches?(order.send(:webhook_payload_body), **order.send(:webhooks_request_options))
 
         expect(matched).to be true
       end
 
       it 'reject when one of preferred vendors is not in order' do
         rule =  build(:cm_webhook_subscriber_order_vendors_rule, vendors: [vendor1, vendor2, vendor3], match_policy: 'all')
-        matched = rule.matches?('order.placed', order.send(:webhook_payload_body), **order.send(:webhooks_request_options))
+        matched = rule.matches?(order.send(:webhook_payload_body), **order.send(:webhooks_request_options))
 
         expect(matched).to be false
       end
@@ -32,17 +32,34 @@ RSpec.describe SpreeCmCommissioner::Webhooks::Rules::OrderVendors, type: :model 
     context 'any' do
       it 'matched when one preferred vendors is in order' do
         rule =  build(:cm_webhook_subscriber_order_vendors_rule, vendors: [vendor1], match_policy: 'all')
-        matched = rule.matches?('order.placed', order.send(:webhook_payload_body), **order.send(:webhooks_request_options))
+        matched = rule.matches?(order.send(:webhook_payload_body), **order.send(:webhooks_request_options))
 
         expect(matched).to be true
       end
 
       it 'reject when none of preferred venodrs is in order' do
         rule =  build(:cm_webhook_subscriber_order_vendors_rule, vendors: [vendor3], match_policy: 'all')
-        matched = rule.matches?('order.placed', order.send(:webhook_payload_body), **order.send(:webhooks_request_options))
+        matched = rule.matches?(order.send(:webhook_payload_body), **order.send(:webhooks_request_options))
 
         expect(matched).to be false
       end
+    end
+
+    it 'reject when preferred venodrs is empty' do
+      rule =  build(:cm_webhook_subscriber_order_vendors_rule, vendors: [], match_policy: 'all')
+      matched = rule.matches?(order.send(:webhook_payload_body), **order.send(:webhooks_request_options))
+
+      expect(matched).to be false
+    end
+
+    it 'reject when order vendors is empty' do
+      allow(order.line_items[0]).to receive(:vendor_id).and_return(nil)
+      allow(order.line_items[1]).to receive(:vendor_id).and_return(nil)
+
+      rule =  build(:cm_webhook_subscriber_order_vendors_rule, vendors: [vendor1], match_policy: 'all')
+      matched = rule.matches?(order.send(:webhook_payload_body), **order.send(:webhooks_request_options))
+
+      expect(matched).to be false
     end
   end
 end
