@@ -21,12 +21,16 @@ module SpreeCmCommissioner
           SUPPORTED_EVENTS.include?(event)
         end
 
-        def matches?(_event, webhook_payload_body, _options = {})
+        def matches?(webhook_payload_body, _options = {})
+          return false if preferred_vendors.empty?
+
           payload_body = JSON.parse(webhook_payload_body)
 
           vendor_ids = payload_body['included'].filter_map do |include|
             include['attributes']['vendor_id'].to_s if include['type'] == 'line_item'
           end
+
+          return false if vendor_ids.empty?
 
           case preferred_match_policy
           when 'any'

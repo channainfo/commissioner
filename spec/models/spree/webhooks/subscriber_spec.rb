@@ -114,4 +114,37 @@ RSpec.describe Spree::Webhooks::Subscriber, type: :model do
       end
     end
   end
+
+  describe '#authorized_to?' do
+    let(:vendor) { create(:vendor) }
+    let(:order) { create(:order_with_line_items, line_items_count: 1) }
+
+    it 'return failed when no authorized rules is added' do
+      non_authorizer_rule = build(:cm_webhook_subscriber_order_states_rule)
+      subscriber = build(:cm_webhook_subscriber, rules: [non_authorizer_rule])
+
+      expect(subscriber.authorizer_rules.size).to eq 0
+      expect(subscriber.authorized_to?(order)).to eq false
+    end
+
+    it 'return true when subscriber authorized to vendor' do
+      allow(order.line_items[0]).to receive(:vendor_id).and_return(vendor.id)
+
+      authorizer_rule = create(:cm_webhook_subscriber_order_vendors_rule, vendors: [vendor], match_policy: 'all')
+      subscriber = create(:cm_webhook_subscriber, rules: [authorizer_rule])
+
+      expect(subscriber.authorizer_rules).to eq [authorizer_rule]
+      expect(subscriber.authorized_to?(order)).to be true
+    end
+
+    it 'return false when subscriber does not authorized to vendor' do
+      allow(order.line_items[0]).to receive(:vendor_id).and_return(vendor.id)
+
+      authorizer_rule = create(:cm_webhook_subscriber_order_vendors_rule, vendors: [], match_policy: 'all')
+      subscriber = create(:cm_webhook_subscriber, rules: [authorizer_rule])
+
+      expect(subscriber.authorizer_rules).to eq [authorizer_rule]
+      expect(subscriber.authorized_to?(order)).to be false
+    end
+  end
 end

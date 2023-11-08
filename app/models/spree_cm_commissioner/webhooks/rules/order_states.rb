@@ -30,7 +30,7 @@ module SpreeCmCommissioner
           SUPPORTED_EVENTS.include?(event)
         end
 
-        def matches?(_event, webhook_payload_body, _options = {})
+        def matches?(webhook_payload_body, _options = {})
           payload_body = JSON.parse(webhook_payload_body)
 
           state = payload_body['data']['attributes']['state']
