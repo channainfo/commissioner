@@ -104,7 +104,12 @@ Spree::Core::Engine.add_routes do
     end
 
     resources :webhooks_subscribers do
-      resources :rules, controller: :webhooks_subscriber_rules
+      resources :rules, controller: :webhooks_subscriber_rules, except: %i[index show]
+      resources :orders, controller: :webhooks_subscriber_orders do
+        collection do
+          put :queue
+        end
+      end
     end
   end
 
