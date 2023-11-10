@@ -17,6 +17,14 @@ module SpreeCmCommissioner
         preference :match_policy, :string, default: MATCH_POLICIES.first
         preference :vendors, :array
 
+        # TODO: support all match policy
+        def filter(orders)
+          case preferred_match_policy
+          when 'any'
+            orders.joins(:line_items).where(line_items: { vendor_id: preferred_vendors })
+          end
+        end
+
         def supported?(event)
           SUPPORTED_EVENTS.include?(event)
         end

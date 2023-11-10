@@ -26,6 +26,10 @@ module SpreeCmCommissioner
 
         preference :states, :array, default: DEFAULT_STATES
 
+        def filter(orders)
+          orders.where(state: preferred_states)
+        end
+
         def supported?(event)
           SUPPORTED_EVENTS.include?(event)
         end
