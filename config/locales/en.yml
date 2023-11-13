@@ -171,6 +171,9 @@ en:
       fixed_date:
         name: 'Fixed Date'
         description: 'Fixed Date'
+      weekend:
+        name: 'Weekend'
+        description: 'Weekend'
       vendor:
         name: 'Vendor'
         description: 'Vendor'
@@ -178,9 +181,9 @@ en:
       create_date_specific_item_adjustments:
         name: 'Create date specific item adjustment'
         description: 'Create date specific item adjustment'
-    fixed_date_rule:
-      match_any: 'Match any of these date'
-      match_all: 'Must match all of these date'
+    date_rule:
+      match_any: 'Some line items must within selected date'
+      match_all: 'All line items must within selected date'
     billing:
       code: 'code'
       name: 'name'
