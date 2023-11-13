@@ -162,6 +162,9 @@ km:
       fixed_date:
         name: 'ថ្ងៃជាក់លាក់'
         description: 'Fixed Date'
+      weekend:
+        name: 'ថ្ងៃចុងសប្តាហ៍'
+        description: 'ថ្ងៃចុងសប្តាហ៍'
       vendor:
         name: 'ក្រុមហ៊ុន'
         description: 'Vendor'
@@ -169,9 +172,9 @@ km:
       create_date_specific_item_adjustments:
         name: 'Create date specific item adjustment'
         description: 'Create date specific item adjustment'
-    fixed_date_rule:
-      match_any: 'Match any of these date'
-      match_all: 'Must match all of these date'
+    date_rule:
+      match_any: 'Some line items must within selected date'
+      match_all: 'All line items must within selected date'
     billing:
       code: 'code'
       name: 'name'
