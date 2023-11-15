@@ -174,9 +174,9 @@ en:
       weekend:
         name: 'Weekend'
         description: 'Weekend'
-      vendor:
-        name: 'Vendor'
-        description: 'Vendor'
+      vendors:
+        name: 'Vendors'
+        description: 'Vendors'
     promotion_action_types:
       create_date_specific_item_adjustments:
         name: 'Create date specific item adjustment'
@@ -184,6 +184,14 @@ en:
     date_rule:
       match_any: 'Some line items must within selected date'
       match_all: 'All line items must within selected date'
+    fixed_date_rule:
+      match_any: 'Match any of these date'
+      match_all: 'Must match all of these date'
+    vendors_rule:
+      label: 'Vendors'
+      choose_vendors: 'Choose vendors'
+      match_any: 'Some line items must from selected vendor'
+      match_all: 'All line items must from selected vendor'
     billing:
       code: 'code'
       name: 'name'
