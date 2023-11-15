@@ -21,7 +21,7 @@ module SpreeCmCommissioner
 
     def queue_webhooks_requests
       context.orders.each do |order|
-        order.queue_webhooks_requests!('order.placed')
+        SpreeCmCommissioner::QueueOrderWebhooksRequestsJob.perform_later(order_id: order.id, event: 'order.placed')
       end
     end
   end
