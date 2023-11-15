@@ -9,7 +9,8 @@ describe Spree::V2::Storefront::VariantSerializer, type: :serializer do
         :product,
         :images,
         :option_values,
-        :vendor
+        :vendor,
+        :stock_locations
       ]).serializable_hash
     }
 
@@ -43,7 +44,8 @@ describe Spree::V2::Storefront::VariantSerializer, type: :serializer do
         :product,
         :images,
         :option_values,
-        :vendor
+        :vendor,
+        :stock_locations
       )
     end
   end

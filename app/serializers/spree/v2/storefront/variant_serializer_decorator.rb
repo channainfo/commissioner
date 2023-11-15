@@ -4,6 +4,8 @@ module Spree
       module VariantSerializerDecorator
         def self.prepended(base)
           base.attributes :permanent_stock, :need_confirmation, :product_type
+
+          base.has_many :stock_locations
         end
       end
     end
