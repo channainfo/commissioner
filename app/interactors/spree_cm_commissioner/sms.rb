@@ -1,7 +1,7 @@
 module  SpreeCmCommissioner
   class Sms < BaseInteractor
-    include SmsAdapter::Twillio
-    # include SmsAdapter::Plasgate
+    # include SmsAdapter::Twillio
+    include SmsAdapter::Plasgate
 
     def call
       context.fail!(message: I18n.t('sms.to.blank')) if context.to.blank?
