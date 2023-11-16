@@ -171,4 +171,46 @@ RSpec.describe Spree::LineItem, type: :model do
       expect(line_item.rejecter_id).to eq(user2.id)
     end
   end
+
+  describe '#date_range_excluding_checkout' do
+    let(:line_item) { create(:line_item, from_date: '2023-01-10'.to_date, to_date: '2023-01-13'.to_date) }
+
+    it 'return date range without checkout date' do
+      expect(line_item.date_range_excluding_checkout).to eq (['2023-01-10'.to_date, '2023-01-11'.to_date, '2023-01-12'.to_date])
+    end
+  end
+
+  describe '#date_range_including_checkout' do
+    let(:line_item) { create(:line_item, from_date: '2023-01-10'.to_date, to_date: '2023-01-13'.to_date) }
+
+    it 'return date range without checkout date' do
+      expect(line_item.date_range_including_checkout).to eq (['2023-01-10'.to_date, '2023-01-11'.to_date, '2023-01-12'.to_date, '2023-01-13'.to_date])
+    end
+  end
+
+  describe '#date_range' do
+    let(:line_item) { create(:line_item, from_date: '2023-01-10'.to_date, to_date: '2023-01-13'.to_date) }
+
+    it 'return date_range_excluding_checkout when it is accomodation' do
+      allow(line_item).to receive(:accommodation?).and_return(true)
+
+      expect(line_item.date_range).to eq (line_item.date_range_excluding_checkout)
+    end
+
+    it 'return date_range_including_checkout when it is not accomodation' do
+      allow(line_item).to receive(:accommodation?).and_return(false)
+
+      expect(line_item.date_range).to eq (line_item.date_range_including_checkout)
+    end
+  end
+
+  describe '#date_unit' do
+    let(:line_item) { create(:line_item, from_date: '2023-01-10'.to_date, to_date: '2023-01-13'.to_date) }
+
+    it 'return number of night when it is accomodation' do
+      allow(line_item).to receive(:accommodation?).and_return(true)
+
+      expect(line_item.date_unit).to eq 3
+    end
+  end
 end

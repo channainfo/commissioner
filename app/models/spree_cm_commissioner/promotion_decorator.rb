@@ -16,8 +16,12 @@ module SpreeCmCommissioner
     end
 
     def date_eligible?(date)
-      promotion_rules.any? do |rule|
-        rule.respond_to?(:date_eligible?) && rule.date_eligible?(date)
+      rules = promotion_rules.select { |rule| rule.respond_to?(:date_eligible?) }
+
+      if match_all?
+        rules.all? { |rule| rule.date_eligible?(date) }
+      else
+        rules.any? { |rule| rule.date_eligible?(date) }
       end
     end
   end

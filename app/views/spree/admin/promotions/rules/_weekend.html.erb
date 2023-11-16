@@ -1,3 +1,9 @@
 <div class="card-body">
-  <%= select_tag("#{param_prefix}[preferred_match_policy]", options_for_select(promotion_rule.class::MATCH_POLICIES.map{|s| [Spree.t("date_rule.match_#{s}"),s] }, promotion_rule.preferred_match_policy), {class: 'form-control custom-select m-1'}) %>
+  <div class="form-group">
+    <%= label_tag "#{param_prefix}_vendor_ids_string", Spree.t('weekend_rule.choose_weekend') %>
+    <%= select "#{param_prefix}", 'preferred_weekend_days', options_from_collection_for_select(promotion_rule.class::DAYS_INTO_WEEK, :last, :first, promotion_rule.preferred_weekend_days), { }, multiple: true, class: 'select2 form-control' %>
+  </div>
+  <div class="form-group mb-0">
+    <%= select_tag("#{param_prefix}[preferred_match_policy]", options_for_select(promotion_rule.class::MATCH_POLICIES.map{|s| [Spree.t("date_rule.match_#{s}"),s] }, promotion_rule.preferred_match_policy), {class: 'form-control custom-select'}) %>
+  </div>
 </div>

@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::Promotion::Rules::Weekend do
-  subject { described_class.new }
-
   let(:monday) { '2023-11-13'.to_date }
   let(:tuesday) { '2023-11-14'.to_date }
   let(:wednesday) { '2023-11-15'.to_date }
@@ -13,20 +11,20 @@ RSpec.describe SpreeCmCommissioner::Promotion::Rules::Weekend do
   let(:sunday) { '2023-11-19'.to_date }
 
   describe 'date_eligible?' do
-    it 'eligible on saturday and sunday' do
-      expect(saturday.on_weekend?).to be true
-      expect(sunday.on_weekend?).to be true
+    it 'eligible when wday is in preferred_weekend_days' do
+      subject = described_class.new(preferred_weekend_days: [5, 6, 0])
 
+      expect(friday.wday).to eq 5
+      expect(saturday.wday).to eq 6
+      expect(sunday.wday).to eq 0
+
+      expect(subject.date_eligible?(friday)).to be true
       expect(subject.date_eligible?(saturday)).to be true
       expect(subject.date_eligible?(sunday)).to be true
     end
 
     it 'not eligible on weekday' do
-      expect(monday.on_weekend?).to be false
-      expect(tuesday.on_weekend?).to be false
-      expect(wednesday.on_weekend?).to be false
-      expect(thursday.on_weekend?).to be false
-      expect(friday.on_weekend?).to be false
+      subject = described_class.new(preferred_weekend_days: [6, 0])
 
       expect(subject.date_eligible?(monday)).to be false
       expect(subject.date_eligible?(tuesday)).to be false
