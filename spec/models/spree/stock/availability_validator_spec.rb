@@ -20,6 +20,7 @@ RSpec.describe Spree::Stock::AvailabilityValidator do
         let(:reservation1) { build(:order, state: :complete) }
         let(:reservation2) { build(:order, state: :complete) }
 
+        # exclude checkout date
         let!(:line_item1) { create(:line_item, quantity: 3, order: reservation1, product: product, from_date: date('2023-01-10'), to_date: date('2023-01-11'), accepted_at: date('2023-01-11')) }
         let!(:line_item2) { create(:line_item, quantity: 1, order: reservation2, product: product, from_date: date('2023-01-11'), to_date: date('2023-01-13'), accepted_at: date('2023-01-11')) }
 
@@ -29,8 +30,7 @@ RSpec.describe Spree::Stock::AvailabilityValidator do
 
           expect(line_item.errors.full_messages).to eq ([
             "Quantity Rooms are not available on 2023-01-10",
-            "Quantity Only 2 rooms available on 2023-01-11",
-            "Quantity Only 2 rooms available on 2023-01-12"
+            "Quantity Only 2 rooms available on 2023-01-11"
           ])
         end
 

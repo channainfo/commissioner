@@ -175,9 +175,8 @@ km:
     date_rule:
       match_any: 'Some line items must within selected date'
       match_all: 'All line items must within selected date'
-    fixed_date_rule:
-      match_any: 'Match any of these date'
-      match_all: 'Must match all of these date'
+    weekend_rule:
+      choose_weekend: 'Choose weekend'
     vendors_rule:
       label: 'Vendors'
       choose_vendors: 'Choose vendors'
