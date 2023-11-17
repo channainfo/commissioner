@@ -3,7 +3,8 @@ module SpreeCmCommissioner
     extend ActiveSupport::Concern
 
     included do
-      has_many :promotion_rules, class_name: 'Spree::PromotionRule'
+      has_many :vendor_promotion_rules, class_name: 'SpreeCmCommissioner::VendorPromotionRule'
+      has_many :promotion_rules, through: :vendor_promotion_rules, class_name: 'Spree::PromotionRule'
       has_many :promotions, through: :promotion_rules, class_name: 'Spree::Promotion'
 
       has_many :active_promotions, -> { active },
