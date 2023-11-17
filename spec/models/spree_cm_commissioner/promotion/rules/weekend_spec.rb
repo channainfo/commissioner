@@ -12,7 +12,7 @@ RSpec.describe SpreeCmCommissioner::Promotion::Rules::Weekend do
 
   describe 'date_eligible?' do
     it 'eligible when wday is in preferred_weekend_days' do
-      subject = described_class.new(preferred_weekend_days: [5, 6, 0])
+      subject = described_class.new(preferred_weekend_days: ['5', '6', '0'])
 
       expect(friday.wday).to eq 5
       expect(saturday.wday).to eq 6
@@ -24,7 +24,7 @@ RSpec.describe SpreeCmCommissioner::Promotion::Rules::Weekend do
     end
 
     it 'not eligible on weekday' do
-      subject = described_class.new(preferred_weekend_days: [6, 0])
+      subject = described_class.new(preferred_weekend_days: ['6', '0'])
 
       expect(subject.date_eligible?(monday)).to be false
       expect(subject.date_eligible?(tuesday)).to be false
