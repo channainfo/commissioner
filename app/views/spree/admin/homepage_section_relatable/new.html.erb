@@ -1,0 +1,11 @@
+<%= form_with model: @object, url: { action: 'create' }, method: :post do |f| %>
+  <fieldset data-hook="new_photo">
+    <%= render partial: 'form', locals: { f: f } %>
+    <%= hidden_field_tag :homepage_section_id, params[:homepage_section_id] %>
+    <div class="form-actions" data-hook="buttons">
+      <%= button Spree.t('actions.create'), 'save.svg', 'submit', {class: 'btn-success', data: { disable_with: "#{ Spree.t(:saving) }..." }} %>
+      <span class="or"><%= Spree.t(:or) %></span>
+      <%= button_link_to Spree.t('actions.cancel'), edit_admin_homepage_feed_homepage_section_url(params[:homepage_section_id]), icon: 'cancel.svg', data: { turbo: false } %>
+    </div>
+  </fieldset>
+<% end %>

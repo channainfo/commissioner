@@ -1,0 +1,58 @@
+<% content_for :page_title do %>
+  <%= link_to plural_resource_name(SpreeCmCommissioner::HomepageSection), spree.admin_homepage_feed_homepage_section_index_url %> /
+  <%= Spree.t(:homepage_section_relatable) %>
+<% end %>
+
+<div class="row">
+  <div class="col-12">
+    <p class="font-weight-bold">Section Relatable</p>
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="form-group">
+          <%= label_tag :relatable_type %>
+          <%= select_tag(:relatable_type, options_for_select([['Vendor', 'Spree::Vendor'], ['Taxon', 'Spree::Taxon'], ['Product', 'Spree::Product']], @object.persisted? ? @object.relatable_type : nil), class: "select2", id: "relatable_type_select") %>
+        </div>
+        <div class="form-group">
+          <%= label_tag :relatable_id %>
+          <%= select_tag(:relatable_id, options_for_select([], @object.persisted? ? @object.relatable_id : nil), class: "select2", id: "relatable_id_select") %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    // Initial setup
+    updateRelatableIdOptions();
+
+    // Event listener for relatable_type change
+    $("#relatable_type_select").on("change", function () {
+      updateRelatableIdOptions();
+    });
+
+    function updateRelatableIdOptions() {
+      var selectedType = $("#relatable_type_select").val();
+      $.ajax({
+        url: "/admin/homepage_feed/homepage_section_relatable/options",
+        method: "GET",
+        data: { relatable_type: selectedType },
+        dataType: "json",
+        success: function (data) {
+          $("#relatable_id_select").html("");
+          $.each(data, function (key, value) {
+            $("#relatable_id_select").append(
+              $("<option></option>").attr("value", value[1]).text(value[0])
+            );
+          });
+          <% if @object.persisted? %>
+            $("#relatable_id_select").val("<%= @object.relatable_id %>");
+          <% end %>
+        },
+        error: function (xhr, status, error) {
+          console.error("Error fetching relatable_id options:", error);
+        },
+      });
+    }
+  });
+</script>

@@ -28,3 +28,12 @@
     class: "nav-link #{'active' if current == :background}" %>
   </li>
 <% end %>
+
+<%= content_for :page_tabs do %>
+  <li class="nav-item">
+    <%= link_to_with_icon 'person.svg',
+    Spree.t(:section),
+    spree.admin_homepage_feed_homepage_section_index_path,
+    class: "nav-link #{'active' if current == :section}" %>
+  </li>
+<% end %>

@@ -87,6 +87,19 @@ Spree::Core::Engine.add_routes do
           post :update_positions
         end
       end
+
+      resources :homepage_section do
+        collection do
+          post :update_positions
+        end
+      end
+
+      resources :homepage_section_relatable do
+        collection do
+          get :options
+          post :update_positions
+        end
+      end
     end
 
     resources :webhooks_events
@@ -219,6 +232,7 @@ Spree::Core::Engine.add_routes do
           resources :nearby_places, only: %i[index]
         end
         resource :homepage_data, only: [:show]
+        resources :homepage_sections, only: [:index]
         resources :order_qrs, only: [:show]
       end
     end
