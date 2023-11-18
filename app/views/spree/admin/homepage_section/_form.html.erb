@@ -1,0 +1,23 @@
+<div class="row">
+  <div class="col-12">
+    <p class="font-weight-bold">Section Info<p>
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="form-group">
+          <%= f.field_container :title do %>
+            <%= f.label :title %>
+            <%= f.text_field :title, class: 'form-control' %>
+          <% end %>
+          <%= f.field_container :description do%>
+            <%= f.label :description %>
+            <%= f.text_area :description, class: 'form-control' %>
+          <% end %>
+          <%= f.field_container :active do %>
+            <%= f.label :active %>
+            <%= f.check_box :active %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
