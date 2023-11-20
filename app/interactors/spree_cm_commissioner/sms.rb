@@ -1,8 +1,5 @@
 module  SpreeCmCommissioner
   class Sms < BaseInteractor
-    # include SmsAdapter::Twillio
-    include SmsAdapter::Plasgate
-
     def call
       context.fail!(message: I18n.t('sms.to.blank')) if context.to.blank?
       context.fail!(message: I18n.t('sms.body.blank')) if context.body.blank?
@@ -19,12 +16,26 @@ module  SpreeCmCommissioner
 
     private
 
+    def adapter
+      context.adapter ||= SmsAdapter::Plasgate.new
+    end
+
+    def create_message(sms_options)
+      adapter.create_message(sms_options) { |attrs| update_sms_log(attrs) }
+    end
+
+    # sms adapter can decide whether to update additional sms log fields
+    def update_sms_log(attributes)
+      attributes = attributes.slice(:external_ref)
+      context.sms_log.update(attributes)
+    end
+
     def create_sms_log(sms_options)
       context.sms_log = SpreeCmCommissioner::SmsLog.create(
         from_number: sms_options[:from],
         to_number: sms_options[:to],
         body: sms_options[:body],
-        adapter_name: adapter_name
+        adapter_name: adapter.class.name.demodulize
       )
     end
 
@@ -36,7 +47,7 @@ module  SpreeCmCommissioner
     end
 
     def from_number
-      context.from || ENV['SMS_SENDER_ID'].presence || 'CentralMarket'
+      context.from || ENV['SMS_SENDER_ID'].presence || 'SMS Info'
     end
 
     def sanitize(number)

@@ -1,15 +1,24 @@
 module SmsAdapter
-  module Plasgate
+  class Plasgate < Base
     # options: to:, :from, :body
     def create_message(options)
-      response = client.post('/rest/send') do |req|
-        req.params = { private_key: Rails.application.credentials.plasgate[:private] }
-        req.body = request_body(options).to_json
-      end
+      response = request(options)
 
       raise response.body if response.status != 200
 
-      JSON.parse(response.body)
+      json = JSON.parse(response.body)
+
+      # update sms log
+      yield(external_ref: json['queue_id'])
+
+      json
+    end
+
+    def request
+      client.post('/rest/send') do |req|
+        req.params = { private_key: Rails.application.credentials.plasgate[:private] }
+        req.body = request_body(options).to_json
+      end
     end
 
     def client
@@ -23,10 +32,6 @@ module SmsAdapter
         }
       )
       @client
-    end
-
-    def adapter_name
-      'Plasgate'
     end
 
     private
