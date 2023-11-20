@@ -1,7 +1,5 @@
 module SmsAdapter
-  module Twillio
-    include ActiveSupport::Concern
-
+  class Twillio < Base
     def create_message(options)
       client.messages.create(**options)
     end
