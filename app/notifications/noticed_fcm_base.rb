@@ -48,7 +48,8 @@ class NoticedFcmBase < Noticed::Base
 
   def payload
     default_payload = {
-      id: notificable.id.to_s
+      id: notificable.id.to_s,
+      type: type
     }
     default_payload.merge(extra_payload)
   end
