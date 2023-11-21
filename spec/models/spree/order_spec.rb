@@ -185,13 +185,13 @@ RSpec.describe Spree::Order, type: :model do
       allow(order).to receive(:confirmation_required?).and_return(false)
     end
 
-    it "calls request! when order need_confirmation?" do
+    it "calls request when order need_confirmation?" do
       allow(order).to receive(:need_confirmation?).and_return(true)
-      allow(order).to receive(:request!).and_return(true)
+      allow(order).to receive(:request).and_return(true)
 
       order.next!
 
-      expect(order).to have_received(:request!)
+      expect(order).to have_received(:request)
     end
 
     it "notify user when need confirmation" do
