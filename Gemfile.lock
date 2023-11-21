@@ -58,7 +58,7 @@ PATH
       spree_auth_devise (>= 4.5.0)
       spree_backend (>= 4.5.0)
       spree_extension
-      spree_multi_vendor (>= 2.4.0)
+      spree_multi_vendor (>= 2.4.1)
       telegram-bot
       twilio-ruby (~> 5.48.0)
 
@@ -778,7 +778,7 @@ GEM
     spree_extension (0.1.0)
       activerecord (>= 4.2)
       spree_core
-    spree_multi_vendor (2.4.0)
+    spree_multi_vendor (2.4.1)
       deface (~> 1.0)
       spree (>= 4.3.0.rc1)
       spree_backend (>= 4.3.0.rc1)
