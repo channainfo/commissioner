@@ -175,6 +175,19 @@ RSpec.describe Spree::Order, type: :model do
     end
   end
 
+  context 'when update payment state to :paid' do
+    let(:order) { create(:order_with_line_items, state: :address) }
+
+    it 'trigger notify_order_complete_app_notification_to_user when order is complete and paid' do
+
+      order.payment_state = 'paid'
+
+      expect(order).to receive(:notify_order_complete_app_notification_to_user)
+
+      order.save!
+    end
+  end
+
   context 'when update state to :complete' do
     let(:order) { create(:order_with_line_items, state: :address) }
 
@@ -192,24 +205,6 @@ RSpec.describe Spree::Order, type: :model do
       order.next!
 
       expect(order).to have_received(:request)
-    end
-
-    it "notify user when need confirmation" do
-      allow(order).to receive(:need_confirmation?).and_return(true)
-      allow(order).to receive(:notify_order_complete_app_notification_to_user).and_return(true)
-
-      order.next!
-
-      expect(order).to have_received(:notify_order_complete_app_notification_to_user)
-    end
-
-    it "notify user when not need confirmation" do
-      allow(order).to receive(:need_confirmation?).and_return(false)
-      allow(order).to receive(:notify_order_complete_app_notification_to_user).and_return(true)
-
-      order.next!
-
-      expect(order).to have_received(:notify_order_complete_app_notification_to_user)
     end
 
     it "trigger send_order_complete_telegram_alert_to_vendors when not need confirmation" do
