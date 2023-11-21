@@ -299,4 +299,46 @@ RSpec.describe Spree::Order, type: :model do
       end
     end
   end
+
+  describe '#valid_promotion_ids' do
+    let!(:order) { create(:order, total: 100) }
+    let!(:promotion) { create(:promotion, :with_order_adjustment) }
+    let!(:adjustment) do
+      adjustment = create(:adjustment, adjustable: order, order: order, source: promotion.actions.first)
+      adjustment.update_column(:amount, 10)
+      adjustment
+    end
+
+    it 'return valid_promotion_ids' do
+      order.reload
+
+      expect(order.valid_promotion_ids).to eq [promotion.id]
+    end
+
+    it 'return empty valid_promotion_ids when promotion is deleted' do
+      promotion.destroy
+      order.reload
+
+      expect(order.adjustments.size).to eq 0
+      expect(order.valid_promotion_ids).to eq []
+    end
+
+    it 'return empty valid_promotion_ids when promotion action is deleted' do
+      promotion.actions.destroy_all
+      order.reload
+
+      expect(order.adjustments.size).to eq 0
+      expect(order.valid_promotion_ids).to eq []
+    end
+
+    # still has adjustment, but no source
+    it 'return empty valid_promotion_ids when adjustment source is nil' do
+      adjustment.update_column(:source_id, nil)
+
+      order.reload
+
+      expect(order.adjustments.size).to eq 1
+      expect(order.valid_promotion_ids).to eq []
+    end
+  end
 end
