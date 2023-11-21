@@ -32,7 +32,9 @@ class NoticedFcmBase < Noticed::Base
     {
       data: convert_hash_values_to_str(payload),
       token: device_token,
-      notification: notification_data
+      notification: notification_data,
+      android: android,
+      apns: apns
     }
   end
 
@@ -48,7 +50,8 @@ class NoticedFcmBase < Noticed::Base
 
   def payload
     default_payload = {
-      id: notificable.id.to_s
+      id: notificable.id.to_s,
+      type: type
     }
     default_payload.merge(extra_payload)
   end
