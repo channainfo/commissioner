@@ -66,6 +66,15 @@ module SpreeCmCommissioner
       super
     end
 
+    # overrided
+    # avoid raise error when source_id is nil.
+    # https://github.com/channainfo/commissioner/pull/843
+    def valid_promotion_ids
+      all_adjustments.eligible.nonzero.promotion
+                     .where.not(source_id: nil)
+                     .map { |a| a.source.promotion_id }.uniq
+    end
+
     # assume check is default payment method for subscription
     def create_default_payment_if_eligble
       return unless subscription?
