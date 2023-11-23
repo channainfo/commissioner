@@ -10,8 +10,14 @@ module SpreeCmCommissioner
     validates :payload, presence: true
     validates :notification_type, presence: true
 
+    def default_notification_image_url
+      Spree::Store.default.default_notification_image&.styles&.first&.[](:url)
+    end
+
     def push_notification_image_url
-      image_attrs = feature_image.style(:mini)
+      return default_notification_image_url if feature_image.nil?
+
+      image_attrs = feature_image.styles.first
       image_attrs[:url]
     end
 

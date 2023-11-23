@@ -1,0 +1,16 @@
+<!-- insert_after "erb[loud]:contains('fields_for :favicon_image')" -->
+
+  <% @store.build_default_notification_image unless @store.default_notification_image %>
+
+  <%= f.fields_for :default_notification_image do |ff| %>
+    <%= f.field_container :default_notification_image do %>
+      <% if @store.default_notification_image.attachment&.attached? && @store.default_notification_image.attachment&.variable? %>
+        <%= image_tag main_app.cdn_image_url(@store.default_notification_image.attachment.variant(resize_to_limit: [104, 104])) %>
+      <% end %>
+      <%= f.field_container :default_notification_image do %>
+        <%= f.label :default_notification_image, Spree.t(:default_notifcation_image) %><br>
+        <%= ff.file_field :attachment %>
+        <%= f.error_message_on :default_notification_image %>
+      <% end %>
+    <% end %>
+  <% end %>
