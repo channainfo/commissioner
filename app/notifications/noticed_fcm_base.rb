@@ -1,6 +1,6 @@
 class NoticedFcmBase < Noticed::Base
   deliver_by :database, format: :format_for_database, if: :push_notificable?
-  deliver_by :fcm, credentials: :fcm_credentials, format: :format_for_fcm, if: :push_notificable?
+  deliver_by :fcm, credentials: :fcm_credentials, format: :format_notification, if: :push_notificable?
   delegate :push_notificable?, to: :recipient
 
   def format_for_database
@@ -24,15 +24,47 @@ class NoticedFcmBase < Noticed::Base
     recipient.device_tokens.map(&:registration_token)
   end
 
-  def format_for_fcm(device_token)
-    notification_data = {
-      title: title,
-      body: message
-    }
+  def format_notification(device_token)
     {
       data: convert_hash_values_to_str(payload),
       token: device_token,
-      notification: notification_data
+      notification: {
+        title: title,
+        body: message
+      },
+
+      # send notication with image
+      android: android_settings,
+      apns: apns_settings
+    }
+  end
+
+  def image_url
+    nil
+  end
+
+  def android_settings
+    return if image_url.nil?
+
+    {
+      notification: {
+        image: image_url
+      }
+    }
+  end
+
+  def apns_settings
+    return if image_url.nil?
+
+    {
+      payload: {
+        aps: {
+          'mutable-content': 1
+        }
+      },
+      fcm_options: {
+        image: image_url
+      }
     }
   end
 

@@ -2,6 +2,7 @@ module SpreeCmCommissioner
   class CustomerContentNotification < NoticedFcmBase
     param :customer_notification
 
+    # overrided
     def image_url
       customer_notification.push_notification_image_url
     end
