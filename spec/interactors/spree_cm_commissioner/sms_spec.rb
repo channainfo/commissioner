@@ -114,11 +114,11 @@ RSpec.describe SpreeCmCommissioner::Sms do
   context 'plasgate adapter' do
     it 'update sms log queue_id after create message' do
       success_response = double(:response, status: 200, body: "{\n  \"message_count\": 1, \n  \"queue_id\": \"2448cbec-822b-4a46-b216-e1cb6a3c5a86\"\n}\n")
+      sms_options = { from: 'SMS Info', to: '+85512345678', body: 'Message Body...' }
 
       allow_any_instance_of(SpreeCmCommissioner::Sms).to receive(:adapter).and_return(SmsAdapter::Plasgate.new)
-      allow_any_instance_of(SmsAdapter::Plasgate).to receive(:request).and_return(success_response)
+      allow_any_instance_of(SmsAdapter::Plasgate).to receive(:request).with(sms_options).and_return(success_response)
 
-      sms_options = { from: 'SMS Info', to: '+85512345678', body: 'Message Body...' }
       context = SpreeCmCommissioner::Sms.call(sms_options)
 
       expect(context.sms_log.external_ref).to eq "2448cbec-822b-4a46-b216-e1cb6a3c5a86"

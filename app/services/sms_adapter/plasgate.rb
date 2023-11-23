@@ -14,7 +14,7 @@ module SmsAdapter
       json
     end
 
-    def request
+    def request(options)
       client.post('/rest/send') do |req|
         req.params = { private_key: Rails.application.credentials.plasgate[:private] }
         req.body = request_body(options).to_json
