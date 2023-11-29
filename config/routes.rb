@@ -114,6 +114,8 @@ Spree::Core::Engine.add_routes do
         put :fire_notification
         put :queue_webhooks_requests
       end
+
+      resources :line_items, only: %i[edit update]
     end
 
     resources :webhooks_subscribers do
