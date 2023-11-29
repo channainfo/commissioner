@@ -7,7 +7,6 @@
         <%= f.error_message_on :name, class: 'error-message' %>
       <% end %>
     </div>
-
     <div class="col-12 col-md-4">
       <%= f.field_container :hide_from_nav, class: ['custom-control', 'custom-checkbox', 'my-4'] do %>
         <%= f.check_box :hide_from_nav, class: 'custom-control-input' %>
@@ -15,7 +14,6 @@
         <%= f.error_message_on :hide_from_nav %>
       <% end %>
     </div>
-
     <div class="col-12 col-md-8">
       <% unless @taxon.new_record? %>
         <%= f.field_container :permalink do %>
@@ -31,7 +29,6 @@
         <% end %>
       <% end %>
     </div>
-
     <div class="col-12 col-md-4">
       <% if @taxon.new_record? %>
         <% disabled = false %>
@@ -48,49 +45,43 @@
       <% end %>
     </div>
   </div>
-<% unless @taxon.new_record? %>
-  <div class="row">
-    <div class="col-12">
-      <hr>
+  <% unless @taxon.new_record? %>
+    <div class="row">
+      <div class="col-12">
+        <hr>
+      </div>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="col-12 col-md-8">
-      <%= f.field_container :description do %>
-        <%= f.label :description, Spree.t(:description) %>
-        <%= f.text_area :description, class: "form-control #{'spree-rte' if taxon_wysiwyg_editor_enabled? }", rows: 14 %>
-      <% end %>
+    <div class="row">
+      <div class="col-12 col-md-8">
+        <%= f.field_container :description do %>
+          <%= f.label :description, Spree.t(:description) %>
+          <%= f.text_area :description, class: "form-control #{'spree-rte' if taxon_wysiwyg_editor_enabled? }", rows: 14 %>
+        <% end %>
+      </div>
+      <div class="col-12 col-md-4">
+        <%= render 'assets_form', f: f %>
+      </div>
     </div>
-
-    <div class="col-12 col-md-4">
-      <%= render 'assets_form', f: f %>
+    <div class="row">
+      <div class="col-12">
+        <hr>
+      </div>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="col-12">
-      <hr>
+    <div class="row">
+      <div class="col-12">
+        <%= f.field_container :meta_title do %>
+          <%= f.label :meta_title, Spree.t(:meta_title) %>
+          <%= f.text_field :meta_title, class: 'form-control', rows: 6 %>
+        <% end %>
+        <%= f.field_container :meta_description do %>
+          <%= f.label :meta_description, Spree.t(:meta_description) %>
+          <%= f.text_area :meta_description, class: 'form-control', rows: 6 %>
+        <% end %>
+        <%= f.field_container :meta_keywords do %>
+          <%= f.label :meta_keywords, Spree.t(:meta_keywords) %>
+          <%= f.text_field :meta_keywords, class: 'form-control', rows: 6 %>
+        <% end %>
+      </div>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="col-12">
-      <%= f.field_container :meta_title do %>
-        <%= f.label :meta_title, Spree.t(:meta_title) %>
-        <%= f.text_field :meta_title, class: 'form-control', rows: 6 %>
-      <% end %>
-
-      <%= f.field_container :meta_description do %>
-        <%= f.label :meta_description, Spree.t(:meta_description) %>
-        <%= f.text_area :meta_description, class: 'form-control', rows: 6 %>
-      <% end %>
-
-      <%= f.field_container :meta_keywords do %>
-        <%= f.label :meta_keywords, Spree.t(:meta_keywords) %>
-        <%= f.text_field :meta_keywords, class: 'form-control', rows: 6 %>
-      <% end %>
-    </div>
-  </div>
-<% end %>
+  <% end %>
 </div>

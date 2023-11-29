@@ -152,7 +152,13 @@ Spree::Core::Engine.add_routes do
   namespace :transit do
     resources :reservations
     resources :locations
-    resources :vendors
+    resources :vendors do
+      resources :service_calendars, except: %i[update] do
+        member do
+          patch :update_status
+        end
+      end
+    end
     resources :branches
     resources :stops
     resources :routes
