@@ -217,6 +217,9 @@ en:
       location: "Location"
       settings: "Setting"
       vendor: "Vendor"
+      service_calendar:
+        title: "Sevice Calendar"
+        new: "New Sevice Calendar"
       branch:
         branches: "Branches"
         address: "Address"

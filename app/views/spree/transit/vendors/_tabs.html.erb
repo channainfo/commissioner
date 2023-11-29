@@ -1,0 +1,16 @@
+<% content_for(:page_tabs) do %>
+  <%= content_tag :li, class: 'nav-item' do %>
+    <%= link_to_with_icon 'edit.svg',
+                          Spree.t(:details),
+                          spree.edit_transit_vendor_url(@vendor.id),
+                          class: "nav-link #{'active' if current == :details}" %>
+  <% end if can?(:transit, Spree::Vendor) %>
+
+  <%= content_tag :li do %>
+    <%= link_to_with_icon 'images.svg',
+      Spree.t(:service_calendars),
+      transit_vendor_service_calendars_url(@vendor.id),
+      class: "nav-link #{'active' if current == :service_calendars}"
+    %>
+  <% end if can?(:transit, SpreeCmCommissioner::ServiceCalendar) %>
+<% end %>
