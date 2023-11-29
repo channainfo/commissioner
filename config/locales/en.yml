@@ -167,6 +167,8 @@ en:
     length: 'Length'
     preference: 'Preference'
     notification: 'Notification'
+    notice_messages:
+      line_item_not_found: 'Line item not found'
     promotion_rule_types:
       fixed_date:
         name: 'Fixed Date'
