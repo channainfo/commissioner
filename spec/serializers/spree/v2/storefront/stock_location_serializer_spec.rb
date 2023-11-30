@@ -16,14 +16,17 @@ describe Spree::V2::Storefront::StockLocationSerializer, type: :serializer do
         :lat,
         :lon,
         :address1,
-        :reference
+        :reference,
+        :phone
       )
     end
 
     it 'returns exact relationships' do
       expect(subject[:data][:relationships].keys).to contain_exactly(
         :vendor,
-        :state
+        :state,
+        :nearby_places,
+        :logo
       )
     end
   end
