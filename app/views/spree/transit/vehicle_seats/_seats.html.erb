@@ -47,7 +47,7 @@
               <div class="seat-icon" data-seat-row="<%= seat['row'] %>" data-seat-column="<%= seat['column'] %>">
                 <%= inline_svg_tag "cm-driver-seat-icons.svg", size: "35px" %>
               </div>
-              <div class="text-center">
+              <div class="text-center hidden-input">
                 <input id="<%= seat['row'] %><%= seat['column'] %>"
                         type="text" class="seat-label text-center border-0"
                         value="<%= seat['label'] %>"
