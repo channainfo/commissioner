@@ -32,7 +32,9 @@ module Spree
 
       def load_data
         scope = current_store.orders
-        @order = scope.find(params[:order_id])
+
+        @order = scope.find_by(number: params[:order_id])
+
         @line_item = @order.line_items.find(params[:id])
       end
     end
