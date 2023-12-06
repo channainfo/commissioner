@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
     constructor(row, column, label) {
       this.row = row;
       this.column = column;
-      this.label = label + row + column;
+      this.label = label;
       this.layer = layer;
       this.seat_type = 0;
       this.vehicle_type_id = vehicleTypeId;
@@ -41,9 +41,10 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   label.addEventListener("input", function () {
     if (row.value > 0 && column.value > 0 && seats) {
-      seats.forEach((r, rIndex) => {
-        r.forEach((seat, cIndex) => {
-          seat.label = `${label.value}${rIndex + 1}${cIndex + 1}`;
+      let tmpLabel = 0;
+      seats.forEach((r) => {
+        r.forEach((seat) => {
+          seat.label = `${label.value}${++tmpLabel}`;
         });
       });
       getSeats();
@@ -58,10 +59,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function constructSeats() {
     seats = [];
+    let tmpLabel = 0;
     for (let i = 1; i <= row.value; i++) {
       let columns = [];
       for (let j = 1; j <= column.value; j++) {
-        columns.push(new Seat(i, j, label.value));
+        tmpLabel++;
+        columns.push(new Seat(i, j, label.value + tmpLabel));
       }
       seats.push(columns);
     }
@@ -162,6 +165,17 @@ document.addEventListener("DOMContentLoaded", function () {
       seats[selectedRow][selectedColumn].seat_type = parseInt(
         document.getElementById("type").value
       );
+      let tmpLabel = 0;
+      for (let i = 0; i < row.value; i++) {
+        for (let j = 0; j < column.value; j++) {
+          if (seats[i][j].seat_type != 1 && seats[i][j].seat_type != 3) {
+            tmpLabel++;
+            seats[i][j].label = `${label.value}${tmpLabel}`;
+          } else {
+            seats[i][j].label = "NA";
+          }
+        }
+      }
       getSeats();
     });
   }
@@ -191,27 +205,3 @@ $(document).ready(function () {
     });
   }
 });
-
-// function viewseat() {
-//   $.ajax({
-//     url: "/transit/vehicle_types/vehicle_seats/load_seat",
-//     type: "POST",
-//     data: {
-//       row: row.value,
-//       column: column.value,
-//       label: label.value,
-//       seats: JSON.stringify(seats),
-//     },
-//     success: function (response) {
-//       seatsContainer.innerHTML = response;
-//       addSeatClickListener();
-//       typeSelect();
-//       editLabel();
-//       addLayer();
-//       console.log(seats);
-//     },
-//     error: function (xhr, status, error) {
-//       show_flash("error", error);
-//     },
-//   });
-// }
