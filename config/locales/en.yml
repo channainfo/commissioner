@@ -176,6 +176,9 @@ en:
       weekend:
         name: 'Weekend'
         description: 'Weekend'
+      custom_dates:
+        name: 'Custom Dates'
+        description: 'Custom Dates'
       vendors:
         name: 'Vendors'
         description: 'Vendors'

@@ -1,0 +1,29 @@
+<% if @promotion_rule.preferred_custom_dates&.any? %>
+<table class="table table-bordered rounded mt-4">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col"><small>Title</small></th>
+      <th scope="col"><small>Date</small></th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @promotion_rule.preferred_custom_dates&.each_with_index do |event_json, index| %>
+      <% event = JSON.parse(event_json) %>
+      <tr>
+        <td scope="row">
+          <%= event['title'] %>
+        </td>
+        <td>
+          <%= event['start_date'] %>
+          <div class="badge badge-active"><small><%= event['length'] %> day</small></div>
+        </td>
+        <td>
+          <%= link_to_with_icon 'delete.svg', Spree.t(:delete), url_for(action: :remove_custom_date, custom_date_index: index),
+            { no_text: true, class: 'mb-2 btn btn-danger btn-sm delete-resource', data: { confirm: Spree.t(:are_you_sure), disable_with: "#{Spree.t(:saving)}..." } } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% end %>
