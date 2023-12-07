@@ -1,0 +1,42 @@
+<% content_for :page_title do %>
+  <%= link_to Spree.t(:taxonomies), spree.transit_taxonomies_path %> / <%= @taxonomy.name %>
+<% end %>
+
+<div id="sortableTreeArea">
+  <div class="row">
+    <div class="col-12">
+
+      <div class="card mb-3">
+        <div class="card-header">
+          <div class="row pb-0">
+            <div class="col d-flex my-1">
+              <%= button_link_to Spree.t('transit.taxonomies.edit_root_taxonomy', name: @taxonomy.root.name ), spree.edit_transit_taxonomy_taxon_path(@taxonomy, @taxonomy.root.id), icon: 'edit.svg', class: 'no-wrap btn-light align-self-center' %>
+            </div>
+            <div class="col d-flex my-1 justify-content-end">
+              <%= button_link_to Spree.t('transit.taxonomies.add_new_taxon'), spree.new_transit_taxonomy_taxon_path(@taxonomy.id), icon: 'add.svg', class: 'no-wrap btn btn-success align-self-center' %>
+            </div>
+          </div>
+        </div>
+
+        <% if @taxonomy.root.present? %>
+          <div class="card-body p-0 bg-light" data-controller="sortable-tree" data-sortable-tree-handle-value=".move-handle">
+            <div data-sortable-tree-parent-id-value="<%= @taxonomy.root.id %>">
+
+              <% if @taxonomy.root.children.present? %>
+                <% @taxonomy.root.children.each do |root_children| %>
+                  <%= build_sortable_tree(@taxonomy, root_children) %>
+                <% end %>
+              <% else %>
+                <div class="text-center no-objects-found m-5 m-5">
+                  <%= raw Spree.t('transit.taxonomies.no_taxons', taxonomy: @taxonomy.root.name ) %>
+                </div>
+              <% end %>
+
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+</div>

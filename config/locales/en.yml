@@ -229,7 +229,15 @@ en:
           label: "Reference"
       stops: "Stops"
       routes: "Routes"
-    device_tokens: "Device Tokens"
+      places: "Places"
+      taxonomies:
+        edit_root_taxonomy: Edit %{name} Taxonomy
+        taxonomies: Taxonomies
+        taxons_belonging_to: "Taxons Belonging To %{taxonomy_name}"
+        submenu: Submenu
+        add_new_taxon: Add a new Taxon
+        no_taxons: '<b>%{taxonomy}</b> has no Taxons. Click the <b>Add a new Taxon</b> button, to begin adding Taxons.'
+
     user_identity_providers: "Identity Providers"
     new_user_identity_provider: "New Identity Providers"
 

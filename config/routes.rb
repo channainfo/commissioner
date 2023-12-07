@@ -156,6 +156,18 @@ Spree::Core::Engine.add_routes do
     resources :branches
     resources :stops
     resources :routes
+    resources :taxonomies do
+      collection do
+        post :update_positions
+      end
+      resources :taxons do
+        member do
+          delete :remove_icon
+        end
+      end
+    end
+
+    resources :taxons, only: %i[index show]
     root to: redirect('/transit/reservations')
   end
 

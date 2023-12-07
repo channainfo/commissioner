@@ -1,0 +1,29 @@
+<% taxonomy = parent_resource %>
+<% taxon = child_resource %>
+
+<div class="sortable-tree-item-row d-flex flex-nowrap">
+  <div class="move-handle d-flex align-items-center p-3">
+    <%= svg_icon(name: 'grip-vertical.svg', width: '20', height: '20') %>
+  </div>
+
+  <div class="d-flex align-items-center overflow-hidden w-100">
+    <div class="overflow-hidden">
+      <%= taxon.name %>
+      <small class="form-text text-muted mt-0 mb-1">
+        <%= Spree.t('admin.taxonomies.submenu') %>: <%= active_badge(!taxon.hide_from_nav) %>
+      </small>
+    </div>
+    <% if taxon.icon.present? %>
+      <div class="ml-2">
+        <div class="item_image_holder">
+          <%= image_tag main_app.cdn_image_url(taxon.icon.attachment) %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="d-flex align-items-center space-buttons px-2">
+    <%= link_to_edit(taxon, no_text: true, url: spree.edit_transit_taxonomy_taxon_path(taxonomy, taxon.id)) %>
+    <%= link_to_delete(taxon, no_text: true, url: spree.transit_taxonomy_taxon_path(taxonomy, taxon.id)) if can?(:destroy, taxon) %>
+  </div>
+</div>
