@@ -1,10 +1,6 @@
+$day-background: theme-color("light");
+
 .simple-calendar {
-  $day-background: theme-color("light");
-
-  table {
-    @extend .table-responsive-md;
-  }
-
   .calendar-heading {
     @extend .border;
 
@@ -105,4 +101,97 @@
 
   // .has-events {
   // }
+}
+
+.c-month-calendar {
+  .simple-calendar {
+    table {
+      @extend .table-responsive-md;
+    }
+  }
+}
+
+.c-annual-calendar {
+  @extend .row;
+
+  .simple-calendar {
+    @extend .col-md-4;
+    @extend .col-sm-6;
+    @extend .col-12;
+
+    margin-bottom: 8px;
+
+    table {
+      border: none;
+    }
+
+    .calendar-heading {
+      border: none !important;
+      background: none !important;
+      margin: 8px 0px;
+
+      a {
+        display: none;
+      }
+    }
+
+    th {
+      @extend .border-top;
+
+      padding: 4px !important;
+      font-size: x-small;
+      font-weight: normal;
+    }
+
+    .day {
+      padding: 4px;
+      height: 24px;
+      font-size: small;
+    }
+
+    .prev-month {
+      font-size: 0px !important;
+    }
+
+    .next-month {
+      display: none;
+    }
+
+    // .current-month {}
+    .has-events {
+      background-color: lighten(theme-color("warning"), 30%);
+      color: darken(theme-color("warning"), 50%);
+
+      @include hover {
+        background-color: theme-color("warning");
+      }
+    }
+
+    .has-events:has(div.c-exception) {
+      background-color: lighten(theme-color("danger"), 20%);
+      color: darken(theme-color("danger"), 50%);
+
+      @include hover {
+        background-color: theme-color("danger");
+      }
+    }
+
+    .c-selecting-day {
+      background-color: lighten(theme-color("info"), 30%) !important;
+      color: darken(theme-color("info"), 50%) !important;
+
+      @include hover {
+        background-color: theme-color("info") !important;
+      }
+    }
+
+    .c-selecting-day:has(div.c-exception) {
+      background-color: lighten(theme-color("info"), 10%) !important;
+      color: darken(theme-color("info"), 20%) !important;
+
+      @include hover {
+        background-color: theme-color("info") !important;
+      }
+    }
+  }
 }

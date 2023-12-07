@@ -7,6 +7,7 @@
   <div id="c-sidebar"></div>
 <% end %>
 
+<div class="c-month-calendar">
 <%= month_calendar(attribute: :from_date, end_attribute: :to_date, events: events, start_date_param: :active_date) do |date, _events| %>
   <% display_day = active_date.month != date.month ? date.strftime("%b %d") : date.day %>
   <div class="c-date-container" >
@@ -23,3 +24,4 @@
     </div>
   </div>
 <% end %>
+</div>
