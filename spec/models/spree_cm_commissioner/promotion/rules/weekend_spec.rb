@@ -23,6 +23,16 @@ RSpec.describe SpreeCmCommissioner::Promotion::Rules::Weekend do
       expect(subject.date_eligible?(sunday)).to be true
     end
 
+    it 'not eligible when date is weekend but is exception date' do
+      exception_date = { start_date: friday, length: '1', title: 'Holiday' }.to_json
+      subject = described_class.new(preferred_weekend_days: ['5', '6', '0'], preferred_exception_dates: [exception_date])
+
+      expect(subject.weekend?(friday)).to be true
+      expect(subject.exception?(friday)).to be true
+
+      expect(subject.date_eligible?(friday)).to be false
+    end
+
     it 'not eligible on weekday' do
       subject = described_class.new(preferred_weekend_days: ['6', '0'])
 

@@ -1,6 +1,14 @@
 Spree::Core::Engine.add_routes do
   # Add your extension routes here
   namespace :admin do
+    resources :promotions do
+      resources :weekend_rules, controller: :promotion_weekend_rules, only: %i[edit update] do
+        member do
+          delete :remove_exception_date
+        end
+      end
+    end
+
     namespace :vectors do
       resources :icons, only: [:index]
       resources :option_values, only: %i[index update] do
