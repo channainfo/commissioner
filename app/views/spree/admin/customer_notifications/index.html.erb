@@ -13,7 +13,6 @@
       <tr data-hook="admin_notifications_index_headers">
         <th scope="col"><%= Spree.t("customer_notification.title") %></th>
         <th scope="col"><%= Spree.t("customer_notification.excerpt") %></th>
-        <th scope="col"><%= Spree.t("customer_notification.body") %></th>
         <th scope="col"><%= Spree.t("customer_notification.notification_type") %></th>
         <th scope="col"><%= Spree.t("customer_notification.url") %></th>
         <th scope="col"><%= Spree.t("customer_notification.created_at") %></th>
@@ -26,7 +25,6 @@
           <tr data-hook="admin_notifications_index_rows" class="<%= cycle('odd', 'even') %>">
             <td><%= link_to notification.try(:title), edit_admin_customer_notification_url(notification) %></td>
             <td><%= truncate(notification.try(:excerpt)) %></td>
-            <td><%= truncate(notification.try(:body)) %></td>
             <td><%= notification.notification_type %></td>
             <td><%= notification.url %></td>
             <td><%= notification.created_at %></td>

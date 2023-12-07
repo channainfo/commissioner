@@ -14,9 +14,9 @@
         <%= f.error_message_on :excerpt %>
       </div>
 
-     <div class="col-lg-12 col-sm-12">
+    <div class="col-lg-12 col-sm-12">
           <%= f.label :body, Spree.t(:body) %>
-          <%= f.text_area :body, class: "form-control  border-radius-5" %>
+          <%= f.text_area :body,  { rows: "20", class: 'form-control spree-rte border-radius-5' } %>
           <%= f.error_message_on :body %>
     </div>
 
