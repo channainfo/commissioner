@@ -11,7 +11,8 @@ module SpreeCmCommissioner
     def extra_payload
       {
         order_id: order.id,
-        order_number: order.number
+        order_number: order.number,
+        notification_type: type
       }
     end
 

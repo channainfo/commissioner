@@ -26,7 +26,9 @@ RSpec.describe SpreeCmCommissioner::CustomerContentNotification do
     it 'return a payload with customer_notification_id and url' do
       extra_payload = {
         customer_notification_id: customer_notification.id,
-        url: url
+        url: url,
+        notification_type: 'promotion'
+
       }
       expect(noticed_customer.extra_payload).to eq extra_payload
     end
