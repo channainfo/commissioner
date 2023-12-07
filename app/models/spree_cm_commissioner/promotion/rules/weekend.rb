@@ -8,9 +8,9 @@ module SpreeCmCommissioner
         preference :exception_dates, :array
         preference :weekend_days, :array, default: %w[6 0]
 
-        before_update :reorder_exception_dates
+        before_update :sort_exception_dates, unless: -> { preferred_exception_dates.blank? }
 
-        def reorder_exception_dates
+        def sort_exception_dates
           self.preferred_exception_dates = preferred_exception_dates.sort_by { |obj| JSON.parse(obj)['start_date'] }
         end
 

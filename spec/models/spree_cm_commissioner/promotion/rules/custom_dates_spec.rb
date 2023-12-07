@@ -11,7 +11,7 @@ RSpec.describe SpreeCmCommissioner::Promotion::Rules::CustomDates do
 
   let(:preferred_custom_dates) { [custom_date1, custom_date2, custom_date3]}
 
-  describe 'date_eligible?' do
+  describe '#date_eligible?' do
     it 'eligible when date is between any of custom_dates' do
       subject = described_class.create(preferred_custom_dates: preferred_custom_dates)
 
@@ -34,6 +34,30 @@ RSpec.describe SpreeCmCommissioner::Promotion::Rules::CustomDates do
       subject = described_class.create(preferred_custom_dates: [custom_date1])
 
       expect(subject.date_eligible?('2023-01-01'.to_date)).to be false
+    end
+  end
+
+  context 'before_update callbacks' do
+    let(:custom_date_7th) { { start_date: '2023-11-07'.to_date, length: '1', title: 'Holiday1' }.to_json }
+    let(:custom_date_8th) { { start_date: '2023-11-08'.to_date, length: '1', title: 'Holiday2' }.to_json }
+
+    describe '#sort_custom_dates' do
+      it 'does not run callback if custom_dates not exists' do
+        promotion_rule = described_class.new
+        allow(promotion_rule).to receive(:sort_custom_dates)
+
+        expect(promotion_rule.preferred_custom_dates).to eq nil
+        expect(promotion_rule).not_to have_received(:sort_custom_dates)
+      end
+
+      it 'sorted custom dates by their start date' do
+        promotion_rule = described_class.create
+
+        promotion_rule.update(preferred_custom_dates: [custom_date_8th, custom_date_7th])
+        promotion_rule.reload
+
+        expect(promotion_rule.preferred_custom_dates).to eq [custom_date_7th, custom_date_8th]
+      end
     end
   end
 end
