@@ -5,9 +5,9 @@ module SpreeCmCommissioner
         # [ {"start_date":"2023-12-07", "length":"1", "title":"KNY"} ]
         preference :custom_dates, :array
 
-        before_update :reorder_custom_dates
+        before_update :sort_custom_dates, unless: -> { preferred_custom_dates.blank? }
 
-        def reorder_custom_dates
+        def sort_custom_dates
           self.preferred_custom_dates = preferred_custom_dates.sort_by { |obj| JSON.parse(obj)['start_date'] }
         end
 
