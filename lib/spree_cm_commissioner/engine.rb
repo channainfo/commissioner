@@ -24,6 +24,7 @@ module SpreeCmCommissioner
         SpreeCmCommissioner::Promotion::Rules::Vendors,
         SpreeCmCommissioner::Promotion::Rules::FixedDate,
         SpreeCmCommissioner::Promotion::Rules::Weekend,
+        SpreeCmCommissioner::Promotion::Rules::CustomDates,
       ]
 
       Rails.application.config.spree.promotions.actions.concat [

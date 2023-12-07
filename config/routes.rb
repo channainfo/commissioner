@@ -2,6 +2,12 @@ Spree::Core::Engine.add_routes do
   # Add your extension routes here
   namespace :admin do
     resources :promotions do
+      resources :custom_dates_rules, controller: :promotion_custom_dates_rules, only: %i[edit update] do
+        member do
+          delete :remove_custom_date
+        end
+      end
+
       resources :weekend_rules, controller: :promotion_weekend_rules, only: %i[edit update] do
         member do
           delete :remove_exception_date

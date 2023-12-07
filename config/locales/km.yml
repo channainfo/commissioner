@@ -167,6 +167,9 @@ km:
       weekend:
         name: 'ថ្ងៃចុងសប្តាហ៍'
         description: 'ថ្ងៃចុងសប្តាហ៍'
+      custom_dates:
+        name: 'Custom Dates'
+        description: 'Custom Dates'
       vendors:
         name: 'Vendors'
         description: 'Vendors'
