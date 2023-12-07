@@ -4,7 +4,7 @@ FactoryBot.define do
     body { FFaker::LoremUA.paragraph }
     payload { { test: :payload_data } }
     url { FFaker::Internet.http_url }
-    notification_type { FFaker::Name.name }
+    notification_type { 'promotion' }
 
     trait :with_feature_image do
       after(:build) do |customer_notification|

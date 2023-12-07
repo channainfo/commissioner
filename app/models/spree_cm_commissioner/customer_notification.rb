@@ -10,6 +10,8 @@ module SpreeCmCommissioner
     validates :payload, presence: true
     validates :notification_type, presence: true
 
+    enum notification_type: { :promotion => 0, :announcement => 1 }
+
     def default_notification_image_url
       Spree::Store.default.default_notification_image&.styles&.first&.[](:url)
     end

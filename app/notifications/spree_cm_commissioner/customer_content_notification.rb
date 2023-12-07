@@ -19,7 +19,8 @@ module SpreeCmCommissioner
     def extra_payload
       {
         customer_notification_id: customer_notification.id,
-        url: customer_notification.url
+        url: customer_notification.url,
+        notification_type: params[:customer_notification][:notification_type]
       }
     end
 

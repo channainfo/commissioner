@@ -21,11 +21,11 @@
     </div>
 
     <div class="col-lg-12 col-sm-12">
-      <div class="form-group">
-        <%= f.label :notification_type, class: "text-md" %>
-        <%= f.text_field :notification_type, class: 'form-control border-radius-5' %>
+      <%= f.field_container :notification_type, class: ['form-group mt-3'] do %>
+        <%= f.label :notification_type, Spree.t(:notification_type) %> <span class="required text-danger">*</span>
+        <%= f.select(:notification_type, SpreeCmCommissioner::CustomerNotification.notification_types.keys, {}, { class: 'select2-clear' }) %>
         <%= f.error_message_on :notification_type %>
-      </div>
+      <% end %>
     </div>
 
     <div class="col-lg-12 col-sm-12">
