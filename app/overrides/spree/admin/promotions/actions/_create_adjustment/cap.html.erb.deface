@@ -1,0 +1,11 @@
+<!-- insert_after ".calculator-fields > .row > .settings" -->
+
+<div class="form-group col-12 col-md-6 mt-3 mb-0" id="cap_field">
+  <%= label_tag "#{param_prefix}[calculator_attributes][cap]", "Cap" %>
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text"><%= currency_symbol(current_currency) %></span>
+    </div>
+    <%= text_field_tag "#{param_prefix}[calculator_attributes][cap]", number_to_currency(promotion_action.calculator.cap, unit: ''), class: 'form-control' %>
+  </div>
+</div>

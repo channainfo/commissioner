@@ -36,8 +36,11 @@ module SpreeCmCommissioner
         def compute_line_item_amount(line_item)
           line_item.date_range.filter_map do |date|
             if promotion.date_eligible?(date)
-              line_item_per_unit = Struct.new(:amount, :currency, :quantity)
-                                         .new(line_item.amount_per_date_unit, line_item.currency, line_item.quantity)
+              line_item_per_unit = Struct.new(:amount, :currency, :quantity, :price)
+                                         .new(line_item.amount_per_date_unit, line_item.currency,
+                                              line_item.quantity, line_item.price
+                                         )
+
               compute(line_item_per_unit)
             end
           end.sum
