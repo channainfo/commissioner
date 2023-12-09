@@ -112,6 +112,7 @@ RSpec.describe SpreeCmCommissioner::UserPinCodeAuthenticator do
 
         expect(registerer.context.user.phone_number).to eq '012123456'
         expect(registerer.context.user.email).to eq nil
+        expect(registerer.context.user.confirmed_at).to be_within(1.second).of(Time.zone.now)
       end
 
       it 'saves user with email if phone number does not exist' do
@@ -134,6 +135,7 @@ RSpec.describe SpreeCmCommissioner::UserPinCodeAuthenticator do
 
         expect(registerer.context.user.phone_number).to eq nil
         expect(registerer.context.user.email).to eq 'panhachom@gmail.com'
+        expect(registerer.context.user.confirmed_at).to be_within(1.second).of(Time.zone.now)
       end
     end
 

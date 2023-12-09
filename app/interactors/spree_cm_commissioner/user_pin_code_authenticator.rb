@@ -32,6 +32,7 @@ module SpreeCmCommissioner
       create_options = context.to_h.slice(*fields)
 
       user = Spree::User.new(create_options)
+      user.confirmed_at = Time.zone.now
 
       if user.save
         context.user = user
