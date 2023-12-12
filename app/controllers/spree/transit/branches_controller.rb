@@ -8,6 +8,7 @@ module Spree
 
       def collection
         return @collection if defined?(@collection)
+
         current_vendor.branches
 
         @search = current_vendor.branches.includes(:state).ransack(params[:q])

@@ -2,6 +2,9 @@
   <%= page_header_back_button spree.transit_vehicle_types_path %>
   <%= I18n.t('spree.transit.vehicle_types') %>
 <% end %>
+<% content_for :page_actions do %>
+  <%= button Spree.t(:add_layer), "add.svg", nil, { class: "btn-success", "data-toggle": "modal", "data-target": "#createSeatModal" } %>
+<% end %>
 <div data-hook="admin_user_new_form_header">
   <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
 </div>
@@ -9,41 +12,50 @@
   <%= form_with model: @object, url: { action: 'update' } do |f| %>
     <%= render partial: 'form', locals: { f: f } %>
   <% end %>
-  <div>
-    <div class="p-2 layer-list">
-      <% @seats.each do |layer| %>
-        <div class="m-2 d-flex">
-          <div class="m-1">
-            <label for="layer">Layer</label>
-            <input disabled type="text" class="form-control" name="layer" value= "<%= layer.first.first[:layer] %>">
-          </div>
-          <div class="m-1">
-            <label for="Row">Row</label>
-            <input disabled type="text" class="form-control" name="Row" value= "<%= layer.size %>">
-          </div>
-          <div class="m-1">
-            <label for="Column">Column</label>
-            <input disabled type="text" class="form-control" name="Column" value= "<%= layer.first.size %>">
-          </div>
-          <div class="mt-auto mb-1 mx-1">
-            <button type="button" class="btn btn-primary view-layer-btn"
-            data-toggle="modal"
-            data-target="#viewSeatModal"
-            data-layer="<%= layer.to_json %>"
-            data-layer-name="<%= layer.first.first[:layer] %>"
-            data-layer-row="<%= layer.size %>"
-            data-layer-column="<%= layer.first.size %>"
-            >
-              View Layer
-            </button>
-          </div>
-        </div>
-      <% end %>
-      <button type="button" class="btn btn-primary m-2" data-toggle="modal" data-target="#createSeatModal">
-        add layer
-      </button>
+  <% if @seats.any? %>
+    <div class="table-responsive border rounded bg-white mb-3">
+      <table class="table" id="listing_customers" data-hook>
+        <thead class="text-muted">
+          <tr data-hook="admin_customers_index_headers">
+            <th>
+              <%= Spree.t(:layer_name)%>
+            </th>
+            <th>
+              <%= Spree.t(:row) %>
+            </th>
+            <th>
+              <%= Spree.t(:column) %>
+            </th>
+            <th>
+              <%= Spree.t(:created_at) %>
+            </th>
+            <th scope="col" class="text-center" data-hook="admin_products_index_header_actions" class="actions"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @seats.each do | layer| %>
+            <tr data-hook="admin_customers_index_rows">
+              <td>
+                <%= layer.first.first[:layer] %>
+              </td>
+              <td>
+                <%= layer.size %>
+              </td>
+              <td>
+                <%= layer.first.size %>
+              </td>
+              <td>
+                <%= layer.first.first[:created_at] %>
+              </td>
+              <td>
+                <%= button nil, "eye-fill.svg", nil, {class: "view-layer-btn", "data-toggle": "modal", "data-target": "#viewSeatModal", "data-layer": layer.to_json, "data-layer-name": layer.first.first[:layer], "data-layer-row": layer.size, "data-layer-column": layer.first.size    } %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
-  </div>
+  <% end %>
   <div  style="width:100%;" class="col-12" data-hook="admin_user_new_form_buttons">
     <%= render partial: 'spree/admin/shared/edit_resource_links', locals: { collection_url: spree.transit_vehicle_types_path } %>
   </div>

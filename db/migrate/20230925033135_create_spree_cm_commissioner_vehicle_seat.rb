@@ -5,7 +5,7 @@ class CreateSpreeCmCommissionerVehicleSeat < ActiveRecord::Migration[7.0]
       t.integer :seat_type
       t.integer :row
       t.integer :column
-      t.string  :layer
+      t.string  :code
       t.integer :vehicle_type_id
       t.timestamps
     end

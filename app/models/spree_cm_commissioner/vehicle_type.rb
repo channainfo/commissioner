@@ -4,6 +4,8 @@ module SpreeCmCommissioner
     has_many :vehicle_seats, class_name: 'SpreeCmCommissioner::VehicleSeat'
     belongs_to :vendor, class_name: 'Spree::Vendor'
 
+    validates :code, presence: true
+    validates :name, presence: true
     accepts_nested_attributes_for :vehicle_seats, allow_destroy: true
 
     def seat_layers
@@ -16,6 +18,7 @@ module SpreeCmCommissioner
               label: seat.label,
               layer: seat.layer,
               seat_type: seat.seat_type,
+              created_at: seat.created_at,
               vehicle_type_id: seat.vehicle_type_id
             }
           end

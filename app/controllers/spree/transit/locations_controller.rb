@@ -15,6 +15,7 @@ module Spree
 
       def collection
         return @collection if defined?(@collection)
+
         load_location
 
         @search = @locations.ransack(params[:q])

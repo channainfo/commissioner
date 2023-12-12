@@ -4,6 +4,7 @@ class CreateSpreeCmCommissionerVehicleType < ActiveRecord::Migration[7.0]
       t.string :name
       t.integer :route_type
       t.integer :vendor_id
+      t.code :string
       t.timestamps
     end
   end
