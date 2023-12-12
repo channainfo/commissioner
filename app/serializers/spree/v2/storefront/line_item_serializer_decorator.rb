@@ -3,7 +3,7 @@ module Spree
     module Storefront
       module LineItemSerializerDecorator
         def self.prepended(base)
-          base.attributes :from_date, :to_date, :need_confirmation, :product_type, :event_status
+          base.attributes :from_date, :to_date, :need_confirmation, :product_type, :event_status, :amount, :display_amount
           base.has_one :vendor
 
           base.belongs_to :order, serializer: Spree::V2::Storefront::LineItemOrderSerializer
