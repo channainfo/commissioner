@@ -14,6 +14,12 @@ module SpreeCmCommissioner
       )
     }
 
+    scope :unread_notifications, lambda {
+      where(
+        read_at: nil
+      )
+    }
+
     belongs_to :recipient, polymorphic: true
     belongs_to :notificable, polymorphic: true
   end

@@ -224,6 +224,9 @@ Spree::Core::Engine.add_routes do
         resource :profile_images, only: [:update]
         resource :user_profiles, only: [:update]
         resources :notifications do
+          collection do
+            patch :mark_all_as_read
+          end
           member do
             patch :mark_as_read
           end

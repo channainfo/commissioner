@@ -30,7 +30,19 @@ module Spree
           end
 
           def mark_as_read
-            SpreeCmCommissioner::NotificationReader.call(id: params[:id])
+            result = SpreeCmCommissioner::NotificationReader.call(id: params[:id])
+
+            return unless result.success?
+
+            head :ok
+          end
+
+          def mark_all_as_read
+            result = SpreeCmCommissioner::NotificationReader.call(user: spree_current_user)
+
+            return unless result.success?
+
+            head :ok
           end
 
           def resource_serializer
