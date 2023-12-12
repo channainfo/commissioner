@@ -12,6 +12,7 @@ module Spree
         @row = params[:row]
         @column = params[:column]
         @layer_name = params[:layer_name]
+        @created_at = params[:created_at]
         render :partial => 'spree/transit/vehicle_types/seat_view'
       end
 

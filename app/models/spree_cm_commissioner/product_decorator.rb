@@ -33,7 +33,7 @@ module SpreeCmCommissioner
       }
       base.scope :subscribable, -> { where(subscribable: 1) }
 
-      base.whitelisted_ransackable_attributes |= %w[short_name route_type ]
+      base.whitelisted_ransackable_attributes |= %w[short_name route_type]
     end
   end
 end
