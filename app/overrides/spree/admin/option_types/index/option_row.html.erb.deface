@@ -11,6 +11,7 @@
       <% @badge_class = 'badge-primary' if option_type.kind == "variant" %>
       <% @badge_class = 'badge-secondary' if option_type.kind == "product" %>
       <% @badge_class = 'badge-dark' if option_type.kind == "vendor" %>
+      <% @badge_class = 'badge-info' if option_type.kind == "vehicle_type" %>
       <%= content_tag(:strong, class: "badge #{@badge_class} text-uppercase ") do; option_type.kind ; end %>
     </td>
     <td><%= active_badge(option_type.filterable) %></td>

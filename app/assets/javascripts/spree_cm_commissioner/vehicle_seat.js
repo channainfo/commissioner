@@ -272,6 +272,9 @@ const VehicleSeatViewHandler = {
             success: function (response) {
               seatsViewContainer.innerHTML = response;
             },
+            error: function (xhr, status, error) {
+              show_flash("error", error);
+            },
           });
         });
       }
