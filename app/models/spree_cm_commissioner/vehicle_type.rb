@@ -1,11 +1,15 @@
 module SpreeCmCommissioner
   class VehicleType < SpreeCmCommissioner::Base
     include SpreeCmCommissioner::RouteType
-    has_many :vehicle_seats, class_name: 'SpreeCmCommissioner::VehicleSeat'
+    has_many :vehicle_seats, class_name: 'SpreeCmCommissioner::VehicleSeat', dependent: :destroy
+    has_many :option_value_vehicle_types, class_name: 'SpreeCmCommissioner::OptionValueVehicleType'
+    has_many :option_values, through: :option_value_vehicle_types, class_name: 'Spree::OptionValue'
     belongs_to :vendor, class_name: 'Spree::Vendor'
 
     validates :code, presence: true
+    validates :code, uniqueness: true
     validates :name, presence: true
+    validates :name, uniqueness: true
     accepts_nested_attributes_for :vehicle_seats, allow_destroy: true
 
     def seat_layers
