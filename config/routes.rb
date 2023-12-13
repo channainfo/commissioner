@@ -171,6 +171,13 @@ Spree::Core::Engine.add_routes do
     resources :vehicle_types do
       resources :vehicle_seats
     end
+    resources :vehicles do
+      resources :vehicle_photos do
+        collection do
+          post :update_positions
+        end
+      end
+    end
     root to: redirect('/transit/reservations')
     post '/vehicle_types/vehicle_seats/load_seat', to: 'vehicle_seats#load_seat'
     post '/vehicle_types/layer', to: 'vehicle_types#layer'

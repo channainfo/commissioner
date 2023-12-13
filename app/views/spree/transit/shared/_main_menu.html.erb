@@ -31,6 +31,9 @@
   <ul class="nav nav-sidebar" id="sidebarVehicleTypes">
     <%= tab :vehicle_types, label: I18n.t('spree.transit.vehicle_types'), url: transit_vehicle_types_path, icon: "truck.svg", selected: request.path.include?('vehicle_types') %>
   </ul>
+  <ul class="nav nav-sidebar" id="sidebarVehicles">
+    <%= tab :vehicles, label: I18n.t('spree.transit.vehicles'), url: transit_vehicles_path, icon: "truck.svg", selected: request.path.include?('vehicles') %>
+  </ul>
   <ul class="nav nav-sidebar" id="sidebarSetting">
     <%= transit_main_menu_tree I18n.t('spree.transit.settings'), icon: "gear.svg", sub_menu:"setting", url: "#sidebar-setting" %>
   </ul>

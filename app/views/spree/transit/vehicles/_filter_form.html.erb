@@ -1,0 +1,23 @@
+<% content_for :table_filter do %>
+  <div data-hook="transit_vehicle_index_search">
+    <%= search_form_for [:vehicle, @search], url: spree.transit_vehicles_path do |f| %>
+      <div class="row">
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :code_cont, I18n.t('spree.code') %>
+            <%= f.text_field :code_cont, placeholder: 'Vehicle Code', class: "form-control js-quick-search-target js-filterable" %>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :vehicle_type_id_eq, I18n.t('spree.transit.vehicle_type') %>
+            <%= f.select :vehicle_type_id_eq, SpreeCmCommissioner::VehicleType.all.map{|s| [s.name, s.id]}, { prompt: "Select a Vehicle Type" }, class: "form-control select2 js-filterable" %>
+          </div>
+        </div>
+      </div>
+      <div data-hook="transit_vehicle_index_search_buttons" class="form-actions">
+        <%= button Spree.t(:search), 'search.svg' %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
