@@ -1,0 +1,22 @@
+<div data-hook="admin_image_form_fields" class="row">
+  <div class="col-12 col-md-6">
+    <% if defined?(preview) and preview == true %>
+      <div data-hook="preview-image">
+        <%=
+          link_to image_tag(main_app.url_for(@object.url(:vehicle)), :class => "rounded border mb-4"),
+          main_app.rails_blob_url(@object.attachment)
+        %>
+      </div>
+    <% end %>
+    <div data-hook="file" class="form-group">
+      <%= f.label :attachment, Spree.t(:filename) %>
+      <%= f.file_field :attachment %>
+    </div>
+  </div>
+  <div data-hook="alt_text" class="col-12 col-md-6">
+    <div class="form-group">
+      <%= f.label :alt, Spree.t(:alt_text) %>
+      <%= f.text_area :alt, rows: 4, class: 'form-control' %>
+    </div>
+  </div>
+</div>

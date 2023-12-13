@@ -58,6 +58,9 @@ module SpreeCmCommissioner
       base.has_many :subscriptions, through: :customers, class_name: 'SpreeCmCommissioner::Subscription'
       base.has_many :subscription_orders, through: :subscriptions, class_name: 'Spree::Order', source: :orders
 
+      base.has_many :vehicle_types, class_name: 'SpreeCmCommissioner::VehicleType', dependent: :destroy
+      base.has_many :vehicles, through: :vehicle_types, class_name: 'SpreeCmCommissioner::Vehicle', dependent: :destroy
+
       # TODO: we will need searchkick later
       # unless Rails.env.test?
       #   base.searchkick(

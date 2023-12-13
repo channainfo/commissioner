@@ -1,0 +1,20 @@
+<% content_for :page_title do %>
+  <%= page_header_back_button spree.transit_vehicles_path %>
+  <%= @vehicle.code %>
+<% end %>
+
+<% content_for(:page_tabs) do %>
+  <%= content_tag :li, class: 'nav-item' do %>
+    <%= link_to_with_icon 'edit.svg',
+      Spree.t(:details),
+      edit_transit_vehicle_path(@vehicle),
+      class: "nav-link #{'active' if current == :details}" %>
+  <% end %>
+
+  <%= content_tag :li, class: 'nav-item' do %>
+    <%= link_to_with_icon 'images.svg',
+      Spree.t(:images),
+      spree.transit_vehicle_vehicle_photos_path(@vehicle),
+      class: "nav-link #{'active' if current == :images}" %>
+  <% end %>
+<% end %>

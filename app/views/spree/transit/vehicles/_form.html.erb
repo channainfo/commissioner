@@ -1,0 +1,19 @@
+<div data-hook="transit_vehicle_form_fields" class="row">
+  <div class="col-12 ">
+    <%= f.field_container :code do %>
+      <%= f.label :code, Spree.t(:code) %>
+      <%= f.text_field :code, class: 'form-control', placeholder: Spree.t("transit.vehicle.code") %>
+      <%= f.error_message_on :code %>
+    <% end %>
+    <%= f.field_container :license_plate do %>
+      <%= f.label :license_plate, Spree.t("transit.vehicle.license_plate") %>
+      <%= f.text_field :license_plate, class: 'form-control', placeholder: Spree.t("transit.vehicle.license_plate") %>
+      <%= f.error_message_on :license_plate %>
+    <% end %>
+    <%= f.field_container :vehicle_type_id do %>
+      <%= f.label :vehicle_type, Spree.t("transit.vehicle_type") %>
+      <%= f.collection_select(:vehicle_type_id, SpreeCmCommissioner::VehicleType.all, :id, :name, { prompt: "Select a Vehicle Type" }, { class: 'form-control select2' }) %>
+      <%= f.error_message_on :lon %>
+    <% end %>
+  </div>
+</div>

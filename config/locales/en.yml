@@ -1,23 +1,18 @@
 # Sample localization file for English. Add more files in this directory for other locales.
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
-
 en:
   account_checker:
     verify:
       already_exist: "%{login} already exist"
-
   sms:
     to:
       blank: "recipient can not be blank"
     body:
       blank: "sms content can not be blank"
-
       already_exist: "%{login} already exist"
-
   pincode_creator:
     invalid_phone_number: "Invalid phone number"
     invalid_email_address: "Invalid email address"
-
   pincode_checker:
     error_type:
       not_found: "Verification Code not found!"
@@ -25,33 +20,26 @@ en:
       reached_max_attempt: "Verification Code already reach max attempt!"
       not_match: "Verification code is not valid"
       ok: "Verification code is valid"
-
   authenticator:
     incorrect_login: "Incorrect login"
     incorrect_password: "Incorrect password"
     invalid_or_missing_params: "Invalid or missing params"
-
   hello: "Hello world"
-
   taxon:
     icon: Icon (Square)
     category_icon: Category icon (Square)
     app_banner: App Banner (16x9)
     web_banner: Web banner (10x2)
-
   user_update_contact:
     phone_number_is_already_used: "Phone number is already used"
     email_is_already_used: "Email is already used"
-
   calendar:
     event:
       empty_info: "No <b>Events</b> found."
-
   option_type:
     kind_info: "<b>Once set</b>, it can't be updated."
     kind_validation: "Attribute can't be updated for %{option_type_name}"
     empty_info: "No <b>Option Type</b> found for this kind"
-
   stock_location:
     lat:
       label: "Latitude"
@@ -61,10 +49,8 @@ en:
       hint: "Enter between 180 to -180"
     reference:
       label: "Reference"
-
   user_identity_provider:
     not_found: "User identity provider for %{identity_type} not found in the system"
-
   variant:
     validation:
       option_type_is_not_variant: "%{option_type_name} / %{option_value_name} is not kind of variant"
@@ -73,27 +59,21 @@ en:
       out_of_stock: "%{variant_name} is out of stock"
     product_kind_option_types:
       empty_info: "<b>Note:</b> Set service option types to service first. To edit, go to <b>Details</b> tab > <b>Option Types</b>"
-
   vectors:
     icons:
       info_rules: 'Only allow <b>%{allow_extensions}</b> files. Icons are stored inside "images/" folder, eg. app/assets/images/backend-adjust.svg.'
       total: "Total: %{total_in_page} / %{total_count} icons"
-
   product:
     validation:
       not_active: "%{product_name} is not active"
-
   photo:
     empty_info: "No <b>Photos</b> found."
-
   nearby_place:
     empty_info: "No <b>Nearby places</b> found."
-
   vendor:
     validation:
       vendor_kind_option_types:
         empty_info: "<b>Note:</b> Set vendor option types to vendor first. To edit, go to <b>Details</b> tab > <b>Option Types</b>"
-
     service_calendars:
       empty_info: "No <b>Service calendars</b> found."
       start_date: "Start date"
@@ -103,10 +83,8 @@ en:
       new_calendar: "New Service calendar"
       operations_day: "Operations day"
       exception_rules: "Exception Rules"
-
   orders:
     total: "Total: %{orders_count} invoices"
-
   account_deletion:
     title:
       have_another_account: "I have another account"
@@ -116,10 +94,8 @@ en:
     reason_description:
       sth_broken: "Can you please share us what was not working? We will fix them as soon as possible as we spot them"
       other: "Can you please share us your account deletion reason. If something slipped through our fingers, we'd be so grateful to be aware and fix it."
-
   user:
     invalid_password: "Invalid Password"
-
   spree:
     logo: "Logo"
     image: "Image"
@@ -239,6 +215,11 @@ en:
         add_new_taxon: Add a new Taxon
         no_taxons: "<b>%{taxonomy}</b> has no Taxons. Click the <b>Add a new Taxon</b> button, to begin adding Taxons."
       vehicle_types: "Vehicle Types"
+      vehicle_type: "Vehicle Type"
+      vehicles: "Vehicles"
+      vehicle:
+        code: "Code"
+        license_plate: "License Plate"
     device_tokens: "Device Tokens"
     user_identity_providers: "Identity Providers"
     new_user_identity_provider: "New Identity Providers"
@@ -268,7 +249,6 @@ en:
           attributes:
             exception_rules:
               invalid_json: "is not a valid format"
-
   mail:
     order_mailer:
       booking_confirm: "Your booking is now confirmed!"
@@ -285,11 +265,9 @@ en:
     empty_info: "No <b>User identity providers</b> found"
   notification:
     send_test_success: "Test Send Successfully"
-
   pincode_sender:
     sms:
       body: "%{code} is your %{readable_type}"
-
   pincode:
     readable_type:
       login: "login code"
@@ -298,7 +276,6 @@ en:
       confirmation_code: "confirmation code"
       update_user_login: "update user code"
       contact_update: "update contact code"
-
   notifications:
     spree_cm_commissioner:
       order_complete_notification:
@@ -315,7 +292,6 @@ en:
         message: "[%{vendor_name}] is reviewing your booking request."
   actions:
     login: "Login"
-
   spree_user:
     invalid_password: "Current password is not valid"
     cannot_delete_account: "You cannot delete this account because you own a special role"
