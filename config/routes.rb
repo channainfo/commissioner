@@ -254,6 +254,8 @@ Spree::Core::Engine.add_routes do
         resource :homepage_data, only: [:show]
         resources :homepage_sections, only: [:index]
         resources :order_qrs, only: [:show]
+
+        resources :guests
       end
     end
 
