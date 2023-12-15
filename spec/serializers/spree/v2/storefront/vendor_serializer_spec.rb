@@ -12,7 +12,8 @@ RSpec.describe Spree::V2::Storefront::VendorSerializer, type: :serializer do
         :products,
         :stock_locations,
         :nearby_places,
-        :places
+        :places,
+        :default_state,
       ]).serializable_hash
     }
 
@@ -44,6 +45,7 @@ RSpec.describe Spree::V2::Storefront::VendorSerializer, type: :serializer do
         :promoted_option_values,
         :vendor_kind_option_values,
         :active_promotions,
+        :default_state,
         :logo
       )
     end
