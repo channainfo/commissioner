@@ -16,6 +16,7 @@ module Spree
           base.has_many :vendor_kind_option_values, serializer: :option_value
           base.has_many :active_promotions, serializer: ::SpreeCmCommissioner::V2::Storefront::PromotionSerializer
 
+          base.has_one :default_state, serializer: :state
           base.has_one :logo, serializer: ::SpreeCmCommissioner::V2::Storefront::AssetSerializer
         end
       end
