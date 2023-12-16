@@ -42,6 +42,7 @@ RSpec.describe Spree::V2::Storefront::LineItemSerializer, type: :serializer do
         :from_date,
         :to_date,
         :need_confirmation,
+        :kyc,
         :product_type,
         :event_status
       )
