@@ -35,7 +35,7 @@
               <tr id="<%= spree_dom_id section_relatable %>" data-hook="section_relatables_row">
                 <td colspan="3" class="move-handle">
                   <%= svg_icon name: "sort.svg", width: '18', height: '18' %>
-                  <label class="ml-2 mr-2"><%= section_relatable.relatable.name %></label>
+                  <label class="ml-2 mr-2"><%= section_relatable.relatable&.name %></label>
                 </td>
                 <td>
                   <%= section_relatable.relatable_type %>

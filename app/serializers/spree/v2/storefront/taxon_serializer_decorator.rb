@@ -6,7 +6,9 @@ module Spree
           base.has_one :category_icon, serializer: ::SpreeCmCommissioner::V2::Storefront::AssetSerializer
           base.has_one :app_banner, serializer: ::SpreeCmCommissioner::V2::Storefront::AssetSerializer
           base.has_one :web_banner, serializer: ::SpreeCmCommissioner::V2::Storefront::AssetSerializer
-          base.attributes :custom_redirect_url
+          base.has_one :home_banner, serializer: ::SpreeCmCommissioner::V2::Storefront::AssetSerializer
+
+          base.attributes :custom_redirect_url, :kind
         end
       end
     end
