@@ -4,6 +4,7 @@ RSpec.describe Spree::V2::Storefront::TaxonSerializer, type: :serializer do
   describe '#serializable_hash' do
     let!(:category_icon) { create(:cm_taxon_category_icon) }
     let!(:taxon) { create(:taxon, category_icon: category_icon) }
+    let!(:home_banner) { create(:cm_asset, viewable: taxon) }
 
     subject {
       described_class.new(taxon, include: [
@@ -14,6 +15,7 @@ RSpec.describe Spree::V2::Storefront::TaxonSerializer, type: :serializer do
         :category_icon,
         :app_banner,
         :web_banner,
+        :home_banner,
       ]).serializable_hash
     }
 
@@ -36,7 +38,8 @@ RSpec.describe Spree::V2::Storefront::TaxonSerializer, type: :serializer do
         :is_root,
         :is_child,
         :is_leaf,
-        :custom_redirect_url
+        :custom_redirect_url,
+        :kind,
       )
     end
 
@@ -49,6 +52,7 @@ RSpec.describe Spree::V2::Storefront::TaxonSerializer, type: :serializer do
         :category_icon,
         :app_banner,
         :web_banner,
+        :home_banner,
       )
     end
   end

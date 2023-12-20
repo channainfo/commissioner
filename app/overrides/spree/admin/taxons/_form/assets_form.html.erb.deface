@@ -1,34 +1,51 @@
 <!-- replace "erb[loud]:contains('assets_form')" -->
 
-<%# "@taxon.icon is not used yet" %>
-<%# render 'shared/asset_field',
-  field: :icon,
-  label: I18n.t('taxon.icon'),
-  asset: @taxon.icon,
-  remove_url: remove_icon_admin_taxonomy_taxon_url(@taxonomy.id, @taxon.id),
-  form:f
-%>
 
-<%= render 'shared/asset_field',
-  field: :category_icon,
-  label: I18n.t('taxon.category_icon'),
-  asset: @taxon.category_icon,
-  remove_url: remove_category_icon_admin_taxonomy_taxon_url(@taxonomy.id, @taxon.id),
-  form:f
-%>
+<div class="row">
+  <%# "@taxon.icon is not used yet" %>
+  <%# render 'shared/asset_field',
+    field: :icon,
+    label: I18n.t('taxon.icon'),
+    asset: @taxon.icon,
+    remove_url: remove_icon_admin_taxonomy_taxon_url(@taxonomy.id, @taxon.id),
+    form:f,
+    classes: ['col-md-5 ml-3']
+  %>
 
-<%= render 'shared/asset_field',
-  field: :app_banner,
-  label: I18n.t('taxon.app_banner'),
-  asset: @taxon.app_banner,
-  remove_url: remove_app_banner_admin_taxonomy_taxon_url(@taxonomy.id, @taxon.id),
-  form:f
-%>
+  <%= render 'shared/asset_field',
+    field: :category_icon,
+    label: I18n.t('taxon.category_icon'),
+    asset: @taxon.category_icon,
+    remove_url: remove_category_icon_admin_taxonomy_taxon_url(@taxonomy.id, @taxon.id),
+    form:f,
+    classes: ['col-md-5 ml-3']
+  %>
 
-<%= render 'shared/asset_field',
-  field: :web_banner,
-  label: I18n.t('taxon.web_banner'),
-  asset: @taxon.web_banner,
-  remove_url: remove_web_banner_admin_taxonomy_taxon_url(@taxonomy.id, @taxon.id),
-  form:f
-%>
+  <%= render 'shared/asset_field',
+    field: :app_banner,
+    label: I18n.t('taxon.app_banner'),
+    asset: @taxon.app_banner,
+    remove_url: remove_app_banner_admin_taxonomy_taxon_url(@taxonomy.id, @taxon.id),
+    form:f,
+    classes: ['col-md-5 ml-3']
+  %>
+
+  <%= render 'shared/asset_field',
+    field: :web_banner,
+    label: I18n.t('taxon.web_banner'),
+    asset: @taxon.web_banner,
+    remove_url: remove_web_banner_admin_taxonomy_taxon_url(@taxonomy.id, @taxon.id),
+    form:f,
+    classes: ['col-md-5 ml-3']
+  %>
+
+  <%= render 'shared/asset_field',
+    field: :home_banner,
+    label: I18n.t('taxon.home_banner'),
+    asset: @taxon.home_banner,
+    remove_url: remove_home_banner_admin_taxonomy_taxon_url(@taxonomy.id, @taxon.id),
+    form:f,
+    classes: ['col-md-5 ml-3']
+  %>
+</div>
+
