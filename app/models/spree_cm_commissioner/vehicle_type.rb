@@ -1,6 +1,7 @@
 module SpreeCmCommissioner
   class VehicleType < SpreeCmCommissioner::Base
     include SpreeCmCommissioner::RouteType
+
     has_many :vehicle_seats, class_name: 'SpreeCmCommissioner::VehicleSeat', dependent: :destroy
     has_many :option_value_vehicle_types, class_name: 'SpreeCmCommissioner::OptionValueVehicleType'
     has_many :option_values, through: :option_value_vehicle_types, class_name: 'Spree::OptionValue'
@@ -13,7 +14,7 @@ module SpreeCmCommissioner
     validates :name, uniqueness: true
     accepts_nested_attributes_for :vehicle_seats, allow_destroy: true
 
-    self.whitelisted_ransackable_attributes = %w[id]
+    self.whitelisted_ransackable_attributes = %w[name code route_type id]
 
     def seat_layers
       grouped_seats = SpreeCmCommissioner::VehicleSeat.where(vehicle_type_id: id).group_by(&:layer).transform_values do |seats|

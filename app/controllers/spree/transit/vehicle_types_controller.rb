@@ -26,6 +26,18 @@ module Spree
         @vehicle_type = SpreeCmCommissioner::VehicleType.new
       end
 
+      def scope
+        @vehicle_types = current_vendor.vehicle_types
+      end
+
+      def collection
+        return @collection if defined?(@collection)
+        scope
+
+        @search = scope.ransack(params[:q])
+        @collection = @search.result
+      end
+
       def edit
         @seats = @object.seat_layers
       end
