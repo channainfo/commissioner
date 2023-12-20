@@ -1,0 +1,29 @@
+<% content_for :table_filter do %>
+  <div data-hook="transit_vehicle_index_search">
+    <%= search_form_for [:vehicle_type, @search], url: spree.transit_vehicle_types_path do |f| %>
+      <div class="row">
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :name_cont, I18n.t('spree.name') %>
+            <%= f.text_field :name_cont, placeholder: I18n.t('spree.transit.vehicle_type_name'), class: "form-control js-quick-search-target js-filterable" %>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :code_cont, I18n.t('spree.code') %>
+            <%= f.text_field :code_cont, placeholder: I18n.t('spree.transit.vehicle_type_code'), class: "form-control js-filterable" %>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :route_type_eq, I18n.t('spree.transit.route_type') %>
+            <%= f.select :route_type_eq, SpreeCmCommissioner::RouteType::ROUTE_TYPES.each_with_index.map { |type, i| [type.to_s.capitalize, i] }, { include_blank: true, prompt: I18n.t('spree.transit.select_route_type') }, { class: "form-control select2 js-filterable" } %>
+          </div>
+        </div>
+      </div>
+      <div data-hook="transit_vehicle_index_search_buttons" class="form-actions">
+        <%= button Spree.t(:search), 'search.svg' %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

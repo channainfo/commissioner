@@ -220,6 +220,10 @@ en:
       vehicle:
         code: "Code"
         license_plate: "License Plate"
+      route_type: "Route Type"
+      select_route_type: "Select Route Type"
+      vehicle_type_name: "Vehicle Type Name"
+      vehicle_type_code: "Vehicle Type Code"
     device_tokens: "Device Tokens"
     user_identity_providers: "Identity Providers"
     new_user_identity_provider: "New Identity Providers"
