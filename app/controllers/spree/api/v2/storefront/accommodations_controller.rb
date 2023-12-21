@@ -30,6 +30,26 @@ module Spree
                                                               ).value
           end
 
+          def collection_finder
+            SpreeCmCommissioner::AccommodationSearchDetail.new(
+              from_date: params[:from_date],
+              to_date: params[:to_date],
+              query: params[:query],
+              province_id: params[:province_id],
+              vendor_id: params[:vendor_id]
+            )
+          end
+
+          def resource_finder
+            SpreeCmCommissioner::AccommodationSearchDetail.new(
+              from_date: params[:from_date],
+              to_date: params[:to_date],
+              query: params[:query],
+              province_id: params[:province_id],
+              vendor_id: params[:vendor_id]
+            )
+          end
+
           def allowed_sort_attributes
             super << :min_price << :max_price
           end
@@ -46,13 +66,13 @@ module Spree
             Spree::V2::Storefront::AccommodationSerializer
           end
 
-          def collection_finder
-            SpreeCmCommissioner::AccommodationSearchDetail
-          end
+          # def collection_finder
+          #   SpreeCmCommissioner::AccommodationSearchDetail
+          # end
 
-          def resource_finder
-            SpreeCmCommissioner::AccommodationSearchDetail
-          end
+          # def resource_finder
+          #   SpreeCmCommissioner::AccommodationSearchDetail
+          # end
 
           def required_schema
             SpreeCmCommissioner::AccommodationRequestSchema

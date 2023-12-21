@@ -24,6 +24,7 @@ group :test do
   gem 'terminal-table', '~> 3.0.1'
   # ActionMailer, Net::SMTP
   gem 'net-smtp'
+  gem 'pg_search'
 
   gem 'rails-controller-testing'
   gem 'vcr'

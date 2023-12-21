@@ -37,9 +37,9 @@ module SpreeCmCommissioner
     end
 
     def with_available_inventory
-      # Get vendors by province that include: day, total_booking and remaining
-      scope = Spree::Vendor.select('spree_vendors.*, vendor_id, day, COALESCE(total_booking, 0) AS total_booking, COALESCE((spree_vendors.total_inventory - max_booked_vendors.total_booking), spree_vendors.total_inventory) AS remaining')
-                           .joins("LEFT JOIN (#{max_booked_vendor_sql}) max_booked_vendors ON max_booked_vendors.vendor_id = spree_vendors.id")
+      scope = Spree::Vendor.search_by_query(query)
+      scope = scope.select('spree_vendors.*, vendor_id, day, COALESCE(total_booking, 0) AS total_booking, COALESCE((spree_vendors.total_inventory - max_booked_vendors.total_booking), spree_vendors.total_inventory) AS remaining')
+                   .joins("LEFT JOIN (#{max_booked_vendor_sql}) max_booked_vendors ON max_booked_vendors.vendor_id = spree_vendors.id")
       apply_filter(scope)
     end
 

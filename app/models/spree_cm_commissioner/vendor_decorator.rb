@@ -12,6 +12,12 @@ module SpreeCmCommissioner
 
       base.before_save :generate_code, if: :code.nil?
 
+      base.include PgSearch::Model
+
+      base.pg_search_scope :search_by_query, against: %i[name description other_columns], using: {
+        tsearch: { prefix: true, any_word: true }
+      }
+
       base.has_many :photos, -> { order(:position) }, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorPhoto'
       base.has_many :option_values, through: :products
       base.has_many :vendor_option_types, class_name: 'SpreeCmCommissioner::VendorOptionType'
