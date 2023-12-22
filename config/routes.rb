@@ -68,6 +68,10 @@ Spree::Core::Engine.add_routes do
     end
 
     resources :products do
+      member do
+        get 'edit_kyc', to: 'kyc#edit'
+        put 'update_kyc', to: 'kyc#update'
+      end
       resources :master_variant, only: %i[index update] do
         collection do
           patch :update

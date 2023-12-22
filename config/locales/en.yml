@@ -335,3 +335,7 @@ en:
   spree_user:
     invalid_password: "Current password is not valid"
     cannot_delete_account: "You cannot delete this account because you own a special role"
+    invalid_password: 'Current password is not valid'
+    cannot_delete_account: 'You cannot delete this account because you own a special role'
+  kyc:
+    note: '<b>Note:</b> Select Required KYC Field For this Product'
