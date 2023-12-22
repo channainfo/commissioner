@@ -5,7 +5,7 @@ module Spree
       def index; end
 
       def location_after_save
-        transit_vehicle_types_url
+        edit_transit_vehicle_type_path(@object)
       end
 
       def layer

@@ -1,9 +1,7 @@
 module Spree
   module Transit
     class ServiceCalendarsController < Spree::Transit::BaseController
-      include SpreeCmCommissioner::ServiceCalendarType
       before_action :load_vendor
-
       create.before :set_vendor
       update.before :set_vendor
 
@@ -35,28 +33,34 @@ module Spree
       end
 
       def permitted_resource_params
+        add_exception_rules_type(params[:spree_cm_commissioner_service_calendar][:exception_rules])
         service_calendar_params = params.require(:spree_cm_commissioner_service_calendar)
                                         .permit(:calendarable_id, :calendarable_type, :start_date, :end_date,
                                                 :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :name, :not_available_reason,
                                                 :service_type
                                         )
-
         service_calendar_params[:exception_rules] = build_exception_rules(params[:spree_cm_commissioner_service_calendar][:exception_rules])
         service_calendar_params
       end
 
       def model_class
-        SpreeCmCommissioner::TransitServiceCalendar
+        SpreeCmCommissioner::ServiceCalendar
       end
 
       def object_name
-        'spree_cm_commissioner_transit_service_calendars'
+        'spree_cm_commissioner_service_calendars'
       end
 
       private
 
       def build_exception_rules(exception_rules)
-        exception_rules.values.reject! { |rule| rule['from'].blank? || rule['to'].blank? || rule['type'].blank? } || exception_rules.values
+        exception_rules.values.reject! { |rule| rule['from'].blank? || rule['to'].blank? } || exception_rules.values
+      end
+
+      def add_exception_rules_type(exception_rules)
+        exception_rules.values.each do |rule|
+          rule['type'] = 'exclusion'
+        end
       end
 
       def set_vendor
@@ -83,13 +87,13 @@ module Spree
       end
 
       def set_exception_rules
-        @exception_rules = [{ from: DateTime.now, to: DateTime.now, reason: nil }]
+        @exception_rules = [{ from: DateTime.now, to: DateTime.now, type: 'exclusion', reason: nil }]
       end
 
       def build_resource
         today = Time.zone.today
         model_class.new(start_date: today,
-                        exception_rules: [{ from: nil, to: nil}]
+                        exception_rules: [{ from: nil, to: nil }]
                        )
       end
 

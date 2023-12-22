@@ -1,73 +1,70 @@
 <%= render partial: 'spree/admin/shared/vendor_tabs', locals: {current: :service_calendars} %>
-
 <% content_for :page_actions do %>
   <%= yield :page_actions %>
   <%= button_link_to(t('vendor.service_calendars.new_calendar'), new_admin_vendor_vendor_service_calendar_url(
 @vendor), { class: "btn-success", icon: 'add.svg', id: 'new_service_calendar_link' }) if can? :create, SpreeCmCommissioner::
 ServiceCalendar %>
 <% end %>
-
 <% unless @objects.empty? %>
-<div class="table-responsive" id="service-calendar-index">
-  <table class="table sortable" data-hook="service_calendars_table">
-    <thead>
-      <tr data-hook="service_calendars_header">
-        <th>
-          <%= Spree.t(:id) %>
-        </th>
-        <th>
-          <%= t('vendor.service_calendars.start_date') %>
-        </th>
-        <th>
-          <%= t('vendor.service_calendars.end_date') %>
-        </th>
-        <th width="30%">
-          <%= t('vendor.service_calendars.operations_day') %>
-        </th>
-        <th>
-          <%= t('vendor.service_calendars.exception_rules') %>
-        </th>
-        <th class="actions"></th>
-      </tr>
-    </thead>
-
-    <tbody id="sortVert">
-      <% @objects.each do |service_calendar| %>
-        <tr id="<%= spree_dom_id service_calendar %>" data-hook="service_calendars_row">
-          <td><%= service_calendar.id %></td>
-          <td><%= service_calendar.start_date %></td>
-          <td><%= service_calendar.end_date %></td>
-          <td>
-            <span><%= check_box_tag :monday, service_calendar.monday, service_calendar.monday, disabled: true %> Monday</span>
-            <span><%= check_box_tag :tuesday, service_calendar.tuesday, service_calendar.tuesday, disabled: true %> Tuesday</span>
-            <span><%= check_box_tag :wednesday, service_calendar.wednesday, service_calendar.wednesday, disabled: true %> Wednesday</span>
-            <span><%= check_box_tag :thursday, service_calendar.thursday, service_calendar.thursday, disabled: true %> Thursday</span>
-            <span><%= check_box_tag :friday, service_calendar.friday, service_calendar.friday, disabled: true %> Friday</span>
-            <span><%= check_box_tag :saturday, service_calendar.saturday, service_calendar.saturday, disabled: true %> Saturday</span>
-            <span><%= check_box_tag :sunday, service_calendar.sunday, service_calendar.sunday, disabled: true %> Sunday</span>
-          </td>
-          <td>
-            <% service_calendar.exception_rules.each do |exception_rule| %>
-              <div>
-                <div>Date: <span class="state badge badge-pill badge-primary"><%= exception_rule['from'] %></span> - <span class="state badge badge-pill badge-primary"><%= exception_rule['to'] %></span></div>
-                <div>Type: <%= exception_rule['type'] %></div>
-                <div>Reason: <%= exception_rule['reason'] %></div>
-              </div>
-            <%end%>
-          </td>
-          <td class="actions">
-            <span class="d-flex justify-content-end">
-              <%= toggle_status_btn(service_calendar) %>
-              <%= link_to_delete(service_calendar, { url: admin_vendor_vendor_service_calendar_url(@vendor, service_calendar), no_text: true }) if can? :destroy, service_calendar %>
-            </span>
-          </td>
+  <div class="table-responsive" id="service-calendar-index">
+    <table class="table sortable" data-hook="service_calendars_table">
+      <thead>
+        <tr data-hook="service_calendars_header">
+          <th>
+            <%= Spree.t(:id) %>
+          </th>
+          <th>
+            <%= t('vendor.service_calendars.start_date') %>
+          </th>
+          <th>
+            <%= t('vendor.service_calendars.end_date') %>
+          </th>
+          <th width="30%">
+            <%= t('vendor.service_calendars.operations_day') %>
+          </th>
+          <th>
+            <%= t('vendor.service_calendars.exception_rules') %>
+          </th>
+          <th class="actions"></th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+      </thead>
+      <tbody id="sortVert">
+        <% @objects.each do |service_calendar| %>
+          <tr id="<%= spree_dom_id service_calendar %>" data-hook="service_calendars_row">
+            <td><%= service_calendar.id %></td>
+            <td><%= service_calendar.start_date %></td>
+            <td><%= service_calendar.end_date %></td>
+            <td>
+              <span><%= check_box_tag :monday, service_calendar.monday, service_calendar.monday, disabled: true %> Monday</span>
+              <span><%= check_box_tag :tuesday, service_calendar.tuesday, service_calendar.tuesday, disabled: true %> Tuesday</span>
+              <span><%= check_box_tag :wednesday, service_calendar.wednesday, service_calendar.wednesday, disabled: true %> Wednesday</span>
+              <span><%= check_box_tag :thursday, service_calendar.thursday, service_calendar.thursday, disabled: true %> Thursday</span>
+              <span><%= check_box_tag :friday, service_calendar.friday, service_calendar.friday, disabled: true %> Friday</span>
+              <span><%= check_box_tag :saturday, service_calendar.saturday, service_calendar.saturday, disabled: true %> Saturday</span>
+              <span><%= check_box_tag :sunday, service_calendar.sunday, service_calendar.sunday, disabled: true %> Sunday</span>
+            </td>
+            <td>
+              <% service_calendar.exception_rules.each do |exception_rule| %>
+                <div>
+                  <div>Date: <span class="state badge badge-pill badge-primary"><%= exception_rule['from'] %></span> - <span class="state badge badge-pill badge-primary"><%= exception_rule['to'] %></span></div>
+                  <div>Type: <%= exception_rule['type'] %></div>
+                  <div>Reason: <%= exception_rule['reason'] %></div>
+                </div>
+              <%end%>
+            </td>
+            <td class="actions">
+              <span class="d-flex justify-content-end">
+                <%= toggle_status_btn(service_calendar) %>
+                <%= link_to_delete(service_calendar, { url: admin_vendor_vendor_service_calendar_url(@vendor, service_calendar), no_text: true }) if can? :destroy, service_calendar %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 <% else %>
-<small class="form-text text-muted">
-  <%= raw I18n.t('vendor.service_calendars.empty_info') %>
-</small>
+  <small class="form-text text-muted">
+    <%= raw I18n.t('vendor.service_calendars.empty_info') %>
+  </small>
 <% end %>
