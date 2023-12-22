@@ -1,7 +1,7 @@
 module SpreeCmCommissioner
   module TaxonomyDecorator
     def self.prepended(base)
-      base.enum kind: { category: 0, cms: 1, event: 2 }
+      base.include SpreeCmCommissioner::TaxonKind
     end
   end
 end

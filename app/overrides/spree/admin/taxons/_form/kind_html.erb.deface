@@ -1,5 +1,5 @@
 <!-- insert_after "erb[loud]:contains('field_container :permalink')" -->
 
-<%= render 'shared/kind_field', field: :kind, f: f, disabled: true %>
+<%= render 'shared/kind_field', field: :kind, f: f %>
 
 
