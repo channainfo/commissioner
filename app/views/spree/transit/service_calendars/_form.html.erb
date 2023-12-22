@@ -1,5 +1,5 @@
 <div data-hook="admin_vendor_service_calendar_form_fields" id="admin_vendor_service_calendar_form_fields">
-  <div class="card mb-4 col-8">
+  <div class="card mb-4 ">
     <div class="p-3 card-body">
       <div class="row pb-0">
         <div class="col-12 col-md-6">
@@ -9,22 +9,20 @@
           </div>
         </div>
         <div class="col-12 col-md-6">
-          <div class="form-group " data-hook="name">
+          <div class="form-group " data-hook="type">
             <%= f.label :service_type, raw(Spree.t(:service_type) + required_span_tag) %>
             <%= f.select :service_type, options_for_select(SpreeCmCommissioner::ServiceCalendarType::SERVICE_TYPES), {}, class: 'form-control select2 fullwidth' %>
           </div>
         </div>
       </div>
-
       <div class="row">
-         <div class="col-12 col-md-12">
-            <div class="form-group " data-hook="reason">
-              <%= f.label :not_available_reason %>
-              <%= f.text_area :not_available_reason, class: 'form-control', placeholder: "Reason when serivce is not available" %>
-            </div>
-         </div>
+        <div class="col-12 col-md-12">
+          <div class="form-group " data-hook="reason">
+            <%= f.label :not_available_reason %>
+            <%= f.text_area :not_available_reason, class: 'form-control', placeholder: "Reason when serivce is not available" %>
+          </div>
+        </div>
       </div>
-
       <div class="row pb-0">
         <div class="col-12 col-md-6">
           <div id="">
@@ -39,12 +37,10 @@
                                 placeholder: Spree.t(:select_a_date),
                                 class: 'form-control ',
                                 'data-input':'' %>
-
               <%= render partial: 'spree/admin/shared/cal_close' %>
             </div>
           </div>
         </div>
-
         <div class="col-12 col-md-6">
           <div id="">
             <%= f.label :end_date %>
@@ -58,64 +54,52 @@
                                 placeholder: Spree.t(:select_a_date),
                                 class: 'form-control ',
                                 'data-input':'' %>
-
               <%= render partial: 'spree/admin/shared/cal_close' %>
             </div>
           </div>
         </div>
-
         <div class="col-12 pt-4">
           <div class="d-block">
-             <%= f.label :service_day %>
+            <%= f.label :service_day %>
           </div>
-
           <div class="custom-control custom-switch">
             <%= f.check_box :monday, class: 'custom-control-input' %>
             <%= f.label :monday, class: 'custom-control-label' %>
           </div>
-
           <div class="custom-control custom-switch">
             <%= f.check_box :tuesday, class: 'custom-control-input' %>
             <%= f.label :tuesday, class: 'custom-control-label' %>
           </div>
-
           <div class="custom-control custom-switch">
             <%= f.check_box :wednesday, class: 'custom-control-input' %>
             <%= f.label :wednesday, class: 'custom-control-label' %>
           </div>
-
           <div class="custom-control custom-switch">
             <%= f.check_box :thursday, class: 'custom-control-input' %>
             <%= f.label :thursday, class: 'custom-control-label' %>
           </div>
-
           <div class="custom-control custom-switch">
             <%= f.check_box :friday, class: 'custom-control-input' %>
             <%= f.label :friday, class: 'custom-control-label' %>
           </div>
-
           <div class="custom-control custom-switch">
             <%= f.check_box :saturday, class: 'custom-control-input' %>
             <%= f.label :saturday, class: 'custom-control-label' %>
           </div>
-
           <div class="custom-control custom-switch">
             <%= f.check_box :sunday, class: 'custom-control-input' %>
             <%= f.label :sunday, class: 'custom-control-label' %>
           </div>
-
         </div>
       </div>
     </div>
   </div>
-
-
   <div class="mb-4">
     <div class="mb-2">
-       <h5>Execption Rules</h5>
+      <h5>Execption Rules</h5>
     </div>
     <div class="row">
-      <div class="col-8">
+      <div class="col-12">
         <%= render partial: 'exception_rules', locals: { f: f, object: @object  } %>
       </div>
     </div>
