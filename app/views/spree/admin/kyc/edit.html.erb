@@ -1,0 +1,18 @@
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :kyc } %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:edit_icons),
+    admin_vectors_option_values_url,
+    { icon: 'spree-icon.svg', id: 'admin-option-values-icons-index' }
+  %>
+<% end %>
+
+<%= form_with model: @product, url: update_kyc_admin_product_path(@product), method: :put do |form| %>
+    <small class="form-text text-muted">
+        <%= raw I18n.t('kyc.note') %>
+    </small>
+    <%= render partial: 'form', locals: { form: form } %>
+      <div class='form-actions' data-hook='buttons'>
+        <%= button Spree.t('actions.update'), 'save.svg', 'submit', { class: 'btn-success', data: { disable_with: "#{ Spree.t(:saving) }..." }} %>
+    </div>
+<% end %>
