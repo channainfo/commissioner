@@ -7,8 +7,41 @@
         <%= f.error_message_on :name, class: 'error-message' %>
       <% end %>
     </div>
+
+    <% if @taxon.root.present? %>
+      <div class="col-12 col-md-8">
+        <div class="d-block">
+          <%= f.label :data_type, raw(Spree.t(:data_type) + required_span_tag) %>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <%= f.field_container :stop, class: ['custom-control', 'custom-checkbox'] do %>
+            <%= f.check_box :stop, class: 'custom-control-input stop checkboxGroup', checked: f.object.persisted? && f.object.stop? %>
+            <%= f.label :stop, Spree.t(:stop), class: 'custom-control-label' %>
+            <%= f.error_message_on :stop %>
+          <% end %>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <%= f.field_container :branch, class: ['custom-control', 'custom-checkbox'] do %>
+            <%= f.check_box :branch, class: 'custom-control-input branch checkboxGroup', checked: f.object.persisted? && f.object.branch? %>
+            <%= f.label :branch, Spree.t(:branch), class: 'custom-control-label' %>
+            <%= f.error_message_on :branch %>
+          <% end %>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <%= f.field_container :location, class: ['custom-control', 'custom-checkbox'] do %>
+            <%= f.check_box :location, class: 'custom-control-input location checkboxGroup', checked: f.object.persisted? && f.object.location? %>
+            <%= f.label :location, Spree.t(:location), class: 'custom-control-label' %>
+            <%= f.error_message_on :location %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
     <div class="col-12 col-md-4">
-      <%= f.field_container :hide_from_nav, class: ['custom-control', 'custom-checkbox', 'my-4'] do %>
+      <%= f.field_container :hide_from_nav, class: ['custom-control', 'custom-checkbox'] do %>
         <%= f.check_box :hide_from_nav, class: 'custom-control-input' %>
         <%= f.label :hide_from_nav, Spree.t(:hide_from_subcategories_nav), class: 'custom-control-label' %>
         <%= f.error_message_on :hide_from_nav %>
