@@ -9,6 +9,7 @@ module SpreeCmCommissioner
       base.belongs_to :rejecter, class_name: 'Spree::User', optional: true
 
       base.has_many :taxons, class_name: 'Spree::Taxon', through: :product
+      base.has_many :guests, class_name: 'SpreeCmCommissioner::Guest', dependent: :destroy
 
       base.before_save :update_vendor_id
 
@@ -58,6 +59,10 @@ module SpreeCmCommissioner
         accepted_at: Time.current,
         accepter: user
       )
+    end
+
+    def remaining_total_guests
+      quantity - guests.count
     end
 
     def rejected_by(user)
