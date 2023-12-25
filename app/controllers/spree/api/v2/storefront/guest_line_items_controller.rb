@@ -3,6 +3,10 @@ module Spree
     module V2
       module Storefront
         class GuestLineItemsController < Spree::Api::V2::ResourceController
+          include OrderConcern
+
+          before_action :ensure_order
+
           # override
           def model_class
             Spree::LineItem
@@ -15,8 +19,7 @@ module Spree
 
           # override
           def index
-            order = Spree::Order.find_by!(number: params[:order_number])
-            guest_line_items = order.line_items
+            guest_line_items = spree_current_order.line_items
 
             render_serialized_payload { serialize_resource(guest_line_items) }
           end
