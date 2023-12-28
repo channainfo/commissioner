@@ -43,6 +43,33 @@ RSpec.describe Spree::Order, type: :model do
         expect(order.save).to eq true
       end
     end
+
+    describe '#promo_total' do
+      it { should validate_presence_of(:promo_total) }
+
+      it do
+        should validate_numericality_of(:promo_total)
+          .is_greater_than(-described_class::MONEY_THRESHOLD)
+          .is_less_than(described_class::MONEY_THRESHOLD)
+          .allow_nil
+      end
+
+      # for pricing model
+      it 'save promo total even if it is positive number' do
+        order = build(:order, promo_total: 1)
+
+        expect(order.save).to be true
+        expect(order.promo_total).to eq 1
+      end
+
+      # for promotion
+      it 'save promo total even if it is negative number' do
+        order = build(:order, promo_total: -1)
+
+        expect(order.save).to be true
+        expect(order.promo_total).to eq -1
+      end
+    end
   end
 
   describe 'paid' do
