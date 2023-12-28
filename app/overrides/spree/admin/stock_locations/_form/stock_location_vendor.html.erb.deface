@@ -1,0 +1,5 @@
+<!-- insert_before "[data-hook='stock_location_country']" -->
+<div class="form-group" data-hook="vendor">
+  <%= f.label :vendor_id, Spree.t('vendor') %>
+  <%= f.collection_select :vendor_id, Spree::Vendor.all, :id, :name, {}, { class: 'form-control', disabled: !@stock_location.new_record? } %>
+</div>
