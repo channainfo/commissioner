@@ -17,6 +17,8 @@ module SpreeCmCommissioner
       base.before_create :link_by_phone_number
       base.before_create :associate_customer
 
+      base.validates :promo_total, base::MONEY_VALIDATION
+
       base.validates :phone_number, presence: true, if: :require_phone_number
       base.has_one :invoice, dependent: :destroy, class_name: 'SpreeCmCommissioner::Invoice'
 
@@ -175,4 +177,11 @@ module SpreeCmCommissioner
   end
 end
 
-Spree::Order.prepend(SpreeCmCommissioner::OrderDecorator) unless Spree::Order.included_modules.include?(SpreeCmCommissioner::OrderDecorator)
+if Spree::Order.included_modules.exclude?(SpreeCmCommissioner::OrderDecorator)
+  # remove all promo_total validations
+  Spree::Order._validators.reject! { |key, _| key == :promo_total }
+  Spree::Order._validate_callbacks.each { |c| c.filter.attributes.delete(:promo_total) if c.filter.respond_to?(:attributes) }
+
+  # prepend decorator will include new validations
+  Spree::Order.prepend(SpreeCmCommissioner::OrderDecorator)
+end
