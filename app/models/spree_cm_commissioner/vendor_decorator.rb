@@ -19,6 +19,9 @@ module SpreeCmCommissioner
       base.has_many :option_types, through: :vendor_option_types
       base.has_many :nearby_places, -> { order(position: :asc) }, class_name: 'SpreeCmCommissioner::VendorPlace', dependent: :destroy
 
+      base.has_many :taxon_vendors, class_name: 'SpreeCmCommissioner::TaxonVendor'
+      base.has_many :taxons, through: :taxon_vendors
+
       base.has_many :promoted_option_types, -> { where(promoted: true).order(:position) },
                     through: :vendor_option_types, source: :option_type
 
