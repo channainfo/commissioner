@@ -15,5 +15,11 @@ module SpreeCmCommissioner
         kyc & bit_value != 0
       end
     end
+
+    def kyc_fields
+      BIT_FIELDS.filter_map do |field, bit_value|
+        field if kyc & bit_value != 0
+      end
+    end
   end
 end

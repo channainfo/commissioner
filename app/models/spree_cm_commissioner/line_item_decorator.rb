@@ -4,6 +4,7 @@ module SpreeCmCommissioner
       base.include SpreeCmCommissioner::LineItemDurationable
       base.include SpreeCmCommissioner::LineItemsFilterScope
       base.include SpreeCmCommissioner::ProductDelegation
+      base.include SpreeCmCommissioner::KycBitwise
 
       base.belongs_to :accepter, class_name: 'Spree::User', optional: true
       base.belongs_to :rejecter, class_name: 'Spree::User', optional: true
