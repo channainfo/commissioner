@@ -31,6 +31,10 @@ module Spree
 
         @vendor.build_payment_qrcode(attachment: permitted_resource_params.delete(:payment_qrcode))
       end
+
+      def location_after_save
+        spree.edit_admin_vendor_url(@vendor)
+      end
     end
   end
 end
