@@ -1,41 +1,41 @@
 <div class="d-flex flex-column my-4">
   <div class="form-check form-check-inline">
-    <%= form.field_container :customer_name do %>
-      <%= form.check_box :customer_name, class: 'form-check-input', checked: form.object.customer_name? %>
-      <%= form.label :customer_name, Spree.t(:customer_name), class: 'form-check-label' %>
-      <%= form.error_message_on :customer_name, class: 'text-danger' %>
+    <%= form.field_container :guest_name do %>
+      <%= form.check_box :guest_name, class: 'form-check-input', checked: form.object.guest_name? %>
+      <%= form.label :guest_name, Spree.t(:guest_name), class: 'form-check-label' %>
+      <%= form.error_message_on :guest_name, class: 'text-danger' %>
     <% end %>
   </div>
 
   <div class="form-check form-check-inline">
-    <%= form.field_container :customer_gender do %>
-      <%= form.check_box :customer_gender, class: 'form-check-input', checked: form.object.customer_gender? %>
-      <%= form.label :customer_gender, Spree.t(:customer_gender), class: 'form-check-label' %>
-      <%= form.error_message_on :customer_gender, class: 'text-danger' %>
+    <%= form.field_container :guest_gender do %>
+      <%= form.check_box :guest_gender, class: 'form-check-input', checked: form.object.guest_gender? %>
+      <%= form.label :guest_gender, Spree.t(:guest_gender), class: 'form-check-label' %>
+      <%= form.error_message_on :guest_gender, class: 'text-danger' %>
     <% end %>
   </div>
 
   <div class="form-check form-check-inline">
-    <%= form.field_container :customer_dob do %>
-      <%= form.check_box :customer_dob, class: 'form-check-input', checked: form.object.customer_dob? %>
-      <%= form.label :customer_dob, Spree.t(:customer_dob), class: 'form-check-label' %>
-      <%= form.error_message_on :customer_dob, class: 'text-danger' %>
+    <%= form.field_container :guest_dob do %>
+      <%= form.check_box :guest_dob, class: 'form-check-input', checked: form.object.guest_dob? %>
+      <%= form.label :guest_dob, Spree.t(:guest_dob), class: 'form-check-label' %>
+      <%= form.error_message_on :guest_dob, class: 'text-danger' %>
     <% end %>
   </div>
 
   <div class="form-check form-check-inline">
-    <%= form.field_container :customer_occupation do %>
-      <%= form.check_box :customer_occupation, class: 'form-check-input', checked: form.object.customer_occupation? %>
-      <%= form.label :customer_occupation, Spree.t(:customer_occupation), class: 'form-check-label' %>
-      <%= form.error_message_on :customer_occupation, class: 'text-danger' %>
+    <%= form.field_container :guest_occupation do %>
+      <%= form.check_box :guest_occupation, class: 'form-check-input', checked: form.object.guest_occupation? %>
+      <%= form.label :guest_occupation, Spree.t(:guest_occupation), class: 'form-check-label' %>
+      <%= form.error_message_on :guest_occupation, class: 'text-danger' %>
     <% end %>
   </div>
 
   <div class="form-check form-check-inline">
-    <%= form.field_container :customer_id_card do %>
-      <%= form.check_box :customer_id_card, class: 'form-check-input', checked: form.object.customer_id_card? %>
-      <%= form.label :customer_id_card, Spree.t(:customer_id_card), class: 'form-check-label' %>
-      <%= form.error_message_on :customer_id_card, class: 'text-danger' %>
+    <%= form.field_container :guest_id_card do %>
+      <%= form.check_box :guest_id_card, class: 'form-check-input', checked: form.object.guest_id_card? %>
+      <%= form.label :guest_id_card, Spree.t(:guest_id_card), class: 'form-check-label' %>
+      <%= form.error_message_on :guest_id_card, class: 'text-danger' %>
     <% end %>
   </div>
 </div>
