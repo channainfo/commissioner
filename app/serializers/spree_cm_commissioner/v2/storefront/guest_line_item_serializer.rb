@@ -4,7 +4,7 @@ module SpreeCmCommissioner
       class GuestLineItemSerializer < BaseSerializer
         set_type :line_item
 
-        attributes :remaining_total_guests, :quantity, :kyc
+        attributes :remaining_total_guests, :quantity, :kyc, :kyc_fields
 
         belongs_to :vendor, serializer: Spree::V2::Storefront::VendorSerializer
         has_many :guests, serializer: :guest
