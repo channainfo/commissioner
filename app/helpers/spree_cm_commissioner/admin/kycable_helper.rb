@@ -2,7 +2,7 @@ module SpreeCmCommissioner
   module Admin
     module KycableHelper
       def calculate_kyc_value(params)
-        kyc_params = params.slice(:customer_name, :customer_gender, :customer_dob, :customer_occupation, :customer_id_card)
+        kyc_params = params.slice(:guest_name, :guest_gender, :guest_dob, :guest_occupation, :guest_id_card)
         return nil unless kyc_params.values.any?(&:present?)
 
         kyc_params.values.each_with_index.sum do |value, index|
