@@ -5,7 +5,7 @@
   <%= button_link_to I18n.t('spree.transit.new.route'), new_transit_route_path, { class: "btn-success", icon: 'add.svg', id: 'admin_new_product' } %>
 <% end %>
 <% render 'filter_form' %>
-<% if @routes.any? %>
+<% if @collection.any? %>
   <div class="table-responsive border rounded bg-white mb-3">
     <table class="table" id="listing_customers" data-hook>
       <thead class="text-muted">
@@ -17,6 +17,9 @@
             <%= Spree.t(:short_name) %>
           </th>
           <th>
+            <%= Spree.t(:stop_legs) %>
+          </th>
+          <th>
             <%= Spree.t(:route_type) %>
           </th>
           <th>
@@ -26,7 +29,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @routes.each do |route| %>
+        <% @collection.each do |route| %>
           <tr data-hook="admin_customers_index_rows">
             <td>
               <%= route.name %>
@@ -35,14 +38,25 @@
               <%= route.short_name %>
             </td>
             <td>
-              <%= route.route_type.capitalize  %>
+
+              <% origin = Spree::Taxon.find_by(id: route.origin_id) %>
+              <% destination = Spree::Taxon.find_by(id: route.destination_id) %>
+
+              <% if origin.present? && destination.present? %>
+                <%= origin.name %> <%= '->' %> <%= destination.name %>
+              <% end %>
+            </td>
+            <td>
+              <% if route.route_type.present? %>
+                <%= route.route_type.capitalize  %>
+              <% end %>
             </td>
             <td>
               <%= display_price(route) %>
             </td>
             <td class="actions " data-hook="admin_products_index_row_actions">
               <span class="d-flex justify-content-end">
-                <%= link_to_edit route, url: edit_transit_route_path(route), no_text: true, class: 'edit' if can?(:edit, route) %>
+                <%= link_to_edit route, url: edit_transit_route_path(route.id), no_text: true, class: 'edit' if can?(:edit, route.id) && !route.deleted? %>
               </span>
             </td>
           </tr>
@@ -50,4 +64,12 @@
       </tbody>
     </table>
   </div>
+<% else %>
+  <div class="text-center no-objects-found m-5">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree::Product)) %>,
+    <%= link_to Spree.t(:add_one), new_object_url if can?(:create, Spree::Product) %>!
+  </div>
 <% end %>
+
+<%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>
+

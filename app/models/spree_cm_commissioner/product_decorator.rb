@@ -34,6 +34,24 @@ module SpreeCmCommissioner
       base.scope :subscribable, -> { where(subscribable: 1) }
 
       base.whitelisted_ransackable_attributes |= %w[short_name route_type]
+
+      base.before_validation :validate_origin
+      base.before_validation :validate_destination
+
+    end
+
+    private
+
+    def validate_origin
+      if product_type == 'transit'
+        errors.add(:origin, "can't be blank") if origin_id.blank?
+      end
+    end
+
+    def validate_destination
+      if product_type == 'transit'
+        errors.add(:destination, "can't be blank") if destination_id.blank?
+      end
     end
   end
 end
