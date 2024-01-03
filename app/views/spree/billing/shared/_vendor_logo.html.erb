@@ -1,1 +1,1 @@
- <%= image_tag main_app.url_for(@vendor.logo.url(size)) if @vendor.logo %>
+<img src="<%= main_app.rails_blob_url(@current_vendor.logo.attachment) %>" alt="vendor's logo" style="width: 50px">
