@@ -6,7 +6,6 @@ module SpreeCmCommissioner
       base.include SpreeCmCommissioner::ParameterizeName
       base.enum kind: %i[variant product vendor]
 
-      base.validates :name, presence: true
       base.validates :attr_type, inclusion: { in: ATTRIBUTE_TYPES }
       base.validates :attr_type, presence: true, if: :travel?
       base.validate :kind_has_updated, on: :update, if: :kind_changed?

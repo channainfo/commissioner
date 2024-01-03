@@ -20,9 +20,9 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.requirements << 'none'
 
-  spree_opts = '>= 4.5.0'
+  spree_opts = '>= 4.6.0'
   s.add_dependency 'spree', spree_opts
-  s.add_dependency 'spree_api_v1', spree_opts # latest spree_multi_vendor 2.4.0 still depends on the Spree v1 API
+  s.add_dependency 'spree_api_v1', '~> 4.5.0' # latest spree_multi_vendor 2.4.0 still depends on the Spree v1 API
   s.add_dependency 'spree_auth_devise', spree_opts
   s.add_dependency 'spree_backend', spree_opts
   s.add_dependency 'spree_multi_vendor', '>= 2.4.1'

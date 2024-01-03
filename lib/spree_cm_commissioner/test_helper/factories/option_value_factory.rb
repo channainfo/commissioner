@@ -4,6 +4,11 @@ FactoryBot.define do
     sequence(:name) { |n| "Size-#{n}" }
     presentation    { 'S' }
 
-    initialize_with { Spree::OptionValue.where(name: name, option_type: option_type).first_or_initialize }
+    to_create do |instance|
+      Spree::OptionValue.first_or_initialize(name: instance.name) do |object|
+        object.attributes = instance.attributes
+        object.save
+      end
+    end
   end
 end
