@@ -6,9 +6,9 @@ module SpreeCmCommissioner
       class MakeRequest < Spree::Webhooks::Subscribers::MakeRequest
         attr_reader :api_key
 
-        def initialize(url:, api_key:, webhook_payload_body:)
+        def initialize(signature:, url:, api_key:, webhook_payload_body:)
           @api_key = api_key
-          super(url: url, webhook_payload_body: webhook_payload_body)
+          super(signature: signature, url: url, webhook_payload_body: webhook_payload_body)
         end
 
         def headers
@@ -16,6 +16,7 @@ module SpreeCmCommissioner
 
           headers['Content-Type'] = 'application/json'
           headers['X-Api-Key'] = api_key if api_key.present?
+          headers['X-Spree-Hmac-SHA256'] = @signature
 
           headers
         end

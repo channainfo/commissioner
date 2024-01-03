@@ -6,8 +6,8 @@ RSpec.describe Spree::V2::Storefront::TaxonSerializer, type: :serializer do
     let!(:taxon) { create(:taxon, category_icon: category_icon) }
     let!(:home_banner) { create(:cm_asset, viewable: taxon) }
 
-    subject {
-      described_class.new(taxon, include: [
+    subject do
+      described_class.new(taxon, params: { 'store': Spree::Store.default }, include: [
         :parent,
         :taxonomy,
         :children,
@@ -18,7 +18,7 @@ RSpec.describe Spree::V2::Storefront::TaxonSerializer, type: :serializer do
         :home_banner,
         :vendors,
       ]).serializable_hash
-    }
+    end
 
     it 'returns exact taxon attributes' do
       expect(subject[:data][:attributes].keys).to contain_exactly(
@@ -41,6 +41,7 @@ RSpec.describe Spree::V2::Storefront::TaxonSerializer, type: :serializer do
         :is_leaf,
         :custom_redirect_url,
         :kind,
+        :localized_slugs,
       )
     end
 

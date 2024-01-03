@@ -18,6 +18,11 @@ FactoryBot.define do
       presentation { 'payment-option' }
     end
 
-    initialize_with { Spree::OptionType.where(name: name).first_or_initialize }
+    to_create do |instance|
+      Spree::OptionType.first_or_initialize(name: instance.name) do |object|
+        object.attributes = instance.attributes
+        object.save
+      end
+    end
   end
 end

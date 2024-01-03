@@ -25,6 +25,20 @@ RSpec.describe Spree::Webhooks::Subscriber, type: :model do
     end
   end
 
+  describe '#secret_key' do
+    it 'does not generate secret_key on build' do
+      subscriber = build(:cm_webhook_subscriber)
+
+      expect(subscriber.secret_key).to be_nil
+    end
+
+    it 'generate secret_key on create' do
+      subscriber = create(:cm_webhook_subscriber)
+
+      expect(subscriber.secret_key).not_to be_nil
+    end
+  end
+
   describe '#matches?' do
     let(:order) { build(:order) }
     let(:rule1) { build(:cm_webhook_subscriber_order_vendors_rule) }

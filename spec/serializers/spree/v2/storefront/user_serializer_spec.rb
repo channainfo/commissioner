@@ -23,7 +23,8 @@ describe Spree::V2::Storefront::UserSerializer, type: :serializer do
         :completed_orders,
         :phone_number,
         :intel_phone_number,
-        :country_code
+        :country_code,
+        :selected_locale,
       )
     end
 
