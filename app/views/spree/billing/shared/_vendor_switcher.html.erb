@@ -1,7 +1,7 @@
 <% if can?(:admin, current_store) %>
   <span class="d-none d-lg-inline text-light">
     <% if current_vendor.logo %>
-      <img src="<%= main_app.rails_blob_url(@current_vendor.logo.attachment) %>" alt="qrcode" style="width: 40px; height: 40px; padding: 2px">
+      <img src="<%= main_app.rails_blob_url(@current_vendor.logo.attachment) %>" alt="vendor's logo" style="width: 40px; padding: 2px">
     <% else %>
       <%= svg_icon name: "building.svg", width: '25', height: '25' %>
     <% end %>
