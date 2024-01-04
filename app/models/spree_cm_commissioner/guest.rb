@@ -1,5 +1,9 @@
 module SpreeCmCommissioner
   class Guest < SpreeCmCommissioner::Base
+    include SpreeCmCommissioner::KycBitwise
+
+    delegate :kyc, to: :line_item
+
     enum gender: { :other => 0, :male => 1, :female => 2 }
 
     belongs_to :line_item, class_name: 'Spree::LineItem'
