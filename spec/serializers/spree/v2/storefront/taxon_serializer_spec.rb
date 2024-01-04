@@ -16,6 +16,7 @@ RSpec.describe Spree::V2::Storefront::TaxonSerializer, type: :serializer do
         :app_banner,
         :web_banner,
         :home_banner,
+        :vendors,
       ]).serializable_hash
     }
 
@@ -53,6 +54,7 @@ RSpec.describe Spree::V2::Storefront::TaxonSerializer, type: :serializer do
         :app_banner,
         :web_banner,
         :home_banner,
+        :vendors,
       )
     end
   end
