@@ -30,6 +30,15 @@ module SpreeCmCommissioner
       Rails.application.config.spree.promotions.actions.concat [
         SpreeCmCommissioner::Promotion::Actions::CreateDateSpecificItemAdjustments,
       ]
+
+      if Rails.application.config.respond_to?(:spree_backend)
+        SpreeCmCommissioner::Admin::MainMenu::DefaultConfigurationBuilder.new.add_all
+        SpreeCmCommissioner::Admin::Tabs::UserDefaultTabsBuilder.new.add_all
+        SpreeCmCommissioner::Admin::Tabs::OrderDefaultTabsBuilder.new.add_all
+        SpreeCmCommissioner::Admin::Tabs::VendorDefaultTabsBuilder.new.add_all
+        SpreeCmCommissioner::Admin::Tabs::ProductDefaultTabsBuilder.new.add_all
+        SpreeCmCommissioner::Admin::Actions::OrderDefaultActionsBuilder.new.add_all
+      end
     end
 
     config.to_prepare(&method(:activate).to_proc)

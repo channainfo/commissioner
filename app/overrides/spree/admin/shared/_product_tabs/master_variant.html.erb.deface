@@ -1,9 +1,0 @@
-<!-- insert_after "erb[silent]:contains('Spree::Digital')" -->
-
-<%= content_tag :li, class: 'nav-item' do %>
-  <%= link_to_with_icon 'adjust.svg',
-    Spree.t(:master_variant),
-    admin_product_master_variant_index_url(@product),
-    class: "nav-link #{'active' if current == :master_variant}" %>
-
-<% end if can?(:admin, Spree::Variant) && !@product.deleted? %>

@@ -159,6 +159,9 @@ km:
     length: "ប្រវែង"
     preference: "Preference"
     notification: "Notification"
+    customer_notifications: "Customer Notifications"
+    homepage: "Home Page"
+    icons: "Icons"
     notice_messages:
       line_item_not_found: "Line item not found"
     promotion_rule_types:
@@ -324,4 +327,4 @@ km:
     cannot_delete_account: 'អ្នកមិនអាចលុបគណនីនេះបានទេ ដោយសារអ្នកមានតួនាទីពិសេស'
   kyc:
     note: '<b>ចំណាំ:</b> ជ្រើសរើស KYC ដែលត្រូវការសម្រាប់ផលិតផលនេះ'
- 
+
