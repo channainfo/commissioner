@@ -5,6 +5,7 @@
     <%= Spree.t(:order_line_items) %>
   </h5>
   <div class="page-actions d-flex justify-content-center flex-wrap">
-    <%= event_links(@order, [:accept_all, :reject_all]) %>
+    <%= order_event_button(@order, :accept_all) if @order.can_accept_all? %>
+    <%= order_event_button(@order, :reject_all) if @order.can_reject_all? %>
   </div>
 </div>
