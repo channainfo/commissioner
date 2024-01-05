@@ -1,6 +1,0 @@
-<!-- insert_after "erb[silent]:contains('content_for :page_actions')" -->
-
-<%= button_link_to Spree.t('print'),
-  main_app.url_for("/o/#{order.qr_data}"),
-  icon: 'printer.svg',
-  target: :_blank %>

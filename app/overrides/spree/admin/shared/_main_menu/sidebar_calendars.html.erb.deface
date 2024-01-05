@@ -1,5 +1,0 @@
-<!-- insert_after "#sidebarPromotion" -->
-
-<ul class="nav nav-sidebar" id="sidebarCalendar">
-  <%= main_menu_tree Spree.t(:calendar), icon: "calendar4-event.svg", sub_menu: "calendar", url: "#sidebar-calendar" %>
-</ul>
