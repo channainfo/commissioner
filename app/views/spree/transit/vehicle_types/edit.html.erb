@@ -46,8 +46,10 @@
                 <td>
                   <%= layer.first.first[:created_at] %>
                 </td>
-                <td>
-                  <%= button nil, "eye-fill.svg", "button", {class: "view-layer-btn", "data-toggle": "modal", "data-target": "#viewSeatModal", "data-layer": layer.to_json, "data-layer-name": layer.first.first[:layer], "data-layer-row": layer.size, "data-layer-column": layer.first.size} %>
+                <td class="actions">
+                  <span class="d-flex justify-content-end">
+                    <%= button Spree.t(:view), nil, "button", {class: "view-layer-btn btn-primary", "data-toggle": "modal", "data-target": "#viewSeatModal", "data-layer": layer.to_json, "data-layer-name": layer.first.first[:layer], "data-layer-row": layer.size, "data-layer-column": layer.first.size} %>
+                  </span>
                 </td>
               </tr>
             <% end %>
