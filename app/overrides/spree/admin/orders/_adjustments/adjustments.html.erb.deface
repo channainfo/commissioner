@@ -1,0 +1,27 @@
+<!-- replace "[data-hook='order_details_adjustments']" -->
+<% eligible_adjustments = adjustments.eligible%>
+<tbody id="order-charges">
+  <% eligible_adjustments.group_by(&:label).each do |label, adjustments| %>
+    <tr class="total">
+      <td>
+        <strong><%= label %>:</strong>
+      </td>
+      <td class="total">
+        <span>
+          <%= Spree::Money.new(
+            adjustments.sum(&:amount),
+            currency: adjustments.first.order.try(:currency)
+          ) %>
+
+          <% if eligible_adjustments.promotion.present? %>
+            ~ (Cap
+            <%= Spree::Money.new(
+                    eligible_adjustments.promotion.first.source.calculator&.cap,
+                    currency: adjustments.first.order.try(:currency)
+                  ) %>)
+          <%end%>
+        </span>
+      </td>
+    </tr>
+  <% end %>
+</tbody>

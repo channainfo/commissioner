@@ -38,20 +38,76 @@ RSpec.describe SpreeCmCommissioner::Promotion::Actions::CreateDateSpecificItemAd
   let!(:promotion) { create(:promotion, promotion_rules: [rule]) }
 
   describe '#compute_line_item_amount' do
-    it 'return computed amount of -10% = 1$ for a matched date: 2023-01-12' do
-      subject = described_class.new(calculator: ten_percent_off_calculator, promotion: promotion)
-      amount = subject.compute_line_item_amount(line_item_10_to_12)
+    context 'when calculator has no cap' do
+      let(:subject) { described_class.new(calculator: ten_percent_off_calculator, promotion: promotion) }
 
-      expect(amount).to eq (1.0)
-      expect(-amount).to eq (subject.compute_amount(line_item_10_to_12))
+      it 'return computed amount of -10% = 1$ for a matched date: 2023-01-12' do
+        amount = subject.compute_line_item_amount(line_item_10_to_12)
+
+        expect(amount).to eq (1.0)
+        expect(-amount).to eq (subject.compute_amount(line_item_10_to_12))
+      end
+
+      it 'return computed amount of -10% = 2$ for 2 matched dates: 2023-01-13, 2023-01-14' do
+        amount = subject.compute_line_item_amount(line_item_13_to_14)
+
+        expect(amount).to eq (2.0)
+        expect(-amount).to eq (subject.compute_amount(line_item_13_to_14))
+      end
     end
 
-    it 'return computed amount of -10% = 2$ for 2 matched dates: 2023-01-13, 2023-01-14' do
-      subject = described_class.new(calculator: ten_percent_off_calculator, promotion: promotion)
-      amount = subject.compute_line_item_amount(line_item_13_to_14)
+    context 'when calculator has 50% discount with a cap' do
+      let(:product1) { create(:cm_accommodation_product, price: BigDecimal('30.0'), permanent_stock: 4) }
+      let(:line_item_product1_10_to_12) {
+        create(:line_item,
+          order: order,
+          quantity: 1,
+          price: BigDecimal('30.0'),
+          product: product,
+          from_date: '2023-01-10'.to_date,
+          to_date: '2023-01-13'.to_date
+        )
+      }
+      let(:line_item_product1_13_to_14) {
+        create(:line_item,
+          order: order,
+          quantity: 1,
+          price: BigDecimal('30.0'),
+          product: product1,
+          from_date: '2023-01-13'.to_date,
+          to_date: '2023-01-15'.to_date
+        )
+      }
+      let(:fifty_percent_off_with_cap_calculator) { Spree::Calculator::PercentOnLineItem.new(preferred_percent: 50, cap: 5) }
+      let(:subject) { described_class.new(calculator: fifty_percent_off_with_cap_calculator, promotion: promotion) }
 
-      expect(amount).to eq (2.0)
-      expect(-amount).to eq (subject.compute_amount(line_item_13_to_14))
+      it 'return computed amount of cap(5$ x 1) = 5$ for a matched date: 2023-01-12 of product 30$' do
+        amount = subject.compute_line_item_amount(line_item_product1_10_to_12)
+
+        expect(amount).to eq (0.5e1)
+        expect(-amount).to eq (subject.compute_amount(line_item_product1_10_to_12))
+      end
+
+      it 'return computed amount of cap(5$ x 2) = 10$ for a matched dates: 2023-01-13, 2023-01-14 of product 30$' do
+        amount = subject.compute_line_item_amount(line_item_product1_13_to_14)
+
+        expect(amount).to eq (10.0)
+        expect(-amount).to eq (subject.compute_amount(line_item_product1_13_to_14))
+      end
+
+      it 'return computed amount of 50% = 5$ for a matched date: 2023-01-12' do
+        amount = subject.compute_line_item_amount(line_item_10_to_12)
+
+        expect(amount).to eq (0.5e1)
+        expect(-amount).to eq (subject.compute_amount(line_item_10_to_12))
+      end
+
+      it 'return computed amount of 50% = 10$ for 2 matched dates: 2023-01-13, 2023-01-14' do
+        amount = subject.compute_line_item_amount(line_item_13_to_14)
+
+        expect(amount).to eq (10.0)
+        expect(-amount).to eq (subject.compute_amount(line_item_13_to_14))
+      end
     end
   end
 
