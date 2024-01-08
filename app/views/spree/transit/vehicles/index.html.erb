@@ -18,6 +18,7 @@
           </th>
           <th><%= Spree.t('transit.vehicle_type') %></th>
           <th><%= Spree.t('transit.vehicle.license_plate') %></th>
+          <th><%= Spree.t("transit.vehicle.route_type") %></th>
           <th scope="col" class="text-center" data-hook="transit_vehicles_index_header_actions" class="actions"></th>
         </tr>
       </thead>
@@ -27,6 +28,7 @@
             <td><%= vehicle.code %></td>
             <td><%= link_to vehicle.vehicle_type.name, edit_transit_vehicle_type_path(vehicle.vehicle_type) %></td>
             <td><%= vehicle.license_plate %></td>
+            <td><%= vehicle.route_type.capitalize %></td>
             <td class="actions " data-hook="transit_vehicles_index_row_actions">
               <span class="d-flex justify-content-end">
                 <%= link_to_edit vehicle, url: edit_transit_vehicle_path(vehicle), no_text: true, class: 'edit' if can?(:edit, vehicle) %>
