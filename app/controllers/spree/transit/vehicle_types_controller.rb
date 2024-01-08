@@ -2,6 +2,7 @@ module Spree
   module Transit
     class VehicleTypesController < Spree::Transit::BaseController
       before_action :load_amenities, except: %i[index layer]
+      before_action :load_status, except: %i[index layer]
       def index; end
 
       def location_after_save
@@ -20,6 +21,10 @@ module Spree
       def load_amenities
         @amenities = Spree::OptionValue.where(option_type_id: Spree::OptionType.where(kind: 'vehicle_type').first.id).pluck(:name, :id)
         @selected_option_value_ids = @object.option_values.pluck(:id)
+      end
+
+      def load_status
+        @statuses = SpreeCmCommissioner::VehicleType.state_machine.states.map(&:name)
       end
 
       def new
@@ -52,7 +57,8 @@ module Spree
           name: vehicle_type_params[:name],
           code: vehicle_type_params[:code],
           vendor_id: vehicle_type_params[:vendor_id],
-          route_type: vehicle_type_params[:route_type]
+          route_type: vehicle_type_params[:route_type],
+          status: vehicle_type_params[:status]
         }
       end
 
