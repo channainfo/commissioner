@@ -26,10 +26,13 @@
         <% @vehicles.each do |vehicle| %>
           <tr data-hook="transit_vehicle_index_rows">
             <td>
-                <div data-hook="preview-image">
-                  <%= link_to image_tag(main_app.url_for((vehicle.vehicle_photo.first.attachment.variant(resize_to_fill: [60, 60]))), :class => "rounded border mb-4"),
-                              main_app.rails_blob_url(vehicle.vehicle_photo.first.attachment) %>
-                </div>
+              <%= link_to spree.transit_vehicle_vehicle_photos_path(vehicle) do %>
+                <% if vehicle.primary_photo.present? %>
+                  <%= image_tag main_app.url_for(vehicle.primary_photo.attachment.variant(resize_to_fill: [60, 60])), :class => "rounded border" %>
+                <% else %>
+                  <div class="rounded border" style="width: 60px; height: 60px; padding: 5px"><%= Spree.t('transit.no_image') %></div>
+                <% end %>
+              <% end %>
             </td>
             <td><%= vehicle.code %></td>
             <td><%= link_to vehicle.vehicle_type.name, edit_transit_vehicle_type_path(vehicle.vehicle_type) %></td>
