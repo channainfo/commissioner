@@ -2,6 +2,11 @@
   <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
 </div>
 
+<% content_for :page_title do %>
+  <%= page_header_back_button spree.transit_vehicles_path %>
+  <%= @object.code %>
+<% end %>
+
 <%= render partial: 'spree/transit/shared/vehicle_tabs', locals: { current: :details } %>
 
 <div data-hook="admin_user_new_form">

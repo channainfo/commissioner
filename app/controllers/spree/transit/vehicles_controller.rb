@@ -1,6 +1,7 @@
 module Spree
   module Transit
     class VehiclesController < Spree::Transit::BaseController
+      before_action :set_vendor, if: -> { member_action? }
       before_action :load_vehicle_types
 
       def new
@@ -22,6 +23,7 @@ module Spree
 
       def collection
         return @collection if defined?(@collection)
+
         scope
 
         @search = scope.includes(:vehicle_type).ransack(params[:q])
@@ -42,6 +44,10 @@ module Spree
 
       def vehicle_params
         params.require(:vehicle).permit(:code, :license_plate)
+      end
+
+      def set_vendor
+        permitted_resource_params[:vendor] = current_vendor
       end
     end
   end
