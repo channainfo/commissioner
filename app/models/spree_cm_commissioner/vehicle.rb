@@ -2,6 +2,8 @@ require_dependency 'spree_cm_commissioner'
 
 module SpreeCmCommissioner
   class Vehicle < SpreeCmCommissioner::Base
+    has_one :primary_photo, -> { order(position: :asc) }, class_name: 'SpreeCmCommissioner::VehiclePhoto', as: :viewable, dependent: :destroy
+
     belongs_to :vehicle_type, class_name: 'SpreeCmCommissioner::VehicleType', dependent: :destroy
     belongs_to :vendor, class_name: 'Spree::Vendor'
 
