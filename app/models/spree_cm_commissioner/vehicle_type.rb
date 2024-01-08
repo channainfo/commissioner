@@ -14,7 +14,28 @@ module SpreeCmCommissioner
     validates :name, uniqueness: true
     accepts_nested_attributes_for :vehicle_seats, allow_destroy: true
 
-    self.whitelisted_ransackable_attributes = %w[name code route_type id]
+    state_machine :status, initial: :draft do
+      event :draft do
+        transition to: :draft
+      end
+      after_transition to: :draft, do: :after_draft
+
+      event :activate do
+        transition to: :active
+      end
+      after_transition to: :active, do: :after_activate
+
+      event :archive do
+        transition to: :archived
+      end
+      after_transition to: :archived, do: :after_archive
+    end
+
+    self.whitelisted_ransackable_attributes = %w[name code route_type id status]
+
+    def after_activate; end
+    def after_archive; end
+    def after_draft; end
 
     def seat_layers
       grouped_seats = SpreeCmCommissioner::VehicleSeat.where(vehicle_type_id: id).group_by(&:layer).transform_values do |seats|
