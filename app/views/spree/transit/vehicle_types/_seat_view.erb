@@ -20,7 +20,7 @@
           <div class="row">
             <% rows.each do |seat| %>
               <div class="column ml-4">
-                <% if seat['seat_type'] == 0 %>
+                <% if seat['seat_type'] == 'normal' %>
                   <div class="seat-container">
                     <div class="seat-icon" data-seat-row="<%= seat['row'] %>" data-seat-column="<%= seat['column'] %>">
                       <%= inline_svg_tag "cm-normal-seat-icons.svg", size: "35px" %>
@@ -33,7 +33,7 @@
                         size="<%= seat['label'].length %>">
                     </div>
                   </div>
-                <% elsif seat['seat_type'] == 1 %>
+                <% elsif seat['seat_type'] == 'empty' %>
                   <div class="seat-container">
                     <div class="seat-icon" data-seat-row="<%= seat['row'] %>" data-seat-column="<%= seat['column'] %>">
                       <div class="hidden-seat"></div>
@@ -46,7 +46,7 @@
                         size="<%= seat['label'].length %>">
                     </div>
                   </div>
-                <% elsif seat['seat_type'] == 2 %>
+                <% elsif seat['seat_type'] == 'vip' %>
                   <div class="seat-container">
                     <div class="seat-icon" data-seat-row="<%= seat['row'] %>" data-seat-column="<%= seat['column'] %>">
                       <%= inline_svg_tag "cm-vip-seat-icons.svg", size: "35px" %>

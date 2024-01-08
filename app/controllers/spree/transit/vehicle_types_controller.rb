@@ -32,6 +32,7 @@ module Spree
 
       def collection
         return @collection if defined?(@collection)
+
         scope
 
         @search = scope.ransack(params[:q])
