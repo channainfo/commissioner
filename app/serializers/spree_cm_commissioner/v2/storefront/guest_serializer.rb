@@ -7,6 +7,7 @@ module SpreeCmCommissioner
         attributes :first_name, :last_name, :line_item_id, :dob, :gender, :kyc_fields, :created_at, :updated_at
 
         belongs_to :occupation, serializer: Spree::V2::Storefront::TaxonSerializer
+        has_one :id_card, serializer: Spree::V2::Storefront::IdCardSerializer
       end
     end
   end
