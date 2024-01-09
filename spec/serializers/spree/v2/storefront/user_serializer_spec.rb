@@ -32,7 +32,8 @@ describe Spree::V2::Storefront::UserSerializer, type: :serializer do
         :default_billing_address,
         :default_shipping_address,
         :profile,
-        :device_tokens
+        :device_tokens,
+        :spree_roles
       )
     end
   end
