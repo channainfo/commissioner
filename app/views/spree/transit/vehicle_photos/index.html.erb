@@ -1,3 +1,8 @@
+<% content_for :page_title do %>
+  <%= page_header_back_button spree.transit_vehicles_path %>
+  <%= "Vehicle/#{@vehicle.code}" %>
+<% end %>
+
 <%= render partial: 'spree/transit/shared/vehicle_tabs', locals: {current: :images} %>
 
 <% content_for :page_actions do %>
