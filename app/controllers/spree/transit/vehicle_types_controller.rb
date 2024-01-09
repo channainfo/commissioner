@@ -3,7 +3,10 @@ module Spree
     class VehicleTypesController < Spree::Transit::BaseController
       before_action :load_amenities, except: %i[index layer]
       before_action :load_status, except: %i[index layer]
-      def index; end
+
+      def index
+        respond_with(@collection)
+      end
 
       def location_after_save
         edit_transit_vehicle_type_path(@object)
