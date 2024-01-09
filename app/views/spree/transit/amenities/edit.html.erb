@@ -1,0 +1,53 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:amenities) %>
+<% end %>
+<%= form_with model: @amenity, url: { action: 'update' } do |f| %>
+  <div class="card mb-3">
+    <div class="card-header">
+      <h5 class="card-title mb-0 h6">
+        <%= Spree.t(:add_amenity_values) %>
+      </h5>
+    </div>
+    <div class="card-body">
+       <%= render partial: 'form', locals: { f: f } %>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive border rounded bg-white">
+          <table class="table table-condensed sortable" data-hook data-sortable-link="<%= update_values_positions_admin_option_types_url %>">
+            <thead data-hook="option_header">
+              <tr>
+                <th colspan="2"><%= raw(Spree.t(:name) + required_span_tag) %></th>
+                <th><%= raw(Spree.t(:display) + required_span_tag) %></th>
+                <th class="actions"></th>
+              </tr>
+            </thead>
+            <tbody id="sortVert">
+              <% if @amenity.option_values.empty? %>
+                <tr id="none" data-hook="option_none">
+                  <td colspan="2"><%= Spree.t(:none) %></td>
+                  <td class="actions text-center"></td>
+                </tr>
+              <% else %>
+                <%= f.fields_for :option_values do |option_value_form| %>
+                  <%= render partial: 'option_value_fields', locals: { f: option_value_form } %>
+                <% end %>
+              <% end %>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="4" class="text-center">
+                    <%= button_link_to Spree.t(:add_amenity_values_icon), transit_vectors_amenity_values_url, { icon: 'spree-icon.svg', id: 'admin-option-values-icons-index' } %>
+                    <%= button_link_to Spree.t(:add_amenity_values), "javascript:;", { icon: 'add.svg', :'data-target' => "tbody#sortVert", class: 'btn-success mx-auto spree_add_fields' } %>
+                  </div>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    <div class="card-footer text-center">
+      <%= render partial: 'spree/admin/shared/edit_resource_links', locals: { collection_url: spree.edit_transit_amenity_path(@amenity) }  %>
+    </div>
+  </div>
+<% end %>
+

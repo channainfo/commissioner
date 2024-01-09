@@ -150,6 +150,15 @@ Spree::Core::Engine.add_routes do
   end
 
   namespace :transit do
+    namespace :vectors do
+      resources :icons, only: [:index]
+      resources :amenity_values, only: %i[index update] do
+        collection do
+          post :update
+        end
+      end
+    end
+
     resources :reservations
     resources :locations
     resources :vendors do
@@ -172,6 +181,10 @@ Spree::Core::Engine.add_routes do
         end
       end
     end
+
+    resource :amenity, only: [:new, :create , :edit, :update]
+    post "/amenity/update_positions"
+    post "/amenity/update_values_positions"
 
     resources :taxons, only: %i[index show]
     resources :vehicle_types do
