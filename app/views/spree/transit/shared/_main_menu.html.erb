@@ -34,6 +34,9 @@
   <ul class="nav nav-sidebar" id="sidebarVehicles">
     <%= tab :vehicles, label: I18n.t('spree.transit.vehicles'), url: transit_vehicles_path, icon: "truck.svg", selected: request.path.include?('vehicles') %>
   </ul>
+  <ul class="nav nav-sidebar" id="sidebarAmenities">
+    <%= tab :amenities, label: 'Amenities', url: edit_transit_amenity_path, icon: "truck.svg", selected: request.path.include?('amenities') %>
+  </ul>
   <ul class="nav nav-sidebar" id="sidebarSetting">
     <%= transit_main_menu_tree I18n.t('spree.transit.settings'), icon: "gear.svg", sub_menu:"setting", url: "#sidebar-setting" %>
   </ul>

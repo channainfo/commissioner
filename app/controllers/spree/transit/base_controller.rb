@@ -4,6 +4,7 @@ module Spree
       helper_method :current_vendor, :vendors
       before_action :required_vendor_user!
       before_action :current_vendor
+      # before_action :load_amenity
       layout 'spree/layouts/transit'
 
       def vendors
@@ -30,6 +31,14 @@ module Spree
         session[:transit_current_vendor_slug] ||= @current_vendor&.slug
 
         @current_vendor
+      end
+
+      def load_amenity
+        @amenity = Spree::OptionType.where(
+                                name: "amenities",
+                                presentation: "Amenities",
+                                kind: :vehicle_type,
+                                attr_type: :amenity).first_or_create
       end
 
       def collection_url(options = {})
