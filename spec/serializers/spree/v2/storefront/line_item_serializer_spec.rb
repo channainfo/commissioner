@@ -54,6 +54,7 @@ RSpec.describe Spree::V2::Storefront::LineItemSerializer, type: :serializer do
         :digital_links,
         :vendor,
         :order,
+        :guests
       )
     end
   end
