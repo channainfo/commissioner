@@ -14,6 +14,9 @@ RSpec.describe Spree::Vendor, type: :model do
     it { should have_many(:vendor_promotion_rules).class_name('SpreeCmCommissioner::VendorPromotionRule') }
     it { should have_many(:promotion_rules).class_name('Spree::PromotionRule').through(:vendor_promotion_rules) }
     it { should have_many(:promotions).class_name('Spree::Promotion').through(:promotion_rules) }
+    it { should have_many(:active_promotions).class_name('Spree::Promotion').through(:promotion_rules).source(:promotion) }
+    it { should have_many(:possible_promotions).class_name('Spree::Promotion').through(:promotion_rules).source(:promotion) }
+    it { should have_many(:auto_apply_promotions).class_name('Spree::Promotion').through(:promotion_rules).source(:promotion) }
   end
 
   describe 'attributes' do
@@ -59,6 +62,44 @@ RSpec.describe Spree::Vendor, type: :model do
     it 'raise error when id in slug-from not found' do
       vendor = create(:vendor, slug: 'vendor')
       expect { described_class.by_vendor_id!('wrong-vendor-slug') }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
+  describe '#auto_apply_promotions' do
+    let(:vendor) { create(:vendor) }
+
+    it 'should return a promotion where path & code is nil and not expired' do
+      promotion = create(:cm_promotion, :with_vendor_rule, vendor: vendor, path: nil, code: nil, expires_at: 1.day.from_now)
+      vendor.reload
+
+      expect(vendor.auto_apply_promotions).to eq [promotion]
+      expect(promotion.path).to be_nil
+      expect(promotion.code).to be_nil
+      expect(promotion.expired?).to be false
+    end
+
+    it 'should return empty when it expired' do
+      promotion = create(:cm_promotion, :with_vendor_rule, vendor: vendor, path: nil, code: nil, expires_at: 1.day.ago)
+      vendor.reload
+
+      expect(vendor.auto_apply_promotions).to be_empty
+      expect(promotion.expired?).to be true
+    end
+
+    it 'should return empty when it has path' do
+      promotion = create(:cm_promotion, :with_vendor_rule, vendor: vendor, path: 'page/path', code: nil)
+      vendor.reload
+
+      expect(vendor.auto_apply_promotions).to be_empty
+      expect(promotion.path).not_to be_nil
+    end
+
+    it 'should return empty when it has code' do
+      promotion = create(:cm_promotion, :with_vendor_rule, vendor: vendor, path: nil, code: 'coupon-code')
+      vendor.reload
+
+      expect(vendor.auto_apply_promotions).to be_empty
+      expect(promotion.code).not_to be_nil
     end
   end
 

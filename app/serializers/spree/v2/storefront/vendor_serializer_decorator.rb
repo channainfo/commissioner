@@ -14,6 +14,7 @@ module Spree
           base.has_many :places, serializer: :place
           base.has_many :promoted_option_values, serializer: :option_value
           base.has_many :vendor_kind_option_values, serializer: :option_value
+          base.has_many :auto_apply_promotions, serializer: ::SpreeCmCommissioner::V2::Storefront::PromotionSerializer
           base.has_many :active_promotions, serializer: ::SpreeCmCommissioner::V2::Storefront::PromotionSerializer
 
           base.has_one :default_state, serializer: :state
