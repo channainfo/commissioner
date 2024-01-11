@@ -7,6 +7,8 @@ module Spree
           base.has_one :vendor
 
           base.belongs_to :order, serializer: Spree::V2::Storefront::LineItemOrderSerializer
+
+          base.has_many :guests, serializer: SpreeCmCommissioner::V2::Storefront::GuestSerializer
         end
       end
     end

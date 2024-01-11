@@ -260,9 +260,11 @@ Spree::Core::Engine.add_routes do
         resources :homepage_sections, only: [:index]
         resources :order_qrs, only: [:show]
 
+        resources :guest_qrs, only: [:show]
         resources :guests do
           resources :id_cards
         end
+        resources :check_in_records, only: %i[index show create update destroy]
       end
     end
 
