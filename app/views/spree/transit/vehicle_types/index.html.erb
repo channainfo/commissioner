@@ -4,8 +4,32 @@
 <% content_for :page_actions do %>
   <%= button_link_to I18n.t('spree.transit.new.vehicle_type'), new_transit_vehicle_type_path, { class: "btn-success", icon: 'add.svg', id: 'admin_new_product' } %>
 <% end %>
+
+<% content_for :page_tabs do %>
+  <li class="nav-item">
+    <%= link_to Spree.t(:all),
+                spree.transit_vehicle_types_path,
+                class: "nav-link #{'active' if params[:q]&.dig(:status_eq).blank?}" %>
+  </li>
+  <li class="nav-item">
+    <%= link_to Spree.t(:active),
+                params.merge({q: {status_eq: :active}}).permit!,
+                class: "nav-link #{'active' if params[:q]&.dig(:status_eq) == 'active'}" %>
+  </li>
+  <li class="nav-item">
+    <%= link_to Spree.t(:draft),
+                params.merge({q: {status_eq: :draft}}).permit!,
+                class: "nav-link #{'active' if params[:q]&.dig(:status_eq) == 'draft'}" %>
+  </li>
+  <li class="nav-item">
+    <%= link_to Spree.t(:archived),
+                params.merge({q: {status_eq: :archived}}).permit!,
+                class: "nav-link #{'active' if params[:q]&.dig(:status_eq) == 'archived'}" %>
+  </li>
+<% end  %>
+
 <% render 'filter_form' %>
-<% if @vehicle_types.any? %>
+<% if @collection.any? %>
   <div class="table-responsive border rounded bg-white mb-3">
     <table class="table" id="listing_customers" data-hook>
       <thead class="text-muted">
@@ -23,13 +47,16 @@
             <%= Spree.t(:route_type) %>
           </th>
           <th>
+            <%= Spree.t(:status) %>
+          </th>
+          <th>
             <%= Spree.t(:created_at) %>
           </th>
           <th scope="col" class="text-center" data-hook="admin_products_index_header_actions" class="actions"></th>
         </tr>
       </thead>
       <tbody>
-        <% @vehicle_types.each do | type| %>
+        <% @collection.each do | type| %>
           <tr data-hook="admin_customers_index_rows">
             <td>
               <%= type.id %>
@@ -42,6 +69,14 @@
             </td>
             <td>
               <%= type.route_type.capitalize  %>
+            </td>
+            <td>
+              <% @badge_class = "badge-active" if type.status == 'active' %>
+              <% @badge_class = "badge-inactive" if type.status == 'draft' %>
+              <% @badge_class = "badge-dark" if type.status == 'archived' %>
+              <%= content_tag(:strong, class: "badge #{@badge_class} ") do %>
+                <%= type.status %>
+              <% end %>
             </td>
             <td>
               <%= type.created_at.to_date %>

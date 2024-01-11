@@ -5,6 +5,7 @@ module SpreeCmCommissioner
     include SpreeCmCommissioner::RouteType
 
     belongs_to :vehicle_type, class_name: 'SpreeCmCommissioner::VehicleType'
+    has_one :primary_photo, -> { order(position: :asc) }, class_name: 'SpreeCmCommissioner::VehiclePhoto', as: :viewable, dependent: :destroy
     belongs_to :vendor, class_name: 'Spree::Vendor'
 
     before_save :set_route_type, if: :vehicle_type_id_changed?
