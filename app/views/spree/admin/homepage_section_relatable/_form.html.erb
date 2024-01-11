@@ -1,21 +1,30 @@
-<% content_for :page_title do %>
-  <%= link_to plural_resource_name(SpreeCmCommissioner::HomepageSection), spree.admin_homepage_feed_homepage_section_index_url %> /
-  <%= Spree.t(:homepage_section_relatable) %>
-<% end %>
-
 <div class="row">
   <div class="col-12">
     <p class="font-weight-bold">Section Relatable</p>
     <div class="card mb-3">
       <div class="card-body">
-        <div class="form-group">
-          <%= label_tag :relatable_type %>
-          <%= select_tag(:relatable_type, options_for_select([['Vendor', 'Spree::Vendor'], ['Taxon', 'Spree::Taxon'], ['Product', 'Spree::Product']], @object.persisted? ? @object.relatable_type : nil), class: "select2", id: "relatable_type_select") %>
-        </div>
-        <div class="form-group">
-          <%= label_tag :relatable_id %>
-          <%= select_tag(:relatable_id, options_for_select([], @object.persisted? ? @object.relatable_id : nil), class: "select2", id: "relatable_id_select") %>
-        </div>
+        <%= f.hidden_field :homepage_section_id %>
+        <%= f.field_container :relatable_type do %>
+          <%= f.label :relatable_type %>
+          <%= f.select :relatable_type, [['Vendor', 'Spree::Vendor'], ['Taxon', 'Spree::Taxon'], ['Product', 'Spree::Product']], {}, :class => "fullwidth select2" %>
+        <% end %>
+
+        <%= f.field_container :relatable_id do %>
+          <%= f.label :relatable_id %>
+          <%= f.select :relatable_id,
+            options_from_collection_for_select(f.object.relatable.present? ? [f.object.relatable] : [], :id, :name),
+              { include_hidden: true },
+              class: 'select2autocomplete',
+              data: { autocomplete_url_value: 'homepage_section_relatables_api_v2',
+                      autocomplete_return_attr_value: :name,
+                      autocomplete_min_input_value: 1,
+                      autocomplete_additional_url_params_value: "model_class=#{f.object.relatable_type}" } %>
+        <% end %>
+
+        <%= f.field_container :active do %>
+          <%= f.label :active %>
+          <%= f.check_box :active %>
+        <% end %>
       </div>
     </div>
   </div>
@@ -23,36 +32,21 @@
 
 <script>
   $(document).ready(function () {
-    // Initial setup
-    updateRelatableIdOptions();
+    const relatableTypeSelector = "#spree_cm_commissioner_homepage_section_relatable_relatable_type"
+    const relatableIdSelector = "#spree_cm_commissioner_homepage_section_relatable_relatable_id"
 
-    // Event listener for relatable_type change
-    $("#relatable_type_select").on("change", function () {
+    // initialize
+    updateRelatableIdOptions();
+    loadAutoCompleteParams();
+
+    $(relatableTypeSelector).on("change", function () {
       updateRelatableIdOptions();
+      loadAutoCompleteParams();
     });
 
     function updateRelatableIdOptions() {
-      var selectedType = $("#relatable_type_select").val();
-      $.ajax({
-        url: "/admin/homepage_feed/homepage_section_relatable/options",
-        method: "GET",
-        data: { relatable_type: selectedType },
-        dataType: "json",
-        success: function (data) {
-          $("#relatable_id_select").html("");
-          $.each(data, function (key, value) {
-            $("#relatable_id_select").append(
-              $("<option></option>").attr("value", value[1]).text(value[0])
-            );
-          });
-          <% if @object.persisted? %>
-            $("#relatable_id_select").val("<%= @object.relatable_id %>");
-          <% end %>
-        },
-        error: function (xhr, status, error) {
-          console.error("Error fetching relatable_id options:", error);
-        },
-      });
+      var selectedType = $(relatableTypeSelector).val();
+      $(relatableIdSelector).attr('data-autocomplete-additional-url-params-value', "model_class=" + selectedType);
     }
   });
 </script>

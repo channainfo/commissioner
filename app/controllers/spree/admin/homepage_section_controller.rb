@@ -16,7 +16,7 @@ module Spree
       def edit
         homepage_section_id = params[:id]
         @homepage_section = SpreeCmCommissioner::HomepageSection.find(homepage_section_id)
-        @homepage_section_relatables = @homepage_section.homepage_section_relatables
+        @homepage_section_relatables = SpreeCmCommissioner::HomepageSectionRelatable.where(homepage_section: @homepage_section)
       end
 
       private

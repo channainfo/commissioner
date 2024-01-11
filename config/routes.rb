@@ -213,6 +213,10 @@ Spree::Core::Engine.add_routes do
 
   namespace :api, defaults: { format: 'json' } do
     namespace :v2 do
+      namespace :platform do
+        resources :homepage_section_relatable_options
+      end
+
       namespace :storefront do
         resource :cart, controller: :cart, only: %i[show create destroy] do
           patch :restart_checkout_flow

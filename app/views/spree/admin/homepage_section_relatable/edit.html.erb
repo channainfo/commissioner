@@ -1,5 +1,10 @@
+<% content_for :page_title do %>
+  <%= link_to plural_resource_name(SpreeCmCommissioner::HomepageSectionRelatable), edit_admin_homepage_feed_homepage_section_path(params[:homepage_section_id]) %> /
+  <%= Spree.t(:homepage_section_relatable) %>
+<% end %>
+
 <%= form_with model: @object, url: { action: 'update' }, html: { multipart: true } do |f| %>
-  <fieldset data-hook="new_photo">
+  <fieldset data-hook="new_homepage_section_relatable">
     <%= render partial: 'form', locals: { f: f } %>
     <div class="form-actions" data-hook="buttons">
       <%= button Spree.t('actions.update'), 'save.svg', 'submit', {class: 'btn-success', data: { disable_with: "#{ Spree.t(:saving) }..." }} %>

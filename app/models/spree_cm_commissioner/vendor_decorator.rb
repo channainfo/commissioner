@@ -59,6 +59,10 @@ module SpreeCmCommissioner
       base.has_many :subscriptions, through: :customers, class_name: 'SpreeCmCommissioner::Subscription'
       base.has_many :subscription_orders, through: :subscriptions, class_name: 'Spree::Order', source: :orders
 
+      base.has_many :homepage_section_relatables,
+                    class_name: 'SpreeCmCommissioner::HomepageSectionRelatable',
+                    dependent: :destroy, inverse_of: :relatable
+
       def base.by_vendor_id!(vendor_id)
         if vendor_id.to_s =~ /^\d+$/
           find(vendor_id)
