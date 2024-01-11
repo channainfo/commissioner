@@ -16,6 +16,11 @@ module SpreeCmCommissioner
                through: :promotion_rules,
                class_name: 'Spree::Promotion',
                source: :promotion
+
+      has_many :auto_apply_promotions, -> { active.where(code: nil, path: nil) },
+               through: :promotion_rules,
+               class_name: 'Spree::Promotion',
+               source: :promotion
     end
   end
 end

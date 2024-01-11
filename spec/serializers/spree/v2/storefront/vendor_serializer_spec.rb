@@ -46,7 +46,8 @@ RSpec.describe Spree::V2::Storefront::VendorSerializer, type: :serializer do
         :vendor_kind_option_values,
         :active_promotions,
         :default_state,
-        :logo
+        :logo,
+        :auto_apply_promotions
       )
     end
   end
