@@ -16,17 +16,8 @@
   <ul class="nav nav-sidebar" id="sidebarRoutes">
     <%= tab :routes, label: I18n.t('spree.transit.routes'), url: transit_routes_path, icon: "location.svg", selected: request.path.include?('routes') %>
   </ul>
-  <ul class="nav nav-sidebar" id="sidebarLocations">
-    <%= tab :locations, label: I18n.t('spree.transit.locations'), url: transit_locations_path, icon: "location.svg", selected: request.path.include?('locations') %>
-  </ul>
    <ul class="nav nav-sidebar" id="sidebarLocations">
-    <%= tab :taxonomies, label: Spree.t(:taxonomies), url: transit_taxonomies_path, icon: "location.svg", selected: request.path.include?('taxonomies') %>
-  </ul>
-  <ul class="nav nav-sidebar" id="sidebarStop">
-    <%= tab :stops, label: I18n.t('spree.transit.stops'), url: transit_stops_path, icon: "location.svg", selected: request.path.include?('stops') %>
-  </ul>
-  <ul class="nav nav-sidebar" id="sidebarBranches">
-    <%= tab :branches, label: I18n.t('spree.transit.branch.branches'), url: transit_branches_path, icon: "shop.svg", selected: request.path.include?('branches') %>
+    <%= tab :places, label: I18n.t('spree.transit.places.places'), url: spree.transit_places_path , icon: "location.svg", selected: request.path.include?('place') %>
   </ul>
   <ul class="nav nav-sidebar" id="sidebarVehicleTypes">
     <%= tab :vehicle_types, label: I18n.t('spree.transit.vehicle_types'), url: transit_vehicle_types_path, icon: "truck.svg", selected: request.path.include?('vehicle_types') %>
