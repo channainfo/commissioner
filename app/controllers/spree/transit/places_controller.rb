@@ -5,7 +5,7 @@ module Spree
       helper 'spree/transit/sortable_tree'
 
       def load_places_taxonomy
-        @places_taxonomy = Spree::Taxonomy.find_by(name: 'Places', kind: 'transit')
+        @places_taxonomy = Spree::Taxonomy.find_by(kind: 'transit')
         @places_taxonomy ||= create_places_taxon
       end
 
@@ -27,7 +27,7 @@ module Spree
         @taxon.taxonomy = @places_taxonomy
       end
 
-      def update # rubocop:disable Metrics/AbcSize
+      def update
         successful = @taxon.transaction do
           parent_id = params[:taxon][:parent_id]
           set_position
