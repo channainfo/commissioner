@@ -223,6 +223,7 @@ en:
       vehicle:
         code: "Code"
         license_plate: "License Plate"
+        route_type: "Route Type"
       route_type: "Route Type"
       select_route_type: "Select Route Type"
       vehicle_type_name: "Vehicle Type Name"
