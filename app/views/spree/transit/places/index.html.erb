@@ -1,0 +1,32 @@
+<% content_for :page_title do %>
+  <%= @places_taxonomy&.name %>
+<% end %>
+
+<% content_for :page_actions do %>
+    <%= button_link_to Spree.t('transit.places.add_new_place'), spree.new_transit_place_path(), icon: 'add.svg', class: 'no-wrap btn btn-success align-self-center' %>
+<% end %>
+
+
+<div id="sortableTreeArea">
+
+      <div class="mb-3 border">
+        <% if @places_taxonomy.root.present? %>
+          <div class="p-0 bg-light" data-controller="sortable-tree" data-sortable-tree-handle-value=".move-handle">
+            <div data-sortable-tree-parent-id-value="<%= @places_taxonomy.root.id %>">
+
+              <% if @places_taxonomy.root.children.present? %>
+                <% @places_taxonomy.root.children.each do |root_children| %>
+                  <%= build_sortable_tree(@places_taxonomy, root_children) %>
+                <% end %>
+              <% else %>
+                <div class="text-center no-objects-found m-5 m-5">
+                  <%= raw Spree.t('transit.taxonomies.no_taxons', taxonomy: @places_taxonomy.root.name ) %>
+                </div>
+              <% end %>
+
+            </div>
+          </div>
+        <% end %>
+      </div>
+</div>
+

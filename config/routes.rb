@@ -171,22 +171,10 @@ Spree::Core::Engine.add_routes do
     resources :branches
     resources :stops
     resources :routes
-    resources :taxonomies do
-      collection do
-        post :update_positions
-      end
-      resources :taxons do
-        member do
-          delete :remove_icon
-        end
-      end
-    end
-
+    resources :places
     resource :amenity, only: [:new, :create , :edit, :update]
     post "/amenity/update_positions"
     post "/amenity/update_values_positions"
-
-    resources :taxons, only: %i[index show]
     resources :vehicle_types do
       resources :vehicle_seats
     end
