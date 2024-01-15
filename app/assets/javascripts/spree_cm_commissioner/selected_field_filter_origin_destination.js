@@ -1,5 +1,5 @@
 var SelectFieldFilterOriginDestination = {
-  initialize: function (originSelector, destinationSelector) {
+  initialize: function (originSelector, destinationSelector, selectedOriginId, selectedDestinationId) {
     function filterOptions(originId, destinationSelector) {
       $(destinationSelector + ' option').each(function () {
         if ($(this).val() == originId) {
@@ -10,6 +10,14 @@ var SelectFieldFilterOriginDestination = {
         }
       });
     }
+
+    $(originSelector).val(selectedOriginId);
+    $(destinationSelector).val(selectedDestinationId);
+
+    filterOptions(selectedOriginId, destinationSelector);
+    filterOptions(selectedDestinationId, originSelector);
+
+
     $(document).on('change', originSelector, function () {
       var originId = $(this).val();
       filterOptions(originId, destinationSelector);
@@ -23,5 +31,7 @@ var SelectFieldFilterOriginDestination = {
 }
 
 document.addEventListener("spree:load", function () {
-  SelectFieldFilterOriginDestination.initialize('#product_origin_id', '#product_destination_id');
+  var selectedOriginId = $('#product_origin_id').val();
+  var selectedDestinationId = $('#product_destination_id').val();
+  SelectFieldFilterOriginDestination.initialize('#product_origin_id', '#product_destination_id', selectedOriginId, selectedDestinationId);
 });
