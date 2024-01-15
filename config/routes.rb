@@ -264,7 +264,7 @@ Spree::Core::Engine.add_routes do
         resources :guests do
           resources :id_cards
         end
-        resources :check_in_records, only: %i[index show create update destroy]
+        resources :check_ins, only: %i[index show create]
       end
     end
 
