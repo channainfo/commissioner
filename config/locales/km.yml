@@ -174,6 +174,9 @@ km:
       vendors:
         name: "Vendors"
         description: "Vendors"
+      guest_occupations:
+        name: "Guest Occupations"
+        description: "Guest Occupations"
     promotion_action_types:
       create_date_specific_item_adjustments:
         name: "Create date specific item adjustment"
@@ -324,4 +327,4 @@ km:
     cannot_delete_account: 'អ្នកមិនអាចលុបគណនីនេះបានទេ ដោយសារអ្នកមានតួនាទីពិសេស'
   kyc:
     note: '<b>ចំណាំ:</b> ជ្រើសរើស KYC ដែលត្រូវការសម្រាប់ផលិតផលនេះ'
- 
+
