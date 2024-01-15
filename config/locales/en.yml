@@ -189,6 +189,9 @@ en:
       vendors:
         name: "Vendors"
         description: "Vendors"
+      guest_occupations:
+        name: "Guest Occupations"
+        description: "Guest Occupations"
     promotion_action_types:
       create_date_specific_item_adjustments:
         name: "Create date specific item adjustment"
@@ -203,6 +206,11 @@ en:
       choose_vendors: "Choose vendors"
       match_any: "Some line items must from selected vendor"
       match_all: "All line items must from selected vendor"
+    guest_occupation_rule:
+      label: "Guest Occupation"
+      choose_guest_occupation: "Choose Guest occupations"
+      match_any: "Some line items must from selected occupations"
+      match_all: "All line items must from selected occupations"
     billing:
       code: "code"
       name: "name"

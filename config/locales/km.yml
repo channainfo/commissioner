@@ -177,6 +177,9 @@ km:
       vendors:
         name: "Vendors"
         description: "Vendors"
+      guest_occupations:
+        name: "Guest Occupations"
+        description: "Guest Occupations"
     promotion_action_types:
       create_date_specific_item_adjustments:
         name: "Create date specific item adjustment"
