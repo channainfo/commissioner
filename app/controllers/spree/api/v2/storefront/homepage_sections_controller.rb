@@ -8,7 +8,7 @@ module Spree
           end
 
           def collection
-            model_class.all
+            model_class.active
           end
 
           def collection_serializer

@@ -7,6 +7,8 @@ module SpreeCmCommissioner
     attribute :active
     attribute :position
 
-    has_many :homepage_section_relatables, dependent: :destroy
+    has_many :homepage_section_relatables, -> { active }, inverse_of: :homepage_section, dependent: :destroy
+
+    scope :active, -> { where(active: true).order(:position) }
   end
 end

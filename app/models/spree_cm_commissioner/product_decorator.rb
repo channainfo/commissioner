@@ -1,6 +1,6 @@
 module SpreeCmCommissioner
   module ProductDecorator
-    def self.prepended(base)
+    def self.prepended(base) # rubocop:disable Metrics/AbcSize
       base.include SpreeCmCommissioner::ProductType
       base.include SpreeCmCommissioner::KycBitwise
 
@@ -17,6 +17,10 @@ module SpreeCmCommissioner
       base.has_many :prices_including_master, lambda {
                                                 order('spree_variants.position, spree_variants.id, currency')
                                               }, source: :prices, through: :variants_including_master
+
+      base.has_many :homepage_section_relatables,
+                    class_name: 'SpreeCmCommissioner::HomepageSectionRelatable',
+                    dependent: :destroy, inverse_of: :relatable
 
       base.has_one :default_state, through: :vendor
 
