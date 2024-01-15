@@ -6,6 +6,7 @@ module Spree
       before_action :set_permalink_part, only: [:edit]
       respond_to :html, :js
       helper 'spree/transit/sortable_tree'
+      before_action :set_data_type, only: [:update, :create]
 
       def index; end
 
@@ -65,12 +66,21 @@ module Spree
       end
 
       def taxon_params
-        params.require(:taxon).permit(permitted_taxon_attributes)
+        params.require(:taxon).permit(:stop, :branch, :location, permitted_taxon_attributes)
       end
 
       def set_position
         new_position = params[:taxon][:position]
         @taxon.child_index = new_position.to_i if new_position
+      end
+
+      # If this method is applied to the model, it will set stop, location, and
+      # taxon attributes to 0 when a drag-and-drop action changes the position.
+      def set_data_type
+        if params[:taxon][:stop].present? || params[:taxon][:branch].present? || params[:taxon][:location].present?
+          result = params[:taxon][:stop].to_i * 2**0 + params[:taxon][:branch].to_i * 2**1 + params[:taxon][:location].to_i * 2**2
+          @taxon[:data_type] = result
+        end
       end
 
       def set_parent(parent_id)
