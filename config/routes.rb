@@ -270,6 +270,10 @@ Spree::Core::Engine.add_routes do
         end
         resources :check_ins, only: %i[index show create]
       end
+
+      namespace :operator do
+        resources :line_items, only: %i[index show]
+      end
     end
 
     namespace :json_ld do
