@@ -23,7 +23,7 @@
   </div>
 
   <div class="d-flex align-items-center space-buttons px-2">
-    <%= link_to_edit(taxon, no_text: true, url: spree.edit_transit_taxonomy_taxon_path(taxonomy, taxon.id)) %>
-    <%= link_to_delete(taxon, no_text: true, url: spree.transit_taxonomy_taxon_path(taxonomy, taxon.id)) if can?(:destroy, taxon) %>
+    <%= link_to_edit(taxon, no_text: true, url: edit_transit_place_path(taxon.id)) %>
+    <%= link_to_delete(taxon, no_text: true, url: spree.transit_place_path(taxon.id)) if can?(:destroy, taxon) %>
   </div>
 </div>

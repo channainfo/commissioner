@@ -6,7 +6,6 @@ module SpreeCmCommissioner
   end
 end
 
-Spree::Taxonomy.prepend(SpreeCmCommissioner::TaxonomyDecorator) unless Spree::Taxonomy.included_modules.include?(SpreeCmCommissioner::TaxonomyDecorator)
-
-
-    
+unless Spree::Taxonomy.included_modules.include?(SpreeCmCommissioner::TaxonomyDecorator)
+  Spree::Taxonomy.prepend(SpreeCmCommissioner::TaxonomyDecorator)
+end

@@ -12,6 +12,8 @@ module Spree
         load_data
       end
 
+      def show; end
+
       def new
         @taxonomy = Spree::Taxonomy.new
         super
@@ -19,6 +21,7 @@ module Spree
 
       def collection
         return @collection if @collection.present?
+
         @collection = super
         @search = @collection.ransack(params[:q])
         @collection = @search.result

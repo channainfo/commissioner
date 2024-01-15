@@ -184,6 +184,7 @@ en:
     auto_apply: "Auto apply"
     auto_apply_info: "Path & code will be removed"
     transit:
+      no_places: "'Places' taxonomy is missing"
       new:
         route: "New Route"
         vehicle_type: "New Vehicle Type"
@@ -209,7 +210,11 @@ en:
           label: "Reference"
       stops: "Stops"
       routes: "Routes"
-      places: "Places"
+
+      places:
+        places: "Places"
+        add_new_place: "Add a new place"
+
       taxonomies:
         edit_root_taxonomy: Edit %{name} Taxonomy
         taxonomies: Taxonomies
