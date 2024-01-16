@@ -1,0 +1,15 @@
+<% content_for(:page_tabs) do %>
+  <%= content_tag :li, class: 'nav-item' do %>
+    <%= link_to_with_icon 'edit.svg',
+      Spree.t(:details),
+      edit_admin_taxonomy_url(@taxonomy),
+      class: "nav-link #{'active' if current == :details}" %>
+  <% end if can?(:admin, Spree::Taxonomy) %>
+
+  <%= content_tag :li, class: 'nav-item' do %>
+    <%= link_to_with_icon 'images.svg',
+      Spree.t(:vendors),
+      admin_taxonomy_taxon_vendors_url(@taxonomy),
+      class: "nav-link #{'active' if current == :vendors}" %>
+  <% end if can?(:admin,SpreeCmCommissioner::TaxonVendor)%>
+<% end %>

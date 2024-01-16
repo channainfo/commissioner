@@ -84,6 +84,7 @@ Spree::Core::Engine.add_routes do
     end
 
     resources :taxonomies do
+      resource :taxon_vendors
       resources :taxons do
         member do
           delete :remove_category_icon
