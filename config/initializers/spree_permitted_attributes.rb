@@ -19,11 +19,12 @@ module Spree
       from_date kind
     ]
 
-    @@store_attributes = [
+    @@store_attributes += [
       :preferred_telegram_order_alert_chat_id,
       :preferred_telegram_order_request_alert_chat_id,
       { default_notification_image_attributes: {} }
     ]
+
     @@checkout_attributes += %i[
       phone_number
       country_code
