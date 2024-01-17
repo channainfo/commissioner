@@ -181,6 +181,9 @@ km:
       create_date_specific_item_adjustments:
         name: "Create date specific item adjustment"
         description: "Create date specific item adjustment"
+      create_guest_item_adjustments:
+        name: "Create guest item adjustment"
+        description: "Create guest item adjustment"
     date_rule:
       match_any: "Some line items must within selected date"
       match_all: "All line items must within selected date"
