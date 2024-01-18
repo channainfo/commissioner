@@ -1,4 +1,0 @@
-<!-- insert_before "erb[silent]:contains('content_for :page_title')" -->
-
-<%= render partial: 'spree/admin/shared/taxonomies_tabs', locals: { current: :details } %>
-

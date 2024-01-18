@@ -39,6 +39,9 @@ km:
     web_banner: Web banner (10x2)
     home_banner: Home Banner (16x9)
 
+  taxon_vendor:
+    empty_info: "មិនមានព័ត៌មានអំពីអ្នកលក់ទេ"
+
   user_update_contact:
     phone_number_is_already_used: "លេខទូរស័ព្ធបានប្រើប្រាស់រួច"
     email_is_already_used: "Email បានប្រើប្រាស់រួច"
@@ -324,4 +327,4 @@ km:
     cannot_delete_account: 'អ្នកមិនអាចលុបគណនីនេះបានទេ ដោយសារអ្នកមានតួនាទីពិសេស'
   kyc:
     note: '<b>ចំណាំ:</b> ជ្រើសរើស KYC ដែលត្រូវការសម្រាប់ផលិតផលនេះ'
- 
+

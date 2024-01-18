@@ -47,6 +47,10 @@ en:
     web_banner: Web banner (10x2)
     home_banner: Home Banner (16x9)
 
+  taxon_vendor:
+    empty_info: "No vendor information available."
+
+
   user_update_contact:
     phone_number_is_already_used: "Phone number is already used"
     email_is_already_used: "Email is already used"

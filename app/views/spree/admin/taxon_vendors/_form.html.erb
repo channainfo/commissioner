@@ -1,0 +1,9 @@
+<div data-hook="admin_taxonomy_taxon_taxon_vendors_form_fields" class="row">
+  <div class="col-6">
+    <%= f.field_container :vendor do %>
+      <%= f.label :vendor, Spree.t(:vendor) %>
+      <%= f.collection_select :vendor_id, Spree::Vendor.all, :id, :name, { include_blank: Spree.t('match_choices.none') }, class: 'form-control' %>
+      <%= f.error_message_on :vendor_id %>
+    <% end %>
+  </div>
+</div>
