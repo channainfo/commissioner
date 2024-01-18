@@ -1,0 +1,46 @@
+<% content_for :page_title do %>
+  <%= plural_resource_name(SpreeCmCommissioner::TaxonVendor) %>
+<% end %>
+
+<%= render partial: 'spree/admin/shared/taxon_tabs', locals: { current: :vendors } %>
+
+<% if @taxon_vendors.any? %>
+  <div class="table-responsive border rounded bg-white mb-3">
+    <table class="table" id="listing_taxon_vendor" data-hook>
+      <thead class="text-muted">
+        <tr data-hook="admin_taxonomy_taxon_taxon_vendors_index_headers">
+          <th>
+            <%=Spree.t(:id)%>
+          </th>
+          <th>
+            <%=Spree.t(:name)%>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @taxon_vendors.each do |taxon_vendor| %>
+          <tr id="<%= spree_dom_id taxon_vendor %>" data-hook="admin_taxonomy_taxon_taxon_vendors_index_rows">
+            <td>
+              <%= taxon_vendor.id %>
+            </td>
+            <td>
+              <%= taxon_vendor.vendor.name %>
+            </td>
+            <td data-hook="admin_taxonomy_taxon_taxon_vendors_index_row_actions" class="actions">
+              <span class="d-flex justify-content-end">
+                <%= link_to_edit taxon_vendor, url: edit_admin_taxonomy_taxon_taxon_vendor_path(id: taxon_vendor), no_text: true if can?(:edit, :admin, taxon_vendor) %>
+                <%= link_to_delete taxon_vendor,url: admin_taxonomy_taxon_taxon_vendor_path(id: taxon_vendor), no_text: true if can?(:delete, taxon_vendor) %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <small class="form-text text-muted">
+      <%= raw I18n.t('taxon_vendor.empty_info') %>
+   </small>
+<% end %>
+
+

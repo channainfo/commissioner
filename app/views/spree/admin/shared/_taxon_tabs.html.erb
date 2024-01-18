@@ -2,14 +2,14 @@
   <%= content_tag :li, class: 'nav-item' do %>
     <%= link_to_with_icon 'edit.svg',
       Spree.t(:details),
-      edit_admin_taxonomy_url(@taxonomy),
+      edit_admin_taxonomy_taxon_url(@taxonomy, @taxon.id),
       class: "nav-link #{'active' if current == :details}" %>
   <% end if can?(:admin, Spree::Taxonomy) %>
 
   <%= content_tag :li, class: 'nav-item' do %>
-    <%= link_to_with_icon 'images.svg',
+    <%= link_to_with_icon 'store.svg',
       Spree.t(:vendors),
-      admin_taxonomy_taxon_vendors_url(@taxonomy),
+      admin_taxonomy_taxon_taxon_vendors_url(@taxonomy, @taxon.id),
       class: "nav-link #{'active' if current == :vendors}" %>
   <% end if can?(:admin,SpreeCmCommissioner::TaxonVendor)%>
 <% end %>
