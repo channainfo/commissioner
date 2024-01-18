@@ -13,6 +13,7 @@
   @total = @invoice.order.display_total
   @from_date = @invoice.order.line_items.first.to_date.strftime("%B %Y")
   @date = @invoice.date.strftime('%Y-%m-%d')
+  @due_date = @order.line_items[0].due_date&.to_date
 
   @invoice_number = @invoice.invoice_number
   @customer_number = @customer.customer_number
@@ -23,11 +24,7 @@
 <div class="flex align-items-center w-100 mt-3">
   <div class="invoice-content card p-5 invoice-content">
     <div class="print-area">
-      <div class="d-flex justify-content-between align-items-start">
-        <div>
-          <%= render partial: 'spree/billing/shared/vendor_logo', locals: { size: :small } %>
-        </div>
-        <div class="align-self-end">
+      <div class="d-flex justify-content-center">
           <strong>
             <div class="d-flex flex-column text-primary moul ">
                 <div class="ml-4">ព្រះរាជាណាចក្រកម្ពុជា</div>
@@ -36,24 +33,38 @@
             </div>
           </strong>
         </div>
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <%= render partial: 'spree/billing/shared/vendor_logo', locals: { size: :small } %>
+        </div>
+        <div class="text-center flex-grow-1">
+          <h4 class="pt-0"> <%= @title %></h4>
+        </div>
       </div>
-      <div class="d-flex justify-content-center">
-        <h4 class="pt-0"> <%= @title %></h4>
-      </div>
+
+      <br>
       <div class="d-flex justify-content-between">
         <div>
           <ul class="list-unstyled">
             <li>
-              <div> អាសយដ្ធានទទួលវិក្កយបត្រ​ / Address :</div>
-              <%= @customer_address %>
+              <span> លេខអតិថិជន / Customer No : </span>
+              <%= @customer_number %>
             </li>
-            <li class="mt-4 p-2 bg-success text-white">
-              <div class = "font-weight-bold"> ចំណាំ</div>
-                <%= @note %>
+            <li>
+              <span>ឈ្មោះអតិថិជន / Customer Name :</span>
+              <%= @customer_name %>
+            </li>
+            <li>
+              <span>លេខទូរស័ព្ទអតិថិជន / Customer Phone Number :</span>
+              <%= @customer_phone %>
+            </li>
+            <li>
+              <div> អាសយដ្ធានអតិថិជន​ / Customer Address :</div>
+              <%= @customer_address %>
             </li>
           </ul>
         </div>
-        <div >
+        <div>
           <ul class="list-unstyled">
             <li>
               <span>លេខវិក្កយបត្រ​​ / Invoice No :</span>
@@ -64,8 +75,8 @@
               <%= @date %>
             </li>
             <li>
-              <span> លេខអតិថិជន / Customer No : </span>
-              <%= @customer_number %>
+              <span>កាលបរិច្ចេទត្រូវបង់ / Invoice Due Date : </span>
+              <%= @due_date %>
             </li>
             <li>
               <span>លេខកូខទីតាំង / Loc code : </span>
@@ -75,6 +86,7 @@
         </div>
       </div>
 
+      <br>
       <table class="table table-striped mt-2">
           <thead  class=" bg-light">
             <tr>
@@ -127,15 +139,22 @@
       </table>
 
       <div class="mt-2">
-          <br>
           <div class="d-flex justify-content-between align-items-center bg-primary pt-3 px-2 font-weight-bold text-white">
                 <p>ទឹកប្រាក់​ត្រូវទូទាត់​​ / Total Amount due</p>
                 <p>
                   <%= @total %>
                 </p>
           </div>
-          <div class="col-6 offset-6 mt-3 qrcode-container " style="display: flex; justify-content: flex-end;">
-            <img src="<%= main_app.rails_blob_url(@current_vendor.payment_qrcode.attachment) %>" alt="qrcode" style="width: 150px;">
+
+          <br>
+          <div class="d-flex align-items-start">
+            <div class="p-0 col-8 list-unstyled">
+              <li><span>កំណត់ចំណាំសំខាន់ / Important Note :</span></li>
+              <li><%= @note %></li>
+            </div>
+            <div class="ml-auto  qrcode-container">
+              <img src="<%= main_app.rails_blob_url(@current_vendor.payment_qrcode.attachment) %>" alt="qrcode" style="width: 150px;">
+            </div>
           </div>
             <div class="d-flex justify-content-between mt-4">
               <div>
@@ -148,12 +167,10 @@
               </div>
             </div>
           <div class="d-flex justify-content-center mt-4">
-            <div>
-              <div> អាសយដ្ធាន / Address : <%= @address %> </div>
-              <div>
-                <span>ទំនាក់ទំនង / Contact : <%= @contact %></span>
-                <span>, អុីមែល / Email : <%= @email %></span>
-              </div>
+            <div class="list-unstyled">
+              <li> អាសយដ្ធាន / Address : <%= @address %> </li>
+              <li>ទំនាក់ទំនង / Contact : <%= @contact %></li>
+              <li>អុីមែល / Email : <%= @email %></li>
             </div>
           </div>
         </div>
