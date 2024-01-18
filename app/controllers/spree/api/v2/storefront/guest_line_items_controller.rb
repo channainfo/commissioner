@@ -23,6 +23,13 @@ module Spree
 
             render_serialized_payload { serialize_resource(guest_line_items) }
           end
+
+          # override
+          def show
+            guest_line_item = spree_current_order.line_items.find(params['id'])
+
+            render_serialized_payload { serialize_resource(guest_line_item) }
+          end
         end
       end
     end
