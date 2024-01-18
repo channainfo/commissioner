@@ -1,11 +1,21 @@
 module Spree
   module Admin
     class TaxonVendorsController < Spree::Admin::ResourceController
+      before_action :load_taxonomy_taxon, except: [:index]
+
       def index
         @taxonomy = Spree::Taxonomy.find(params[:taxonomy_id])
         @taxon = @taxonomy.taxons.find(params[:taxon_id])
 
         # Retrieve taxon vendors associated with the taxon
+        @taxon_vendors = @taxon.taxon_vendors
+      end
+
+      private
+
+      def load_taxonomy_taxon
+        @taxonomy = Spree::Taxonomy.find(params[:taxonomy_id])
+        @taxon = @taxonomy.taxons.find(params[:taxon_id])
         @taxon_vendors = @taxon.taxon_vendors
       end
 
@@ -18,7 +28,7 @@ module Spree
       end
 
       def collection_url(options = {})
-        admin_taxonomy_taxon_taxon_vendors_url(taxonomy_id: @taxonomy, taxon_id: @taxon, options: options)
+        admin_taxonomy_taxon_taxon_vendors_url(taxonomy: @taxonomy, taxon: @taxon, options: options)
       end
     end
   end

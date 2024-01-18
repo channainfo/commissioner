@@ -1,18 +1,22 @@
+
 <div data-hook="admin_taxonomy_taxon_edit_general_settings" class="card mb-3">
   <div class="card-header">
     <h5 class="card-title mb-0 h6">
       <%= Spree.t(:taxon_vendors) %>
     </h5>
   </div>
+
+  <%= render partial: 'spree/admin/shared/taxon_tabs', locals: { current: :vendors } %>
+
   <div class="card-body">
     <div data-hook="admin_taxonomy_taxon_taxon_vendors_edit_form_header">
-      <%= render partial: 'spree/admin/shared/error_messages', locals: { target:@object} %>
+      <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
     </div>
     <div data-hook="admin_taxonomy_taxon_taxon_vendors_edit_form">
-      <%= form_with model: @object, url: { action: 'update' } do |f| %>
+      <%= form_with model: @object, url: { action: 'update', id: @object } do |f| %>
         <%= render partial: 'form', locals: { f: f } %>
         <div data-hook="admin_taxonomy_taxon_taxon_vendors_edit_form_button">
-          <%= render partial: 'spree/admin/shared/edit_resource_links', locals: { collection_url: spree.admin_taxonomy_taxon_taxon_vendor_path } %>
+          <%= render partial: 'spree/admin/shared/edit_resource_links' %>
         </div>
       <% end %>
     </div>
