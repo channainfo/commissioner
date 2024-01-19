@@ -10,6 +10,7 @@ module SpreeCmCommissioner
     belongs_to :occupation, class_name: 'Spree::Taxon'
 
     has_one :id_card, class_name: 'SpreeCmCommissioner::IdCard', dependent: :destroy
+    has_one :check_in, class_name: 'SpreeCmCommissioner::CheckIn'
 
     def generate_svg_qr
       qrcode = RQRCode::QRCode.new(qr_data)
