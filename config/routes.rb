@@ -222,6 +222,7 @@ Spree::Core::Engine.add_routes do
       namespace :storefront do
         resource :cart, controller: :cart, only: %i[show create destroy] do
           patch :restart_checkout_flow
+          put :set_quantity
         end
 
         resources :accommodations, only: %i[index show]

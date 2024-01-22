@@ -42,6 +42,25 @@ module SpreeCmCommissioner
 
             @spree_current_order ||= create_service.call(create_cart_params).value
           end
+
+          def set_quantity
+            return render_error_item_quantity unless params[:quantity].to_i.positive?
+
+            spree_authorize! :update, spree_current_order, order_token
+
+            result = ::SpreeCmCommissioner::Cart::SetQuantity.call(
+              order: spree_current_order,
+              line_item: line_item,
+              quantity: params[:quantity],
+              guests_to_remove: params[:guests_to_remove]
+            )
+
+            render_order(result)
+          end
+
+          def add_item_params
+            params.permit(:quantity, :variant_id, guests_to_remove: [], public_metadata: {}, private_metadata: {}, options: {})
+          end
         end
       end
     end
