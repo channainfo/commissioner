@@ -1,13 +1,23 @@
-<%= render partial: 'spree/admin/shared/taxon_tabs', locals: { current: :vendors } %>
+<% content_for :page_title do %>
+  <%= link_to Spree.t(:taxonomies), spree.admin_taxonomies_url %> /
+  <%= link_to @taxonomy.root.name, spree.edit_admin_taxonomy_url(@taxonomy) %>
+  <% unless @taxon.root? %>
+    / <%= link_to @taxon.name %>
+  <% end %> / <%= Spree.t(:new) %>
+<% end %>
 
-<div data-hook="admin_taxonomy_taxon_taxon_vendors_new_form_header">
-  <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+<div class="card">
+  <div class="card-body">
+    <%= form_with model: @object, url: { action: 'create' } do |f| %>
+      <%= f.hidden_field :taxon_id, value: @taxon.id %>
+      <div class="form-group" data-hook="vendor">
+        <%= f.label :vendor_id, Spree.t('vendor') %>
+        <%= f.collection_select :vendor_id, Spree::Vendor.all, :id, :name, { include_blank: Spree.t('match_choices.none') }, class: 'form-control' %>
+      </div>
+      <fieldset data-hook="new_taxon_vendor">
+        <%= render partial: 'spree/admin/shared/new_resource_links' %>
+      </fieldset>
+    <% end %>
+  </div>
 </div>
-<div data-hook="admin_taxonomy_taxon_taxon_vendors_new_form">
-  <%= form_with model: @object, url: { action: 'create' } do |f| %>
-    <%= render partial: 'form', locals: { f: f } %>
-    <div data-hook="admin_taxonomy_taxon_taxon_vendors_new_form_buttons">
-      <%= render partial: 'spree/admin/shared/new_resource_links' %>
-    </div>
-  <% end %>
-</div>
+
