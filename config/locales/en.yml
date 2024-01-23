@@ -186,6 +186,9 @@ en:
       guest_occupations:
         name: "Guest Occupations"
         description: "Guest Occupations"
+      guest_ages:
+        name: "Guest Ages"
+        description: "Guest Ages"
     promotion_action_types:
       create_date_specific_item_adjustments:
         name: "Create date specific item adjustment"
@@ -205,6 +208,11 @@ en:
       choose_guest_occupation: "Choose Guest occupations"
       match_any: "Some line items must from selected occupations"
       match_all: "All line items must from selected occupations"
+    guest_age_rule:
+      label: "Guest Occupation"
+      choose_guest_ages: "Choose Guest Ages"
+      match_any: "Some line items must from selected ages"
+      match_all: "All line items must from selected ages"
     billing:
       code: "code"
       name: "name"
