@@ -278,7 +278,6 @@ Spree::Core::Engine.add_routes do
         resources :guests, only: %i[create update show] do
           resources :id_cards
         end
-        resources :check_ins, only: %i[index show create]
       end
 
       namespace :operator do
@@ -288,7 +287,9 @@ Spree::Core::Engine.add_routes do
         resources :dashboard_crew_events, only: %i[index]
         resources :taxons do
           resource :event_ticket_aggregators, only: %i[show]
+          resource :pie_chart_event_aggregators, only: %i[show]
         end
+        resources :operator_pie_charts, only: %i[index]
       end
     end
 
