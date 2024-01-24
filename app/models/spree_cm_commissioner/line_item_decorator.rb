@@ -45,6 +45,10 @@ module SpreeCmCommissioner
       end
     end
 
+    def amount_per_guest
+      amount / quantity
+    end
+
     def accepted?
       accepted_at.present?
     end
