@@ -46,5 +46,11 @@ module SpreeCmCommissioner
         'INVALID'
       end
     end
+
+    def current_age
+      return nil if dob.nil?
+
+      ((Time.zone.now - dob.to_time) / 1.year.seconds).floor
+    end
   end
 end
