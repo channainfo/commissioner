@@ -24,6 +24,15 @@ module SpreeCmCommissioner
         rules.any? { |rule| rule.date_eligible?(date) }
       end
     end
+
+    def guest_eligible?(guest, line_item)
+      rules = promotion_rules.select { |rule| rule.respond_to?(:guest_eligible?) }
+      if match_all?
+        rules.all? { |rule| rule.guest_eligible?(guest, line_item) }
+      else
+        rules.any? { |rule| rule.guest_eligible?(guest, line_item) }
+      end
+    end
   end
 end
 

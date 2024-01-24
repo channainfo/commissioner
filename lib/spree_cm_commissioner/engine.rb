@@ -30,6 +30,7 @@ module SpreeCmCommissioner
 
       Rails.application.config.spree.promotions.actions.concat [
         SpreeCmCommissioner::Promotion::Actions::CreateDateSpecificItemAdjustments,
+        SpreeCmCommissioner::Promotion::Actions::CreateGuestItemAdjustments,
       ]
     end
 
