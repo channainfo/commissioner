@@ -9,7 +9,12 @@ module SpreeCmCommissioner
         # override
         def request
           @request ||=
-            SpreeCmCommissioner::Webhooks::Subscribers::MakeRequest.new(url: url, api_key: api_key, webhook_payload_body: body_with_event_metadata)
+            Spree::Webhooks::Subscribers::MakeRequest.new(
+              signature: event.signature_for(body_with_event_metadata),
+              url: url,
+              api_key: api_key,
+              webhook_payload_body: body_with_event_metadata
+            )
         end
       end
     end

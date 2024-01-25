@@ -1,9 +1,0 @@
-<!-- insert_after "erb[silent]:contains('Spree::Digital')" -->
-
- <%= content_tag :li, class: 'nav-item' do %>
-    <%= link_to_with_icon 'card-heading.svg',
-      Spree.t(:kyc_field),
-      edit_kyc_admin_product_url(@product),
-      class: "nav-link #{'active' if current == :kyc}" %>
- <% end %>
-

@@ -4,52 +4,15 @@
 <% end %>
 
 <% content_for :page_tabs do %>
-
-    <%= content_tag :li do %>
-      <%= link_to_with_icon 'edit.svg',
-        Spree.t(:details),
-        edit_admin_vendor_url(@vendor),
-        class: "nav-link #{'active' if current == :details}"
-      %>
-    <% end if can?(:admin, Spree::Vendor) %>
-
-    <%= content_tag :li do %>
-      <%= link_to_with_icon 'images.svg',
-        Spree.t(:photos),
-        admin_vendor_vendor_photos_url(@vendor),
-        class: "nav-link #{'active' if current == :photos}"
-      %>
-    <% end if can?(:admin, SpreeCmCommissioner::VendorPhoto) %>
-
-    <%= content_tag :li do %>
-      <%= link_to_with_icon 'extensions.svg',
-        Spree.t(:vendor_option_types),
-        admin_vendor_vendor_kind_option_types_url(@vendor),
-        class: "nav-link #{'active' if current == :vendor_option_types}"
-      %>
-    <% end if can?(:admin, SpreeCmCommissioner::VendorOptionType) %>
-
-    <%= content_tag :li do %>
-      <%= link_to_with_icon 'images.svg',
-        Spree.t(:nearby_places),
-        admin_vendor_nearby_places_url(@vendor),
-        class: "nav-link #{'active' if current == :nearby_places}"
-      %>
-    <% end if can?(:admin, SpreeCmCommissioner::VendorPlace) %>
-
-    <%= content_tag :li do %>
-      <%= link_to_with_icon 'calendar2-week.svg',
-        Spree.t(:service_calendars),
-        admin_vendor_vendor_service_calendars_url(@vendor),
-        class: "nav-link #{'active' if current == :service_calendars}"
-      %>
-    <% end if can?(:admin, SpreeCmCommissioner::ServiceCalendar) %>
-
-    <%= content_tag :li do %>
-      <%= link_to_with_icon 'telegram.svg',
-        Spree.t(:telegram),
-        admin_vendor_vendor_authorized_users_url(@vendor),
-        class: "nav-link #{'active' if current == :vendor_authorized_users }"
-      %>
-    <% end if can?(:admin, Spree::Vendor) %>
+  <% vendor_tabs.items.each do |tab| %>
+    <% next unless tab.available?(current_ability, @vendor) %>
+      <li class="nav-item">
+        <%= link_to_with_icon(
+          tab.icon_key,
+          Spree.t(tab.label_translation_key),
+          tab.url(@vendor),
+          class: tab.active?(current) ? 'active nav-link' : 'nav-link'
+        ) %>
+      </li>
+  <% end %>
 <% end %>

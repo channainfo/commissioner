@@ -5,6 +5,7 @@ module Spree
       from_date
       to_date
     ]
+
     @@user_attributes += %i[
       first_name
       last_name
@@ -12,6 +13,7 @@ module Spree
       phone_number
       profile
     ]
+
     @@taxon_attributes += %i[
       category_icon
       custom_redirect_url

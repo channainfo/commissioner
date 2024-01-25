@@ -162,6 +162,9 @@ km:
     length: "ប្រវែង"
     preference: "Preference"
     notification: "Notification"
+    customer_notifications: "Customer Notifications"
+    homepage: "Home Page"
+    icons: "Icons"
     notice_messages:
       line_item_not_found: "Line item not found"
     promotion_rule_types:
