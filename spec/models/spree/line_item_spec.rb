@@ -16,6 +16,90 @@ RSpec.describe Spree::LineItem, type: :model do
     end
   end
 
+  context 'validations' do
+    describe "#validate_if_allowed_to_decrease_quantity" do
+      let(:line_item) { create(:line_item, quantity: 2) }
+
+      context 'when line item is not kyc' do
+        before do
+          allow(line_item).to receive(:kyc?).and_return(false)
+        end
+
+        it 'should not run validation if it is not kyc' do
+          line_item.quantity = line_item.quantity + 1
+          line_item.save
+
+          expect(line_item).to_not receive(:validate_if_allowed_to_decrease_quantity)
+        end
+      end
+
+      context 'when line item is kyc' do
+        before do
+          allow(line_item).to receive(:kyc?).and_return(true)
+        end
+
+        it 'should not raise any error if line item quantity is increasing' do
+          line_item.quantity = line_item.quantity + 1
+
+          expect(line_item.save).to be true
+        end
+
+        it 'should not raise any error if line item can be decreased' do
+          allow(line_item).to receive(:allowed_to_decrease_quantity?).and_return(true)
+
+          # decreasing
+          line_item.quantity = line_item.quantity - 1
+
+          expect(line_item.save).to be true
+        end
+
+        it 'should raise error if line item quantity is decreasing & not allowed to decrease' do
+          allow(line_item).to receive(:allowed_to_decrease_quantity?).and_return(false)
+
+          # decreasing
+          line_item.quantity = line_item.quantity - 1
+
+          expect(line_item.save).to be false
+          expect(line_item.errors.full_messages).to eq ['Quantity must_remove_some_guests']
+        end
+      end
+    end
+  end
+
+  describe "#allowed_to_decrease_quantity?" do
+    let(:line_item1) { create(:line_item) }
+    let(:line_item2) { create(:line_item) }
+
+    context 'when line item is not kyc' do
+      it 'should return true if line item is not kyc' do
+        allow(line_item1).to receive(:kyc?).and_return(false)
+
+        expect(line_item1.allowed_to_decrease_quantity?).to be true
+      end
+    end
+
+    context 'when line item is kyc' do
+      before do
+        allow(line_item1).to receive(:kyc?).and_return(true)
+        allow(line_item2).to receive(:kyc?).and_return(true)
+      end
+
+      it 'should return true if remaining_total_guest >= 0' do
+        allow(line_item1).to receive(:remaining_total_guests).and_return(0)
+        allow(line_item2).to receive(:remaining_total_guests).and_return(1)
+
+        expect(line_item1.allowed_to_decrease_quantity?).to be true
+        expect(line_item2.allowed_to_decrease_quantity?).to be true
+      end
+
+      it 'should return false if remaining_total_guest < 0' do
+        allow(line_item1).to receive(:remaining_total_guests).and_return(-1)
+
+        expect(line_item1.allowed_to_decrease_quantity?).to be false
+      end
+    end
+  end
+
   describe '#set_duration' do
 
     let(:taxonomy) { create(:taxonomy, kind: :event) }

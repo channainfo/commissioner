@@ -16,6 +16,8 @@ module SpreeCmCommissioner
 
       base.before_create :add_due_date, if: :subscription?
 
+      base.validate :validate_if_allowed_to_decrease_quantity, if: :kyc?
+
       base.whitelisted_ransackable_attributes |= %w[to_date from_date]
 
       def base.json_api_columns
@@ -62,8 +64,24 @@ module SpreeCmCommissioner
       )
     end
 
+    # remaining total guests can be negative indicate
+    # that it exceeding & should not allow to decrease quantity
     def remaining_total_guests
       quantity - guests.count
+    end
+
+    # if allow false, user must delete guest first before decreasing quantity
+    def allowed_to_decrease_quantity?
+      return true unless kyc?
+
+      remaining_total_guests >= 0
+    end
+
+    def validate_if_allowed_to_decrease_quantity
+      return if quantity > quantity_was
+      return if allowed_to_decrease_quantity?
+
+      errors.add(:quantity, 'must_remove_some_guests')
     end
 
     def rejected_by(user)

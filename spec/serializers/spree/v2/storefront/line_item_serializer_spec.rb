@@ -43,6 +43,8 @@ RSpec.describe Spree::V2::Storefront::LineItemSerializer, type: :serializer do
         :to_date,
         :need_confirmation,
         :kyc,
+        :remaining_total_guests,
+        :allowed_to_decrease_quantity,
         :product_type,
         :event_status
       )
