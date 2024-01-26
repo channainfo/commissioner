@@ -7,8 +7,8 @@ module Spree
         @taxonomy = Spree::Taxonomy.find(params[:taxonomy_id])
         @taxon = @taxonomy.taxons.find(params[:taxon_id])
 
-        # Retrieve taxon vendors associated with the taxon
-        @taxon_vendors = @taxon.taxon_vendors
+        # Retrieve taxon vendors associated with the taxon, including the vendor association
+        @taxon_vendors = @taxon.taxon_vendors.includes(:vendor)
       end
 
       private
