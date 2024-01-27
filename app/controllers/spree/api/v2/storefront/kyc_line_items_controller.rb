@@ -2,7 +2,7 @@ module Spree
   module Api
     module V2
       module Storefront
-        class GuestLineItemsController < Spree::Api::V2::ResourceController
+        class KycLineItemsController < Spree::Api::V2::ResourceController
           include OrderConcern
 
           before_action :ensure_order
@@ -14,7 +14,7 @@ module Spree
 
           # override
           def resource_serializer
-            SpreeCmCommissioner::V2::Storefront::GuestLineItemSerializer
+            SpreeCmCommissioner::V2::Storefront::KycLineItemSerializer
           end
 
           # override
