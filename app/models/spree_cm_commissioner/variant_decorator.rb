@@ -9,6 +9,8 @@ module SpreeCmCommissioner
       base.validate     :validate_option_types
 
       base.scope :subscribable, -> { active.joins(:product).where(product: { subscribable: true, status: :active }) }
+
+      base.has_many :subscriptions, class_name: 'SpreeCmCommissioner::Subscription', dependent: :destroy
     end
 
     def selected_option_value_ids
