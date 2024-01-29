@@ -1,6 +1,11 @@
 require 'spec_helper'
 
 RSpec.describe Spree::User, type: :model do
+  describe 'associations' do
+    it { should have_many(:user_events).class_name('SpreeCmCommissioner::UserEvent') }
+    it { should have_many(:events).through(:user_events).source(:taxon).class_name('Spree::Taxon') }
+  end
+
   describe '.require_login_identity_all_blank_for' do
     it 'not required email, phone, or login if already has user_identity_providers' do
       user = build(

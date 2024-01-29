@@ -13,6 +13,8 @@ module SpreeCmCommissioner
       base.has_many :permissions, through: :role_permissions, class_name: 'SpreeCmCommissioner::Permission'
       base.has_many :line_items, through: :orders, source: :line_items
       base.has_many :check_ins, foreign_key: 'check_in_by_id', class_name: 'SpreeCmCommissioner::CheckIn'
+      base.has_many :user_events, class_name: 'SpreeCmCommissioner::UserEvent'
+      base.has_many :events, through: :user_events, class_name: 'Spree::Taxon', source: 'taxon'
 
       base.has_one :profile, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::UserProfile'
 

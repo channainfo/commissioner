@@ -12,4 +12,12 @@
       admin_taxonomy_taxon_taxon_vendors_url(@taxonomy, @taxon.id),
       class: "nav-link #{'active' if current == :vendors}" %>
   <% end if can?(:admin,SpreeCmCommissioner::TaxonVendor)%>
+
+  <%= content_tag :li, class: 'nav-item' do %>
+    <%= link_to_with_icon 'user.svg',
+      Spree.t(:operators),
+      admin_taxonomy_taxon_user_taxons_url(@taxonomy, @taxon.id),
+      class: "nav-link #{'active' if current == :operators}" %>
+  <% end if can?(:admin, SpreeCmCommissioner::UserTaxon) %>
+
 <% end %>
