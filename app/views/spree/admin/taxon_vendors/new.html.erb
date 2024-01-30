@@ -6,13 +6,19 @@
   <% end %> / <%= Spree.t(:new) %>
 <% end %>
 
+<div data-hook="admin_new_user_identity_provider_new_form_header">
+  <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+</div>
+
 <div class="card">
   <div class="card-body">
     <%= form_with model: @object, url: { action: 'create' } do |f| %>
       <%= f.hidden_field :taxon_id, value: @taxon.id %>
       <div class="form-group" data-hook="vendor">
-        <%= f.label :vendor_id, Spree.t('vendor') %>
-        <%= f.collection_select :vendor_id, Spree::Vendor.all, :id, :name, { include_blank: Spree.t('match_choices.none') }, class: 'form-control' %>
+        <%= f.field_container :vendor do %>
+          <%= f.label :vendor_id, Spree.t('vendor') %>
+          <%= f.collection_select :vendor_id, Spree::Vendor.all, :id, :name, { prompt: Spree.t('match_choices.none') }, class: 'form-control' %>
+        <% end %>
       </div>
       <fieldset data-hook="new_taxon_vendor">
         <%= render partial: 'spree/admin/shared/new_resource_links' %>
@@ -20,4 +26,3 @@
     <% end %>
   </div>
 </div>
-
