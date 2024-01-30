@@ -1,0 +1,17 @@
+<div class="card-body">
+  <div class="form-group">
+    <%= label_tag "#{param_prefix}_guest_age_group", Spree.t('guest_age_group_rule.choose_guest_age_group') %>
+    <%= select_tag("#{param_prefix}[preferred_guest_age_group][]",
+        options_for_select(SpreeCmCommissioner::Promotion::Rules::GuestAgeGroup::AGE_GROUPS.map { |key, range| ["#{key.to_s.capitalize} (#{range[0]}-#{range[1]})", key.to_s] },
+        promotion_rule.preferred_guest_age_group),
+        { class: 'select2 form-control', multiple: true }
+    ) %>
+  </div>
+  <div class="form-group mb-0">
+    <%= label_tag Spree.t('guest_age_group_rule.label') %>
+    <%= select_tag("#{param_prefix}[preferred_match_policy]",
+        options_for_select(SpreeCmCommissioner::Promotion::Rules::GuestAgeGroup::MATCH_POLICIES.map { |s| [Spree.t("guest_age_group_rule.match_#{s}"), s] },
+        promotion_rule.preferred_match_policy), {class: 'form-control'}
+    ) %>
+  </div>
+</div>
