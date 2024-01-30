@@ -26,7 +26,7 @@ module SpreeCmCommissioner
         SpreeCmCommissioner::Promotion::Rules::Weekend,
         SpreeCmCommissioner::Promotion::Rules::CustomDates,
         SpreeCmCommissioner::Promotion::Rules::GuestOccupations,
-        SpreeCmCommissioner::Promotion::Rules::GuestAges
+        SpreeCmCommissioner::Promotion::Rules::GuestAgeGroup
       ]
 
       Rails.application.config.spree.promotions.actions.concat [
