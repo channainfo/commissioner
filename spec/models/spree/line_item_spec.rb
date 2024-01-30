@@ -213,4 +213,25 @@ RSpec.describe Spree::LineItem, type: :model do
       expect(line_item.date_unit).to eq 3
     end
   end
+
+  describe '#number_of_guests' do
+    let(:line_item) { create(:line_item, quantity: 2) }
+
+    it 'return number of guest base on variant and quantity' do
+      allow(line_item.variant).to receive(:number_of_guests).and_return(3)
+
+      expect(line_item.number_of_guests).to eq 6
+    end
+  end
+
+  describe '#remaining_total_guests' do
+    let(:line_item) { create(:line_item) }
+
+    it 'return number of guest base on variant and quantity' do
+      allow(line_item).to receive(:number_of_guests).and_return(3)
+      allow(line_item.guests).to receive(:size).and_return(2)
+
+      expect(line_item.remaining_total_guests).to eq 1
+    end
+  end
 end

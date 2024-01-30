@@ -10,9 +10,11 @@ module SpreeCmCommissioner
       guest_id_card: 0b10000
     }.freeze
 
+    def kyc? = kyc != 0
+
     BIT_FIELDS.each do |field, bit_value|
       define_method "#{field}?" do
-        kyc & bit_value != 0
+        kyc_value_enabled?(bit_value)
       end
     end
 
@@ -20,6 +22,10 @@ module SpreeCmCommissioner
       BIT_FIELDS.filter_map do |field, bit_value|
         field if kyc & bit_value != 0
       end
+    end
+
+    def kyc_value_enabled?(bit_value)
+      kyc & bit_value != 0
     end
   end
 end

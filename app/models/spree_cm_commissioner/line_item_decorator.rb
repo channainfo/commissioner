@@ -63,7 +63,11 @@ module SpreeCmCommissioner
     end
 
     def remaining_total_guests
-      quantity - guests.count
+      number_of_guests - guests.size
+    end
+
+    def number_of_guests
+      variant.number_of_guests * quantity
     end
 
     def rejected_by(user)

@@ -18,6 +18,21 @@ FactoryBot.define do
       presentation { 'payment-option' }
     end
 
+    trait :adults do
+      name { 'adults' }
+      presentation { 'Adults' }
+    end
+
+    trait :kids do
+      name { 'kids' }
+      presentation { 'Kids' }
+    end
+
+    trait :kids_age_max do
+      name { 'kids-age-max' }
+      presentation { 'Kids age max' }
+    end
+
     initialize_with { Spree::OptionType.where(name: name).first_or_initialize }
   end
 end
