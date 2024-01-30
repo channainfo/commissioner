@@ -224,6 +224,8 @@ Spree::Core::Engine.add_routes do
           patch :restart_checkout_flow
         end
 
+        resource :cart_guests, only: %i[create destroy]
+
         resources :accommodations, only: %i[index show]
         resources :line_items, only: %i[index show]
         resources :guest_line_items, only: %i[index show]

@@ -18,5 +18,9 @@ FactoryBot.define do
     factory :cm_need_confirmation_line_item do
       product { create(:product, need_confirmation: true) }
     end
+
+    factory :cm_kyc_line_item do
+      product { create(:cm_kyc_product) }
+    end
   end
 end

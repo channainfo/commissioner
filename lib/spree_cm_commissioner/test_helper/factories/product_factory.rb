@@ -78,5 +78,16 @@ FactoryBot.define do
         product.master.save!
       end
     end
+
+    factory :cm_kyc_product do
+      transient do
+        select_fields { [ :guest_name, :guest_gender, :guest_dob]}
+      end
+
+      before(:create) do |product, _evaluator|
+        fields = product.class::BIT_FIELDS
+        product.kyc = _evaluator.select_fields.map { |field| fields[field] }.sum
+      end
+    end
   end
 end
