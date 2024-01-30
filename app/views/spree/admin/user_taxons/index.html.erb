@@ -1,0 +1,49 @@
+<% content_for :page_title do %>
+  <%= link_to Spree.t(:taxonomies), spree.admin_taxonomies_url %> /
+
+  <%= link_to @taxonomy.root.name, spree.edit_admin_taxonomy_url(@taxonomy) %>
+  <% unless @taxon.root? %>
+   / <%= @taxon.name %>
+   <% end %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:add_new_operator), new_admin_taxonomy_taxon_user_taxon_path, class: "btn-success", icon: 'add.svg', id: 'admin_new_operator_link' %>
+<% end if can? :create,  SpreeCmCommissioner::UserTaxon %>
+
+<%= render partial: 'spree/admin/shared/taxon_tabs', locals: { current: :operators } %>
+
+<% if @user_taxons.any? %>
+  <div class="table-responsive border rounded bg-white mb-3">
+    <table class="table" id="listing_user_taxon" data-hook>
+      <thead class="text-muted">
+        <tr data-hook="admin_taxonomy_taxon_user_taxons_index_headers">
+          <th><%= Spree.t(:id) %></th>
+          <th><%= Spree.t(:email) %></th>
+          <th><%= Spree.t(:created_at) %></th>
+          <th><%= Spree.t(:updated_at) %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @user_taxons.each do |user_taxon| %>
+          <tr id="<%= spree_dom_id user_taxon %>" data-hook="admin_taxonomy_taxon_user_taxons_index_rows">
+            <td><%= user_taxon.id %></td>
+            <td><%= user_taxon.user.email %></td>
+            <td><%= user_taxon.created_at %></td>
+            <td><%= user_taxon.updated_at %></td>
+            <td data-hook="admin_taxonomy_taxon_user_taxons_index_row_actions" class="actions">
+              <span class="d-flex justify-content-end">
+                <%= link_to_edit user_taxon, url: edit_admin_taxonomy_taxon_user_taxon_path(id: user_taxon.id), no_text: true if can?(:edit, :admin, user_taxon) %>
+                <%= link_to_delete user_taxon, url: admin_taxonomy_taxon_user_taxon_path(id: user_taxon.id), no_text: true if can?(:delete, user_taxon) %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <small class="form-text text-muted">
+    <%= raw I18n.t('user_taxon.empty_info') %>
+  </small>
+<% end %>

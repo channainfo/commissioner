@@ -10,6 +10,9 @@ module SpreeCmCommissioner
                     class_name: 'SpreeCmCommissioner::HomepageSectionRelatable',
                     dependent: :destroy, inverse_of: :relatable
 
+      base.has_many :user_events, class_name: 'SpreeCmCommissioner::UserEvent'
+      base.has_many :users, through: :user_events, class_name: Spree.user_class.to_s
+
       base.has_one :category_icon, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::TaxonCategoryIcon'
 
       base.has_one :web_banner, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::TaxonWebBanner'
