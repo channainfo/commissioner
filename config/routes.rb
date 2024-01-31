@@ -229,7 +229,6 @@ Spree::Core::Engine.add_routes do
 
         resources :accommodations, only: %i[index show]
         resources :line_items, only: %i[index show]
-        resources :guest_line_items, only: %i[index show]
         resources :account_checker
         resource :account_recovers, only: [:update]
 
