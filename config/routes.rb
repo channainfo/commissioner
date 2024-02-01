@@ -229,7 +229,6 @@ Spree::Core::Engine.add_routes do
 
         resources :accommodations, only: %i[index show]
         resources :line_items, only: %i[index show]
-        resources :guest_line_items, only: %i[index show]
         resources :account_checker
         resource :account_recovers, only: [:update]
 
@@ -270,7 +269,7 @@ Spree::Core::Engine.add_routes do
         resources :order_qrs, only: [:show]
 
         resources :guest_qrs, only: [:show]
-        resources :guests do
+        resources :guests, only: %i[create update show] do
           resources :id_cards
         end
         resources :check_ins, only: %i[index show create]

@@ -2,9 +2,9 @@ require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::CheckInBulkCreator do
   describe '#call' do
-    let(:guest_a) { SpreeCmCommissioner::Guest.create!(first_name: 'Guest A', last_name: 'B') }
-    let(:guest_b) { SpreeCmCommissioner::Guest.create!(first_name: 'Guest B', last_name: 'A') }
-    let(:guest_c) { SpreeCmCommissioner::Guest.create!(first_name: 'Guest C', last_name: 'C') }
+    let(:guest_a) { create(:guest, first_name: 'Guest A', last_name: 'B') }
+    let(:guest_b) { create(:guest, first_name: 'Guest B', last_name: 'A') }
+    let(:guest_c) { create(:guest, first_name: 'Guest C', last_name: 'C') }
 
     let(:guest_ids) { [guest_a.id, guest_b.id, guest_c.id] }
 
