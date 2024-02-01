@@ -6,5 +6,13 @@ module SpreeCmCommissioner
 
     has_one :front_image, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::FrontImage'
     has_one :back_image, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::BackImage'
+
+    def allowed_checkout?
+      if passport?
+        front_image.present?
+      elsif national_id_card? || student_id_card?
+        front_image.present? && back_image.present?
+      end
+    end
   end
 end

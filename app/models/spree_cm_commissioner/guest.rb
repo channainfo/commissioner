@@ -6,11 +6,26 @@ module SpreeCmCommissioner
 
     enum gender: { :other => 0, :male => 1, :female => 2 }
 
-    belongs_to :line_item, class_name: 'Spree::LineItem'
+    belongs_to :line_item, class_name: 'Spree::LineItem', optional: false
     belongs_to :occupation, class_name: 'Spree::Taxon'
 
     has_one :id_card, class_name: 'SpreeCmCommissioner::IdCard', dependent: :destroy
     has_one :check_in, class_name: 'SpreeCmCommissioner::CheckIn'
+
+    # no validation for each field as we allow user to save data to model partially.
+    def allowed_checkout?
+      kyc_fields.all? { |field| allowed_checkout_for?(field) }
+    end
+
+    def allowed_checkout_for?(field)
+      return (first_name.present? && last_name.present?) if field == :guest_name
+      return gender.present? if field == :guest_gender
+      return dob.present? if field == :guest_dob
+      return occupation.present? if field == :guest_occupation
+      return id_card.present? && id_card.allowed_checkout? if field == :guest_id_card
+
+      false
+    end
 
     def generate_svg_qr
       qrcode = RQRCode::QRCode.new(qr_data)

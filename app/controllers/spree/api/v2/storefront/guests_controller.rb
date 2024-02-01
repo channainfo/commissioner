@@ -3,6 +3,10 @@ module Spree
     module V2
       module Storefront
         class GuestsController < ::Spree::Api::V2::ResourceController
+          include Spree::Api::V2::Storefront::OrderConcern
+
+          before_action :ensure_order
+
           # override
           def model_class
             SpreeCmCommissioner::Guest
@@ -23,49 +27,39 @@ module Spree
             SpreeCmCommissioner::V2::Storefront::GuestSerializer
           end
 
-          # override
-          def show
-            guest = SpreeCmCommissioner::Guest.find(params[:id])
-
-            render_serialized_payload { serialize_resource(guest) }
-          end
-
           def create
-            context = SpreeCmCommissioner::Guest.create(guest_params)
+            resource = line_item.guests.create(guest_params)
 
-            if context.save
-              render_serialized_payload(201) { serialize_resource(context) }
+            if resource.save
+              render_serialized_payload(201) { serialize_resource(resource) }
             else
               render_error_payload(context, 400)
             end
           end
 
           def update
-            guest = SpreeCmCommissioner::Guest.find(params[:id])
+            resource.assign_attributes(guest_params)
 
-            if guest.update(guest_params)
-              render_serialized_payload { serialize_resource(guest) }
+            if resource.save
+              render_serialized_payload { serialize_resource(resource) }
             else
-              render_error_payload(guest, 400)
-            end
-          end
-
-          def destroy
-            guest = SpreeCmCommissioner::Guest.find(params[:id])
-
-            if guest.destroy
-              render_serialized_payload(204) { serialize_resource(guest) }
-            else
-              render_error_payload(guest, 400)
+              render_error_payload(resource, 400)
             end
           end
 
           private
 
+          # override
+          def scope
+            line_item.guests
+          end
+
+          def line_item
+            @line_item ||= spree_current_order.line_items.find(params[:line_item_id])
+          end
+
           def guest_params
-            params.permit(
-              :first_name, :last_name, :dob, :gender, :occupation_id, :line_item_id
-            )
+            params.permit(:first_name, :last_name, :dob, :gender, :occupation_id)
           end
         end
       end
