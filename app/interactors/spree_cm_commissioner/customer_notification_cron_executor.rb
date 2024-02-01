@@ -15,7 +15,7 @@ module SpreeCmCommissioner
       enqueue_customer_notification_alert(customer_notification)
     end
 
-    def update_customer_marketing_notification_sent_at(customer_notification)
+    def update_customer_notification_sent_at(customer_notification)
       customer_notification.sent_at = Time.current
       customer_notification.save
     end
