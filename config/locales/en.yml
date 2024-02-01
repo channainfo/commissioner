@@ -177,6 +177,8 @@ en:
     notification: "Notification"
     notice_messages:
       line_item_not_found: "Line item not found"
+      qrcode_removed: "QRCode removed"
+      cannot_remove_qrcode: "Cannot remove QRCode"
     promotion_rule_types:
       fixed_date:
         name: "Fixed Date"
@@ -235,6 +237,10 @@ en:
       day: "day"
       products: "Products"
       vendor: "vendor"
+      account_name: "Account Name"
+      account_number: "Account Number"
+      account_name_is_required: "Account Name is required"
+      account_number_is_required: "Account Number is required"
       payment_state:
         paid: "Paid"
         balance_due: "Balance Due"
