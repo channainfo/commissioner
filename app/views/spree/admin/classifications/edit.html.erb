@@ -1,0 +1,36 @@
+<% content_for :page_title do %>
+  <%= link_to Spree.t(:taxonomies), spree.admin_taxonomies_url %> /
+  <%= link_to @taxonomy.root.name, spree.edit_admin_taxonomy_url(@taxonomy) %>
+  <% unless @taxon.root? %>
+    / <%= link_to @taxon.name %>
+  <% end %> / <%= Spree.t(:edit) %>
+<% end %>
+
+<div data-hook="admin_taxonomy_taxon_edit_general_settings" class="card mb-3">
+
+  <div class="card-header">
+    <h5 class="card-title mb-0 h6">
+      <%= Spree.t(:taxon_products) %>
+    </h5>
+  </div>
+
+  <div class="card-body">
+    <div data-hook="admin_taxonomy_taxon_taxon_products_edit_form_header">
+      <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+    </div>
+    <div data-hook="admin_taxonomy_taxon_taxon_products_edit_form">
+      <%= form_with model: @object, url: { action: 'update', id: @object } do |f| %>
+        <div class="form-group" data-hook="product">
+          <%= f.field_container :product do %>
+            <%= f.label :product_id, Spree.t(:products) %>
+            <%= f.collection_select :product_id, Spree::Product.all, :id, :name, { prompt: Spree.t('match_choices.none') }, class: 'form-control' %>
+            <%= f.error_message_on :product_id %>
+          <% end %>
+        </div>
+        <div data-hook="admin_taxonomy_taxon_taxon_products_edit_form_button">
+          <%= render partial: 'spree/admin/shared/edit_resource_links' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

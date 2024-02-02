@@ -1,0 +1,20 @@
+<% content_for :page_title do %>
+  <%= link_to Spree.t(:taxonomies), spree.admin_taxonomies_url %> /
+
+  <%= link_to @taxonomy.root.name, spree.edit_admin_taxonomy_url(@taxonomy) %>
+  <% unless @taxon.root? %>
+   / <%= @taxon.name %>
+   <% end %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:add_new_product), new_admin_taxonomy_taxon_classification_path, class: "btn-success", icon: 'add.svg', id: 'admin_new_vendor_link' %>
+<% end if can? :create,  Spree::Classification %>
+
+<%= render partial: 'spree/admin/shared/taxon_tabs', locals: { current: :products } %>
+
+<%= render partial: 'spree/admin/shared/products', locals: {
+  products: @taxon.products,
+  action_object: @taxon,
+  empty_message: I18n.t('taxon_vendor.empty_info'),
+} %>
