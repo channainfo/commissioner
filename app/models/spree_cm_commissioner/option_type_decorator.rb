@@ -13,6 +13,10 @@ module SpreeCmCommissioner
 
       base.scope :promoted, -> { where(promoted: true) }
       base.whitelisted_ransackable_attributes = %w[kind]
+
+      def base.amenities
+        Spree::OptionType.where(kind: 'vehicle_type', name: 'amenities', presentation: 'Amenities', attr_type: 'amenity').first_or_create
+      end
     end
 
     private

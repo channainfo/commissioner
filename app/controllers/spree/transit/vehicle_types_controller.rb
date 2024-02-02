@@ -22,7 +22,7 @@ module Spree
       end
 
       def load_amenities
-        @amenities = Spree::OptionValue.where(option_type_id: Spree::OptionType.where(kind: 'vehicle_type').first.id).pluck(:name, :id)
+        @amenities = Spree::OptionType.amenities.option_values.pluck(:name, :id)
         @selected_option_value_ids = @object.option_values.pluck(:id)
       end
 
