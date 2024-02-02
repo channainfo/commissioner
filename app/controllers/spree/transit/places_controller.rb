@@ -1,12 +1,13 @@
 module Spree
   module Transit
     class PlacesController < Spree::Transit::BaseController
-      before_action :load_places_taxonomy
+      before_action :load_place_taxonomy
       helper 'spree/transit/sortable_tree'
 
-      def load_places_taxonomy
-        @places_taxonomy = Spree::Taxonomy.find_by(kind: 'transit')
-        @places_taxonomy ||= create_places_taxon
+      def load_place_taxonomy
+        ActiveRecord::Base.connected_to(role: :writing) do
+          @place_taxonomy = Spree::Taxonomy.place
+        end
       end
 
       before_action :set_permalink_part, only: [:edit]
@@ -16,15 +17,9 @@ module Spree
 
       def index; end
 
-      def create_places_taxon
-        ActiveRecord::Base.connected_to(role: :writing) do
-          Spree::Taxonomy.create(name: 'Places', kind: 'transit', store: current_store)
-        end
-      end
-
       def new
         @taxon = Spree::Taxon.new
-        @taxon.taxonomy = @places_taxonomy
+        @taxon.taxonomy = @place_taxonomy
       end
 
       def update
@@ -94,7 +89,11 @@ module Spree
       # If this method is applied to the model, it will set stop, location, and
       # taxon attributes to 0 when a drag-and-drop action changes the position.
       def set_data_type
-        return unless params[:taxon][:stop].present? || params[:taxon][:branch].present? || params[:taxon][:location].present?
+        if params[:taxon][:stop].to_i.zero? && params[:taxon][:branch].to_i.zero?
+          # If not checked, it will set the location instead.
+          params[:taxon][:location] = 1
+          @taxon[:data_type] = (params[:taxon][:location].to_i * (2**2))
+        end
 
         result = (params[:taxon][:stop].to_i * (2**0)) + (params[:taxon][:branch].to_i * (2**1)) + (params[:taxon][:location].to_i * (2**2))
         @taxon[:data_type] = result
