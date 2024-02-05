@@ -14,6 +14,7 @@
           </th>
           <th><%= Spree.t(:description) %></th>
           <th><%= Spree.t(:created_at) %></th>
+          <th><%= Spree.t(:updated_at)%></th>
           <th><%= Spree.t(:active) %></th>
           <th></th>
         </tr>
@@ -32,6 +33,9 @@
               <%= pretty_time(homepage_section.created_at) %>
             </td>
             <td>
+              <%= pretty_time(homepage_section.updated_at) %>
+            </td>
+            <td>
               <%= active_badge(homepage_section.active?) %>
             </td>
             <td class="text-right">
@@ -42,7 +46,14 @@
         <% end %>
       </tbody>
     </table>
+    <%= form_with model: @object, url: { action: 'update_the_updated_at' } do |f| %>
+      <div class="form-actions mt-5" data-hook="buttons">
+        <%= button 'Update All Sections', 'save.svg', 'submit', {class: 'btn-success', data: { disable_with: "#{ Spree.t(:saving) }..." }}
+        %>
+      </div>
+    <% end %>
   </div>
+
 <% else %>
   <div class="alert alert-info alpha twelve columns no-objects-found">
     <%= Spree.t(:no_resource_found, resource: plural_resource_name(SpreeCmCommissioner::HomepageSection)) %>

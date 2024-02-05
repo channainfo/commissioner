@@ -13,10 +13,18 @@ module Spree
         admin_homepage_feed_homepage_section_index_url(options)
       end
 
+      # ovverride
       def edit
         homepage_section_id = params[:id]
         @homepage_section = SpreeCmCommissioner::HomepageSection.find(homepage_section_id)
         @homepage_section_relatables = SpreeCmCommissioner::HomepageSectionRelatable.where(homepage_section: @homepage_section)
+      end
+
+      # This method update the updated_at field of all homepage sections
+      def update_the_updated_at
+        SpreeCmCommissioner::HomepageSection.find_each(&:touch)
+
+        redirect_to collection_url
       end
 
       private

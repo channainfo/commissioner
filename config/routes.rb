@@ -113,6 +113,7 @@ Spree::Core::Engine.add_routes do
 
       resources :homepage_section do
         collection do
+          post :update_the_updated_at
           post :update_positions
         end
       end
