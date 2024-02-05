@@ -1,0 +1,9 @@
+<!--  insert_before "erb[loud]:contains('field_container :permalink')" -->
+
+<div>
+  <%= f.field_container :subtitle do %>
+    <%= f.label :subtitle, raw(Spree.t(:subtitle) + required_span_tag) %>
+    <%= f.text_field :subtitle, class: 'form-control', rows: 6 %>
+    <%= f.error_message_on :subtitle, class: 'error-message' %>
+  <% end %>
+</div>

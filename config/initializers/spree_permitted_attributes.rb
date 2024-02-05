@@ -16,7 +16,9 @@ module Spree
       category_icon
       custom_redirect_url
       to_date
-      from_date kind
+      from_date
+      kind
+      subtitle
     ]
 
     @@store_attributes += [
