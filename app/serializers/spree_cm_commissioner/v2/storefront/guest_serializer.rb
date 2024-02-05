@@ -9,6 +9,9 @@ module SpreeCmCommissioner
 
         belongs_to :occupation, serializer: Spree::V2::Storefront::TaxonSerializer
         has_one :id_card, serializer: Spree::V2::Storefront::IdCardSerializer
+
+        # allowed_checkout updates frequently
+        cache_options store: nil
       end
     end
   end
