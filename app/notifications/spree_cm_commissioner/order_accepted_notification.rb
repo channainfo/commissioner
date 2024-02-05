@@ -12,7 +12,8 @@ module SpreeCmCommissioner
       {
         order_number: order.number,
         title: notification_title,
-        message: notification_message
+        message: notification_message,
+        notification_type: type
 
       }
     end
