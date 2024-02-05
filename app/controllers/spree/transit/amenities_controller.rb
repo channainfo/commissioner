@@ -18,7 +18,7 @@ module Spree
         end
 
         respond_to do |format|
-          format.html { redirect_to spree.transit_routes_url() }
+          format.html { redirect_to spree.transit_routes_url }
           format.js { render plain: 'Ok' }
         end
       end
@@ -26,12 +26,11 @@ module Spree
       def update
         load_amenity
         if @amenity.update(amenity_params)
-          flash[:success] = "Option Type updated successfully."
-          redirect_back(fallback_location: edit_transit_amenity_path(@amenity))
+          flash[:success] = 'Option Type updated successfully.'
         else
-          flash[:error] = "Unable to update Option Type. Errors: " + @amenity.errors.full_messages.join(', ')
-          redirect_back(fallback_location: edit_transit_amenity_path(@amenity))
+          flash[:error] = "Unable to update Option Type. Errors: #{@amenity.errors.full_messages.join(', ')}"
         end
+        redirect_back(fallback_location: edit_transit_amenity_path(@amenity))
       end
 
       def location_after_save
@@ -50,7 +49,7 @@ module Spree
 
       def load_vendor
         @vendor ||= vendors.find { |v| v[:slug] == session[:transit_current_vendor_slug] } || vendors.first
-    end
+      end
 
       def model_class
         Spree::OptionType
@@ -61,18 +60,14 @@ module Spree
       end
 
       def setup_new_option_value
-          @amenity.option_values.build if @amenity.option_values.empty?
+        @amenity.option_values.build if @amenity.option_values.empty?
       end
 
       private
 
       def load_amenity
         ActiveRecord::Base.connected_to(role: :writing) do
-          @amenity = Spree::OptionType.where(
-                                  name: "amenities",
-                                  presentation: "Amenities",
-                                  kind: :vehicle_type,
-                                  attr_type: :amenity).first_or_create
+          @amenity = Spree::OptionType.amenities
         end
       end
 
