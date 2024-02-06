@@ -12,6 +12,10 @@ module Spree
         redirect_back fallback_location: admin_path
       end
 
+      def print
+        order.update(approved_at: Time.zone.now)
+      end
+
       # @overrided
       def order
         @order = Spree::Order.find_by!(number: params[:order_id])

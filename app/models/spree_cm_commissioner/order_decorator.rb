@@ -138,6 +138,12 @@ module SpreeCmCommissioner
       "#{number}-#{token}"
     end
 
+    def payment_date
+      return unless payment_state == 'paid'
+
+      updated_at
+    end
+
     private
 
     # override :spree_api

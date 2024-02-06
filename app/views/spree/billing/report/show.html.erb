@@ -15,20 +15,22 @@
       <thead class="text-muted">
         <tr data-hook="admin_subscriptions_index_headers">
           <th><%= I18n.t(:number, scope: 'activerecord.attributes.spree/order') %></th>
-          <th><%= sort_link @search, :start_date, I18n.t(:start_date, scope: 'activerecord.attributes.spree/order') %></th>
-          <th><%= sort_link @search, :created_at, I18n.t(:created_at, scope: 'activerecord.attributes.spree/order') %></th>
+          <th><%= sort_link @search, :created_at, I18n.t(:issued_date, scope: 'activerecord.attributes.spree/order') %></th>
+          <th><%= I18n.t(:customer_name, scope: 'activerecord.attributes.spree/order') %></th>
           <th><%= I18n.t(:phone_number, scope: 'activerecord.attributes.spree/order') %></th>
-          <th><%= I18n.t(:payment_state, scope: 'activerecord.attributes.spree/order') %></th>
           <th><%= sort_link @search, :total, I18n.t(:total, scope: 'activerecord.attributes.spree/order') %></th>
+          <th><%= I18n.t(:payment_state, scope: 'activerecord.attributes.spree/order') %></th>
+          <th><%= I18n.t(:payment_date, scope: 'activerecord.attributes.spree/order') %></th>
         </tr>
       </thead>
       <tbody>
         <% @orders.each do |order| %>
           <tr id="<%= spree_dom_id order %>" data-hook="admin_subscriptions_index_rows">
             <td><%= link_to order.number, edit_billing_order_path(order) %></td>
-            <td><%= order.line_items[0].from_date.to_date %></td>
             <td><%= order.created_at.to_date %></td>
+            <td><%= order.customer.fullname %></td>
             <td><%= order.customer&.intel_phone_number %></td>
+            <td><%= order.display_total.to_html %></td>
             <td class="no-wrap">
               <% if order.payment_state %>
                 <%= link_to Spree.t("payment_states.#{order.payment_state}"),
@@ -36,7 +38,7 @@
                   class: "badge badge-pill badge-#{order.payment_state}" %>
               <% end %>
             </td>
-            <td><%= order.display_total.to_html %></td>
+            <td><%= order.payment_date&.to_date %></td>
           </tr>
         <% end %>
       </tbody>

@@ -15,11 +15,23 @@ module Spree
       end
 
       def paid
+        if params[:q].present?
+          params[:q][:updated_at_lteq] = params[:q][:updated_at_lteq].to_date.end_of_day if params[:q][:updated_at_lteq].present?
+        else
+          params[:q] = {}
+        end
+
         @search = Spree::Order.subscription.ransack(params[:q])
         @orders = @search.result.where(payment_state: 'paid').page(page).per(per_page)
       end
 
       def balance_due
+        if params[:q].present?
+          params[:q][:created_at_lteq] = params[:q][:created_at_lteq].to_date.end_of_day if params[:q][:created_at_lteq].present?
+        else
+          params[:q] = {}
+        end
+
         @search = Spree::Order.subscription.ransack(params[:q])
         @orders = @search.result.where(payment_state: 'balance_due').page(page).per(per_page)
       end

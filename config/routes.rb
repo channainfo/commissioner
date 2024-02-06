@@ -200,7 +200,11 @@ Spree::Core::Engine.add_routes do
         resources :variants_including_master, only: [:update]
       end
       resources :orders do
-        resource :invoice, only: %i[show create], controller: :invoice
+        resource :invoice, only: %i[show create], controller: :invoice do
+          collection do
+            put :print
+          end
+        end
         resources :payments do
           member do
             put :fire
