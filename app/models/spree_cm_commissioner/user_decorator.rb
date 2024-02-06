@@ -3,6 +3,7 @@ module SpreeCmCommissioner
     def self.prepended(base)
       base.include SpreeCmCommissioner::UserNotification
       base.include SpreeCmCommissioner::UserIdentity
+      base.include SpreeCmCommissioner::UserPreference
 
       base.enum gender: %i[male female other]
 

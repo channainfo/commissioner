@@ -227,11 +227,16 @@ Spree::Core::Engine.add_routes do
         end
 
         resource :cart_guests, only: %i[create destroy]
+        resources :cart_payment_method_groups, only: %i[index]
 
         resources :accommodations, only: %i[index show]
         resources :line_items, only: %i[index show]
         resources :account_checker
         resource :account_recovers, only: [:update]
+
+        namespace :account do
+          resource :preferred_payment_method, controller: :preferred_payment_method, only: %i[show update]
+        end
 
         resource :s3_signed_urls
         resources :provinces, only: %i[index]
