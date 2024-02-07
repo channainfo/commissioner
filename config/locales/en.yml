@@ -53,7 +53,6 @@ en:
   user_taxon:
     empty_info: "No user information available."
 
-
   user_update_contact:
     phone_number_is_already_used: "Phone number is already used"
     email_is_already_used: "Email is already used"
@@ -251,6 +250,9 @@ en:
     device_tokens: "Device Tokens"
     user_identity_providers: "Identity Providers"
     new_user_identity_provider: "New Identity Providers"
+    admin:
+      display_on:
+        frontend_for_early_adopter: "Storefront for Early Adopter"
 
   activerecord:
     attributes:
@@ -342,7 +344,5 @@ en:
   spree_user:
     invalid_password: "Current password is not valid"
     cannot_delete_account: "You cannot delete this account because you own a special role"
-    invalid_password: 'Current password is not valid'
-    cannot_delete_account: 'You cannot delete this account because you own a special role'
   kyc:
-    note: '<b>Note:</b> Select Required KYC Field For this Product'
+    note: "<b>Note:</b> Select Required KYC Field For this Product"

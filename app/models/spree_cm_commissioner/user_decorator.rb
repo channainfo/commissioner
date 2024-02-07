@@ -36,6 +36,10 @@ module SpreeCmCommissioner
       end
     end
 
+    def early_adopter?
+      has_spree_role?('early_adopter')
+    end
+
     def full_name
       [first_name, last_name].compact_blank.join(' ')
     end

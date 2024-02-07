@@ -82,6 +82,63 @@ RSpec.describe Spree::Order, type: :model do
     end
   end
 
+  describe '#collect_payment_methods' do
+    context 'when user is nil' do
+      let(:order) { create(:order, user: nil) }
+
+      it 'should call super method & collect_payment_methods_for_early_adopter' do
+        order.collect_payment_methods
+
+        expect(order.user).to eq nil
+        expect(order).to_not receive(:collect_payment_methods_for_early_adopter)
+      end
+    end
+
+    context 'when user is not early adaopter' do
+      let(:user) { create(:user) }
+      let(:order) { create(:order, user: user) }
+
+      it 'should call super method & not not call collect_payment_methods_for_early_adopter' do
+        order.collect_payment_methods
+
+        expect(order.user).to eq user
+        expect(order.user.early_adopter?).to be false
+        expect(order).to_not receive(:collect_payment_methods_for_early_adopter)
+      end
+    end
+
+    context 'when user is early adaopter' do
+      let(:user) { create(:cm_early_adopter_user) }
+      let(:order) { create(:order, user: user) }
+
+      it 'call collect_payment_methods_for_early_adopter' do
+        allow(order).to receive(:collect_payment_methods_for_early_adopter).with(nil).and_return([])
+
+        order.collect_payment_methods
+
+        expect(order.user).to eq user
+        expect(order.user.early_adopter?).to be true
+        expect(order).to have_received(:collect_payment_methods_for_early_adopter)
+      end
+    end
+  end
+
+  describe '#collect_payment_methods_for_early_adopter' do
+    let!(:payment_method_both) { create(:payment_method, display_on: :both) }
+    let!(:payment_method_frontend) { create(:payment_method, display_on: :front_end) }
+    let!(:payment_method_frontend_for_early_adopter) { create(:payment_method, display_on: :frontend_for_early_adopter) }
+    let!(:payment_method_backend) { create(:payment_method, display_on: :backend) }
+
+    let(:order) { create(:order) }
+
+    it 'should return methods that available for early adopter' do
+      expect(order.collect_payment_methods_for_early_adopter.size).to eq 3
+      expect(order.collect_payment_methods_for_early_adopter[0]).to eq payment_method_both
+      expect(order.collect_payment_methods_for_early_adopter[1]).to eq payment_method_frontend
+      expect(order.collect_payment_methods_for_early_adopter[2]).to eq payment_method_frontend_for_early_adopter
+    end
+  end
+
   describe '#delivery_required?' do
     let(:product1) { create(:product, name: 'Product 1') }
     let(:product2) { create(:product, name: 'Product 2') }
