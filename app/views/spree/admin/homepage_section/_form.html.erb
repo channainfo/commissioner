@@ -8,6 +8,10 @@
             <%= f.label :title %>
             <%= f.text_field :title, class: 'form-control' %>
           <% end %>
+          <%= f.field_container :section_type do %>
+            <%= f.label :section_type %>
+            <%= f.select :section_type, SpreeCmCommissioner::HomepageSection.section_types.keys, {}, { class: 'fullwidth select2' } %>
+          <% end %>
           <%= f.field_container :description do%>
             <%= f.label :description %>
             <%= f.text_area :description, class: 'form-control' %>
