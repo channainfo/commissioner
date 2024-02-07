@@ -13,6 +13,7 @@
             <%= Spree.t(:title) %>
           </th>
           <th><%= Spree.t(:description) %></th>
+          <th><%= Spree.t(:section_type) %></th>
           <th><%= Spree.t(:created_at) %></th>
           <th><%= Spree.t(:active) %></th>
           <th></th>
@@ -27,6 +28,9 @@
             </td>
             <td>
               <%= homepage_section.description %>
+            </td>
+            <td>
+              <%= homepage_section.section_type %>
             </td>
             <td>
               <%= pretty_time(homepage_section.created_at) %>
