@@ -41,6 +41,19 @@ module SpreeCmCommissioner
       end
     end
 
+    # override
+    def collect_payment_methods(store = nil)
+      return super if user.blank?
+      return super unless user.early_adopter?
+
+      collect_payment_methods_for_early_adopter(store)
+    end
+
+    def collect_payment_methods_for_early_adopter(store = nil)
+      store ||= self.store
+      store.payment_methods.available_on_frontend_for_early_adopter.select { |pm| pm.available_for_order?(self) }
+    end
+
     def state_changed_to_complete?
       saved_change_to_state? && state == 'complete'
     end

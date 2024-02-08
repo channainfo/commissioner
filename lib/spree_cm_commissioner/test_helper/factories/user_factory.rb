@@ -29,4 +29,8 @@ FactoryBot.define do
       context.user
     end
   end
+
+  factory :cm_early_adopter_user, parent: :cm_user do
+    spree_roles { [Spree::Role.find_by(name: 'early_adopter') || create(:role, name: 'early_adopter')] }
+  end
 end

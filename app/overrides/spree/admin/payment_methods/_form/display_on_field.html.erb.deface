@@ -1,0 +1,6 @@
+<!-- replace "[data-hook='display']" -->
+
+<div data-hook="display" class="form-group">
+  <%= label_tag :payment_method_display_on, Spree.t(:display) %>
+  <%= select(:payment_method, :display_on, Spree::PaymentMethod::DISPLAY.collect { |display| [Spree.t("admin.display_on.#{display}"), display.to_s] }, { selected: f.object.display_on }, {class: 'select2'}) %>
+</div>
