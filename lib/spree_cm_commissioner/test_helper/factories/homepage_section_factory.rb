@@ -2,6 +2,7 @@ FactoryBot.define do
   factory :cm_homepage_section, class: SpreeCmCommissioner::HomepageSection do
     title { FFaker::Name.unique.name }
     description { |e| "Description for #{e.title}" }
+    section_type { 'general' }
     active { true }
 
     # position is defaultly set by act_as_list

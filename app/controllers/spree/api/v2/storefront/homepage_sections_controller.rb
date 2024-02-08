@@ -7,16 +7,20 @@ module Spree
             SpreeCmCommissioner::HomepageSection
           end
 
-          def collection
-            model_class.active
-          end
-
           def collection_serializer
             Spree::V2::Storefront::HomepageSectionSerializer
           end
 
           def resource_serializer
             Spree::V2::Storefront::HomepageSectionSerializer
+          end
+
+          def collection_finder
+            SpreeCmCommissioner::HomepageSections::Find.new(scope: model_class.all, params: finder_params).execute
+          end
+
+          def collection
+            @collection ||= collection_finder
           end
         end
       end
