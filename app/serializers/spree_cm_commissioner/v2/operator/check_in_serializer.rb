@@ -7,7 +7,6 @@ module SpreeCmCommissioner
         attributes :guest_id,
                    :line_item_id,
                    :order_id,
-                   :confirmed_at,
                    :verification_state,
                    :check_in_type,
                    :entry_type,

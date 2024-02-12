@@ -1,11 +1,12 @@
 module SpreeCmCommissioner
   class DashboardCrewEventQuery
-    attr_reader :user_id, :section
+    attr_reader :user_id, :section, :start_from_date
 
     # user_id:, section: 'incoming | previous'
-    def initialize(user_id:, section:)
+    def initialize(user_id:, section:, start_from_date: nil)
       @user_id = user_id
       @section = section
+      @start_from_date = start_from_date || Time.zone.today
     end
 
     def call
@@ -18,10 +19,10 @@ module SpreeCmCommissioner
                            .where(cm_user_taxons: { user_id: user_id, type: 'SpreeCmCommissioner::UserEvent' })
 
       if section == 'incoming'
-        taxons = taxons.where('spree_taxons.from_date >= ?', Time.zone.now)
+        taxons = taxons.where('spree_taxons.from_date >= ?', start_from_date)
         taxons = taxons.order(from_date: :asc)
       else
-        taxons = taxons.where('spree_taxons.from_date < ?', Time.zone.now)
+        taxons = taxons.where('spree_taxons.from_date < ?', start_from_date)
         taxons = taxons.order(to_date: :desc)
       end
 

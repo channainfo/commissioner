@@ -6,7 +6,6 @@ module Spree
           before_action :require_spree_current_user
 
           def collection
-            # spree_current_user.line_items.complete.paid.filter_by_event(params[:event])
             @collection = SpreeCmCommissioner::DashboardCrewEventQuery.new(
               user_id: spree_current_user.id,
               section: params[:section] || 'incoming'
