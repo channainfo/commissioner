@@ -1,14 +1,26 @@
 module Spree
   module Transit
-    class TaxonsController < Spree::Transit::BaseController
-      belongs_to 'spree/taxonomy'
+    class PlacesController < Spree::Transit::BaseController
+      before_action :load_place_taxonomy
+      helper 'spree/transit/sortable_tree'
+
+      def load_place_taxonomy
+        ActiveRecord::Base.connected_to(role: :writing) do
+          @place_taxonomy = Spree::Taxonomy.place
+        end
+      end
 
       before_action :set_permalink_part, only: [:edit]
       respond_to :html, :js
       helper 'spree/transit/sortable_tree'
-      before_action :set_data_type, only: [:update, :create]
+      before_action :set_data_type, only: %i[update create]
 
       def index; end
+
+      def new
+        @taxon = Spree::Taxon.new
+        @taxon.taxonomy = @place_taxonomy
+      end
 
       def update
         successful = @taxon.transaction do
@@ -36,7 +48,7 @@ module Spree
           rename_child_taxons if @update_children
 
           respond_with(@taxon) do |format|
-            format.html { redirect_to spree.edit_transit_taxonomy_url(@taxonomy) }
+            format.html { redirect_to spree.edit_transit_place_url(params[:id]) }
             format.json { render json: @taxon.to_json }
           end
         else
@@ -48,7 +60,7 @@ module Spree
       end
 
       def location_after_save
-        spree.edit_transit_taxonomy_url(@taxonomy)
+        spree.transit_places_url
       end
 
       def set_permalink_part
@@ -60,9 +72,9 @@ module Spree
       def set_permalink_params
         set_permalink_part
 
-        if params.key? 'permalink_part'
-          params[:taxon][:permalink] = @parent_permalink + params[:permalink_part]
-        end
+        return unless params.key? 'permalink_part'
+
+        params[:taxon][:permalink] = @parent_permalink + params[:permalink_part]
       end
 
       def taxon_params
@@ -77,10 +89,14 @@ module Spree
       # If this method is applied to the model, it will set stop, location, and
       # taxon attributes to 0 when a drag-and-drop action changes the position.
       def set_data_type
-        if params[:taxon][:stop].present? || params[:taxon][:branch].present? || params[:taxon][:location].present?
-          result = params[:taxon][:stop].to_i * 2**0 + params[:taxon][:branch].to_i * 2**1 + params[:taxon][:location].to_i * 2**2
-          @taxon[:data_type] = result
+        if params[:taxon][:stop].to_i.zero? && params[:taxon][:branch].to_i.zero?
+          # If not checked, it will set the location instead.
+          params[:taxon][:location] = 1
+          @taxon[:data_type] = (params[:taxon][:location].to_i * (2**2))
         end
+
+        result = (params[:taxon][:stop].to_i * (2**0)) + (params[:taxon][:branch].to_i * (2**1)) + (params[:taxon][:location].to_i * (2**2))
+        @taxon[:data_type] = result
       end
 
       def set_parent(parent_id)
@@ -98,9 +114,9 @@ module Spree
       def set_permalink_params
         set_permalink_part
 
-        if params.key? 'permalink_part'
-          params[:taxon][:permalink] = @parent_permalink + params[:permalink_part]
-        end
+        return unless params.key? 'permalink_part'
+
+        params[:taxon][:permalink] = @parent_permalink + params[:permalink_part]
       end
 
       def rename_child_taxons
@@ -118,6 +134,10 @@ module Spree
         taxon.reload
         taxon.set_permalink
         taxon.save!
+      end
+
+      def collection_url
+        spree.polymorphic_url([:transit, place.to_sym], options)
       end
 
       def edit_transit_taxon_path(taxon)

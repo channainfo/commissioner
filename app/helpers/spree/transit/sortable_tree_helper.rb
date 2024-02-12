@@ -24,7 +24,8 @@ module Spree
                     data: {
                       sortable_tree_resource_name_value: child_resource_name.singularize,
                       sortable_tree_update_url_value: "/api/v2/platform/#{child_resource_name.pluralize}/#{child_resource.id}/reposition"
-                    })
+                    }
+        )
       end
     end
   end

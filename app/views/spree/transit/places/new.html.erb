@@ -1,7 +1,6 @@
-
- <% content_for :page_title do %>
-  <%= page_header_back_button spree.transit_taxonomies_url %>
-    <%= Spree.t(:taxonomies) %> /  <%= Spree.t(:new_taxonomy) %>
+<% content_for :page_title do %>
+  <%= page_header_back_button spree.transit_places_url %>
+  <%= @place_taxonomy.name %> /  <%= Spree.t(:new_place) %>
 <% end %>
 
 <div data-hook="admin_user_new_form_header">
@@ -11,7 +10,7 @@
 <%= form_with model: @object, url: { action: 'create' } do |f| %>
     <%= render partial: 'form', locals: { f: f } %>
     <div data-hook="admin_user_new_form_buttons">
-      <%= render partial: 'spree/admin/shared/new_resource_links', locals: { collection_url: spree.transit_taxonomies_url }   %>
+      <%= render partial: 'spree/admin/shared/new_resource_links', locals: { collection_url: spree.transit_places_url }   %>
     </div>
   <% end %>
 </div>
