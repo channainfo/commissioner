@@ -1,0 +1,17 @@
+<!-- insert_after "[data-hook='admin_product_form_subscribable']" -->
+
+  <div class="col-lg-12 col-sm-12 px-0 pb-3 ">
+    <%= f.label :started_at, class: "text-md" %>
+    <div class="input-group datePickerTo"
+          data-wrap="true"
+          data-alt-input="true"
+          data-enable-time="true"
+    >
+      <%= f.text_field :started_at,
+                        value: @object.started_at,
+                        placeholder: Spree.t(:select_a_date),
+                        class: 'form-control shadow-none ',
+                        'data-input':'' %>
+      <%= render partial: 'spree/admin/shared/cal_close' %>
+    </div>
+</div>

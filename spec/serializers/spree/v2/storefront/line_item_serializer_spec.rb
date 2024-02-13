@@ -46,6 +46,7 @@ RSpec.describe Spree::V2::Storefront::LineItemSerializer, type: :serializer do
         :event_status,
         :kyc,
         :kyc_fields,
+        :started_at,
         :remaining_total_guests,
         :number_of_guests
       )
