@@ -13,7 +13,7 @@ module SpreeCmCommissioner
       Rails.cache.delete(cache_key) if refreshed
 
       value = Rails.cache.fetch(cache_key, expires_in: 5.minutes) do
-        product_aggregators
+        product_aggregators || []
       end
 
       SpreeCmCommissioner::EventTicketAggregator.new(
@@ -38,7 +38,7 @@ module SpreeCmCommissioner
 
     def product_aggregators
       select_fields = [
-        'spree_products.id  as product_id',
+        'spree_products.id as product_id',
         'SUM(spree_line_items.quantity) AS total_tickets',
         'COUNT(*) AS total_items'
       ]
@@ -49,7 +49,8 @@ module SpreeCmCommissioner
         .joins('LEFT JOIN spree_line_items ON spree_variants.id = spree_line_items.variant_id')
         .joins('INNER JOIN spree_orders ON spree_orders.id = spree_line_items.order_id')
         .joins('INNER JOIN spree_products_taxons ON spree_products.id = spree_products_taxons.product_id')
-        .where(spree_orders: { state: 'complete' }, spree_products_taxons: { taxon_id: taxon_id })
+        .joins('INNER JOIN spree_taxons ON spree_taxons.id = spree_products_taxons.taxon_id')
+        .where(spree_orders: { state: 'complete' }, spree_taxons: { parent_id: taxon_id })
         .group('spree_products.id')
         .map do |record|
           record.slice(
