@@ -2,7 +2,7 @@
   <%= tab :paid_report, selected: request.path.ends_with?('/paid'), url: spree.paid_billing_report_path, label: Spree.t('billing.payment_state.paid') %>
   <%= tab :balance_due_report, selected: request.path.ends_with?('/balance_due'), url: spree.balance_due_billing_report_path, label: Spree.t('billing.payment_state.balance_due') %>
   <%= tab :overdue_report, selected: request.path.ends_with?('/overdue'), url: spree.overdue_billing_report_path, label: Spree.t('billing.payment_state.overdue') %>
-  <%= tab :failed, selected: request.path.ends_with?('/failed'), url: spree.failed_billing_report_path, label: Spree.t('billing.payment_state.failed') %>
+  <%= tab :failed_orders, selected: request.path.ends_with?('/failed_orders'), url: spree.failed_orders_billing_report_path, label: Spree.t('billing.payment_state.failed') %>
   <%= tab :active_subscribers_report, selected: request.path.ends_with?('/active_subscribers'), url: spree.active_subscribers_billing_report_path, label: Spree.t('billing.active_subscribers') %>
   <%= tab :report, selected: request.path.ends_with?('/report'), url: spree.billing_report_path, label: Spree.t('billing.report') %>
 </ul>
