@@ -1,4 +1,7 @@
-<%= render partial: 'spree/admin/homepage_feed/shared/feed_tabs', locals: { current: :feed } %>
+<% content_for :page_title do %>
+  <%= Spree.t(:homepage) %>
+<% end %>
+
 <div data-hook="admin_homepage_feed">
   <%= form_with url: spree.admin_homepage_feed_path, method: :put do |f| %>
     <%= render partial: 'form', locals: { f: f }%>
