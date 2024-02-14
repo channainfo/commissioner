@@ -1,4 +1,6 @@
-<%= render partial: 'spree/admin/homepage_feed/shared/feed_tabs', locals: { current: :background } %>
+<% content_for :page_title do %>
+  <%= Spree.t(:homepage) %>
+<% end %>
 
 <% content_for :page_actions do %>
   <%= button_link_to Spree.t(:new_homepage_background), new_admin_homepage_feed_homepage_background_path, { class: "btn-success", icon: 'add.svg', id: 'admin_new_homepage_background' } %>
