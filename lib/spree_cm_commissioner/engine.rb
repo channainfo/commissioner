@@ -25,10 +25,13 @@ module SpreeCmCommissioner
         SpreeCmCommissioner::Promotion::Rules::FixedDate,
         SpreeCmCommissioner::Promotion::Rules::Weekend,
         SpreeCmCommissioner::Promotion::Rules::CustomDates,
+        SpreeCmCommissioner::Promotion::Rules::GuestOccupations,
+        SpreeCmCommissioner::Promotion::Rules::GuestAgeGroup
       ]
 
       Rails.application.config.spree.promotions.actions.concat [
         SpreeCmCommissioner::Promotion::Actions::CreateDateSpecificItemAdjustments,
+        SpreeCmCommissioner::Promotion::Actions::CreateGuestItemAdjustments,
       ]
     end
 
