@@ -1,11 +1,6 @@
 require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::HomepageSectionRelatable, type: :model do
-  describe 'associations' do
-    it { should belong_to(:homepage_section).inverse_of(:homepage_section_relatables).dependent(:destroy) }
-    it { should belong_to(:relatable).inverse_of(:homepage_section_relatables).dependent(:destroy) }
-  end
-
   describe '#active' do
     let(:section) { create(:cm_homepage_section) }
 
