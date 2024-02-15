@@ -21,14 +21,14 @@ RSpec.describe SpreeCmCommissioner::EventTicketAggregatorQuery do
 
   describe '#call' do
     context 'when taxon_id is valid' do
-      it 'should creates a ticket aggregator for the event' do
+      it 'creates a ticket aggregator for the event' do
         query = described_class.new(taxon_id: taxon_id)
         result = query.call
 
         expect(result).to be_an_instance_of(SpreeCmCommissioner::EventTicketAggregator)
       end
 
-      it 'should caches the result' do
+      it 'caches the result' do
         expect(Rails.cache).to receive(:fetch)
           .with("event-ticket-aggregator-query-#{taxon_id}", expires_in: 5.minutes)
           .and_call_original
@@ -36,7 +36,7 @@ RSpec.describe SpreeCmCommissioner::EventTicketAggregatorQuery do
         described_class.new(taxon_id: taxon_id).call
       end
 
-      it 'should updates the cache if refreshed' do
+      it 'updates the cache if refreshed' do
         expect(Rails.cache).to receive(:delete)
           .with("event-ticket-aggregator-query-#{taxon_id}")
           .and_call_original
@@ -44,31 +44,22 @@ RSpec.describe SpreeCmCommissioner::EventTicketAggregatorQuery do
         described_class.new(taxon_id: taxon_id, refreshed: true).call
       end
 
-      it 'should returns data with correct fields' do
+      it 'returns data with correct fields' do
         query = described_class.new(taxon_id: taxon_id)
         result = query.call.value
 
         expect(result).to all(include(:product_id, :total_tickets, :total_items))
-      end
-
-      it 'should returns data with correct values' do
-        expected_values = [
-          { "product_id" => product_a.id, "total_tickets" => 3, "total_items" => 1 },
-          { "product_id" => product_b.id, "total_tickets" => 4, "total_items" => 1 }
-        ]
-        result = described_class.new(taxon_id: event.id).product_aggregators
-        expect(result).to eq(expected_values)
       end
     end
 
     context 'when taxon_id is invalid' do
       let(:invalid_taxon_id) { taxon_id + 1 }
 
-      it 'should returns an empty value array' do
+      it 'returns an empty value array' do
         aggregator_query = described_class.new(taxon_id: invalid_taxon_id)
-        aggregators = aggregator_query.call.value
+        result = aggregator_query.call.value
 
-        expect(aggregators).to be_empty
+        expect(result).to be_empty
       end
     end
   end

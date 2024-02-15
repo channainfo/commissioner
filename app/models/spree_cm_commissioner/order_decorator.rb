@@ -32,12 +32,22 @@ module SpreeCmCommissioner
 
       base.whitelisted_ransackable_associations |= %w[customer taxon payments]
 
+      base.after_update :precalculate_products_taxons_total_count, if: -> { state_changed_to_complete? }
+
       def base.search_by_qr_data!(data)
         token = data.match(/^R\d{9,}-([A-Za-z0-9_\-]+)$/)&.captures
 
         raise ActiveRecord::RecordNotFound, "Couldn't find Spree::Order with QR data: #{data}" unless token
 
         find_by!(token: token)
+      end
+    end
+
+    def precalculate_products_taxons_total_count
+      line_items.each do |item|
+        item.product.classifications.each do |classification|
+          SpreeCmCommissioner::ProductsTaxonsTotalCountPreCalculatorJob.perform_later(classification.id)
+        end
       end
     end
 
