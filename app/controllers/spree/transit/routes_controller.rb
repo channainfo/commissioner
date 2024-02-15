@@ -15,8 +15,7 @@ module Spree
         @option_types = OptionType.order(:name)
         @shipping_categories = ShippingCategory.order(:name)
         @selected_option_type_ids = Spree::OptionType.where(name: %w[origin destination]).ids
-        taxonomies = Spree::Taxonomy.where(kind: :transit)
-        @taxons = taxonomies.map(&:taxons).flatten
+        @taxons = Spree::Taxonomy.place.taxons
       end
 
       def collection
@@ -32,8 +31,8 @@ module Spree
         @search = current_vendor.products.where(product_type: :transit).ransack(params[:q].reject { |k, _v| k.to_s == 'deleted_at_null' })
 
         @collection = @search.result
-                      .page(params[:page])
-                      .per(params[:per_page] || Spree::Backend::Config[:variants_per_page])
+                             .page(params[:page])
+                             .per(params[:per_page] || Spree::Backend::Config[:variants_per_page])
         @collection
       end
 
