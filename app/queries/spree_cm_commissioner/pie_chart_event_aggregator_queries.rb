@@ -35,8 +35,12 @@ module SpreeCmCommissioner
     private
 
     def base_joins
-      SpreeCmCommissioner::Guest
-        .joins('INNER JOIN cm_check_ins ON cm_check_ins.guest_id = cm_guests.id')
+      query = SpreeCmCommissioner::Guest
+      if chart_type == 'participation'
+        query.joins('LEFT JOIN cm_check_ins ON cm_check_ins.guest_id = cm_guests.id')
+      else
+        query.joins('INNER JOIN cm_check_ins ON cm_check_ins.guest_id = cm_guests.id')
+      end
         .joins('INNER JOIN spree_line_items ON spree_line_items.id = cm_guests.line_item_id')
         .joins('INNER JOIN spree_variants ON spree_variants.id = spree_line_items.variant_id')
         .joins('INNER JOIN spree_orders ON spree_orders.id = spree_line_items.order_id')
