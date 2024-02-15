@@ -274,6 +274,11 @@ Spree::Core::Engine.add_routes do
         resources :homepage_sections, only: [:index]
         resources :order_qrs, only: [:show]
 
+        resources :homepage, only: [] do
+          resources :homepage_sections, only: [:index]
+          resource :homepage_background, only: [:show]
+        end
+
         resources :guest_qrs, only: [:show]
         resources :guests, only: %i[create update show] do
           resources :id_cards

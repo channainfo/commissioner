@@ -36,4 +36,18 @@ RSpec.describe SpreeCmCommissioner::HomepageSection, type: :model do
       expect(homepage_section.homepage_section_relatables_count).to eq 1
     end
   end
+
+  describe '.filter_by_segment' do
+    it 'should return sections with the given segment' do
+      general_section = create(:cm_homepage_section, segment: 1)
+      ticket_section = create(:cm_homepage_section, segment: 2)
+      tour_section = create(:cm_homepage_section, segment: 4)
+      accommodation = create(:cm_homepage_section, segment: 8)
+
+      expect(described_class.filter_by_segment(:general).to_a).to eq [general_section]
+      expect(described_class.filter_by_segment(:ticket).to_a).to eq [ticket_section]
+      expect(described_class.filter_by_segment(:tour).to_a).to eq [tour_section]
+      expect(described_class.filter_by_segment(:accommodation).to_a).to eq [accommodation]
+    end
+  end
 end

@@ -7,16 +7,16 @@ module Spree
             SpreeCmCommissioner::HomepageSection
           end
 
-          def collection
-            model_class.active
-          end
-
           def collection_serializer
             Spree::V2::Storefront::HomepageSectionSerializer
           end
 
           def resource_serializer
             Spree::V2::Storefront::HomepageSectionSerializer
+          end
+
+          def collection
+            @collection ||= model_class.filter_by_segment(params[:homepage_id] || :general).active.order(position: :asc)
           end
         end
       end
