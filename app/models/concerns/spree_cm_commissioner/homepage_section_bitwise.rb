@@ -11,17 +11,17 @@ module SpreeCmCommissioner
 
     BIT_SEGMENT.each do |segment, bit_value|
       define_method "#{segment}?" do
-        homepage_section_value_enabled?(bit_value)
+        segment_enabled?(bit_value)
       end
     end
 
     def segments
       BIT_SEGMENT.filter_map do |segment_value, bit_value|
-        segment_value if homepage_section_value_enabled?(bit_value)
+        segment_value if segment_enabled?(bit_value)
       end
     end
 
-    def homepage_section_value_enabled?(bit_value)
+    def segment_enabled?(bit_value)
       segment & bit_value != 0
     end
   end
