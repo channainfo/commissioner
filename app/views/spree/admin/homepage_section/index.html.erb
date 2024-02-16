@@ -1,5 +1,5 @@
 <% content_for :page_title do %>
-  <%= Spree.t(:homepage) %>
+  <%= Spree.t(:homepages) %>
 <% end %>
 
 <% content_for :page_actions do %>
@@ -15,7 +15,8 @@
             <%= Spree.t(:title) %>
           </th>
           <th><%= Spree.t(:description) %></th>
-          <th><%= Spree.t(:created_at) %></th>
+          <th><%= Spree.t(:segment) %></th>
+          <th><%= Spree.t(:relatables_count) %></th>
           <th><%= Spree.t(:active) %></th>
           <th></th>
         </tr>
@@ -31,7 +32,16 @@
               <%= homepage_section.description %>
             </td>
             <td>
-              <%= pretty_time(homepage_section.created_at) %>
+              <% SpreeCmCommissioner::HomepageSectionBitwise::BIT_SEGMENT.each do |segment_name, bit_value| %>
+                <% if homepage_section.segment & bit_value != 0 %>
+                  <%= content_tag(:strong, class: SpreeCmCommissioner::Admin::HomepageSegmentHelper.badge_class_for_segment(segment_name)) do %>
+                    <%= segment_name.to_s.capitalize %>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </td>
+            <td>
+              <%= homepage_section.homepage_section_relatables_count %>
             </td>
             <td>
               <%= active_badge(homepage_section.active?) %>

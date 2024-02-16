@@ -8,6 +8,17 @@
             <%= f.label :title %>
             <%= f.text_field :title, class: 'form-control' %>
           <% end %>
+          <%= f.field_container :segment do %>
+            <%= f.label :segment, class: 'd-flex align-items-center' %>
+            <div class="d-flex flex-wrap">
+              <% SpreeCmCommissioner::HomepageSectionBitwise::BIT_SEGMENT.each do |segment, bit_value| %>
+                <div class="form-check mr-3 mb-2">
+                  <%= f.check_box segment, class: 'form-check-input', checked: (f.object.segment & bit_value) != 0 %>
+                  <%= f.label segment, class: 'form-check-label ml-1' %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
           <%= f.field_container :description do%>
             <%= f.label :description %>
             <%= f.text_area :description, class: 'form-control' %>
