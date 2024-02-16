@@ -25,5 +25,6 @@ require 'activerecord_json_validator'
 require 'googleauth'
 require 'dry-validation'
 require 'font-awesome-sass'
+require 'counter_culture'
 
 require 'byebug' if Rails.env.development? || Rails.env.test?

@@ -37,6 +37,8 @@
     <td class="presentation"><%= f.text_field :presentation, class: "form-control", required: true %></td>
   <% when "amenity" %>
     <td class="presentation"><%= f.text_field :presentation, class: "form-control", required: true %></td>
+  <% when "vehicle" %>
+    <td class="presentation"><%= f.text_field :presentation, class: "form-control", required: true %></td>
   <% end %>
 
   <td class="actions">

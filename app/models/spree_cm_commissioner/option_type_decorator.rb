@@ -1,10 +1,10 @@
 module SpreeCmCommissioner
   module OptionTypeDecorator
-    ATTRIBUTE_TYPES = %w[float integer string boolean date coordinate state_selection amenity].freeze
+    ATTRIBUTE_TYPES = %w[float integer string boolean date coordinate state_selection amenity departure_time duration vehicle].freeze
 
     def self.prepended(base)
       base.include SpreeCmCommissioner::ParameterizeName
-      base.enum kind: %i[variant product vendor vehicle_type]
+      base.enum kind: %i[variant product vendor vehicle_type transit]
 
       base.validates :name, presence: true
       base.validates :attr_type, inclusion: { in: ATTRIBUTE_TYPES }
@@ -16,6 +16,12 @@ module SpreeCmCommissioner
 
       def base.amenities
         Spree::OptionType.where(kind: 'vehicle_type', name: 'amenities', presentation: 'Amenities', attr_type: 'amenity').first_or_create
+      end
+
+      def base.vehicle
+        Spree::OptionType.where(presentation: 'vehicle', attr_type: 'vehicle', kind: 'variant',
+                                name: 'vehicle'
+        ).first_or_create
       end
     end
 

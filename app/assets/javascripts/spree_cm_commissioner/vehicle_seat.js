@@ -4,7 +4,7 @@ const VehcileSeatLayoutHandler = {
       this.row = row;
       this.column = column;
       this.label = label;
-      this.layer = VehcileSeatLayoutHandler.layer;
+      this.layer = VehcileSeatLayoutHandler.layer.value;
       this.seat_type = 0;
       this.vehicle_type_id = VehcileSeatLayoutHandler.vehicleTypeId;
     }
@@ -18,6 +18,7 @@ const VehcileSeatLayoutHandler = {
     this.listenToLayer();
     this.listenToLabel();
     this.listenToSubmitButton();
+    this.typeSelect();
   },
 
   keyInit: function () {
@@ -64,6 +65,8 @@ const VehcileSeatLayoutHandler = {
     this.layer.addEventListener("input", () => {
       if (this.row.value > 0 && this.column.value > 0 && this.seats) {
         this.addLayer();
+        console.log("updated layer");
+        console.log(this.seats);
       }
     });
   },
@@ -148,9 +151,7 @@ const VehcileSeatLayoutHandler = {
       success: (response) => {
         this.seatsContainer.innerHTML = response;
         this.addSeatClickListener();
-        this.typeSelect();
         this.editLabel();
-        this.addLayer();
       },
       error: function (xhr, status, error) {
         show_flash("error", error);
@@ -213,6 +214,7 @@ const VehcileSeatLayoutHandler = {
       });
     });
   },
+
   editLabel: function () {
     let self = this;
     document.querySelectorAll(".seat-label").forEach((label) => {
@@ -225,6 +227,7 @@ const VehcileSeatLayoutHandler = {
       });
     });
   },
+
   typeSelect: function () {
     document.getElementById("type").addEventListener("input", () => {
       this.seats[this.selectedRow][this.selectedColumn].seat_type = parseInt(

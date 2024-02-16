@@ -33,6 +33,27 @@ FactoryBot.define do
       end
     end
 
+    factory :route do
+      route_type {:automobile}
+      product_type { :transit }
+      transient do
+        departure_time {Spree::OptionType.find_by(attr_type: 'departure_time') || create(:departure_time, presentation: 'Departure Time') }
+        duration  {Spree::OptionType.find_by(attr_type: "duration") || create(:duration, presentation: 'Duration') }
+        vehicle_option_type {Spree::OptionType.vehicle}
+      end
+
+      before(:create) do |route, evaluator|
+        stock_location = create(:stock_location) unless Spree::StockLocation.any?
+        if route.stores.empty?
+          default_store = Spree::Store.default.persisted? ? Spree::Store.default : nil
+          store = default_store || create(:store)
+
+          route.stores << [store]
+        end
+        route.option_types = [evaluator.departure_time, evaluator.duration, evaluator.vehicle_option_type]
+      end
+    end
+
     factory :cm_subscribable_product do
       option_types { [
         create(:cm_option_type, :month),
