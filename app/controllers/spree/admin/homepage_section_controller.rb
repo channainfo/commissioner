@@ -2,6 +2,7 @@ module Spree
   module Admin
     class HomepageSectionController < Spree::Admin::ResourceController
       include SpreeCmCommissioner::Admin::HomepageSegmentHelper
+      helper_method :badge_class_for_segment
 
       def model_class
         SpreeCmCommissioner::HomepageSection

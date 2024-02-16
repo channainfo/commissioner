@@ -10,9 +10,7 @@ module SpreeCmCommissioner
 
     scope :active, -> { where(active: true) }
 
-    enum segment: SpreeCmCommissioner::HomepageSectionBitwise::BIT_SEGMENT.transform_keys(&:to_sym)
-
-    scope :filter_by_segment, -> (segment) { where(segment: SpreeCmCommissioner::HomepageSectionBitwise::BIT_SEGMENT[segment.to_sym]) }
+    enum segment: SpreeCmCommissioner::HomepageSectionBitwise::BIT_SEGMENT.keys
 
     def toggle_status!
       self.active = !active?

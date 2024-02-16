@@ -1,6 +1,9 @@
 module Spree
   module Admin
     class HomepageBackgroundController < Spree::Admin::ResourceController
+      include SpreeCmCommissioner::Admin::HomepageSegmentHelper
+      helper_method :badge_class_for_segment
+
       before_action :build_images, only: :create
       before_action :create_images, only: :update
 

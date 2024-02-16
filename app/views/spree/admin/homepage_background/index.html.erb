@@ -39,12 +39,8 @@
             </div>
           </td>
           <td>
-            <% SpreeCmCommissioner::HomepageSectionBitwise::BIT_SEGMENT.each do |segment_name, bit_value| %>
-              <% if homepage_background.segment.to_sym == segment_name %>
-                <%= content_tag(:strong, class: SpreeCmCommissioner::Admin::HomepageSegmentHelper.badge_class_for_segment(segment_name)) do %>
-                  <%= segment_name.to_s.capitalize %>
-                <% end %>
-              <% end %>
+            <%= content_tag(:strong, class: badge_class_for_segment(homepage_background.segment)) do %>
+              <%= homepage_background.segment.to_s.capitalize %>
             <% end %>
           </td>
           <td>

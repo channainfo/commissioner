@@ -12,7 +12,7 @@ module Spree
           end
 
           def resource
-            @resource ||= model_class.filter_by_segment(params[:segment] || :general).active.order(priority: :asc).first
+            @resource ||= model_class.active.where(segment: params[:homepage_id] || :general).first
           end
         end
       end
