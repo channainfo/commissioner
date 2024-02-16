@@ -202,7 +202,7 @@ Spree::Core::Engine.add_routes do
       resources :orders do
         resource :invoice, only: %i[show create], controller: :invoice do
           collection do
-            put :print
+            put :print_invoice_date
           end
         end
         resources :payments do

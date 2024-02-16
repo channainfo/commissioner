@@ -38,7 +38,7 @@
                   class: "badge badge-pill badge-#{order.payment_state}" %>
               <% end %>
             </td>
-            <td><%= order.payment_date&.to_date %></td>
+            <td><%= order.completed_at&.to_date %></td>
           </tr>
         <% end %>
       </tbody>

@@ -44,7 +44,7 @@
             <td><%= order.customer.fullname %></td>
             <td><%= order.customer&.intel_phone_number %></td>
             <td><%= order.display_total.to_html %></td>
-            <td><%= order.approved_at&.to_date %></td>
+            <td><%= order.invoice.invoice_issued_date&.to_date %></td>
             <td class="no-wrap">
               <% if order.payment_state %>
                 <%= link_to Spree.t("payment_states.#{order.payment_state}"),
