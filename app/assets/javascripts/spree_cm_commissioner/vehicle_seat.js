@@ -4,7 +4,7 @@ const VehcileSeatLayoutHandler = {
       this.row = row;
       this.column = column;
       this.label = label;
-      this.layer = VehcileSeatLayoutHandler.layer;
+      this.layer = VehcileSeatLayoutHandler.layer.value;
       this.seat_type = 0;
       this.vehicle_type_id = VehcileSeatLayoutHandler.vehicleTypeId;
     }
@@ -18,6 +18,7 @@ const VehcileSeatLayoutHandler = {
     this.listenToLayer();
     this.listenToLabel();
     this.listenToSubmitButton();
+    this.typeSelect();
   },
 
   keyInit: function () {
@@ -148,9 +149,7 @@ const VehcileSeatLayoutHandler = {
       success: (response) => {
         this.seatsContainer.innerHTML = response;
         this.addSeatClickListener();
-        this.typeSelect();
         this.editLabel();
-        this.addLayer();
       },
       error: function (xhr, status, error) {
         show_flash("error", error);
