@@ -6,7 +6,8 @@ module SpreeCmCommissioner
       general: 0b00001,
       ticket: 0b00010,
       tour: 0b00100,
-      accommodation: 0b01000
+      accommodation: 0b01000,
+      things_to_do: 0b10000
     }.freeze
 
     BIT_SEGMENT.each do |segment, bit_value|

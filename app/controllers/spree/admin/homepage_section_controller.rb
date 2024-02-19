@@ -1,7 +1,7 @@
 module Spree
   module Admin
     class HomepageSectionController < Spree::Admin::ResourceController
-      include SpreeCmCommissioner::Admin::HomepageSegmentHelper
+      helper SpreeCmCommissioner::Admin::HomepageSegmentHelper
 
       def model_class
         SpreeCmCommissioner::HomepageSection
@@ -46,7 +46,7 @@ module Spree
 
       # overrided
       def permitted_resource_params
-        segment_value = calculate_segment_value(params[:spree_cm_commissioner_homepage_section])
+        segment_value = helpers.calculate_segment_value(params[:spree_cm_commissioner_homepage_section])
 
         params.require(:spree_cm_commissioner_homepage_section).permit(:title, :description, :active).merge(segment: segment_value)
       end
