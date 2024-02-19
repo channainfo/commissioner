@@ -34,7 +34,7 @@
             <td>
               <% SpreeCmCommissioner::HomepageSectionBitwise::BIT_SEGMENT.each do |segment_name, bit_value| %>
                 <% if homepage_section.segment & bit_value != 0 %>
-                  <%= content_tag(:strong, class: SpreeCmCommissioner::Admin::HomepageSegmentHelper.badge_class_for_segment(segment_name)) do %>
+                  <%= content_tag(:strong, class: badge_class_for_segment(segment_name)) do %>
                     <%= segment_name.to_s.capitalize %>
                   <% end %>
                 <% end %>

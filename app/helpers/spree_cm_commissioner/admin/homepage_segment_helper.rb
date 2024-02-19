@@ -1,7 +1,7 @@
 module SpreeCmCommissioner
   module Admin
     module HomepageSegmentHelper
-      def self.badge_class_for_segment(segment_name)
+      def badge_class_for_segment(segment_name)
         case segment_name.to_sym
         when :general
           'badge badge-primary text-uppercase'

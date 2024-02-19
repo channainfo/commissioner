@@ -16,7 +16,7 @@
           </th>
           <th><%= Spree.t(:app_image) %></th>
           <th><%= Spree.t(:web_image) %></th>
-          <th><%= Spree.t(:created_at) %></th>
+          <th><%= Spree.t(:segment) %></th>
           <th><%= Spree.t(:active) %></th>
           <th></th>
         </tr>
@@ -39,7 +39,9 @@
             </div>
           </td>
           <td>
-            <%= pretty_time(homepage_background.created_at) %>
+            <%= content_tag(:strong, class: badge_class_for_segment(homepage_background.segment)) do %>
+              <%= homepage_background.segment.to_s.capitalize %>
+            <% end %>
           </td>
           <td>
             <%= active_badge(homepage_background.active?) %>
