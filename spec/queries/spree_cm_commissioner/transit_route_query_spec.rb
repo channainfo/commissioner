@@ -110,7 +110,7 @@ let!(:tomorrow) {today + 1.day}
 
   describe"#trips" do
     context "display table" do
-      let(:records) {described_class.new(origin_id: phnom_penh, destination_id: siem_reap, date: tomorrow)}
+      let(:records) {described_class.new(origin_id: phnom_penh, destination_id: siem_reap, date: today)}
       it "return trips table" do
         # result =  SpreeCmCommissioner::TransitRouteQuery.call(origin_id: phnom_penh, destination_id: siem_reap, date: today)
         # p result.map(&:attributes)
@@ -123,6 +123,10 @@ let!(:tomorrow) {today + 1.day}
         end
 
         puts table
+        p "" * 80
+        p records.call.explain
+        p "" * 80
+      # p records.total_sold.explain
       end
     end
     context"trip from phnom-penh to siem-reap by vet_airbus" do

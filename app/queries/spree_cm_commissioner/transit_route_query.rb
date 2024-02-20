@@ -31,14 +31,16 @@ module SpreeCmCommissioner
                              .joins('INNER JOIN spree_option_value_variants ON spree_option_value_variants.variant_id = spree_variants.id')
                              .joins('INNER JOIN spree_option_values ON spree_option_values.id = spree_option_value_variants.option_value_id')
                              .joins('INNER JOIN spree_option_types ON spree_option_types.id = spree_option_values.option_type_id')
-                             .joins('INNER JOIN cm_vehicles ON cm_vehicles.id::text = spree_option_values.name')
+                             .joins('INNER JOIN cm_vehicles ON cm_vehicles.id = spree_option_values.name::integer')
                              .joins('INNER JOIN spree_vendors ON spree_vendors.id = spree_variants.vendor_id')
                              .joins('INNER JOIN spree_taxons origin on origin.id = routes.origin_id')
                              .joins('INNER JOIN spree_taxons destination on destination.id = routes.destination_id')
                              .joins("LEFT JOIN (#{total_sold.to_sql}) ts ON spree_variants.id = ts.trip_id")
                              .where(spree_option_types: { attr_type: 'vehicle' })
-                             .where(routes: { origin_id: origin_id, destination_id: destination_id })
+                             .order(trip_id: :asc)
 
+      # TODO: migrat to variant attr_type orign and destination
+      result = result.where(routes: { origin_id: origin_id, destination_id: destination_id }) # TODO: migrate to variant
       result = result.where(vendor_id: vendor_id) if vendor_id.present?
       result
     end
