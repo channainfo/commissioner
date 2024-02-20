@@ -56,10 +56,12 @@ module SpreeCmCommissioner
 
       notification = recipient.notifications.where(options).first_or_initialize
 
-      return notification if notification.persisted?
-
-      notification.assign_attributes(attributes)
-      notification.save!
+      if notification.persisted?
+        notification.update(attributes)
+      else
+        notification.assign_attributes(attributes)
+        notification.save!
+      end
 
       notification
     end
