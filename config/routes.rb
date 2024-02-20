@@ -288,7 +288,7 @@ Spree::Core::Engine.add_routes do
       namespace :operator do
         resources :line_items, only: %i[index show]
         resources :check_ins, only: %i[index create]
-        resource :check_in_bulks, only: %i[index create]
+        resource :check_in_bulks, only: %i[show create]
         resources :dashboard_crew_events, only: %i[index]
         resources :taxons do
           resource :event_ticket_aggregators, only: %i[show]

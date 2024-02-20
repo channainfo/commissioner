@@ -3,10 +3,10 @@ module Spree
     module V2
       module Operator
         class CheckInsController < ::Spree::Api::V2::ResourceController
-          before_action :require_spree_current_user, only: %i[index create]
+          before_action :require_spree_current_user, only: [:create]
 
           def create
-            spree_authorize! :create, SpreeCmCommissioner::CheckIn
+            spree_authorize! :create, model_class
 
             guest_ids = [params[:guest_id]]
             context = SpreeCmCommissioner::CheckInBulkCreator.call(

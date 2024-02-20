@@ -5,6 +5,17 @@ module Spree
         class CheckInBulksController < ::Spree::Api::V2::ResourceController
           before_action :require_spree_current_user, only: [:create]
 
+          def show
+            spree_authorize! :read, model_class
+
+            render_serialized_payload(200) do
+              resource_serializer.new(
+                SpreeCmCommissioner::CheckIn.where(event_id: filter_param),
+                { include: resource_includes }
+              ).serializable_hash
+            end
+          end
+
           def create
             spree_authorize! :create, SpreeCmCommissioner::CheckIn
 
@@ -26,6 +37,10 @@ module Spree
           end
 
           private
+
+          def filter_param
+            params[:event_id]
+          end
 
           def model_class
             SpreeCmCommissioner::CheckIn
