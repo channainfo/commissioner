@@ -6,7 +6,7 @@ module Spree
           before_action :require_spree_current_user, only: [:create]
 
           def create
-            spree_authorize! :create, SpreeCmCommissioner::CheckIn
+            spree_authorize! :create, model_class
 
             guest_ids = params[:guest_ids]
             context = SpreeCmCommissioner::CheckInBulkCreator.call(

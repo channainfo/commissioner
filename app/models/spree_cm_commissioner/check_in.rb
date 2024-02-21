@@ -9,7 +9,9 @@ module SpreeCmCommissioner
 
     belongs_to :guest, class_name: 'SpreeCmCommissioner::Guest'
     belongs_to :check_in_by, class_name: 'Spree::User'
-    belongs_to :line_item, class_name: 'Spree::LineItem'
+    has_one :line_item, class_name: 'Spree::LineItem', through: :guest
+
+    belongs_to :checkinable, polymorphic: true
 
     validates :guest_id, uniqueness: true
   end
