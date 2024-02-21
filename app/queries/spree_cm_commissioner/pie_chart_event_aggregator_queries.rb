@@ -52,35 +52,44 @@ module SpreeCmCommissioner
 
     def participation_pie_chart
       base_joins
-        .select('spree_products.id AS product_id, COUNT(DISTINCT cm_check_ins.id) AS checked_in_ticket, COUNT(*) AS total_ticket')
-        .group('spree_products.id')
+        .select("CASE
+                   WHEN cm_check_ins.id IS NOT NULL THEN 'show'
+                   ELSE 'no_show'
+                 END AS name,
+                 COUNT(*) AS total"
+               )
+        .group('CASE WHEN cm_check_ins.id IS NOT NULL THEN \'show\' ELSE \'no_show\' END')
         .map do |record|
-          record.slice(:product_id, :checked_in_ticket, :total_ticket)
+          record.slice(:name, :total)
         end
     end
 
     def gender_pie_chart
       base_joins
         .select("CASE
-                  WHEN cm_guests.gender = 0 THEN 'other'
-                  WHEN cm_guests.gender = 1 THEN 'male'
-                  WHEN cm_guests.gender = 2 THEN 'female'
+                    WHEN cm_guests.gender = 0 THEN 'other'
+                    WHEN cm_guests.gender = 1 THEN 'male'
+                    WHEN cm_guests.gender = 2 THEN 'female'
                   ELSE NULL
-                END AS genders, COUNT(DISTINCT cm_guests.id) AS gender_count"
+                END AS name, COUNT(DISTINCT cm_guests.id) AS total"
                )
-        .group('genders')
+        .group('cm_guests.gender')
         .map do |record|
-          record.slice(:genders, :gender_count)
+          record.slice(:name, :total)
         end
     end
 
     def entry_type_pie_chart
       base_joins
-        .select("spree_products.id AS product_id, CASE WHEN cm_check_ins.entry_type = 0 THEN 'normal' WHEN cm_check_ins.entry_type = 1 THEN 'VIP' ELSE NULL END AS entry_types, COUNT(cm_check_ins.id) AS check_in_count") # rubocop:disable Layout/LineLength
+        .select(" CASE  WHEN cm_check_ins.entry_type = 0 THEN 'normal'
+                        WHEN cm_check_ins.entry_type = 1 THEN 'VIP'
+                        ELSE NULL END AS name,
+                  COUNT(cm_check_ins.id) AS total"
+               )
         .where.not(cm_check_ins: { id: nil })
-        .group('spree_products.id, entry_types')
+        .group('cm_check_ins.entry_type')
         .map do |record|
-          record.slice(:product_id, :entry_types, :check_in_count)
+          record.slice(:name, :total)
         end
     end
   end
