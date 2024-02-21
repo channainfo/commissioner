@@ -9,21 +9,35 @@ module SpreeCmCommissioner
       @date = date
     end
 
-    # def trips
-    #   result = matching_trips
-    #   apply_filter(result)
-    # end
-
     def call
+      transit_trip_blueprint = Struct.new(:trip_id, :vendor_id, :vendor_name,
+                                          :route_name, :origin, :destination,
+                                          :option_values, :total_sold, :total_seats, :remaining_seats
+      )
+      result = trips_info
+      trip_ids = result.pluck(:trip_id)
+      variants = Spree::Variant.where(id: trip_ids).includes(:option_values).index_by(&:id)
+      result.map do |r|
+        variant = variants[r.trip_id]
+        trip_instance = transit_trip_blueprint.new(r['trip_id'], r['vendor_id'], r['vendor_name'],
+                                                   r['route_name'], r['origin'], r['destination'],
+                                                   r['option_values'], r['total_sold'], r['total_seats'], r['remaining_seats']
+        )
+        trip_instance['option_values'] = (variant.option_values.to_h { |ov| [ov.option_type.attr_type, ov.name] })
+        trip_instance
+      end
+    end
+
+    def trips_info
       result = Spree::Variant.select('spree_variants.id as trip_id,
                               spree_vendors.id as vendor_id,
                               spree_vendors.name as vendor_name,
                               routes.name as route_name,
                               origin.name as origin,
                               destination.name as destination,
-                              spree_option_values.name as vehicle_id,
-                              cm_vehicles.number_of_seats as total_seats,
+                              spree_option_values.name as option_values,
                               COALESCE(ts.total_sold, 0) as total_sold,
+                              cm_vehicles.number_of_seats as total_seats,
                               (cm_vehicles.number_of_seats - COALESCE(ts.total_sold, 0))  as remaining_seats
                             '
                                     )
@@ -35,21 +49,20 @@ module SpreeCmCommissioner
                              .joins('INNER JOIN spree_vendors ON spree_vendors.id = spree_variants.vendor_id')
                              .joins('INNER JOIN spree_taxons origin on origin.id = routes.origin_id')
                              .joins('INNER JOIN spree_taxons destination on destination.id = routes.destination_id')
-                             .joins("LEFT JOIN (#{total_sold.to_sql}) ts ON spree_variants.id = ts.trip_id")
+                             .joins("LEFT JOIN (#{total_sold_sql}) ts ON spree_variants.id = ts.trip_id")
                              .where(spree_option_types: { attr_type: 'vehicle' })
-                             .order(trip_id: :asc)
 
       # TODO: migrat to variant attr_type orign and destination
-      result = result.where(routes: { origin_id: origin_id, destination_id: destination_id }) # TODO: migrate to variant
+      result = result.where(routes: { origin_id: origin_id, destination_id: destination_id })
       result = result.where(vendor_id: vendor_id) if vendor_id.present?
       result
     end
 
-    def total_sold
+    def total_sold_sql
       Spree::Variant.select('spree_variants.id as trip_id, SUM(spree_line_items.quantity) as total_sold')
                     .joins('INNER JOIN spree_line_items ON spree_line_items.variant_id = spree_variants.id')
                     .where(spree_line_items: { date: date })
-                    .group('spree_variants.id')
+                    .group('spree_variants.id').to_sql
     end
 
     # def matching_trips

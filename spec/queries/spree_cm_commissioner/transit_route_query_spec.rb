@@ -112,20 +112,24 @@ let!(:tomorrow) {today + 1.day}
     context "display table" do
       let(:records) {described_class.new(origin_id: phnom_penh, destination_id: siem_reap, date: today)}
       it "return trips table" do
-        # result =  SpreeCmCommissioner::TransitRouteQuery.call(origin_id: phnom_penh, destination_id: siem_reap, date: today)
-        # p result.map(&:attributes)
-        result =  records.call.to_a
-        table = Terminal::Table.new :headings => ['Trip ID', 'Name', 'Origin', 'Destination', 'Vehicle ID', 'Vendor', 'Total Seat', 'Total Sold', 'Remaining Seats']
+        result =  records.call
+        table = Terminal::Table.new :headings => ['Trip ID', 'Name', 'Vendor',
+                                                  'Origin', 'Destination', 'Departure Time',
+                                                  'Duration', 'Vehicle ID' , 'Total Seat',
+                                                  'Total Sold', 'Remaining Seats']
 
         result.each do |r|
-          table.add_row [r["trip_id"], r["route_name"], r["origin"], r["destination"], r["vehicle_id"], r["vendor_name"], r["total_seats"], r['total_sold'], r['remaining_seats']]
+          table.add_row [r["trip_id"], r["route_name"], r["vendor_name"],
+                        r["origin"], r["destination"], r['option_values']['departure_time'],
+                        r['option_values']['duration'], r['option_values']['vehicle'], r["total_seats"], r['total_sold'], r['remaining_seats']]
           table.add_separator unless r.equal?(result.last) # Avoid adding separator after the last row
         end
 
         puts table
-        p "" * 80
-        p records.call.explain
-        p "" * 80
+
+        # p "" * 80
+        # p records.call.explain
+        # p "" * 80
       # p records.total_sold.explain
       end
     end
