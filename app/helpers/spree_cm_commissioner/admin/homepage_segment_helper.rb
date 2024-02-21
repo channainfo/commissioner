@@ -11,6 +11,8 @@ module SpreeCmCommissioner
           'badge badge-info text-uppercase'
         when :accommodation
           'badge badge-warning text-uppercase'
+        when :things_to_do
+          'badge badge-success text-uppercase'
         else
           'badge'
         end
