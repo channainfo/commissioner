@@ -12,6 +12,11 @@ module SpreeCmCommissioner
     has_one :line_item, class_name: 'Spree::LineItem', through: :guest
 
     belongs_to :checkinable, polymorphic: true
+    before_validation :set_entry_type, on: :create
+
+    def set_entry_type
+      self.entry_type = guest.entry_type
+    end
 
     validates :guest_id, uniqueness: true
   end

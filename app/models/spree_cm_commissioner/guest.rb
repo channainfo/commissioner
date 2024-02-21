@@ -9,8 +9,15 @@ module SpreeCmCommissioner
     belongs_to :line_item, class_name: 'Spree::LineItem', optional: false
     belongs_to :occupation, class_name: 'Spree::Taxon'
 
+    belongs_to :event, class_name: 'Spree::Taxon'
+
     has_one :id_card, class_name: 'SpreeCmCommissioner::IdCard', dependent: :destroy
     has_one :check_in, class_name: 'SpreeCmCommissioner::CheckIn'
+
+    before_validation :set_event_id, on: :create
+
+    self.whitelisted_ransackable_associations = ['id_card']
+    self.whitelisted_ransackable_attributes = %w[first_name last_name gender occupation_id card_type]
 
     # no validation for each field as we allow user to save data to model partially.
     def allowed_checkout?
@@ -25,6 +32,14 @@ module SpreeCmCommissioner
       return id_card.present? && id_card.allowed_checkout? if field == :guest_id_card
 
       false
+    end
+
+    def set_event_id
+      self.event_id = line_item.associated_event&.id
+    end
+
+    def full_name
+      [first_name, last_name].compact_blank.join(' ')
     end
 
     def generate_svg_qr

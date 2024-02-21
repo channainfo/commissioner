@@ -8,10 +8,10 @@
 <% end %>
 
 <% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:add_new_operator), new_admin_taxonomy_taxon_user_taxon_path, class: "btn-success", icon: 'add.svg', id: 'admin_new_operator_link' %>
+  <%= button_link_to Spree.t(:add_new_event_roles), new_admin_taxonomy_taxon_user_taxon_path, class: "btn-success", icon: 'add.svg', id: 'admin_new_operator_link' %>
 <% end if can? :create,  SpreeCmCommissioner::UserTaxon %>
 
-<%= render partial: 'spree/admin/shared/taxon_tabs', locals: { current: :operators } %>
+<%= render partial: 'spree/admin/shared/taxon_tabs', locals: { current: :event_roles } %>
 
 <% if @user_taxons.any? %>
   <div class="table-responsive border rounded bg-white mb-3">

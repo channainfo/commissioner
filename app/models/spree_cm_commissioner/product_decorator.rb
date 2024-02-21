@@ -48,6 +48,10 @@ module SpreeCmCommissioner
       errors.add(:taxons, 'Event Taxon can\'t not be more than 1') if taxons.event.size > 1
       errors.add(:taxons, 'Must add event date to taxon') if taxons.event.first.from_date.nil? || taxons.event.first.to_date.nil?
     end
+
+    def associated_event
+      taxons.event.first&.parent
+    end
   end
 end
 

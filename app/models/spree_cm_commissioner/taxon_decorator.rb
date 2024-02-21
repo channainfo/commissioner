@@ -25,10 +25,15 @@ module SpreeCmCommissioner
 
       base.validates_associated :category_icon
       base.before_save :set_kind
+      base.before_save :set_slug
     end
 
     def set_kind
       self.kind = taxonomy.kind
+    end
+
+    def set_slug
+      self.slug = permalink&.parameterize
     end
   end
 end

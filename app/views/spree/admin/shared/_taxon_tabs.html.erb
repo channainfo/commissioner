@@ -22,11 +22,8 @@
 
   <%= content_tag :li, class: 'nav-item' do %>
     <%= link_to_with_icon 'user.svg',
-      Spree.t(:operators),
+      Spree.t(:event_roles),
       admin_taxonomy_taxon_user_taxons_url(@taxonomy, @taxon.id),
-      class: "nav-link #{'active' if current == :operators}" %>
+      class: "nav-link #{'active' if current == :event_roles}" %>
   <% end if can?(:admin, SpreeCmCommissioner::UserTaxon) %>
-
-
-
 <% end %>

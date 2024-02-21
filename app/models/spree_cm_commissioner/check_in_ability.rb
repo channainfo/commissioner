@@ -4,9 +4,10 @@ module SpreeCmCommissioner
 
     def initialize(user)
       if user.has_spree_role?('operator')
-        can :create, CheckIn
+        can :manage, CheckIn
       elsif user.has_spree_role?('organizer')
         can :manage, CheckIn
+        can :manage, Guest
       else
         cannot :manage, CheckIn
       end
