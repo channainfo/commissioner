@@ -4,7 +4,9 @@ module SpreeCmCommissioner
       base.include SpreeCmCommissioner::TaxonomyKind
 
       def base.place
-        Spree::Taxonomy.find_or_create_by(name: 'Place', kind: 'transit', store: Spree::Store.default)
+        ActiveRecord::Base.connected_to(role: :writing) do
+          Spree::Taxonomy.find_or_create_by(name: 'Place', kind: 'transit', store: Spree::Store.default)
+        end
       end
     end
   end

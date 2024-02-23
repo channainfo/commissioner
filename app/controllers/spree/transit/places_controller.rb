@@ -5,9 +5,7 @@ module Spree
       helper 'spree/transit/sortable_tree'
 
       def load_place_taxonomy
-        ActiveRecord::Base.connected_to(role: :writing) do
-          @place_taxonomy = Spree::Taxonomy.place
-        end
+        @place_taxonomy = Spree::Taxonomy.place
       end
 
       before_action :set_permalink_part, only: [:edit]
