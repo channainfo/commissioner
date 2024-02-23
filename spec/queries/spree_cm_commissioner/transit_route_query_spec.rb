@@ -15,6 +15,7 @@ RSpec.describe SpreeCmCommissioner::TransitRouteQuery do
                         :with_seats,
                         code: "AIRBUS",
                         vendor: vet_airbus,
+
                         row: 4,
                         column: 4,)}
 
@@ -22,8 +23,8 @@ RSpec.describe SpreeCmCommissioner::TransitRouteQuery do
                         :with_seats,
                         code: "minivan",
                         vendor: larryta,
-                        row: 4,
-                        column: 4,)}
+                        row: 5,
+                        column: 5,)}
 
   let!(:bus1) {create(:vehicle, vehicle_type: airbus, vendor: vet_airbus)}
   let!(:bus2) {create(:vehicle, vehicle_type: airbus, vendor_id: vet_airbus)}
@@ -35,19 +36,21 @@ RSpec.describe SpreeCmCommissioner::TransitRouteQuery do
                                                 short_name:"PP-SR",
                                                 vendor: vet_airbus,
                                                 origin_id: phnom_penh.id,
-                                                destination_id: siem_reap.id) }
+                                                destination_id: siem_reap.id,
+                                                vehicle_id: bus1.id) }
 
   let!(:phnom_penh_to_siem_reap_by_larryta) { create(:route,
                                                     name: 'Phnom Penh to Siem Reap by Larryta',
                                                     short_name:"PP-SR",
                                                     vendor: larryta,
                                                     origin_id: phnom_penh.id,
-                                                    destination_id: siem_reap.id) }
+                                                    destination_id: siem_reap.id,
+                                                    vehicle_id: minivan1.id) }
 
   let!(:vet_pp_to_sr_trip_1) {create(:trip,
                                   route: phnom_penh_to_siem_reap_by_vet,
-                                  sku: 'VET-PP-SR-13:00-6',
-                                  departure_time: '13:00',
+                                  sku: 'VET-PP-SR-10:00-6',
+                                  departure_time: '10:00',
                                   duration: '6',
                                   vehicle: bus1)}
 
@@ -65,8 +68,8 @@ RSpec.describe SpreeCmCommissioner::TransitRouteQuery do
                                         vehicle: minivan1)}
   let!(:larryta_pp_to_sr_trip_2) {create(:trip,
                                         route: phnom_penh_to_siem_reap_by_larryta,
-                                        sku: 'LTA-PP-SR-14:00-7',
-                                        departure_time: '14:00',
+                                        sku: 'LTA-PP-SR-20:00-7',
+                                        departure_time: '20:00',
                                         duration: '7',
                                         vehicle: minivan2)}
 #date
@@ -108,20 +111,21 @@ let!(:tomorrow) {today + 1.day}
 
 
 
-  describe"#trips" do
+  describe"#call" do
     context "display table" do
       let(:records) {described_class.new(origin_id: phnom_penh, destination_id: siem_reap, date: today)}
       it "return trips table" do
         result =  records.call
         table = Terminal::Table.new :headings => ['Trip ID', 'Name', 'Vendor',
-                                                  'Origin', 'Destination', 'Departure Time',
-                                                  'Duration', 'Vehicle ID' , 'Total Seat',
-                                                  'Total Sold', 'Remaining Seats']
+                                                  'Origin', 'Destination',
+                                                   'Vehicle ID' , 'Total Seat',
+                                                  'Total Sold', 'Remaining Seats', 'Attr Type', 'Vehicle Option Type', 'Duration', 'Departure Time']
 
         result.each do |r|
           table.add_row [r["trip_id"], r["route_name"], r["vendor_name"],
-                        r["origin"], r["destination"], r['option_values']['departure_time'],
-                        r['option_values']['duration'], r['option_values']['vehicle'], r["total_seats"], r['total_sold'], r['remaining_seats']]
+                        r["origin"], r["destination"], r['option_values']['vehicle'], r["total_seats"], r['total_sold'],
+                        r['remaining_seats'], r['attr_type'], r['option_type'],r['option_values']['duration'],
+                        r['option_values']['departure_time']]
           table.add_separator unless r.equal?(result.last) # Avoid adding separator after the last row
         end
 
@@ -130,82 +134,29 @@ let!(:tomorrow) {today + 1.day}
         # p "" * 80
         # p records.call.explain
         # p "" * 80
-      # p records.total_sold.explain
-      end
-    end
-    context"trip from phnom-penh to siem-reap by vet_airbus" do
-      let(:records) {described_class.new(origin_id: phnom_penh.id, destination_id: siem_reap.id, date: today, vendor_id: vet_airbus)}
-      it "return matching trips by vet_airbus" do
-        result = records.trips.to_a
-        expect(result.count).to eq(2)
-        expect(result.first["id"]).to eq(vet_pp_to_sr_trip_1.id)
-        expect(result.last["id"]).to eq(vet_pp_to_sr_trip_2.id)
-      end
-    end
-    context"trip from phnom-penh to siem-reap by larryta" do
-      let(:records) {described_class.new(origin_id: phnom_penh.id, destination_id: siem_reap.id, date: today, vendor_id: larryta)}
-      it "return matching trips by vet_airbus" do
-        result = records.trips.to_a
-        expect(result.count).to eq(2)
-        expect(result.first["id"]).to eq(larryta_pp_to_sr_trip_1.id)
-        expect(result.last["id"]).to eq(larryta_pp_to_sr_trip_2.id)
-      end
-    end
-    context"trip from phnom-penh to sihanoukville" do
-      let(:mekong_expess) {create(:vendor, name: 'Mekong Express', code: 'MEK')}
-      let(:records) {described_class.new(origin_id: phnom_penh.id, destination_id: siem_reap.id, date: today, vendor_id: mekong_expess)}
-      it "return no matching trips" do
-        result = records.trips.to_a
-        expect(result.count).to eq(0)
-        expect(result).to eq([])
+        # p records.total_sold.explain
       end
     end
   end
 
-  describe"#matching_trips" do
-    context"trip from phnom-penh to siem-reap " do
-      let(:records) {described_class.new(origin_id: phnom_penh.id, destination_id: siem_reap.id, date: today)}
-      it"return matching trips" do
-        result = records.matching_trips.to_a
-        expect(result.count).to eq(4)
-        expect(result[0]["id"]).to eq(vet_pp_to_sr_trip_1.id)
-        expect(result[1]["id"]).to eq(vet_pp_to_sr_trip_2.id)
-        expect(result[2]["id"]).to eq(larryta_pp_to_sr_trip_1.id)
-        expect(result[3]["id"]).to eq(larryta_pp_to_sr_trip_2.id)
-      end
-    end
-
-    context"trip from phnom-penh to sihanoukville" do
-      let(:records) {described_class.new(origin_id: phnom_penh.id, destination_id: sihanoukville.id, date: today)}
-      it "return no matching trips" do
-        result = records.matching_trips.to_a
-        expect(result.count).to eq(0)
-        expect(result).to eq([])
-      end
-    end
-  end
-
-  describe"#trip_remaining_seats" do
-    context "remaining seats for today" do
-      let(:records) {described_class.new(origin_id: phnom_penh.id, destination_id: siem_reap.id, date: today)}
-      it "return today's remaining seats" do
-          result = records.trip_remaining_seats.map { |trip| { "id" => trip.id, "remaining_seats" => trip.remaining_seats } }
-          expect(result).to include({"id"=>vet_pp_to_sr_trip_1.id, "remaining_seats"=>8})
-          expect(result).to include({"id"=>vet_pp_to_sr_trip_2.id, "remaining_seats"=>12})
-          expect(result).to include({"id"=>larryta_pp_to_sr_trip_1.id, "remaining_seats"=>14})
-          expect(result).to include({"id"=>larryta_pp_to_sr_trip_2.id, "remaining_seats"=>14})
+  describe"#process" do
+    context "display table" do
+      let(:records) {described_class.new(origin_id: phnom_penh, destination_id: siem_reap, date: today)}
+      it "return trips table" do
+        result =  records.trips_info
+        result = records.process(result)
+        table = Terminal::Table.new :headings => ['Trip ID', 'Name', 'Vendor',
+                                                  'Origin', 'Destination', 'Departure Time',
+                                                  'Duration', 'Vehicle ID' , 'Total Seat',
+                                                  'Total Sold', 'Remaining Seats']
+        result.each do |key, r|
+          table.add_row [r.trip_id, r.route_name, r.vendor_name,
+                          r.origin + " - " + r.origin_id.to_s, r.destination + " - " + r.destination_id.to_s, r.departure_time,
+                          r.duration, r.vehicle, r.total_seats, r.total_sold, r.remaining_seats]
+          table.add_separator unless key.equal?(result.keys.last) # Avoid adding separator after the last row
         end
-    end
-    context "remaining seats for tomorrow" do
-      let!(:tmr_order_1) {create(:transit_order, variant: vet_pp_to_sr_trip_1, seats: [arb_f1_seat,arb_f2_seat,arb_f4_seat], date: tomorrow)}
-      let!(:tmr_order_2) {create(:transit_order, variant: larryta_pp_to_sr_trip_1, seats: [mvn_f5_seat,mvn_f6_seat,mvn_f7_seat,mvn_f8_seat,mvn_f9_seat], date: tomorrow)}
-      let(:records) {described_class.new(origin_id: phnom_penh.id, destination_id: siem_reap.id, date: tomorrow)}
-      it "return tomorrow's remaining seats" do
-        result = records.trip_remaining_seats.map { |trip| { "id" => trip.id, "remaining_seats" => trip.remaining_seats } }
-        expect(result).to include({"id"=>vet_pp_to_sr_trip_1.id, "remaining_seats"=>13})
-        expect(result).to include({"id"=>vet_pp_to_sr_trip_2.id, "remaining_seats"=>16})
-        expect(result).to include({"id"=>larryta_pp_to_sr_trip_1.id, "remaining_seats"=>11})
-        expect(result).to include({"id"=>larryta_pp_to_sr_trip_2.id, "remaining_seats"=>16})
+
+        puts table
       end
     end
   end

@@ -9,6 +9,7 @@ require 'spree_cm_commissioner/engine'
 require 'spree_cm_commissioner/version'
 require 'spree_cm_commissioner/passenger_option'
 require 'spree_cm_commissioner/calendar_event'
+require 'spree_cm_commissioner/transit_trip'
 
 require 'searchkick'
 require 'elasticsearch'
