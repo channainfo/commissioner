@@ -5,8 +5,14 @@ module Spree
         class CheckInsController < ::Spree::Api::V2::ResourceController
           before_action :require_spree_current_user, only: %i[index create]
 
+          def collection
+            @collection = SpreeCmCommissioner::CheckIn.where(checkinable: params[:taxon_id])
+
+            @collection = @collection.page(params[:page]).per(params[:per_page])
+          end
+
           def create
-            spree_authorize! :create, SpreeCmCommissioner::CheckIn
+            spree_authorize! :create, model_class
 
             guest_ids = [params[:guest_id]]
             context = SpreeCmCommissioner::CheckInBulkCreator.call(

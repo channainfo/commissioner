@@ -13,6 +13,7 @@ module SpreeCmCommissioner
       base.has_many :user_events, class_name: 'SpreeCmCommissioner::UserEvent'
       base.has_many :users, through: :user_events, class_name: Spree.user_class.to_s
       base.has_many :products, through: :classifications, class_name: 'Spree::Product'
+      base.has_many :guests, as: :checkinable, class_name: 'SpreeCmCommissioner::Guest', dependent: :nullify
 
       base.has_one :category_icon, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::TaxonCategoryIcon'
 

@@ -5,8 +5,6 @@ module SpreeCmCommissioner
         set_type :check_in
 
         attributes :guest_id,
-                   :line_item_id,
-                   :order_id,
                    :verification_state,
                    :check_in_type,
                    :entry_type,
