@@ -52,44 +52,47 @@ module SpreeCmCommissioner
 
     def participation_pie_chart
       base_joins
-        .select("CASE
+        .select(" spree_products.id AS product_id,
+                  CASE
                    WHEN cm_check_ins.id IS NOT NULL THEN 'show'
                    ELSE 'no_show'
                  END AS name,
                  COUNT(*) AS total"
                )
-        .group('CASE WHEN cm_check_ins.id IS NOT NULL THEN \'show\' ELSE \'no_show\' END')
+        .group('spree_products.id, CASE WHEN cm_check_ins.id IS NOT NULL THEN \'show\' ELSE \'no_show\' END')
         .map do |record|
-          record.slice(:name, :total)
+          record.slice(:product_id, :name, :total)
         end
     end
 
     def gender_pie_chart
       base_joins
-        .select("CASE
+        .select(" spree_products.id AS product_id,
+                  CASE
                     WHEN cm_guests.gender = 0 THEN 'other'
                     WHEN cm_guests.gender = 1 THEN 'male'
                     WHEN cm_guests.gender = 2 THEN 'female'
                   ELSE NULL
                 END AS name, COUNT(DISTINCT cm_guests.id) AS total"
                )
-        .group('cm_guests.gender')
+        .group('spree_products.id, cm_guests.gender')
         .map do |record|
-          record.slice(:name, :total)
+          record.slice(:product_id, :name, :total)
         end
     end
 
     def entry_type_pie_chart
       base_joins
-        .select(" CASE  WHEN cm_check_ins.entry_type = 0 THEN 'normal'
+        .select(" spree_products.id AS product_id,
+                  CASE  WHEN cm_check_ins.entry_type = 0 THEN 'normal'
                         WHEN cm_check_ins.entry_type = 1 THEN 'VIP'
                         ELSE NULL END AS name,
                   COUNT(cm_check_ins.id) AS total"
                )
         .where.not(cm_check_ins: { id: nil })
-        .group('cm_check_ins.entry_type')
+        .group('spree_products.id, cm_check_ins.entry_type')
         .map do |record|
-          record.slice(:name, :total)
+          record.slice(:product_id, :name, :total)
         end
     end
   end
