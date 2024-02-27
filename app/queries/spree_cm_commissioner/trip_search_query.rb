@@ -1,5 +1,5 @@
 module SpreeCmCommissioner
-  class TransitRouteQuery
+  class TripSearchQuery
     attr_reader :origin_id, :destination_id, :vendor_id, :date
 
     def initialize(origin_id:, destination_id:, date:, vendor_id: nil)
@@ -10,23 +10,23 @@ module SpreeCmCommissioner
     end
 
     def call
-      transit_trip_blueprint = Struct.new(:trip_id, :vendor_id, :vendor_name,
-                                          :route_name, :origin, :destination,
-                                          :option_values, :total_sold, :total_seats, :remaining_seats, :attr_type, :option_type
-      )
-      result = trips_info
-      trip_ids = result.pluck(:trip_id)
-      variants = Spree::Variant.where(id: trip_ids).includes(:option_values).index_by(&:id)
-      result.map do |r|
-        variant = variants[r.trip_id]
-        trip_instance = transit_trip_blueprint.new(r['trip_id'], r['vendor_id'], r['vendor_name'],
-                                                   r['route_name'], r['origin'], r['destination'],
-                                                   r['option_values'], r['total_sold'], r['total_seats'],
-                                                   r['remaining_seats'], r['attr_type'], r['option_type']
-        )
-        trip_instance['option_values'] = (variant.option_values.to_h { |ov| [ov.option_type.attr_type, ov.name] })
-        trip_instance
-      end
+      # transit_trip_blueprint = Struct.new(:trip_id, :vendor_id, :vendor_name,
+      #                                     :route_name, :origin, :destination,
+      #                                     :option_value, :total_sold, :total_seats, :remaining_seats, :attr_type
+      # )
+      # result = trips_info
+      # trip_ids = result.pluck(:trip_id)
+      # variants = Spree::Variant.where(id: trip_ids).includes(:option_values).index_by(&:id)
+      # result.map do |r|
+      #   variant = variants[r.trip_id]
+      #   trip_instance = transit_trip_blueprint.new(r['trip_id'], r['vendor_id'], r['vendor_name'],
+      #                                              r['route_name'], r['origin'], r['destination'],
+      #                                              r['total_sold'], r['total_seats'],
+      #                                              r['remaining_seats'], r['attr_type']
+      #   )
+      #   trip_instance['option_values'] = (variant.option_values.to_h { |ov| [ov.option_type.attr_type, ov.name] })
+      #   trip_instance
+      # end
     end
 
     def trips_info
@@ -38,9 +38,8 @@ module SpreeCmCommissioner
                               origin.name as origin,
                               routes.destination_id as destination_id,
                               destination.name as destination,
-                              spree_option_values.name as option_values,
+                              spree_option_values.name as option_value,
                               spree_option_types.attr_type as attr_type,
-                              spree_option_types.name as option_type,
                               COALESCE(ts.total_sold, 0) as total_sold,
                               cm_vehicles.number_of_seats as total_seats,
                               (cm_vehicles.number_of_seats - COALESCE(ts.total_sold, 0))  as remaining_seats
@@ -63,9 +62,8 @@ module SpreeCmCommissioner
     end
 
     def process(result_set)
-      result = {}
-      result_set.group_by(&:trip_id).each do |trip_id, trips|
-        result[trip_id] = TransitTrip.new(
+      result_set.group_by(&:trip_id).map do |_trip_id, trips|
+        trip_result_options = {
           trip_id: trips.first.trip_id,
           vendor_id: trips.first.vendor_id,
           vendor_name: trips.first.vendor_name,
@@ -76,34 +74,12 @@ module SpreeCmCommissioner
           destination: trips.first.destination,
           total_sold: trips.first.total_sold,
           total_seats: trips.first.total_seats
-        )
-
+        }
         trips.each do |trip|
-          result[trip_id].set_option_value(attr_type: trip.attr_type, option_value: trip['option_values'])
+          trip_result_options[trip.attr_type] = trip['option_value']
         end
+        SpreeCmCommissioner::TripResult.new(trip_result_options)
       end
-      result
-
-      # result[trip_id] = {
-      #   trip_id: trips.first.trip_id,
-      #   vendor_id: trips.first.vendor_id,
-      #   vendor: trips.first.vendor_name,
-      #   name: trips.first.route_name,
-      #   origin_id: trips.first.origin_id,
-      #   origin: trips.first.origin,
-      #   destination_id: trips.first.destination_id,
-      #   destination: trips.first.destination,
-      #   total_sold: trips.first.total_sold,
-      #   total_seats: trips.first.total_seats,
-      #   remaining_seats: trips.first.remaining_seats
-      # }
-      # trip_data = Struct.new(:trip_id, :vendor_id, :vendor_name, :route_name, :origin, :destination, :option_values, :attr_type, :option_type,
-      #                        :total_sold, :total_seats, :remaining_seats
-      # )
-      # trip_ids = result.map(&:trip_id).uniq
-      # # trip_ids.map do |trip_id|
-
-      # # end
     end
 
     def total_sold_sql

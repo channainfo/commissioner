@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe SpreeCmCommissioner::TransitRouteQuery do
+RSpec.describe SpreeCmCommissioner::TripSearchQuery do
   #vendor
   let!(:vet_airbus) {create(:vendor, name: 'Vet Airbus', code:"VET")}
   let!(:larryta) {create(:vendor, name: 'Larryta', code: 'LTA')}
@@ -30,48 +30,76 @@ RSpec.describe SpreeCmCommissioner::TransitRouteQuery do
   let!(:bus2) {create(:vehicle, vehicle_type: airbus, vendor_id: vet_airbus)}
   let!(:minivan1) {create(:vehicle, vehicle_type: minivan, vendor: larryta)}
   let!(:minivan2) {create(:vehicle, vehicle_type: minivan, vendor: larryta)}
+
+  #option_type
+  let!(:duration) {create(:option_type, name: 'duration', presentation: 'Duration', attr_type: 'duration', kind: 'variant')}
+  let!(:departure_time) {create(:option_type, name: 'departure_time', presentation: 'Departure Time', attr_type: 'departure_time', kind: 'variant')}
+#option_value
+  let!(:dt_13) {create(:option_value, name: '13:00', presentation: '13:00', option_type: departure_time)}
+  let!(:dt_10) {create(:option_value, name: '10:00', presentation: '10:00', option_type: departure_time)}
+  let(:dt_20) {create(:option_value, name: '20:00', presentation: '20:00', option_type: departure_time)}
+  let(:duration_6) {create(:option_value, name: '6', presentation: '6', option_type: duration)}
+  let(:duration_5) {create(:option_value, name: '5', presentation: '5', option_type: duration)}
+  let(:duration_3) {create(:option_value, name: '3', presentation: '3', option_type: duration)}
+  let(:duration_7) {create(:option_value, name: '7', presentation: '7', option_type: duration)}
+
+
   #routes
   let!(:phnom_penh_to_siem_reap_by_vet) { create(:route,
+                                                :with_option_types,
                                                 name: 'Phnom Penh to Siem Reap by Vet Airbus',
                                                 short_name:"PP-SR",
                                                 vendor: vet_airbus,
                                                 origin_id: phnom_penh.id,
                                                 destination_id: siem_reap.id,
+                                                departure_time: departure_time,
+                                                duration: duration,
+                                                vehicle_id: Spree::OptionType.vehicle,
                                                 vehicle_id: bus1.id) }
 
   let!(:phnom_penh_to_siem_reap_by_larryta) { create(:route,
+                                                    :with_option_types,
                                                     name: 'Phnom Penh to Siem Reap by Larryta',
                                                     short_name:"PP-SR",
                                                     vendor: larryta,
                                                     origin_id: phnom_penh.id,
                                                     destination_id: siem_reap.id,
+                                                    departure_time: departure_time,
+                                                    duration: duration,
+                                                    vehicle_id: Spree::OptionType.vehicle,
                                                     vehicle_id: minivan1.id) }
 
   let!(:vet_pp_to_sr_trip_1) {create(:trip,
                                   route: phnom_penh_to_siem_reap_by_vet,
                                   sku: 'VET-PP-SR-10:00-6',
-                                  departure_time: '10:00',
-                                  duration: '6',
-                                  vehicle: bus1)}
+                                  departure_time: dt_10,
+                                  duration: duration_6,
+                                  vehicle_id: bus1.id
+                                  )}
 
   let!(:vet_pp_to_sr_trip_2) {create(:trip,
                                     route: phnom_penh_to_siem_reap_by_vet,
                                     sku: 'VET-PP-SR-13:00-5',
-                                    departure_time: '13:00',
-                                    duration: '5',
-                                    vehicle: bus2)}
+                                    departure_time: dt_13,
+                                    duration: duration_5,
+                                    vehicle_id: bus2.id
+                                    )}
+
   let!(:larryta_pp_to_sr_trip_1) {create(:trip,
                                         route: phnom_penh_to_siem_reap_by_larryta,
                                         sku: 'LTA-PP-SR-13:00-6',
-                                        departure_time: '13:00',
-                                        duration: '6',
-                                        vehicle: minivan1)}
+                                        departure_time: dt_13,
+                                        duration: duration_3,
+                                        vehicle_id: minivan1.id
+                                        )}
+
   let!(:larryta_pp_to_sr_trip_2) {create(:trip,
                                         route: phnom_penh_to_siem_reap_by_larryta,
                                         sku: 'LTA-PP-SR-20:00-7',
-                                        departure_time: '20:00',
-                                        duration: '7',
-                                        vehicle: minivan2)}
+                                        departure_time: dt_20,
+                                        duration: duration_7,
+                                        vehicle_id: minivan2.id
+                                        )}
 #date
 let!(:today) {Date.today}
 let!(:tomorrow) {today + 1.day}
@@ -111,49 +139,42 @@ let!(:tomorrow) {today + 1.day}
 
 
 
-  describe"#call" do
+  describe"#trip_info" do
     context "display table" do
       let(:records) {described_class.new(origin_id: phnom_penh, destination_id: siem_reap, date: today)}
       it "return trips table" do
-        result =  records.call
+        result =  records.trips_info
         table = Terminal::Table.new :headings => ['Trip ID', 'Name', 'Vendor',
-                                                  'Origin', 'Destination',
-                                                   'Vehicle ID' , 'Total Seat',
-                                                  'Total Sold', 'Remaining Seats', 'Attr Type', 'Vehicle Option Type', 'Duration', 'Departure Time']
+                                                  'Origin', 'Destination', 'Total Seat',
+                                                  'Total Sold', 'Remaining Seats', 'Attr Type', 'Option Value',]
 
         result.each do |r|
           table.add_row [r["trip_id"], r["route_name"], r["vendor_name"],
-                        r["origin"], r["destination"], r['option_values']['vehicle'], r["total_seats"], r['total_sold'],
-                        r['remaining_seats'], r['attr_type'], r['option_type'],r['option_values']['duration'],
-                        r['option_values']['departure_time']]
+                        r["origin"], r["destination"], r["total_seats"], r['total_sold'],
+                        r['remaining_seats'], r['attr_type'], r['option_value']]
           table.add_separator unless r.equal?(result.last) # Avoid adding separator after the last row
         end
 
         puts table
-
-        # p "" * 80
-        # p records.call.explain
-        # p "" * 80
-        # p records.total_sold.explain
       end
     end
   end
 
   describe"#process" do
     context "display table" do
-      let(:records) {described_class.new(origin_id: phnom_penh, destination_id: siem_reap, date: today)}
+      let(:result) {described_class.new(origin_id: phnom_penh, destination_id: siem_reap, date: today)}
       it "return trips table" do
-        result =  records.trips_info
-        result = records.process(result)
+        search_result =  result.trips_info
+        search_result = result.process(search_result)
         table = Terminal::Table.new :headings => ['Trip ID', 'Name', 'Vendor',
-                                                  'Origin', 'Destination', 'Departure Time',
+                                                  'Origin', 'Destination', 'Departure Time', 'Arrival Time',
                                                   'Duration', 'Vehicle ID' , 'Total Seat',
                                                   'Total Sold', 'Remaining Seats']
-        result.each do |key, r|
+        search_result.each do |r|
           table.add_row [r.trip_id, r.route_name, r.vendor_name,
                           r.origin + " - " + r.origin_id.to_s, r.destination + " - " + r.destination_id.to_s, r.departure_time,
-                          r.duration, r.vehicle, r.total_seats, r.total_sold, r.remaining_seats]
-          table.add_separator unless key.equal?(result.keys.last) # Avoid adding separator after the last row
+                          r.arrival_time, r.duration, r.vehicle_id, r.total_seats, r.total_sold, r.remaining_seats]
+          table.add_separator unless r.equal?(search_result.last) # Avoid adding separator after the last row
         end
 
         puts table
