@@ -12,11 +12,8 @@
   <div class="card-body">
     <%= form_with model: @object, url: { action: 'create' } do |f| %>
       <%= f.hidden_field :taxon_id, value: @taxon.id %>
-      <div class="form-group" data-hook="user">
-        <%= f.label :user_id, Spree.t('user') %>
-        <%= f.collection_select :user_id, Spree::User.all, :id, :email, { include_blank: Spree.t('match_choices.none') }, class: 'form-control' %>
-      </div>
       <fieldset data-hook="new_taxon_user">
+        <%= render partial: 'form', locals: { f: f } %>
         <%= render partial: 'spree/admin/shared/new_resource_links' %>
       </fieldset>
     <% end %>

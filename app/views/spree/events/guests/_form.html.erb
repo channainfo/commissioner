@@ -1,0 +1,58 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12 col-lg-6">
+            <%= f.field_container :first_name do %>
+              <%= f.label :first_name %>
+              <%= f.text_field :first_name, class: 'form-control', readonly: true %>
+            <% end %>
+          </div>
+          <div class="col-12 col-lg-6">
+            <%= f.field_container :last_name do %>
+              <%= f.label :last_name %>
+              <%= f.text_field :last_name, class: 'form-control', readonly: true %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 col-lg-6">
+            <%= f.label :gender, Spree.t(:gender) %>
+            <%= f.text_field :gender, class: 'form-control', value: @guest.gender.titleize, readonly: true %>
+          </div>
+
+          <div class="col-12 col-lg-6">
+            <%= f.label :occupation_id, Spree.t(:occupation) %>
+            <%= f.text_field :occupation_id, class: 'form-control', value: @guest.occupation.name, readonly: true %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 col-lg-6">
+            <%= f.label :id_card_card_type_eq, Spree.t(:card_type) %>
+            <%= f.text_field :id_card_card_type_eq, class: 'form-control', value: @guest.id_card.try(:card_type).titleize, readonly: true %>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-12 col-lg-6">
+            <%= f.field_container :entry_type do %>
+              <%= f.label :entry_type %>
+              <% SpreeCmCommissioner::CheckIn.entry_types.map do |k, v| %>
+                <div class="radio" data-id="<%= k.to_s %>">
+                  <label data-hook="entry_type_field">
+                    <%= f.radio_button :entry_type, v, class: "entry_types_radios" %>
+                    <%= k.to_s.capitalize %>
+                  </label>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
