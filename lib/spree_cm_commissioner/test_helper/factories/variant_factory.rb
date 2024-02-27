@@ -14,18 +14,12 @@ FactoryBot.define do
     transient do
       departure_time { "10:00" }
       duration { "1" }
-      vehicle_id { }
       route { }
     end
     before(:create) do |trip, evaluator|
       trip.product = evaluator.route
-      # option_value_1 = Spree::OptionValue.create( name: "#{evaluator.departure_time}", presentation: "#{evaluator.departure_time}")
 
-      # option_value_2 = Spree::OptionValue.create( name: "#{evaluator.duration}", presentation: "#{evaluator.duration}")
-
-      # option_value_3 = Spree::OptionValue.find_by( name: "#{evaluator.vehicle_id}")
-
-      trip.option_values = [evaluator.departure_time, evaluator.duration, Spree::OptionValue.find_by( name: "#{evaluator.vehicle_id}")]
+      trip.option_values = [evaluator.departure_time, evaluator.duration]
 
     end
     after(:create) do |trip, evaluator|
