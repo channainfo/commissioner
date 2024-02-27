@@ -65,6 +65,8 @@ const VehcileSeatLayoutHandler = {
     this.layer.addEventListener("input", () => {
       if (this.row.value > 0 && this.column.value > 0 && this.seats) {
         this.addLayer();
+        console.log("updated layer");
+        console.log(this.seats);
       }
     });
   },
@@ -212,6 +214,7 @@ const VehcileSeatLayoutHandler = {
       });
     });
   },
+
   editLabel: function () {
     let self = this;
     document.querySelectorAll(".seat-label").forEach((label) => {
@@ -224,6 +227,7 @@ const VehcileSeatLayoutHandler = {
       });
     });
   },
+
   typeSelect: function () {
     document.getElementById("type").addEventListener("input", () => {
       this.seats[this.selectedRow][this.selectedColumn].seat_type = parseInt(

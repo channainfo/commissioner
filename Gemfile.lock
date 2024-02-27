@@ -38,6 +38,7 @@ PATH
       activerecord_json_validator (~> 2.1, >= 2.1.3)
       aws-sdk-s3
       byebug
+      counter_culture (~> 3.2)
       dry-validation (~> 1.10)
       elasticsearch (~> 8.5)
       exception_notification
@@ -227,6 +228,9 @@ GEM
     console (1.23.2)
       fiber-annotation
       fiber-local
+    counter_culture (3.5.2)
+      activerecord (>= 4.2)
+      activesupport (>= 4.2)
     crack (0.4.5)
       rexml
     crass (1.0.6)
