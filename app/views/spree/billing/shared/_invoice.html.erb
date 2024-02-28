@@ -18,6 +18,9 @@
   @invoice_number = @invoice.invoice_number
   @customer_number = @customer.customer_number
   @customer_address = @order.billing_address&.address1
+
+  @account_name = @vendor.account_name
+  @account_number = @vendor.account_number
 %>
 
 
@@ -154,6 +157,10 @@
             </div>
             <div class="ml-auto  qrcode-container">
               <img src="<%= main_app.rails_blob_url(@current_vendor.payment_qrcode.attachment) %>" alt="qrcode" style="width: 150px;">
+              <div class="list-unstyled text-center">
+                <li><span><%= @account_name %></span></li>
+                <li><span><%= @account_number %></span></li>
+              </div>
             </div>
           </div>
             <div class="d-flex justify-content-between mt-4">
