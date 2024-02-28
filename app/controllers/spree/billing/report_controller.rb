@@ -15,12 +15,12 @@ module Spree
       end
 
       def paid
-        @search = Spree::Order.subscription.ransack(params[:q])
+        @search = Spree::Order.subscription.ransack(SpreeCmCommissioner::OrderParamsChecker.process_paid_params(params))
         @orders = @search.result.where(payment_state: 'paid').page(page).per(per_page)
       end
 
       def balance_due
-        @search = Spree::Order.subscription.ransack(params[:q])
+        @search = Spree::Order.subscription.ransack(SpreeCmCommissioner::OrderParamsChecker.process_balance_due_params(params))
         @orders = @search.result.where(payment_state: 'balance_due').page(page).per(per_page)
       end
 

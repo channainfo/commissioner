@@ -282,6 +282,11 @@ en:
   activerecord:
     attributes:
       spree/order:
+        product_type: "Product Type"
+        customer_name: "Customer Name"
+        issued_date: "Issued Date"
+        payment_date: "Payment Date"
+        printing_date: "Printing Date"
         customer_id: "Customer ID"
         to_date: "To Date"
         from_date: "From Date"

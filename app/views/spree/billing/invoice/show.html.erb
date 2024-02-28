@@ -6,7 +6,7 @@
 
 <% content_for :page_actions do %>
   <% unless @invoice.nil? %>
-    <%= link_to  Spree.t(:print),'#', onclick: 'window.print(); return false;', class: 'btn btn-success mb-3' %>
+    <%= link_to Spree.t(:print), spree.print_invoice_date_billing_order_invoice_path, method: :put, onclick: 'window.print(); return false;', class: 'btn btn-success mb-3'%>
   <% else %>
     <%= button_link_to Spree.t(:create_invoice), @invoice_path, method: :post, class: "btn-success" %>
   <% end %>

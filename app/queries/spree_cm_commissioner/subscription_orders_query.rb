@@ -19,7 +19,8 @@ module SpreeCmCommissioner
     def query_builder
       Spree::Order.subscription
                   .joins(:line_items)
-                  .where(line_items: { vendor_id: vendor_id, from_date: from_date..to_date })
+                  .where(line_items: { vendor_id: vendor_id })
+                  .where(created_at: from_date..to_date)
     end
   end
 end
