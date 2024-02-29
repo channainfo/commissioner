@@ -6,10 +6,10 @@ module Spree
           before_action :require_spree_current_user
 
           def collection
-            @collection ||= SpreeCmCommissioner::DashboardCrewEventQuery.new(
+            SpreeCmCommissioner::DashboardCrewEventQuery.new(
               user_id: spree_current_user.id,
               section: params[:section] || 'incoming'
-            ).call
+            ).events
           end
 
           def collection_serializer
