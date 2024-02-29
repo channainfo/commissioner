@@ -15,12 +15,12 @@ RSpec.describe SpreeCmCommissioner::DashboardCrewEventQuery do
 
     it 'should return only incoming events that user has access to' do
       query_a = SpreeCmCommissioner::DashboardCrewEventQuery.new(user_id: user_a.id, section: 'incoming')
-      expect(query_a.events.map(&:taxon_id)).to eq([incoming_event_a.id, incoming_event_b.id])
+      expect(query_a.events.pluck(:taxon_id)).to eq([incoming_event_a.id, incoming_event_b.id])
     end
 
     it 'should return only previous events that user has access to' do
       query_b = SpreeCmCommissioner::DashboardCrewEventQuery.new(user_id: user_a.id, section: 'previous')
-      expect(query_b.events.map(&:taxon_id)).to eq([previous_event_a.id, previous_event_b.id])
+      expect(query_b.events.pluck(:taxon_id)).to eq([previous_event_a.id, previous_event_b.id])
     end
 
     context 'when section is incoming' do
@@ -32,7 +32,7 @@ RSpec.describe SpreeCmCommissioner::DashboardCrewEventQuery do
         expect(incoming_event_a.from_date).to be >= start_from_date
         expect(incoming_event_b.from_date).to be >= start_from_date
         expect(incoming_event_c.from_date).to be >= start_from_date
-        expect(subject.events.map(&:taxon_id)).to eq([incoming_event_a.id, incoming_event_b.id, incoming_event_c.id])
+        expect(subject.events.pluck(:taxon_id)).to eq([incoming_event_a.id, incoming_event_b.id, incoming_event_c.id])
       end
     end
 
@@ -45,7 +45,7 @@ RSpec.describe SpreeCmCommissioner::DashboardCrewEventQuery do
         expect(previous_event_a.from_date).to be < start_from_date
         expect(previous_event_b.from_date).to be < start_from_date
 
-        expect(subject.events.map(&:taxon_id)).to eq([previous_event_a.id, previous_event_b.id])
+        expect(subject.events.pluck(:taxon_id)).to eq([previous_event_a.id, previous_event_b.id])
       end
     end
   end

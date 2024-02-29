@@ -21,7 +21,8 @@ module SpreeCmCommissioner
       base.has_one :app_banner, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::TaxonAppBanner'
       base.has_one :home_banner, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::TaxonHomeBanner'
 
-      base.attr_accessor :classification_ids
+      base.has_many :children, class_name: 'Spree::Taxon', foreign_key: :parent_id, dependent: :destroy
+      base.has_many :children_classifications, through: :children, source: :classifications, class_name: 'Spree::Classification'
 
       base.validates_associated :category_icon
       base.before_save :set_kind
