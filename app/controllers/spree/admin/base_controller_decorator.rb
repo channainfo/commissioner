@@ -9,6 +9,13 @@ module Spree
         end
       end
 
+      # override: even in view actions, head.html.erb still need admin_oauth_token which may create new token.
+      def admin_oauth_token
+        ActiveRecord::Base.connected_to(role: :writing) do
+          super
+        end
+      end
+
       # 2023-07-31
       def parse_date!(date, format: nil)
         Date.strptime(date.to_s, format || '%Y-%m-%d')
