@@ -48,5 +48,30 @@ RSpec.describe SpreeCmCommissioner::DashboardCrewEventQuery do
         expect(subject.events.pluck(:taxon_id)).to eq([previous_event_a.id, previous_event_b.id])
       end
     end
+
+    it 'should complete within a reasonable time and not cause a loop' do
+      query = SpreeCmCommissioner::DashboardCrewEventQuery.new(user_id: user_a.id, section: 'incoming')
+      expect {query.events}.not_to raise_error
+
+      expect {Timeout.timeout(1) {query.events}}.not_to raise_error
+    end
+
+    it 'should not loop excessively for each item' do
+      # Capture the Rails logger to inspect logs
+      logs = StringIO.new
+      Rails.logger = Logger.new(logs)
+
+      # Execute the query
+      query = SpreeCmCommissioner::DashboardCrewEventQuery.new(user_id: user_a.id, section: 'incoming')
+
+      # Expectation: The query should complete without raising any errors
+      expect { query.events }.not_to raise_error
+
+      # Expectation: Check Rails logs for excessive looping
+      expect(logs.string).not_to include('Loop detected')  # Adjust this log message according to your implementation
+
+      # Restore the original Rails logger
+      Rails.logger = ActiveSupport::Logger.new(STDOUT)
+    end
   end
 end
