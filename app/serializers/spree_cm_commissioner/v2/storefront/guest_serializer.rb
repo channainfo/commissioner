@@ -4,7 +4,7 @@ module SpreeCmCommissioner
       class GuestSerializer < BaseSerializer
         set_type :guest
 
-        attributes :first_name, :last_name, :dob, :gender, :kyc_fields, :created_at, :updated_at
+        attributes :first_name, :last_name, :dob, :gender, :kyc_fields, :other_occupation, :created_at, :updated_at
         attribute :allowed_checkout, &:allowed_checkout?
 
         belongs_to :occupation, serializer: Spree::V2::Storefront::TaxonSerializer
