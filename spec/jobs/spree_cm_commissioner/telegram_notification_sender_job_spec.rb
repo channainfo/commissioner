@@ -18,4 +18,14 @@ RSpec.describe SpreeCmCommissioner::TelegramNotificationSenderJob do
       parse_mode: parse_mode
     )
   end
+
+  it 'does not call TelegramNotificationSender when chat_id is nil' do
+    expect(SpreeCmCommissioner::TelegramNotificationSender).not_to receive(:call)
+
+    subject.perform(
+      chat_id: nil,
+      message: message,
+      parse_mode: parse_mode
+    )
+  end
 end

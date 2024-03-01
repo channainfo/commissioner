@@ -19,7 +19,7 @@ module SpreeCmCommissioner
     def notifier_error_message(error_message)
       ::Telegram.bots[:exception_notifier].send_message(
         chat_id: chat_id,
-        text: "Telgram Notifier Error:\n#{error_message}\nSend Text:\n#{message}"
+        text: "Telegram Notifier Error:\n#{error_message}\nSend Text:\n#{message}"
       )
     end
   end
