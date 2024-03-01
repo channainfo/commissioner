@@ -42,6 +42,8 @@ RSpec.describe Spree::V2::Storefront::TaxonSerializer, type: :serializer do
         :custom_redirect_url,
         :kind,
         :subtitle,
+        :from_date,
+        :to_date,
       )
     end
 
