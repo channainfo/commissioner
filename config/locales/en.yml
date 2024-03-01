@@ -301,6 +301,7 @@ en:
         type: "Type"
         select_date: "Select Date"
         taxon: "Taxon"
+        quantity: "Quantity"
       spree/report:
         cashier: "Cashier"
     errors:
