@@ -95,27 +95,27 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
 let!(:today) {Date.today}
 let!(:tomorrow) {today + 1.day}
 
-#airbus_seats
-  let!(:arb_f1_seat) {airbus.vehicle_seats.find_by(row: 1, column: 1)}
-  let!(:arb_f2_seat) {airbus.vehicle_seats.find_by(row: 1, column: 2)}
-  let!(:arb_f3_seat) {airbus.vehicle_seats.find_by(row: 1, column: 3)}
-  let!(:arb_f4_seat) {airbus.vehicle_seats.find_by(row: 1, column: 4)}
-  let!(:arb_f5_seat) {airbus.vehicle_seats.find_by(row: 2, column: 1)}
-  let!(:arb_f6_seat) {airbus.vehicle_seats.find_by(row: 2, column: 2)}
-  let!(:arb_f7_seat) {airbus.vehicle_seats.find_by(row: 2, column: 3)}
-  let!(:arb_f8_seat) {airbus.vehicle_seats.find_by(row: 2, column: 4)}
-  let!(:arb_f9_seat) {airbus.vehicle_seats.find_by(row: 3, column: 1)}
+  #airbus_seats
+  let!(:arb_f1_seat) {airbus.vehicle_seats.find_by(label: "F1")}
+  let!(:arb_f2_seat) {airbus.vehicle_seats.find_by(label: "F2")}
+  let!(:arb_f3_seat) {airbus.vehicle_seats.find_by(label: "F3")}
+  let!(:arb_f4_seat) {airbus.vehicle_seats.find_by(label: "F4")}
+  let!(:arb_f5_seat) {airbus.vehicle_seats.find_by(label: "F5")}
+  let!(:arb_f6_seat) {airbus.vehicle_seats.find_by(label: "F6")}
+  let!(:arb_f7_seat) {airbus.vehicle_seats.find_by(label: "F7")}
+  let!(:arb_f8_seat) {airbus.vehicle_seats.find_by(label: "F8")}
+  let!(:arb_f9_seat) {airbus.vehicle_seats.find_by(label: "F9")}
 
   #minivan_seats
-  let!(:mvn_f1_seat) {minivan.vehicle_seats.find_by(row: 1, column: 1)}
-  let!(:mvn_f2_seat) {minivan.vehicle_seats.find_by(row: 1, column: 2)}
-  let!(:mvn_f3_seat) {minivan.vehicle_seats.find_by(row: 1, column: 3)}
-  let!(:mvn_f4_seat) {minivan.vehicle_seats.find_by(row: 1, column: 4)}
-  let!(:mvn_f5_seat) {minivan.vehicle_seats.find_by(row: 2, column: 1)}
-  let!(:mvn_f6_seat) {minivan.vehicle_seats.find_by(row: 2, column: 2)}
-  let!(:mvn_f7_seat) {minivan.vehicle_seats.find_by(row: 1, column: 3)}
-  let!(:mvn_f8_seat) {minivan.vehicle_seats.find_by(row: 1, column: 4)}
-  let!(:mvn_f9_seat) {minivan.vehicle_seats.find_by(row: 3, column: 1)}
+  let!(:mvn_f1_seat) {minivan.vehicle_seats.find_by(label: "F1")}
+  let!(:mvn_f2_seat) {minivan.vehicle_seats.find_by(label: "F2")}
+  let!(:mvn_f3_seat) {minivan.vehicle_seats.find_by(label: "F3")}
+  let!(:mvn_f4_seat) {minivan.vehicle_seats.find_by(label: "F4")}
+  let!(:mvn_f5_seat) {minivan.vehicle_seats.find_by(label: "F5")}
+  let!(:mvn_f6_seat) {minivan.vehicle_seats.find_by(label: "F6")}
+  let!(:mvn_f7_seat) {minivan.vehicle_seats.find_by(label: "F7")}
+  let!(:mvn_f8_seat) {minivan.vehicle_seats.find_by(label: "F8")}
+  let!(:mvn_f9_seat) {minivan.vehicle_seats.find_by(label: "F9")}
 
 
 
@@ -206,8 +206,8 @@ let!(:tomorrow) {today + 1.day}
         expect(search_result.count).to eq(4)
         expect(search_result.first.trip_id).to eq(vet_pp_to_sr_trip_1.id)
         expect(search_result.last.trip_id).to eq(larryta_pp_to_sr_trip_2.id)
-        expect(search_result.first.remaining_seats).to eq(8)
-        expect(search_result.last.remaining_seats).to eq(23)
+        expect(search_result.first.remaining_seats).to eq(7)
+        expect(search_result.last.remaining_seats).to eq(22)
       end
     end
     context "return trip result for tomorrow" do
@@ -217,8 +217,8 @@ let!(:tomorrow) {today + 1.day}
       it "return trip result for tomorrow" do
         search_result = result.call.sort_by(&:trip_id)
         expect(search_result.count).to eq(4)
-        expect(search_result.first.remaining_seats).to eq(13)
-        expect(search_result.last.remaining_seats).to eq(23)
+        expect(search_result.first.remaining_seats).to eq(12)
+        expect(search_result.last.remaining_seats).to eq(22)
       end
     end
   end

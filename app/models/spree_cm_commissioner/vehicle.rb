@@ -12,6 +12,7 @@ module SpreeCmCommissioner
     after_commit :create_vehicle_option_value
 
     has_many :vehicle_photo, class_name: 'SpreeCmCommissioner::VehiclePhoto', as: :viewable, dependent: :destroy
+    has_many :vehicle_seats, class_name: 'SpreeCmCommissioner::VehicleSeat', through: :vehicle_type
 
     validates :code, uniqueness: { scope: :vendor_id }, presence: true
     validates :license_plate, uniqueness: {}, allow_blank: true

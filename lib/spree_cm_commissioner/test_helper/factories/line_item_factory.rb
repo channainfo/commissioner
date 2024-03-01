@@ -26,7 +26,7 @@ FactoryBot.define do
 
     after(:create) do |line_item, evaluator|
       evaluator.seats.each_with_index do |seat, index|
-      create(:line_item_seat, line_item: line_item , seat: seat)
+      create(:line_item_seat, line_item: line_item , seat: seat, date: evaluator.date, variant_id: evaluator.variant_id)
       line_item.line_item_seats.reload
       end
     end
