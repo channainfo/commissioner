@@ -97,8 +97,10 @@ module SpreeCmCommissioner
       vendor_list.each do |vendor|
         title = '🎫 --- [NEW ORDER FROM BOOKME+] ---'
         chat_id = vendor.preferred_telegram_chat_id
-        factory = OrderTelegramMessageFactory.new(title: title, order: self, vendor: vendor)
-        TelegramNotificationSenderJob.perform_later(chat_id: chat_id, message: factory.message, parse_mode: factory.parse_mode)
+        if chat_id.present?
+          factory = OrderTelegramMessageFactory.new(title: title, order: self, vendor: vendor)
+          TelegramNotificationSenderJob.perform_later(chat_id: chat_id, message: factory.message, parse_mode: factory.parse_mode)
+        end
       end
     end
 

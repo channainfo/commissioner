@@ -4,7 +4,7 @@ module SpreeCmCommissioner
 
     def call
       telegram_client.send_message(
-        chat_id: ENV.fetch('EXCEPTION_NOTIFIER_TELEGRAM_CHANNEL_ID', nil),
+        chat_id: chat_id,
         parse_mode: 'HTML',
         text: body
       )
