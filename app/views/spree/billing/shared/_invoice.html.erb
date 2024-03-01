@@ -8,8 +8,16 @@
   @email =  @vendor.notification_email
   @note =  @vendor.note
 
+  @quantity = @customer.quantity
   @product = @invoice.order.line_items.first.variant.sku
   @price = @invoice.order.line_items.first.display_price
+  @sum_total = @price.to_s.gsub(/[^\d.]/, '').to_d * @quantity
+  @total_price = @sum_total
+  @sum_total = Spree::Money.new(@sum_total, currency: @price.currency).to_s
+  @order.adjustments.each do |adjustment|
+    @total_price += adjustment.amount
+  end
+  @total_price = Spree::Money.new(@total_price, currency: @price.currency).to_s
   @total = @invoice.order.display_total
   @from_date = @invoice.order.line_items.first.to_date.strftime("%B %Y")
   @date = @invoice.date.strftime('%Y-%m-%d')
@@ -18,9 +26,6 @@
   @invoice_number = @invoice.invoice_number
   @customer_number = @customer.customer_number
   @customer_address = @order.billing_address&.address1
-
-  @account_name = @vendor.account_name
-  @account_number = @vendor.account_number
 %>
 
 
@@ -95,8 +100,10 @@
             <tr>
               <th scope="col">ល.រ​​​ / N</th>
               <th scope="col">បរិយាយ / Description</th>
+              <th scope="col">ចំនួន / Quantity</th>
               <th scope="col">ប្រចាំខែ / Month</th>
               <th scope="col">ទឹកប្រាក់​ / Amount</th>
+              <th scope="col">ទឹកប្រាក់​សរុប / Total Amount</th>
             </tr>
           </thead>
           <tbody class="list-unstyled">
@@ -105,6 +112,11 @@
               <td>
                 <ul class="list-unstyled">
                   <li> <%= @product %></li>
+                </ul>
+              </td>
+              <td>
+                <ul class="list-unstyled">
+                  <li> <%= @quantity %></li>
                 </ul>
               </td>
               <td>
@@ -119,6 +131,11 @@
                   </li>
                 </ul>
               </td>
+              <td>
+                <ul class="list-unstyled">
+                  <li> <%= @sum_total %></li>
+                </ul>
+              </td>
             </tr>
             <%  @order.adjustments.each do |adjustment|  %>
               <tr>
@@ -129,6 +146,15 @@
                   </ul>
                 </td>
                 <td></td>
+                <td>
+                </td>
+                <td>
+                  <ul class="list-unstyled">
+                    <li>
+                      <%= adjustment.display_amount %>
+                    </li>
+                  </ul>
+                </td>
                 <td>
                   <ul class="list-unstyled">
                     <li>
@@ -145,7 +171,7 @@
           <div class="d-flex justify-content-between align-items-center bg-primary pt-3 px-2 font-weight-bold text-white">
                 <p>ទឹកប្រាក់​ត្រូវទូទាត់​​ / Total Amount due</p>
                 <p>
-                  <%= @total %>
+                  <%= @total_price %>
                 </p>
           </div>
 
@@ -157,10 +183,6 @@
             </div>
             <div class="ml-auto  qrcode-container">
               <img src="<%= main_app.rails_blob_url(@current_vendor.payment_qrcode.attachment) %>" alt="qrcode" style="width: 150px;">
-              <div class="list-unstyled text-center">
-                <li><span><%= @account_name %></span></li>
-                <li><span><%= @account_number %></span></li>
-              </div>
             </div>
           </div>
             <div class="d-flex justify-content-between mt-4">
