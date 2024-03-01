@@ -9,6 +9,10 @@ module Spree
       before_action :load_data
       before_action :set_current_user_instance, except: :index
       before_action :load_order, only: [:show]
+      before_action :verify_event, only: :update
+
+      rescue_from Spree::Core::GatewayError, with: :handle_spree_core_gateway_error
+      rescue_from SpreeCmCommissioner::PaymentSourceMissingError, with: :handle_payment_source_missing
 
       def set_current_user_instance
         @payment.current_user_instance = spree_current_user
@@ -40,10 +44,52 @@ module Spree
         @payment = @object
       end
 
+      def update
+        check_payment_source
+
+        if @payment.send("#{params[:e]}!")
+          flash[:success] = Spree.t(:payment_updated)
+        else
+          flash[:error] = Spree.t(:cannot_perform_operation)
+          raise Spree::Core::GatewayError
+        end
+
+        redirect_to request.referer || spree.billing_order_payments_path(@order)
+      end
+
+      # supported_events is a method from Spree::Billing::PaymentFireable
+      def verify_event
+        # Because we have a transition method also called void, we do this to avoid conflicts.
+        params[:e] = 'void_transaction' if params[:e] == 'void'
+
+        return if supported_events.include?(params[:e])
+
+        flash[:error] = Spree.t(:unsupported_event)
+        raise Spree::Core::GatewayError
+      end
+
       def load_resource_instance
         return order.payments.build if new_actions.include?(action)
 
         order.payments.find_by!(number: params[:id])
+      end
+
+      def check_payment_source
+        return unless @payment.payment_source.nil? || @payment.payment_source.blank?
+
+        raise SpreeCmCommissioner::PaymentSourceMissingError
+      end
+
+      def handle_payment_source_missing
+        flash[:error] = Spree.t(:payment_source_missing)
+
+        redirect_to request.referer || spree.billing_order_payments_path(@order)
+      end
+
+      def handle_spree_core_gateway_error(error)
+        flash[:error] = error.message.to_s
+
+        redirect_to request.referer || spree.billing_order_payments_path(@order)
       end
 
       def order

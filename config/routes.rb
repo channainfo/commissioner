@@ -170,11 +170,13 @@ Spree::Core::Engine.add_routes do
   scope '(:locale)', locale: /#{I18n.available_locales.join('|')}/ do
     namespace :billing do
       resource :report, only: %i[show], controller: :report do
-        get '/failed', to: 'report#failed_orders', as: :failed
-        get '/paid', to: 'report#paid', as: :paid
-        get '/balance_due', to: 'report#balance_due', as: :balance_due
-        get '/overdue', to: 'report#overdue', as: :overdue
-        get '/active_subscribers', to: 'report#active_subscribers', as: :active_subscribers
+        member do
+          get :failed_orders
+          get :paid
+          get :balance_due
+          get :overdue
+          get :active_subscribers
+        end
       end
       resources :vendors do
         resource :payment_qrcodes, only: %i[destroy]
@@ -212,9 +214,6 @@ Spree::Core::Engine.add_routes do
           end
         end
         resources :payments do
-          member do
-            put :fire
-          end
           resources :refunds, only: %i[new create edit update]
         end
         resources :adjustments
