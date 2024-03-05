@@ -8,6 +8,7 @@ module SpreeCmCommissioner
 
     belongs_to :line_item, class_name: 'Spree::LineItem', optional: false
     belongs_to :occupation, class_name: 'Spree::Taxon'
+    belongs_to :nationality, class_name: 'Spree::Taxon'
 
     belongs_to :event, class_name: 'Spree::Taxon'
 
@@ -29,6 +30,7 @@ module SpreeCmCommissioner
       return gender.present? if field == :guest_gender
       return dob.present? if field == :guest_dob
       return occupation.present? if field == :guest_occupation
+      return nationality.present? if field == :guest_nationality
       return id_card.present? && id_card.allowed_checkout? if field == :guest_id_card
 
       false

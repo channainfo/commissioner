@@ -2,6 +2,7 @@ require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::Guest, type: :model do
   let(:taxon) { create(:taxon, name: 'University Student') }
+  let(:nationality) { create(:taxon, name: 'Khmer') }
   let(:line_item) { create(:line_item) }
   let(:id_card) { create(:id_card) }
 
@@ -125,6 +126,26 @@ RSpec.describe SpreeCmCommissioner::Guest, type: :model do
         subject.id_card = id_card
 
         expect(subject.guest_id_card?).to be true
+        expect(subject.allowed_checkout?).to be true
+      end
+    end
+
+    context 'when nationality kyc enabled' do
+      it 'return false when nationality is not provided' do
+        allow(line_item).to receive(:kyc).and_return(SpreeCmCommissioner::KycBitwise::BIT_FIELDS[:guest_nationality])
+
+        subject.nationality = nil
+
+        expect(subject.guest_nationality?).to be true
+        expect(subject.allowed_checkout?).to be false
+      end
+
+      it 'return true when nationality is provided' do
+        allow(line_item).to receive(:kyc).and_return(SpreeCmCommissioner::KycBitwise::BIT_FIELDS[:guest_nationality])
+
+        subject.nationality = nationality
+
+        expect(subject.guest_nationality?).to be true
         expect(subject.allowed_checkout?).to be true
       end
     end

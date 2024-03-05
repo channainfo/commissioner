@@ -5,6 +5,11 @@ module SpreeCmCommissioner
       source_root File.expand_path('../../../../spree/templates', __dir__)
       source_root File.expand_path('templates', __dir__)
 
+      # it copy nationalities.yml to config/data before running the migration
+      def copy_nationalities_data
+        template 'config/data/nationalities.yml'
+      end
+
       def add_migrations
         gems = %i[
           spree_multi_vendor
