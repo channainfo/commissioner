@@ -18,6 +18,14 @@
         <% end %>
       <% end %>
     </span>
+    <span class="ml-2">
+      <%= f.field_container :hidden do %>
+        <%= f.label :hidden do %>
+          <%= f.check_box :hidden %>
+          <%= Spree.t(:hidden) %>
+        <% end %>
+      <% end %>
+    </span>
   </div>
 </div>
 
