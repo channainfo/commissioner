@@ -65,6 +65,7 @@ en:
     kind_info: "<b>Once set</b>, it can't be updated."
     kind_validation: "Attribute can't be updated for %{option_type_name}"
     empty_info: "No <b>Option Type</b> found for this kind"
+    time_format_info: "<b>Please Note:</b> option value must be in the format <b>%{time_format}</b> with multiple values separated by commas like <b>%{time_format},%{time_format}</b>"
 
   stock_location:
     lat:

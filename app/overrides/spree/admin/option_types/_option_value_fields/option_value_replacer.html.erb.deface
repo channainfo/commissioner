@@ -33,6 +33,8 @@
     <td class="presentation"><%= f.text_field :presentation, class: "form-control", required: true %></td>
   <% when "started_at" %>
     <td class="presentation"><%= f.text_field :presentation, class: "form-control", required: true %></td>
+  <% when "reminder" %>
+    <td class="presentation"><%= f.text_field :presentation, class: "form-control", required: true %></td>
   <% end %>
 
   <td class="actions">

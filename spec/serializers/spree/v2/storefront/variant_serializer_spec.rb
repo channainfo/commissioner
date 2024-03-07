@@ -36,7 +36,9 @@ describe Spree::V2::Storefront::VariantSerializer, type: :serializer do
         :permanent_stock,
         :kyc,
         :need_confirmation,
-        :product_type
+        :product_type,
+        :reminder_option_value,
+        :started_at_option_value
       )
     end
 

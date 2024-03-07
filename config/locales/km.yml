@@ -54,6 +54,7 @@ km:
     kind_info: "<b>បន្តាប់ពីកំណត់រួច</b> អ្នកមិនអាចកែប្រែបានទៀតទេ"
     kind_validation: "Attribute can't be updated for %{option_type_name}"
     empty_info: "រក <b>Option Type</b> មិនឃើញសម្រាប់ប្រភេទ"
+    time_format_info: "<b>សូម​ចំណាំ:</b>option value ត្រូវតែមានទម្រង់<b>%{time_format}</b> ជាមួយនឹងតម្លៃជាច្រើនត្រូវបំបែកដោយសញ្ញាក្បៀសដូច<b>%{time_format},%{time_format}</b>"
 
   stock_location:
     lat:
