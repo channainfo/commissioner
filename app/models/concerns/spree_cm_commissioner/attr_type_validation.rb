@@ -7,7 +7,7 @@ module SpreeCmCommissioner
         validates :presentation, numericality: { only_integer: true }, if: :integer
         validates :presentation, numericality: { only_float: true }, if: :float
         validates :presentation, inclusion: %w[1 0], if: :boolean
-        validate :presentation_format, if: :stated_at
+        validate :started_at_format, if: :started_at?
       end
     end
 
@@ -15,10 +15,10 @@ module SpreeCmCommissioner
       @option_type ||= Spree::OptionType.find_by(id: option_type_id)
     end
 
-    def presentation_format
-      return if presentation =~ /^\d{1,2}d\d{1,2}h\d{1,2}m\d{1,2}s$/
+    def started_at_format
+      return if presentation =~ /^\d{1,2}h\d{1,2}m$/
 
-      errors.add(:presentation, "Invalid format. Should be in '0d0h0m0s' format")
+      errors.add(:presentation, "Invalid format. Should be in '0h0m' format")
     end
 
     private
@@ -35,7 +35,7 @@ module SpreeCmCommissioner
       option_type&.attr_type == 'boolean'
     end
 
-    def stated_at
+    def started_at?
       option_type&.attr_type == 'started_at'
     end
   end

@@ -104,11 +104,11 @@ RSpec.describe SpreeCmCommissioner::AttrTypeValidation do
     it 'invalid when input is in wrong format' do
       dummy = DummyClass.new(presentation: 'Invalid Presentation', option_type_id: option_type.id)
       expect(dummy.valid?).to be false
-      expect(dummy.errors[:presentation]).to eq ["Invalid format. Should be in '0d0h0m0s' format"]
+      expect(dummy.errors[:presentation]).to eq ["Invalid format. Should be in '0h0m' format"]
     end
 
     it 'valid when input is in right format' do
-      dummy = DummyClass.new(presentation: '3d2h0m0s', option_type_id: option_type.id)
+      dummy = DummyClass.new(presentation: '2h0m', option_type_id: option_type.id)
       expect(dummy.valid?).to be true
     end
   end

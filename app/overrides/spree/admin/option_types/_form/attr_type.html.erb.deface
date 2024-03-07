@@ -11,6 +11,12 @@
     <%= f.field_container :attr_type, class: ['form-group'] do %>
       <%= f.label :attr_type, Spree.t(:attribute_type) %> <span class="required">*</span>
       <%= f.text_field :attr_type, disabled: true, class: "form-control" %>
+      <% case @option_type.attr_type %>
+        <% when 'reminder' %>
+          <small class="form-text text-muted">
+            <%= raw I18n.t('option_type.time_format_info', time_format: '0d0h0m0s') %>
+          </small>
+      <% end %>
       <%= f.error_message_on :attr_type %>
     <% end %>
   <% end %>

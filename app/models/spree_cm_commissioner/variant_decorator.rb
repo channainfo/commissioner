@@ -3,6 +3,8 @@ module SpreeCmCommissioner
     def self.prepended(base)
       base.include SpreeCmCommissioner::ProductDelegation
       base.include SpreeCmCommissioner::VariantGuestsConcern
+      base.include SpreeCmCommissioner::VariantOptionValuesConcern
+
       base.after_commit :update_vendor_price
       base.after_save   :update_vendor_total_inventory, if: :saved_change_to_permanent_stock?
       base.validate     :validate_option_types
