@@ -11,7 +11,8 @@ RSpec.describe SpreeCmCommissioner::Admin::KycableHelper do
         guest_gender: '0',      #2**1  = 2
         guest_dob: '0',         #2**2  = 4
         guest_occupation: '0',  #2**3  = 8
-        guest_id_card: '0'      #2**4  = 16
+        guest_id_card: '0',     #2**4  = 16
+        guest_nationality: '0'  #2**5  = 32
       }
     end
 
@@ -45,8 +46,14 @@ RSpec.describe SpreeCmCommissioner::Admin::KycableHelper do
       expect(dummy_class.calculate_kyc_value(params)).to eq(16)
     end
 
+    it 'return value 32 if guest_nationality is selected' do
+      params[:guest_nationality] = '1'
+
+      expect(dummy_class.calculate_kyc_value(params)).to eq(32)
+    end
+
     it 'return value 31 if value params is selected' do
-      expected_value = 2**0 + 2**1 + 2**2 + 2**3 + 2**4
+      expected_value = 2**0 + 2**1 + 2**2 + 2**3 + 2**4 + 2**5
       params.transform_values! { '1' }
 
       expect(dummy_class.calculate_kyc_value(params)).to eq(expected_value)

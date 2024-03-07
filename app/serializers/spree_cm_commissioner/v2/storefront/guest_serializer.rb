@@ -8,6 +8,7 @@ module SpreeCmCommissioner
         attribute :allowed_checkout, &:allowed_checkout?
 
         belongs_to :occupation, serializer: Spree::V2::Storefront::TaxonSerializer
+        belongs_to :nationality, serializer: Spree::V2::Storefront::TaxonSerializer
         has_one :id_card, serializer: Spree::V2::Storefront::IdCardSerializer
 
         # allowed_checkout updates frequently

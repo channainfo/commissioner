@@ -38,6 +38,14 @@
       <%= form.error_message_on :guest_id_card, class: 'text-danger' %>
     <% end %>
   </div>
+
+  <div class="form-check form-check-inline">
+    <%= form.field_container :guest_nationality do %>
+      <%= form.check_box :guest_nationality, class: 'form-check-input', checked: form.object.guest_nationality? %>
+      <%= form.label :guest_nationality, Spree.t(:guest_nationality), class: 'form-check-label' %>
+      <%= form.error_message_on :guest_nationality, class: 'text-danger' %>
+    <% end %>
+  </div>
 </div>
 
 
