@@ -1,5 +1,13 @@
 module Spree
   module OrderMailerDecorator
+    # overrided
+    def cancel_email(order, resend: false)
+      @order = order.respond_to?(:id) ? order : Spree::Order.find(order)
+      return false if @order.email.blank?
+
+      super
+    end
+
     def confirm_email(order, resend: false)
       @order = order.respond_to?(:id) ? order : Spree::Order.find(order)
       return false if @order.email.blank?
