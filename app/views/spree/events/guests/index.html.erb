@@ -1,5 +1,20 @@
 <% content_for :page_title do %>
-  <%= Spree.t(:guests) %>
+  <%= Spree.t(:register_guests) %>
+  <%= link_to 'Export CSV', event_guests_path(format: :csv, params: params.permit!), class: 'btn btn-primary float-right' %>
+<% end %>
+
+<% content_for :page_tabs do %>
+  <% occupations = Spree::Taxon.where(kind: Spree::Taxon.kinds[:occupation]).order(:position) %>
+  <li class="nav-item">
+    <%= link_to 'All', spree.event_guests_path(q: { occupation_id_eq: nil }),
+                class: "nav-link #{'active' if params.dig(:q, :occupation_id_eq).nil?}" %>
+  </li>
+  <% occupations.each do |occupation| %>
+    <li class="nav-item">
+      <%= link_to occupation.name, spree.event_guests_path(q: { occupation_id_eq: occupation.id }),
+                  class: "nav-link #{'active' if params.dig(:q, :occupation_id_eq).to_s == occupation.id.to_s}" %>
+    </li>
+  <% end %>
 <% end %>
 
 <% content_for :table_filter do %>
@@ -11,23 +26,20 @@
   <table class="table" id="listing_products">
     <thead class="text-muted">
       <tr data-hook="admin_products_index_headers">
-        <th scope="col" class="text-left"><%= Spree.t(:id) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:full_name) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:date_of_birth) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:gender) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:occupation) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:id_card_type) %></th>
-        <th scope="col" class="text-left"><%= Spree.t(:id_cards) %></th>
+        <th scope="col" class="text-left"><%= Spree.t(:id_card_image) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:entry_type) %></th>
+        <th scope="col" class="text-left"><%= Spree.t(:created_at) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:action) %></th>
       </tr>
     </thead>
     <tbody>
       <% @collection.each do |guest| %>
         <tr id="<%= spree_dom_id guest %>" data-hook="event_guests_index_rows">
-        <td class="text-left">
-            <%= guest.id %>
-          </td>
           <td class="text-left">
             <%= guest.full_name %>
           </td>
@@ -40,7 +52,7 @@
             <% end %>
           </td>
           <td class="text-left">
-            <%= guest.occupation&.name %>
+            <%= guest.other_occupation&.titleize || guest.occupation&.name %>
           </td>
           <td class="text-left">
             <%= content_tag(:strong, class: "badge #{badge_color_base_on_id_card_status(guest.id_card&.card_type)} font-weight-bold") do %>
@@ -71,6 +83,9 @@
             <%= content_tag(:strong, class: "badge #{badge_color_base_on_entry_type(guest.entry_type)} font-weight-bold uppercase") do %>
               <%= SpreeCmCommissioner::CheckIn.entry_types.key(guest.entry_type).titleize %>
             <% end %>
+          </td>
+          <td class="text-left">
+            <%= guest.created_at&.strftime('%d %b %Y %I:%M:%S %p') %>
           </td>
           <td class="text-left">
             <%= link_to_edit guest, url: edit_event_guest_url(current_event.slug, guest), no_text: true, class: 'edit' %>
