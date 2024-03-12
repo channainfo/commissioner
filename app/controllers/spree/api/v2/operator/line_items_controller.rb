@@ -6,10 +6,7 @@ module Spree
           before_action :require_spree_current_user
 
           def collection
-            qr_data = params[:qr_data]
-            order = Spree::Order.search_by_qr_data!(qr_data)
-
-            order.line_items
+            SpreeCmCommissioner::LineItemSearcherQuery.new(params).call
           end
 
           def allowed_sort_attributes

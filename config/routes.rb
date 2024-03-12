@@ -303,7 +303,6 @@ Spree::Core::Engine.add_routes do
           resource :event_ticket_aggregators, only: %i[show]
           resource :pie_chart_event_aggregators, only: %i[show]
         end
-        resources :operator_pie_charts, only: %i[index]
       end
     end
 
