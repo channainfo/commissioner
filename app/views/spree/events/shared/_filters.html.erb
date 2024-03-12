@@ -11,7 +11,7 @@
 
         <div class="date-range-filter col-12 col-lg-6">
           <div class="form-group">
-            <%= f.label :last_name_cont, Spree.t(:first_name) %>
+            <%= f.label :last_name_cont, Spree.t(:last_name) %>
             <%= f.search_field :last_name_cont, class: "form-control js-filterable", placeholder: Spree.t(:last_name) %>
           </div>
         </div>
@@ -34,7 +34,7 @@
       <div class="row">
         <div class="col-12 col-lg-6">
           <div class="form-group">
-            <%= f.label :id_card_card_type_eq, Spree.t(:card_type) %>
+            <%= f.label :id_card_card_type_eq, Spree.t(:id_card_type) %>
             <%= f.select :id_card_card_type_eq, options_for_select(SpreeCmCommissioner::IdCard.card_types.map { |k, v| [Spree.t("spree.card_type.#{k}"), v] }), { include_blank: true, prompt: Spree.t(:select_card_type) }, class: "form-control js-filterable" %>
           </div>
         </div>

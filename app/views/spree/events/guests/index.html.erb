@@ -1,6 +1,16 @@
 <% content_for :page_title do %>
-  <%= Spree.t(:guests) %>
+  <%= Spree.t(:register_guests) %>
 <% end %>
+
+
+<% content_for :widget do %>
+  <%= render partial: 'spree/events/shared/widget' %>
+<% end %>
+
+<% content_for :tab_filter do %>
+  <%= render partial: 'spree/events/shared/tab_filter' %>
+<% end %>
+
 
 <% content_for :table_filter do %>
   <%= render partial: 'spree/events/shared/filters' %>
@@ -17,7 +27,7 @@
         <th scope="col" class="text-left"><%= Spree.t(:gender) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:occupation) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:id_card_type) %></th>
-        <th scope="col" class="text-left"><%= Spree.t(:id_cards) %></th>
+        <th scope="col" class="text-left"><%= Spree.t(:id_card_image) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:entry_type) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:action) %></th>
       </tr>

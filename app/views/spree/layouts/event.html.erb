@@ -41,6 +41,23 @@
               <%# Main content                                    %>
               <%#-------------------------------------------------%>
               <div class="<%= content_for?(:sidebar) ? 'with-sidebar col-12 col-lg-9 px-0' : 'col-12 px-0' %>" id="content" data-hook>
+                <%#-------------------------------------------------%>
+                <%# Widget                                          %>
+                <%#-------------------------------------------------%>
+                <div class="<%= content_for?(:widget) ? 'pr-3' : '' %>">
+                  <%= render partial: 'spree/events/shared/widget' if content_for?(:widget) %>
+                  <%= yield %>
+                </div>
+                <%#-------------------------------------------------%>
+                <%# Tab filter                                      %>
+                <%#-------------------------------------------------%>
+                <div class="<%= content_for?(:tab_filter) ? 'pr-3' : '' %>">
+                  <%= render partial: 'spree/events/shared/tab_filter' if content_for?(:tab_filter) %>
+                  <%= yield %>
+                </div>
+                <%#-------------------------------------------------%>
+                <%# Table filter                                    %>
+                <%#-------------------------------------------------%>
                 <div class="<%= content_for?(:sidebar) ? 'pr-3' : '' %>">
                   <%= render partial: 'spree/admin/shared/table_filter' if content_for?(:table_filter) %>
                   <%= yield %>

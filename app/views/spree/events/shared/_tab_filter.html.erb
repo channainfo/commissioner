@@ -1,0 +1,7 @@
+<% [nil, *Spree::Taxon.where(parent_id: 82).pluck(:id)].each do |occupation_id| %>
+    <li class="nav-item">
+      <%= link_to (occupation_id.nil? ? 'All' : Spree::Taxon.find(occupation_id).name),
+                  spree.event_guests_path(q: { occupation_id_eq: occupation_id }),
+                  class: "nav-link #{'active' if params.dig(:q, :occupation_id_eq).to_s == occupation_id.to_s}" %>
+    </li>
+  <% end %>
