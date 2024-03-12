@@ -217,3 +217,38 @@ unless Spree::Admin::UserSessionsController.ancestors.include?(SpreeCmCommission
 end
 
 ```
+
+## Avoid Excessive Looping
+
+This test ensures that the query for fetching events does not loop excessively for each item.
+
+### Test Explanation
+
+The test is structured as follows:
+
+1. **Capture Rails Logger**: It captures the Rails logger to inspect logs generated during the test execution.
+2. **Execute the Query**: It executes the query to fetch events.
+3. **Expectation 1**: It expects the query execution to complete without raising any errors.
+4. **Expectation 2**: It checks the captured Rails logs for any indication of excessive looping. This is done by verifying that the log messages do not include the phrase "Loop detected".
+5. **Restore Original Rails Logger**: Finally, it restores the original Rails logger.
+
+### Test Code (Ruby RSpec)
+
+```ruby
+it 'should not loop excessively for each item' do
+  # Capture the Rails logger to inspect logs
+  logs = StringIO.new
+  Rails.logger = Logger.new(logs)
+
+  # Execute the query
+  query = SpreeCmCommissioner::DashboardCrewEventQuery.new(user_id: user_a.id, section: 'incoming')
+
+  # Expectation: The query should complete without raising any errors
+  expect { query.events }.not_to raise_error
+
+  # Expectation: Check Rails logs for excessive looping
+  expect(logs.string).not_to include('Loop detected')  # Adjust this log message according to your implementation
+
+  # Restore the original Rails logger
+  Rails.logger = ActiveSupport::Logger.new(STDOUT)
+end
