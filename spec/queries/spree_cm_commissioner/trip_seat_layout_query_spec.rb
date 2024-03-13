@@ -50,69 +50,42 @@ RSpec.describe SpreeCmCommissioner::TripSeatLayoutQuery do
   let!(:minivan1) {create(:vehicle, vehicle_type: minivan, vendor: vet)}
   let!(:sleeping_bus1) {create(:vehicle, vehicle_type: sleeping_bus, vendor: vet)}
 
-  #option_type
-  let!(:duration) {create(:option_type, name: 'duration', presentation: 'Duration', attr_type: 'duration', kind: 'variant')}
-  let!(:departure_time) {create(:option_type, name: 'departure_time', presentation: 'Departure Time', attr_type: 'departure_time', kind: 'variant')}
-#option_value
-  let!(:dt_13) {create(:option_value, name: '13:00', presentation: '13:00', option_type: departure_time)}
-  let!(:dt_10) {create(:option_value, name: '10:00', presentation: '10:00', option_type: departure_time)}
-  let(:duration_3) {create(:option_value, name: '3', presentation: '3', option_type: duration)}
-  let(:duration_6) {create(:option_value, name: '6', presentation: '6', option_type: duration)}
-
-
   #routes
   let!(:phnom_penh_to_siem_reap_by_airbus) { create(:route,
-                                                :with_option_types,
+                                                trip_detail_attributes: {
+                                                  origin_id: phnom_penh.id,
+                                                  destination_id: siem_reap.id,
+                                                  departure_time: '10:00',
+                                                  duration: 6,
+                                                  vehicle_id: bus1.id
+                                                },
                                                 name: 'Phnom Penh to Siem Reap by Vet Airbus',
                                                 short_name:"PP-SR",
-                                                vendor: vet,
-                                                origin_id: phnom_penh.id,
-                                                destination_id: siem_reap.id,
-                                                departure_time: departure_time,
-                                                duration: duration,
-                                                vehicle_id: bus1.id) }
+                                                vendor: vet) }
 
   let!(:phnom_penh_to_siem_reap_by_minivan) { create(:route,
-                                                    :with_option_types,
+                                                    trip_detail_attributes: {
+                                                      origin_id: phnom_penh.id,
+                                                      destination_id: siem_reap.id,
+                                                      departure_time: '13:00',
+                                                      duration: 6,
+                                                      vehicle_id: minivan1.id
+                                                    },
                                                     name: 'Phnom Penh to Siem Reap by Larryta',
                                                     short_name:"PP-SR",
-                                                    vendor: vet,
-                                                    origin_id: phnom_penh.id,
-                                                    destination_id: siem_reap.id,
-                                                    departure_time: departure_time,
-                                                    duration: duration,
-                                                    vehicle_id: minivan1.id) }
+                                                    vendor: vet) }
 
   let!(:phnom_penh_to_siem_reap_by_sleeping_bus) { create(:route,
-                                                              :with_option_types,
+                                                              trip_detail_attributes: {
+                                                                origin_id: phnom_penh.id,
+                                                                destination_id: siem_reap.id,
+                                                                departure_time: '10:00',
+                                                                duration: 6,
+                                                                vehicle_id: sleeping_bus1.id
+                                                              },
                                                               name: 'Phnom Penh to Siem Reap by Vet Sleeping Bus',
                                                               short_name:"PP-SR",
-                                                              vendor: vet,
-                                                              origin_id: phnom_penh.id,
-                                                              destination_id: siem_reap.id,
-                                                              departure_time: departure_time,
-                                                              duration: duration,
-                                                              vehicle_id: sleeping_bus1.id) }
-  let!(:sleeping_bus_pp_to_sr_trip) {create(:trip,
-                                route: phnom_penh_to_siem_reap_by_sleeping_bus,
-                                sku: 'SLEEP-BUS-PP-SR-10:00-6',
-                                departure_time: dt_10,
-                                duration: duration_6
-                                )}
-
-  let!(:airbus_pp_to_sr_trip) {create(:trip,
-                                  route: phnom_penh_to_siem_reap_by_airbus,
-                                  sku: 'VET-PP-SR-10:00-6',
-                                  departure_time: dt_10,
-                                  duration: duration_6
-                                  )}
-
-  let!(:minivan_pp_to_sr_trip) {create(:trip,
-                                        route: phnom_penh_to_siem_reap_by_minivan,
-                                        sku: 'LTA-PP-SR-13:00-6',
-                                        departure_time: dt_13,
-                                        duration: duration_3,
-                                        )}
+                                                              vendor: vet) }
 #date
 let!(:today) {Date.today}
 let!(:tomorrow) {today + 1.day}
@@ -151,19 +124,19 @@ let!(:tomorrow) {today + 1.day}
   let!(:mvn_f9_seat) {minivan.vehicle_seats.find_by(label: "F9")}
 
   #order
-  let!(:order1) {create(:transit_order, variant: airbus_pp_to_sr_trip, seats: [arb_f1_seat,arb_f4_seat], date: today)}
-  let!(:order2) {create(:transit_order, variant: airbus_pp_to_sr_trip, seats: [arb_f5_seat,arb_f6_seat,arb_f7_seat,arb_f8_seat,arb_f9_seat], date: today)}
-  let!(:order3) {create(:transit_order, variant: minivan_pp_to_sr_trip, seats: [mvn_f1_seat,mvn_f2_seat], date: today)}
-  let!(:order4) {create(:transit_order, variant: minivan_pp_to_sr_trip, seats: [mvn_f5_seat,mvn_f6_seat], date: today)}
-  let!(:order5) {create(:transit_order, variant: sleeping_bus_pp_to_sr_trip, seats: [slb_f1_seat,slb_f2_seat], date: today)}
-  let!(:order6) {create(:transit_order, variant: sleeping_bus_pp_to_sr_trip, seats: [slb_s16_seat,slb_s17_seat], date: today)}
+  let!(:order1) {create(:transit_order, variant: phnom_penh_to_siem_reap_by_airbus.master, seats: [arb_f1_seat,arb_f4_seat], date: today)}
+  let!(:order2) {create(:transit_order, variant: phnom_penh_to_siem_reap_by_airbus.master, seats: [arb_f5_seat,arb_f6_seat,arb_f7_seat,arb_f8_seat,arb_f9_seat], date: today)}
+  let!(:order3) {create(:transit_order, variant: phnom_penh_to_siem_reap_by_minivan.master, seats: [mvn_f1_seat,mvn_f2_seat], date: today)}
+  let!(:order4) {create(:transit_order, variant: phnom_penh_to_siem_reap_by_minivan.master, seats: [mvn_f5_seat,mvn_f6_seat], date: today)}
+  let!(:order5) {create(:transit_order, variant: phnom_penh_to_siem_reap_by_sleeping_bus.master, seats: [slb_f1_seat,slb_f2_seat], date: today)}
+  let!(:order6) {create(:transit_order, variant: phnom_penh_to_siem_reap_by_sleeping_bus.master, seats: [slb_s16_seat,slb_s17_seat], date: today)}
 
 
 
 
   describe"#call" do
     context "display seats layout table for Sleeping Bus" do
-      let(:records) {described_class.new(trip_id: sleeping_bus_pp_to_sr_trip.id, date: today)}
+      let(:records) {described_class.new(trip_id: phnom_penh_to_siem_reap_by_sleeping_bus.master.id, date: today)}
       it "return Sleeping Bus seats layout" do
         result = records.call
         result.each do |layer, rows|
@@ -171,22 +144,22 @@ let!(:tomorrow) {today + 1.day}
             rows.each do |row_num, seats|
               row = seats.map do |seat|
                 if seat[:seat_type] == "normal"
-                  seat[:seat_id] == nil ? "#{seat[:label]}  " : "#{seat[:label]} x "
+                  seat[:seat_id] == nil ? " #{seat[:label]}" : "x#{seat[:label]}"
                 else
-                 seat[:seat_type] == "driver" ? "D   " : "   "
+                 seat[:seat_type] == "driver" ? "D   " : " - "
                 end
               end
               t.add_row row
             end
           end
-
+          rows_table.style = {:alignment => :center}
           puts "#{layer}\n#{rows_table}"
         end
       end
     end
 
     context "display seats layout table for Airbus Bus" do
-      let(:records) {described_class.new(trip_id: airbus_pp_to_sr_trip.id, date: today)}
+      let(:records) {described_class.new(trip_id: phnom_penh_to_siem_reap_by_airbus.master.id, date: today)}
       it "return Air Bus seats layout" do
         result = records.call
         result.each do |layer, rows|
@@ -194,22 +167,22 @@ let!(:tomorrow) {today + 1.day}
             rows.each do |row_num, seats|
               row = seats.map do |seat|
                 if seat[:seat_type] == "normal"
-                  seat[:seat_id] == nil ? "#{seat[:label]}  " : "#{seat[:label]} x "
+                  seat[:seat_id] == nil ? " #{seat[:label]}" : "x#{seat[:label]}"
                 else
-                 seat[:seat_type] == "driver" ? "D   " : "   "
+                 seat[:seat_type] == "driver" ? "D   " : " - "
                 end
               end
               t.add_row row
             end
           end
-
+          rows_table.style = {:alignment => :center}
           puts "#{layer}\n#{rows_table}"
         end
       end
     end
 
     context "display seats layout table for Minivan" do
-      let(:records) {described_class.new(trip_id: minivan_pp_to_sr_trip.id, date: today)}
+      let(:records) {described_class.new(trip_id: phnom_penh_to_siem_reap_by_minivan.master.id, date: today)}
       it "return Minivan seats layout" do
         result = records.call
         result.each do |layer, rows|
@@ -217,17 +190,33 @@ let!(:tomorrow) {today + 1.day}
             rows.each do |row_num, seats|
               row = seats.map do |seat|
                 if seat[:seat_type] == "normal"
-                  seat[:seat_id] == nil ? "#{seat[:label]}  " : "#{seat[:label]} x "
+                  seat[:seat_id] == nil ? " #{seat[:label]}" : "x#{seat[:label]}"
                 else
-                 seat[:seat_type] == "driver" ? "D   " : "   "
+                 seat[:seat_type] == "driver" ? "D   " : " - "
                 end
               end
               t.add_row row
             end
           end
-
+          rows_table.style = {:alignment => :center}
           puts "#{layer}\n#{rows_table}"
         end
+      end
+    end
+  end
+
+  describe "#seats" do
+    context "return all seats for sleeping bus" do
+      let(:records) {described_class.new(trip_id: phnom_penh_to_siem_reap_by_sleeping_bus.master.id, date: today)}
+      it "return all seats for  sleeping bus" do
+        result = records.seats.to_a
+        order_seats = [slb_f1_seat,slb_f2_seat,slb_s16_seat,slb_s17_seat]
+        ordered_seats_from_result = result.select {|seat| seat.seat_id != nil}
+        bookable_seats = result.select {|seat| %w[normal vip].include?(seat.seat_type)}
+        available_seats = result.select {|seat| seat.seat_id == nil && %w[normal vip].include?(seat.seat_type)}
+        expect(ordered_seats_from_result).to eq(order_seats)
+        expect(bookable_seats.count).to eq(sleeping_bus.vehicle_seats_count)
+        expect(available_seats.count).to eq(sleeping_bus.vehicle_seats_count - order_seats.count)
       end
     end
   end

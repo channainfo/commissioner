@@ -19,6 +19,7 @@ module SpreeCmCommissioner
                                               }, source: :prices, through: :variants_including_master
 
       base.has_one :default_state, through: :vendor
+      base.has_one :trip_detail, class_name: 'SpreeCmCommissioner::TripDetail', dependent: :destroy
 
       base.scope :min_price, lambda { |vendor|
         joins(:prices_including_master)
@@ -35,23 +36,7 @@ module SpreeCmCommissioner
 
       base.whitelisted_ransackable_attributes |= %w[short_name route_type]
 
-      base.before_validation :validate_origin
-      base.before_validation :validate_destination
-
-    end
-
-    private
-
-    def validate_origin
-      if product_type == 'transit'
-        errors.add(:origin, "can't be blank") if origin_id.blank?
-      end
-    end
-
-    def validate_destination
-      if product_type == 'transit'
-        errors.add(:destination, "can't be blank") if destination_id.blank?
-      end
+      base.accepts_nested_attributes_for :trip_detail, allow_destroy: true
     end
   end
 end

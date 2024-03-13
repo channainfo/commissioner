@@ -1,25 +1,24 @@
-require 'date'
 module SpreeCmCommissioner
   class TripSeatLayoutQuery
-    attr_reader :trip_id, :date, :vehicle_type
+    attr_reader :trip_id, :date, :vehicle_type, :vehicle, :route
 
     def initialize(trip_id:, date:)
       @trip_id = trip_id
       @date = date
+      @route = Spree::Variant.find_by(id: trip_id).product
+      @vehicle = SpreeCmCommissioner::Vehicle.find_by(id: route.trip_detail.vehicle_id)
+      @vehicle_type = SpreeCmCommissioner::VehicleType.find_by(id: vehicle.vehicle_type_id)
     end
 
     def call
-      route = Spree::Variant.find_by(id: trip_id).product
-      vehicle = SpreeCmCommissioner::Vehicle.find_by(id: route.vehicle_id)
-      @vehicle_type = SpreeCmCommissioner::VehicleType.find_by(id: vehicle.vehicle_type_id)
-
       # layout_structure
       # {"First_Layer" => {"Row_1" => [{seat1}, {seat2}, {seat3}, {seat4}],
       #                   {"Row_2" => [{seat5}, {seat6}, {seat7}, {seat8}],
       # }
-      seats.group_by(&:layer).transform_values do |seats|
-        seats.group_by(&:row).transform_values do |row_seats|
-          row_seats.sort_by(&:column).map do |seat|
+      vehicle_seats = seats.to_a
+      vehicle_seats.group_by(&:layer).transform_values do |s|
+        s.group_by(&:row).transform_values do |r|
+          r.sort_by(&:column).map do |seat|
             {
               row: seat.row,
               column: seat.column,
@@ -36,8 +35,8 @@ module SpreeCmCommissioner
     end
 
     def seats
-      # check line_item status
-      SpreeCmCommissioner::VehicleSeat.select('cm_vehicle_seats.*, cm_line_item_seats.seat_id')
+      # TODO: check line_item status
+      SpreeCmCommissioner::VehicleSeat.select('cm_vehicle_seats.*, cm_line_item_seats.seat_id as seat_id')
                                       .joins("LEFT JOIN cm_line_item_seats ON cm_vehicle_seats.id = cm_line_item_seats.seat_id
                                               AND cm_line_item_seats.variant_id = #{trip_id}
                                               AND cm_line_item_seats.date = '#{date}'

@@ -1,6 +1,6 @@
 module SpreeCmCommissioner
   class TripResult
-    attr_accessor :trip_id, :vendor_id, :vendor_name, :route_name,
+    attr_accessor :trip_id, :vendor_id, :vendor_name, :short_name, :route_name,
                   :origin_id, :origin, :destination_id, :destination,
                   :total_sold, :total_seats,
                   :duration, :vehicle_id, :departure_time
@@ -16,7 +16,7 @@ module SpreeCmCommissioner
     end
 
     def arrival_time
-      departure_time.to_time + duration.to_i.hours
+      (departure_time.to_time + duration.to_i.hours).strftime('%H:%M')
     end
   end
 end

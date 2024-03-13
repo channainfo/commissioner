@@ -36,21 +36,27 @@ FactoryBot.define do
     factory :route do
       route_type {:automobile}
       product_type { :transit }
-      trait :with_option_types do
-        transient do
-          departure_time{}
-          duration  {}
-        end
-        before(:create) do |route, evaluator|
-          stock_location = create(:stock_location) unless Spree::StockLocation.any?
-          if route.stores.empty?
-            default_store = Spree::Store.default.persisted? ? Spree::Store.default : nil
-            store = default_store || create(:store)
+      trip_detail_attributes do
+        departure_time { '13:00' }
+        duration { 5 }
+        vehicle_id {1}
+        origin_id {1}
+        destination_id {2}
+      end
+      before(:create) do |route, evaluator|
+        stock_location = create(:stock_location) unless Spree::StockLocation.any?
+        if route.stores.empty?
+          default_store = Spree::Store.default.persisted? ? Spree::Store.default : nil
+          store = default_store || create(:store)
 
-            route.stores << [store]
-          end
-          route.option_types = [evaluator.departure_time, evaluator.duration]
+          route.stores << [store]
         end
+      end
+      after(:create) do |route, evaluator|
+        trip = route.master
+        trip.permanent_stock = 10
+        trip.stock_items = [create(:stock_item, variant: trip, stock_location: route.vendor.stock_locations.first)]
+        trip.stock_items.first.adjust_count_on_hand(10)
       end
     end
 
