@@ -14,7 +14,6 @@ FactoryBot.define do
     end
 
     after(:create) do |order, evaluator|
-
       unless evaluator.without_line_items
         create(:transit_line_item, order: order, variant: evaluator.variant, date: evaluator.date, quantity: evaluator.seats.count, seats: evaluator.seats)
         order.line_items.reload

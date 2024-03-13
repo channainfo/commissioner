@@ -10,6 +10,7 @@ require 'spree_cm_commissioner/version'
 require 'spree_cm_commissioner/passenger_option'
 require 'spree_cm_commissioner/calendar_event'
 require 'spree_cm_commissioner/trip_result'
+require 'spree_cm_commissioner/trip_seat_layout_result'
 
 require 'searchkick'
 require 'elasticsearch'
