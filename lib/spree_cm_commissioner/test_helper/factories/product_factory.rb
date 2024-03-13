@@ -36,7 +36,7 @@ FactoryBot.define do
     factory :route do
       route_type {:automobile}
       product_type { :transit }
-      trip_detail_attributes do
+      trip_attributes do
         departure_time { '13:00' }
         duration { 5 }
         vehicle_id {1}

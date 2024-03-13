@@ -32,7 +32,7 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
 
   #routes
   let!(:vet_phnom_penh_siem_reap_1) { create(:route,
-                                                trip_detail_attributes: {
+                                                trip_attributes: {
                                                   origin_id: phnom_penh.id,
                                                   destination_id: siem_reap.id,
                                                   departure_time: '10:00',
@@ -44,7 +44,7 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                                                 vendor: vet_airbus
                                                 ) }
   let!(:vet_phnom_penh_siem_reap_2) { create(:route,
-                                                trip_detail_attributes: {
+                                                trip_attributes: {
                                                   origin_id: phnom_penh.id,
                                                   destination_id: siem_reap.id,
                                                   departure_time: '15:00',
@@ -57,7 +57,7 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                                               ) }
 
   let!(:larryta_phnom_penh_siemreap_1) { create(:route,
-                                                    trip_detail_attributes: {
+                                                    trip_attributes: {
                                                       origin_id: phnom_penh.id,
                                                       destination_id: siem_reap.id,
                                                       departure_time: '13:00',
@@ -70,7 +70,7 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                                                     ) }
 
   let!(:larryta_phnom_penh_siemreap_2) { create(:route,
-                                                    trip_detail_attributes: {
+                                                    trip_attributes: {
                                                       origin_id: phnom_penh.id,
                                                       destination_id: siem_reap.id,
                                                       departure_time: '20:00',

@@ -17,7 +17,7 @@ module SpreeCmCommissioner
           vendor_name: trip.vendor_name,
           route_name: trip.route_name,
           short_name: trip.short_name,
-          detail: trip.trip_detail_id,
+          detail: trip.trip_id,
           origin_id: trip.origin_id,
           origin: trip.origin,
           destination_id: trip.destination_id,
@@ -38,7 +38,7 @@ module SpreeCmCommissioner
                               spree_vendors.name as vendor_name,
                               routes.name as route_name,
                               routes.short_name as short_name,
-                              details.id as trip_detail_id,
+                              details.id as trip_id,
                               details.origin_id as origin_id,
                               details.destination_id as destination_id,
                               details.departure_time as departure_time,
@@ -51,7 +51,7 @@ module SpreeCmCommissioner
                             '
                                     )
                              .joins('INNER JOIN spree_products routes ON routes.id = spree_variants.product_id')
-                             .joins('INNER JOIN cm_trip_details details on details.product_id = routes.id')
+                             .joins('INNER JOIN cm_trips details on details.product_id = routes.id')
                              .joins('INNER JOIN cm_vehicles ON cm_vehicles.id = details.vehicle_id')
                              .joins('INNER JOIN spree_taxons origin on origin.id = details.origin_id')
                              .joins('INNER JOIN spree_vendors ON spree_vendors.id = spree_variants.vendor_id')

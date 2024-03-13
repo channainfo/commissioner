@@ -19,7 +19,7 @@ module SpreeCmCommissioner
                                               }, source: :prices, through: :variants_including_master
 
       base.has_one :default_state, through: :vendor
-      base.has_one :trip_detail, class_name: 'SpreeCmCommissioner::TripDetail', dependent: :destroy
+      base.has_one :trip, class_name: 'SpreeCmCommissioner::Trip', dependent: :destroy
 
       base.scope :min_price, lambda { |vendor|
         joins(:prices_including_master)
@@ -36,7 +36,7 @@ module SpreeCmCommissioner
 
       base.whitelisted_ransackable_attributes |= %w[short_name route_type]
 
-      base.accepts_nested_attributes_for :trip_detail, allow_destroy: true
+      base.accepts_nested_attributes_for :trip, allow_destroy: true
     end
   end
 end

@@ -52,7 +52,7 @@ RSpec.describe SpreeCmCommissioner::TripSeatLayoutQuery do
 
   #routes
   let!(:phnom_penh_to_siem_reap_by_airbus) { create(:route,
-                                                trip_detail_attributes: {
+                                                trip_attributes: {
                                                   origin_id: phnom_penh.id,
                                                   destination_id: siem_reap.id,
                                                   departure_time: '10:00',
@@ -64,7 +64,7 @@ RSpec.describe SpreeCmCommissioner::TripSeatLayoutQuery do
                                                 vendor: vet) }
 
   let!(:phnom_penh_to_siem_reap_by_minivan) { create(:route,
-                                                    trip_detail_attributes: {
+                                                    trip_attributes: {
                                                       origin_id: phnom_penh.id,
                                                       destination_id: siem_reap.id,
                                                       departure_time: '13:00',
@@ -76,7 +76,7 @@ RSpec.describe SpreeCmCommissioner::TripSeatLayoutQuery do
                                                     vendor: vet) }
 
   let!(:phnom_penh_to_siem_reap_by_sleeping_bus) { create(:route,
-                                                              trip_detail_attributes: {
+                                                              trip_attributes: {
                                                                 origin_id: phnom_penh.id,
                                                                 destination_id: siem_reap.id,
                                                                 departure_time: '10:00',
@@ -139,7 +139,11 @@ let!(:tomorrow) {today + 1.day}
       let(:records) {described_class.new(trip_id: phnom_penh_to_siem_reap_by_sleeping_bus.master.id, date: today)}
       it "return Sleeping Bus seats layout" do
         result = records.call
-        result.each do |layer, rows|
+        layout = result.layout
+        puts "Total Seats: #{result.total_seats}"
+        puts "Sold: #{result.total_sold}"
+        puts "Remaining: #{result.remaining_seats}"
+        layout.each do |layer, rows|
           rows_table = Terminal::Table.new do |t|
             rows.each do |row_num, seats|
               row = seats.map do |seat|
@@ -162,7 +166,11 @@ let!(:tomorrow) {today + 1.day}
       let(:records) {described_class.new(trip_id: phnom_penh_to_siem_reap_by_airbus.master.id, date: today)}
       it "return Air Bus seats layout" do
         result = records.call
-        result.each do |layer, rows|
+        layout = result.layout
+        puts "Total Seats: #{result.total_seats}"
+        puts "Sold: #{result.total_sold}"
+        puts "Remaining: #{result.remaining_seats}"
+        layout.each do |layer, rows|
           rows_table = Terminal::Table.new do |t|
             rows.each do |row_num, seats|
               row = seats.map do |seat|
@@ -185,7 +193,11 @@ let!(:tomorrow) {today + 1.day}
       let(:records) {described_class.new(trip_id: phnom_penh_to_siem_reap_by_minivan.master.id, date: today)}
       it "return Minivan seats layout" do
         result = records.call
-        result.each do |layer, rows|
+        layout = result.layout
+        puts "Total Seats: #{result.total_seats}"
+        puts "Sold: #{result.total_sold}"
+        puts "Remaining: #{result.remaining_seats}"
+        layout.each do |layer, rows|
           rows_table = Terminal::Table.new do |t|
             rows.each do |row_num, seats|
               row = seats.map do |seat|
