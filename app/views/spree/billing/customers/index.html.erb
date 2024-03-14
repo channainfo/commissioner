@@ -96,7 +96,7 @@
               <%= customer.phone_number %>
             </td>
             <td class='taxon'>
-              <%= customer.taxon.name %>
+              <%= customer.taxon&.name %>
             </td>
             <td>
               <%= customer.created_at.to_date %>

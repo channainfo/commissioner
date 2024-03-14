@@ -32,9 +32,11 @@ module SpreeCmCommissioner
     has_many :active_variants, class_name: 'Spree::Variant', through: :active_subscriptions, source: :variant
 
     validates :sequence_number, presence: true, uniqueness: { scope: :vendor_id }
-    validates :email, uniqueness: { scope: :vendor_id }, allow_blank: true
-    validates :phone_number, uniqueness: { scope: :vendor_id }, allow_blank: true
+    validates :email, uniqueness: { scope: :vendor_id }, allow_blank: true, unless: -> { Spree::Store.default.code.include?('billing') }
+    validates :phone_number, uniqueness: { scope: :vendor_id }, allow_blank: true, unless: -> { Spree::Store.default.code.include?('billing') }
     validates :number, presence: true, uniqueness: { scope: :vendor_id }
+
+    validate :billing_customer_attributes
 
     acts_as_paranoid
     self.whitelisted_ransackable_attributes = %w[number phone_number first_name last_name taxon_id sequence_number]
@@ -97,6 +99,15 @@ module SpreeCmCommissioner
 
     def fullname
       "#{first_name} #{last_name}"
+    end
+
+    def billing_customer_attributes
+      return unless Spree::Store.default.code.include?('billing')
+
+      errors.add(:base, :owner_name_cant_be_blank) if last_name.blank?
+      errors.add(:base, :gender_cant_be_blank) if gender.blank?
+      errors.add(:base, :phone_number_cant_be_blank) if phone_number.blank?
+      errors.add(:base, :quantity_cant_be_less_than_or_equal_to_zero) if quantity <= 0
     end
   end
 end
