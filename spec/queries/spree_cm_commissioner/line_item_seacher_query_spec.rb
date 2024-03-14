@@ -2,64 +2,91 @@ require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::LineItemSearcherQuery do
   describe '#call' do
-    let(:params) { {} }
-    let(:query) { described_class.new(params) }
+    let(:taxonomy) { create(:taxonomy, kind: :event) }
+    let!(:event) { create(:taxon, name: 'BunPhum', taxonomy: taxonomy) }
+
+    let!(:section_a) { create(:taxon, parent: event, taxonomy: taxonomy, name: 'Section A', from_date: Date.current, to_date: Date.current + 2.days) }
+    let!(:section_b) { create(:taxon, parent: event, taxonomy: taxonomy, name: 'Section B', from_date: Date.current, to_date: Date.current + 2.days) }
+
+    let!(:product_a) { create(:product, product_type: :ecommerce, taxons: [section_a]) }
+    let!(:product_b) { create(:product, product_type: :ecommerce, taxons: [section_b]) }
+
+    let!(:order) { create(:order, phone_number: '012345678', email: 'lengvevo007@gmail.com', number: 'R591727627') }
+
+    let!(:line_item1) { create(:cm_line_item, order: order, product: product_a) }
+    let!(:line_item2) { create(:cm_line_item, order: order, product: product_b) }
+
+    let!(:guest1) { create(:guest, first_name: 'Han', last_name: 'Xin', line_item: line_item1) }
+    let!(:guest2) { create(:guest, first_name: 'Sokleng', last_name: 'Houng', line_item: line_item2) }
 
     context 'when qr_data is present' do
       let(:params) { { qr_data: 'R591727627-WiWma0OjZqh7Tk1aXGCUzA1708344610539' } }
-      let(:order) { instance_double('Spree::Order') }
-      let(:line_items) { double('line_items') }
+      let(:order) { create(:order)}
+      let!(:line_item) { create(:cm_line_item, order: order) }
 
       before do
-        allow(Spree::Order).to receive(:search_by_qr_data!).with(params[:qr_data]).and_return(order)
-        allow(order).to receive(:line_items).and_return(line_items)
+        allow(Spree::Order).to receive(:search_by_qr_data!).and_return(order)
+        allow(order).to receive(:line_items).and_return([line_item])
       end
 
       it 'calls search_by_qr_data! with qr_data' do
-        query.call
-        expect(Spree::Order).to have_received(:search_by_qr_data!).with(params[:qr_data])
+        expect(Spree::Order).to receive(:search_by_qr_data!).with(params[:qr_data])
+        described_class.new(params).call
       end
 
       it 'returns line items of the order found by qr_data' do
-        expect(query.call).to eq(line_items)
+        expect(described_class.new(params).call).to eq([line_item])
+
+        expect(order).to have_received(:line_items)
       end
     end
 
-    context 'when qr_data is not present' do
-      before do
-        allow(query).to receive(:search_by_guest_name).and_return('guest_name_result')
+    context 'when term is present' do
+      let(:params) { { term: 'Leng' } }
+
+      it 'calls search_by_ransack with term' do
+        expect(Spree::LineItem).to receive_message_chain(:ransack, :result)
+        described_class.new(params).call
       end
 
-      it 'returns the result of search_by_guest_name' do
-        expect(query.call).to eq('guest_name_result')
+      it 'returns line items found by term' do
+        expect(described_class.new(params).call).to eq([line_item2])
+      end
+
+      it 'returns line items found by term guest first_name' do
+        params[:term] = 'Han'
+        expect(described_class.new(params).call).to eq([line_item1])
+      end
+
+      it 'returns line items found by term guest last_name' do
+        params[:term] = 'Leng'
+        expect(described_class.new(params).call).to eq([line_item2])
+      end
+
+      it 'returns line items found by term order number' do
+        params[:term] = 'R591727627'
+        expect(described_class.new(params).call).to eq([line_item1, line_item2])
+      end
+
+      it 'returns line items found by term order phone number' do
+        params[:term] = '012345678'
+        expect(described_class.new(params).call).to eq([line_item1, line_item2])
       end
     end
 
-    context 'when first_name, last_name, phone_number and taxon_id are present' do
-      let(:params) do
-        {
-          first_name: 'John',
-          last_name: 'Doe',
-          phone_number: '123456789',
-          taxon_id: 1
-        }
-      end
-      let(:guests) { double('guests') }
-      let(:line_item_ids) { [1, 2, 3] }
-      let(:line_items) { double('line_items') }
+    context 'when term email is present' do
+      let(:params) { { email: 'lengvevo007@gmail.com' } }
 
-      before do
-        allow(SpreeCmCommissioner::Guest).to receive(:joins).and_return(guests)
-        allow(guests).to receive(:joins).with(line_item: :order).and_return(guests)
-        allow(guests).to receive(:where).with('LOWER(cm_guests.first_name) LIKE LOWER(?) AND LOWER(cm_guests.last_name) LIKE LOWER(?)', '%John%', '%Doe%').and_return(guests)
-        allow(guests).to receive(:where).with(spree_orders: { phone_number: '123456789' }).and_return(guests)
-        allow(guests).to receive(:where).with(parent: { id: 1 }).and_return(guests)
-        allow(guests).to receive(:map).and_return(line_item_ids)
-        allow(Spree::LineItem).to receive(:where).with(id: line_item_ids).and_return(line_items)
+      it 'returns line items found by email' do
+        expect(described_class.new(params).call).to eq([line_item1, line_item2])
       end
+    end
 
-      it 'returns line items found by first_name, last_name, phone_number and taxon_id' do
-        expect(query.call).to eq(line_items)
+
+    context 'when term and qr is not present' do
+      it 'calls search_by_guest_infos' do
+        expect_any_instance_of(described_class).to receive(:search_by_guest_infos)
+        described_class.new({}).call
       end
     end
   end

@@ -49,6 +49,7 @@ module SpreeCmCommissioner
 
       option_values.each do |option_value|
         option_type = option_value.option_type
+        next if option_type.nil?
 
         if variant.is_master? && !option_type.product?
           message = I18n.t('variant.validation.option_type_is_not_product', option_type_name: option_type.name, option_value_name: option_value.name)

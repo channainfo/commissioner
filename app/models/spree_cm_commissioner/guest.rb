@@ -17,7 +17,7 @@ module SpreeCmCommissioner
 
     before_validation :set_event_id, on: :create
 
-    self.whitelisted_ransackable_associations = ['id_card']
+    self.whitelisted_ransackable_associations = %w[id_card event]
     self.whitelisted_ransackable_attributes = %w[first_name last_name gender occupation_id card_type]
 
     # no validation for each field as we allow user to save data to model partially.

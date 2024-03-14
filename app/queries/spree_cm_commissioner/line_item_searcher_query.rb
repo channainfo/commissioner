@@ -7,17 +7,27 @@ module SpreeCmCommissioner
     end
 
     def call
-      qr_data = @params[:qr_data]
-
-      if qr_data.present?
-        order = Spree::Order.search_by_qr_data!(qr_data)
+      if params[:qr_data].present?
+        order = Spree::Order.search_by_qr_data!(params[:qr_data])
         order.line_items
+      elsif params[:term].present?
+        search_by_ransack
       else
-        search_by_guest_name
+        search_by_guest_infos
       end
     end
 
-    def search_by_guest_name
+    def search_by_ransack
+      terms = params[:term].split
+      taxon_id = params[:taxon_id]
+
+      Spree::LineItem.ransack(
+        guests_first_name_or_guests_last_name_or_order_phone_number_or_order_email_or_order_number_cont_any: terms,
+        guests_event_id_eq: taxon_id
+      ).result
+    end
+
+    def search_by_guest_infos
       first_name = params[:first_name]
       last_name = params[:last_name]
       phone_number = params[:phone_number]
