@@ -5,18 +5,20 @@ FactoryBot.define do
 
     transient do
       line_items_count       { 1 }
-      without_line_items     { false }
       shipment_cost          { 100 }
       shipping_method_filter { Spree::ShippingMethod::DISPLAY_ON_FRONT_END }
-      seats {[]}
+      seats {}
       variant {}
+      quantity {}
       date { Date.today }
     end
 
     after(:create) do |order, evaluator|
-      unless evaluator.without_line_items
-        create(:transit_line_item, order: order, variant: evaluator.variant, date: evaluator.date, quantity: evaluator.seats.count, seats: evaluator.seats)
+      if evaluator.quantity.nil? && evaluator.seats.present?
+        create(:transit_line_item, :with_seats, order: order, variant: evaluator.variant, date: evaluator.date, quantity: evaluator.seats.count, seats: evaluator.seats)
         order.line_items.reload
+      else
+        create(:transit_line_item, order: order, variant: evaluator.variant, date: evaluator.date, quantity: evaluator.quantity)
       end
 
       stock_location = order.line_items&.first&.variant&.stock_items&.first&.stock_location || create(:stock_location)
