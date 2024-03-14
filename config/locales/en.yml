@@ -257,8 +257,6 @@ en:
       vendor: "vendor"
       account_name: "Account Name"
       account_number: "Account Number"
-      account_name_is_required: "Account Name is required"
-      account_number_is_required: "Account Number is required"
       payment_state:
         paid: "Paid"
         balance_due: "Balance Due"

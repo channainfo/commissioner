@@ -65,7 +65,9 @@ module SpreeCmCommissioner
                     class_name: 'SpreeCmCommissioner::HomepageSectionRelatable',
                     dependent: :destroy, inverse_of: :relatable
 
-      base.validate :validate_account_name_and_number_presence, unless: -> { payment_qrcode.nil? }
+      base.validates :account_name, :account_number, presence: true, if: lambda {
+                                                                           payment_qrcode.present? && Spree::Store.default.code.include?('billing')
+                                                                         }
 
       def base.by_vendor_id!(vendor_id)
         if vendor_id.to_s =~ /^\d+$/
@@ -151,13 +153,6 @@ module SpreeCmCommissioner
 
     def generate_code
       self.code = (code.presence || name[0, 3].upcase)
-    end
-
-    def validate_account_name_and_number_presence
-      return unless request.path.include?('billing')
-
-      errors.add(:base, Spree.t('billing.account_name_is_required')) if account_name.blank?
-      errors.add(:base, Spree.t('billing.account_number_is_required')) if account_number.blank?
     end
   end
 end
