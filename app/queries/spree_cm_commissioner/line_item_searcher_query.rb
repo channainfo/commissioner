@@ -6,10 +6,31 @@ module SpreeCmCommissioner
       @params = params
     end
 
+    def construct_matches
+      qr_data = @params[:qr_data]
+
+      if qr_data =~ /-L\d+$/
+        qr_data.match(/(R\d+)-([A-Za-z0-9_\-]+)-(L\d+)/)&.captures
+      else
+        qr_data.match(/(R\d+)-([A-Za-z0-9_\-]+)/)&.captures
+      end
+    end
+
     def call
-      if params[:qr_data].present?
-        order = Spree::Order.search_by_qr_data!(params[:qr_data])
-        order.line_items
+      qr_data = @params[:qr_data]
+
+      if qr_data.present?
+        matches = construct_matches
+
+        if matches
+          if matches.size == 3
+            line_item_id = Spree::LineItem.search_by_qr_data!(qr_data).id
+            Spree::LineItem.where(id: line_item_id)
+          else
+            order = Spree::Order.search_by_qr_data!(qr_data)
+            order.line_items
+          end
+        end
       elsif params[:term].present?
         search_by_ransack
       else

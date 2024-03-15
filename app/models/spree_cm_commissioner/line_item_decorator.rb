@@ -27,6 +27,18 @@ module SpreeCmCommissioner
         json_api_columns << :options_text
         json_api_columns << :vendor_id
       end
+
+      def base.search_by_qr_data!(data)
+        matches = data.match(/(R\d+)-([A-Za-z0-9_\-]+)-(L\d+)/)&.captures
+
+        raise ActiveRecord::RecordNotFound, "Couldn't find Spree::LineItem with QR data: #{data}" unless matches
+
+        order_number, order_token, line_item_id = matches
+        line_item_id = line_item_id.delete('L').to_i
+
+        Spree::LineItem.joins(:order)
+                       .find_by(id: line_item_id, spree_orders: { number: order_number, token: order_token })
+      end
     end
 
     def reservation?
@@ -77,6 +89,38 @@ module SpreeCmCommissioner
         rejected_at: Time.current,
         rejecter: user
       )
+    end
+
+    def generate_svg_qr
+      qrcode = RQRCode::QRCode.new(qr_data)
+      qrcode.as_svg(
+        color: '000',
+        shape_rendering: 'crispEdges',
+        module_size: 5,
+        standalone: true,
+        use_path: true,
+        viewbox: '0 0 20 10'
+      )
+    end
+
+    def generate_png_qr
+      qrcode = RQRCode::QRCode.new(qr_data)
+      qrcode.as_png(
+        bit_depth: 1,
+        border_modules: 1,
+        color_mode: ChunkyPNG::COLOR_GRAYSCALE,
+        color: 'black',
+        file: nil,
+        fill: 'white',
+        module_px_size: 4,
+        resize_exactly_to: false,
+        resize_gte_to: false,
+        size: 120
+      )
+    end
+
+    def qr_data
+      "#{order.number}-#{order.token}-L#{id}"
     end
 
     private
