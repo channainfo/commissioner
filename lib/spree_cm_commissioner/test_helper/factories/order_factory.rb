@@ -2,6 +2,8 @@ FactoryBot.define do
   factory :transit_order, class: Spree::Order do
     bill_address
     ship_address
+    state {'complete'}
+    payment_state {'paid'}
 
     transient do
       line_items_count       { 1 }

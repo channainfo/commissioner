@@ -148,12 +148,12 @@ let!(:tomorrow) {today + 1.day}
 
   #order
   let!(:order1) {create(:transit_order, variant: phnom_penh_to_siem_reap_by_airbus.master, seats: [arb_f1_seat,arb_f4_seat], date: today)}
-  let!(:order2) {create(:transit_order, variant: phnom_penh_to_siem_reap_by_airbus.master, seats: [arb_f5_seat,arb_f6_seat,arb_f7_seat,arb_f8_seat,arb_f9_seat], date: today)}
+  let!(:order2) {create(:transit_order, variant: phnom_penh_to_siem_reap_by_airbus.master, seats: [arb_f5_seat,arb_f6_seat,arb_f7_seat,arb_f8_seat,arb_f9_seat])}
   let!(:order3) {create(:transit_order, variant: phnom_penh_to_siem_reap_by_minivan.master, seats: [mvn_f1_seat,mvn_f2_seat], date: today)}
   let!(:order4) {create(:transit_order, variant: phnom_penh_to_siem_reap_by_minivan.master, seats: [mvn_f5_seat,mvn_f6_seat], date: today)}
   let!(:order5) {create(:transit_order, variant: phnom_penh_to_siem_reap_by_sleeping_bus.master, seats: [slb_f1_seat,slb_f2_seat], date: today)}
   let!(:order6) {create(:transit_order, variant: phnom_penh_to_siem_reap_by_sleeping_bus.master, seats: [slb_s16_seat,slb_s17_seat], date: today)}
-  let!(:order7) {create(:transit_order, variant: sihanoukville_to_koh_rong_by_ferry.master, date: tomorrow, quantity: 3)}
+  let!(:order7) {create(:transit_order, variant: sihanoukville_to_koh_rong_by_ferry.master, date: tomorrow, quantity: 3, state: 'payment', payment_state: nil)}
   let!(:order8) {create(:transit_order, variant: sihanoukville_to_koh_rong_by_ferry.master, date: tomorrow, quantity: 5)}
 
 
@@ -193,6 +193,8 @@ let!(:tomorrow) {today + 1.day}
       it "return Air Bus seats layout" do
         result = records.call
         layout = result.layout
+        expect(result.allow_seat_selection).to eq(true)
+        expect(result.total_sold).to eq(7)
         puts "Total Seats: #{result.total_seats}"
         puts "Sold: #{result.total_sold}"
         puts "Remaining: #{result.remaining_seats}"
@@ -226,6 +228,7 @@ let!(:tomorrow) {today + 1.day}
         puts "Allow Seat Selection: #{result.allow_seat_selection}"
         expect(result.allow_seat_selection).to eq(false)
         expect(result.layout).to eq(nil)
+        expect(result.total_sold).to eq(5)
       end
     end
 
@@ -261,7 +264,7 @@ let!(:tomorrow) {today + 1.day}
     context "return all seats for sleeping bus" do
       let(:records) {described_class.new(trip_id: phnom_penh_to_siem_reap_by_sleeping_bus.master.id, date: today)}
       it "return all seats for  sleeping bus" do
-        result = records.seats.to_a
+        result = records.seats
         order_seats = [slb_f1_seat,slb_f2_seat,slb_s16_seat,slb_s17_seat]
         ordered_seats_from_result = result.select {|seat| seat.seat_id != nil}
         bookable_seats = result.select {|seat| %w[normal vip].include?(seat.seat_type)}
@@ -269,6 +272,18 @@ let!(:tomorrow) {today + 1.day}
         expect(ordered_seats_from_result).to eq(order_seats)
         expect(bookable_seats.count).to eq(sleeping_bus.vehicle_seats_count)
         expect(available_seats.count).to eq(sleeping_bus.vehicle_seats_count - order_seats.count)
+      end
+    end
+  end
+  describe '#ordered_seats_sql' do
+    context "return ordered seats for airbus" do
+      let(:records) {described_class.new(trip_id: phnom_penh_to_siem_reap_by_airbus.master.id, date: today)}
+      let(:failed_order) {create(:transit_order, variant: phnom_penh_to_siem_reap_by_airbus.master, seats: [arb_f2_seat,arb_f3_seat], date: today, state: 'payment', payment_state: nil)}
+      it "return all seats for  sleeping bus" do
+        result = records.ordered_seats
+        ordered_seats_ids = result.pluck(:seat_id)
+        expect(result.count).to eq(7)
+        expect(ordered_seats_ids).not_to include [arb_f2_seat.id,arb_f3_seat.id]
       end
     end
   end

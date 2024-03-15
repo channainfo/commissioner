@@ -49,7 +49,9 @@ module SpreeCmCommissioner
           end
         end
       else
-        total_sold = Spree::LineItem.where(variant_id: trip_id, date: date).sum(:quantity)
+        total_sold = Spree::LineItem.joins(:order)
+                                    .where(variant_id: trip_id, date: date, spree_orders: { state: 'complete' })
+                                    .sum(:quantity)
         remaining_seats = vehicle.number_of_seats - total_sold
         layout = nil
       end
@@ -58,14 +60,17 @@ module SpreeCmCommissioner
     end
 
     def seats
-      # TODO: check line_item status
-      SpreeCmCommissioner::VehicleSeat.select('cm_vehicle_seats.*, cm_line_item_seats.seat_id as seat_id')
-                                      .joins("LEFT JOIN cm_line_item_seats ON cm_vehicle_seats.id = cm_line_item_seats.seat_id
-                                              AND cm_line_item_seats.variant_id = #{trip_id}
-                                              AND cm_line_item_seats.date = '#{date}'
-                                              "
-                                            )
+      SpreeCmCommissioner::VehicleSeat.select('cm_vehicle_seats.*, os.seat_id as seat_id')
+                                      .joins("LEFT JOIN (#{ordered_seats.to_sql}) os ON cm_vehicle_seats.id = os.seat_id")
                                       .where('cm_vehicle_seats.vehicle_type_id = ? ', vehicle_type.id)
+    end
+
+    def ordered_seats
+      SpreeCmCommissioner::LineItemSeat.select('cm_line_item_seats.seat_id')
+                                       .joins('INNER JOIN spree_line_items ON cm_line_item_seats.line_item_id = spree_line_items.id')
+                                       .joins('INNER JOIN spree_orders ON spree_orders.id = spree_line_items.order_id')
+                                       .where('spree_orders.state = ? ', 'complete')
+                                       .where('cm_line_item_seats.variant_id = ? AND cm_line_item_seats.date = ?', trip_id, date)
     end
   end
 end

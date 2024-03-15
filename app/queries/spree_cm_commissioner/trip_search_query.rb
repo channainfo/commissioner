@@ -56,7 +56,7 @@ module SpreeCmCommissioner
                              .joins('INNER JOIN spree_taxons origin on origin.id = details.origin_id')
                              .joins('INNER JOIN spree_vendors ON spree_vendors.id = spree_variants.vendor_id')
                              .joins('INNER JOIN spree_taxons destination on destination.id = details.destination_id')
-                             .joins("LEFT JOIN (#{total_sold_sql}) ts ON spree_variants.id = ts.trip_id")
+                             .joins("LEFT JOIN (#{total_sold.to_sql}) ts ON spree_variants.id = ts.trip_id")
 
       # TODO: migrat to new table: vehicle, orign and destination
       result = result.where(details: { origin_id: origin_id, destination_id: destination_id })
@@ -64,11 +64,13 @@ module SpreeCmCommissioner
       result
     end
 
-    def total_sold_sql
+    def total_sold
       Spree::Variant.select('spree_variants.id as trip_id, SUM(spree_line_items.quantity) as total_sold')
                     .joins('INNER JOIN spree_line_items ON spree_line_items.variant_id = spree_variants.id')
+                    .joins('INNER JOIN spree_orders ON spree_orders.id = spree_line_items.order_id')
+                    .where(spree_orders: { state: 'complete' })
                     .where(spree_line_items: { date: date })
-                    .group('spree_variants.id').to_sql
+                    .group('spree_variants.id')
     end
   end
 end

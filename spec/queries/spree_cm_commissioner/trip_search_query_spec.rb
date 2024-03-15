@@ -153,6 +153,7 @@ let!(:tomorrow) {today + 1.day}
   let!(:order3) {create(:transit_order, variant: larryta_phnom_penh_siemreap_1.master, seats: [mvn_f1_seat,mvn_f2_seat], date: today)}
   let!(:order4) {create(:transit_order, variant: larryta_phnom_penh_siemreap_1.master, seats: [mvn_f3_seat,mvn_f4_seat], date: today)}
   let!(:order5) {create(:transit_order, variant: vet_phnom_penh_siem_reap_2.master, seats: [arb_f1_seat,arb_f6_seat,arb_f4_seat], date: today)}
+  let!(:failed_order1) {create(:transit_order, variant: vet_phnom_penh_siem_reap_2.master, seats: [arb_f2_seat,arb_f3_seat,arb_f5_seat], date: today, state: 'payment', payment_state: nil)}
   let!(:order6) {create(:transit_order, variant: larryta_phnom_penh_siemreap_2.master, seats: [mvn_f7_seat,mvn_f8_seat], date: today)}
   let!(:order8) {create(:transit_order, variant: sihanoukville_to_koh_rong_by_ferry.master, date: tomorrow, quantity: 4)}
 
