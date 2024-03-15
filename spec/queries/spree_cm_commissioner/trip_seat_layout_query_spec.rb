@@ -3,10 +3,12 @@ require 'spec_helper'
 RSpec.describe SpreeCmCommissioner::TripSeatLayoutQuery do
   #vendor
   let!(:vet) {create(:vendor, name: 'Vet', code:"VET")}
-
+  let!(:buva_sea) {create(:vendor, name:'Buva Sea', code:"BS")}
   #location
   let!(:phnom_penh) { create(:transit_place, name: 'Phnom Penh', data_type:4) }
   let!(:siem_reap) { create(:transit_place, name: 'Siem Reap', data_type:4) }
+  let!(:sihanoukville) { create(:transit_place, name: 'Sihanoukville', data_type:4) }
+  let!(:koh_rong) {create(:transit_place, name: 'Koh Rong', data_type:4)}
 
   #Vehicle Type
   let!(:airbus) {create(:vehicle_type,
@@ -45,10 +47,19 @@ RSpec.describe SpreeCmCommissioner::TripSeatLayoutQuery do
                                       empty: [[0,2],[0,3],[1,2],[2,2],[3,2],[4,2],[5,2]]
                                     }]
                                   )}
+  let!(:ferry) {create(:vehicle_type,
+                :with_seats,
+                code: 'ferry',
+                vendor: buva_sea,
+                row: 5,
+                column: 5,
+                empty: [[0,2],[1,2],[2,2],[3,2],[4,2]]
+                )}
 
   let!(:bus1) {create(:vehicle, vehicle_type: airbus, vendor: vet)}
   let!(:minivan1) {create(:vehicle, vehicle_type: minivan, vendor: vet)}
   let!(:sleeping_bus1) {create(:vehicle, vehicle_type: sleeping_bus, vendor: vet)}
+  let!(:ferry1) {create(:vehicle, vehicle_type: ferry, vendor: buva_sea)}
 
   #routes
   let!(:phnom_penh_to_siem_reap_by_airbus) { create(:route,
@@ -86,6 +97,18 @@ RSpec.describe SpreeCmCommissioner::TripSeatLayoutQuery do
                                                               name: 'Phnom Penh to Siem Reap by Vet Sleeping Bus',
                                                               short_name:"PP-SR",
                                                               vendor: vet) }
+  let!(:sihanoukville_to_koh_rong_by_ferry) {create(:route,
+                                                        trip_attributes: {
+                                                          origin_id: sihanoukville.id,
+                                                          destination_id: koh_rong.id,
+                                                          departure_time: '10:00',
+                                                          duration: 6,
+                                                          vehicle_id: ferry1.id,
+                                                          allow_seat_selection: false
+                                                        },
+                                                        name: "Sihanoukville to Koh Rong by Buva Sea Ferry",
+                                                        short_name: "SV-KR",
+                                                        vendor: buva_sea)}
 #date
 let!(:today) {Date.today}
 let!(:tomorrow) {today + 1.day}
@@ -130,6 +153,9 @@ let!(:tomorrow) {today + 1.day}
   let!(:order4) {create(:transit_order, variant: phnom_penh_to_siem_reap_by_minivan.master, seats: [mvn_f5_seat,mvn_f6_seat], date: today)}
   let!(:order5) {create(:transit_order, variant: phnom_penh_to_siem_reap_by_sleeping_bus.master, seats: [slb_f1_seat,slb_f2_seat], date: today)}
   let!(:order6) {create(:transit_order, variant: phnom_penh_to_siem_reap_by_sleeping_bus.master, seats: [slb_s16_seat,slb_s17_seat], date: today)}
+  let!(:order7) {create(:transit_order, variant: sihanoukville_to_koh_rong_by_ferry.master, date: tomorrow, quantity: 3)}
+  let!(:order8) {create(:transit_order, variant: sihanoukville_to_koh_rong_by_ferry.master, date: tomorrow, quantity: 5)}
+
 
 
 
@@ -186,6 +212,20 @@ let!(:tomorrow) {today + 1.day}
           rows_table.style = {:alignment => :center}
           puts "#{layer}\n#{rows_table}"
         end
+      end
+    end
+
+    context "display seats layout table for ferry" do
+      let(:records) {described_class.new(trip_id: sihanoukville_to_koh_rong_by_ferry.master.id, date: tomorrow)}
+      it "return ferry seat layout" do
+        result = records.call
+        layout = result.layout
+        puts "Total Seats: #{result.total_seats}"
+        puts "Sold: #{result.total_sold}"
+        puts "Remaining: #{result.remaining_seats}"
+        puts "Allow Seat Selection: #{result.allow_seat_selection}"
+        expect(result.allow_seat_selection).to eq(false)
+        expect(result.layout).to eq(nil)
       end
     end
 

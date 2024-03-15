@@ -4,11 +4,13 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
   #vendor
   let!(:vet_airbus) {create(:vendor, name: 'Vet Airbus', code:"VET")}
   let!(:larryta) {create(:vendor, name: 'Larryta', code: 'LTA')}
+  let!(:buva_sea) {create(:vendor, name:'Buva Sea', code:"BS")}
 
   #location
   let!(:phnom_penh) { create(:transit_place, name: 'Phnom Penh', data_type:4) }
   let!(:siem_reap) { create(:transit_place, name: 'Siem Reap', data_type:4) }
   let!(:sihanoukville) { create(:transit_place, name: 'Sihanoukville', data_type:4) }
+  let!(:koh_rong) {create(:transit_place, name: 'Koh Rong', data_type:4)}
 
   #Vehicle Type
   let!(:airbus) {create(:vehicle_type,
@@ -25,10 +27,21 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                         row: 5,
                         column: 5)}
 
+  let!(:ferry) {create(:vehicle_type,
+                        :with_seats,
+                        code: 'ferry',
+                        vendor: buva_sea,
+                        row: 5,
+                        column: 5,
+                        empty: [[0,2],[1,2],[2,2],[3,2],[4,2]]
+                        )}
+
   let!(:bus1) {create(:vehicle, vehicle_type: airbus, vendor: vet_airbus)}
   let!(:bus2) {create(:vehicle, vehicle_type: airbus, vendor: vet_airbus)}
   let!(:minivan1) {create(:vehicle, vehicle_type: minivan, vendor: larryta)}
   let!(:minivan2) {create(:vehicle, vehicle_type: minivan, vendor: larryta)}
+  let!(:ferry1) {create(:vehicle, vehicle_type: ferry, vendor: buva_sea)}
+  let!(:ferry2) {create(:vehicle, vehicle_type: ferry, vendor: buva_sea)}
 
   #routes
   let!(:vet_phnom_penh_siem_reap_1) { create(:route,
@@ -39,7 +52,7 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                                                   duration: 6,
                                                   vehicle_id: bus1.id
                                                 },
-                                                name: 'VET Airbus Phnom Penh to Siem Reap 10:00',
+                                                name: 'VET Airbus Phnom Penh Siem Reap 10:00',
                                                 short_name:"PP-SR-10:00-6",
                                                 vendor: vet_airbus
                                                 ) }
@@ -51,7 +64,7 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                                                   duration: 7,
                                                   vehicle_id: bus2.id
                                                 },
-                                                name: 'VET Airbus Phnom Penh to Siem Reap 15:00',
+                                                name: 'VET Airbus Phnom Penh Siem Reap 15:00',
                                                 short_name:"PP-SR-15:00-7",
                                                 vendor: vet_airbus
                                               ) }
@@ -64,7 +77,7 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                                                       duration: 4,
                                                       vehicle_id: minivan1.id
                                                     },
-                                                    name: 'Larryta Airbus Phnom Penh to Siem Reap 13:00',
+                                                    name: 'Larryta Airbus Phnom Penh Siem Reap 13:00',
                                                     short_name:"PP-SR-13:00-4",
                                                     vendor: larryta
                                                     ) }
@@ -77,10 +90,35 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                                                       duration: 5,
                                                       vehicle_id: minivan2.id
                                                     },
-                                                    name: 'Larryta Airbus Phnom Penh to Siem Reap 20:00',
+                                                    name: 'Larryta Airbus Phnom Penh Siem Reap 20:00',
                                                     short_name:"PP-SR-20:00-5",
                                                     vendor: larryta
                                                     ) }
+  let!(:sihanoukville_to_koh_rong_by_ferry) {create(:route,
+                                                    trip_attributes: {
+                                                      origin_id: sihanoukville.id,
+                                                      destination_id: koh_rong.id,
+                                                      departure_time: '10:00',
+                                                      duration: 6,
+                                                      vehicle_id: ferry1.id,
+                                                      allow_seat_selection: false
+                                                    },
+                                                    name: "Buva Sea Sihanoukville to Koh Rong 10",
+                                                    short_name: "SV-KR10-00-6",
+                                                    vendor: buva_sea)}
+
+  let!(:sihanoukville_to_koh_rong_by_ferry_2) {create(:route,
+                                                    trip_attributes: {
+                                                      origin_id: sihanoukville.id,
+                                                      destination_id: koh_rong.id,
+                                                      departure_time: '15:00',
+                                                      duration: 3,
+                                                      vehicle_id: ferry2.id,
+                                                      allow_seat_selection: false
+                                                    },
+                                                    name: "Buva Sea Sihanoukville to Koh Rong 15",
+                                                    short_name: "SV-KR-15-00-3",
+                                                    vendor: buva_sea)}
 #date
 let!(:today) {Date.today}
 let!(:tomorrow) {today + 1.day}
@@ -116,7 +154,7 @@ let!(:tomorrow) {today + 1.day}
   let!(:order4) {create(:transit_order, variant: larryta_phnom_penh_siemreap_1.master, seats: [mvn_f3_seat,mvn_f4_seat], date: today)}
   let!(:order5) {create(:transit_order, variant: vet_phnom_penh_siem_reap_2.master, seats: [arb_f1_seat,arb_f6_seat,arb_f4_seat], date: today)}
   let!(:order6) {create(:transit_order, variant: larryta_phnom_penh_siemreap_2.master, seats: [mvn_f7_seat,mvn_f8_seat], date: today)}
-
+  let!(:order8) {create(:transit_order, variant: sihanoukville_to_koh_rong_by_ferry.master, date: tomorrow, quantity: 4)}
 
   describe"#trips_info" do
     context "display table" do
@@ -196,6 +234,17 @@ let!(:tomorrow) {today + 1.day}
         expect(search_result.last.trip_id).to eq(larryta_phnom_penh_siemreap_2.master.id)
         expect(search_result.first.remaining_seats).to eq(7)
         expect(search_result.last.remaining_seats).to eq(22)
+      end
+    end
+    context "return trip result of SV-KR for today " do
+      let(:result) {described_class.new(origin_id: sihanoukville, destination_id: koh_rong, date: tomorrow)}
+      it "return trip result for today" do
+        search_result = result.call.sort_by(&:trip_id)
+        expect(search_result.count).to eq(2)
+        expect(search_result.first.trip_id).to eq(sihanoukville_to_koh_rong_by_ferry.master.id)
+        expect(search_result.last.trip_id).to eq(sihanoukville_to_koh_rong_by_ferry_2.master.id)
+        expect(search_result.first.remaining_seats).to eq(15)
+        expect(search_result.last.remaining_seats).to eq(19)
       end
     end
     context "return trip result for tomorrow" do
