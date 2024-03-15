@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 RSpec.describe Spree::Variant, type: :model do
+  describe 'associations' do
+    it { should have_many(:prices).class_name('Spree::Price').dependent(:destroy) }
+  end
+
   describe 'validations' do
     context 'saving option values to variants' do
       let(:product_kind_option_type) { create(:option_type, kind: :product, presentation: 'Bathroom & Toiletries', name: 'bathroom-toiletries') }
