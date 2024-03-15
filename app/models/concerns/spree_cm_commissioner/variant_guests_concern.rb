@@ -6,15 +6,23 @@ module SpreeCmCommissioner
     DEFAULT_NUMBER_OF_GUESTS = 1
 
     def adults_option_value
-      option_value('adults')
+      @adults_option_value ||= option_value('adults')
     end
 
     def kids_option_value
-      option_value('kids')
+      @kids_option_value ||= option_value('kids')
     end
 
     def kids_age_max_option_value
-      option_value('kids-age-max')
+      @kids_age_max_option_value ||= option_value('kids-age-max')
+    end
+
+    def allowed_extra_adults_option_value
+      @allowed_extra_adults_option_value ||= option_value('allowed-extra-adults')
+    end
+
+    def allowed_extra_kids_option_value
+      @allowed_extra_kids_option_value ||= option_value('allowed-extra-kids')
     end
 
     # can consider as customers.
@@ -29,6 +37,14 @@ module SpreeCmCommissioner
 
     def number_of_kids
       kids_option_value&.to_i || 0
+    end
+
+    def allowed_extra_adults
+      allowed_extra_adults_option_value&.to_i || 0
+    end
+
+    def allowed_extra_kids
+      allowed_extra_kids_option_value&.to_i || 0
     end
 
     # <= 17

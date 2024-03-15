@@ -159,5 +159,23 @@ RSpec.describe Spree::Variant, type: :model do
         expect(subject.kids_age_max).to eq 14
       end
     end
+
+    describe '#allowed_extra_adults' do
+      let(:option_type) { create(:cm_option_type, :allowed_extra_adults) }
+      let(:option_value) { create(:option_value, name: 'allowed-2-adults', presentation: '2', option_type: option_type) }
+
+      it 'return result of presentation in integer' do
+        expect(subject.allowed_extra_adults).to eq 2
+      end
+    end
+
+    describe '#allowed_extra_kids' do
+      let(:option_type) { create(:cm_option_type, :allowed_extra_kids) }
+      let(:option_value) { create(:option_value, name: '2-kids', presentation: '2', option_type: option_type) }
+
+      it 'return result of presentation in integer' do
+        expect(subject.allowed_extra_kids).to eq 2
+      end
+    end
   end
 end
