@@ -3,6 +3,7 @@ module SpreeCmCommissioner
     def self.prepended(base)
       base.include SpreeCmCommissioner::LineItemDurationable
       base.include SpreeCmCommissioner::LineItemsFilterScope
+      base.include SpreeCmCommissioner::LineItemGuestsConcern
       base.include SpreeCmCommissioner::ProductDelegation
       base.include SpreeCmCommissioner::KycBitwise
 
@@ -64,14 +65,6 @@ module SpreeCmCommissioner
         accepted_at: Time.current,
         accepter: user
       )
-    end
-
-    def remaining_total_guests
-      number_of_guests - guests.size
-    end
-
-    def number_of_guests
-      variant.number_of_guests * quantity
     end
 
     def rejected_by(user)

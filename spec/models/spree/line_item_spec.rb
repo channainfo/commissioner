@@ -218,8 +218,10 @@ RSpec.describe Spree::LineItem, type: :model do
     let(:line_item) { create(:line_item, quantity: 2) }
 
     it 'return number of guest base on variant and quantity' do
-      allow(line_item.variant).to receive(:number_of_guests).and_return(3)
+      allow(line_item.variant).to receive(:number_of_kids).and_return(1)
+      allow(line_item.variant).to receive(:number_of_adults).and_return(2)
 
+      expect(line_item.variant.number_of_guests).to eq 3
       expect(line_item.number_of_guests).to eq 6
     end
   end
@@ -233,5 +235,211 @@ RSpec.describe Spree::LineItem, type: :model do
 
       expect(line_item.remaining_total_guests).to eq 1
     end
+  end
+
+  context 'guest options' do
+    describe '#number_of_adults' do
+      let(:variant) { create(:variant, option_values: [adults(4), allowed_extra_adults(2)]) }
+
+      context 'when public metadata is provided' do
+        it 'return number_of_adults base on public_metadata' do
+          line_item = create(:line_item, quantity: 2, variant: variant, public_metadata: { number_of_adults: 6 })
+
+          expect(line_item.number_of_adults).to eq 6
+        end
+      end
+
+      context 'when public_metadata is not provided' do
+        it 'return number_of_adults base on variant adults' do
+          line_item = create(:line_item, quantity: 1, variant: variant)
+
+          expect(line_item.variant.number_of_adults).to eq 4
+          expect(line_item.number_of_adults).to eq 4
+        end
+
+        it 'return number_of_adults base on variant adults x quantity' do
+          quantity = 2
+          line_item = create(:line_item, quantity: quantity, variant: variant)
+
+          expect(line_item.variant.number_of_adults).to eq 4
+          expect(line_item.number_of_adults).to eq 4 * quantity
+        end
+      end
+    end
+
+    describe '#number_of_kids' do
+      let(:variant) { create(:variant, option_values: [kids(4), allowed_extra_kids(3)]) }
+
+      context 'when public metadata is provided' do
+        it 'return actual number of kids base on public_metadata' do
+          line_item = create(:line_item, quantity: 1, variant: variant, public_metadata: { number_of_kids: 6 })
+
+          expect(line_item.number_of_kids).to eq 6
+        end
+      end
+
+      context 'when public_metadata is not provided' do
+        it 'return actual number of kids base on variant kids' do
+          line_item = create(:line_item, quantity: 1, variant: variant)
+
+          expect(line_item.variant.number_of_kids).to eq 4
+          expect(line_item.number_of_kids).to eq 4
+        end
+
+        it 'return actual number of kids base on variant kids x quantity' do
+          quantity = 2
+          line_item = create(:line_item, quantity: quantity, variant: variant)
+
+          expect(line_item.variant.number_of_kids).to eq 4
+          expect(line_item.number_of_kids).to eq 4 * quantity
+        end
+      end
+    end
+
+    describe '#extra_adults' do
+      let(:variant) { create(:variant, option_values: [adults(4), allowed_extra_adults(2)]) }
+
+      it 'should return 2 extra adults' do
+        line_item = create(:line_item, quantity: 1, variant: variant, public_metadata: { number_of_adults: 5 })
+
+        expect(line_item.extra_adults).to eq 1
+      end
+
+      it 'should return 0 when extra_adults? false' do
+        line_item = create(:line_item, quantity: 1, variant: variant, public_metadata: { number_of_adults: 5 })
+        allow(line_item).to receive(:extra_adults?).and_return(false)
+
+        expect(line_item.extra_adults).to eq 0
+      end
+    end
+
+    describe '#extra_kids' do
+      let(:variant) { create(:variant, option_values: [kids(4), allowed_extra_kids(3)]) }
+
+      it 'should return 2 extra kids' do
+        line_item = create(:line_item, quantity: 1, variant: variant, public_metadata: { number_of_kids: 6 })
+
+        expect(line_item.extra_kids).to eq 2
+      end
+
+      it 'should return 0 when extra_kids? false' do
+        line_item = create(:line_item, quantity: 1, variant: variant, public_metadata: { number_of_kids: 6 })
+        allow(line_item).to receive(:extra_kids?).and_return(false)
+
+        expect(line_item.extra_kids).to eq 0
+      end
+    end
+
+    describe '#extra_adults?' do
+      let(:variant) { create(:variant, option_values: [adults(4), allowed_extra_adults(2)]) }
+
+      it 'return false when public_metadata[:number_of_adults] not present?' do
+        line_item = create(:line_item, quantity: 1, variant: variant)
+
+        expect(line_item.extra_adults?).to eq false
+      end
+
+      it 'return false when number_of_adults 4 is not exceeding variant number of adults 4' do
+        line_item = create(:line_item, quantity: 1, variant: variant, public_metadata: { number_of_adults: 4 })
+
+        expect(line_item.variant.number_of_adults).to eq 4
+        expect(line_item.number_of_adults).to eq 4
+        expect(line_item.extra_adults?).to eq false
+      end
+
+      it 'return true when number_of_adults 5 is exceeding variant number of adults 4' do
+        line_item = create(:line_item, quantity: 1, variant: variant, public_metadata: { number_of_adults: 5 })
+
+        expect(line_item.variant.number_of_adults).to eq 4
+        expect(line_item.number_of_adults).to eq 5
+        expect(line_item.extra_adults?).to eq true
+      end
+    end
+
+    describe '#extra_kids?' do
+      let(:variant) { create(:variant, option_values: [kids(4), allowed_extra_kids(3)]) }
+
+      it 'return false when public_metadata[:number_of_kids] not present?' do
+        line_item = create(:line_item, quantity: 1, variant: variant)
+
+        expect(line_item.extra_kids?).to eq false
+      end
+
+      it 'return false when number_of_kids 4 is not exceeding variant number of kids 4' do
+        line_item = create(:line_item, quantity: 1, variant: variant, public_metadata: { number_of_kids: 4 })
+
+        expect(variant.number_of_kids).to eq 4
+        expect(line_item.number_of_kids).to eq 4
+        expect(line_item.extra_kids?).to eq false
+      end
+
+      it 'return true when number_of_kids 5 is exceeding variant number of kids 4' do
+        line_item = create(:line_item, quantity: 1, variant: variant, public_metadata: { number_of_kids: 5 })
+
+        expect(variant.number_of_kids).to eq 4
+        expect(line_item.number_of_kids).to eq 5
+        expect(line_item.extra_kids?).to eq true
+      end
+    end
+
+    context 'validate total adults' do
+      let(:variant) { create(:variant, option_values: [adults(4), allowed_extra_adults(2)]) }
+
+      it 'invalid when actual adults is exceed variant adults & allow extra adults' do
+        line_item = build(:line_item, quantity: 1, variant: variant, public_metadata: { number_of_adults: 7 })
+
+        expect(line_item.allowed_total_adults).to eq 6
+        expect { line_item.save! }.to raise_error(ActiveRecord::RecordInvalid)
+                                  .with_message("Validation failed: Quantity exceed_total_adults")
+      end
+
+      it 'invalid when actual adults is exceed variant adults & allow extra adults x quantity' do
+        line_item = build(:line_item, quantity: 2, variant: variant, public_metadata: { number_of_adults: 13 })
+
+        expect(line_item.allowed_total_adults).to eq 12
+        expect { line_item.save! }.to raise_error(ActiveRecord::RecordInvalid)
+                                  .with_message("Validation failed: Quantity exceed_total_adults")
+      end
+    end
+
+    context 'validate total kids' do
+      let(:variant) { create(:variant, option_values: [kids(4), allowed_extra_kids(3)]) }
+
+      it 'invalid when actual kids is exceed variant kids & allow extra kids' do
+        line_item = build(:line_item, quantity: 1, variant: variant, public_metadata: { number_of_kids: 8 })
+
+        expect(line_item.allowed_total_kids).to eq 7
+        expect { line_item.save! }.to raise_error(ActiveRecord::RecordInvalid)
+                                  .with_message("Validation failed: Quantity exceed_total_kids")
+      end
+
+      it 'invalid when actual kids is exceed variant kids & allow extra kids x quantity' do
+        line_item = build(:line_item, quantity: 2, variant: variant, public_metadata: { number_of_kids: 15 })
+
+        expect(line_item.allowed_total_kids).to eq 14
+        expect { line_item.save! }.to raise_error(ActiveRecord::RecordInvalid)
+                                  .with_message("Validation failed: Quantity exceed_total_kids")
+      end
+    end
+  end
+
+  def kids(number)
+    kids_option_type = create(:cm_option_type, :kids)
+    create(:option_value, name: "#{number}-kids", presentation: "#{number}", option_type: kids_option_type)
+  end
+
+  def adults(number)
+    adults_option_type = create(:cm_option_type, :adults)
+    create(:option_value, name: "#{number}-adults", presentation: "#{number}", option_type: adults_option_type)
+  end
+
+  def allowed_extra_kids(number)
+    allowed_extra_kids_option_type = create(:cm_option_type, :allowed_extra_kids)
+    create(:option_value, name: "allowed-#{number}-kids", presentation: "#{number}", option_type: allowed_extra_kids_option_type)
+  end
+
+  def allowed_extra_adults(number)
+    allowed_extra_adults_option_type = create(:cm_option_type, :allowed_extra_adults)
+    create(:option_value, name: "allowed-#{number}-adults", presentation: "#{number}", option_type: allowed_extra_adults_option_type)
   end
 end
