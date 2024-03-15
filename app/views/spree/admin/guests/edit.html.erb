@@ -1,0 +1,11 @@
+<% content_for :page_title do %>
+<%= link_to plural_resource_name(SpreeCmCommissioner::Guest), spree.admin_order_guests_url(@order) %> /
+  <%= Spree.t(:new_homepage_section) %>
+<% end %>
+
+<%= form_with model: @object, url: { action: 'update' }, html: { multipart: true } do |f| %>
+  <fieldset data-hook="">
+    <%= render partial: 'form', locals: { f: f } %>
+    <%= render partial: 'spree/admin/shared/new_resource_links' %>
+  </fieldset>
+<% end %>

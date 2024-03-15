@@ -1,0 +1,19 @@
+<%= render 'spree/admin/shared/order_tabs', current: :guests %>
+
+<% if @order.payments.exists? && @order.considered_risky? %>
+  <%= render 'spree/admin/orders/risk_analysis', latest_payment: @order.payments.order("created_at DESC").first %>
+<% end %>
+
+<% if @order.line_items.empty? %>
+  <div class="alert alert-warning">
+    <%= Spree.t(:your_order_is_empty_add_product) %>
+  </div>
+<% end %>
+
+<% @order.line_items.map do |line_item| %>
+  <% if line_item.kyc? %>
+    <%= render partial: 'table', locals: { line_item: line_item } %>
+  <% end %>
+<% end %>
+
+<%= render 'spree/admin/shared/order_summary' %>

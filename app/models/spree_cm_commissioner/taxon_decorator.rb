@@ -27,6 +27,8 @@ module SpreeCmCommissioner
       base.validates_associated :category_icon
       base.before_save :set_kind
       base.before_save :set_slug
+
+      base.whitelisted_ransackable_attributes |= %w[kind]
     end
 
     def set_kind

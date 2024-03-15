@@ -139,6 +139,12 @@ Spree::Core::Engine.add_routes do
       end
 
       resources :line_items, only: %i[edit update]
+      resources :guests do
+        collection do
+          post :add_guest
+          delete :remove_guest
+        end
+      end
     end
 
     resources :webhooks_subscribers do
