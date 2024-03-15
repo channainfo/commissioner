@@ -4,10 +4,16 @@ module SpreeCmCommissioner
       base.include SpreeCmCommissioner::ProductDelegation
       base.include SpreeCmCommissioner::VariantGuestsConcern
       base.include SpreeCmCommissioner::VariantOptionValuesConcern
+      base.include SpreeCmCommissioner::PriceableConcern
 
       base.after_commit :update_vendor_price
       base.after_save   :update_vendor_total_inventory, if: :saved_change_to_permanent_stock?
       base.validate     :validate_option_types
+
+      # override
+      base.has_one :default_price, lambda {
+                                     with_deleted.where(currency: Spree::Store.default.default_currency)
+                                   }, as: :priceable, class_name: 'Spree::Price', dependent: :destroy
 
       base.has_many :visible_option_values, lambda {
                                               joins(:option_type).where(spree_option_types: { hidden: false })
