@@ -1,0 +1,24 @@
+<div class="form-group">
+  <%= f.hidden_field :guest_id, value: params[:guest_id] %>
+  <%= f.field_container :card_type do %>
+    <%= f.label :card_type, class: "font-weight-bold" %>
+    <% SpreeCmCommissioner::IdCard.card_types.keys.each do |card_type| %>
+      <div class="radio" data-id="<%= card_type.to_s %>">
+        <label data-hook="card_type_field">
+          <%= f.radio_button :card_type, card_type, class: "card_types_radios" %>
+          <%= card_type.to_s.titleize %>
+        </label>
+      </div>
+    <% end %>
+  <% end %>
+  <%= f.field_container :front_image do %>
+    <%= f.label :front_image %>
+    <%= f.file_field :front_image %>
+    <%= image_tag main_app.url_for(@object.front_image.url(:small)) if @object.front_image %>
+  <% end %>
+  <%= f.field_container :back_image do %>
+    <%= f.label :back_image %>
+    <%= f.file_field :back_image %>
+    <%= image_tag main_app.url_for(@object.back_image.url(:small)) if @object.back_image %>
+  <% end %>
+</div>

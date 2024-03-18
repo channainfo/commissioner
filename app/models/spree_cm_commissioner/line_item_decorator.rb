@@ -18,6 +18,8 @@ module SpreeCmCommissioner
 
       base.whitelisted_ransackable_attributes |= %w[to_date from_date]
 
+      base.after_create :create_blank_guest
+
       delegate :kyc?, to: :product
 
       def base.json_api_columns
@@ -47,6 +49,9 @@ module SpreeCmCommissioner
       end
     end
 
+    def create_blank_guest
+      guests.new.save(validate: false)
+    end
 
     def amount_per_guest
       amount / quantity

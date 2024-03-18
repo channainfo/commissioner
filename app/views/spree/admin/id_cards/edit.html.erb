@@ -1,6 +1,6 @@
 <% content_for :page_title do %>
-<%= link_to plural_resource_name(SpreeCmCommissioner::Guest), spree.admin_order_guests_url(@order) %> /
-  <%= Spree.t(:guest_infomation) %>
+<%= link_to plural_resource_name(SpreeCmCommissioner::Guest), spree.admin_order_guests_url(params[:order_id]) %> /
+  <%= Spree.t(:edit_id_card_images) %>
 <% end %>
 
 <%= form_with model: @object, url: { action: 'update' }, html: { multipart: true } do |f| %>

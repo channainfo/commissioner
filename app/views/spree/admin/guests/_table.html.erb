@@ -3,7 +3,7 @@
       <h5 class="card-title mb-0 h6 alert">
         <%= Spree.t(line_item.name) %>
       </h5>
-      <%= button_to Spree.t(:create_guest), add_guest_admin_order_guests_path(line_item.order, params: { line_item_id: line_item.id }), class: 'btn btn-primary' %>
+      <%= button_to Spree.t(:create_guest), add_guest_admin_order_guests_path(line_item.order, params: { line_item_id: line_item.id }), class: "btn btn-outline-primary" %>
     </div>
     <div class="table-responsive border-0 rounded bg-white">
       <table class="table line-items" data-hook="line-items">
@@ -20,9 +20,8 @@
                 <% when :guest_occupation %>
                   <th scope="col" class="text-left"><%= Spree.t(:occupation) %></th>
                 <% when :guest_id_card %>
-                  <th scope="col" class="text-left"><%= Spree.t(:id_card) %></th>
-                <% when :guest_id_cards %>
-                  <th scope="col" class="text-left"><%= Spree.t(:id_cards) %></th>
+                  <th scope="col" class="text-left"><%= Spree.t(:id_card_type) %></th>
+                  <th scope="col" class="text-left"><%= Spree.t(:id_card_images) %></th>
                 <% when :guest_entry_type %>
                   <th scope="col" class="text-left"><%= Spree.t(:entry_type) %></th>
               <% end %>
@@ -69,8 +68,10 @@
                           <%= guest.id_card&.card_type&.titleize %>
                         <% end %>
                       </td>
-                    <% when :guest_id_cards %>
                       <td class="d-flex flex-row gap-5">
+                        <% if guest&.id_card&.front_image.nil? && guest&.id_card&.back_image.nil? %>
+                          <%= link_to Spree.t(:upload_id_card), new_admin_order_guest_id_card_path(@order, guest_id: guest.id), class: "text-center" %>
+                        <% end %>
                         <% if guest&.id_card&.front_image %>
                           <div class="admin-product-image-container small-img">
                             <% if guest&.id_card&.front_image&.attachment %>
@@ -100,6 +101,9 @@
               <% end %>
               <td class="text-right flex-grow-1" colspan="<%= line_item.kyc_fields.count %>">
                 <%= link_to_edit guest, url: edit_admin_order_guest_path(@order, guest), no_text: true %>
+                <% if guest&.id_card&.front_image.present? || guest&.id_card&.back_image.present? %>
+                  <%= link_to_with_icon 'images.svg', 'Edit Id Card Images', edit_admin_order_guest_id_card_path(order_id: @order, guest_id: guest.id, id: guest.id_card.id), no_text: true, class: "mx-2" %>
+                <% end %>
                 <%= link_to_delete guest, url: remove_guest_admin_order_guests_path(@order, params: {line_item_id: guest.line_item_id, guest_id: guest.id }) ,no_text: true %>
               </td>
             </tr>
