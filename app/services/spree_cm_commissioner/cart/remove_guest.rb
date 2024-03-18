@@ -6,7 +6,7 @@ module SpreeCmCommissioner
       def call(order:, line_item:, guest_id: nil)
         ActiveRecord::Base.transaction do
           remove_guest(order, line_item, guest_id) if guest_id.present?
-          decrease_quantity(order, line_item) if should_decrease_quantity?(line_item)
+          decrease_quantity(order, line_item) if should_decrease_quantity?(order, line_item)
           recalculate_cart(order, line_item)
 
           success(order: order, line_item: line_item)
@@ -33,7 +33,9 @@ module SpreeCmCommissioner
 
       # should decrease quantity if number of guests
       # does not fully fill a unit/quantity of line item
-      def should_decrease_quantity?(line_item)
+      def should_decrease_quantity?(order, line_item)
+        return false if order.completed?
+
         total_guests(line_item) <= required_guests_for_previous_unit(line_item)
       end
 

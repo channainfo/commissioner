@@ -11,7 +11,7 @@ RSpec.describe SpreeCmCommissioner::Cart::RemoveGuest do
       subject { described_class.call(order: order, line_item: line_item, guest_id: guest.id) }
 
       it 'should removes guest then decreases quantity when should_decrease_quantity? true' do
-        allow_any_instance_of(described_class).to receive(:should_decrease_quantity?).with(line_item).and_return(true)
+        allow_any_instance_of(described_class).to receive(:should_decrease_quantity?).with(order, line_item).and_return(true)
 
         expect_any_instance_of(described_class).to receive(:remove_guest).with(order, line_item, guest.id).and_call_original
         expect_any_instance_of(described_class).to receive(:decrease_quantity).with(order, line_item).and_call_original
@@ -22,7 +22,7 @@ RSpec.describe SpreeCmCommissioner::Cart::RemoveGuest do
       end
 
       it 'should removes guest & does not decreases quantity when should_decrease_quantity? false' do
-        allow_any_instance_of(described_class).to receive(:should_decrease_quantity?).with(line_item).and_return(false)
+        allow_any_instance_of(described_class).to receive(:should_decrease_quantity?).with(order, line_item).and_return(false)
 
         expect_any_instance_of(described_class).to receive(:remove_guest).with(order, line_item, guest.id).and_call_original
         expect_any_instance_of(described_class).to_not receive(:decrease_quantity)
@@ -37,7 +37,7 @@ RSpec.describe SpreeCmCommissioner::Cart::RemoveGuest do
       subject { described_class.call(order: order, line_item: line_item, guest_id: nil) }
 
       it 'should decrease quantity when should_decrease_quantity? true' do
-        allow_any_instance_of(described_class).to receive(:should_decrease_quantity?).with(line_item).and_return(true)
+        allow_any_instance_of(described_class).to receive(:should_decrease_quantity?).with(order, line_item).and_return(true)
 
         expect_any_instance_of(described_class).to_not receive(:remove_guest)
         expect_any_instance_of(described_class).to receive(:decrease_quantity).with(order, line_item).and_call_original
@@ -48,7 +48,7 @@ RSpec.describe SpreeCmCommissioner::Cart::RemoveGuest do
 
       # in this case, the class does not do anything except recaculate cart.
       it 'does not decrease quantity when should_decrease_quantity? false' do
-        allow_any_instance_of(described_class).to receive(:should_decrease_quantity?).with(line_item).and_return(false)
+        allow_any_instance_of(described_class).to receive(:should_decrease_quantity?).with(order, line_item).and_return(false)
 
         expect_any_instance_of(described_class).to_not receive(:remove_guest)
         expect_any_instance_of(described_class).to_not receive(:decrease_quantity)
@@ -66,14 +66,14 @@ RSpec.describe SpreeCmCommissioner::Cart::RemoveGuest do
       allow(subject).to receive(:total_guests).with(line_item).and_return(2)
       allow(subject).to receive(:required_guests_for_next_unit).with(line_item).and_return(2)
 
-      expect(subject.send(:should_decrease_quantity?, line_item)).to be true
+      expect(subject.send(:should_decrease_quantity?, order, line_item)).to be true
     end
 
     it 'should return false when total_guests > required_guests_for_next_unit' do
       allow(subject).to receive(:total_guests).with(line_item).and_return(3)
       allow(subject).to receive(:required_guests_for_next_unit).with(line_item).and_return(2)
 
-      expect(subject.send(:should_decrease_quantity?, line_item)).to be false
+      expect(subject.send(:should_decrease_quantity?, order, line_item)).to be false
     end
   end
 

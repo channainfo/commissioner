@@ -18,11 +18,6 @@ module Spree
         'spree_cm_commissioner_guest'
       end
 
-      def new
-        @line_item = @order.line_items.find(params[:line_item_id])
-        @kyc_fields = @line_item.kyc_fields
-      end
-
       def add_guest
         SpreeCmCommissioner::Cart::AddGuest.call(order: @order, line_item: @order.line_items.find(params[:line_item_id]))
 
@@ -36,21 +31,17 @@ module Spree
 
         respond_to do |format|
           format.html { redirect_to location_after_destroy }
-          format.js   { render_js_for_destroy }
+          format.js { render js: 'window.location.reload(true);' }
         end
+      end
+
+      def new
+        @line_item = @order.line_items.find(params[:line_item_id])
+        @kyc_fields = @line_item.kyc_fields
       end
 
       def edit
         @kyc_fields = @object.line_item.kyc_fields
-      end
-
-      def create
-        guest = SpreeCmCommissioner::Guest.new(permitted_resource_params)
-        if guest.save
-          redirect_to collection_url
-        else
-          render :new
-        end
       end
 
       def permitted_resource_params

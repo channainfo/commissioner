@@ -34,7 +34,7 @@
           <% when :guest_dob %>
             <div data-hook="admin_product_form_dob" data-product-edit-target="makeActiveAt">
               <%= f.field_container :dob do %>
-                <%= f.label :dob, Spree.t(:dob) %>
+                <%= f.label :dob, Spree.t(:date_of_birth) %>
                 <%= f.error_message_on :dob %>
 
                 <div class="input-group datePickerFrom"
