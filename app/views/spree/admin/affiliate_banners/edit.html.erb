@@ -1,0 +1,13 @@
+<main class="content" id="content" role="main">
+  <%= link_to admin_affiliate_banners_path, class: "btn btn-default", method: :get do %>
+    <i class="fa fa-chevron-left"></i> Back
+  <% end %>
+  <div class="well" style="height:auto">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+      <h1 class="page-title">Edit Affiliate Banner</h1>
+      <%= render "form" %>
+      </div>
+    </div>
+  </div>
+</main>
