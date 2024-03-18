@@ -20,11 +20,11 @@ module Spree
         @taxon.taxonomy = @place_taxonomy
       end
 
-      def update
+      def update # rubocop:disable Metrics/AbcSize
         successful = @taxon.transaction do
           parent_id = params[:taxon][:parent_id]
           set_position
-          set_parent(parent_id)
+          assign_parent(parent_id)
 
           @taxon.save!
 
@@ -97,7 +97,7 @@ module Spree
         @taxon[:data_type] = result
       end
 
-      def set_parent(parent_id)
+      def assign_parent(parent_id)
         @taxon.parent = current_store.taxons.find(parent_id) if parent_id
       end
 
@@ -107,14 +107,6 @@ module Spree
         else
           super
         end
-      end
-
-      def set_permalink_params
-        set_permalink_part
-
-        return unless params.key? 'permalink_part'
-
-        params[:taxon][:permalink] = @parent_permalink + params[:permalink_part]
       end
 
       def rename_child_taxons

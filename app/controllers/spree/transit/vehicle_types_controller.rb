@@ -62,7 +62,9 @@ module Spree
           code: vehicle_type_params[:code],
           vendor_id: vehicle_type_params[:vendor_id],
           route_type: vehicle_type_params[:route_type],
-          status: vehicle_type_params[:status]
+          status: vehicle_type_params[:status],
+          allow_seat_selection: vehicle_type_params[:allow_seat_selection],
+          vehicle_seats_count: vehicle_type_params[:vehicle_seats_count]
         }
       end
 

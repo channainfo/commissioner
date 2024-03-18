@@ -1,5 +1,5 @@
 <div data-hook="admin_user_form_fields" class="row">
-  <div class='col-6'>
+  <div class='col-3'>
     <%= f.hidden_field :vendor_id, value: current_vendor.id %>
     <%= f.field_container :name do %>
       <%= f.label :name, Spree.t(:name) %>
@@ -7,20 +7,20 @@
       <%= f.error_message_on :name %>
     <% end %>
   </div>
-  <div class="col-6">
-    <%= f.field_container :option_value_ids, :class => ['form-group'] do %>
-    <%=f.label :amenities%>
-      <%= f.select(:option_value_ids, options_for_select( @amenities, @selected_option_value_ids),{include_blank:false},{class: "select2", multiple:true}) %>
-    <% end %>
-  </div>
-  <div class="col-4" >
+    <div class="col-3" >
     <%= f.field_container :code, :class =>['form-group'] do %>
       <%= f.label :code, Spree.t(:code) %>
     <%= f.text_field :code, class: 'form-control', required: true%>
       <%= f.error_message_on :code %>
     <%end%>
   </div>
-  <div class='col-4'>
+  <div class="col-6">
+    <%= f.field_container :option_value_ids, :class => ['form-group'] do %>
+    <%=f.label :amenities%>
+      <%= f.select(:option_value_ids, options_for_select( @amenities, @selected_option_value_ids),{include_blank:false},{class: "select2", multiple:true}) %>
+    <% end %>
+  </div>
+  <div class='col-3'>
     <%= f.field_container :route_type, :class => ['form-group'] do %>
       <%= f.label :route_type, Spree.t('route_type') %><br />
       <%= f.collection_select :route_type, SpreeCmCommissioner::RouteType::ROUTE_TYPES, :to_s, :capitalize,
@@ -29,11 +29,37 @@
               :disabled => defined?(disabled) && disabled == true ? 'disable' : nil }.compact %>
     <% end %>
   </div>
-  <div class="col-4">
+  <div class="col-3">
     <%= f.field_container :status, :class => ['form-group'] do %>
     <%= f.label :status %>
     <%= f.select(:status, options_for_select(@statuses, @object.status),{include_blank:false},{class: "select2"})%>
     <%= f.error_message_on :status %>
     <% end  %>
   </div>
+  <div class="col-3">
+    <%= f.field_container :allow_seat_selection, :class => ['form_group'] do %>
+      <%= f.label :seat_selection, Spree.t(:seat_selection) %>
+      <%= f.select(:allow_seat_selection, options_for_select([[ 'True', true ], [ 'False', false ]], @object.allow_seat_selection), {}, {class: 'form-control select2', id:'allow_seat_selection',onchange: 'toggleVehicleSeatsCount();' })%>
+      <%= f.error_message_on :allow_seat_selection%>
+    <% end %>
+  </div>
+  <div class="form-group col-3">
+    <%= f.field_container :vehicle_seats_count do %>
+      <%= f.label :seats_amount %>
+      <%= f.text_field :vehicle_seats_count, class: 'form-control', id: 'vehicle_seats_count' %>
+      <%= f.error_message_on :vehicle_seats_count %>
+    <%end%>
+  </div>
 </div>
+
+<script>
+  function toggleVehicleSeatsCount() {
+    var allowSeatSelection = $('#allow_seat_selection').val();
+    if (allowSeatSelection == 'true') {
+      $('#vehicle_seats_count').prop('disabled', true);
+    } else {
+      $('#vehicle_seats_count').prop('disabled', false);
+    }
+  }
+  $(document).ready(toggleVehicleSeatsCount);
+</script>
