@@ -1,0 +1,8 @@
+<!-- insert_after "[data-hook='admin_order_tabs_channel_details']" -->
+
+<li class="nav-item" data-hook='admin_order_tabs_guests'>
+  <%= link_to_with_icon 'person-plus-fill.svg',
+    Spree.t(:guests),
+    admin_order_guests_url(@order),
+    class: "#{'active' if current == :guests} nav-link" %>
+</li>

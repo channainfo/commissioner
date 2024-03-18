@@ -15,7 +15,7 @@ module SpreeCmCommissioner
     has_one :id_card, class_name: 'SpreeCmCommissioner::IdCard', dependent: :destroy
     has_one :check_in, class_name: 'SpreeCmCommissioner::CheckIn'
 
-    before_validation :set_event_id, on: :create
+    before_validation :set_event_id
 
     self.whitelisted_ransackable_associations = ['id_card']
     self.whitelisted_ransackable_attributes = %w[first_name last_name gender occupation_id card_type]

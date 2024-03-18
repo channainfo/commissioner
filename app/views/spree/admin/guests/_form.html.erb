@@ -1,0 +1,76 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card mb-3">
+      <div class="card-body">
+        <% @kyc_fields.each do |field| %>
+          <% case field %>
+          <% when :guest_name %>
+            <div class="row">
+              <div class="col-12 col-lg-6">
+                <%= f.field_container :first_name do %>
+                  <%= f.label :first_name %>
+                  <%= f.text_field :first_name, class: 'form-control' %>
+                <% end %>
+              </div>
+              <div class="col-12 col-lg-6">
+                <%= f.field_container :last_name do %>
+                  <%= f.label :last_name %>
+                  <%= f.text_field :last_name, class: 'form-control' %>
+                <% end %>
+              </div>
+            </div>
+          <% when :guest_gender %>
+            <%= f.field_container :gender do %>
+              <%= f.label :gender %>
+              <% SpreeCmCommissioner::Guest.genders.each do |key, value| %>
+                <div class="radio" data-id="<%= key.to_s %>">
+                  <label data-hook="gender_field">
+                    <%= f.radio_button :gender, key, class: "genders_radios" %>
+                    <%= key.to_s.capitalize %>
+                  </label>
+                </div>
+              <% end %>
+            <% end %>
+          <% when :guest_dob %>
+            <div data-hook="admin_product_form_dob" data-product-edit-target="makeActiveAt">
+              <%= f.field_container :dob do %>
+                <%= f.label :dob, Spree.t(:date_of_birth) %>
+                <%= f.error_message_on :dob %>
+
+                <div class="input-group datePickerFrom"
+                    data-wrap="true"
+                    data-alt-format="<%= Spree.t(:fpr_human_friendly_date_format, scope: 'date_picker', default: 'M j, Y') %>"
+                    data-max-date="<%= Time.zone.today %>">
+
+                  <%= f.text_field :dob,
+                                  placeholder: Spree.t(:select_a_date),
+                                  class: 'form-control ',
+                                  'data-input':'' %>
+
+                  <%= render partial: 'spree/admin/shared/cal_close' %>
+                </div>
+              <% end %>
+            </div>
+          <% when :guest_occupation %>
+            <%= f.field_container :occupation_id do %>
+              <%= f.label :occupation_id %>
+              <%= f.select :occupation_id, Spree::Taxon.where(kind: Spree::Taxon.kinds[:occupation]).order(:position).map { |occupation| [occupation.name, occupation.id]}, {}, :class => "fullwidth select2" %>
+            <% end %>
+          <% when :guest_nationality %>
+            <%= f.field_container :nationality_id do %>
+              <%= f.label :nationality_id %>
+              <%= f.select :nationality_id,
+                options_from_collection_for_select(Spree::Taxon.where(kind: Spree::Taxon.kinds[:nationality]), :id, :name, @object.nationality_id),
+                  { include_hidden: true },
+                  class: 'select2autocomplete',
+                  data: { autocomplete_url_value: 'taxons_api_v2',
+                          autocomplete_return_attr_value: :name,
+                          autocomplete_min_input_value: 1,
+                          autocomplete_additional_url_params_value: "q[kind_eq]=4" } %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

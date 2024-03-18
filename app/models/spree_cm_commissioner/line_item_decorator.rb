@@ -19,6 +19,8 @@ module SpreeCmCommissioner
 
       base.whitelisted_ransackable_attributes |= %w[to_date from_date]
 
+      delegate :kyc?, to: :product
+
       def base.json_api_columns
         json_api_columns = column_names.reject { |c| c.match(/_id$|id|preferences|(.*)password|(.*)token|(.*)api_key/) }
         json_api_columns << :options_text

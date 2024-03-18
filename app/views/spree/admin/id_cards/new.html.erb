@@ -1,0 +1,11 @@
+<% content_for :page_title do %>
+<%= link_to plural_resource_name(SpreeCmCommissioner::Guest), spree.admin_order_guests_url(params[:order_id]) %> /
+  <%= Spree.t(:new_id_card_images) %>
+<% end %>
+
+<%= form_with model: @object, url: { action: 'create' }, html: { multipart: true } do |f| %>
+  <fieldset>
+    <%= render partial: 'form', locals: { f: f } %>
+    <%= render partial: 'spree/admin/shared/new_resource_links' %>
+  </fieldset>
+<% end %>
