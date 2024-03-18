@@ -4,6 +4,9 @@
   <%= f.field_container :subtitle do %>
     <%= f.label :subtitle, raw(Spree.t(:subtitle) + required_span_tag) %>
     <%= f.text_field :subtitle, class: 'form-control', rows: 6 %>
+    <small class="form-text text-muted">
+        <%= raw I18n.t('taxon.note') %>
+    </small>
     <%= f.error_message_on :subtitle, class: 'error-message' %>
   <% end %>
 </div>

@@ -46,6 +46,7 @@ en:
     app_banner: App Banner (16x9)
     web_banner: Web banner (10x2)
     home_banner: Home Banner (16x9)
+    note: "<b>Note:</b> Subtitle is used for country code in Nationality Taxon"
 
   taxon_vendor:
     empty_info: "No vendor information available."
