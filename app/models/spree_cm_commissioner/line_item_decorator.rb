@@ -17,6 +17,7 @@ module SpreeCmCommissioner
 
       base.before_create :add_due_date, if: :subscription?
 
+      base.whitelisted_ransackable_associations |= %w[guests]
       base.whitelisted_ransackable_attributes |= %w[to_date from_date]
 
       delegate :kyc?, to: :product
