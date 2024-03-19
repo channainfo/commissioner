@@ -2,6 +2,8 @@ module SpreeCmCommissioner
   class VehicleType < SpreeCmCommissioner::Base
     include SpreeCmCommissioner::RouteType
 
+    after_commit :recalculate_vehicle_seats_count, if: -> { saved_change_to_allow_seat_selection? && allow_seat_selection }
+
     has_many :vehicle_seats, class_name: 'SpreeCmCommissioner::VehicleSeat', dependent: :destroy
     has_many :option_value_vehicle_types, class_name: 'SpreeCmCommissioner::OptionValueVehicleType'
     has_many :option_values, through: :option_value_vehicle_types, class_name: 'Spree::OptionValue'
@@ -36,6 +38,11 @@ module SpreeCmCommissioner
     def after_activate; end
     def after_archive; end
     def after_draft; end
+
+    def recalculate_vehicle_seats_count
+      self.vehicle_seats_count = vehicle_seats.where(seat_type: %w[normal vip]).count
+      save
+    end
 
     def seat_layers
       grouped_seats = SpreeCmCommissioner::VehicleSeat.where(vehicle_type_id: id).group_by(&:layer).transform_values do |seats|
