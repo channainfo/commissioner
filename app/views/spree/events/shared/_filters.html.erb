@@ -26,8 +26,15 @@
 
         <div class="col-12 col-lg-6">
           <div class="form-group">
-            <%= f.label :occupation_id_eq, Spree.t(:occupation) %>
-            <%= f.select :occupation_id_eq, options_for_select(Spree::Taxon.where(kind: Spree::Taxon.kinds[:occupation]).order(:position).map { |t| [Spree.t("#{t.name}"), t.id] }), { include_blank: true, prompt: Spree.t(:select_occupation) }, class: "form-control js-filterable" %>
+            <%= f.label :occupation_id %>
+            <%= f.select :occupation_id_eq,
+              options_from_collection_for_select(Spree::Taxon.where(kind: Spree::Taxon.kinds[:occupation]), :id, :name),
+                { include_hidden: true },
+                class: 'select2autocomplete',
+                data: { autocomplete_url_value: 'taxons_api_v2',
+                        autocomplete_return_attr_value: :name,
+                        autocomplete_min_input_value: 1,
+                        autocomplete_additional_url_params_value: "q[kind_eq]=3" } %>
           </div>
         </div>
       </div>
