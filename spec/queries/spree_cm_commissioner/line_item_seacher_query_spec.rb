@@ -19,7 +19,7 @@ RSpec.describe SpreeCmCommissioner::LineItemSearcherQuery do
     let!(:guest1) { create(:guest, first_name: 'Han', last_name: 'Xin', line_item: line_item1) }
     let!(:guest2) { create(:guest, first_name: 'Sokleng', last_name: 'Houng', line_item: line_item2) }
 
-    context 'when qr_data is present' do
+    context 'when order qr_data is present' do
       let(:params) { { qr_data: 'R591727627-WiWma0OjZqh7Tk1aXGCUzA1708344610539' } }
       let(:order) { create(:order)}
       let!(:line_item) { create(:cm_line_item, order: order) }
@@ -38,6 +38,15 @@ RSpec.describe SpreeCmCommissioner::LineItemSearcherQuery do
         expect(described_class.new(params).call).to eq([line_item])
 
         expect(order).to have_received(:line_items)
+      end
+
+      context 'when order token of qr_data include -L' do
+        let(:params) { { qr_data: 'R591727627-WiWma0OjZqh7Tk1aXG-LCUzA1708344610539' } }
+
+        it 'calls search_by_qr_data! with qr_data' do
+          expect(Spree::Order).to receive(:search_by_qr_data!).with(params[:qr_data])
+          described_class.new(params).call
+        end
       end
     end
 
@@ -82,11 +91,35 @@ RSpec.describe SpreeCmCommissioner::LineItemSearcherQuery do
       end
     end
 
-
     context 'when term and qr is not present' do
       it 'calls search_by_guest_infos' do
         expect_any_instance_of(described_class).to receive(:search_by_guest_infos)
         described_class.new({}).call
+      end
+    end
+
+    context 'when line_item qr_data is line_item' do
+      let(:params) { { qr_data: 'R591727627-WiWma0OjZqh7Tk1aXGCUzA1708344610539-L2461' } }
+      let(:order) { create(:order)}
+      let!(:line_item) { create(:cm_line_item, order: order) }
+
+      before do
+        allow(Spree::LineItem).to receive(:search_by_qr_data!).and_return(order)
+        allow(order).to receive(:line_items).and_return([line_item])
+      end
+
+      it 'calls search_by_qr_data! with qr_data' do
+        expect(Spree::LineItem).to receive(:search_by_qr_data!).with(params[:qr_data])
+        described_class.new(params).call
+      end
+
+      context 'when middle of qr_data include -L' do
+        let(:params) { { qr_data: 'R591727627-WiWma0OjZqh7Tk1aXG-LCUzA1708344610539-L2461' } }
+
+        it 'calls search_by_qr_data! with qr_data' do
+          expect(Spree::LineItem).to receive(:search_by_qr_data!).with(params[:qr_data])
+          described_class.new(params).call
+        end
       end
     end
   end
