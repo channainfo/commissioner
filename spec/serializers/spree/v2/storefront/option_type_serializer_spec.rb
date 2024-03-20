@@ -18,7 +18,8 @@ describe Spree::V2::Storefront::OptionTypeSerializer, type: :serializer do
         :public_metadata,
         :kind,
         :attr_type,
-        :promoted
+        :promoted,
+        :hidden
       )
     end
 
