@@ -49,7 +49,6 @@ describe Spree::V2::Storefront::VariantSerializer, type: :serializer do
         :option_values,
         :vendor,
         :stock_locations,
-        :visible_option_values
       )
     end
   end
