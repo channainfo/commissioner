@@ -17,33 +17,29 @@
             <%= Spree.t(:short_name) %>
           </th>
           <th>
-            <%= Spree.t(:stop_legs) %>
+            <%= Spree.t(:route_type) %>
           </th>
           <th>
-            <%= Spree.t(:route_type) %>
+            <%= Spree.t(:departure_time) %>
+          </th>
+          <th>
+            <%= Spree.t(:duration) %>
           </th>
           <th>
             <%= Spree.t(:price) %>
           </th>
           <th scope="col" class="text-center" data-hook="admin_products_index_header_actions" class="actions"></th>
+          <th scope="col" class="text-center" data-hook="admin_products_index_header_actions" class="actions"></th>
         </tr>
       </thead>
       <tbody>
-        <% @collection.each do |route| %>
+        <% @collection.includes(:trip).each do |route| %>
           <tr data-hook="admin_customers_index_rows">
             <td>
-              <%= route.name %>
+              <%= link_to route.name, edit_transit_route_path(route) %>
             </td>
             <td>
               <%= route.short_name %>
-            </td>
-            <td>
-              <% origin = Spree::Taxon.find_by(id: route.origin_id) %>
-              <% destination = Spree::Taxon.find_by(id: route.destination_id) %>
-
-              <% if origin.present? && destination.present? %>
-                <%= origin.name %> <%= '->' %> <%= destination.name %>
-              <% end %>
             </td>
             <td>
               <% if route.route_type.present? %>
@@ -51,11 +47,20 @@
               <% end %>
             </td>
             <td>
+              <%= route.trip.departure_time.strftime('%H:%M') if route.trip.present? %>
+            </td>
+            <td>
+              <% duration = route.trip.duration_in_hms if route.trip.present?%>
+              <%= "#{duration[:hours]}hrs-#{duration[:minutes]}mns" if duration %>
+            </td>
+            <td>
               <%= display_price(route) %>
             </td>
             <td class="actions " data-hook="admin_products_index_row_actions">
               <span class="d-flex justify-content-end">
+                <% route_trip = (route.trip ? edit_transit_route_trip_path(route, route.trip) : new_transit_route_trip_path(route)) %>
                 <%= link_to_edit route, url: edit_transit_route_path(route.id), no_text: true, class: 'edit' if can?(:edit, route.id) && !route.deleted? %>
+                <%= link_to_with_icon 'location.svg', 'Edit Trip' ,route_trip, class:'edit btn btn-light', no_text: true %>
               </span>
             </td>
           </tr>

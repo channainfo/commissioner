@@ -170,11 +170,13 @@ Spree::Core::Engine.add_routes do
     end
     resources :branches
     resources :stops
-    resources :routes
+    resources :routes do
+      resources :trips
+    end
     resources :places
-    resource :amenity, only: [:new, :create , :edit, :update]
-    post "/amenity/update_positions"
-    post "/amenity/update_values_positions"
+    resource :amenity, only: %i[new create edit update]
+    post '/amenity/update_positions'
+    post '/amenity/update_values_positions'
     resources :vehicle_types do
       resources :vehicle_seats
     end

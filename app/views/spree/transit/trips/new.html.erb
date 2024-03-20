@@ -1,7 +1,4 @@
-<% content_for :page_title do %>
-  <%= page_header_back_button spree.transit_routes_path %>
-  <%= I18n.t('spree.transit.routes') %>
-<% end %>
+<%= render partial: 'spree/transit/shared/route_tabs', locals: {current: :trip} %>
 <div data-hook="admin_user_new_form_header">
   <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
 </div>
