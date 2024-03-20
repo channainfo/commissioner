@@ -110,25 +110,6 @@ RSpec.describe Spree::Variant, type: :model do
     end
   end
 
-  describe '#number_of_guests' do
-    let(:variant) { create(:variant) }
-
-    it 'return 2 of number_of_adults + number_of_kids' do
-      allow(variant).to receive(:number_of_adults).and_return(1)
-      allow(variant).to receive(:number_of_kids).and_return(1)
-
-      expect(variant.number_of_guests).to eq 2
-    end
-
-    it 'return 1 when number_of_adults + number_of_kids less than default' do
-      allow(variant).to receive(:number_of_adults).and_return(0)
-      allow(variant).to receive(:number_of_kids).and_return(0)
-
-      expect(variant.number_of_guests).to eq 1
-      expect(variant.class::DEFAULT_NUMBER_OF_GUESTS).to eq 1
-    end
-  end
-
   context 'guests options' do
     let(:product) { create(:product, option_types: [option_type]) }
     subject { create(:variant, product: product, option_values: [option_value]) }
@@ -143,11 +124,35 @@ RSpec.describe Spree::Variant, type: :model do
     end
 
     describe '#number_of_adults' do
-      let(:option_type) { create(:cm_option_type, :adults) }
-      let(:option_value) { create(:option_value, name: '2-adults', presentation: '2', option_type: option_type) }
+      context 'when option value is present' do
+        let(:option_type) { create(:cm_option_type, :adults) }
+        let(:option_value) { create(:option_value, name: '2-adults', presentation: '2', option_type: option_type) }
 
-      it 'return result in integer' do
-        expect(subject.number_of_adults).to eq 2
+        it 'return result in integer' do
+          expect(subject.number_of_adults).to eq 2
+        end
+      end
+
+      context 'when option value is not present' do
+        subject { create(:variant) }
+
+        it 'return default 1 when optino value is not present' do
+          expect(subject.adults_option_value).to eq nil
+          expect(subject.number_of_adults).to eq 1
+
+          expect(subject.class::DEFAULT_NUMBER_OF_ADULTS).to eq 1
+        end
+      end
+    end
+
+    describe '#number_of_guests' do
+      subject { create(:variant) }
+
+      it 'return result of number of kids + adults' do
+        allow(subject).to receive(:number_of_kids).and_return(2)
+        allow(subject).to receive(:number_of_adults).and_return(1)
+
+        expect(subject.number_of_guests).to eq 2 + 1
       end
     end
 

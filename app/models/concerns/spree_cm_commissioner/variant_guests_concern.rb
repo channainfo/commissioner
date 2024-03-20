@@ -3,7 +3,7 @@ module SpreeCmCommissioner
     extend ActiveSupport::Concern
 
     DEFAULT_KIDS_AGE_MAX = 17
-    DEFAULT_NUMBER_OF_GUESTS = 1
+    DEFAULT_NUMBER_OF_ADULTS = 1
 
     def adults_option_value
       @adults_option_value ||= option_value('adults')
@@ -26,13 +26,13 @@ module SpreeCmCommissioner
     end
 
     # can consider as customers.
-    # 1 by default in case adult & kid is not provided.
     def number_of_guests
-      [DEFAULT_NUMBER_OF_GUESTS, number_of_adults + number_of_kids].max
+      number_of_adults + number_of_kids
     end
 
+    # 1 by default in case adult is not provided.
     def number_of_adults
-      adults_option_value&.to_i || 0
+      [DEFAULT_NUMBER_OF_ADULTS, adults_option_value&.to_i || 0].max
     end
 
     def number_of_kids
