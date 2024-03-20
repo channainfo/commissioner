@@ -160,6 +160,7 @@ Spree::Core::Engine.add_routes do
 
   resources :events, only: [] do
     resources :guests, only: %i[index show edit update], controller: 'events/guests' do
+      post :send_email, on: :member, as: :send_email
       member do
         post :check_in
       end
@@ -332,4 +333,5 @@ end
 Rails.application.routes.draw do
   get 'i/:id', to: 'spree_cm_commissioner/qr_images#show', as: 'qr_image'
   get 'o/:id', to: 'spree_cm_commissioner/orders#show', as: 'order'
+  get 'li/:id', to: 'spree_cm_commissioner/line_item_qr_images#show', as: 'line_item_qr_image'
 end

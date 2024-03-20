@@ -1,0 +1,15 @@
+<div class="content-cell flex" id="greeting-card">
+  <div>
+    <%= image_tag "mailer/bookme-plus.png", class: "icon-bookme-plus"%>
+    <div class="hello"><%= I18n.t('mail.order_mailer.hello', full_name: user_full_name(order))%></div>
+    <div class="description">
+      <%= I18n.t('mail.order_mailer.booking_event', event_name: order.products.first&.name || 'NA') %>
+    </div>
+  </div>
+  <%# TODO we need to render qr image  %>
+  <% line_item = Spree::LineItem.find(@guest.line_item_id) %>
+  <div class="qr-container">
+    <%= image_tag main_app.url_for("/li/#{line_item.id}"), class: 'qr-code' %>
+    <p>Show your QR to enter</p>
+  </div>
+</div>

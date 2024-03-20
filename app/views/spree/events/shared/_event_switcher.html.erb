@@ -1,6 +1,6 @@
 <div>
   <span class="d-none d-lg-inline text-light">
-    <% if current_event.category_icon %>
+    <% if current_event&.category_icon %>
       <img src="<%= main_app.rails_blob_url(current_event.category_icon.attachment) %>" alt="vendor's logo" style="width: 40px; padding: 2px" class="rounded-circle">
     <% else %>
       <%= svg_icon name: "building.svg", width: '25', height: '25' %>
