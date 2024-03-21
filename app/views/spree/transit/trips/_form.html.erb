@@ -1,0 +1,63 @@
+<div class="row">
+  <div class='col-6'>
+    <%= f.field_container :origin_id do %>
+      <%= f.label :Origin, Spree.t(:origin) %>
+      <%= f.select :origin_id, options_from_collection_for_select(Spree::Taxonomy.place.taxons, 'id', 'name', @object.origin_id), {},{class: 'select2 fullwidth', id:'product_origin_id'} %>
+      <%= f.error_message_on :origin_id %>
+    <% end %>
+  </div>
+  <div class='col-6'>
+    <%= f.field_container :destination_id do %>
+      <%= f.label :Destination, Spree.t(:destination) %>
+      <%= f.select :destination_id, options_from_collection_for_select(Spree::Taxonomy.place.taxons, 'id', 'name', @object.destination_id), {},{class: 'select2 fullwidth', id:'product_destination_id'} %>
+      <%= f.error_message_on :destination_id %>
+    <% end %>
+  </div>
+  <div class="col-4">
+    <%= f.field_container :vehicle_id do %>
+      <%= f.label :vehicle, Spree.t(:vehicle) %>
+      <%= f.collection_select :vehicle_id, @vehicles, :id, ->(vehicle) { "#{vehicle.code} - #{vehicle.vehicle_type.name} - #{vehicle.number_of_seats}seats" },{},{class: 'select2'} %>
+      <%= f.error_message_on :name %>
+    <% end %>
+  </div>
+  <div class="col-5">
+    <%= f.field_container :duration, :class => ['form-group'] do %>
+      <%= f.label :duration, Spree.t(:duration) %>
+      <div class="row no-gutters">
+        <div class="col-4">
+          <div class="d-flex align-items-center">
+            <%= f.number_field :hours, class: 'form-control', placeholder: 'Hours', value: @object.duration_in_hms[:hours] || 0 %>
+            <span class="input-group-text" id="">h</span>
+          </div>
+          <%= f.error_message_on :hours %>
+        </div>
+        <div class="col-4">
+          <div class="d-flex align-items-center">
+            <%= f.number_field :minutes, class: 'form-control', placeholder: 'Minutes', value: @object.duration_in_hms[:minutes] || 0 %>
+            <span class="input-group-text" id="">m</span>
+          </div>
+          <%= f.error_message_on :minutes %>
+        </div>
+        <div class="col-4">
+          <div class="d-flex align-items-center">
+            <%= f.number_field :seconds, class: 'form-control', placeholder: 'Seconds', value: @object.duration_in_hms[:seconds] || 0 %>
+            <span class="input-group-text" id="">s</span>
+          </div>
+          <%= f.error_message_on :seconds %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-3">
+    <%= f.field_container :departure_time do %>
+      <%= f.label :departure_time, Spree.t(:departure_time) %>
+      <div>
+        <%= f.time_select :departure_time, { default: Time.now}, {class: 'form-control', style: 'display: inline-block; width: auto;'} %>
+      </div>
+      <%= f.error_message_on :departure_time %>
+    <% end %>
+  </div>
+  <div>
+    <%= f.hidden_field :product_id,value: @product.id %>
+  </div>
+</div>

@@ -18,6 +18,10 @@ module Spree
         @taxons = Spree::Taxonomy.place.taxons
       end
 
+      def new
+        @object.product_type = :transit
+      end
+
       def collection
         return @collection if defined?(@collection)
 
@@ -43,10 +47,6 @@ module Spree
 
       def product_scope
         current_store.products.accessible_by(current_ability, :index)
-      end
-
-      def new
-        @object.product_type = :transit
       end
 
       def location_after_save

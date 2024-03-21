@@ -64,41 +64,6 @@
       <%= f.error_message_on :shipping_category_id %>
     <% end %>
   </div>
-  <div class="row">
-    <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-     <div data-hook="admin_product_form_taxons">
-        <%= f.field_container :origin do %>
-          <%= f.label :origin_id, raw(Spree.t(:origin) + required_span_tag)  %>
-
-          <% if can? :modify, Spree::Classification %>
-          <%= f.select :origin_id, options_for_select(@taxons.map { |t| [t.name, t.id] }, @product.origin_id), { include_blank: 'Select an origin' }, { class: "select2 form-control js-quick-search-target js-filterable", id: 'product_origin_id' } %>
-          <% elsif @product.origin_id.present? %>
-            <% origin_taxon = Spree::Taxon.find_by(id: @product.origin_id) %>
-            <%= origin_taxon.present? %>
-          <% else %>
-            <div class="alert alert-info"><%= Spree.t(:no_resource_found, resource: :origin_id) %></div>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
-
-    <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-      <div data-hook="admin_product_form_taxons">
-        <%= f.field_container :destination do %>
-          <%= f.label :destination_id, raw(Spree.t(:destination) + required_span_tag) %>
-
-          <% if can? :modify, Spree::Classification %>
-            <%= f.select :destination_id, options_for_select(@taxons.map { |t| [t.name, t.id] }, @product.destination_id), { include_blank: 'Select a destination', required: true }, { class: "select2 form-control js-quick-search-target js-filterable", id: 'product_destination_id' } %>
-          <% elsif @product.destination_id.present? %>
-            <%= @product.destination_id.name %>
-          <% else %>
-            <div class="alert alert-info"><%= Spree.t(:no_resource_found, resource: :destination_id) %></div>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
-
-  </div>
 
   <%= f.hidden_field :product_type, :class => ['form-group'] do %>
     <%= f.label :product_type, Spree.t('product_type') %><br />

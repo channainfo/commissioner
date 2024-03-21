@@ -21,9 +21,9 @@ module SpreeCmCommissioner
     def set_attributes
       self.route_type = vehicle_type.route_type
       self.number_of_seats = vehicle_type.vehicle_seats_count
+      self.allow_seat_selection = vehicle_type.allow_seat_selection
     end
 
-    # TODO: Move to service object
     def create_vehicle_option_value
       SpreeCmCommissioner::VehicleOptionValueCreator.call(self)
     end
