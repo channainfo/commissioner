@@ -77,6 +77,8 @@ Spree::Core::Engine.add_routes do
           patch :update
         end
       end
+      resources :pricing_rates
+      resources :pricing_models
     end
 
     namespace :calendars do

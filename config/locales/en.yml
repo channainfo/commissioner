@@ -226,6 +226,14 @@ en:
       choose_guest_age_group: "Choose Guest Age Group"
       match_any: "Some line items must from selected age group"
       match_all: "All line items must from selected age group"
+    pricing_rate:
+      match_all: "Rate will be applied if matched all of these rules"
+      match_any: "Rate will be applied if matched any of these rules"
+      match_none: "Rate will be applied if matched none of these rules"
+    pricing_model:
+      match_all: "Adjustment will be applied if matched all of these rules"
+      match_any: "Adjustment will be applied if matched any of these rules"
+      match_none: "Adjustment will be applied if matched none of these rules"
     billing:
       code: "code"
       name: "name"

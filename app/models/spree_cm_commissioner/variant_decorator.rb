@@ -10,6 +10,9 @@ module SpreeCmCommissioner
       base.after_save   :update_vendor_total_inventory, if: :saved_change_to_permanent_stock?
       base.validate     :validate_option_types
 
+      base.has_many :pricing_rates, as: :rateable, dependent: :destroy, class_name: 'SpreeCmCommissioner::PricingRate'
+      base.has_many :pricing_models, as: :modelable, dependent: :destroy, class_name: 'SpreeCmCommissioner::PricingModel'
+
       # override
       base.has_one :default_price, lambda {
                                      with_deleted.where(currency: Spree::Store.default.default_currency)
