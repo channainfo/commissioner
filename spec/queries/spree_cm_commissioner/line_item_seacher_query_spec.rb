@@ -11,7 +11,7 @@ RSpec.describe SpreeCmCommissioner::LineItemSearcherQuery do
     let!(:product_a) { create(:product, product_type: :ecommerce, taxons: [section_a]) }
     let!(:product_b) { create(:product, product_type: :ecommerce, taxons: [section_b]) }
 
-    let!(:order) { create(:order, phone_number: '012345678', email: 'lengvevo007@gmail.com', number: 'R591727627') }
+    let!(:order) { create(:order, phone_number: '012345678', email: 'lengvevo007@gmail.com', number: 'R591727627', completed_at: Date.current) }
 
     let!(:line_item1) { create(:cm_line_item, order: order, product: product_a) }
     let!(:line_item2) { create(:cm_line_item, order: order, product: product_b) }
@@ -51,7 +51,7 @@ RSpec.describe SpreeCmCommissioner::LineItemSearcherQuery do
     end
 
     context 'when term is present' do
-      let(:params) { { term: 'Leng' } }
+      let(:params) { { term: 'Leng', event_id: event.id } }
 
       it 'calls search_by_ransack with term' do
         expect(Spree::LineItem).to receive_message_chain(:ransack, :result)
