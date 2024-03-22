@@ -4,7 +4,7 @@ module SpreeCmCommissioner
       class LineItemSerializer < BaseSerializer
         set_type :line_item
 
-        attributes :name, :quantity
+        attributes :name, :quantity, :options_text
 
         belongs_to :order, serializer: SpreeCmCommissioner::V2::Operator::LineItemOrderSerializer
 
