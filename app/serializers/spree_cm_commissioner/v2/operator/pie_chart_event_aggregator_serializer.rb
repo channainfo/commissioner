@@ -2,7 +2,7 @@ module SpreeCmCommissioner
   module V2
     module Operator
       class PieChartEventAggregatorSerializer < BaseSerializer
-        attributes :id, :type, :value
+        attributes :chart_type, :product_charts
       end
     end
   end

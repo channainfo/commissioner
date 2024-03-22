@@ -13,14 +13,14 @@ module SpreeCmCommissioner
       cache_key = "#{chart_type}-#{taxon_id}"
       Rails.cache.delete(cache_key) if refreshed
 
-      value = Rails.cache.fetch(cache_key, expires_in: 30.minutes) do
+      product_charts = Rails.cache.fetch(cache_key, expires_in: 30.minutes) do
         pie_chart_aggregators || []
       end
 
       SpreeCmCommissioner::PieChartEventAggregator.new(
         id: taxon_id,
-        type: chart_type,
-        value: value
+        chart_type: chart_type,
+        product_charts: product_charts
       )
     end
 
@@ -53,6 +53,7 @@ module SpreeCmCommissioner
     def participation_pie_chart
       base_joins
         .select(" spree_products.id AS product_id,
+                  spree_products.name AS product_name,
                   CASE
                    WHEN cm_check_ins.id IS NOT NULL THEN 'show'
                    ELSE 'no_show'
@@ -60,14 +61,25 @@ module SpreeCmCommissioner
                  COUNT(*) AS total"
                )
         .group('spree_products.id, CASE WHEN cm_check_ins.id IS NOT NULL THEN \'show\' ELSE \'no_show\' END')
-        .map do |record|
-          record.slice(:product_id, :name, :total)
+        .group_by(&:product_id)
+        .map do |product_id, records|
+          {
+            product_id: product_id,
+            product_name: records.first.product_name,
+            pies: records.map do |record|
+              record.slice(
+                :name,
+                :total
+              )
+            end
+          }
         end
     end
 
     def gender_pie_chart
       base_joins
         .select(" spree_products.id AS product_id,
+                  spree_products.name AS product_name,
                   CASE
                     WHEN cm_guests.gender = 0 THEN 'other'
                     WHEN cm_guests.gender = 1 THEN 'male'
@@ -76,14 +88,25 @@ module SpreeCmCommissioner
                 END AS name, COUNT(DISTINCT cm_guests.id) AS total"
                )
         .group('spree_products.id, cm_guests.gender')
-        .map do |record|
-          record.slice(:product_id, :name, :total)
+        .group_by(&:product_id)
+        .map do |product_id, records|
+          {
+            product_id: product_id,
+            product_name: records.first.product_name,
+            pies: records.map do |record|
+              record.slice(
+                :name,
+                :total
+              )
+            end
+          }
         end
     end
 
     def entry_type_pie_chart
       base_joins
         .select(" spree_products.id AS product_id,
+                  spree_products.name AS product_name,
                   CASE  WHEN cm_check_ins.entry_type = 0 THEN 'normal'
                         WHEN cm_check_ins.entry_type = 1 THEN 'VIP'
                         ELSE NULL END AS name,
@@ -91,8 +114,18 @@ module SpreeCmCommissioner
                )
         .where.not(cm_check_ins: { id: nil })
         .group('spree_products.id, cm_check_ins.entry_type')
-        .map do |record|
-          record.slice(:product_id, :name, :total)
+        .group_by(&:product_id)
+        .map do |product_id, records|
+          {
+            product_id: product_id,
+            product_name: records.first.product_name,
+            pies: records.map do |record|
+              record.slice(
+                :name,
+                :total
+              )
+            end
+          }
         end
     end
   end
