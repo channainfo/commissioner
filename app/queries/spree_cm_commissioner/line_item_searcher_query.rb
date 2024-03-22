@@ -40,12 +40,14 @@ module SpreeCmCommissioner
 
     def search_by_ransack
       terms = params[:term].split
-      taxon_id = params[:taxon_id]
+      event_id = params[:event_id]
 
-      Spree::LineItem.ransack(
-        guests_first_name_or_guests_last_name_or_order_phone_number_or_order_email_or_order_number_cont_any: terms,
-        guests_event_id_eq: taxon_id
-      ).result
+      Spree::LineItem
+        .complete
+        .joins('INNER JOIN cm_guests ON cm_guests.line_item_id = spree_line_items.id')
+        .where(cm_guests: { event_id: event_id })
+        .ransack(guests_first_name_or_guests_last_name_or_order_phone_number_or_order_email_or_order_number_cont_any: terms)
+        .result
     end
 
     def search_by_guest_infos
