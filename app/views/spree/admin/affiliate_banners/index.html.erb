@@ -1,0 +1,62 @@
+<main class="content" id="content" role="main">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="page-title">All Affiliate Banners</h2>
+    </div>
+    <div class="col-md-6">
+      <%= link_to "Add New Affiliate Banner", new_admin_affiliate_banner_path, class: 'btn btn-success pull-right' %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 table-responsive">
+      <section>
+        <table class="table table-striped">
+          <thead>
+            <th>Name</th>
+            <%# <th>Banner Clicks Count</th>
+            <th>Code</th> %>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Status</th>
+          </thead>
+          <tbody>
+            <% @affiliate_banners.each do |affiliate_banner| %>
+              <tr>
+                <td>
+                  <%= affiliate_banner.name %>
+                </td>
+                <td>
+                  <%= affiliate_banner.start_date %>
+                </td>
+                <td>
+                  <%= affiliate_banner.end_date %>
+                </td>
+                <td>
+                  <%= affiliate_banner.status %>
+                </td>
+                <td align="right">
+  <% if affiliate_banner.active? %>
+    <%= link_to_with_icon 'info-circle.svg', '', admin_affiliate_banner_path(affiliate_banner), class: "btn btn-info", title: "Show Details" %>
+    <%= link_to_with_icon 'edit.svg', '', edit_admin_affiliate_banner_path(id: affiliate_banner.id, page: params[:page], q: params[:q]), class: "btn btn-primary", title: "Edit" %>
+    <%= link_to_with_icon 'cancel.svg', '', admin_affiliate_banner_path(affiliate_banner), method: :delete, class: "btn btn-danger", title: "Unpublish", data: { confirm: "Are you sure to unpublish this banner?", confirm_title: "Unpublish" } %>
+  <% else %>
+    <%= link_to_with_icon 'capslock.svg', 'Publish', admin_affiliate_banner_path(affiliate_banner), method: :delete, class: "btn btn-primary", title: "Publish", data: { confirm: "Are you sure to publish this banner?", confirm_title: "Publish" } %>
+  <% end %>
+</td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </div>
+
+  <div class="text-center">
+    <div>
+      <%= page_entries_info @affiliate_banners %>
+    </div>
+    <div>
+      <%= paginate @affiliate_banners %>
+    </div>
+  </div>
+</main>
