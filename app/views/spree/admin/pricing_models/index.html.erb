@@ -1,0 +1,15 @@
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :pricing_models } %>
+
+<% content_for :page_actions do %>
+  <%= yield :page_actions %>
+  <%= external_page_preview_link(@product) %>
+<% end %>
+
+<%= form_tag nil, { class: 'form-horizontal' } do %>
+  <div class="mb-3"><%= render 'pricing_models' %></div>
+  <div class="form-actions" data-hook="buttons">
+    <%= button Spree.t('actions.update'), 'update.svg' %>
+    <span class="or"><%= Spree.t(:or) %></span>
+    <%= button_link_to Spree.t('actions.cancel'), admin_product_path(@product), icon: 'delete.svg' %>
+  </div>
+<% end %>

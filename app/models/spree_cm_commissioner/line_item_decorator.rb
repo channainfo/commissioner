@@ -12,10 +12,14 @@ module SpreeCmCommissioner
 
       base.has_many :taxons, class_name: 'Spree::Taxon', through: :product
       base.has_many :guests, class_name: 'SpreeCmCommissioner::Guest', dependent: :destroy
+      base.has_many :applied_pricing_rates, class_name: 'SpreeCmCommissioner::AppliedPricingRate', dependent: :destroy
+      base.has_many :applied_pricing_models, class_name: 'SpreeCmCommissioner::AppliedPricingModel', dependent: :destroy
 
       base.before_save :update_vendor_id
 
       base.before_create :add_due_date, if: :subscription?
+
+      base.after_save :calculate_pricings, if: -> { variant.pricing_models.any? || variant.pricing_rates.any? }
 
       base.whitelisted_ransackable_associations |= %w[guests]
       base.whitelisted_ransackable_attributes |= %w[to_date from_date]
@@ -52,6 +56,8 @@ module SpreeCmCommissioner
     #
     # override
     def amount
+      return pricing_subtotal if pricing_subtotal.present?
+
       base_price = price * quantity
 
       if reservation? && date_unit
@@ -59,6 +65,10 @@ module SpreeCmCommissioner
       else
         base_price
       end
+    end
+
+    def calculate_pricings
+      SpreeCmCommissioner::Pricings::LineItemPricingsCalculator.new(line_item: self).call
     end
 
     def amount_per_guest

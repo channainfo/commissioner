@@ -1,0 +1,8 @@
+<!-- insert_after "erb[silent]:contains('Spree::Price')" -->
+
+<%= content_tag :li, class: 'nav-item' do %>
+  <%= link_to_with_icon 'coin.svg',
+    Spree.t(:pricing_rates),
+    admin_product_pricing_rates_url(@product),
+    class: "nav-link #{'active' if current == :pricing_rates}" %>
+<% end if can?(:admin, Spree::Variant) %>
