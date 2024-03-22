@@ -1,25 +1,15 @@
 module SpreeCmCommissioner
   class GenerateGuestsCsv < BaseInteractor
-    delegate :collection, :file_name, to: :context
+    delegate :guest_ids, :csv_file_path, to: :context
 
     def call
-      headers = ['Full Name', 'Date of Birth', 'Gender', 'Occupation', 'ID Card Type', 'Entry Type']
+      generate_guests_csv
+    end
 
-      CSV.open(file_name, 'w') do |csv|
-        csv << headers
+    private
 
-        collection.find_each do |guest|
-          entry_type_key = SpreeCmCommissioner::CheckIn.entry_types.key(guest.entry_type)
-          csv << [
-            guest.full_name,
-            guest.dob&.strftime('%d %b %Y'),
-            guest.gender&.titleize,
-            guest.other_occupation&.titleize || guest.occupation&.name,
-            guest.id_card&.card_type&.titleize,
-            entry_type_key ? entry_type_key.titleize : nil
-          ]
-        end
-      end
+    def generate_guests_csv
+      context.generate_guests_csv_job_id = SpreeCmCommissioner::GenerateGuestsCsvJob.perform_async(guest_ids, csv_file_path)
     end
   end
 end

@@ -159,7 +159,11 @@ Spree::Core::Engine.add_routes do
   end
 
   resources :events, only: [] do
-    resources :guests, only: %i[index show edit update], controller: 'events/guests'
+    resources :guests, only: %i[index show edit update], controller: 'events/guests' do
+      collection do
+        post :generate_csv
+      end
+    end
   end
 
   namespace :telegram do

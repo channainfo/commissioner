@@ -12,18 +12,33 @@ module Spree
       end
 
       def index
-        file_name = Rails.root.join('tmp', csv_name)
+        @csv_file_path = csv_file_path
+        @guest_ids = collection.pluck(:id)
 
         respond_with(collection) do |format|
           format.csv do
-            SpreeCmCommissioner::GenerateGuestsCsv.call(
-              collection: collection,
-              file_name: file_name
-            )
+            if File.exist?(session[:csv_file_path])
+              context = SpreeCmCommissioner::DownloadGuestCsv.call(
+                csv_file_path: session[:csv_file_path],
+                generate_guest_csv_job_id: session[:generate_guest_csv_job_id]
+              )
 
-            send_file file_name
+              send_file context.csv_file_path
+            else
+              flash[:error] = Spree.t('csv.csv_not_found')
+              redirect_to collection_url
+            end
           end
         end
+      end
+
+      def generate_csv
+        context = SpreeCmCommissioner::GenerateGuestsCsv.call(guest_ids: params[:guest_ids], csv_file_path: params[:csv_file_path])
+
+        flash[:notice] = Spree.t('csv.csv_generate')
+
+        session[:generate_guest_csv_job_id] = context.generate_guest_csv_job_id
+        session[:csv_file_path] = params[:csv_file_path]
       end
 
       def edit
@@ -33,7 +48,11 @@ module Spree
 
       private
 
-      def csv_name
+      def csv_file_path
+        @csv_file_path ||= Rails.root.join('tmp', csv_file_name)
+      end
+
+      def csv_file_name
         @csv_name ||= "guests-data-#{current_event.name.downcase.gsub(' ', '-')}-#{Time.current.to_i}.csv"
       end
 
