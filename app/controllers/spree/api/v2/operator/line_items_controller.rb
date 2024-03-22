@@ -5,6 +5,12 @@ module Spree
         class LineItemsController < ::Spree::Api::V2::ResourceController
           before_action :require_spree_current_user
 
+          def index
+            render_serialized_payload do
+              serialize_collection(paginated_collection)
+            end
+          end
+
           def collection
             SpreeCmCommissioner::LineItemSearcherQuery.new(params).call
           end
