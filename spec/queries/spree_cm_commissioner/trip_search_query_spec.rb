@@ -28,12 +28,10 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                         column: 5)}
 
   let!(:ferry) {create(:vehicle_type,
-                        :with_seats,
                         code: 'ferry',
                         vendor: buva_sea,
-                        row: 5,
-                        column: 5,
-                        empty: [[0,2],[1,2],[2,2],[3,2],[4,2]]
+                        allow_seat_selection: false,
+                        vehicle_seats_count: 100
                         )}
 
   let!(:bus1) {create(:vehicle, vehicle_type: airbus, vendor: vet_airbus)}
@@ -49,7 +47,7 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                                                   origin_id: phnom_penh.id,
                                                   destination_id: siem_reap.id,
                                                   departure_time: '10:00',
-                                                  duration: 6,
+                                                  duration: 21660,
                                                   vehicle_id: bus1.id
                                                 },
                                                 name: 'VET Airbus Phnom Penh Siem Reap 10:00',
@@ -61,7 +59,7 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                                                   origin_id: phnom_penh.id,
                                                   destination_id: siem_reap.id,
                                                   departure_time: '15:00',
-                                                  duration: 7,
+                                                  duration: 25200,
                                                   vehicle_id: bus2.id
                                                 },
                                                 name: 'VET Airbus Phnom Penh Siem Reap 15:00',
@@ -74,7 +72,7 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                                                       origin_id: phnom_penh.id,
                                                       destination_id: siem_reap.id,
                                                       departure_time: '13:00',
-                                                      duration: 4,
+                                                      duration: 14400,
                                                       vehicle_id: minivan1.id
                                                     },
                                                     name: 'Larryta Airbus Phnom Penh Siem Reap 13:00',
@@ -87,7 +85,7 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                                                       origin_id: phnom_penh.id,
                                                       destination_id: siem_reap.id,
                                                       departure_time: '20:00',
-                                                      duration: 5,
+                                                      duration: 18000,
                                                       vehicle_id: minivan2.id
                                                     },
                                                     name: 'Larryta Airbus Phnom Penh Siem Reap 20:00',
@@ -99,7 +97,7 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                                                       origin_id: sihanoukville.id,
                                                       destination_id: koh_rong.id,
                                                       departure_time: '10:00',
-                                                      duration: 6,
+                                                      duration: 21600,
                                                       vehicle_id: ferry1.id,
                                                       allow_seat_selection: false
                                                     },
@@ -112,7 +110,7 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                                                       origin_id: sihanoukville.id,
                                                       destination_id: koh_rong.id,
                                                       departure_time: '15:00',
-                                                      duration: 3,
+                                                      duration: 10800,
                                                       vehicle_id: ferry2.id,
                                                       allow_seat_selection: false
                                                     },
@@ -218,7 +216,7 @@ let!(:tomorrow) {today + 1.day}
         search_result.each do |r|
           table.add_row [r.trip_id, r.route_name, r.vendor_name, r.short_name,
                           r.origin + " - " + r.origin_id.to_s, r.destination + " - " + r.destination_id.to_s, r.departure_time,
-                          r.arrival_time, r.duration, r.vehicle_id, r.total_seats, r.total_sold, r.remaining_seats]
+                          r.arrival_time, r.duration_in_hms, r.vehicle_id, r.total_seats, r.total_sold, r.remaining_seats]
           table.add_separator unless r.equal?(search_result.last) # Avoid adding separator after the last row
         end
         table.style = {:alignment => :center}
@@ -231,21 +229,19 @@ let!(:tomorrow) {today + 1.day}
       it "return trip result for today" do
         search_result = result.call.sort_by(&:trip_id)
         expect(search_result.count).to eq(4)
-        expect(search_result.first.trip_id).to eq(vet_phnom_penh_siem_reap_1.master.id)
-        expect(search_result.last.trip_id).to eq(larryta_phnom_penh_siemreap_2.master.id)
         expect(search_result.first.remaining_seats).to eq(7)
+        expect(search_result[1].remaining_seats).to eq(12)
+        expect(search_result[2].remaining_seats).to eq(20)
         expect(search_result.last.remaining_seats).to eq(22)
       end
     end
-    context "return trip result of SV-KR for today " do
+    context "return trip result of SV-KR for tomorrow " do
       let(:result) {described_class.new(origin_id: sihanoukville, destination_id: koh_rong, date: tomorrow)}
       it "return trip result for today" do
         search_result = result.call.sort_by(&:trip_id)
         expect(search_result.count).to eq(2)
-        expect(search_result.first.trip_id).to eq(sihanoukville_to_koh_rong_by_ferry.master.id)
-        expect(search_result.last.trip_id).to eq(sihanoukville_to_koh_rong_by_ferry_2.master.id)
-        expect(search_result.first.remaining_seats).to eq(15)
-        expect(search_result.last.remaining_seats).to eq(19)
+        expect(search_result.first.remaining_seats).to eq(96)
+        expect(search_result.last.remaining_seats).to eq(100)
       end
     end
     context "return trip result for tomorrow" do
@@ -256,6 +252,8 @@ let!(:tomorrow) {today + 1.day}
         search_result = result.call.sort_by(&:trip_id)
         expect(search_result.count).to eq(4)
         expect(search_result.first.remaining_seats).to eq(12)
+        expect(search_result[1].remaining_seats).to eq(15)
+        expect(search_result[2].remaining_seats).to eq(24)
         expect(search_result.last.remaining_seats).to eq(22)
       end
     end

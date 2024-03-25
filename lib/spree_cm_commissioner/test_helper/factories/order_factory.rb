@@ -17,10 +17,10 @@ FactoryBot.define do
 
     after(:create) do |order, evaluator|
       if evaluator.quantity.nil? && evaluator.seats.present?
-        create(:transit_line_item, :with_seats, order: order, variant: evaluator.variant, date: evaluator.date, quantity: evaluator.seats.count, seats: evaluator.seats)
+        create(:line_item, order: order, variant: evaluator.variant, date: evaluator.date, booking_seats: evaluator.seats)
         order.line_items.reload
       else
-        create(:transit_line_item, order: order, variant: evaluator.variant, date: evaluator.date, quantity: evaluator.quantity)
+        create(:line_item, order: order, variant: evaluator.variant, date: evaluator.date, quantity: evaluator.quantity)
       end
 
       stock_location = order.line_items&.first&.variant&.stock_items&.first&.stock_location || create(:stock_location)

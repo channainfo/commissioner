@@ -6,12 +6,15 @@ module SpreeCmCommissioner
     before_validation :convert_duration_to_seconds
 
     belongs_to :route, class_name: 'Spree::Product'
+    belongs_to :vehicle, class_name: 'SpreeCmCommissioner::Vehicle'
     validates :departure_time, presence: true
 
     validates :duration, numericality: { greater_than: 0 }
     validate :origin_and_destination_cannot_be_the_same
 
     def convert_duration_to_seconds
+      return if hours.blank? && minutes.blank? && seconds.blank?
+
       self.duration = (hours.to_i * 3600) + (minutes.to_i * 60) + seconds.to_i
     end
 
