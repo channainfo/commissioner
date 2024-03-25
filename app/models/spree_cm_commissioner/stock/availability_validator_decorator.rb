@@ -3,6 +3,7 @@ module SpreeCmCommissioner
     module AvailabilityValidatorDecorator
       # override
       def validate(line_item)
+        return validate_seats_reservation(line_item) if line_item.seat_reservation?
         return validate_reservation(line_item) if line_item.reservation?
 
         super
@@ -38,8 +39,47 @@ module SpreeCmCommissioner
         end
       end
 
+      def validate_seats_reservation(line_item)
+        trip = reservation_trip(line_item)
+        allow_seat_selection = trip.allow_seat_selection
+
+        if allow_seat_selection
+          line_item.errors.add(:base, :some_seats_are_booked, message: 'Some seats are already booked') if validate_by_booking_seats(line_item)
+        elsif validate_by_quantity(line_item, trip)
+          line_item.errors.add(:quantity, :exceeded_available_quantity, message: 'exceeded available quantity')
+        end
+      end
+
+      def validate_by_booking_seats(line_item)
+        booked_seats = find_booked_seats(line_item.variant_id, line_item.date).pluck(:seat_id)
+        booking_seats = line_item.booking_seats.pluck(:id)
+
+        booking_seats.intersect?(booked_seats)
+      end
+
+      def validate_by_quantity(line_item, trip)
+        booked_quantity = Spree::LineItem.joins(:order)
+                                         .where(variant_id: line_item.variant_id, date: line_item.date, spree_orders: { state: 'complete' })
+                                         .sum(:quantity)
+        remaining_quantity = trip.vehicle.number_of_seats - booked_quantity
+        line_item.quantity > remaining_quantity
+      end
+
+      def reservation_trip(line_item)
+        route = Spree::Variant.find_by(id: line_item.variant_id).product
+        route.trip
+      end
+
       def find_booked_variants(variant_id, from_date, to_date)
         SpreeCmCommissioner::ReservationVariantQuantityAvailabilityQuery.new(variant_id, from_date, to_date).booked_variants
+      end
+
+      def find_booked_seats(trip_id, date)
+        SpreeCmCommissioner::LineItemSeat.select('cm_line_item_seats.seat_id')
+                                         .joins('INNER JOIN spree_line_items ON cm_line_item_seats.line_item_id = spree_line_items.id')
+                                         .joins('INNER JOIN spree_orders ON spree_orders.id = spree_line_items.order_id')
+                                         .where('spree_orders.state = ? ', 'complete')
+                                         .where('cm_line_item_seats.variant_id = ? AND cm_line_item_seats.date = ?', trip_id, date)
       end
     end
   end
