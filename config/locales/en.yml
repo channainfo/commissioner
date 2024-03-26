@@ -265,6 +265,7 @@ en:
         overdue: "Overdue"
         failed: "Failed"
         unknown: "Unknown"
+      subscription_price_placeholder: "Subscription Price In %{currency}"
     upsupported_payment: "Unsupported event"
     exceeded_available_quantity_on_date:
       zero: "Rooms are not available on %{date}"

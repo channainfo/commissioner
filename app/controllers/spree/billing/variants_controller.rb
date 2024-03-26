@@ -4,6 +4,16 @@ module Spree
       belongs_to 'spree/product', find_by: :slug
       before_action :load_data
 
+      def new
+        if request.xhr?
+          @variant = @product.variants.build
+
+          render :show, layout: false
+        else
+          redirect_to new_billing_product_variant_url(@product)
+        end
+      end
+
       def collection
         return @collection if @collection.present?
 

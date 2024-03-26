@@ -1,22 +1,90 @@
 <div data-hook="admin_user_form_fields" class="row">
-  <div class="col-12 col-md-6">
-    <%= f.hidden_field :customer_id, value: @customer.id %>
-    <%= f.field_container :variant_id do %>
-      <%= f.label :variant, Spree.t(:variant) %>
-      <%= f.collection_select(:variant_id, @customer.subscribable_variants, :id, :display_variant, { include_blank: false }, { class: 'select2' ,disabled: @subscription.persisted?}) %>
-      <%= f.error_message_on :product_id %>
-    <% end %>
-    <%= f.field_container :start_date do %>
-      <%= f.label :start_date, Spree.t(:start_date) %>
-      <%= f.date_field :start_date, class: 'form-control', disabled: @subscription.persisted? %>
-      <%= f.error_message_on :start_date %>
-    <% end %>
-    <% if @subscription.id.present? %>
-      <%= f.field_container :status do %>
-        <%= f.label :status, Spree.t(:status) %>
-        <%= f.select :status, SpreeCmCommissioner::Subscription.statuses.keys, {}, class: 'select2' %>
-        <%= f.error_message_on :status %>
+  <div class="col-12">
+    <%= f.hidden_field :customer_id, value: customer.id %>
+
+    <div class="col-12">
+      <% if @subscription.persisted? %>
+        <%= f.field_container :product do %>
+          <%= f.label :product, Spree.t(:product) %>
+          <%= f.text_field :product, value: f.object.variant.product.name, class: 'form-control', disabled: true %>
+          <%= f.error_message_on :product %>
+        <% end %>
+      <% else %>
+        <%= f.field_container :product do %>
+          <%= f.label :product, Spree:t(:product) %>
+          <%= f.select :product, options_for_select(Spree::Product.joins(:taxons)
+                                    .where(spree_taxons: { id: customer.taxon_id })
+                                    .map{ |product| [product.name, product.sku] }),
+                                  { include_blank: true },
+                                  { class: "select2-clear" } %>
+          <%= f.error_message_on :product %>
+        <% end %>
       <% end %>
-    <% end %>
+    </div>
+
+    <div class="col-12">
+      <% if @subscription.persisted? %>
+        <%= f.field_container :variant do %>
+          <%= f.label :variant, Spree.t(:variant) %>
+          <%= f.text_field :variant, value: f.object.variant.sku, class: 'form-control', disabled: true %>
+          <%= f.error_message_on :product %>
+        <% end %>
+      <% else %>
+        <div id="option-types-form-container">
+        </div>
+      <% end %>
+    </div>
+
+    <div class="col-12">
+      <%= f.field_container :start_date do %>
+        <%= f.label :start_date, Spree.t(:start_date) %>
+        <%= f.date_field :start_date, class: 'form-control', disabled: @subscription.persisted? %>
+        <%= f.error_message_on :start_date %>
+      <% end %>
+    </div>
+
+    <div class="col-12">
+      <% if @subscription.id.present? %>
+        <%= f.field_container :status do %>
+          <%= f.label :status, Spree.t(:status) %>
+          <%= f.select :status, SpreeCmCommissioner::Subscription.statuses.keys, {}, class: 'select2' %>
+          <%= f.error_message_on :status %>
+        <% end %>
+      <% end %>
+    </div>
   </div>
 </div>
+
+<script>
+  $(document).ready(function () {
+    const productSelector = "#spree_cm_commissioner_subscription_product";
+    const variantIdSelector = "#spree_cm_commissioner_subscription_variant_id";
+    const optionTypesFormDiv = "#option-types-form-container";
+
+    $(productSelector).on("change", function () {
+      removeOptionTypesForm();
+      appendOptionTypesForm();
+    });
+
+    function appendOptionTypesForm() {
+      var productSku = $(productSelector).val();
+
+      $.ajax({
+        url: '/en/billing/products/' + productSku + '/variants/new',
+        type: 'GET',
+        dataType: 'html',
+        success: function (response) {
+          console.log('Success fetching form:', response);
+          $(optionTypesFormDiv).append(response);
+        },
+        error: function (error) {
+          console.error('Error fetching form:', error);
+        }
+      });
+    }
+
+    function removeOptionTypesForm() {
+      $(optionTypesFormDiv).empty();
+    }
+  });
+</script>

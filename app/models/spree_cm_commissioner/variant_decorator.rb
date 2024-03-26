@@ -14,6 +14,8 @@ module SpreeCmCommissioner
                                             }, through: :option_value_variants, source: :option_value
 
       base.scope :subscribable, -> { active.joins(:product).where(product: { subscribable: true, status: :active }) }
+
+      base.has_many :subscriptions, class_name: 'SpreeCmCommissioner::Subscription', dependent: :destroy
     end
 
     # override
