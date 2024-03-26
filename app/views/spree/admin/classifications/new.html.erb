@@ -17,7 +17,10 @@
       <div class="form-group" data-hook="product">
         <%= f.field_container :product do %>
           <%= f.label :product_id, Spree.t('product') %>
-          <%= f.collection_select :product_id, Spree::Product.all, :id, :name, { prompt: Spree.t('match_choices.none') }, class: 'form-control' %>
+          <%= f.select :product_id,
+              options_from_collection_for_select(Spree::Product.all, :id, :name),
+                { include_hidden: true },
+                class: 'select2 form-control' %>
         <% end %>
       </div>
       <fieldset data-hook="new_taxon_product">
