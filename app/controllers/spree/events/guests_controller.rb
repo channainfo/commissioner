@@ -26,6 +26,22 @@ module Spree
         end
       end
 
+      def check_in
+        guest_ids = [params[:id]]
+        context = SpreeCmCommissioner::CheckInBulkCreator.call(
+          guest_ids: guest_ids,
+          check_in_by: spree_current_user
+        )
+
+        if context.success?
+          flash[:success] = Spree.t('event.check_in.success')
+        else
+          flash[:error] = context.message.to_s.titleize
+        end
+
+        redirect_to collection_url
+      end
+
       def edit
         @guest = SpreeCmCommissioner::Guest.find(params[:id])
         @event = @guest.event

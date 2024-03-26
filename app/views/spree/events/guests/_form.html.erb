@@ -20,19 +20,19 @@
         <div class="row">
           <div class="col-12 col-lg-6">
             <%= f.label :gender, Spree.t(:gender) %>
-            <%= f.text_field :gender, class: 'form-control', value: @guest.gender.titleize, readonly: true %>
+            <%= f.text_field :gender, class: 'form-control', value: @guest.gender&.titleize, readonly: true %>
           </div>
 
           <div class="col-12 col-lg-6">
             <%= f.label :occupation_id, Spree.t(:occupation) %>
-            <%= f.text_field :occupation_id, class: 'form-control', value: @guest.occupation.name, readonly: true %>
+            <%= f.text_field :occupation_id, class: 'form-control', value: @guest.occupation&.name, readonly: true %>
           </div>
         </div>
 
         <div class="row">
           <div class="col-12 col-lg-6">
             <%= f.label :id_card_card_type_eq, Spree.t(:card_type) %>
-            <%= f.text_field :id_card_card_type_eq, class: 'form-control', value: @guest.id_card.try(:card_type).titleize, readonly: true %>
+            <%= f.text_field :id_card_card_type_eq, class: 'form-control', value: @guest.id_card&.try(:card_type)&.titleize, readonly: true %>
           </div>
         </div>
 

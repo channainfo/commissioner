@@ -34,6 +34,7 @@
         <th scope="col" class="text-left"><%= Spree.t(:id_card_image) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:entry_type) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:created_at) %></th>
+        <th scope="col" class="text-left"><%= Spree.t(:check_in_status) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:action) %></th>
       </tr>
     </thead>
@@ -86,6 +87,9 @@
           </td>
           <td class="text-left">
             <%= guest.created_at&.strftime('%d %b %Y %I:%M:%S %p') %>
+          </td>
+          <td class="text-left">
+            <%= guest.check_in&.created_at&.strftime('%d %b %Y %I:%M:%S %p') %>
           </td>
           <td class="text-left">
             <%= link_to_edit guest, url: edit_event_guest_url(current_event.slug, guest), no_text: true, class: 'edit' %>
