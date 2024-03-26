@@ -10,7 +10,10 @@
       <%= svg_icon name: "cancel.svg", width: '20', height: '20', classes: 'p-0 m-0' %>
     </button>
   </div>
-    <ul class="nav nav-sidebar" id="sidebarOrder">
+    <ul class="nav nav-sidebar mb-3" id="sidebarOrder">
         <%= tab :guests, url: event_guests_path, icon: 'people.svg' %>
+    </ul>
+    <ul class="nav nav-sidebar" id="sidebarOrder">
+        <%= tab :check_ins, url: event_check_ins_path, icon: 'people.svg' %>
     </ul>
 </nav>

@@ -7,6 +7,9 @@ en:
       already_exist: "%{login} already exist"
       not_exist: "%{login} not exist"
 
+  event:
+    check_in:
+      success: "Guest check-in in successfully"
   sms:
     to:
       blank: "recipient can not be blank"

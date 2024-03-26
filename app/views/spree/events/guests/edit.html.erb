@@ -2,6 +2,11 @@
   <%= Spree.t(:guests) %>
 <% end %>
 
+
+<% content_for :page_actions do %>
+  <%= link_to 'Create CheckIn', check_in_event_guest_path, method: :post, class: 'btn btn-outline-primary' %>
+<% end %>
+
 <%= form_with(model: @guest, url: { action: :update }) do |f| %>
   <fieldset>
     <%= render partial: 'form', locals: { f: f } %>
