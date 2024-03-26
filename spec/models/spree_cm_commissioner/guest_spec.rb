@@ -8,6 +8,39 @@ RSpec.describe SpreeCmCommissioner::Guest, type: :model do
 
   subject { line_item.guests.new }
 
+  describe '.complete' do
+    let(:order1) { create(:order, completed_at: Date.current) }
+    let(:order2) { create(:order, completed_at: nil) }
+
+    let(:line_item1) { create(:line_item, order: order1) }
+    let(:line_item2) { create(:line_item, order: order2) }
+
+    let!(:guest1) { create(:guest, line_item: line_item1) }
+    let!(:guest2) { create(:guest, line_item: line_item2) }
+
+    it 'return guests that has complete line item' do
+      expect(described_class.complete.to_a).to eq [guest1]
+    end
+  end
+
+  describe '.unassigned_event' do
+    let(:taxonomy) { create(:taxonomy, kind: :event) }
+    let(:event) { create(:taxon, name: 'BunPhum', taxonomy: taxonomy) }
+    let(:section) { create(:taxon, parent: event, taxonomy: taxonomy, name: 'Section A') }
+    let(:product) { create(:product, product_type: :ecommerce, taxons: [section]) }
+    let(:line_item) { create(:line_item, product: product) }
+
+    let!(:guest_with_event_id) { create(:guest, line_item: line_item) }
+    let!(:guest_with_no_event_id) { create(:guest) }
+
+    it 'return guests that has no assigned event_id' do
+      expect(guest_with_event_id.event_id).to eq event.id
+      expect(guest_with_no_event_id.event_id).to eq nil
+
+      expect(described_class.unassigned_event.to_a).to eq [guest_with_no_event_id]
+    end
+  end
+
   describe '#allowed_checkout?' do
     context 'when guest_name kyc enabled' do
       it 'return false when first name is not provided' do

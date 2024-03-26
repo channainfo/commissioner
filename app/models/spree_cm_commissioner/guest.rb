@@ -6,6 +6,9 @@ module SpreeCmCommissioner
 
     enum gender: { :other => 0, :male => 1, :female => 2 }
 
+    scope :complete, -> { joins(:line_item).merge(Spree::LineItem.complete) }
+    scope :unassigned_event, -> { where(event_id: nil) }
+
     belongs_to :line_item, class_name: 'Spree::LineItem', optional: false
     belongs_to :occupation, class_name: 'Spree::Taxon'
     belongs_to :nationality, class_name: 'Spree::Taxon'
