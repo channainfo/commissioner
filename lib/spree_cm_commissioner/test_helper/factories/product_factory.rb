@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :cm_product, parent: :base_product do
-    vendor { create(:cm_vendor) }
+    vendor { Spree::Vendor.first || create(:cm_vendor) }
 
     before(:create) do |product|
       create(:stock_location) unless Spree::StockLocation.any?
