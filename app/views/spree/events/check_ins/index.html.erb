@@ -13,6 +13,7 @@
         <th scope="col" class="text-left"><%= Spree.t(:entry_type) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:check_in_method) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:check_in_by) %></th>
+        <th scope="col" class="text-left"><%= Spree.t(:confirmed_at) %></th>
       </tr>
     </thead>
     <tbody>
@@ -41,6 +42,9 @@
           </td>
           <td class="text-left">
             <%= check_in.check_in_by.full_name %>
+          </td>
+          <td class="text-left">
+            <%= check_in.confirmed_at %>
           </td>
         </tr>
       <% end %>

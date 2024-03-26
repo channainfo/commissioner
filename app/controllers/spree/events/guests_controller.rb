@@ -39,12 +39,18 @@ module Spree
           flash[:error] = context.message.to_s.titleize
         end
 
-        redirect_to collection_url
+        redirect_to edit_object_url
       end
 
       def edit
         @guest = SpreeCmCommissioner::Guest.find(params[:id])
+        @check_in = @guest.check_in
         @event = @guest.event
+      end
+
+      # override
+      def edit_object_url
+        edit_event_guest_url
       end
 
       private

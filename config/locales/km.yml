@@ -262,6 +262,9 @@ km:
     admin:
       display_on:
         frontend_for_early_adopter: "Storefront for Early Adopter"
+    event:
+      check_in:
+        success: "Guest check-in in successfully"
 
   activerecord:
     attributes:

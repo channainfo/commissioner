@@ -27,7 +27,10 @@
         <div class="col-12 col-lg-6">
           <div class="form-group">
             <%= f.label :occupation_id_eq, Spree.t(:occupation) %>
-            <%= f.select :occupation_id_eq, options_for_select(Spree::Taxon.where(kind: Spree::Taxon.kinds[:occupation]).order(:position).map { |t| [Spree.t("#{t.name}"), t.id] }), { include_blank: true, prompt: Spree.t(:select_occupation) }, class: "form-control js-filterable" %>
+            <%= f.select :occupation_id_eq,
+              options_from_collection_for_select(Spree::Taxon.where(kind: Spree::Taxon.kinds[:occupation]).order(:position), :id, :name),
+                { include_hidden: true },
+                class: 'select2 form-control' %>
           </div>
         </div>
       </div>
