@@ -2,9 +2,18 @@
   <%= Spree.t(:guests) %>
 <% end %>
 
-
-<% content_for :page_actions do %>
-  <%= link_to 'Create CheckIn', check_in_event_guest_path, method: :post, class: 'btn btn-outline-primary' %>
+<% content_for(:sidebar) do %>
+  <% if @guest.check_in.present? %>
+    <%= render partial: 'check_in_status' %>
+  <% else %>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title"><%= Spree.t(:check_in_status) %></h5>
+        <p class="card-text">Click button below to manually check-in guest</p>
+        <%= link_to 'Check In', check_in_event_guest_path, method: :post, class: 'btn btn-outline-primary' %>
+      </div>
+    </div>
+  <% end %>
 <% end %>
 
 <%= form_with(model: @guest, url: { action: :update }) do |f| %>
@@ -13,3 +22,4 @@
     <%= render partial: 'spree/admin/shared/edit_resource_links' %>
   </fieldset>
 <% end %>
+

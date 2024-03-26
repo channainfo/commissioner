@@ -6,10 +6,6 @@ en:
     verify:
       already_exist: "%{login} already exist"
       not_exist: "%{login} not exist"
-
-  event:
-    check_in:
-      success: "Guest check-in in successfully"
   sms:
     to:
       blank: "recipient can not be blank"
@@ -281,6 +277,9 @@ en:
     admin:
       display_on:
         frontend_for_early_adopter: "Storefront for Early Adopter"
+    event:
+      check_in:
+        success: "Guest check-in in successfully"
 
   activerecord:
     attributes:
