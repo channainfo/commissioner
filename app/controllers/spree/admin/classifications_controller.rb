@@ -3,6 +3,15 @@ module Spree
     class ClassificationsController < Spree::Admin::ResourceController
       before_action :load_taxon_and_products
 
+      def recalculate_conversions
+        @taxon.products.each do |product|
+          SpreeCmCommissioner::ConversionPreCalculatorJob.perform_later(product.id)
+        end
+
+        flash[:success] = Spree.t('recalculate_products')
+        redirect_to collection_url
+      end
+
       private
 
       def edit_object_url(product, options = {})
