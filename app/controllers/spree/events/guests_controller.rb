@@ -53,6 +53,18 @@ module Spree
         edit_event_guest_url
       end
 
+      def send_email
+        @guest = SpreeCmCommissioner::Guest.find(params[:id])
+        @event = @guest.event
+
+        @email = params[:guest][:email]
+
+        Spree::OrderMailer.ticket_email(@guest, @email).deliver_later
+
+        flash[:success] = 'Email sent successfully' # rubocop:disable Rails/I18nLocaleTexts
+        redirect_to event_guest_path
+      end
+
       private
 
       def csv_name
