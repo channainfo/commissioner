@@ -12,7 +12,7 @@ module SpreeCmCommissioner
     def after_sign_in_path_for(_)
       if spree_current_user.admin?
         admin_path
-      elsif spree_current_user.organizer?
+      elsif spree_current_user.organizer? && spree_current_user.events.present?
         event_guests_path(spree_current_user.events.first.slug)
       else
         '/'
