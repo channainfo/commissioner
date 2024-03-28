@@ -162,7 +162,7 @@ Spree::Core::Engine.add_routes do
     end
   end
 
-  resources :events, only: [] do
+  resources :events, only: %i[index show], controller: 'events/base' do
     resources :guests, only: %i[index show edit update], controller: 'events/guests' do
       post :send_email, on: :member, as: :send_email
       member do
@@ -170,6 +170,9 @@ Spree::Core::Engine.add_routes do
       end
     end
     resources :check_ins, only: %i[index], controller: 'events/check_ins'
+    collection do
+      get :forbidden, to: 'events/errors#forbidden'
+    end
   end
 
   namespace :telegram do
