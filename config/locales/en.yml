@@ -280,6 +280,8 @@ en:
     event:
       check_in:
         success: "Guest check-in in successfully"
+      uncheck_in:
+        success: "Guest uncheck-in in successfully"
 
   activerecord:
     attributes:

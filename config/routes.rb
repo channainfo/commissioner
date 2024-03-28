@@ -167,7 +167,9 @@ Spree::Core::Engine.add_routes do
       post :send_email, on: :member, as: :send_email
       member do
         post :check_in
+        post :uncheck_in
       end
+      resources :state_changes, only: %i[index], controller: 'events/state_changes'
     end
     resources :check_ins, only: %i[index], controller: 'events/check_ins'
   end
