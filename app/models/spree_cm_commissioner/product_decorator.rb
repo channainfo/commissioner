@@ -20,7 +20,7 @@ module SpreeCmCommissioner
 
       base.has_many :homepage_section_relatables,
                     class_name: 'SpreeCmCommissioner::HomepageSectionRelatable',
-                    dependent: :destroy, inverse_of: :relatable
+                    dependent: :destroy, as: :relatable
 
       base.has_one :default_state, through: :vendor
 
