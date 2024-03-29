@@ -1,0 +1,48 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:guests) %>
+<% end %>
+
+<%= render partial: 'spree/events/shared/guest_tabs', locals: { current: :state_changes } %>
+
+<% if @state_changes.any? %>
+<div class="table-responsive border rounded bg-white">
+  <table class="table" id="listing_order_state_changes" data-hook>
+    <thead class="text-muted">
+      <tr data-hook="admin_orders_state_changes_headers">
+        <th><%= Spree::StateChange.human_attribute_name(:type) %></th>
+        <th><%= Spree::StateChange.human_attribute_name(:state_from) %></th>
+        <th><%= Spree::StateChange.human_attribute_name(:state_to) %></th>
+        <th><%= Spree::StateChange.human_attribute_name(:by_user) %></th>
+        <th><%= Spree::StateChange.human_attribute_name(:timestamp) %></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @state_changes.each do |state_change| %>
+        <% scope = state_change.name == 'guest'  ? "#{ state_change.name }_state" : "#{ state_change.name }_states" -%>
+        <tr>
+          <td><%= Spree.t("state_machine_states.#{state_change.name}") %></td>
+          <td><%= state_change.previous_state %></td>
+          <td><%= state_change.next_state %></td>
+          <td>
+            <% if state_change.user %>
+              <% user_login = state_change.user.try(:login) || state_change.user.try(:email) %>
+              <%= link_to user_login, spree.admin_user_path(state_change.user) %>
+            <% end %>
+          </td>
+          <td>
+            <%= pretty_time(state_change.created_at) %>
+            <% if state_change.created_at != state_change.updated_at %>
+              <small><%= Spree::StateChange.human_attribute_name(:updated) %>: <%= pretty_time(state_change.updated_at) %></small>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<% else %>
+  <div class="text-center no-objects-found m-5">
+    <%= Spree.t(:no_state_changes) %>
+  </div>
+<% end %>
