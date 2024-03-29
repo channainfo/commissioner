@@ -28,7 +28,7 @@
     <%= f.hidden_field :vendor_id, value: current_vendor.id %>
     <%= f.field_container :taxon_id do %>
       <%= f.label :taxon_id, I18n.t('activerecord.attributes.spree/order.taxon') %>
-      <%= f.collection_select(:taxon_id, Spree::Taxon.all.order('parent_id ASC').uniq, :id, :pretty_name, { include_blank: Spree.t('match_choices.none') }, { class: 'select2' })%>
+      <%= f.collection_select(:taxon_id, Spree::Taxon.where('depth > ? ',0).order('parent_id ASC').uniq, :id, :pretty_name, { include_blank: Spree.t('match_choices.none') }, { class: 'select2' })%>
       <%= f.error_message_on :taxon_id %>
     <% end %>
     <%= f.field_container :quantity do %>

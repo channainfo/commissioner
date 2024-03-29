@@ -19,7 +19,6 @@ module Spree
         @option_types = OptionType.order(:name)
         @tax_categories = TaxCategory.order(:name)
         @shipping_categories = ShippingCategory.order(:name)
-        @selected_option_type_ids = Spree::OptionType.where(name: %w[month payment-option due-date]).ids
       end
 
       # overrided
