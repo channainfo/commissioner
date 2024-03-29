@@ -3,7 +3,7 @@
     <li class="nav-item" data-hook='admin_guest_tabs_edit'>
       <%= link_to_with_icon 'edit.svg',
         Spree.t('edit'),
-        edit_event_guest_path(@event, @guest),
+        edit_event_guest_path(@event.slug, @guest),
         class: "#{'active' if current == :edit} nav-link" %>
     </li>
   <% end %>
@@ -12,7 +12,7 @@
     <li class="nav-item" data-hook='admin_guest_tabs_state_changes'>
       <%= link_to_with_icon 'calendar3.svg',
         Spree::StateChange.human_attribute_name(:state_changes),
-        event_guest_state_changes_path(@event, @guest),
+        event_guest_state_changes_path(@event.slug, @guest),
         class: "#{'active' if current == :state_changes} nav-link" %>
     </li>
   <% end %>
