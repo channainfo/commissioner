@@ -92,7 +92,7 @@ module Spree
       end
 
       def collection
-        scope = model_class.where(event_id: current_event.id)
+        scope = model_class.where(event_id: current_event&.id)
 
         @search = scope.ransack(params[:q])
         @collection = @search.result
