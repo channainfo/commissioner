@@ -14,7 +14,7 @@ module SpreeCmCommissioner
       base.has_many :users, through: :user_events, class_name: Spree.user_class.to_s
       base.has_many :products, through: :classifications, class_name: 'Spree::Product'
       base.has_many :guests, foreign_key: :event_id, class_name: 'SpreeCmCommissioner::Guest', dependent: :nullify
-      base.has_many :check_in, as: :checkinable, class_name: 'SpreeCmCommissioner::CheckIn', dependent: :nullify
+      base.has_many :check_ins, as: :checkinable, class_name: 'SpreeCmCommissioner::CheckIn', dependent: :nullify
 
       base.has_one :category_icon, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::TaxonCategoryIcon'
 

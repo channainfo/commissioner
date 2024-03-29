@@ -51,10 +51,9 @@
     </tbody>
   </table>
 </div>
+<%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>
 <% else %>
   <div class="text-left no-objects-found m-5">
-    <%= Spree.t(:no_resource_found, resource: plural_resource_name(SpreeCmCommissioner::Guest)) %>,
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(SpreeCmCommissioner::CheckIn)) %>
   </div>
 <% end %>
-
-<%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>
