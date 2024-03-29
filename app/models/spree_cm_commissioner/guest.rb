@@ -13,6 +13,8 @@ module SpreeCmCommissioner
     belongs_to :occupation, class_name: 'Spree::Taxon'
     belongs_to :nationality, class_name: 'Spree::Taxon'
 
+    has_many :state_changes, as: :stateful, class_name: 'Spree::StateChange'
+
     belongs_to :event, class_name: 'Spree::Taxon'
 
     has_one :id_card, class_name: 'SpreeCmCommissioner::IdCard', dependent: :destroy

@@ -87,7 +87,11 @@ Spree::Core::Engine.add_routes do
       resources :taxons do
         resources :taxon_vendors
         resources :user_taxons
-        resources :classifications
+        resources :classifications do
+          collection do
+            post :recalculate_conversions
+          end
+        end
 
         member do
           delete :remove_category_icon
@@ -158,13 +162,21 @@ Spree::Core::Engine.add_routes do
     end
   end
 
-  resources :events, only: [] do
+  resources :events, controller: 'events/base' do
+    root to: 'events/guests#index'
     resources :guests, only: %i[index show edit update], controller: 'events/guests' do
+      post :send_email, on: :member, as: :send_email
       member do
         post :check_in
+        post :uncheck_in
       end
+      resources :state_changes, only: %i[index], controller: 'events/state_changes'
     end
     resources :check_ins, only: %i[index], controller: 'events/check_ins'
+    collection do
+      get '/forbidden', to: 'events/errors#forbidden'
+      get '/resource_not_found', to: 'events/errors#resource_not_found'
+    end
   end
 
   namespace :telegram do
@@ -332,4 +344,5 @@ end
 Rails.application.routes.draw do
   get 'i/:id', to: 'spree_cm_commissioner/qr_images#show', as: 'qr_image'
   get 'o/:id', to: 'spree_cm_commissioner/orders#show', as: 'order'
+  get 'li/:id', to: 'spree_cm_commissioner/line_item_qr_images#show', as: 'line_item_qr_image'
 end

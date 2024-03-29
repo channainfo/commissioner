@@ -39,7 +39,15 @@ module SpreeCmCommissioner
         confirmed_at: confirmed_at
       )
 
-      return check_in if check_in.save
+      if check_in.save
+        guest.state_changes.create!(
+          user: check_in_by,
+          previous_state: 'unchecked_in',
+          next_state: 'checked_in',
+          name: 'guest'
+        )
+        return check_in
+      end
 
       context.fail!(message: :invalid, errors: check_in.errors.full_messages)
     end

@@ -42,6 +42,22 @@ module Spree
         redirect_to edit_object_url
       end
 
+      def uncheck_in
+        guest_ids = [params[:id]]
+        context = SpreeCmCommissioner::CheckInDestroyer.call(
+          guest_ids: guest_ids,
+          destroyed_by: spree_current_user
+        )
+
+        if context.success?
+          flash[:success] = Spree.t('event.uncheck_in.success')
+        else
+          flash[:error] = context.message.to_s.titleize
+        end
+
+        redirect_to edit_object_url
+      end
+
       def edit
         @guest = SpreeCmCommissioner::Guest.find(params[:id])
         @check_in = @guest.check_in
@@ -51,6 +67,18 @@ module Spree
       # override
       def edit_object_url
         edit_event_guest_url
+      end
+
+      def send_email
+        @guest = SpreeCmCommissioner::Guest.find(params[:id])
+        @event = @guest.event
+
+        @email = params[:guest][:email]
+
+        Spree::OrderMailer.ticket_email(@guest, @email).deliver_later
+
+        flash[:success] = 'Email sent successfully' # rubocop:disable Rails/I18nLocaleTexts
+        redirect_to event_guest_path
       end
 
       private
@@ -64,7 +92,7 @@ module Spree
       end
 
       def collection
-        scope = model_class.where(event_id: current_event.id)
+        scope = model_class.where(event_id: current_event&.id)
 
         @search = scope.ransack(params[:q])
         @collection = @search.result

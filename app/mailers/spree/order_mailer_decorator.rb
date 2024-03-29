@@ -23,6 +23,24 @@ module Spree
         format.text
       end
     end
+
+    def ticket_email(guest, email)
+      @guest = guest
+      @event = @guest.event
+      @line_item = @guest.line_item
+      @order = @line_item.order
+      @email = email
+
+      @current_store = @order.store
+      @product_type = @line_item.product_type
+
+      subject = "#{@current_store&.name} Booking Confirmation ##{@order.number}"
+
+      mail(to: @email, from: from_address, subject: subject, store_url: @current_store.url) do |format|
+        format.html { render layout: 'spree_cm_commissioner/layouts/line_item_mailer' }
+        format.text
+      end
+    end
   end
 end
 

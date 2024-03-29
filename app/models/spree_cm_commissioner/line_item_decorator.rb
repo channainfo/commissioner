@@ -103,7 +103,7 @@ module SpreeCmCommissioner
       )
     end
 
-    def generate_png_qr
+    def generate_png_qr(size = 120)
       qrcode = RQRCode::QRCode.new(qr_data)
       qrcode.as_png(
         bit_depth: 1,
@@ -115,7 +115,7 @@ module SpreeCmCommissioner
         module_px_size: 4,
         resize_exactly_to: false,
         resize_gte_to: false,
-        size: 120
+        size: size
       )
     end
 
