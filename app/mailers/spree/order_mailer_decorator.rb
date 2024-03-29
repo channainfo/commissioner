@@ -37,7 +37,7 @@ module Spree
       subject = "#{@current_store&.name} Booking Confirmation ##{@order.number}"
 
       mail(to: @email, from: from_address, subject: subject, store_url: @current_store.url) do |format|
-        format.html { render layout: 'spree_cm_commissioner/layouts/order_mailer' }
+        format.html { render layout: 'spree_cm_commissioner/layouts/line_item_mailer' }
         format.text
       end
     end
