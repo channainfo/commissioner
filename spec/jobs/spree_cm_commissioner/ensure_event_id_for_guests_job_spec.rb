@@ -21,12 +21,11 @@ RSpec.describe SpreeCmCommissioner::EnsureEventIdForGuestsJob, type: :job do
     # set it to null as it auto-assign event_id on save.
     before do
       guest1.update_columns(event_id: nil)
-      guest2.update_columns(event_id: nil)
     end
 
-    it "save event_id for guests when it nil" do
+    it "reassign event_id for guests" do
       expect(guest1.reload.event_id).to eq nil
-      expect(guest2.reload.event_id).to eq nil
+      expect(guest2.reload.event_id).not_to eq nil
 
       perform_enqueued_jobs { described_class.perform_now }
 
