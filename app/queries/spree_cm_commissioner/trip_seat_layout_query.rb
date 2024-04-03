@@ -17,8 +17,8 @@ module SpreeCmCommissioner
       SpreeCmCommissioner::TripSeatLayoutResult.new({ trip_id: trip_id, total_sold: total_sold,
                                                       total_seats: vehicle.number_of_seats,
                                                       remaining_seats: remaining_seats,
-                                                      layout: layout,
-                                                      allow_seat_selection: allow_seat_selection
+                                                      allow_seat_selection: allow_seat_selection,
+                                                      layout: layout
                                                     }
       )
     end

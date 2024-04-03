@@ -2,11 +2,14 @@ module SpreeCmCommissioner
   class TripSearchQuery
     attr_reader :origin_id, :destination_id, :vendor_id, :date
 
-    def initialize(origin_id:, destination_id:, date:, vendor_id: nil)
-      @origin_id = origin_id
-      @destination_id = destination_id
-      @vendor_id = vendor_id
-      @date = date
+    def initialize(options: {})
+      options.each do |key, value|
+        instance_variable_set("@#{key}", value)
+      end
+      # @origin_id = origin_id
+      # @destination_id = destination_id
+      # @vendor_id = vendor_id
+      # @date = date
     end
 
     def call
@@ -17,7 +20,7 @@ module SpreeCmCommissioner
           vendor_name: trip.vendor_name,
           route_name: trip.route_name,
           short_name: trip.short_name,
-          detail: trip.trip_id,
+          detail: trip.trip_detail_id,
           origin_id: trip.origin_id,
           origin: trip.origin,
           destination_id: trip.destination_id,
@@ -38,7 +41,7 @@ module SpreeCmCommissioner
                               spree_vendors.name as vendor_name,
                               routes.name as route_name,
                               routes.short_name as short_name,
-                              details.id as trip_id,
+                              details.id as trip_detail_id,
                               details.origin_id as origin_id,
                               details.destination_id as destination_id,
                               details.departure_time as departure_time,

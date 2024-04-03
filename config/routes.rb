@@ -220,6 +220,7 @@ Spree::Core::Engine.add_routes do
           resources :nearby_places, only: %i[index]
         end
         resource :homepage_data, only: [:show]
+        resources :trips, only: %i[index show]
       end
     end
   end
