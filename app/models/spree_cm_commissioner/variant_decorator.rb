@@ -28,7 +28,7 @@ module SpreeCmCommissioner
     def display_variant
       display_sku = sku.split('-').join(' ')
       display_price = price.to_i == price ? price.to_i : price
-      "#{display_sku} - $#{display_price}"
+      "#{display_sku} - #{display_price} ៛"
     end
 
     private

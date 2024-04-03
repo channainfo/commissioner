@@ -23,9 +23,10 @@ module SpreeCmCommissioner
     end
 
     def create_line_item
+      return unless subscription.last_occurence
+
       from_date = subscription.last_occurence
       to_date = from_date + subscription.months_count.months
-
       Spree::Cart::AddItem.call(
         order: context.order,
         variant: subscription.variant,

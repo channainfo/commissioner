@@ -38,7 +38,7 @@
       <div data-hook="admin_product_form_variant_kind_option_types">
         <%= f.field_container :variant_kind_option_type_ids do %>
           <%= f.label Spree.t(:option_types) %>
-          <%= f.select(:variant_kind_option_type_ids, options_for_select(Spree::OptionType.all.pluck(:name, :id), @selected_option_type_ids),{include_blank:false},{class: "select2", multiple:true}) %>
+          <%= f.select(:variant_kind_option_type_ids, options_for_select(Spree::OptionType.all.pluck(:name, :id), @product.option_types.ids),{include_blank:false},{class: "select2", multiple:true}) %>
         <% end %>
       </div>
       <% if @stores.count > 1 %>
