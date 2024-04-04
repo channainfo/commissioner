@@ -1,8 +1,8 @@
  <%
 
   @vendor = @invoice.order.line_items.first.vendor
-  @address =  @vendor.stock_locations.first.address1
-  @location_code = @vendor.stock_locations.first.reference
+  @address =  @vendor.stock_locations.first&.address1
+  @location_code = @vendor.stock_locations.first&.reference
   @title =  @vendor.name
   @contact =  @vendor.contact_us
   @email =  @vendor.notification_email
@@ -26,6 +26,11 @@
   @invoice_number = @invoice.invoice_number
   @customer_number = @customer.customer_number
   @customer_address = @order.billing_address&.address1
+  if @current_vendor.payment_qrcode.present?
+    @qrcode = payment_qrcode_image(@current_vendor.payment_qrcode.attachment)
+    @account_name = @current_vendor.account_name
+    @account_number = @current_vendor.account_number
+  end
 %>
 
 
@@ -182,7 +187,11 @@
               <li><%= @note %></li>
             </div>
             <div class="ml-auto  qrcode-container">
-              <img src="<%= main_app.rails_blob_url(@current_vendor.payment_qrcode.attachment) %>" alt="qrcode" style="width: 150px;">
+              <%= @qrcode %>
+              <div class="list-unstyled text-center">
+                <li><span><%= @account_name %></span></li>
+                <li><span><%= @account_number %></span></li>
+              </div>
             </div>
           </div>
             <div class="d-flex justify-content-between mt-4">
