@@ -3,12 +3,14 @@ module SpreeCmCommissioner
     extend ActiveSupport::Concern
 
     BIT_FIELDS = {
-      guest_name: 0b000001,
-      guest_gender: 0b000010,
-      guest_dob: 0b000100,
-      guest_occupation: 0b001000,
-      guest_id_card: 0b010000,
-      guest_nationality: 0b100000
+      guest_name: 0b1,
+      guest_gender: 0b10,
+      guest_dob: 0b100,
+      guest_occupation: 0b1000,
+      guest_id_card: 0b10000,
+      guest_nationality: 0b100000,
+      guest_age: 0b1000000,
+      guest_emergency_contact: 0b10000000
     }.freeze
 
     def kyc? = kyc != 0

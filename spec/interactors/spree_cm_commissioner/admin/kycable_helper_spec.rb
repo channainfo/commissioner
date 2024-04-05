@@ -7,12 +7,14 @@ RSpec.describe SpreeCmCommissioner::Admin::KycableHelper do
 
     let(:params) do
       {
-        guest_name: '0',        #2**0  = 1
-        guest_gender: '0',      #2**1  = 2
-        guest_dob: '0',         #2**2  = 4
-        guest_occupation: '0',  #2**3  = 8
-        guest_id_card: '0',     #2**4  = 16
-        guest_nationality: '0'  #2**5  = 32
+        guest_name: '0',                    #2**0  = 1
+        guest_gender: '0',                  #2**1  = 2
+        guest_dob: '0',                     #2**2  = 4
+        guest_occupation: '0',              #2**3  = 8
+        guest_id_card: '0',                 #2**4  = 16
+        guest_nationality: '0',             #2**5  = 32
+        guest_age: '0',                     #2**6 = 64
+        guest_emergency_contact: '0'        #2**7 = 128
       }
     end
 
@@ -52,8 +54,20 @@ RSpec.describe SpreeCmCommissioner::Admin::KycableHelper do
       expect(dummy_class.calculate_kyc_value(params)).to eq(32)
     end
 
-    it 'return value 31 if value params is selected' do
-      expected_value = 2**0 + 2**1 + 2**2 + 2**3 + 2**4 + 2**5
+    it 'return value 64 if guest_age is selected' do
+      params[:guest_age] = '1'
+
+      expect(dummy_class.calculate_kyc_value(params)).to eq(64)
+    end
+
+    it 'return value 128 if guest_emergency_contact is selected' do
+      params[:guest_emergency_contact] = '1'
+
+      expect(dummy_class.calculate_kyc_value(params)).to eq(128)
+    end
+
+    it 'return value 255 if value params is selected' do
+      expected_value = 2**0 + 2**1 + 2**2 + 2**3 + 2**4 + 2**5 + 2**6 + 2**7
       params.transform_values! { '1' }
 
       expect(dummy_class.calculate_kyc_value(params)).to eq(expected_value)
