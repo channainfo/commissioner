@@ -274,6 +274,7 @@ en:
     device_tokens: "Device Tokens"
     user_identity_providers: "Identity Providers"
     new_user_identity_provider: "New Identity Providers"
+    webhook_event: "Weebook Event"
     admin:
       display_on:
         frontend_for_early_adopter: "Storefront for Early Adopter"
