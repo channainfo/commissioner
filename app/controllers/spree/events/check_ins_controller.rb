@@ -14,9 +14,9 @@ module Spree
       private
 
       def collection
-        @collection = model_class.all
-                                 .page(params[:page])
-                                 .per(params[:per_page])
+        scope = current_event.check_ins
+
+        @collection = scope.page(params[:page]).per(params[:per_page])
       end
     end
   end
