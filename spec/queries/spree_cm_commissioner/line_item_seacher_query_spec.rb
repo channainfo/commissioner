@@ -59,27 +59,27 @@ RSpec.describe SpreeCmCommissioner::LineItemSearcherQuery do
       end
 
       it 'returns line items found by term' do
-        expect(described_class.new(params).call).to eq([line_item2])
+        expect(described_class.new(params).call.to_a).to eq([line_item2])
       end
 
       it 'returns line items found by term guest first_name' do
         params[:term] = 'Han'
-        expect(described_class.new(params).call).to eq([line_item1])
+        expect(described_class.new(params).call.to_a).to eq([line_item1])
       end
 
       it 'returns line items found by term guest last_name' do
         params[:term] = 'Leng'
-        expect(described_class.new(params).call).to eq([line_item2])
+        expect(described_class.new(params).call.to_a).to eq([line_item2])
       end
 
       it 'returns line items found by term order number' do
         params[:term] = 'R591727627'
-        expect(described_class.new(params).call).to eq([line_item1, line_item2])
+        expect(described_class.new(params).call.to_a).to eq([line_item1, line_item2])
       end
 
       it 'returns line items found by term order phone number' do
         params[:term] = '012345678'
-        expect(described_class.new(params).call).to eq([line_item1, line_item2])
+        expect(described_class.new(params).call.to_a).to eq([line_item1, line_item2])
       end
     end
 

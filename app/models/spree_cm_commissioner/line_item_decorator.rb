@@ -1,6 +1,6 @@
 module SpreeCmCommissioner
   module LineItemDecorator
-    def self.prepended(base)
+    def self.prepended(base) # rubocop:disable Metrics/MethodLength
       base.include SpreeCmCommissioner::LineItemDurationable
       base.include SpreeCmCommissioner::LineItemsFilterScope
       base.include SpreeCmCommissioner::LineItemGuestsConcern
@@ -13,14 +13,25 @@ module SpreeCmCommissioner
       base.has_many :taxons, class_name: 'Spree::Taxon', through: :product
       base.has_many :guests, class_name: 'SpreeCmCommissioner::Guest', dependent: :destroy
 
+      base.has_many :applied_pricing_rates, class_name: 'SpreeCmCommissioner::AppliedPricingRate', dependent: :destroy
+      base.has_many :applied_pricing_models, class_name: 'SpreeCmCommissioner::AppliedPricingModel', dependent: :destroy
+
       base.before_save :update_vendor_id
 
       base.before_create :add_due_date, if: :subscription?
 
+      # base.after_create :calculate_pricings, if: -> { variant.pricing_models.any? || variant.pricing_rates.any? }
+
       base.whitelisted_ransackable_associations |= %w[guests]
       base.whitelisted_ransackable_attributes |= %w[to_date from_date]
 
-      delegate :kyc?, to: :product
+      base.money_methods :pricing_rates_amount, :pricing_models_amount, :pricing_subtotal
+
+      base.validates :pricing_models_amount, allow_nil: true, numericality: true
+      base.with_options allow_nil: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: Spree::Price::MAXIMUM_AMOUNT } do
+        validates :pricing_rates_amount
+        validates :pricing_subtotal
+      end
 
       def base.json_api_columns
         json_api_columns = column_names.reject { |c| c.match(/_id$|id|preferences|(.*)password|(.*)token|(.*)api_key/) }
@@ -52,6 +63,8 @@ module SpreeCmCommissioner
     #
     # override
     def amount
+      return pricing_subtotal if pricing_subtotal.present?
+
       base_price = price * quantity
 
       if reservation? && date_unit
@@ -59,6 +72,10 @@ module SpreeCmCommissioner
       else
         base_price
       end
+    end
+
+    def calculate_pricings
+      SpreeCmCommissioner::Pricings::LineItemPricingsCalculator.new(line_item: self).call
     end
 
     def amount_per_guest
