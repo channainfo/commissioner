@@ -3,7 +3,6 @@ module SpreeCmCommissioner
     module AvailabilityValidatorDecorator
       # override
       def validate(line_item)
-        return validate_seats_reservation(line_item) if line_item.transit?
         return validate_reservation(line_item) if line_item.reservation?
 
         super
@@ -39,44 +38,8 @@ module SpreeCmCommissioner
         end
       end
 
-      def validate_seats_reservation(line_item)
-        @line_item = line_item
-        trip = reservation_trip
-        allow_seat_selection = trip.allow_seat_selection
-
-        if allow_seat_selection
-          @line_item.errors.add(:base, :some_seats_are_booked, message: 'Some seats are already booked') unless selected_seats_available?
-        else
-          @line_item.errors.add(:quantity, :exceeded_available_quantity, message: 'exceeded available quantity') unless seat_quantity_available?(trip)
-        end
-      end
-
-      def selected_seats_available?
-        select_seat_ids = @line_item.booking_seats.pluck(:id)
-        seat_ids_exist?(select_seat_ids, @line_item.date)
-      end
-
-      def seat_quantity_available?(trip)
-        booked_quantity = Spree::LineItem.joins(:order)
-                                         .where(variant_id: @line_item.variant_id, date: @line_item.date, spree_orders: { state: 'complete' })
-                                         .sum(:quantity)
-        remaining_quantity = trip.vehicle.number_of_seats - booked_quantity
-        remaining_quantity >= @line_item.quantity
-      end
-
-      def reservation_trip
-        return @trip if defined? @trip
-
-        route = Spree::Variant.find_by(id: @line_item.variant_id).product
-        @trip = route.trip
-      end
-
       def find_booked_variants(variant_id, from_date, to_date)
         SpreeCmCommissioner::ReservationVariantQuantityAvailabilityQuery.new(variant_id, from_date, to_date).booked_variants
-      end
-
-      def seat_ids_exist?(select_seat_ids, date)
-        LineItemSeat.where(seat_id: select_seat_ids, date: date).blank?
       end
     end
   end
