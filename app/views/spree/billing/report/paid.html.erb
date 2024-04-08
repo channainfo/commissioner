@@ -37,9 +37,15 @@
       <tbody>
         <% @orders.each do |order| %>
           <tr id="<%= spree_dom_id order %>" data-hook="admin_subscriptions_index_rows">
-            <td><%= link_to order.number, edit_billing_order_path(order) %></td>
+            <td><%= link_to order.invoice&.invoice_number, edit_billing_order_path(order) %></td>
             <td><%= order.created_at.to_date %></td>
-            <td><%= order.customer.fullname %></td>
+            <td>
+              <% if order.customer.first_name.present? %>
+                <%= link_to order.customer.first_name, edit_billing_customer_path(order.customer) %>
+              <% else %>
+                <%= link_to order.customer.last_name, edit_billing_customer_path(order.customer) %>
+              <% end %>
+            </td>
             <td><%= order.customer&.intel_phone_number %></td>
             <td><%= order.display_total.to_html %></td>
             <td><%= order.completed_at.to_date %></td>
