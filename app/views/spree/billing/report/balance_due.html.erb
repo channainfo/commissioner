@@ -31,19 +31,24 @@
           <th><%= sort_link @search, :created_at, I18n.t(:issued_date, scope: 'activerecord.attributes.spree/order') %></th>
           <th><%= I18n.t(:customer_name, scope: 'activerecord.attributes.spree/order') %></th>
           <th><%= I18n.t(:phone_number, scope: 'activerecord.attributes.spree/order') %></th>
-          <th><%= sort_link @search, :total, I18n.t(:total, scope: 'activerecord.attributes.spree/order') %></th>
           <th><%= I18n.t(:printing_date, scope: 'activerecord.attributes.spree/order') %></th>
           <th><%= I18n.t(:payment_state, scope: 'activerecord.attributes.spree/order') %></th>
+          <th><%= sort_link @search, :total, I18n.t(:amount, scope: 'activerecord.attributes.spree/order') %></th>
         </tr>
       </thead>
       <tbody>
         <% @orders.each do |order| %>
           <tr id="<%= spree_dom_id order %>" data-hook="admin_subscriptions_index_rows">
-            <td><%= link_to order.number, edit_billing_order_path(order) %></td>
+            <td><%= link_to order.invoice&.invoice_number, edit_billing_order_path(order) %></td>
             <td><%= order.created_at.to_date %></td>
-            <td><%= order.customer.fullname %></td>
+            <td>
+              <% if order.customer.first_name.present? %>
+                <%= link_to order.customer.first_name, edit_billing_customer_path(order.customer) %>
+              <% else %>
+                <%= link_to order.customer.last_name, edit_billing_customer_path(order.customer) %>
+              <% end %>
+            </td>
             <td><%= order.customer&.intel_phone_number %></td>
-            <td><%= order.display_total.to_html %></td>
             <td><%= order.invoice.invoice_issued_date&.to_date %></td>
             <td class="no-wrap">
               <% if order.payment_state %>

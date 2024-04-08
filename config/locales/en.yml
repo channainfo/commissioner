@@ -306,6 +306,7 @@ en:
         select_date: "Select Date"
         taxon: "Taxon"
         quantity: "Quantity"
+        amount: "Amount"
       spree/report:
         cashier: "Cashier"
     errors:
@@ -318,7 +319,7 @@ en:
           attributes:
             base:
               owner_name_cant_be_blank: "Owner name can't be blank"
-              gender_cant_be_blank: "Gender can't be blank"
+              taxon_cant_be_blank: "Taxon can't be blank"
               phone_number_cant_be_blank: "Phone number can't be blank"
               quantity_cant_be_less_than_or_equal_to_zero: "Quantity can't be less or equal than 0"
 

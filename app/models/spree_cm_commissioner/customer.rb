@@ -105,7 +105,7 @@ module SpreeCmCommissioner
       return unless Spree::Store.default.code.include?('billing')
 
       errors.add(:base, :owner_name_cant_be_blank) if last_name.blank?
-      errors.add(:base, :gender_cant_be_blank) if gender.blank?
+      errors.add(:base, :taxon_cant_be_blank) if taxon.blank?
       errors.add(:base, :phone_number_cant_be_blank) if phone_number.blank?
       errors.add(:base, :quantity_cant_be_less_than_or_equal_to_zero) if quantity <= 0
     end

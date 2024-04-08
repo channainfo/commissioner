@@ -61,7 +61,11 @@
               <%= link_to customer.customer_number, edit_billing_customer_path(customer) %>
             </td>
             <td>
-              <%= link_to customer.fullname, edit_billing_customer_path(customer) %>
+              <% if customer.first_name.present? %>
+                <%= link_to customer.first_name, edit_billing_customer_path(customer) %>
+              <% else %>
+                <%= link_to customer.last_name, edit_billing_customer_path(customer) %>
+              <% end %>
             </td>
             <td>
               <%= customer.phone_number %>
