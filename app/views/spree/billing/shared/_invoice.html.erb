@@ -14,7 +14,7 @@
   @sum_total = @price.to_s.gsub(/[^\d.]/, '').to_d * @quantity
   @total_price = @sum_total
   @sum_total = Spree::Money.new(@sum_total, currency: @price.currency).to_s
-  @order.adjustments.each do |adjustment|
+  @order.adjustments.eligible.each do |adjustment|
     @total_price += adjustment.amount
   end
   @total_price = Spree::Money.new(@total_price, currency: @price.currency).to_s
@@ -137,7 +137,7 @@
                 </ul>
               </td>
             </tr>
-            <%  @order.adjustments.each do |adjustment|  %>
+            <% @order.adjustments.eligible.each do |adjustment|  %>
               <tr>
                 <th scope="row">2</th>
                 <td>
