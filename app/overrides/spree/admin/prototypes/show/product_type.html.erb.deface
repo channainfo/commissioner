@@ -1,15 +1,15 @@
 <!-- insert_before "erb[silent]:contains('if @prototype.option_types.present?')" -->
 
-<% initial_type = @prototype&.product_type || SpreeCmCommissioner::ProductType::PRODUCT_TYPES[0] %>
+<% initial_type = @prototype&.product_type || SpreeCmCommissioner::ProductTypeBitwise::BIT_SEGMENT[0] %>
 
-<div class="form-group mb-4">
-  <%= label_tag :product_type, Spree.t(:product_type) %>
-  <% SpreeCmCommissioner::ProductType::PRODUCT_TYPES.each do |product_type| %>
-    <div class="radio" data-id="<%= product_type.to_s %>">
-      <label data-hook="product_type_field">
-        <%= radio_button_tag 'product[product_type]', product_type.to_s, product_type.to_s == initial_type.to_s, { class: "product_types_radios" } %>
-        <%= product_type.capitalize %>
-      </label>
-    </div>
-  <% end %>
-</div>
+<%= f.field_container :product_type do %>
+  <%= f.label :product_type, class: 'd-flex align-items-center' %>
+  <div class="d-flex flex-wrap">
+    <% SpreeCmCommissioner::ProductTypeBitwise::BIT_SEGMENT.each do |type, bit_value| %>
+      <div class="form-check mr-3 mb-2">
+        <%= f.check_box type, class: 'form-check-input', checked: (f.object.product_type & bit_value) != 0 %>
+        <%= f.label type, class: 'form-check-label ml-1' %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
