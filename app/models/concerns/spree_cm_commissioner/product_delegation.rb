@@ -4,7 +4,7 @@ module SpreeCmCommissioner
 
     included do
       delegate :product_type,
-               :need_confirmation?, :need_confirmation, :kyc,
+               :need_confirmation?, :need_confirmation, :kyc, :kyc?,
                :accommodation?, :service?, :ecommerce?,
                :associated_event,
                to: :product

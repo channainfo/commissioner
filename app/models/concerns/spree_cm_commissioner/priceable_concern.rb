@@ -11,6 +11,8 @@ module SpreeCmCommissioner
       cache_key = "spree/prices/#{cache_key_with_version}/price_in/#{currency}"
 
       Rails.cache.fetch(cache_key) { find_or_build_price(currency) } || find_or_build_price(currency)
+    rescue TypeError # when mocking in rspec, it raised TypeError: singleton can't be dumped
+      find_or_build_price(currency)
     end
 
     def find_or_build_price(currency)
