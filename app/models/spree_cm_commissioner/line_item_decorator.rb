@@ -25,6 +25,8 @@ module SpreeCmCommissioner
 
       delegate :kyc?, to: :product
 
+      base.accepts_nested_attributes_for :guests, allow_destroy: true
+
       def base.json_api_columns
         json_api_columns = column_names.reject { |c| c.match(/_id$|id|preferences|(.*)password|(.*)token|(.*)api_key/) }
         json_api_columns << :options_text

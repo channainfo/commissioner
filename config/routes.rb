@@ -138,6 +138,9 @@ Spree::Core::Engine.add_routes do
     resources :webhooks_events
 
     resources :orders, except: [:show] do
+      collection do
+        resources :import_orders, only: %i[index new create]
+      end
       member do
         put :accept_all
         put :reject_all
