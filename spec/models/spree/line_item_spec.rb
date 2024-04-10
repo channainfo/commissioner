@@ -1,6 +1,14 @@
 require 'spec_helper'
 
 RSpec.describe Spree::LineItem, type: :model do
+  describe 'associations' do
+    it { is_expected.to have_many(:applied_pricing_rates).class_name('SpreeCmCommissioner::AppliedPricingRate').dependent(:destroy) }
+    it { is_expected.to have_many(:applied_pricing_models).class_name('SpreeCmCommissioner::AppliedPricingModel').dependent(:destroy) }
+
+    it { is_expected.to have_many(:pricing_rates).class_name('SpreeCmCommissioner::PricingRate').through(:applied_pricing_rates).source(:pricing_rate) }
+    it { is_expected.to have_many(:pricing_models).class_name('SpreeCmCommissioner::PricingModel').through(:applied_pricing_models).source(:pricing_model) }
+  end
+
   describe '#callback before_save' do
     let(:phnom_penh) { create(:state, name: 'Phnom Penh') }
     let!(:vendor) { create(:cm_vendor_with_product, name: 'Phnom Penh Hotel', default_state_id: phnom_penh.id) }
@@ -17,6 +25,22 @@ RSpec.describe Spree::LineItem, type: :model do
   end
 
   describe 'validations' do
+    it { is_expected.to validate_numericality_of(:pricing_models_amount).allow_nil }
+
+    it do
+      is_expected.to validate_numericality_of(:pricing_rates_amount)
+        .allow_nil
+        .is_greater_than_or_equal_to(0)
+        .is_less_than_or_equal_to(Spree::Price::MAXIMUM_AMOUNT)
+    end
+
+    it do
+      is_expected.to validate_numericality_of(:pricing_subtotal)
+        .allow_nil
+        .is_greater_than_or_equal_to(0)
+        .is_less_than_or_equal_to(Spree::Price::MAXIMUM_AMOUNT)
+    end
+
     context 'make sure quantity not exceed max-quantity-per-order' do
       let(:line_item) { create(:line_item) }
 

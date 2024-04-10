@@ -4,11 +4,14 @@ module SpreeCmCommissioner
       base.include SpreeCmCommissioner::ProductDelegation
       base.include SpreeCmCommissioner::VariantGuestsConcern
       base.include SpreeCmCommissioner::VariantOptionValuesConcern
-      base.include SpreeCmCommissioner::PriceableConcern
+      base.include SpreeCmCommissioner::Priceable
 
       base.after_commit :update_vendor_price
       base.after_save   :update_vendor_total_inventory, if: :saved_change_to_permanent_stock?
       base.validate     :validate_option_types
+
+      base.has_many :pricing_rates, as: :pricing_rateable, dependent: :destroy, class_name: 'SpreeCmCommissioner::PricingRate'
+      base.has_many :pricing_models, as: :pricing_modelable, dependent: :destroy, class_name: 'SpreeCmCommissioner::PricingModel'
 
       # override
       base.has_one :default_price, lambda {

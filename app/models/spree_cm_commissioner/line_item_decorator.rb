@@ -4,6 +4,7 @@ module SpreeCmCommissioner
       base.include SpreeCmCommissioner::LineItemDurationable
       base.include SpreeCmCommissioner::LineItemsFilterScope
       base.include SpreeCmCommissioner::LineItemGuestsConcern
+      base.include SpreeCmCommissioner::LineItemPricingsConcern
       base.include SpreeCmCommissioner::ProductDelegation
       base.include SpreeCmCommissioner::KycBitwise
 
@@ -22,8 +23,6 @@ module SpreeCmCommissioner
 
       base.whitelisted_ransackable_associations |= %w[guests]
       base.whitelisted_ransackable_attributes |= %w[to_date from_date]
-
-      delegate :kyc?, to: :product
 
       def base.json_api_columns
         json_api_columns = column_names.reject { |c| c.match(/_id$|id|preferences|(.*)password|(.*)token|(.*)api_key/) }
@@ -55,6 +54,8 @@ module SpreeCmCommissioner
     #
     # override
     def amount
+      return pricing_subtotal if pricing_subtotal.present?
+
       base_price = price * quantity
 
       if reservation? && date_unit
