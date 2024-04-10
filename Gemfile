@@ -30,4 +30,6 @@ group :test do
   gem 'webmock'
 end
 
+gem 'spree_reviews', github: 'bookmebus/spree_reviews', branch: 'spree-4-5-0-only-backend'
+
 gemspec
