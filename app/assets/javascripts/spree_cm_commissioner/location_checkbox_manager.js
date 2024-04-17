@@ -1,9 +1,9 @@
 const LocationCheckboxManager = {
   initialize: function () {
-    const locationCheckboxes = document.querySelectorAll('.location');
+    const locationCheckboxes = document.querySelectorAll(".location");
 
     locationCheckboxes.forEach(function (locationCheckbox) {
-      locationCheckbox.addEventListener('change', function () {
+      locationCheckbox.addEventListener("change", function () {
         LocationCheckboxManager.handleCheckboxChange(this);
       });
 
@@ -12,10 +12,11 @@ const LocationCheckboxManager = {
   },
 
   handleCheckboxChange: function (changedCheckbox) {
-    const stopCheckbox = document.querySelector('.stop');
-    const branchCheckbox = document.querySelector('.branch');
+    const pointCheckbox = document.querySelector(".point");
+    const stopCheckbox = document.querySelector(".stop");
+    const branchCheckbox = document.querySelector(".branch");
 
-    if (!stopCheckbox || !branchCheckbox) {
+    if (!stopCheckbox || !branchCheckbox || !pointCheckbox) {
       alert("Please select at the last one.");
       event.preventDefault();
     }
@@ -28,11 +29,15 @@ const LocationCheckboxManager = {
 
       branchCheckbox.checked = false;
       branchCheckbox.disabled = true;
+
+      pointCheckbox.checked = false;
+      pointCheckbox.disabled = true;
     } else {
       stopCheckbox.disabled = false;
       branchCheckbox.disabled = false;
+      pointCheckbox.disabled = false;
     }
-  }
+  },
 };
 
 document.addEventListener("spree:load", function () {

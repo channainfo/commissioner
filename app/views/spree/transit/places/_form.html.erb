@@ -15,6 +15,14 @@
         </div>
 
         <div class="form-check form-check-inline">
+          <%= f.field_container :point, class: ['custom-control', 'custom-checkbox'] do %>
+            <%= f.check_box :point, class: 'custom-control-input point checkboxGroup', checked: f.object.persisted? && f.object.point? %>
+            <%= f.label :point, Spree.t(:point), class: 'custom-control-label' %>
+            <%= f.error_message_on :point %>
+          <% end %>
+        </div>
+
+        <div class="form-check form-check-inline">
           <%= f.field_container :stop, class: ['custom-control', 'custom-checkbox'] do %>
             <%= f.check_box :stop, class: 'custom-control-input stop checkboxGroup', checked: f.object.persisted? && f.object.stop? %>
             <%= f.label :stop, Spree.t(:stop), class: 'custom-control-label' %>
