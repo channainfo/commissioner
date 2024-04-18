@@ -17,6 +17,7 @@ module SpreeCmCommissioner
       base.has_many :check_ins, foreign_key: 'check_in_by_id', class_name: 'SpreeCmCommissioner::CheckIn'
       base.has_many :user_events, class_name: 'SpreeCmCommissioner::UserEvent'
       base.has_many :events, through: :user_events, class_name: 'Spree::Taxon', source: 'taxon'
+      base.has_many :reviews, foreign_key: :user_id, class_name: 'Spree::Review', dependent: :nullify
 
       base.has_many :wished_items, class_name: 'Spree::WishedItem', through: :wishlists
 
