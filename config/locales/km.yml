@@ -256,6 +256,7 @@ km:
         overdue: "ហួសថ្ងៃបង់"
         failed: "បរាជ័យ"
         unknown: "មិនស្គាល់"
+      subscription_price_placeholder: "តម្លៃជា​​​ %{currency}"
     upsupported_payment: "មិនស្គាល់ការបង់ប្រាក់"
     selected_item_not_available_on_date: "Selected item not available on %{date}"
     auto_apply: "ដាក់ប្រើដោយស្វ័យប្រវត្តិ"

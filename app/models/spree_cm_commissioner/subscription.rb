@@ -6,6 +6,7 @@ module SpreeCmCommissioner
 
     belongs_to :variant, class_name: 'Spree::Variant'
     belongs_to :customer, class_name: 'SpreeCmCommissioner::Customer'
+    belongs_to :product, class_name: 'Spree::Product'
 
     has_many :orders, -> { order(:created_at) }, class_name: 'Spree::Order', dependent: :nullify
     has_many :line_items, through: :orders, class_name: 'Spree::LineItem'
@@ -22,6 +23,8 @@ module SpreeCmCommissioner
 
     after_create :create_order
     after_commit :update_customer_active_subscriptions_count
+
+    accepts_nested_attributes_for :variant
 
     def create_order
       SpreeCmCommissioner::SubscribedOrderCreator.call(subscription: self)

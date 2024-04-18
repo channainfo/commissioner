@@ -1,0 +1,33 @@
+  <%= fields_for @variant do |f| %>
+    <div class="card mb-3">
+      <div class="card-header">
+        <h5 class="mb-0"><%= Spree.t(:variant) %></h5>
+      </div>
+      <%= f.hidden_field :product_id, value: @product.id %>
+
+      <div class="row">
+        <div data-hook="billing_variant_form_fields" class="col-6 p-4">
+          <div data-hook="variants">
+            <div class="form-group " data-hook="price">
+              <%= f.label :price, Spree.t(:price) %>
+              <%= f.text_field :price, placeholder: I18n.t('spree.billing.subscription_price_placeholder', currency: @variant.currency), value: number_to_currency(@variant.price, unit: ''), class: 'form-control' %>
+            </div>
+          </div>
+        </div>
+        <div data-hook="billing_varaint_option_types_field" class="col-6 p-4">
+          <% @product.option_types.each do |option_type| %>
+            <div class="form-group" data-hook="presentation">
+              <%= label :new_variant, option_type.presentation %>
+              <% if option_type.name == 'color' %>
+                <%= f.collection_select 'option_value_ids', option_type.option_values, :id, :name,
+                    { include_blank: true }, { name: 'variant[option_value_ids][]', class: 'select2-clear form-control', id: "option_value_ids-#{option_type.id}" } %>
+              <% else %>
+                <%= f.collection_select 'option_value_ids', option_type.option_values, :id, :presentation,
+                    { include_blank: true }, { name: 'variant[option_value_ids][]', class: 'select2-clear form-control', id: "option_value_ids-#{option_type.id}"  } %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
