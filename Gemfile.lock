@@ -1,4 +1,16 @@
 GIT
+  remote: https://github.com/bookmebus/spree_reviews.git
+  revision: e0e49ba10f37dc41c3fc10ed2093d2b0cdabfcf5
+  branch: spree-4-5-0-only-backend
+  specs:
+    spree_reviews (4.0.0)
+      deface (~> 1.0)
+      spree_api (>= 4.5)
+      spree_backend (>= 4.5)
+      spree_core (>= 4.5)
+      spree_extension
+
+GIT
   remote: https://github.com/kimsrung/spree_dev_tools.git
   revision: 83da7045d71138c9b12a2a3c118f8cd59f5cba83
   specs:
@@ -870,6 +882,7 @@ DEPENDENCIES
   shoulda-matchers (~> 5.0)
   spree_cm_commissioner!
   spree_dev_tools!
+  spree_reviews!
   terminal-table (~> 3.0.1)
   vcr
   webmock

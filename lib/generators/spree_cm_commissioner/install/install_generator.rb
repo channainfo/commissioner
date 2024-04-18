@@ -13,6 +13,7 @@ module SpreeCmCommissioner
       def add_migrations
         gems = %i[
           spree_multi_vendor
+          spree_reviews
           spree_cm_commissioner
         ]
 
