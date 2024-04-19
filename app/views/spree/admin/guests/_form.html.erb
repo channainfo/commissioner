@@ -8,20 +8,20 @@
             <div class="row">
               <div class="col-12 col-lg-6">
                 <%= f.field_container :first_name do %>
-                  <%= f.label :first_name %>
+                  <%= f.label :first_name, raw(Spree.t(:first_name) + required_span_tag) %>
                   <%= f.text_field :first_name, class: 'form-control' %>
                 <% end %>
               </div>
               <div class="col-12 col-lg-6">
                 <%= f.field_container :last_name do %>
-                  <%= f.label :last_name %>
+                  <%= f.label :last_name, raw(Spree.t(:last_name) + required_span_tag) %>
                   <%= f.text_field :last_name, class: 'form-control' %>
                 <% end %>
               </div>
             </div>
           <% when :guest_gender %>
             <%= f.field_container :gender do %>
-              <%= f.label :gender %>
+              <%= f.label :gender, raw(Spree.t(:gender) + required_span_tag) %>
               <% SpreeCmCommissioner::Guest.genders.each do |key, value| %>
                 <div class="radio" data-id="<%= key.to_s %>">
                   <label data-hook="gender_field">
@@ -34,7 +34,7 @@
           <% when :guest_dob %>
             <div data-hook="admin_product_form_dob" data-product-edit-target="makeActiveAt">
               <%= f.field_container :dob do %>
-                <%= f.label :dob, Spree.t(:date_of_birth) %>
+                <%= f.label :dob, raw(Spree.t(:date_of_birth) + required_span_tag) %>
                 <%= f.error_message_on :dob %>
 
                 <div class="input-group datePickerFrom"
@@ -53,12 +53,12 @@
             </div>
           <% when :guest_occupation %>
             <%= f.field_container :occupation_id do %>
-              <%= f.label :occupation_id %>
+              <%= f.label :occupation_id, raw(Spree.t(:occupation) + required_span_tag) %>
               <%= f.select :occupation_id, Spree::Taxon.where(kind: Spree::Taxon.kinds[:occupation]).order(:position).map { |occupation| [occupation.name, occupation.id]}, {}, :class => "fullwidth select2" %>
             <% end %>
           <% when :guest_nationality %>
             <%= f.field_container :nationality_id do %>
-              <%= f.label :nationality_id %>
+              <%= f.label :nationality_id, raw(Spree.t(:nationality) + required_span_tag) %>
               <%= f.select :nationality_id,
                 options_from_collection_for_select(Spree::Taxon.where(kind: Spree::Taxon.kinds[:nationality]), :id, :name, @object.nationality_id),
                   { include_hidden: true },
@@ -67,6 +67,16 @@
                           autocomplete_return_attr_value: :name,
                           autocomplete_min_input_value: 1,
                           autocomplete_additional_url_params_value: "q[kind_eq]=4" } %>
+            <% end %>
+          <% when :guest_age %>
+            <%= f.field_container :age do %>
+              <%= f.label :age, raw(Spree.t(:age) + required_span_tag) %>
+              <%= f.number_field :age, in: 0..100, class: 'form-control' %>
+            <% end %>
+          <% when :guest_emergency_contact %>
+            <%= f.field_container :emergency_contact do %>
+              <%= f.label :emergency_contact, raw(Spree.t(:emergency_contact) + required_span_tag) %>
+              <%= f.text_field :emergency_contact, class: 'form-control' %>
             <% end %>
           <% end %>
         <% end %>

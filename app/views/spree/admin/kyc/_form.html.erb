@@ -46,6 +46,22 @@
       <%= form.error_message_on :guest_nationality, class: 'text-danger' %>
     <% end %>
   </div>
+
+  <div class="form-check form-check-inline">
+    <%= form.field_container :guest_age do %>
+      <%= form.check_box :guest_age, class: 'form-check-input', checked: form.object.guest_age? %>
+      <%= form.label :guest_age, Spree.t(:guest_age), class: 'form-check-label' %>
+      <%= form.error_message_on :guest_age, class: 'text-danger' %>
+    <% end %>
+  </div>
+
+  <div class="form-check form-check-inline">
+    <%= form.field_container :guest_emergency_contact do %>
+      <%= form.check_box :guest_emergency_contact, class: 'form-check-input', checked: form.object.guest_emergency_contact? %>
+      <%= form.label :guest_emergency_contact, Spree.t(:guest_emergency_contact), class: 'form-check-label' %>
+      <%= form.error_message_on :guest_emergency_contact, class: 'text-danger' %>
+    <% end %>
+  </div>
 </div>
 
 

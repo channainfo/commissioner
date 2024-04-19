@@ -22,6 +22,10 @@
                 <% when :guest_id_card %>
                   <th scope="col" class="text-left"><%= Spree.t(:id_card_type) %></th>
                   <th scope="col" class="text-left"><%= Spree.t(:id_card_images) %></th>
+                <% when :guest_age %>
+                  <th scope="col" class="text-left"><%= Spree.t(:age) %></th>
+                <% when :guest_emergency_contact %>
+                  <th scope="col" class="text-left"><%= Spree.t(:emergency_contact) %></th>
                 <% when :guest_entry_type %>
                   <th scope="col" class="text-left"><%= Spree.t(:entry_type) %></th>
               <% end %>
@@ -98,6 +102,14 @@
                             <%= content_tag(:strong, class: "badge #{badge_color_base_on_entry_type(guest.entry_type)} font-weight-bold uppercase") do %>
                               <%= SpreeCmCommissioner::CheckIn.entry_types.key(guest.entry_type).titleize %>
                             <% end %>
+                          </td>
+                        <% when :guest_age %>
+                          <td class="text-left">
+                            <%= guest.age %>
+                          </td>
+                        <% when :guest_emergency_contact %>
+                          <td class="text-left">
+                            <%= guest.emergency_contact %>
                           </td>
                     <% end %>
                   <% end %>
