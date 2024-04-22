@@ -22,6 +22,9 @@ module SpreeCmCommissioner
                     class_name: 'SpreeCmCommissioner::HomepageSectionRelatable',
                     dependent: :destroy, as: :relatable
 
+      # after finish purchase an order, user must complete these steps
+      base.has_many :product_completion_steps, class_name: 'SpreeCmCommissioner::ProductCompletionStep', dependent: :destroy
+
       base.has_one :default_state, through: :vendor
 
       base.has_many :complete_line_items, through: :classifications, source: :line_items

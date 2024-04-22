@@ -20,6 +20,9 @@ module SpreeCmCommissioner
     has_one :id_card, class_name: 'SpreeCmCommissioner::IdCard', dependent: :destroy
     has_one :check_in, class_name: 'SpreeCmCommissioner::CheckIn'
 
+    preference :telegram_user_id, :string
+    preference :telegram_user_verified_at, :string
+
     before_validation :set_event_id
 
     self.whitelisted_ransackable_associations = %w[id_card event]
@@ -30,12 +33,16 @@ module SpreeCmCommissioner
       kyc_fields.all? { |field| allowed_checkout_for?(field) }
     end
 
-    def allowed_checkout_for?(field)
+    def allowed_checkout_for?(field) # rubocop:disable Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
       return (first_name.present? && last_name.present?) if field == :guest_name
       return gender.present? if field == :guest_gender
       return dob.present? if field == :guest_dob
-      return occupation.present? if field == :guest_occupation
+      return occupation.present? || other_occupation.present? if field == :guest_occupation
       return nationality.present? if field == :guest_nationality
+      return age.present? if field == :guest_age
+      return emergency_contact.present? if field == :guest_emergency_contact
+      return other_organization.present? if field == :guest_organization
+      return expectation.present? if field == :guest_expectation
       return id_card.present? && id_card.allowed_checkout? if field == :guest_id_card
 
       false
@@ -78,11 +85,7 @@ module SpreeCmCommissioner
     end
 
     def qr_data
-      if id && line_item_id && line_item&.order_id
-        "#{id}-#{line_item_id}-#{line_item.order_id}"
-      else
-        'INVALID'
-      end
+      token
     end
 
     def current_age

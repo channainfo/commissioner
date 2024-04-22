@@ -14,7 +14,9 @@ RSpec.describe SpreeCmCommissioner::Admin::KycableHelper do
         guest_id_card: '0',                 #2**4  = 16
         guest_nationality: '0',             #2**5  = 32
         guest_age: '0',                     #2**6 = 64
-        guest_emergency_contact: '0'        #2**7 = 128
+        guest_emergency_contact: '0',       #2**7 = 128
+        guest_organization: '0',            #2**8 = 256
+        guest_expectation: '0',             #2**9 = 512
       }
     end
 
@@ -66,8 +68,20 @@ RSpec.describe SpreeCmCommissioner::Admin::KycableHelper do
       expect(dummy_class.calculate_kyc_value(params)).to eq(128)
     end
 
-    it 'return value 255 if value params is selected' do
-      expected_value = 2**0 + 2**1 + 2**2 + 2**3 + 2**4 + 2**5 + 2**6 + 2**7
+    it 'return value 256 if guest_organization is selected' do
+      params[:guest_organization] = '1'
+
+      expect(dummy_class.calculate_kyc_value(params)).to eq(256)
+    end
+
+    it 'return value 512 if guest_expectation is selected' do
+      params[:guest_expectation] = '1'
+
+      expect(dummy_class.calculate_kyc_value(params)).to eq(512)
+    end
+
+    it 'return value 1023 if every kyc is selected' do
+      expected_value = 2**0 + 2**1 + 2**2 + 2**3 + 2**4 + 2**5 + 2**6 + 2**7 + 2**8 + 2**9
       params.transform_values! { '1' }
 
       expect(dummy_class.calculate_kyc_value(params)).to eq(expected_value)

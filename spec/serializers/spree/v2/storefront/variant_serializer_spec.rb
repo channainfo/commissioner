@@ -38,7 +38,9 @@ describe Spree::V2::Storefront::VariantSerializer, type: :serializer do
         :need_confirmation,
         :product_type,
         :reminder_option_value,
-        :started_at_option_value
+        :started_at_option_value,
+        :max_quantity_per_order,
+        :number_of_guests,
       )
     end
 
