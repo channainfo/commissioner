@@ -3,23 +3,23 @@ module SpreeCmCommissioner
     module TaxonBitwise
       extend ActiveSupport::Concern
 
-      BIT_POINT = 0b001
-      BIT_STOP = 0b010
+      BIT_STOP = 0b001
+      BIT_STATION = 0b010
       BIT_BRANCH = 0b100
       BIT_LOCATION = 0b1000
 
       included do
-        attr_accessor :point, :stop, :branch, :location
+        attr_accessor :stop, :station, :branch, :location
 
         before_validation :at_least_one_checkbox_selected
       end
 
-      def point?
-        data_type & BIT_POINT != 0
-      end
-
       def stop?
         data_type & BIT_STOP != 0
+      end
+
+      def station?
+        data_type & BIT_STATION != 0
       end
 
       def branch?
@@ -33,9 +33,9 @@ module SpreeCmCommissioner
       private
 
       def at_least_one_checkbox_selected
-        if point.nil? && stop.nil? && branch.nil? && location.nil?
+        if stop.nil? && station.nil? && branch.nil? && location.nil?
           nil
-        elsif point.to_i.zero? && stop.to_i.zero? && branch.to_i.zero? && location.to_i.zero?
+        elsif stop.to_i.zero? && station.to_i.zero? && branch.to_i.zero? && location.to_i.zero?
           errors.add(:base, 'At least one checkbox (stop, branch, or location) must be selected')
         end
       end

@@ -2,14 +2,14 @@
   <div class='col-6'>
     <%= f.field_container :origin_id do %>
       <%= f.label :Origin, Spree.t(:origin) %>
-      <%= f.select :origin_id, options_from_collection_for_select(Spree::Taxonomy.place.taxons, 'id', 'name', @object.origin_id), {},{class: 'select2 fullwidth', id:'product_origin_id'} %>
+      <%= f.select :origin_id, options_from_collection_for_select(@places, 'id', 'name', @object.origin_id), {},{class: 'select2 fullwidth', id:'product_origin_id'} %>
       <%= f.error_message_on :origin_id %>
     <% end %>
   </div>
   <div class='col-6'>
     <%= f.field_container :destination_id do %>
       <%= f.label :Destination, Spree.t(:destination) %>
-      <%= f.select :destination_id, options_from_collection_for_select(Spree::Taxonomy.place.taxons, 'id', 'name', @object.destination_id), {},{class: 'select2 fullwidth', id:'product_destination_id'} %>
+      <%= f.select :destination_id, options_from_collection_for_select(@places, 'id', 'name', @object.destination_id), {},{class: 'select2 fullwidth', id:'product_destination_id'} %>
       <%= f.error_message_on :destination_id %>
     <% end %>
   </div>
@@ -59,14 +59,14 @@
   </div>
   <div class='col-6'>
     <%= f.field_container :boarding_points do %>
-      <%= f.label :boarding_point, Spree.t(:boarding_point)%>
-    <%= f.select(:boarding_points, options_from_collection_for_select( @points, 'id', 'name',  @boarding_points ),{include_blank: false},{class: "select2", multiple:true}) %>
+      <%= f.label :boarding_stops, Spree.t(:boarding_stops)%>
+    <%= f.select(:boarding_points, options_from_collection_for_select( @stops, 'id', 'name',  @boarding_stops),{include_blank: false},{class: "select2", multiple:true, id: "boarding_stops"}) %>
     <%end%>
   </div>
   <div class='col-6'>
     <%= f.field_container :drop_off_points do %>
-      <%= f.label :drop_off_point, Spree.t(:drop_off_point)%>
-      <%= f.select(:drop_off_points, options_from_collection_for_select( @points, 'id','name', @drop_off_points ),{include_blank: false},{class: "select2", multiple:true}) %>
+      <%= f.label :drop_off_stops, Spree.t(:drop_off_stops)%>
+      <%= f.select(:drop_off_points, options_from_collection_for_select( @stops, 'id','name', @drop_off_stops),{include_blank: false},{class: "select2", multiple:true, id: "drop-off_stops"}) %>
     <%end%>
   </div>
   <div>

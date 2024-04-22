@@ -76,7 +76,7 @@ module Spree
       end
 
       def taxon_params
-        params.require(:taxon).permit(:point, :stop, :branch, :location, permitted_taxon_attributes)
+        params.require(:taxon).permit(:stop, :station, :branch, :location, permitted_taxon_attributes)
       end
 
       def set_position
@@ -88,13 +88,13 @@ module Spree
       # taxon attributes to 0 when a drag-and-drop action changes the position.
       def set_data_type
         place_types = params[:taxon]
-        if place_types[:point].to_i.zero? && place_types[:stop].to_i.zero? && place_types[:branch].to_i.zero?
+        if place_types[:stop].to_i.zero? && place_types[:station].to_i.zero? && place_types[:branch].to_i.zero?
           # If not checked, it will set the location instead.
           place_types[:location] = 1
           @taxon[:data_type] = (place_types[:location].to_i * (2**3))
         end
 
-        result = (place_types[:point].to_i * (2**0)) + (place_types[:stop].to_i * (2**1)) + (place_types[:branch].to_i * (2**2)) + (place_types[:location].to_i * (2**3)) # rubocop:disable Layout/LineLength
+        result = (place_types[:stop].to_i * (2**0)) + (place_types[:station].to_i * (2**1)) + (place_types[:branch].to_i * (2**2)) + (place_types[:location].to_i * (2**3)) # rubocop:disable Layout/LineLength
         @taxon[:data_type] = result
       end
 

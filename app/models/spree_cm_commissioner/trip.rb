@@ -6,17 +6,24 @@ module SpreeCmCommissioner
     before_validation :convert_duration_to_seconds
 
     belongs_to :route, class_name: 'Spree::Product'
+
     validates :departure_time, presence: true
-
-    has_many :trip_points, class_name: 'SpreeCmCommissioner::TripPoint', dependent: :destroy
-
     validates :duration, numericality: { greater_than: 0 }
     validate :origin_and_destination_cannot_be_the_same
 
-    accepts_nested_attributes_for :trip_points, allow_destroy: true
+    has_many :trip_stops, class_name: 'SpreeCmCommissioner::TripStop', dependent: :destroy
+
+    after_create :create_trip_stops
+
+    accepts_nested_attributes_for :trip_stops, allow_destroy: true
 
     def convert_duration_to_seconds
       self.duration = (hours.to_i * 3600) + (minutes.to_i * 60) + seconds.to_i
+    end
+
+    def create_trip_stops
+      trip_stops.create(stop_type: :boarding, stop_id: origin_id)
+      trip_stops.create(stop_type: :drop_off, stop_id: destination_id)
     end
 
     def duration_in_hms

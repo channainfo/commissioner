@@ -12,8 +12,8 @@ const LocationCheckboxManager = {
   },
 
   handleCheckboxChange: function (changedCheckbox) {
-    const pointCheckbox = document.querySelector(".point");
-    const stopCheckbox = document.querySelector(".stop");
+    const pointCheckbox = document.querySelector(".stop");
+    const stopCheckbox = document.querySelector(".station");
     const branchCheckbox = document.querySelector(".branch");
 
     if (!stopCheckbox || !branchCheckbox || !pointCheckbox) {
