@@ -59,7 +59,19 @@ module Spree
           end
 
           def guest_params
-            params.permit(:first_name, :last_name, :dob, :gender, :occupation_id, :nationality_id, :other_occupation)
+            params.permit(
+              :first_name,
+              :last_name,
+              :dob,
+              :gender,
+              :occupation_id,
+              :nationality_id,
+              :other_occupation,
+              :age,
+              :emergency_contact,
+              :other_organization,
+              :expectation
+            )
           end
         end
       end

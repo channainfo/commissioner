@@ -32,8 +32,8 @@
         <td><%= link_to Spree.t(:view), admin_webhooks_subscriber_path(webhooks_subscriber) %></td>
         <td class="actions">
         <span class="d-flex justify-content-end">
-          <%= link_to_with_icon 'list-check.svg', Spree.t(:order).pluralize, admin_webhooks_subscriber_orders_path(webhooks_subscriber), class: 'btn btn-light btn-sm', no_text: true %>
-          <%= link_to_with_icon 'activity.svg', Spree.t(:event).pluralize, admin_webhooks_events_path({q: {subscriber_id_eq: webhooks_subscriber}}), class: 'btn btn-light btn-sm', no_text: true %>
+          <%= link_to_with_icon 'list-check.svg', Spree.t(:orders), admin_webhooks_subscriber_orders_path(webhooks_subscriber), class: 'btn btn-light btn-sm', no_text: true %>
+          <%= link_to_with_icon 'activity.svg', Spree.t(:events), admin_webhooks_events_path({q: {subscriber_id_eq: webhooks_subscriber}}), class: 'btn btn-light btn-sm', no_text: true %>
           <%= link_to_edit(webhooks_subscriber, no_text: true) if can? :edit, webhooks_subscriber %>
           <%= link_to_delete(webhooks_subscriber, no_text: true) if can? :delete, webhooks_subscriber %>
         </span>

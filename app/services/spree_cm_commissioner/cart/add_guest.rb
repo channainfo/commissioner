@@ -4,7 +4,7 @@ module SpreeCmCommissioner
       prepend Spree::ServiceModule::Base
 
       def call(order:, line_item:)
-        ActiveRecord::Base.transaction do
+        ApplicationRecord.transaction do
           create_blank_guest(line_item)
           increase_quantity(line_item) if should_increase_quantity?(line_item)
           recalculate_cart(order, line_item)
@@ -21,7 +21,7 @@ module SpreeCmCommissioner
 
       def increase_quantity(line_item)
         line_item.quantity += 1
-        line_item.save
+        line_item.save!
       end
 
       def should_increase_quantity?(line_item)

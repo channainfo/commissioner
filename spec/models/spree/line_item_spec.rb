@@ -16,6 +16,63 @@ RSpec.describe Spree::LineItem, type: :model do
     end
   end
 
+  describe 'validations' do
+    context 'make sure quantity not exceed max-quantity-per-order' do
+      let(:line_item) { create(:line_item) }
+
+      before do
+        allow(line_item.variant).to receive(:max_quantity_per_order).and_return(3)
+      end
+
+      context 'when quantity is within max_quantity_per_order' do
+        it 'is valid' do
+          line_item.quantity = 3
+          expect(line_item).to be_valid
+        end
+      end
+
+      context 'when quantity exceeds max_quantity_per_order' do
+        it 'is invalid' do
+          line_item.quantity = 6
+          expect(line_item).not_to be_valid
+          expect(line_item.errors[:quantity]).to include('exceeded_max_quantity_per_order')
+        end
+      end
+
+      context 'when max_quantity_per_order is not set' do
+        it 'is always valid' do
+          allow(line_item.variant).to receive(:max_quantity_per_order).and_return(nil)
+
+          line_item.quantity = 100
+          expect(line_item).to be_valid
+        end
+      end
+    end
+  end
+
+  describe '#completion_steps' do
+    let(:line_item) { create(:line_item) }
+    let(:product) { line_item.product }
+
+    context 'when product_completion_steps exist' do
+      let!(:product_completion_step1) { create(:cm_chatrace_tg_product_completion_step, product: product) }
+      let!(:product_completion_step2) { create(:cm_chatrace_tg_product_completion_step, product: product) }
+
+      it 'returns an array of hashes with completion steps' do
+        expected_hash1 = product_completion_step1.construct_hash(line_item: line_item)
+        expected_hash2 = product_completion_step2.construct_hash(line_item: line_item)
+
+        expect(line_item.completion_steps).to contain_exactly(expected_hash1, expected_hash2)
+      end
+    end
+
+    context 'when no product_completion_steps exist' do
+      it 'returns an empty array' do
+        expect(line_item.completion_steps).to eq([])
+      end
+    end
+  end
+
   describe '#set_duration' do
 
     let(:taxonomy) { create(:taxonomy, kind: :event) }

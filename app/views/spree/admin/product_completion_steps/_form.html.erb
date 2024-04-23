@@ -1,0 +1,54 @@
+<div data-hook="admin_product_completion_step_form_fields">
+  <div data-hook="product_completion_step" class="row">
+    <div class="col-12 col-md-6">
+      <div class="card mb-3">
+        <div class="card-header">
+          <h5 class="mb-0"><%= Spree.t(:settings) %></h5>
+        </div>
+        <div class="card-body">
+          <%= f.field_container :type, 'data-hook' => 'type' do %>
+            <%= f.label :type, Spree.t(:type) %>
+            <%= f.select(:type, SpreeCmCommissioner::ProductCompletionStep.descendants.map { |v| [v.to_s.demodulize, v.to_s] }, {}, { class: 'select2' }) %>
+          <% end %>
+
+          <%= f.field_container :title, 'data-hook' => 'title' do %>
+            <%= f.label :title, Spree.t(:title) %>
+            <%= f.text_field :title, class: 'form-control', placeholder: 'eg. Link with Telegram Bot' %>
+            <%= f.error_message_on :title %>
+          <% end %>
+
+          <%= f.field_container :description, 'data-hook' => 'description' do %>
+            <%= f.label :description, Spree.t(:description) %>
+            <%= f.text_area :description, cols: 60, rows: 6, class: 'form-control', placeholder: 'eg. This product required to complete following step.' %>
+          <% end %>
+
+          <%= f.field_container :action_label, 'data-hook' => 'action_label' do %>
+            <%= f.label :action_label, Spree.t(:action_label) %>
+            <%= f.text_field :action_label, class: 'form-control', placeholder: 'eg. Continue' %>
+            <%= f.error_message_on :action_label %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <div class="card mb-3">
+        <div class="card-header">
+          <h5 class="mb-0"><%= Spree.t(:completion_settings) %></h5>
+        </div>
+        <div class="card-body">
+          <div id="preference-settings" class="form-group">
+            <% if preference_fields(@object, f).empty? %>
+              <%= Spree.t('no_settings_message') %>
+            <% else %>
+              <%= preference_fields(@object, f) %>
+            <% end %>
+            <% if @object.respond_to?(:preferences) %>
+              <div id="gateway-settings-warning" class="info warning"><%= Spree.t(:provider_settings_warning) %></div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

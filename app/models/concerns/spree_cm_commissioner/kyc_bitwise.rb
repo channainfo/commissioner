@@ -2,6 +2,7 @@ module SpreeCmCommissioner
   module KycBitwise
     extend ActiveSupport::Concern
 
+    # must add migration to cm_guests when adding new field.
     BIT_FIELDS = {
       guest_name: 0b1,
       guest_gender: 0b10,
@@ -10,7 +11,9 @@ module SpreeCmCommissioner
       guest_id_card: 0b10000,
       guest_nationality: 0b100000,
       guest_age: 0b1000000,
-      guest_emergency_contact: 0b10000000
+      guest_emergency_contact: 0b10000000,
+      guest_organization: 0b100000000,
+      guest_expectation: 0b1000000000
     }.freeze
 
     def kyc? = kyc != 0

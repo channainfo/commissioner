@@ -48,6 +48,12 @@ FactoryBot.define do
       presentation { 'Allowed extra kids' }
     end
 
+    trait :max_quantity_per_order do
+      attr_type { 'integer' }
+      name { 'max-quantity-per-order' }
+      presentation { 'Max quantity per order' }
+    end
+
     initialize_with { Spree::OptionType.where(name: name).first_or_initialize }
   end
 end

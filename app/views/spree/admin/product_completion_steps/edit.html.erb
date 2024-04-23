@@ -1,0 +1,9 @@
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :product_completion_steps } %>
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+
+<%= form_for @object, url: admin_product_product_completion_step_url do |f| %>
+  <fieldset>
+    <%= render partial: 'form', locals: { f: f } %>
+    <%= render partial: 'spree/admin/shared/edit_resource_links' %>
+  </fieldset>
+<% end %>

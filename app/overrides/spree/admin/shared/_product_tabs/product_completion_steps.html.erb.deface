@@ -1,0 +1,8 @@
+<!-- insert_after "erb[silent]:contains('Spree::Digital')" -->
+
+<%= content_tag :li, class: 'nav-item' do %>
+  <%= link_to_with_icon 'adjust.svg',
+    Spree.t(:completion_steps),
+    admin_product_product_completion_steps_url(@product),
+    class: "nav-link #{'active' if current == :product_completion_steps}" %>
+<% end if can?(:admin, SpreeCmCommissioner::ProductCompletionStep) %>

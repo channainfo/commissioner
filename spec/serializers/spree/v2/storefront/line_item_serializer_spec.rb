@@ -47,7 +47,8 @@ RSpec.describe Spree::V2::Storefront::LineItemSerializer, type: :serializer do
         :kyc,
         :kyc_fields,
         :remaining_total_guests,
-        :number_of_guests
+        :number_of_guests,
+        :completion_steps
       )
     end
 

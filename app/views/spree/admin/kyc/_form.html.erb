@@ -62,6 +62,22 @@
       <%= form.error_message_on :guest_emergency_contact, class: 'text-danger' %>
     <% end %>
   </div>
+
+  <div class="form-check form-check-inline">
+    <%= form.field_container :guest_organization do %>
+      <%= form.check_box :guest_organization, class: 'form-check-input', checked: form.object.guest_organization? %>
+      <%= form.label :guest_organization, Spree.t(:guest_organization), class: 'form-check-label' %>
+      <%= form.error_message_on :guest_organization, class: 'text-danger' %>
+    <% end %>
+  </div>
+
+  <div class="form-check form-check-inline">
+    <%= form.field_container :guest_expectation do %>
+      <%= form.check_box :guest_expectation, class: 'form-check-input', checked: form.object.guest_expectation? %>
+      <%= form.label :guest_expectation, Spree.t(:guest_expectation), class: 'form-check-label' %>
+      <%= form.error_message_on :guest_expectation, class: 'text-danger' %>
+    <% end %>
+  </div>
 </div>
 
 

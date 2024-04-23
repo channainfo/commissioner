@@ -12,10 +12,13 @@ module SpreeCmCommissioner
 
       base.has_many :taxons, class_name: 'Spree::Taxon', through: :product
       base.has_many :guests, class_name: 'SpreeCmCommissioner::Guest', dependent: :destroy
+      base.has_many :product_completion_steps, class_name: 'SpreeCmCommissioner::ProductCompletionStep', through: :product
 
       base.before_save :update_vendor_id
 
       base.before_create :add_due_date, if: :subscription?
+
+      base.validate :ensure_not_exceed_max_quantity_per_order, if: -> { variant&.max_quantity_per_order.present? }
 
       base.whitelisted_ransackable_associations |= %w[guests]
       base.whitelisted_ransackable_attributes |= %w[to_date from_date]
@@ -125,7 +128,17 @@ module SpreeCmCommissioner
       "#{order.number}-#{order.token}-L#{id}"
     end
 
+    def completion_steps
+      @completion_steps ||= product_completion_steps.map do |completion_step|
+        completion_step.construct_hash(line_item: self)
+      end
+    end
+
     private
+
+    def ensure_not_exceed_max_quantity_per_order
+      errors.add(:quantity, 'exceeded_max_quantity_per_order') if quantity > variant.max_quantity_per_order
+    end
 
     def update_vendor_id
       self.vendor_id = variant.vendor_id

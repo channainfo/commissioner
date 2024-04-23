@@ -77,6 +77,12 @@ Spree::Core::Engine.add_routes do
           patch :update
         end
       end
+
+      resources :product_completion_steps do
+        collection do
+          post :update_positions
+        end
+      end
     end
 
     namespace :calendars do
@@ -337,6 +343,11 @@ Spree::Core::Engine.add_routes do
 
     namespace :webhook do
       resources :orders, only: [:show]
+    end
+
+    namespace :chatrace do
+      resources :guests, only: %i[show update]
+      resources :check_ins, only: [:create]
     end
   end
 end

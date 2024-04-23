@@ -182,5 +182,24 @@ RSpec.describe Spree::Variant, type: :model do
         expect(subject.allowed_extra_kids).to eq 2
       end
     end
+
+    describe '#max_quantity_per_order' do
+      context 'when has option type/value' do
+        let(:option_type) { create(:cm_option_type, :max_quantity_per_order) }
+        let(:option_value) { create(:option_value, name: '1-quantity', presentation: '1', option_type: option_type) }
+
+        it 'return result of presentation in integer' do
+          expect(subject.max_quantity_per_order).to eq 1
+        end
+      end
+
+      context 'when does not have optino type/value' do
+        subject { create(:variant) }
+
+        it 'return null indicate no limited' do
+          expect(subject.max_quantity_per_order).to eq nil
+        end
+      end
+    end
   end
 end
