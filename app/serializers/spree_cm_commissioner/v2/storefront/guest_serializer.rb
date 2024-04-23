@@ -4,7 +4,7 @@ module SpreeCmCommissioner
       class GuestSerializer < BaseSerializer
         set_type :guest
 
-        attributes :first_name, :last_name, :dob, :gender, :kyc_fields, :other_occupation, :created_at, :updated_at,
+        attributes :first_name, :last_name, :dob, :gender, :kyc_fields, :age, :emergency_contact, :other_occupation, :created_at, :updated_at,
                    :age, :emergency_contact, :other_organization, :expectation
 
         attribute :allowed_checkout, &:allowed_checkout?
