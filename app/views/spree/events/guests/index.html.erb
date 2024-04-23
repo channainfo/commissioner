@@ -15,6 +15,9 @@
         <th scope="col" class="text-left"><%= Spree.t(:full_name) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:date_of_birth) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:gender) %></th>
+        <th scope="col" class="text-left"><%= Spree.t(:age) %></th>
+        <th scope="col" class="text-left"><%= Spree.t(:emergency_contact) %></th>
+        <th scope="col" class="text-left"><%= Spree.t(:ticket_type) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:occupation) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:id_card_type) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:id_card_image) %></th>
@@ -37,6 +40,15 @@
             <%= content_tag(:strong, class: "badge #{badge_color_based_on_gender(guest.gender)} font-weight-bold") do %>
               <%= guest.gender %>
             <% end %>
+          </td>
+          <td class="text-left">
+            <%= guest.age %>
+          </td>
+          <td class="text-left">
+            <%= guest.emergency_contact %>
+          </td>
+          <td class="text-left">
+            <%= guest.line_item.product.name %>
           </td>
           <td class="text-left">
             <%= guest.other_occupation&.titleize || guest.occupation&.name %>
