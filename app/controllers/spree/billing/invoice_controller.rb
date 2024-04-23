@@ -2,6 +2,7 @@ module Spree
   module Billing
     class InvoiceController < Spree::Billing::BaseController
       include Spree::Billing::OrderParentsConcern
+      helper SpreeCmCommissioner::Billing::QrcodesHelper
 
       def show
         @invoice = @order.invoice

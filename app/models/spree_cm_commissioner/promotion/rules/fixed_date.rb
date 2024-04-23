@@ -5,6 +5,8 @@ module SpreeCmCommissioner
         preference :start_date, :string
         preference :length, :integer, default: 1
 
+        validates :preferred_start_date, presence: true
+
         # override
         def date_eligible?(date)
           date.between?(start_rule_date, end_rule_date)
