@@ -24,9 +24,8 @@ module Spree
         @trip = model_class.new
         if @trip.update(trip_params(nested_stop_attributes))
           flash[:success] = flash_message_for(@trip, :successfully_created)
-          redirect_back(fallback_location: edit_transit_route_trip_path(@product, @trip))
+          redirect_to edit_transit_route_trip_path(@product, @product.trip.id)
         else
-          byebug
           flash[:error] = "create failed. Errors: #{@trip.errors.full_messages.join(', ')}"
           redirect_back(fallback_location: new_transit_route_trip_path(@product))
         end
@@ -62,7 +61,7 @@ module Spree
 
           boarding_points_attributes << { id: trip_stop.id,
                                           _destroy: '1'
-}
+                                        }
         end
 
         cm_params[:trip_stops_attributes] = boarding_points_attributes + drop_off_points_attributes

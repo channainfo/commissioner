@@ -1,26 +1,41 @@
-document.addEventListener("spree:load", function () {
-  TripStopSelectionHandler.initialize();
-});
+var boardingAndDropOffSelectionFilter = {
+  initialize: function (boardingSelector, dropOffSelector) {
+    var selectedOriginIds = $(boardingSelector).val();
+    var selectedDestinationIds = $(dropOffSelector).val();
 
-const TripStopSelectionHandler = {
-  initialize: function () {
-    this.keyInit();
-  },
+    function filterOptions(selectedIds, selector) {
+      $(selector + " option").each(function () {
+        var optionValue = $(this).val();
+        // Check if the optionValue exists in the selectedIds array
+        if (selectedIds.includes(optionValue)) {
+          $(this).prop("disabled", true).hide();
+        } else {
+          $(this).prop("disabled", false).show();
+        }
+      });
+    }
 
-  boarding_stop_ids: function () {
-    return Array.from(this.boarding_stop.selectedOptions).map(
-      ({ value }) => value
-    );
-  },
+    $(boardingSelector).val(selectedOriginIds);
+    $(dropOffSelector).val(selectedDestinationIds);
 
-  drop_off_stop_ids: function () {
-    return Array.from(this.drop_off_stop.selectedOptions).map(
-      ({ value }) => value
-    );
-  },
+    filterOptions(selectedOriginIds, dropOffSelector);
+    filterOptions(selectedDestinationIds, boardingSelector);
 
-  keyInit: function () {
-    this.boarding_stop = document.getElementById("boarding_stops");
-    this.drop_off_stop = document.getElementById("drop-off_stops");
+    $(document).on("change", boardingSelector, function () {
+      var originIds = $(this).val();
+      filterOptions(originIds, dropOffSelector);
+    });
+
+    $(document).on("change", dropOffSelector, function () {
+      var destinationIds = $(this).val();
+      filterOptions(destinationIds, boardingSelector);
+    });
   },
 };
+
+document.addEventListener("spree:load", function () {
+  boardingAndDropOffSelectionFilter.initialize(
+    "#boarding_stops",
+    "#drop-off_stops"
+  );
+});
