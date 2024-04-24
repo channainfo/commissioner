@@ -2,6 +2,16 @@
   <%= Spree.t('billing.balance_due_orders') %>
 <% end %>
 
+<% content_for :extra_head do %>
+  <%= stylesheet_link_tag 'spree_cm_commissioner/backend/invoice', media:'print,screen' %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= link_to Spree.t(:print), spree.print_all_invoices_billing_report_path, method: :put, class: 'btn btn-success mb-3 print-all-invoices'%>
+<% end %>
+
+<div id="invoice-container" class="flex align-items-center w-100 mt-3 invoice-container"></div>
+
 <% content_for :sidebar do %>
   <div data-hook="billing_report_index_search">
 
@@ -84,3 +94,45 @@
     <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree::Order)) %>
   </div>
 <% end %>
+
+<script>
+  $(document).ready(function() {
+    $('.print-all-invoices').click(
+      function() {
+        clearDiv();
+        getInvoices();
+        setTimeout(() => {
+          printInvoices();
+        }, timeout = 5000);
+        setTimeout(() => {
+          window.location.reload();
+        }, timeout = 6000);
+      }
+    );
+
+    function printInvoices() {
+      window.print();
+    }
+
+    function clearDiv() {
+      $('#invoice-container').empty();
+    }
+
+    function getInvoices () {
+      <% @orders.each do |order| %>
+        $.ajax({
+          url: '<%= billing_order_invoice_path(order) %>',
+          method: 'GET',
+          dataType: 'html',
+          success: function(data) {
+            var printAreaContent = $(data).find('.invoice-content').html();
+            $('#invoice-container').append('<div class="invoice-content card p-5 invoice-content"><div style="page-break-after: always;">' + printAreaContent + '</div><div class="page-break"></div></div><br>');
+          },
+          error: function(xhr, status, error) {
+            console.error('AJAX request failed:', status, error);
+          }
+        });
+      <% end %>
+    }
+  });
+</script>

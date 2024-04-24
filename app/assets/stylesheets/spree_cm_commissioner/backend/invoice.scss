@@ -26,12 +26,20 @@
 @media print {
 
   body {
-      visibility: hidden;
+    visibility: hidden;
   }
   .print-area * {
-      visibility: visible;
+    visibility: visible;
   }
   .invoice-content {
     margin-top: -220px;
+  }
+
+  .page-break {
+    margin-top: 100px;
+  }
+
+  .header-content {
+    margin-top: 40px;
   }
 }

@@ -1,5 +1,4 @@
  <%
-
   @vendor = @invoice.order.line_items.first.vendor
   @address =  @vendor.stock_locations.first&.address1
   @location_code = @vendor.stock_locations.first&.reference
@@ -31,13 +30,16 @@
     @account_name = @current_vendor.account_name
     @account_number = @current_vendor.account_number
   end
+  @customer_name = @customer.first_name.present? ? @customer.first_name : @customer.last_name
+  @customer_phone = @customer.phone_number
 %>
 
 
 <div class="flex align-items-center w-100 mt-3">
   <div class="invoice-content card p-5 invoice-content">
     <div class="print-area">
-      <div class="d-flex justify-content-center">
+      <div class="header-content">
+        <div class="d-flex justify-content-center">
           <strong>
             <div class="d-flex flex-column text-primary moul ">
                 <div class="ml-4">ព្រះរាជាណាចក្រកម្ពុជា</div>
@@ -46,140 +48,140 @@
             </div>
           </strong>
         </div>
-      <div class="d-flex justify-content-between align-items-center">
-        <div>
-          <%= render partial: 'spree/billing/shared/vendor_logo', locals: { size: :small } %>
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <%= render partial: 'spree/billing/shared/vendor_logo', locals: { size: :small } %>
+          </div>
+          <div class="text-center flex-grow-1">
+            <h4 class="pt-0"> <%= @title %></h4>
+          </div>
         </div>
-        <div class="text-center flex-grow-1">
-          <h4 class="pt-0"> <%= @title %></h4>
-        </div>
-      </div>
 
-      <br>
-      <div class="d-flex justify-content-between">
-        <div>
-          <ul class="list-unstyled">
-            <li>
-              <span> លេខអតិថិជន / Customer No : </span>
-              <%= @customer_number %>
-            </li>
-            <li>
-              <span>ឈ្មោះអតិថិជន / Customer Name :</span>
-              <%= @customer_name %>
-            </li>
-            <li>
-              <span>លេខទូរស័ព្ទអតិថិជន / Customer Phone Number :</span>
-              <%= @customer_phone %>
-            </li>
-            <li>
-              <div> អាសយដ្ធានអតិថិជន​ / Customer Address :</div>
-              <%= @customer_address %>
-            </li>
-          </ul>
+        <br>
+        <div class="d-flex justify-content-between">
+          <div>
+            <ul class="list-unstyled">
+              <li>
+                <span> លេខអតិថិជន / Customer No : </span>
+                <%= @customer_number %>
+              </li>
+              <li>
+                <span>ឈ្មោះអតិថិជន / Customer Name :</span>
+                <%= @customer_name %>
+              </li>
+              <li>
+                <span>លេខទូរស័ព្ទអតិថិជន / Customer Phone Number :</span>
+                <%= @customer_phone %>
+              </li>
+              <li>
+                <div> អាសយដ្ធានអតិថិជន​ / Customer Address :</div>
+                <%= @customer_address %>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <ul class="list-unstyled">
+              <li>
+                <span>លេខវិក្កយបត្រ​​ / Invoice No :</span>
+                <strong> <%= @invoice_number %> </strong>
+              </li>
+              <li>
+                <span>កាលបរិច្ចេទ / Invoice Date : </span>
+                <%= @date %>
+              </li>
+              <li>
+                <span>កាលបរិច្ចេទត្រូវបង់ / Invoice Due Date : </span>
+                <%= @due_date %>
+              </li>
+              <li>
+                <span>លេខកូខទីតាំង / Loc code : </span>
+                <%= @location_code %>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div>
-          <ul class="list-unstyled">
-            <li>
-              <span>លេខវិក្កយបត្រ​​ / Invoice No :</span>
-              <strong> <%= @invoice_number %> </strong>
-            </li>
-            <li>
-              <span>កាលបរិច្ចេទ / Invoice Date : </span>
-              <%= @date %>
-            </li>
-            <li>
-              <span>កាលបរិច្ចេទត្រូវបង់ / Invoice Due Date : </span>
-              <%= @due_date %>
-            </li>
-            <li>
-              <span>លេខកូខទីតាំង / Loc code : </span>
-              <%= @location_code %>
-            </li>
-          </ul>
-        </div>
-      </div>
 
-      <br>
-      <table class="table table-striped mt-2">
-          <thead  class=" bg-light">
-            <tr>
-              <th scope="col">ល.រ​​​ / N</th>
-              <th scope="col">បរិយាយ / Description</th>
-              <th scope="col">ចំនួន / Quantity</th>
-              <th scope="col">ប្រចាំខែ / Month</th>
-              <th scope="col">ទឹកប្រាក់​ / Amount</th>
-              <th scope="col">ទឹកប្រាក់​សរុប / Total Amount</th>
-            </tr>
-          </thead>
-          <tbody class="list-unstyled">
-            <tr>
-              <th scope="row">1</th>
-              <td>
-                <ul class="list-unstyled">
-                  <li> <%= @product %></li>
-                </ul>
-              </td>
-              <td>
-                <ul class="list-unstyled">
-                  <li> <%= @quantity %></li>
-                </ul>
-              </td>
-              <td>
-                <ul class="list-unstyled">
-                    <li> <%= @from_date %></li>
-                </ul>
-              </td>
-              <td>
-                <ul class="list-unstyled">
-                  <li>
-                    <%= @price %>
-                  </li>
-                </ul>
-              </td>
-              <td>
-                <ul class="list-unstyled">
-                  <li> <%= @sum_total %></li>
-                </ul>
-              </td>
-            </tr>
-            <% @order.adjustments.eligible.each do |adjustment|  %>
+        <br>
+        <table class="table table-striped mt-2">
+            <thead  class=" bg-light">
               <tr>
-                <th scope="row">2</th>
+                <th scope="col">ល.រ​​​ / N</th>
+                <th scope="col">បរិយាយ / Description</th>
+                <th scope="col">ចំនួន / Quantity</th>
+                <th scope="col">ប្រចាំខែ / Month</th>
+                <th scope="col">ទឹកប្រាក់​ / Amount</th>
+                <th scope="col">ទឹកប្រាក់​សរុប / Total Amount</th>
+              </tr>
+            </thead>
+            <tbody class="list-unstyled">
+              <tr>
+                <th scope="row">1</th>
                 <td>
                   <ul class="list-unstyled">
-                    <li> <%= adjustment.label %></li>
+                    <li> <%= @product %></li>
                   </ul>
                 </td>
-                <td></td>
                 <td>
+                  <ul class="list-unstyled">
+                    <li> <%= @quantity %></li>
+                  </ul>
+                </td>
+                <td>
+                  <ul class="list-unstyled">
+                      <li> <%= @from_date %></li>
+                  </ul>
                 </td>
                 <td>
                   <ul class="list-unstyled">
                     <li>
-                      <%= adjustment.display_amount %>
+                      <%= @price %>
                     </li>
                   </ul>
                 </td>
                 <td>
                   <ul class="list-unstyled">
-                    <li>
-                      <%= adjustment.display_amount %>
-                    </li>
+                    <li> <%= @sum_total %></li>
                   </ul>
                 </td>
               </tr>
-            <% end %>
-          </tbody>
-      </table>
+              <% @order.adjustments.eligible.each do |adjustment|  %>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>
+                    <ul class="list-unstyled">
+                      <li> <%= adjustment.label %></li>
+                    </ul>
+                  </td>
+                  <td></td>
+                  <td>
+                  </td>
+                  <td>
+                    <ul class="list-unstyled">
+                      <li>
+                        <%= adjustment.display_amount %>
+                      </li>
+                    </ul>
+                  </td>
+                  <td>
+                    <ul class="list-unstyled">
+                      <li>
+                        <%= adjustment.display_amount %>
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+        </table>
 
-      <div class="mt-2">
+        <div class="mt-2">
           <div class="d-flex justify-content-between align-items-center bg-primary pt-3 px-2 font-weight-bold text-white">
                 <p>ទឹកប្រាក់​ត្រូវទូទាត់​​ / Total Amount due</p>
                 <p>
                   <%= @total_price %>
                 </p>
           </div>
-
+        </div>
           <br>
           <div class="d-flex align-items-start">
             <div class="p-0 col-8 list-unstyled">
@@ -193,25 +195,28 @@
                 <li><span><%= @account_number %></span></li>
               </div>
             </div>
+      </div>
+
+      <div class="footer-content">
+        <div class="d-flex justify-content-between mt-4">
+          <div>
+            <p>អ្នកទទួលប្រាក់​​ / Received By : ............................. </p>
+            <p>កាលបរិច្ចេទ / Date : ............................. </p>
           </div>
-            <div class="d-flex justify-content-between mt-4">
-              <div>
-                <p>អ្នកទទួលប្រាក់​​ / Received By : ............................. </p>
-                <p>កាលបរិច្ចេទ / Date : ............................. </p>
-              </div>
-              <div>
-                <p>ទឹកប្រាក់​បានបង់ / Paid Amount : ............................. </p>
-                <p>កាលបរិច្ចេទ / Date : .............................  </p>
-              </div>
-            </div>
-          <div class="d-flex justify-content-center mt-4">
-            <div class="list-unstyled">
-              <li> អាសយដ្ធាន / Address : <%= @address %> </li>
-              <li>ទំនាក់ទំនង / Contact : <%= @contact %></li>
-              <li>អុីមែល / Email : <%= @email %></li>
-            </div>
+          <div>
+            <p>ទឹកប្រាក់​បានបង់ / Paid Amount : ............................. </p>
+            <p>កាលបរិច្ចេទ / Date : .............................  </p>
           </div>
         </div>
+        <div class="d-flex justify-content-center mt-4">
+          <div class="list-unstyled">
+            <li> អាសយដ្ធាន / Address : <%= @address %> </li>
+            <li>ទំនាក់ទំនង / Contact : <%= @contact %></li>
+            <li>អុីមែល / Email : <%= @email %></li>
+          </div>
+        </div>
+      </div>
+    </div>
     </div>
   </div>
 </div>
