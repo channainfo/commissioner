@@ -15,7 +15,6 @@
           <th><%= sort_link @search, :invoice_due_date, I18n.t(:invoice_due_date, scope: 'activerecord.attributes.spree/order') %></th>
           <th><%= I18n.t(:customer_id, scope: 'activerecord.attributes.spree/order') %></th>
           <th><%= I18n.t(:phone_number, scope: 'activerecord.attributes.spree/order') %></th>
-          <th><%= I18n.t(:type, scope: 'activerecord.attributes.spree/order') %></th>
           <th><%= sort_link @search, :total, I18n.t(:total, scope: 'activerecord.attributes.spree/order') %></th>
           <th><%= I18n.t(:payment_state, scope: 'activerecord.attributes.spree/order') %></th>
           <th data-hook="admin_orders_index_header_actions" class="actions"></th>
@@ -32,9 +31,6 @@
               <%= link_to order.customer.customer_number, edit_billing_customer_path(order.customer) %>
             </td>
             <td><%= order.customer.phone_number %></td>
-            <td>
-              <%= order.customer.taxon.name %>
-            </td>
             <td><%= order.display_total.to_html %></td>
             <td class="no-wrap">
               <% if order.payment_state %>
