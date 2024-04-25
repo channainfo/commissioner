@@ -18,8 +18,8 @@
         <%= f.text_field :sequence_number_cont, placeholder: I18n.t(:customer_id, scope: 'activerecord.attributes.spree/order'), class: "form-control js-filterable" %>
       </div>
       <div class="form-group">
-        <%= f.label :taxon_id_eq, I18n.t(:product_type, scope: 'activerecord.attributes.spree/order') %>
-        <%= f.select :taxon_id_eq, SpreeCmCommissioner::Customer.includes(:taxon).pluck(:taxon_id).uniq.map{ |taxon_id| [Spree::Taxon.find(taxon_id).name, taxon_id] }, { include_blank: true }, class: "select2-clear form-control js-filterable" %>
+        <%= f.label :taxons_id_eq, I18n.t(:product_type, scope: 'activerecord.attributes.spree/order') %>
+        <%= f.select :taxons_id_eq, SpreeCmCommissioner::Customer.includes(:taxons).pluck(:taxon_id).uniq.map{ |taxon_id| [Spree::Taxon.find(taxon_id).pretty_name, taxon_id] }, { include_blank: true }, class: "select2-clear form-control js-filterable" %>
       </div>
       <div data-hook="admin_products_index_search_buttons" class="form-actions">
         <%= button Spree.t(:search), 'search.svg', nil, { class: 'btn-outline-primary' } %>
@@ -71,7 +71,7 @@
               <%= customer.phone_number %>
             </td>
             <td class='taxon'>
-              <%= customer.taxon.name %>
+              <%= customer.taxons.map(&:name).join(' ') %>
             </td>
             <td>
               <%= customer.created_at.to_date %>
