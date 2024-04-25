@@ -206,6 +206,7 @@ Spree::Core::Engine.add_routes do
           get :balance_due
           get :overdue
           get :active_subscribers
+          put :print_all_invoices
         end
       end
       resources :vendors do

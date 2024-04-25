@@ -63,6 +63,14 @@ module Spree
         end
       end
 
+      def print_all_invoices
+        @orders = Spree::Order.subscription.joins(:invoice).where(payment_state: 'balance_due').where(cm_invoices: { vendor_id: current_vendor.id })
+
+        @orders.each do |order|
+          order.invoice.update(invoice_issued_date: Time.zone.today) if order.invoice.invoice_issued_date.blank?
+        end
+      end
+
       private
 
       def fetch_date_range_for_this_month(today)
