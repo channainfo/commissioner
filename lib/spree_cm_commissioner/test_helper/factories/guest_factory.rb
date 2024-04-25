@@ -5,5 +5,6 @@ FactoryBot.define do
     last_name { FFaker::Name.name }
     gender { 1 }
     dob { '1986-03-28' }
+    token { SecureRandom.hex(32) }
   end
 end
