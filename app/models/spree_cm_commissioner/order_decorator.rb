@@ -24,13 +24,13 @@ module SpreeCmCommissioner
 
       base.belongs_to :subscription, class_name: 'SpreeCmCommissioner::Subscription', optional: true
       base.has_many :customer, class_name: 'SpreeCmCommissioner::Customer', through: :subscription
-      base.has_many :taxon, class_name: 'Spree::Taxon', through: :customer
+      base.has_many :taxons, class_name: 'Spree::Taxon', through: :customer
       base.has_many :vendors, through: :products, class_name: 'Spree::Vendor'
       base.has_many :taxons, through: :products, class_name: 'Spree::Taxon'
 
       base.delegate :customer, to: :subscription, allow_nil: true
 
-      base.whitelisted_ransackable_associations |= %w[customer taxon payments]
+      base.whitelisted_ransackable_associations |= %w[customer taxons payments]
       base.whitelisted_ransackable_attributes |= %w[phone_number email number]
 
       base.after_update :precalculate_conversion, if: -> { state_changed_to_complete? }

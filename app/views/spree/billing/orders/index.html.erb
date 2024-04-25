@@ -32,8 +32,10 @@
               <%= link_to order.customer.customer_number, edit_billing_customer_path(order.customer) %>
             </td>
             <td><%= order.customer.phone_number %></td>
-            <td>
-              <%= order.customer.taxon.name %>
+            <td class='taxon'>
+              <% order.customer.taxons.each do |taxon| %>
+                <%= taxon.name + "," %>
+              <% end %>
             </td>
             <td><%= order.display_total.to_html %></td>
             <td class="no-wrap">

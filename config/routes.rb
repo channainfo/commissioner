@@ -260,6 +260,7 @@ Spree::Core::Engine.add_routes do
         end
         resources :adjustments
       end
+      resources :places
       put '/switch_vendor', to: 'base#switch_vendor'
       get '/forbidden', to: 'errors#forbidden', as: :forbidden
       root to: redirect('/billing/report')
