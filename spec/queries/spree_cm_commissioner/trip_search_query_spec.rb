@@ -7,10 +7,15 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
   let!(:buva_sea) {create(:vendor, name:'Buva Sea', code:"BS")}
 
   #location
-  let!(:phnom_penh) { create(:transit_place, name: 'Phnom Penh', data_type:4) }
-  let!(:siem_reap) { create(:transit_place, name: 'Siem Reap', data_type:4) }
-  let!(:sihanoukville) { create(:transit_place, name: 'Sihanoukville', data_type:4) }
-  let!(:koh_rong) {create(:transit_place, name: 'Koh Rong', data_type:4)}
+  let!(:phnom_penh) { create(:transit_place, name: 'Phnom Penh', data_type:8) }
+  let!(:siem_reap) { create(:transit_place, name: 'Siem Reap', data_type:8) }
+  let!(:sihanoukville) { create(:transit_place, name: 'Sihanoukville', data_type:8) }
+  let!(:koh_rong) {create(:transit_place, name: 'Koh Rong', data_type:8)}
+  let!(:aeon2) {create(:transit_place, name: 'Aeon Mall 2', data_type:1)}
+  let!(:aeon1) {create(:transit_place, name: 'Aeon Mall 1', data_type:1)}
+  let!(:phsar_kandal) {create(:transit_place, name: 'Phsar Kandal', data_type:1)}
+  let!(:angkor_aquarium) {create(:transit_place, name: 'Angkor Aquarium', data_type:1)}
+  let!(:angkor_wat) {create(:transit_place, name: 'Angkor Wat', data_type:1)}
 
   #Vehicle Type
   let!(:airbus) {create(:vehicle_type,
@@ -49,8 +54,14 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                                                   origin_id: phnom_penh.id,
                                                   destination_id: siem_reap.id,
                                                   departure_time: '10:00',
-                                                  duration: 6,
-                                                  vehicle_id: bus1.id
+                                                  duration: 3600,
+                                                  vehicle_id: bus1.id,
+                                                  trip_stops_attributes:[
+                                                    {stop_id: aeon2.id, stop_type: "boarding"},
+                                                    {stop_id: phsar_kandal.id, stop_type: "boarding"},
+                                                    {stop_id: angkor_aquarium.id, stop_type: "drop_off"},
+                                                    {stop_id: angkor_wat.id, stop_type: "drop_off"}
+                                                  ]
                                                 },
                                                 name: 'VET Airbus Phnom Penh Siem Reap 10:00',
                                                 short_name:"PP-SR-10:00-6",
@@ -62,7 +73,12 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                                                   destination_id: siem_reap.id,
                                                   departure_time: '15:00',
                                                   duration: 7,
-                                                  vehicle_id: bus2.id
+                                                  vehicle_id: bus2.id,
+                                                  trip_stops_attributes:[
+                                                    {stop_id: aeon2.id, stop_type: "boarding"},
+                                                    {stop_id: phsar_kandal.id, stop_type: "boarding"},
+                                                    {stop_id: angkor_aquarium.id, stop_type: "drop_off"}
+                                                  ]
                                                 },
                                                 name: 'VET Airbus Phnom Penh Siem Reap 15:00',
                                                 short_name:"PP-SR-15:00-7",
@@ -75,7 +91,10 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                                                       destination_id: siem_reap.id,
                                                       departure_time: '13:00',
                                                       duration: 4,
-                                                      vehicle_id: minivan1.id
+                                                      vehicle_id: minivan1.id,
+                                                      trip_stops_attributes:[
+                                                        {stop_id: aeon2.id, stop_type: "boarding"},
+                                                      ]
                                                     },
                                                     name: 'Larryta Airbus Phnom Penh Siem Reap 13:00',
                                                     short_name:"PP-SR-13:00-4",
@@ -88,7 +107,10 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                                                       destination_id: siem_reap.id,
                                                       departure_time: '20:00',
                                                       duration: 5,
-                                                      vehicle_id: minivan2.id
+                                                      vehicle_id: minivan2.id,
+                                                      trip_stops_attributes:[
+                                                        {stop_id: angkor_wat.id, stop_type: "drop_off"},
+                                                      ]
                                                     },
                                                     name: 'Larryta Airbus Phnom Penh Siem Reap 20:00',
                                                     short_name:"PP-SR-20:00-5",
@@ -101,7 +123,7 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                                                       departure_time: '10:00',
                                                       duration: 6,
                                                       vehicle_id: ferry1.id,
-                                                      allow_seat_selection: false
+                                                      allow_seat_selection: false,
                                                     },
                                                     name: "Buva Sea Sihanoukville to Koh Rong 10",
                                                     short_name: "SV-KR10-00-6",
@@ -159,9 +181,10 @@ let!(:tomorrow) {today + 1.day}
 
   describe"#trips_info" do
     context "display table" do
-      let(:records) {described_class.new(origin_id: phnom_penh, destination_id: siem_reap, date: today)}
+      let(:records) {described_class.new(origin_id: aeon2, destination_id: siem_reap, date: today)}
       it "return trips table" do
         result =  records.trips_info
+        p result.map(&:attributes)
         table = Terminal::Table.new :headings => ['Trip ID', 'Name', 'Vendor', 'Short Name',
                                                   'Origin', 'Destination', 'Total Seat',
                                                   'Total Sold', 'Remaining Seats', 'Departure Time', 'Duration', 'Vehicle']
@@ -218,7 +241,7 @@ let!(:tomorrow) {today + 1.day}
         search_result.each do |r|
           table.add_row [r.trip_id, r.route_name, r.vendor_name, r.short_name,
                           r.origin + " - " + r.origin_id.to_s, r.destination + " - " + r.destination_id.to_s, r.departure_time,
-                          r.arrival_time, r.duration, r.vehicle_id, r.total_seats, r.total_sold, r.remaining_seats]
+                          r.arrival_time, r.duration_in_hms, r.vehicle_id, r.total_seats, r.total_sold, r.remaining_seats]
           table.add_separator unless r.equal?(search_result.last) # Avoid adding separator after the last row
         end
         table.style = {:alignment => :center}
@@ -257,6 +280,29 @@ let!(:tomorrow) {today + 1.day}
         expect(search_result.count).to eq(4)
         expect(search_result.first.remaining_seats).to eq(12)
         expect(search_result.last.remaining_seats).to eq(22)
+      end
+    end
+    context "search for trip result using stop" do
+      let(:result1) {described_class.new(origin_id: aeon2, destination_id: siem_reap, date: tomorrow)}
+      let(:result2) {described_class.new(origin_id: phnom_penh, destination_id: angkor_wat, date: tomorrow)}
+      let(:result3) {described_class.new(origin_id: aeon2, destination_id: angkor_aquarium , date: tomorrow)}
+      it "only return trips that have boarding stop at aeon2" do
+        search = result1.call.sort_by(&:trip_id)
+        expect(search.count).to eq(3)
+        expect(search.first.trip_id).to eq(vet_phnom_penh_siem_reap_1.master.id)
+        expect(search.last.trip_id).to eq(larryta_phnom_penh_siemreap_1.master.id)
+      end
+      it "only return trips that have drop off stop at angkor wat" do
+        search = result2.call.sort_by(&:trip_id)
+        expect(search.count).to eq(2)
+        expect(search.first.trip_id).to eq(vet_phnom_penh_siem_reap_1.master.id)
+        expect(search.last.trip_id).to eq(larryta_phnom_penh_siemreap_2.master.id)
+      end
+      it "only return trips that have boarding and drop off stop at aeon2 and angkor aquarium" do
+        search = result3.call.sort_by(&:trip_id)
+        expect(search.count).to eq(2)
+        expect(search.first.trip_id).to eq(vet_phnom_penh_siem_reap_1.master.id)
+        expect(search.last.trip_id).to eq(vet_phnom_penh_siem_reap_2.master.id)
       end
     end
   end

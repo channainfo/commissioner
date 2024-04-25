@@ -18,6 +18,8 @@ module SpreeCmCommissioner
     accepts_nested_attributes_for :trip_stops, allow_destroy: true
 
     def convert_duration_to_seconds
+      return if hours.blank? && minutes.blank? && seconds.blank?
+
       self.duration = (hours.to_i * 3600) + (minutes.to_i * 60) + seconds.to_i
     end
 
