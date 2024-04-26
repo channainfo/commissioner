@@ -14,11 +14,11 @@
   <%= f.field_container :front_image do %>
     <%= f.label :front_image %>
     <%= f.file_field :front_image %>
-    <%= image_tag main_app.url_for(@object.front_image.url(:small)) if @object.front_image %>
+    <%= image_tag main_app.cdn_image_url(@object.front_image.url(:small)) if @object.front_image %>
   <% end %>
   <%= f.field_container :back_image do %>
     <%= f.label :back_image %>
     <%= f.file_field :back_image %>
-    <%= image_tag main_app.url_for(@object.back_image.url(:small)) if @object.back_image %>
+    <%= image_tag main_app.cdn_image_url(@object.back_image.url(:small)) if @object.back_image %>
   <% end %>
 </div>

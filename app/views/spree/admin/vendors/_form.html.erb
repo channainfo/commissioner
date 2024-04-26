@@ -41,7 +41,7 @@
     <%= f.field_container :image do %>
       <%= f.label :image %>
       <%= f.file_field :image %>
-      <%= image_tag main_app.url_for(@vendor.image.url(:small)) if @vendor.image %>
+      <%= image_tag main_app.cdn_image_url(@vendor.image.url(:small)) if @vendor.image %>
     <% end %>
   <% end %>
   <%= f.field_container :commission_rate do %>

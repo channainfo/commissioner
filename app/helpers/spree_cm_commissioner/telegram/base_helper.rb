@@ -4,7 +4,7 @@ module SpreeCmCommissioner
       def render_image
         return unless item.variant.images.any?
 
-        image_tag main_app.url_for(item.variant.images.first.url(:small)), :class => 'mr-3'
+        image_tag main_app.cdn_image_url(item.variant.images.first.url(:small)), :class => 'mr-3'
       end
 
       def pretty_time(time)

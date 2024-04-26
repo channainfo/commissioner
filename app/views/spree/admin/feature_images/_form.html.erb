@@ -3,7 +3,7 @@
     <% if defined?(preview) and preview == true %>
       <div data-hook="preview-image">
         <%=
-          link_to image_tag(main_app.url_for(@object.url(:mini)), :class => "rounded border mb-4"),
+          link_to image_tag(main_app.cdn_image_url(@object.url(:mini)), :class => "rounded border mb-4"),
           main_app.rails_blob_url(@object.attachment)
         %>
       </div>
