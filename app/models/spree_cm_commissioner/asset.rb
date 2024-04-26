@@ -9,7 +9,7 @@ module SpreeCmCommissioner
         width, height = size[/(\d+)x(\d+)/].split('x')
 
         {
-          url: url_for(attachment.variant(resize_to_limit: [width.to_i, height.to_i])),
+          url: cdn_image_url(attachment.variant(resize_to_limit: [width.to_i, height.to_i])),
           width: width,
           height: height
         }

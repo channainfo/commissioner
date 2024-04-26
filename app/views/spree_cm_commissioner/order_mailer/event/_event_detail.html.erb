@@ -7,7 +7,7 @@
     <div class="flex two-columns">
       <div class="two-columns-item">
         <div class="flex two-columns-item_detail">
-          <div class="two-columns_icon"><%= link_to(image_tag(main_app.url_for(vendor.logo.url(:small)), class: 'vendor-logo'), spree_storefront_resource_url(vendor)) %></div>
+          <div class="two-columns_icon"><%= link_to(image_tag(main_app.cdn_image_url(vendor.logo.url(:small)), class: 'vendor-logo'), spree_storefront_resource_url(vendor)) %></div>
           <div class="two-columns_text-container">
             <p class="two-columns_title">Event Name</p>
             <p class="two-columns_description"><%= vendor.name %></p>

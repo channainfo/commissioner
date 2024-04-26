@@ -5,7 +5,7 @@ module SpreeCmCommissioner
 
       attribute :url do |image|
         url_helpers = Rails.application.routes.url_helpers
-        url_helpers.url_for(image.attachment) if image
+        url_helpers.cdn_image_url(image.attachment) if image
       end
     end
   end

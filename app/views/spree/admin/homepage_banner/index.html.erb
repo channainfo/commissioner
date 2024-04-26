@@ -33,10 +33,10 @@
             <%= homepage_banner.redirect_url %>
           </td>
           <td>
-            <%= image_tag main_app.url_for(homepage_banner.app_image.url(:mini)) if homepage_banner.app_image %>
+            <%= image_tag main_app.cdn_image_url(homepage_banner.app_image.url(:mini)) if homepage_banner.app_image %>
           </td>
           <td>
-            <%= image_tag main_app.url_for(homepage_banner.web_image.url(:mini)) if homepage_banner.web_image %>
+            <%= image_tag main_app.cdn_image_url(homepage_banner.web_image.url(:mini)) if homepage_banner.web_image %>
           </td>
           <td>
             <%= pretty_time(homepage_banner.created_at) %>
