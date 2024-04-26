@@ -13,11 +13,16 @@ FactoryBot.define do
       variant {}
       quantity {}
       date { Date.today }
+      selected_seats {[]}
+      line_item_seats_attributes{[]}
     end
 
     after(:create) do |order, evaluator|
       if evaluator.quantity.nil? && evaluator.seats.present?
-        create(:line_item, order: order, variant: evaluator.variant, date: evaluator.date, booking_seats: evaluator.seats)
+        @line_item_seats_attributes =  evaluator.seats.map do |seat|
+          {seat_id: seat.id, date: evaluator.date, variant_id: evaluator.variant.id}
+        end
+        create(:line_item, order: order, variant: evaluator.variant, date: evaluator.date, line_item_seats_attributes: @line_item_seats_attributes)
         order.line_items.reload
       else
         create(:line_item, order: order, variant: evaluator.variant, date: evaluator.date, quantity: evaluator.quantity)
