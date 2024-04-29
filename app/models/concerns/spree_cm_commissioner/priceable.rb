@@ -1,5 +1,5 @@
 module SpreeCmCommissioner
-  module PriceableConcern
+  module Priceable
     extend ActiveSupport::Concern
 
     included do
@@ -11,6 +11,11 @@ module SpreeCmCommissioner
       cache_key = "spree/prices/#{cache_key_with_version}/price_in/#{currency}"
 
       Rails.cache.fetch(cache_key) { find_or_build_price(currency) } || find_or_build_price(currency)
+
+    # it raised TypeError: singleton can't be dumped, mean that it can't cache singleton class.
+    # it happens only on rspec.
+    rescue TypeError
+      find_or_build_price(currency)
     end
 
     def find_or_build_price(currency)
