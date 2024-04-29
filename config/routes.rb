@@ -317,7 +317,7 @@ Spree::Core::Engine.add_routes do
         resources :guests, only: %i[create update show] do
           resources :id_cards
         end
-        resources :reviews, only: %i[index create] do
+        resources :reviews, only: %i[index create show] do
           resources :feedback_reviews, only: [:create]
         end
       end

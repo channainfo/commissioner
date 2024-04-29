@@ -4,9 +4,16 @@ module Spree
       module Storefront
         class ReviewsController < Spree::Api::V2::ResourceController
           before_action :load_product, only: %i[index create]
+          before_action :require_spree_current_user
 
           def collection
             @product.reviews.approved
+          end
+
+          def show
+            product_id = params[:id]
+            review = spree_current_user.reviews.find_by(product_id: product_id)
+            render_serialized_payload { serialize_resource(review) }
           end
 
           def create
