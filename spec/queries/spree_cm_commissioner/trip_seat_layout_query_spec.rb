@@ -165,25 +165,25 @@ let!(:tomorrow) {today + 1.day}
       let(:records) {described_class.new(trip_id: phnom_penh_to_siem_reap_by_sleeping_bus.master.id, date: today)}
       it "return Sleeping Bus seats layout" do
         result = records.call
-        layout = result.layout
+        layers = result.layers
         puts "Total Seats: #{result.total_seats}"
         puts "Sold: #{result.total_sold}"
         puts "Remaining: #{result.remaining_seats}"
-        layout.each do |layer, rows|
+        layers.each do |layer|
           rows_table = Terminal::Table.new do |t|
-            rows.each do |row_num, seats|
-              row = seats.map do |seat|
+            layer[:rows].each do |row|
+              row_display = row[:columns].map do |seat|
                 if seat[:seat_type] == "normal"
-                  seat[:seat_id] == nil ? " #{seat[:label]}" : "x#{seat[:label]}"
+                  seat[:seat_id].nil? ? " #{seat[:label]}" : "x#{seat[:label]}"
                 else
-                 seat[:seat_type] == "driver" ? "D   " : " - "
+                  seat[:seat_type] == "driver" ? "D   " : " - "
                 end
               end
-              t.add_row row
+              t.add_row row_display
             end
           end
           rows_table.style = {:alignment => :center}
-          puts "#{layer}\n#{rows_table}"
+          puts "#{layer[:name]}\n#{rows_table}"
         end
       end
     end
@@ -192,27 +192,27 @@ let!(:tomorrow) {today + 1.day}
       let(:records) {described_class.new(trip_id: phnom_penh_to_siem_reap_by_airbus.master.id, date: today)}
       it "return Air Bus seats layout" do
         result = records.call
-        layout = result.layout
+        layers = result.layers
         expect(result.allow_seat_selection).to eq(true)
         expect(result.total_sold).to eq(7)
         puts "Total Seats: #{result.total_seats}"
         puts "Sold: #{result.total_sold}"
         puts "Remaining: #{result.remaining_seats}"
-        layout.each do |layer, rows|
+        layers.each do |layer|
           rows_table = Terminal::Table.new do |t|
-            rows.each do |row_num, seats|
-              row = seats.map do |seat|
+            layer[:rows].each do |row|
+              row_display = row[:columns].map do |seat|
                 if seat[:seat_type] == "normal"
-                  seat[:seat_id] == nil ? " #{seat[:label]}" : "x#{seat[:label]}"
+                  seat[:seat_id].nil? ? " #{seat[:label]}" : "x#{seat[:label]}"
                 else
-                 seat[:seat_type] == "driver" ? "D   " : " - "
+                  seat[:seat_type] == "driver" ? "D   " : " - "
                 end
               end
-              t.add_row row
+              t.add_row row_display
             end
           end
           rows_table.style = {:alignment => :center}
-          puts "#{layer}\n#{rows_table}"
+          puts "#{layer[:name]}\n#{rows_table}"
         end
       end
     end
@@ -221,13 +221,12 @@ let!(:tomorrow) {today + 1.day}
       let(:records) {described_class.new(trip_id: sihanoukville_to_koh_rong_by_ferry.master.id, date: tomorrow)}
       it "return ferry seat layout" do
         result = records.call
-        layout = result.layout
         puts "Total Seats: #{result.total_seats}"
         puts "Sold: #{result.total_sold}"
         puts "Remaining: #{result.remaining_seats}"
         puts "Allow Seat Selection: #{result.allow_seat_selection}"
         expect(result.allow_seat_selection).to eq(false)
-        expect(result.layout).to eq(nil)
+        expect(result.layers).to eq(nil)
         expect(result.total_sold).to eq(5)
       end
     end
@@ -236,25 +235,25 @@ let!(:tomorrow) {today + 1.day}
       let(:records) {described_class.new(trip_id: phnom_penh_to_siem_reap_by_minivan.master.id, date: today)}
       it "return Minivan seats layout" do
         result = records.call
-        layout = result.layout
+        layers = result.layers
         puts "Total Seats: #{result.total_seats}"
         puts "Sold: #{result.total_sold}"
         puts "Remaining: #{result.remaining_seats}"
-        layout.each do |layer, rows|
+        layers.each do |layer|
           rows_table = Terminal::Table.new do |t|
-            rows.each do |row_num, seats|
-              row = seats.map do |seat|
+            layer[:rows].each do |row|
+              row_display = row[:columns].map do |seat|
                 if seat[:seat_type] == "normal"
-                  seat[:seat_id] == nil ? " #{seat[:label]}" : "x#{seat[:label]}"
+                  seat[:seat_id].nil? ? " #{seat[:label]}" : "x#{seat[:label]}"
                 else
-                 seat[:seat_type] == "driver" ? "D   " : " - "
+                  seat[:seat_type] == "driver" ? "D   " : " - "
                 end
               end
-              t.add_row row
+              t.add_row row_display
             end
           end
           rows_table.style = {:alignment => :center}
-          puts "#{layer}\n#{rows_table}"
+          puts "#{layer[:name]}\n#{rows_table}"
         end
       end
     end
