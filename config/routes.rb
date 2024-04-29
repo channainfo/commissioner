@@ -318,6 +318,7 @@ Spree::Core::Engine.add_routes do
           resources :id_cards
         end
         resources :reviews, only: %i[index create show] do
+          resources :review_images, only: [:create]
           resources :feedback_reviews, only: [:create]
         end
       end
