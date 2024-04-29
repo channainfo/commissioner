@@ -1,7 +1,6 @@
 module SpreeCmCommissioner
   module TaxonDecorator
     def self.prepended(base)
-
       base.include SpreeCmCommissioner::Transit::TaxonBitwise
 
       base.has_one :category_icon, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::TaxonCategoryIcon'

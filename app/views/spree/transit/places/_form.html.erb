@@ -23,6 +23,14 @@
         </div>
 
         <div class="form-check form-check-inline">
+          <%= f.field_container :station, class: ['custom-control', 'custom-checkbox'] do %>
+            <%= f.check_box :station, class: 'custom-control-input station checkboxGroup', checked: f.object.persisted? && f.object.station? %>
+            <%= f.label :station, Spree.t(:station), class: 'custom-control-label' %>
+            <%= f.error_message_on :station %>
+          <% end %>
+        </div>
+
+        <div class="form-check form-check-inline">
           <%= f.field_container :branch, class: ['custom-control', 'custom-checkbox'] do %>
             <%= f.check_box :branch, class: 'custom-control-input branch checkboxGroup', checked: f.object.persisted? && f.object.branch? %>
             <%= f.label :branch, Spree.t(:branch), class: 'custom-control-label' %>

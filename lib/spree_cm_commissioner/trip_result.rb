@@ -16,7 +16,16 @@ module SpreeCmCommissioner
     end
 
     def arrival_time
-      (departure_time.to_time + duration.to_i.hours).strftime('%H:%M')
+      (departure_time.to_time + duration.to_i.seconds).strftime('%H:%M')
+    end
+
+    def duration_in_hms
+      return 0 if duration.nil?
+
+      hours = duration / 3600
+      minutes = (duration % 3600) / 60
+      seconds = duration % 60
+      "#{hours}h #{minutes}m #{seconds}s"
     end
   end
 end
