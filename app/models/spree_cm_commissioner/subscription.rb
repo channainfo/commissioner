@@ -58,6 +58,11 @@ module SpreeCmCommissioner
       month_option_value.presentation.to_i
     end
 
+    def display_total_price
+      total_price = variant.price * quantity
+      Spree::Money.new(total_price.to_i, currency: variant.currency).to_s
+    end
+
     def renewal_date
       return start_date if last_occurence.blank?
 

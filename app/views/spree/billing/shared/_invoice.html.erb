@@ -7,7 +7,7 @@
   @email =  @vendor.notification_email
   @note =  @vendor.note
 
-  @quantity = @customer.quantity
+  @quantity = @subscription.quantity
   @product = @invoice.order.line_items.first.variant.sku
   @price = @invoice.order.line_items.first.display_price
   @sum_total = @price.to_s.gsub(/[^\d.]/, '').to_d * @quantity
@@ -101,49 +101,49 @@
           </div>
         </div>
 
-        <br>
-        <table class="table table-striped mt-2">
-            <thead  class=" bg-light">
-              <tr>
-                <th scope="col">ល.រ​​​ / N</th>
-                <th scope="col">បរិយាយ / Description</th>
-                <th scope="col">ចំនួន / Quantity</th>
-                <th scope="col">ប្រចាំខែ / Month</th>
-                <th scope="col">ទឹកប្រាក់​ / Amount</th>
-                <th scope="col">ទឹកប្រាក់​សរុប / Total Amount</th>
-              </tr>
-            </thead>
-            <tbody class="list-unstyled">
-              <tr>
-                <th scope="row">1</th>
-                <td>
-                  <ul class="list-unstyled">
-                    <li> <%= @product %></li>
-                  </ul>
-                </td>
-                <td>
-                  <ul class="list-unstyled">
-                    <li> <%= @quantity %></li>
-                  </ul>
-                </td>
-                <td>
-                  <ul class="list-unstyled">
-                      <li> <%= @from_date %></li>
-                  </ul>
-                </td>
-                <td>
-                  <ul class="list-unstyled">
-                    <li>
-                      <%= @price %>
-                    </li>
-                  </ul>
-                </td>
-                <td>
-                  <ul class="list-unstyled">
-                    <li> <%= @sum_total %></li>
-                  </ul>
-                </td>
-              </tr>
+      <br>
+      <table class="table table-striped mt-2">
+          <thead  class=" bg-light">
+            <tr>
+              <th scope="col">ល.រ​​​ / N</th>
+              <th scope="col">បរិយាយ / Description</th>
+              <th scope="col">ប្រចាំខែ / Month</th>
+              <th scope="col">ទឹកប្រាក់​ / Amount</th>
+              <th scope="col">ចំនួន / Quantity</th>
+              <th scope="col">ទឹកប្រាក់​សរុប / Total Amount</th>
+            </tr>
+          </thead>
+          <tbody class="list-unstyled">
+            <tr>
+              <th scope="row">1</th>
+              <td>
+                <ul class="list-unstyled">
+                  <li> <%= @product %></li>
+                </ul>
+              </td>
+              <td>
+                <ul class="list-unstyled">
+                    <li> <%= @from_date %></li>
+                </ul>
+              </td>
+              <td>
+                <ul class="list-unstyled">
+                  <li>
+                    <%= @price %>
+                  </li>
+                </ul>
+              </td>
+              <td>
+                <ul class="list-unstyled">
+                  <li> <%= @quantity %></li>
+                </ul>
+              </td>
+              <td>
+                <ul class="list-unstyled">
+                  <li> <%= @sum_total %></li>
+                </ul>
+              </td>
+            </tr>
               <% @order.adjustments.eligible.each do |adjustment|  %>
                 <tr>
                   <th scope="row">2</th>

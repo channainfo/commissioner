@@ -18,6 +18,12 @@
               <%= sort_link @search, :price, Spree.t(:price),{},{title: 'price_title'} %>
             </th>
             <th>
+              <%= Spree.t(:quantity) %>
+            </th>
+            <th>
+              <%= Spree.t(:total_price) %>
+            </th>
+            <th>
               <%= sort_link @search, :start_date, I18n.t('activerecord.attributes.spree/order.start_date'), {}, {title: 'start_date_title'} %>
             </th>
             <th>
@@ -36,6 +42,12 @@
               </td>
               <td>
                 <%= subscription.variant.display_price%>
+              </td>
+              <td>
+                <%= subscription.quantity %>
+              </td>
+              <td>
+                <%= subscription.display_total_price %>
               </td>
               <td data-hook="start_date">
                 <%= subscription.start_date %>
