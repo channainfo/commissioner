@@ -38,7 +38,7 @@ module SpreeCmCommissioner
                               spree_vendors.name as vendor_name,
                               routes.name as route_name,
                               routes.short_name as short_name,
-                              details.id as trip_id,
+                              details.id as detail_id,
                               boarding.stop_id as origin_id,
                               drop_off.stop_id as destination_id,
                               details.departure_time as departure_time,

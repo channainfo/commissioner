@@ -33,12 +33,10 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                         column: 5)}
 
   let!(:ferry) {create(:vehicle_type,
-                        :with_seats,
                         code: 'ferry',
                         vendor: buva_sea,
-                        row: 5,
-                        column: 5,
-                        empty: [[0,2],[1,2],[2,2],[3,2],[4,2]]
+                        allow_seat_selection: false,
+                        vehicle_seats_count: 100
                         )}
 
   let!(:bus1) {create(:vehicle, vehicle_type: airbus, vendor: vet_airbus)}
@@ -121,7 +119,7 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                                                       origin_id: sihanoukville.id,
                                                       destination_id: koh_rong.id,
                                                       departure_time: '10:00',
-                                                      duration: 6,
+                                                      duration: 21600,
                                                       vehicle_id: ferry1.id,
                                                       allow_seat_selection: false,
                                                     },
@@ -134,7 +132,7 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                                                       origin_id: sihanoukville.id,
                                                       destination_id: koh_rong.id,
                                                       departure_time: '15:00',
-                                                      duration: 3,
+                                                      duration: 10800,
                                                       vehicle_id: ferry2.id,
                                                       allow_seat_selection: false
                                                     },
@@ -184,7 +182,6 @@ let!(:tomorrow) {today + 1.day}
       let(:records) {described_class.new(origin_id: aeon2, destination_id: siem_reap, date: today)}
       it "return trips table" do
         result =  records.trips_info
-        p result.map(&:attributes)
         table = Terminal::Table.new :headings => ['Trip ID', 'Name', 'Vendor', 'Short Name',
                                                   'Origin', 'Destination', 'Total Seat',
                                                   'Total Sold', 'Remaining Seats', 'Departure Time', 'Duration', 'Vehicle']
@@ -254,21 +251,19 @@ let!(:tomorrow) {today + 1.day}
       it "return trip result for today" do
         search_result = result.call.sort_by(&:trip_id)
         expect(search_result.count).to eq(4)
-        expect(search_result.first.trip_id).to eq(vet_phnom_penh_siem_reap_1.master.id)
-        expect(search_result.last.trip_id).to eq(larryta_phnom_penh_siemreap_2.master.id)
         expect(search_result.first.remaining_seats).to eq(7)
+        expect(search_result[1].remaining_seats).to eq(12)
+        expect(search_result[2].remaining_seats).to eq(20)
         expect(search_result.last.remaining_seats).to eq(22)
       end
     end
-    context "return trip result of SV-KR for today " do
+    context "return trip result of SV-KR for tomorrow " do
       let(:result) {described_class.new(origin_id: sihanoukville, destination_id: koh_rong, date: tomorrow)}
       it "return trip result for today" do
         search_result = result.call.sort_by(&:trip_id)
         expect(search_result.count).to eq(2)
-        expect(search_result.first.trip_id).to eq(sihanoukville_to_koh_rong_by_ferry.master.id)
-        expect(search_result.last.trip_id).to eq(sihanoukville_to_koh_rong_by_ferry_2.master.id)
-        expect(search_result.first.remaining_seats).to eq(15)
-        expect(search_result.last.remaining_seats).to eq(19)
+        expect(search_result.first.remaining_seats).to eq(96)
+        expect(search_result.last.remaining_seats).to eq(100)
       end
     end
     context "return trip result for tomorrow" do
@@ -279,6 +274,8 @@ let!(:tomorrow) {today + 1.day}
         search_result = result.call.sort_by(&:trip_id)
         expect(search_result.count).to eq(4)
         expect(search_result.first.remaining_seats).to eq(12)
+        expect(search_result[1].remaining_seats).to eq(15)
+        expect(search_result[2].remaining_seats).to eq(24)
         expect(search_result.last.remaining_seats).to eq(22)
       end
     end

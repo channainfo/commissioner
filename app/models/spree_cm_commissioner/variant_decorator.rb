@@ -19,6 +19,10 @@ module SpreeCmCommissioner
       "#{display_sku} - $#{display_price}"
     end
 
+    def transit?
+      product.product_type == 'transit'
+    end
+
     private
 
     def update_vendor_price
