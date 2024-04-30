@@ -34,6 +34,7 @@ module SpreeCmCommissioner
       base.whitelisted_ransackable_attributes |= %w[phone_number email number]
 
       base.after_update :precalculate_conversion, if: -> { state_changed_to_complete? }
+      base.after_update :precalculate_conversion, if: -> { state_changed_to_cancle? }
 
       def base.search_by_qr_data!(data)
         token = data.match(/^R\d{9,}-([A-Za-z0-9_\-]+)$/)&.captures
@@ -79,6 +80,10 @@ module SpreeCmCommissioner
 
     def state_changed_to_complete?
       saved_change_to_state? && state == 'complete'
+    end
+
+    def state_changed_to_cancle?
+      saved_change_to_state? && state == 'cancled'
     end
 
     # required only in one case,

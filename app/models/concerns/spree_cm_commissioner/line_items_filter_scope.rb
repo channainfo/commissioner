@@ -3,7 +3,7 @@ module SpreeCmCommissioner
     extend ActiveSupport::Concern
 
     included do
-      scope :complete, -> { joins(:order).merge(Spree::Order.complete) }
+      scope :complete, -> { joins(:order).merge(Spree::Order.complete.not_canceled) }
       scope :accepted, -> { joins(:order).merge(Spree::Order.accepted) }
       scope :paid, -> { joins(:order).merge(Spree::Order.paid) }
 
