@@ -60,7 +60,7 @@ module SpreeCmCommissioner
       if reservation? && date_unit
         base_price * date_unit
       elsif subscription?
-        base_price * order.customer.quantity
+        base_price * quantity
       else
         base_price
       end
