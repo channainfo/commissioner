@@ -93,6 +93,9 @@ RSpec.describe Spree::LineItem, type: :model do
         let!(:line_item_seat_1) {create(:line_item_seat, line_item: line_item1, seat: arb_f1_seat, date: today, variant: phnom_penh_to_siem_reap_by_airbus.master)}
         let!(:order2) { create(:order, state: :cart) }
         let!(:order3) { create(:order, state: :payment) }
+        let!(:order4) { create(:order, state: :complete, canceled_at: today) }
+        let!(:line_item4) {create(:line_item, quantity: 1, product:phnom_penh_to_siem_reap_by_airbus, order: order4, date: today)}
+        let!(:line_item_seat_4) {create(:line_item_seat, line_item: line_item4, seat: arb_f2_seat, date: today, variant: phnom_penh_to_siem_reap_by_airbus.master)}
         let(:selected_seats) {[]}
         before do
           @line_item_seats_attributes = selected_seats.map do |seat|
@@ -119,7 +122,6 @@ RSpec.describe Spree::LineItem, type: :model do
           let(:selected_seats) {[ arb_f2_seat, arb_f3_seat, arb_f4_seat]}
           it "success when all seats are available" do
             result = Spree::Cart::AddItem.call(order: order2, variant: phnom_penh_to_siem_reap_by_airbus.master, quantity: 3, options:{line_item_seats_attributes: @line_item_seats_attributes, date: today})
-
             expect(result.success?).to eq true
             expect(result.error).to eq nil
           end

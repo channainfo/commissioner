@@ -128,7 +128,10 @@ module SpreeCmCommissioner
     def selected_seat_ids_occupied?(selected_seat_ids)
       # check to see if there are any selected_ids exist in the line_item_seats and belongs to completed order
       SpreeCmCommissioner::LineItemSeat.joins(line_item: :order)
-                                       .where(seat_id: selected_seat_ids, date: date, variant_id: variant_id, spree_orders: { state: 'complete' })
+                                       .where(seat_id: selected_seat_ids, date: date, variant_id: variant_id, spree_orders: { state: 'complete',
+                                                                                                                              canceled_at: nil
+}
+                                       )
                                        .present?
     end
   end
