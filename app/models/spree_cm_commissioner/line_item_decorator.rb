@@ -7,13 +7,20 @@ module SpreeCmCommissioner
       base.belongs_to :rejected_by, class_name: 'Spree::User', optional: true
       base.has_many :line_item_seats, class_name: 'SpreeCmCommissioner::LineItemSeat', dependent: :destroy
 
+      base.accepts_nested_attributes_for :line_item_seats, allow_destroy: true
+
       base.before_save :update_vendor_id
+      base.before_save :update_quantity, if: :transit?
+
+      base.validate :validate_seats_reservation, if: :transit?
 
       base.delegate :product_type, :accommodation?, :service?, :ecommerce?, to: :product
       base.before_create :add_due_date, if: :subscription?
 
       base.whitelisted_ransackable_attributes |= %w[to_date from_date]
     end
+
+    delegate :transit?, to: :variant
 
     def reservation?
       date_present? && !subscription?
@@ -35,7 +42,26 @@ module SpreeCmCommissioner
       end
     end
 
+    # override
+    def sufficient_stock?
+      return super unless variant.product.product_type == 'transit'
+
+      transit_sufficient_stock?
+    end
+
     private
+
+    def transit_sufficient_stock?
+      return selected_seats_available? if reservation_trip.allow_seat_selection
+
+      seat_quantity_available?(reservation_trip)
+    end
+
+    def update_quantity
+      return if line_item_seats.blank?
+
+      self.quantity = line_item_seats.size
+    end
 
     def update_vendor_id
       self.vendor_id = variant.vendor_id
@@ -68,6 +94,45 @@ module SpreeCmCommissioner
         return from_date + month_option_value.presentation.to_i.month + day.days
       end
       from_date + day.days
+    end
+
+    def validate_seats_reservation
+      if reservation_trip.allow_seat_selection && !selected_seats_available?
+        errors.add(:base, :some_seats_are_booked, message: 'Some seats are already booked')
+      elsif !reservation_trip.allow_seat_selection && !seat_quantity_available?(reservation_trip)
+        errors.add(:quantity, :exceeded_available_quantity, message: 'exceeded available quantity')
+      end
+    end
+
+    def selected_seats_available?
+      selected_seat_ids = line_item_seats.map(&:seat_id)
+      !selected_seat_ids_occupied?(selected_seat_ids)
+    end
+
+    def seat_quantity_available?(trip)
+      booked_quantity = Spree::LineItem.joins(:order)
+                                       .where(variant_id: variant_id, date: date, spree_orders: { state: 'complete' })
+                                       .where.not(spree_line_items: { id: id })
+                                       .sum(:quantity)
+      remaining_quantity = trip.vehicle.number_of_seats - booked_quantity
+      remaining_quantity >= quantity
+    end
+
+    def reservation_trip
+      return @trip if defined? @trip
+
+      route = Spree::Variant.find_by(id: variant_id).product
+      @trip = route.trip
+    end
+
+    def selected_seat_ids_occupied?(selected_seat_ids)
+      # check to see if there are any selected_ids exist in the line_item_seats and belongs to completed order
+      SpreeCmCommissioner::LineItemSeat.joins(line_item: :order)
+                                       .where(seat_id: selected_seat_ids, date: date, variant_id: variant_id, spree_orders: { state: 'complete',
+                                                                                                                              canceled_at: nil
+}
+                                       )
+                                       .present?
     end
   end
 end

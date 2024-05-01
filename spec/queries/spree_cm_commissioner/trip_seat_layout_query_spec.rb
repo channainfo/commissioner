@@ -51,9 +51,7 @@ RSpec.describe SpreeCmCommissioner::TripSeatLayoutQuery do
                 :with_seats,
                 code: 'ferry',
                 vendor: buva_sea,
-                row: 5,
-                column: 5,
-                empty: [[0,2],[1,2],[2,2],[3,2],[4,2]]
+                vehicle_seats_count: 100,
                 )}
 
   let!(:bus1) {create(:vehicle, vehicle_type: airbus, vendor: vet)}
