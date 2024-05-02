@@ -9,14 +9,16 @@
 
   @quantity = @subscription.quantity
   @product = @invoice.order.line_items.first.variant.sku
-  @price = @invoice.order.line_items.first.display_price
-  @sum_total = @price.to_s.gsub(/[^\d.]/, '').to_d * @quantity
+  @sum_total = 0
+  @invoice.order.line_items.each do |line_item|
+    @price = line_item.variant.price
+    @sum_total += line_item.variant.price * line_item.quantity
+  end
   @total_price = @sum_total
-  @sum_total = Spree::Money.new(@sum_total, currency: @price.currency).to_s
   @order.adjustments.eligible.each do |adjustment|
     @total_price += adjustment.amount
   end
-  @total_price = Spree::Money.new(@total_price, currency: @price.currency).to_s
+  @total_price = Spree::Money.new(@total_price, currency: @order.line_items.first.variant.currency).to_s
   @total = @invoice.order.display_total
   @from_date = @invoice.order.line_items.first.to_date.strftime("%B %Y")
   @date = @invoice.date.strftime('%Y-%m-%d')
@@ -114,36 +116,38 @@
             </tr>
           </thead>
           <tbody class="list-unstyled">
-            <tr>
-              <th scope="row">1</th>
-              <td>
-                <ul class="list-unstyled">
-                  <li> <%= @product %></li>
-                </ul>
-              </td>
-              <td>
-                <ul class="list-unstyled">
-                    <li> <%= @from_date %></li>
-                </ul>
-              </td>
-              <td>
-                <ul class="list-unstyled">
-                  <li>
-                    <%= @price %>
-                  </li>
-                </ul>
-              </td>
-              <td>
-                <ul class="list-unstyled">
-                  <li> <%= @quantity %></li>
-                </ul>
-              </td>
-              <td>
-                <ul class="list-unstyled">
-                  <li> <%= @sum_total %></li>
-                </ul>
-              </td>
-            </tr>
+            <% @invoice.order.line_items.each do |line_item| %>
+              <tr>
+                <th scope="row">1</th>
+                <td>
+                  <ul class="list-unstyled">
+                    <li> <%= line_item.variant.sku %></li>
+                  </ul>
+                </td>
+                <td>
+                  <ul class="list-unstyled">
+                      <li> <%= line_item.to_date.strftime("%B %Y") %></li>
+                  </ul>
+                </td>
+                <td>
+                  <ul class="list-unstyled">
+                    <li>
+                      <%= line_item.variant.price %>
+                    </li>
+                  </ul>
+                </td>
+                <td>
+                  <ul class="list-unstyled">
+                    <li> <%= line_item.quantity %></li>
+                  </ul>
+                </td>
+                <td>
+                  <ul class="list-unstyled">
+                    <li> <%= line_item.variant.price * line_item.quantity %></li>
+                  </ul>
+                </td>
+              </tr>
+            <% end %>
               <% @order.adjustments.eligible.each do |adjustment|  %>
                 <tr>
                   <th scope="row">2</th>
