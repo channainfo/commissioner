@@ -5,7 +5,7 @@ module SpreeCmCommissioner
         set_type :guest
 
         attributes :first_name, :last_name, :dob, :gender, :kyc_fields, :other_occupation, :created_at, :updated_at,
-                   :age, :emergency_contact, :other_organization, :expectation
+                   :age, :emergency_contact, :other_organization, :expectation, :upload_later
 
         attribute :allowed_checkout, &:allowed_checkout?
 

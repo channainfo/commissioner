@@ -70,7 +70,8 @@ module Spree
               :age,
               :emergency_contact,
               :other_organization,
-              :expectation
+              :expectation,
+              :upload_later
             )
           end
         end
