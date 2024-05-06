@@ -6,7 +6,11 @@
     <%= f.hidden_field :id %>
   </td>
 
-  <td class="name"><%= f.text_field :name, class: "form-control", required: true %></td>
+  <% if @option_type.attr_type == "delivery_type"%>
+    <td class="name"><%= f.select :name, [:delivery, :pickup], { include_blank: true } , class: "form-control fullwidth", required: true %></td>
+  <% else %>
+    <td class="name"><%= f.text_field :name, class: "form-control", required: true %></td>
+  <% end %>
 
   <% case @option_type.attr_type %>
   <% when "float" %>
@@ -35,6 +39,8 @@
     <td class="presentation"><%= f.text_field :presentation, class: "form-control", required: true %></td>
   <% when "reminder" %>
     <td class="presentation"><%= f.text_field :presentation, class: "form-control", required: true %></td>
+  <% when "delivery_type" %>
+    <td class="presentation"><%= f.select :presentation, [:delivery, :pickup], { include_blank: true } , class: "form-control  fullwidth", required: true %></td>
   <% end %>
 
   <td class="actions">
