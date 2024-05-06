@@ -11,21 +11,6 @@ module Spree
         SpreeCmCommissioner::Guest
       end
 
-      def index
-        file_name = Rails.root.join('tmp', csv_name)
-
-        respond_with(collection) do |format|
-          format.csv do
-            SpreeCmCommissioner::GenerateGuestsCsv.call(
-              collection: collection,
-              file_name: file_name
-            )
-
-            send_file file_name
-          end
-        end
-      end
-
       def check_in
         guest_ids = [params[:id]]
         context = SpreeCmCommissioner::CheckInBulkCreator.call(
@@ -59,7 +44,6 @@ module Spree
       end
 
       def edit
-        @guest = SpreeCmCommissioner::Guest.find(params[:id])
         @check_in = @guest.check_in
         @event = @guest.event
       end
@@ -81,11 +65,31 @@ module Spree
         redirect_to event_guest_path
       end
 
-      private
+      # POST: /guests/generate_guest_csv
+      def generate_guest_csv
+        name = "guest-csv#{Time.current.to_i}"
+        file_name = "guests-data-#{current_event.name.gsub(' ', '-')}-#{Time.current.to_i}.csv"
+        file_path = Rails.root.join('tmp', file_name)
+        export_type = SpreeCmCommissioner::Exports::ExportGuestCsv
 
-      def csv_name
-        @csv_name ||= "guests-data-#{current_event.name.downcase.gsub(' ', '-')}-#{Time.current.to_i}.csv"
+        guest_csv = SpreeCmCommissioner::Exports::ExportGuestCsv.new(
+          name: name,
+          file_name: file_name,
+          file_path: file_path,
+          export_type: export_type,
+          preferred_event_id: current_event.id
+        )
+
+        if guest_csv.save
+          flash[:success] = Spree.t('csv.csv_generate')
+          redirect_to event_data_exports_path
+        else
+          flash[:error] = Spree.t('csv.generate_error')
+          redirect_back(fallback_location: event_guests_path)
+        end
       end
+
+      private
 
       def permitted_resource_params
         params.required(:spree_cm_commissioner_guest).permit(:entry_type)
@@ -99,6 +103,10 @@ module Spree
                              .includes(:id_card)
                              .page(params[:page])
                              .per(params[:per_page])
+      end
+
+      def collection_actions
+        super << :generate_guest_csv
       end
     end
   end

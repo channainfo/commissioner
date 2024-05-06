@@ -172,6 +172,9 @@ Spree::Core::Engine.add_routes do
     root to: 'events/guests#index'
     resources :guests, only: %i[index show edit update], controller: 'events/guests' do
       post :send_email, on: :member, as: :send_email
+      collection do
+        post :generate_guest_csv
+      end
       member do
         post :check_in
         post :uncheck_in
@@ -179,6 +182,11 @@ Spree::Core::Engine.add_routes do
       resources :state_changes, only: %i[index], controller: 'events/state_changes'
     end
     resources :check_ins, only: %i[index], controller: 'events/check_ins'
+    resources :data_exports, controller: 'events/data_exports' do
+      member do
+        post :download
+      end
+    end
     collection do
       get '/forbidden', to: 'events/errors#forbidden'
       get '/resource_not_found', to: 'events/errors#resource_not_found'
