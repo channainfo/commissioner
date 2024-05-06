@@ -2,6 +2,7 @@
 //= require map/map-picker
 //= require spree_cm_commissioner/routes
 //= require spree_cm_commissioner/calendar
+//= require spree_cm_commissioner/select_field_auto_filter
 //= require spree_cm_commissioner/role_form
 //= require spree_cm_commissioner/address_hide_form
 //= require spree_cm_commissioner/annual_calendar_form

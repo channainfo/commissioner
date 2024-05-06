@@ -1,0 +1,10 @@
+<div class="row p-0">
+  <div class="col form-group mb-0">
+    <%= label_tag Spree.t(:min_extra_adults) %>
+    <%= text_field_tag "#{param_prefix}[preferred_min_extra_adults]", pricing_rule.preferred_min_extra_adults, class: 'form-control input_integer' %>
+  </div>
+  <div class="col form-group mb-0">
+    <%= label_tag Spree.t(:max_extra_adults) %>
+    <%= text_field_tag "#{param_prefix}[preferred_max_extra_adults]", pricing_rule.preferred_max_extra_adults, class: 'form-control input_integer' %>
+  </div>
+</div>

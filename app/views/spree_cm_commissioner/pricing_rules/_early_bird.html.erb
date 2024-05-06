@@ -1,0 +1,11 @@
+<div class="row p-0">
+  <div class="col form-group mb-0">
+    <%= label_tag Spree.t(:booking_date_from) %>
+    <%= date_field_tag "#{param_prefix}[preferred_booking_date_from]", pricing_rule.preferred_booking_date_from, class: 'form-control bg-transparent datepicker' %>
+  </div>
+
+  <div class="col form-group mb-0">
+    <%= label_tag Spree.t(:booking_date_to) %>
+    <%= date_field_tag "#{param_prefix}[preferred_booking_date_to]", pricing_rule.preferred_booking_date_to, class: 'form-control bg-transparent datepicker' %>
+  </div>
+</div>

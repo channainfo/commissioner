@@ -170,9 +170,18 @@ km:
     listing_price: "តម្លៃលក់"
     length: "ប្រវែង"
     preference: "Preference"
+    effective_from: "Effective from"
+    effective_to: "Effective to"
+    booking_date_from: Booking date from
+    booking_date_to: Booking date to
+    min_extra_adults: Min extra adults
+    max_extra_adults: Max extra adults
+    min_extra_kids: Min extra kids
+    max_extra_kids: Max extra kids
     notification: "Notification"
     notice_messages:
       line_item_not_found: "Line item not found"
+      pricing_rules_saved: "Pricing rules saved"
     promotion_rule_types:
       fixed_date:
         name: "ថ្ងៃជាក់លាក់"
@@ -219,6 +228,16 @@ km:
       choose_guest_age_group: "Choose Guest Age Group"
       match_any: "Some line items must from selected age group"
       match_all: "All line items must from selected age group"
+    pricing_rate:
+      title: "Pricing Rate"
+      match_all: "Rate will be applied if matched all of these rules"
+      match_any: "Rate will be applied if matched any of these rules"
+      match_none: "Rate will be applied if matched none of these rules"
+    pricing_model:
+      title: "Pricing Model"
+      match_all: "Adjustment will be applied if matched all of these rules"
+      match_any: "Adjustment will be applied if matched any of these rules"
+      match_none: "Adjustment will be applied if matched none of these rules"
     billing:
       code: "code"
       name: "name"

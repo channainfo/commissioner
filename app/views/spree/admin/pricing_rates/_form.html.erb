@@ -1,0 +1,50 @@
+<div data-hook="admin_pricing_rate_form_fields">
+  <div data-hook="admin_pricing_rate_name">
+    <%= f.field_container :name do %>
+      <%= f.label :name, raw(Spree.t(:name) + required_span_tag) %>
+      <%= f.text_field :name, class: 'form-control title' %>
+      <%= f.error_message_on :name %>
+    <% end %>
+  </div>
+
+  <div data-hook="admin_pricing_rate_match_policy">
+    <%= f.field_container :match_policy, class: ['form-group'] do %>
+      <%= f.label :match_policy, Spree.t(:match_policy) %></span>
+      <%= f.select :match_policy, f.object.class.match_policies.keys, {}, :class => "fullwidth select2" %>
+      <%= f.error_message_on :match_policy %>
+    <% end %>
+  </div>
+
+  <div class="date-range-filter row" data-hook="admin_pricing_rates_effective_dates">
+    <div class="col-12 col-md-6 mb-3 mb-md-0">
+      <%= f.label Spree.t(:effective_from) %>
+      <div class="input-group datePickerFrom"
+          data-wrap="true"
+          data-alt-format="<%= Spree.t(:fpr_human_friendly_date_format, scope: 'date_picker', default: 'M j, Y') %>"
+          data-max-date="<%= f.object.effective_to %>">
+        <%= f.text_field :effective_from,
+                        class: 'form-control',
+                        placeholder: "...",
+                        value: datepicker_field_value(f.object.effective_from),
+                        'data-input':'' %>
+
+        <%= render partial: 'spree/admin/shared/cal_close' %>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 mt-3 mt-md-0">
+      <%= f.label Spree.t(:effective_to) %>
+      <div class="input-group datePickerTo"
+          data-wrap="true"
+          data-alt-format="<%= Spree.t(:fpr_human_friendly_date_format, scope: 'date_picker', default: 'M j, Y') %>"
+          data-min-date="<%= f.object.effective_from %>">
+        <%= f.text_field :effective_to,
+                        class: 'form-control',
+                        placeholder: "...",
+                        value: datepicker_field_value(f.object.effective_to),
+                        'data-input':'' %>
+        <%= render partial: 'spree/admin/shared/cal_close' %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,56 @@
+<% if @pricing_ruleable.is_a?(SpreeCmCommissioner::PricingRate) %>
+  <%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :pricing_rates } %>
+  <%= render partial: 'spree/admin/shared/pricing_rate_sidebar', locals: {
+    current: :rules,
+    pricing_rate: @pricing_ruleable,
+  } %>
+<% end %>
+
+<% content_for :sidebar do %>
+  <hr>
+  <div class="card card-body">
+    <%= form_with model: SpreeCmCommissioner::PricingRule.new, url: admin_product_pricing_rules_path, method: :post do |f| %>
+      <div class="row align-items-end p-0 pr-3">
+        <%= f.field_container :type, class: ['form-group col mb-0'] do %>
+          <%= f.label :type, Spree.t(:type) %> <span class="required">*</span>
+          <%= f.select :type, @pricing_ruleable.available_pricing_rules.map {|t| [t.demodulize, t]}, {}, :class => "fullwidth select2" %>
+          <%= f.error_message_on :type %>
+        <% end %>
+        <div>
+          <%= button Spree.t('actions.create'), 'add.svg', 'submit', { class: @pricing_ruleable.available_pricing_rules.empty? ? 'btn-outline-secondary' : 'btn-outline-success', disabled: @pricing_ruleable.available_pricing_rules.empty?, data: { disable_with: "#{ Spree.t(:saving) }..." } } %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<div id="rule_fields">
+  <% if @pricing_ruleable.pricing_rules.any? %>
+    <% @pricing_rules.each do |pricing_rule| %>
+      <%= form_with model: pricing_rule, url: admin_product_pricing_rule_path(pricing_rule), action: :update do |f| %>
+        <div class="card card-body mb-3" id="<%= dom_id pricing_rule %>">
+          <% type_name = pricing_rule.type&.demodulize %>
+
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="p-0 m-0"><%= type_name %></h5>
+            <div>
+              <%= link_to_with_icon 'delete.svg', '', admin_product_pricing_rule_path(pricing_rule), method: :delete, no_text: true, class: 'delete mr-2', data: { confirm: Spree.t(:are_you_sure_delete) } %>
+              <%= button '', 'update.svg', :submit, { class: "btn btn-outline-primary btn-sm icon-link" } %>
+            </div>
+          </div>
+          <hr>
+
+          <%# eg. spree_cm_commissioner/pricing_rules/early_bird %>
+          <% partial_path = pricing_rule.type&.underscore.tr('::', '/').downcase %>
+
+          <%= render partial: partial_path, locals: { pricing_rule: pricing_rule, param_prefix: :spree_cm_commissioner_pricing_rule } if partial_path.present? %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+  <% if @pricing_ruleable.pricing_rules.empty? %>
+    <div class="text-center no-objects-found m-5">
+      <%= Spree.t(:no_resource_found, resource: plural_resource_name(SpreeCmCommissioner::PricingRule)) %>
+    </div>
+  <% end %>
+</div>

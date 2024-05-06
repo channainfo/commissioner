@@ -11,6 +11,8 @@ module SpreeCmCommissioner
 
       enum match_policy: %i[all any none].freeze, _prefix: true
 
+      default_scope { order(:priority) }
+
       scope :active, lambda {
         where('effective_from IS NULL OR effective_from < ?', Time.current)
           .where('effective_to IS NULL OR effective_to > ?', Time.current)
@@ -27,6 +29,30 @@ module SpreeCmCommissioner
         applicable_rules.any? { |rule| rule.eligible?(options) }
       elsif match_policy_none?
         applicable_rules.none? { |rule| rule.eligible?(options) }
+      end
+    end
+
+    # available only rules that not created.
+    def available_pricing_rules
+      existing_rules = pricing_rules.map { |rule| rule.class.name }
+      default_pricing_rules.reject { |r| existing_rules.include? r }
+    end
+
+    def default_pricing_rules
+      if product_type == 'accommodation'
+        [
+          'SpreeCmCommissioner::PricingRules::CustomDates',
+          'SpreeCmCommissioner::PricingRules::EarlyBird',
+          'SpreeCmCommissioner::PricingRules::ExtraAdults',
+          'SpreeCmCommissioner::PricingRules::ExtraKids',
+          'SpreeCmCommissioner::PricingRules::GroupBooking',
+          'SpreeCmCommissioner::PricingRules::Weekend'
+        ]
+      else
+        [
+          'SpreeCmCommissioner::PricingRules::EarlyBird',
+          'SpreeCmCommissioner::PricingRules::GroupBooking'
+        ]
       end
     end
   end

@@ -25,5 +25,10 @@ module SpreeCmCommissioner
     def tax_category
       pricing_rateable.respond_to?(:tax_category) ? pricing_rateable.tax_category : nil
     end
+
+    # override
+    def product_type
+      pricing_rateable.respond_to?(:product_type) ? pricing_rateable.product_type : nil
+    end
   end
 end

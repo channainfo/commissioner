@@ -37,7 +37,7 @@ module SpreeCmCommissioner
 
       # override
       def description
-        preferred_custom_dates.pluck(:title).to_sentence
+        "Custom dates: #{preferred_custom_dates.size}"
       end
     end
   end

@@ -1,0 +1,32 @@
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :pricing_rates } %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:new), new_object_url, { class: "btn-success", icon: 'add.svg', id: 'admin_new_pricing_rate' } %>
+<% end %>
+
+<%= form_tag url_for(action: :update_prices), class: 'form-horizontal' do %>
+  <div class="d-flex variant-currency-selector">
+    <div class="w-100 mr-2">
+      <%= select_tag "variant_id",
+        options_from_collection_for_select(@product.variants, :id, :options_text, params[:variant_id]),
+        class: 'select_field_auto_filter select2',
+        data: { param_name: 'variant_id', update: "#pricing-rates"}
+      %>
+    </div>
+    <div>
+      <%= select_tag "currency",
+        options_from_collection_for_select(supported_currencies_for_all_stores, :iso_code, :iso_code, params[:currency]),
+        class: 'select_field_auto_filter select2',
+        data: { param_name: 'currency', update: "#pricing-rates"}
+      %>
+    </div>
+  </div>
+
+  <div id="pricing-rates" class="my-3">
+    <%= render partial: 'pricing_rates' %>
+  </div>
+
+  <div class="form-actions" data-hook="buttons">
+    <%= button Spree.t('actions.update'), 'update.svg' %>
+  </div>
+<% end %>
