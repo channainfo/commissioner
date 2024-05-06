@@ -35,8 +35,8 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCronExecutor do
     it "renews all expired subscription by 1 month" do
       instance = described_class.new(current: Date.parse('2021-03-01'))
       instance.call
-      # january still has 1 order left
-      expect(instance.remaining_subscriptions.size).to eq 1
+      # renew orders should be 2 as 2 subscriptions are expired
+      expect(instance.remaining_subscriptions.size).to eq 2
     end
   end
 

@@ -6,7 +6,7 @@ module SpreeCmCommissioner
       # reject if locked?
       return unless subscription.update(last_occurence: subscription.renewal_date)
 
-      create_order
+      find_or_create_order
       create_line_item
       create_invoice
 
@@ -14,7 +14,11 @@ module SpreeCmCommissioner
       context.order.reload
     end
 
-    def create_order
+    def find_or_create_order
+      context.order = Spree::Order.joins(:subscription).find_by(cm_subscriptions: { customer_id: subscription.customer_id })
+
+      return if context.order
+
       context.order = subscription.orders.create!(
         subscription_id: subscription.id,
         phone_number: subscription.customer.phone_number,
@@ -27,15 +31,20 @@ module SpreeCmCommissioner
 
       from_date = subscription.last_occurence
       to_date = from_date + subscription.months_count.months
-      Spree::Cart::AddItem.call(
-        order: context.order,
-        variant: subscription.variant,
-        quantity: 1,
-        options: {
-          from_date: from_date,
-          to_date: to_date
-        }
-      )
+      existing_line_item = context.order.line_items.find_by(variant_id: subscription.variant_id)
+      if existing_line_item
+        existing_line_item.update(quantity: subscription.quantity)
+      else
+        Spree::Cart::AddItem.call(
+          order: context.order,
+          variant: subscription.variant,
+          quantity: subscription.quantity,
+          options: {
+            from_date: from_date,
+            to_date: to_date
+          }
+        )
+      end
     end
 
     def renewal_date
