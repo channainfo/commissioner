@@ -2,13 +2,16 @@ module Spree
   module Api
     module V2
       module Storefront
-        class WishedController < ApplicationController
+        class WishedController < Spree::Api::V2::ResourceController
           def show
             variant_id = params[:id]
-            variant = Spree::Variant.find_by(id: variant_id)
-            wished_item = resource.wished_items.find_or_initialize_by(variant_id: variant.id)
+            wished_item = Spree::WishedItem.find_by(variant_id: variant_id)
 
             render json: wished_item
+          end
+
+          def model_class
+            Spree::WishedItem
           end
         end
       end
