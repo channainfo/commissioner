@@ -4,6 +4,12 @@
     current: :rules,
     pricing_rate: @pricing_ruleable,
   } %>
+<% else %>
+  <%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :pricing_models } %>
+  <%= render partial: 'spree/admin/shared/pricing_model_sidebar', locals: {
+    current: :rules,
+    pricing_model: @pricing_ruleable,
+  } %>
 <% end %>
 
 <% content_for :sidebar do %>

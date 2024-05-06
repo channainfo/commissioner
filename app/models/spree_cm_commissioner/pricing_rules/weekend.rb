@@ -2,7 +2,9 @@ module SpreeCmCommissioner
   module PricingRules
     class Weekend < BaseDate
       DAYS_INTO_WEEK = DateAndTime::Calculations::DAYS_INTO_WEEK
+      MATCH_POLICIES = %w[any all].freeze
 
+      preference :match_policy, :string, default: MATCH_POLICIES.first
       preference :weekend_days, :array, default: %w[6 0]
 
       # override

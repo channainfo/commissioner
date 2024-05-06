@@ -91,11 +91,19 @@ Spree::Core::Engine.add_routes do
         end
       end
 
+      resources :pricing_models do
+        collection do
+          post :update_positions
+        end
+      end
+
       resources :pricing_rules do
         collection do
           post :update_pricing_rules
         end
       end
+
+      resources :pricing_actions
     end
 
     namespace :calendars do

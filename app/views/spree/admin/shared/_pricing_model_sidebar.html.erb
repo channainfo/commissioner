@@ -1,0 +1,18 @@
+<% content_for :sidebar do %>
+  <ul class="nav flex-column nav-pills">
+    <%= content_tag :li do %>
+      <%= link_to_with_icon 'edit.svg',
+        Spree.t(:edit),
+        edit_admin_product_pricing_model_path(pricing_model),
+        class: "nav-link #{'active' if current == :edit }"
+      %>
+    <% end %>
+    <%= content_tag :li do %>
+      <%= link_to_with_icon 'bricks.svg',
+        Spree.t(:rules),
+        admin_product_pricing_rules_path(pricing_model_id: pricing_model.id),
+        class: "nav-link #{'active' if current == :rules }"
+      %>
+    <% end %>
+  </ul>
+<% end %>
