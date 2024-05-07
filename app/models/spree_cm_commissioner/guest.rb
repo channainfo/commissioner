@@ -28,6 +28,10 @@ module SpreeCmCommissioner
     self.whitelisted_ransackable_associations = %w[id_card event]
     self.whitelisted_ransackable_attributes = %w[first_name last_name gender occupation_id card_type]
 
+    def self.csv_importable_columns
+      column_names.map(&:to_sym)
+    end
+
     # no validation for each field as we allow user to save data to model partially.
     def allowed_checkout?
       kyc_fields.all? { |field| allowed_checkout_for?(field) }
