@@ -4,7 +4,7 @@ module Spree
       module VariantSerializerDecorator
         def self.prepended(base)
           base.attributes :permanent_stock, :need_confirmation, :product_type, :kyc,
-                          :reminder_option_value, :started_at_option_value,
+                          :reminder_option_value, :started_at_option_value, :delivery_option_option_value,
                           :number_of_guests, :max_quantity_per_order
 
           base.has_many :stock_locations

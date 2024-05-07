@@ -41,6 +41,7 @@ describe Spree::V2::Storefront::VariantSerializer, type: :serializer do
         :started_at_option_value,
         :max_quantity_per_order,
         :number_of_guests,
+        :delivery_option_option_value
       )
     end
 
