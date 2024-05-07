@@ -11,6 +11,10 @@ module SpreeCmCommissioner
       option_value('reminder')
     end
 
+    def delivery_option_option_value
+      option_value('delivery-option')
+    end
+
     def max_quantity_per_order_option_value
       @max_quantity_option_value ||= option_value('max-quantity-per-order')
     end
