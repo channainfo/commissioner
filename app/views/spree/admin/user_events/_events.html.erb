@@ -1,0 +1,37 @@
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:add_new_events), new_admin_user_event_path, class: "btn-success", icon: 'add.svg', id: 'admin_new_operator_link' %>
+<% end %>
+
+<%= render partial: 'spree/admin/users/tabs', locals: { current: :user_events } %>
+
+<div class="table-responsive border rounded bg-white mb-3">
+    <table class="table" id="listing_user_taxon" data-hook>
+      <thead class="text-muted">
+        <tr data-hook="admin_taxonomy_taxon_user_taxons_index_headers">
+          <th><%= Spree.t(:id) %></th>
+          <th><%= Spree.t(:name) %></th>
+          <th><%= Spree.t(:created_at) %></th>
+          <th><%= Spree.t(:updated_at) %></th>
+          <th><%= Spree.t(:action) %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @user_events.each do |user_event| %>
+          <% event = user_event.taxon %>
+          <tr id="<%= spree_dom_id event %>" data-hook="admin_taxonomy_taxon_events_index_rows">
+            <td><%= event.id %></td>
+            <td><%= link_to event.name, edit_admin_taxonomy_taxon_path(event.taxonomy.id, event.id) %></td>
+            <td><%= event.created_at %></td>
+            <td><%= event.updated_at %></td>
+            <td data-hook="admin_taxonomy_taxon_user_events_index_row_actions" class="actions">
+              <span class="d-flex justify-content-end">
+                <%= link_to_delete user_event, url: admin_user_event_path(user_event.id), no_text: true if can?(:delete, user_event) %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+

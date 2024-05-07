@@ -1,0 +1,19 @@
+<%= render partial: 'spree/admin/users/tabs', locals: { current: :user_events } %>
+
+<div class="card">
+  <div class="card-body">
+    <%= form_with model: @object, url: { action: 'create' } do |f| %>
+      <%= f.hidden_field :user_id, value: @user.id %>
+      <div class="form-group" data-hook="new_event">
+        <%= f.field_container :event do %>
+          <%= f.label :taxon_id, Spree.t('new_event') %>
+          <%= f.select :taxon_id,
+          options_from_collection_for_select(Spree::Taxon.where(kind: Spree::Taxon.kinds[:event]).order(:position), :id, :name), { include_hidden: true }, class: 'select2 form-control' %>
+        <% end %>
+      </div>
+      <fieldset data-hook="new_user_event">
+        <%= render partial: 'spree/admin/shared/new_resource_links' %>
+      </fieldset>
+    <% end %>
+  </div>
+</div>

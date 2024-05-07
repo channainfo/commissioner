@@ -92,7 +92,6 @@ Spree::Core::Engine.add_routes do
     resources :taxonomies do
       resources :taxons do
         resources :taxon_vendors
-        resources :user_taxons
         resources :classifications do
           collection do
             post :recalculate_conversions
@@ -157,6 +156,8 @@ Spree::Core::Engine.add_routes do
         end
       end
     end
+
+    resources :user_events, except: %i[show edit update]
 
     resources :webhooks_subscribers do
       resources :rules, controller: :webhooks_subscriber_rules, except: %i[index show]
