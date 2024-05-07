@@ -3,7 +3,7 @@
 <div data-hook="admin_shipping_method_form_vendor" class="col col-lg-6">
   <%= f.field_container :vendor_id do %>
     <%= f.label :vendor_id, Spree.t('vendor') %>
-    <%= f.collection_select :vendor_id, Spree::Vendor.all, :id, :name, { include_blank: true }, { class: 'form-control select2', disabled: params[:force].present? ? false : @object.vendor.id.present? } %>
+    <%= f.collection_select :vendor_id, Spree::Vendor.all, :id, :name, { include_blank: true }, { class: 'form-control select2', disabled: params[:force].present? ? false : @object.vendor&.id.present? } %>
     <%= f.error_message_on :vendor_id %>
   <% end %>
 </div>
