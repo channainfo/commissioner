@@ -3,7 +3,7 @@ module SpreeCmCommissioner
     module OrdersControllerDecorator
       def self.prepended(base)
         # spree try to create an empty order in the #new action
-        base.around_action :set_writing_role, only: %i[new]
+        base.around_action :set_writing_role, only: %i[new edit]
 
         base.before_action :load_order, only: %i[
           edit update cancel resume approve resend open_adjustments
