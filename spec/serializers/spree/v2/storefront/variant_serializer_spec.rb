@@ -37,11 +37,11 @@ describe Spree::V2::Storefront::VariantSerializer, type: :serializer do
         :kyc,
         :need_confirmation,
         :product_type,
-        :reminder_option_value,
-        :started_at_option_value,
+        :reminder,
+        :started_at,
         :max_quantity_per_order,
         :number_of_guests,
-        :delivery_option_option_value
+        :delivery_option
       )
     end
 
