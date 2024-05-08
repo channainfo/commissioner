@@ -140,6 +140,7 @@ Spree::Core::Engine.add_routes do
     resources :orders, except: [:show] do
       collection do
         resources :import_orders, only: %i[index new create]
+        get :download_order_csv_template, controller: 'import_orders'
       end
       member do
         put :accept_all
