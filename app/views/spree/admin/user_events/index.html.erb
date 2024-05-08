@@ -1,0 +1,9 @@
+<% if @user_events.present? && @user.present? %>
+  <%= render partial: 'events', locals: { user: @user, user_events: @user_events } %>
+<% elsif @taxon.present? && @taxonomy.present? %>
+  <%= render partial: 'users', locals: { user_events: @user_events, taxon: @taxon, taxonomy: @taxonomy } %>
+<% else %>
+  <small class="form-text text-muted">
+    <%= raw I18n.t('user_taxon.empty_info') %>
+  </small>
+<% end %>
