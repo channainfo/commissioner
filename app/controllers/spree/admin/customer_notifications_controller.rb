@@ -18,16 +18,19 @@ module Spree
         admin_customer_notifications_url(options)
       end
 
-      def send_test
-        user_ids = params[:user_ids] || []
+      def notification_sender
         customer_notification = SpreeCmCommissioner::CustomerNotification.find(params[:notification_id])
-        context = { customer_notification: customer_notification, user_ids: user_ids }
-        begin
-          response = SpreeCmCommissioner::CustomerNotificationSender.call(context)
-          redirect_to admin_customer_notifications_path, notice: I18n.t('notification.send_test_success') if response.success?
-        rescue StandardError => e
-          redirect_to admin_customer_notifications_path, alert: e.message
+        user_ids = params[:user_ids] # This can be nil or an array of user ids
+
+        if params[:send_all] == 'true'
+          SpreeCmCommissioner::CustomerNotificationSenderJob.perform_later(customer_notification.id)
+          redirect_to admin_customer_notifications_path, notice: I18n.t('notification.send_all_in_progress')
+        else
+          SpreeCmCommissioner::CustomerNotificationSenderJob.perform_later(customer_notification.id, user_ids)
+          redirect_to admin_customer_notifications_path, notice: I18n.t('notification.send_specific_in_progress')
         end
+      rescue StandardError => e
+        redirect_to admin_customer_notifications_path, alert: I18n.t('notification.error', error_message: e.message)
       end
     end
   end

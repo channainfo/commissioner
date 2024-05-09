@@ -361,7 +361,8 @@ en:
   webhooks_subscriber_rules:
     empty_info: "No <b>Webhooks Subscriber Rules</b> found"
   notification:
-    send_test_success: "Test Send Successfully"
+    send_specific_in_progress: "Send Specific is in Progress"
+    send_all_in_progress: "Send To All is in Progress"
 
   pincode_sender:
     sms:

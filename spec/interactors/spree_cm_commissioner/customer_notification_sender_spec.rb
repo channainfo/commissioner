@@ -62,14 +62,14 @@ RSpec.describe SpreeCmCommissioner::CustomerNotificationSender do
     end
   end
 
-  describe '#users_not_recieved_notifications' do
+  describe '#users_not_received_notifications' do
     it 'return user_2 that has not recieved notification yet' do
       user_1 = create(:cm_user, device_tokens_count: 1)
       user_2 = create(:cm_user, device_tokens_count: 2)
 
       customer_notification = create(:customer_notification)
       alert = described_class.new(customer_notification: customer_notification)
-      users = alert.users_not_recieved_notifications
+      users = alert.users_not_received_notifications
 
       # pushed
       notification = create(
@@ -111,12 +111,12 @@ RSpec.describe SpreeCmCommissioner::CustomerNotificationSender do
       alert.send_notification
     end
 
-    it 'calls send_to_all_users if user_ids is not present' do
+    it 'calls send_to_all_users_now if user_ids is not present' do
       customer_notification = create(:customer_notification)
       alert = described_class.new(customer_notification: customer_notification)
 
       expect(alert).not_to receive(:send_to_specific_users)
-      expect(alert).to receive(:send_to_all_users)
+      expect(alert).to receive(:send_to_all_users_now)
 
       alert.send_notification
     end

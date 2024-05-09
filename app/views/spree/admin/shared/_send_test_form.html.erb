@@ -11,7 +11,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <%= form_with(url: admin_customer_notification_send_test_path(notification), method: :post, class: "send-test-form") do |f| %>
+          <%= form_with(url: admin_customer_notification_notification_sender_path(notification), method: :post, class: "send-test-form") do |f| %>
             <%= f.hidden_field :notification_id, value: notification.id %>
             <div class="form-group">
               <%= f.label :user_id, class: "text-md" %>
