@@ -16,6 +16,16 @@ module SpreeCmCommissioner
       base.scope :subscribable, -> { active.joins(:product).where(product: { subscribable: true, status: :active }) }
     end
 
+    def delivery_required?
+      return true if non_digital_ecommerce?
+
+      delivery_option == 'delivery'
+    end
+
+    def non_digital_ecommerce?
+      !digital? && ecommerce?
+    end
+
     # override
     def options_text
       @options_text ||= Spree::Variants::VisableOptionsPresenter.new(self).to_sentence

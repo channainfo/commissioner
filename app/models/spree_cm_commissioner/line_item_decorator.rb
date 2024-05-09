@@ -23,7 +23,7 @@ module SpreeCmCommissioner
       base.whitelisted_ransackable_associations |= %w[guests]
       base.whitelisted_ransackable_attributes |= %w[to_date from_date]
 
-      delegate :kyc?, to: :product
+      base.delegate :delivery_required?, to: :variant
 
       base.accepts_nested_attributes_for :guests, allow_destroy: true
 

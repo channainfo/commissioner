@@ -18,6 +18,12 @@ FactoryBot.define do
       presentation { 'payment-option' }
     end
 
+    trait :delivery_option do
+      attr_type { 'delivery_type' }
+      name { 'delivery-option' }
+      presentation { 'Delivery option' }
+    end
+
     trait :adults do
       attr_type { 'integer' }
       name { 'adults' }
