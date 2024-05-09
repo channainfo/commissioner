@@ -17,6 +17,8 @@ module SpreeCmCommissioner
     def send_notification
       if user_ids.present?
         send_to_specific_users(user_ids)
+      elsif user_ids.blank?
+        send_to_all_users_now
       else
         send_to_all_users
       end
@@ -30,7 +32,13 @@ module SpreeCmCommissioner
     end
 
     def send_to_all_users
-      users_not_recieved_notifications.find_each do |user|
+      users_not_received_notifications.find_each do |user|
+        deliver_notification_to_user(user)
+      end
+    end
+
+    def send_to_all_users_now
+      end_users.find_each do |user|
         deliver_notification_to_user(user)
       end
     end
@@ -42,7 +50,7 @@ module SpreeCmCommissioner
       )
     end
 
-    def users_not_recieved_notifications
+    def users_not_received_notifications
       end_users.where(cm_notifications: { id: nil })
     end
 

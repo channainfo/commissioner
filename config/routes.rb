@@ -54,7 +54,7 @@ Spree::Core::Engine.add_routes do
     end
 
     resources :customer_notifications do
-      post :send_test
+      post :notification_sender
       resources :feature_images do
         collection do
           post :update_positions
