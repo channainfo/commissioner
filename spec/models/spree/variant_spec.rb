@@ -202,4 +202,76 @@ RSpec.describe Spree::Variant, type: :model do
       end
     end
   end
+
+  describe '#delivery_required?' do
+    context 'when non_digital ecommerce? is true' do
+      let(:product) { create(:product, product_type: :ecommerce) }
+      subject { create(:variant, product: product) }
+
+      it 'returns true' do
+        expect(subject.non_digital_ecommerce?).to be true
+        expect(subject.delivery_required?).to be true
+      end
+    end
+
+    context 'when non_digital_ecommerce? is false' do
+      let(:product) { create(:product, product_type: :ecommerce, option_types: [option_type]) }
+      let(:option_type) { create(:cm_option_type, :delivery_option) }
+
+      subject { build(:variant, product: product, digitals: [create(:digital)], option_values: [option_value]) }
+
+      context 'when deliver option is "delivery"' do
+        let(:option_value) { create(:option_value, name: 'delivery', presentation: 'delivery', option_type: option_type) }
+
+        it 'returns true' do
+          expect(subject.non_digital_ecommerce?).to be false
+          expect(subject.delivery_required?).to be true
+        end
+      end
+
+      context 'when deliver option is "pickup"' do
+        let(:option_value) { create(:option_value, name: 'pickup', presentation: 'pickup', option_type: option_type) }
+
+        it 'returns false' do
+          expect(subject.non_digital_ecommerce?).to be false
+          expect(subject.delivery_required?).to be false
+        end
+      end
+    end
+  end
+
+  describe '#non_digital_ecommerce?' do
+    context 'when digital? is false and ecommerce? is true' do
+      let(:product) { create(:product, product_type: :ecommerce) }
+      subject { build(:variant, product: product, digitals: []) }
+
+      it 'returns true' do
+        expect(subject.digital?).to be false
+        expect(subject.ecommerce?).to be true
+        expect(subject.non_digital_ecommerce?).to be true
+      end
+    end
+
+    context 'when digital? is true' do
+      let(:product) { create(:product, product_type: :ecommerce) }
+      subject { build(:variant, product: product, digitals: [create(:digital)]) }
+
+      it 'returns false even variant is ecommerce' do
+        expect(subject.ecommerce?).to be true
+        expect(subject.digital?).to be true
+        expect(subject.non_digital_ecommerce?).to be false
+      end
+    end
+
+    context 'when ecommerce? is false' do
+      let(:product) { create(:product, product_type: :service) }
+      subject { build(:variant, product: product, digitals: []) }
+
+      it 'returns false event variant is not digital' do
+        expect(subject.ecommerce?).to be false
+        expect(subject.digital?).to be false
+        expect(subject.non_digital_ecommerce?).to be false
+      end
+    end
+  end
 end
