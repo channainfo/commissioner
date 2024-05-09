@@ -7,6 +7,8 @@ module Spree
                           :reminder, :started_at, :delivery_option,
                           :number_of_guests, :max_quantity_per_order
 
+          base.attribute :delivery_required, &:delivery_required?
+
           base.has_many :stock_locations
         end
       end

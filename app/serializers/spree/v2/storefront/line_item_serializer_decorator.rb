@@ -7,9 +7,11 @@ module Spree
                           :kyc, :kyc_fields, :remaining_total_guests, :number_of_guests,
                           :completion_steps
 
+          base.attribute :delivery_required, &:delivery_required?
+
           base.has_one :vendor
 
-          base.belongs_to :order, serializer: Spree::V2::Storefront::LineItemOrderSerializer
+          base.belongs_to :order, serializer: Spree::V2::Storefront::OrderSerializer
 
           base.has_many :guests, serializer: SpreeCmCommissioner::V2::Storefront::GuestSerializer
 
