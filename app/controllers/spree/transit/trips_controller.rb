@@ -16,6 +16,7 @@ module Spree
       end
 
       def edit
+        @trip_stops = @trip.trip_stops.sort_by(&:sequence)
         @boarding_stops = @trip.trip_stops.boarding.to_a.pluck(:stop_id)
         @drop_off_stops = @trip.trip_stops.drop_off.to_a.pluck(:stop_id)
       end
