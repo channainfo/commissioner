@@ -28,4 +28,14 @@ RSpec.describe SpreeCmCommissioner::UserAuthenticator do
                                                   )
     end
   end
+
+  context 'when user has two factor authentication enabled' do
+    it 'raise two_factor_required exception' do
+      user.update(opt_required_for_login: true)
+
+      params = { grant_type: 'password', username: user.email, password: user.password }
+
+      expect { described_class.call!(params) }.to raise_error(Doorkeeper::Errors::TwoFactorRequiredError)
+    end
+  end
 end

@@ -1,3 +1,5 @@
+require 'doorkeeper/errors/two_factor_required_error'
+
 # In case we need to raise exception.
 module SpreeCmCommissioner
   class UserAuthenticator
@@ -7,7 +9,12 @@ module SpreeCmCommissioner
       context = auth_context(params)
       raise exception(context.message) unless context.success?
 
-      context.user
+      if context.user.opt_required_for_login
+        SpreeCmCommissioner::TwoFactorPinCodeGenerator.call(user: context.user)
+        raise Doorkeeper::Errors::TwoFactorRequiredError
+      else
+        context.user
+      end
     end
 
     def self.auth_context(params)

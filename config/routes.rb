@@ -311,6 +311,7 @@ Spree::Core::Engine.add_routes do
         resource :user_contacts, only: [:update]
         resource :reset_passwords, only: [:update]
         resource :user_registration_with_pin_codes, only: [:create]
+        resource :user_login_with_pin_codes, only: [:create]
         resources :user_device_token_registrations, only: %i[create destroy]
         resources :user_account_linkages, only: %i[index create destroy]
         resources :pin_code_generators, only: [:create]
