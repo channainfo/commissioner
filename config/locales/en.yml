@@ -376,6 +376,7 @@ en:
       confirmation_code: "confirmation code"
       update_user_login: "update user code"
       contact_update: "update contact code"
+      otp_code: "OTP code"
 
   notifications:
     spree_cm_commissioner:

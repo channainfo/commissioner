@@ -313,6 +313,8 @@ Spree::Core::Engine.add_routes do
         resource :user_registration_with_pin_codes, only: [:create]
         resources :user_device_token_registrations, only: %i[create destroy]
         resources :user_account_linkages, only: %i[index create destroy]
+        resources :pin_code_otp_generators, only: [:create]
+        resource :pin_code_otp_checkers, only: [:update]
         resources :pin_code_generators, only: [:create]
         resource :pin_code_checkers, only: [:update]
 

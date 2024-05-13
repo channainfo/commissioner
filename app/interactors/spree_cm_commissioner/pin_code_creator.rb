@@ -16,17 +16,17 @@ module SpreeCmCommissioner
     private
 
     def set_contact
-      if context.phone_number.present?
+      if context.email.present?
+        context.fail!(message: I18n.t('pincode_creator.invalid_email_address')) if context.email !~ Devise.email_regexp
+        context.contact = context.email
+        context.contact_type = :email
+      else
         country_code = context.country_code || 'kh'
         phone_parser = Phonelib.parse(context.phone_number, country_code)
         context.fail!(message: I18n.t('pincode_creator.invalid_phone_number')) unless phone_parser.valid?
 
         context.contact = phone_parser.international.gsub!(/[() -]/, '')
         context.contact_type = :phone_number
-      else
-        context.fail!(message: I18n.t('pincode_creator.invalid_email_address')) if context.email !~ Devise.email_regexp
-        context.contact = context.email
-        context.contact_type = :email
       end
     end
   end

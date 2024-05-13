@@ -129,7 +129,8 @@ module SpreeCmCommissioner
         'SpreeCmCommissioner::PinCodeRegistration' => I18n.t('pincode.readable_type.registration_code'),
         'SpreeCmCommissioner::PinCodeMobileConfirm' => I18n.t('pincode.readable_type.confirmation_code'),
         'SpreeCmCommissioner::PinCodeUpdateUserLogin' => I18n.t('pincode.readable_type.update_user_login'),
-        'SpreeCmCommissioner::PinCodeEmailConfirm' => I18n.t('pincode.readable_type.confirmation_code')
+        'SpreeCmCommissioner::PinCodeEmailConfirm' => I18n.t('pincode.readable_type.confirmation_code'),
+        'SpreeCmCommissioner::OtpCode' => I18n.t('pincode.readable_type.otp_code')
       }
     end
 
