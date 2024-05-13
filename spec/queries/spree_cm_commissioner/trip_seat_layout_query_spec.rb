@@ -172,7 +172,7 @@ let!(:tomorrow) {today + 1.day}
             layer[:rows].each do |row|
               row_display = row[:columns].map do |seat|
                 if seat[:seat_type] == "normal"
-                  seat[:seat_id].nil? ? " #{seat[:label]}" : "x#{seat[:label]}"
+                  !seat[:is_occupied] ? " #{seat[:label]}" : "x#{seat[:label]}"
                 else
                   seat[:seat_type] == "driver" ? "D   " : " - "
                 end
@@ -201,7 +201,7 @@ let!(:tomorrow) {today + 1.day}
             layer[:rows].each do |row|
               row_display = row[:columns].map do |seat|
                 if seat[:seat_type] == "normal"
-                  seat[:seat_id].nil? ? " #{seat[:label]}" : "x#{seat[:label]}"
+                  !seat[:is_occupied] ? " #{seat[:label]}" : "x#{seat[:label]}"
                 else
                   seat[:seat_type] == "driver" ? "D   " : " - "
                 end
@@ -242,7 +242,7 @@ let!(:tomorrow) {today + 1.day}
             layer[:rows].each do |row|
               row_display = row[:columns].map do |seat|
                 if seat[:seat_type] == "normal"
-                  seat[:seat_id].nil? ? " #{seat[:label]}" : "x#{seat[:label]}"
+                  !seat[:is_occupied] ? " #{seat[:label]}" : "x#{seat[:label]}"
                 else
                   seat[:seat_type] == "driver" ? "D   " : " - "
                 end

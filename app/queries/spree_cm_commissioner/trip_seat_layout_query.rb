@@ -18,6 +18,7 @@ module SpreeCmCommissioner
                                                       total_seats: vehicle.number_of_seats,
                                                       remaining_seats: remaining_seats,
                                                       allow_seat_selection: allow_seat_selection,
+                                                      vehicle_type_id: vehicle_type.id,
                                                       layers: layers
                                                     }
       )
@@ -42,10 +43,8 @@ module SpreeCmCommissioner
                   {
                     number: seat.column,
                     label: seat.label,
-                    seat_type: seat.seat_type,
-                    created_at: seat.created_at.iso8601, # Formatting datetime to ISO 8601 string
-                    seat_id: seat.seat_id,
-                    vehicle_type_id: seat.vehicle_type_id
+                    seat_type: seat.seat_type, # Formatting datetime to ISO 8601 string
+                    is_occupied: seat.seat_id.present?
                   }
                 end
               }
