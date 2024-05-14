@@ -14,8 +14,8 @@
           <%= form_with(url: admin_customer_notification_notification_sender_path(notification), method: :post, class: "send-test-form") do |f| %>
             <%= f.hidden_field :notification_id, value: notification.id %>
             <div class="form-group">
-              <%= f.label :user_id, class: "text-md" %>
-              <%= f.select :user_ids, options_from_collection_for_select(users, :id, :first_name), { }, { multiple: true, class: "select2 form-control", 'data-dropdown-parent' => "#sendTestModal#{notification.id}" } %>
+              <%= f.label :user_ids, "Select Users", class: "text-md" %>
+              <%= f.select :user_ids, options_from_collection_for_select(users, :id, :display_name), { }, { id: "select2-#{notification.id}", multiple: true, class: "select2 form-control", 'data-dropdown-parent' => "#sendTestModal#{notification.id}" } %>
             </div>
             <%= f.submit "Send", class: "btn btn-primary" %>
           <% end %>
@@ -25,4 +25,15 @@
   </div>
 </div>
 
-
+<!-- Re-Initialize Select2 for this select element when the modal is shown. -->
+<script>
+  $(document).on('shown.bs.modal', function (event) {
+    var modal = $(event.target);
+    var select = modal.find('.select2');
+    if (!select.data('select2')) {
+      select.select2({
+        dropdownParent: modal.find('.modal-content')
+      });
+    }
+  });
+</script>
