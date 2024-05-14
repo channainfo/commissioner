@@ -48,6 +48,15 @@ module SpreeCmCommissioner
       [first_name, last_name].compact_blank.join(' ')
     end
 
+    def display_name
+      return full_name if full_name.present?
+      return first_name if first_name.present?
+      return last_name if last_name.present?
+      return email if email.present?
+
+      phone_number
+    end
+
     def ensure_unique_database_delivery_method(attributes)
       recipient = self
 
