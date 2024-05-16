@@ -4,7 +4,7 @@
 
 <% content_for :sidebar do %>
   <div data-hook="billing_customer_filter">
-    <%= search_form_for [:billing, @search], url: spree.active_subscribers_billing_report_path do |f| %>
+    <%= search_form_for [:billing, @search], url: spree.active_subscribers_billing_reports_path do |f| %>
       <div class="form-group">
         <%= f.label :first_name_or_last_name_cont, I18n.t(:customer_name, scope: 'activerecord.attributes.spree/order') %>
         <%= f.text_field :first_name_or_last_name_cont, placeholder: I18n.t(:customer_name, scope: 'activerecord.attributes.spree/order'), class: "form-control js-quick-search-target js-filterable" %>

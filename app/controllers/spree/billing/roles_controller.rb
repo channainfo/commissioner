@@ -58,7 +58,7 @@ module Spree
 
       def include_permission_hashes
         @include_permission_hashes ||= {
-          'spree/billing/report' => %w[show],
+          'spree/billing/reports' => %w[index],
           'spree/billing/orders' => %w[index create new edit show update destroy],
           'spree/billing/users' => %w[index create new edit show update destroy],
           'spree/billing/subscriptions' => %w[index create new edit show update destroy],
