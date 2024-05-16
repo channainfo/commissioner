@@ -24,6 +24,10 @@
         <div class="form-group">
           <%= f.date_field :created_at_lteq, class: 'form-control js-quick-search-target js-filterable end-datepicker', data: {behavior: 'datepicker', format: 'yyyy-mm-dd'}, placeholder: 'Select Date' %>
         </div>
+        <div class="form-group">
+          <%= f.label :invoice_invoice_issued_date_not_null, I18n.t(:show_invoices, scope: 'activerecord.attributes.spree/order') %>
+          <%= f.select :invoice_invoice_issued_date_not_null, options_for_select([['All', 'all'], ['Printed', true], ['Not Printed', false]]), { include_blank: false }, { class: 'select2-clear js-filterable' } %>
+        </div>
         <div class="form-actions">
           <%= button Spree.t(:search), 'search.svg', nil, { class: 'btn-outline-primary' } %>
         </div>
