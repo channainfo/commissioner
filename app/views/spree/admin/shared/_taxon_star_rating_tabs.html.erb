@@ -1,0 +1,20 @@
+<div class ="w-25">
+  <ul class="nav flex-row nav-pills">
+    <%= content_tag :li, class: 'nav-item' do %>
+      <%= link_to_with_icon 'star-half.svg',
+        Spree.t(:sub_rating),
+        admin_product_taxon_star_ratings_path(kind: :sub_rating),
+        class: "nav-link #{'active' if current == 'sub_rating'}" %>
+    <% end %>
+
+    <%= content_tag :li, class: 'nav-item' do %>
+      <%= link_to_with_icon 'hand-index.svg',
+        Spree.t(:selection),
+        admin_product_taxon_star_ratings_path(kind: :selection),
+        class: "nav-link #{'active' if current == 'selection'}" %>
+    <% end %>
+  <ul>
+</div>
+
+
+
