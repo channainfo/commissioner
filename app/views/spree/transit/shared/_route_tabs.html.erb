@@ -9,11 +9,17 @@
       Spree.t(:route),
       edit_transit_route_path(@product),
       class: "nav-link #{'active' if current == :route}" %>
-  <% end if can?(:admin, Spree::Image) && !@product.deleted? %>
+  <% end %>
   <%= content_tag :li, class: 'nav-item' do %>
     <%= link_to_with_icon 'edit.svg',
       Spree.t(:trip),
       (@product.trip ? edit_transit_route_trip_path(@product, @product.trip) : new_transit_route_trip_path(@product)),
       class: "nav-link #{'active' if current == :trip}" %>
-  <% end if can?(:admin, Spree::Image) && !@product.deleted? %>
+  <% end %>
+  <%= content_tag :li, class: 'nav-item' do %>
+    <%= link_to_with_icon 'edit.svg',
+      Spree.t(:trip_stops),
+      (@product.trip && transit_route_trip_trip_stops_path(@product, @product.trip)),
+      class: "nav-link #{'active' if current == :trip_stop} #{'disabled' if !@product.trip } "%>
+  <% end %>
 <% end %>

@@ -171,7 +171,11 @@ Spree::Core::Engine.add_routes do
     resources :branches
     resources :stops
     resources :routes do
-      resources :trips
+      resources :trips do
+        resources :trip_stops do
+          post :update_sequences, on: :collection
+        end
+      end
     end
     resources :places
     resource :amenity, only: %i[new create edit update]

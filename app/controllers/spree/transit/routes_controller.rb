@@ -1,7 +1,7 @@
 module Spree
   module Transit
     class RoutesController < Spree::Transit::BaseController
-      before_action :load_data, expect: :index
+      before_action :load_data
 
       def scope
         current_vendor.products.where(product_type: :transit)
@@ -12,6 +12,7 @@ module Spree
       end
 
       def load_data
+        @product ||= model_class.find_by(id: params[:id])
         @option_types = OptionType.order(:name)
         @shipping_categories = ShippingCategory.order(:name)
         @selected_option_type_ids = Spree::OptionType.where(name: %w[origin destination]).ids
