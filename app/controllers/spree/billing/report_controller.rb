@@ -11,17 +11,17 @@ module Spree
         set_date_range_from_period
         @revenue_totals ||= revenue_report_query.reports_with_overdues
         @search = searcher.ransack(params[:q])
-        @orders = @search.result.page(page).per(per_page)
+        @orders = @search.result.includes(:line_items).page(page).per(per_page)
       end
 
       def paid
         @search = Spree::Order.subscription.ransack(SpreeCmCommissioner::OrderParamsChecker.process_paid_params(params))
-        @orders = @search.result.where(payment_state: 'paid').page(page).per(per_page)
+        @orders = @search.result.includes(:line_items).where(payment_state: 'paid').page(page).per(per_page)
       end
 
       def balance_due
         @search = Spree::Order.subscription.ransack(SpreeCmCommissioner::OrderParamsChecker.process_balance_due_params(params))
-        @orders = @search.result.where(payment_state: 'balance_due').page(page).per(per_page)
+        @orders = @search.result.includes(:line_items).where(payment_state: 'balance_due').page(page).per(per_page)
       end
 
       def overdue
@@ -37,8 +37,8 @@ module Spree
       end
 
       def active_subscribers
-        @search = SpreeCmCommissioner::Customer.where('active_subscriptions_count > ?', 0).ransack(params[:q])
-        @customers = @search.result.page(page).per(per_page)
+        @search = SpreeCmCommissioner::Customer.joins(:taxons).where('active_subscriptions_count > ?', 0).ransack(params[:q])
+        @customers = @search.result.includes(:subscriptions, :taxons).page(page).per(per_page)
       end
 
       def set_date_range_from_period
