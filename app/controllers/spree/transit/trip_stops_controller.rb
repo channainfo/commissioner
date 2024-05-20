@@ -12,7 +12,7 @@ module Spree
 
       def update_sequences
         ApplicationRecord.transaction do
-          params[:sequences].each do |id, index|
+          params[:positions].each do |id, index|
             SpreeCmCommissioner::TripStop.where(id: id).update(sequence: index)
           end
         end

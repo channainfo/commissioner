@@ -21,7 +21,7 @@ RSpec.describe Spree::LineItem, type: :model do
       let(:product) { create(:cm_accommodation_product, price: BigDecimal('10.0'), permanent_stock: 4) }
       let(:line_item) { create(:line_item, price: BigDecimal('10.0'), quantity: 2, product: product, from_date: '2023-01-10'.to_date, to_date: '2023-01-13'.to_date) }
 
-      it 'caculate amount base on price, quantity & number of nights' do
+      it 'calculate amount base on price, quantity & number of nights' do
         expect(line_item.amount).to eq BigDecimal('60.0') # 10.0 * 2 * 3 nights
       end
     end
