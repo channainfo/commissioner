@@ -316,6 +316,7 @@ en:
         taxon: "Taxon"
         quantity: "Quantity"
         amount: "Amount"
+        show_invoices: "Show Invoices"
       spree/report:
         cashier: "Cashier"
     errors:
