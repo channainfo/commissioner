@@ -16,7 +16,7 @@ module Spree
       # print_invoice_date_billing_order_invoice_path => /spree/orders/:order_id/invoice/print_invoice_date
       # method to record the date when the invoice was printed
       def print_invoice_date
-        order.invoice.update(invoice_issued_date: Time.zone.now)
+        @order.invoice.update(invoice_issued_date: Time.zone.now)
       end
 
       # @overrided

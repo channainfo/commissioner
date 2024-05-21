@@ -7,7 +7,7 @@
 <% end %>
 
 <% content_for :page_actions do %>
-  <%= link_to Spree.t(:print), spree.print_all_invoices_billing_report_path, method: :put, class: 'btn btn-success mb-3 print-all-invoices'%>
+  <%= link_to Spree.t(:print_all), spree.print_all_invoices_billing_report_path, method: :put, class: 'btn btn-success mb-3 print-all-invoices'%>
 <% end %>
 
 <div id="invoice-container" class="flex align-items-center w-100 mt-3 invoice-container"></div>
@@ -86,6 +86,9 @@
                 </span>
               <% end %>
             </td>
+            <td class="print-button">
+              <%= link_to Spree.t(:print), spree.print_invoice_date_billing_order_invoice_path(order), method: :put, class: 'btn btn-success mb-3 print-invoice', data: { order_id: order.id, invoice_url: billing_order_invoice_path(order) } %>
+            </td>
           </tr>
         <% end %>
       </tbody>
@@ -112,6 +115,35 @@
         }, timeout = 6000);
       }
     );
+
+    $('.print-invoice').click(
+      function() {
+        clearDiv();
+        var invoiceUrl = $(this).data('invoice-url');
+        getInvoice(invoiceUrl);
+        setTimeout(() => {
+          printInvoices();
+        }, timeout = 3000);
+        setTimeout(() => {
+          window.location.reload();
+        }, timeout = 6000);
+      }
+    );
+
+    function getInvoice(invoiceUrl) {
+      $.ajax({
+        url: invoiceUrl,
+        method: 'GET',
+        dataType: 'html',
+        success: function(data) {
+          var printAreaContent = $(data).find('.invoice-content').html();
+          $('#invoice-container').append('<div class="invoice-content card p-5 invoice-content"><div style="page-break-after: always;">' + printAreaContent + '</div><div class="page-break"></div></div><br>');
+        },
+        error: function(xhr, status, error) {
+          console.error('AJAX request failed:', status, error);
+        }
+      });
+    }
 
     function printInvoices() {
       window.print();
