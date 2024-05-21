@@ -12,7 +12,7 @@
     <% end %>
     <%= f.field_container :vehicle_type do %>
       <%= f.label :vehicle_type, Spree.t("transit.vehicle_type") %>
-      <%= f.collection_select(:vehicle_type_id, SpreeCmCommissioner::VehicleType.where(status: 'active'), :id, :name, { prompt: "Select a Vehicle Type" }, { class: 'form-control select2' }) %>
+      <%= f.collection_select(:vehicle_type_id, current_vendor.vehicle_types.where(status: 'active'), :id, :name, { prompt: "Select a Vehicle Type" }, { class: 'form-control select2' }) %>
       <%= f.error_message_on :vehicle_type %>
     <% end %>
   </div>
