@@ -22,8 +22,8 @@
 
       <div class="col-12 col-lg-6">
         <div class="form-group">
-          <%= f.label :taxon_permalink_cont, I18n.t(:taxon, scope: 'activerecord.attributes.spree/order') %>
-          <%= f.select :taxon_permalink_cont, Spree::Taxon.all.map{|s| [s.name, s.permalink]}, {include_blank: true}, class: 'select2-clear js-filterable' %>
+          <%= f.label :customer_taxons_id_eq, I18n.t(:taxon, scope: 'activerecord.attributes.spree/order') %>
+          <%= f.collection_select(:customer_taxons_id_eq, Spree::Taxon.all.uniq, :id, :pretty_name, { include_blank: true }, { class: 'select2 form-control js-filterable' }) %>
         </div>
       </div>
 
