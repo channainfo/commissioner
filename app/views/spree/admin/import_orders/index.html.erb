@@ -3,7 +3,8 @@
 <% end %>
 
 <% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:new_import_order), new_admin_import_order_path, { class: "btn-success", icon: 'add.svg', id: 'admin_new_homepage_section' } %>
+  <%= button_link_to Spree.t(:new_import_order), new_admin_import_order_path, { class: "btn-primary", icon: 'add.svg', id: 'admin_new_homepage_section' } %>
+  <%= button_link_to Spree.t(:download_import_template), download_order_csv_template_admin_orders_path(format: 'csv'), { class: "btn btn-outline-primary", icon: 'cloud-download.svg', id: 'download_import_template' } %>
 <% end %>
 
 <% if @collection.any? %>
@@ -15,6 +16,8 @@
         <th scope="col" class="text-left"><%= Spree.t(:status) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:started_at) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:finished_at) %></th>
+        <th scope="col" class="text-left"><%= Spree.t(:created_at) %></th>
+        <th scope="col" class="text-left"><%= Spree.t(:updated_at) %></th>
       </tr>
     </thead>
     <tbody>
@@ -42,6 +45,12 @@
           </td>
           <td class="text-left">
             <%= pretty_time(import.finished_at) %>
+          </td>
+          <td class="text-left">
+            <%= pretty_time(import.created_at) %>
+          </td>
+          <td class="text-left">
+            <%= pretty_time(import.updated_at) %>
           </td>
         </tr>
       <% end %>
