@@ -14,6 +14,7 @@ module SpreeCmCommissioner
     validate :origin_and_destination_cannot_be_the_same
 
     has_many :trip_stops, class_name: 'SpreeCmCommissioner::TripStop', dependent: :destroy
+    has_many :stop_time, class_name: 'SpreeCmCommissioner::StopTime', dependent: :destroy
 
     after_create :create_trip_stops
 

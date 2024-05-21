@@ -10,6 +10,7 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
   let!(:phnom_penh) { create(:transit_place, name: 'Phnom Penh', data_type:8) }
   let!(:siem_reap) { create(:transit_place, name: 'Siem Reap', data_type:8) }
   let!(:sihanoukville) { create(:transit_place, name: 'Sihanoukville', data_type:8) }
+  let!(:kampongthom) {create(:transit_palce, name: 'Shihanoukville', data_type: 8)}
   let!(:koh_rong) {create(:transit_place, name: 'Koh Rong', data_type:8)}
   let!(:aeon2) {create(:transit_place, name: 'Aeon Mall 2', data_type:1)}
   let!(:aeon1) {create(:transit_place, name: 'Aeon Mall 1', data_type:1)}
@@ -65,6 +66,9 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
                                                 short_name:"PP-SR-10:00-6",
                                                 vendor: vet_airbus
                                                 ) }
+  let!(:phnom_penh_kampong_thom_stop_time) {create(
+    :cm_stop_time, trip_id: vet_phnom_penh_siem_reap_1.trip, vehicle_id: bus1.id
+  )}
   let!(:vet_phnom_penh_siem_reap_2) { create(:route,
                                                 trip_attributes: {
                                                   origin_id: phnom_penh.id,
