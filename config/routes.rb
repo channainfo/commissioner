@@ -280,7 +280,7 @@ Spree::Core::Engine.add_routes do
           patch :restart_checkout_flow
         end
 
-        resources :wished, only: [:show]
+        resources :wished_items
 
         resource :cart_guests, only: %i[create destroy]
         resources :cart_payment_method_groups, only: %i[index]
