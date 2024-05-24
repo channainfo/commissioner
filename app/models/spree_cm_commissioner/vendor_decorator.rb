@@ -11,6 +11,9 @@ module SpreeCmCommissioner
 
       base.before_save :generate_code, if: :code.nil?
 
+      base.has_many :operator_places, class_name: 'SpreeCmCommissioner::OperatorPlace', dependent: :destroy
+      base.has_many :trip_stops, class_name: 'SpreeCmCommissioner::TripStop', through: :operator_places
+
       base.has_many :photos, -> { order(:position) }, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorPhoto'
       base.has_many :option_values, through: :products
       base.has_many :vendor_option_types, class_name: 'SpreeCmCommissioner::VendorOptionType'
