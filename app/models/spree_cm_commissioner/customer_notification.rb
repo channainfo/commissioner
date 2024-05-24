@@ -3,6 +3,9 @@ module SpreeCmCommissioner
     has_many :notifications, as: :notificable, dependent: :destroy
     has_one :feature_image, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::FeatureImage'
 
+    has_many :notification_taxons, class_name: 'SpreeCmCommissioner::NotificationTaxon'
+    has_many :taxons, through: :notification_taxons, class_name: 'Spree::Taxon'
+
     validates :title, presence: true
     validates :url, presence: true
     validates_associated :feature_image

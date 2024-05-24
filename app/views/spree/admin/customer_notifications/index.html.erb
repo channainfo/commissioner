@@ -17,7 +17,7 @@
         <th scope="col"><%= Spree.t("customer_notification.url") %></th>
         <th scope="col"><%= Spree.t("customer_notification.created_at") %></th>
         <th scope="col"><%= Spree.t("send_to") %></th>
-        <th scope="col"><%= Spree.t("send_all")%></th>
+        <th scope="col"><%= Spree.t("send_all") %></th>
         <th scope="col" data-hook="admin_notifications_index_header_actions" class="actions"></th>
       </tr>
     </thead>
@@ -30,20 +30,20 @@
             <td><%= notification.url %></td>
             <td><%= notification.created_at %></td>
             <td>
-              <%= render partial: 'spree/admin/shared/send_test_form', locals: {notification: notification , users: @users} %>
+              <%= render partial: 'spree/admin/shared/send_test_form', locals: { notification: notification } %>
             </td>
             <td>
-              <%= render partial: 'spree/admin/shared/send_all_form', locals: {notification: notification , users: @users} %>
+              <%= render partial: 'spree/admin/shared/send_all_form', locals: { notification: notification } %>
             </td>
             <td data-hook="admin_notifications_index_row_actions">
               <span class="d-flex justify-content-end">
-                <%= link_to_edit notification, url:edit_admin_customer_notification_url(notification) , no_text: true, class: 'edit' if can?(:edit, notification) %>
+                <%= link_to_edit notification, url: edit_admin_customer_notification_url(notification), no_text: true, class: 'edit' if can?(:edit, notification) %>
                 &nbsp;
-                <%= link_to_delete notification, url:admin_customer_notification_url(notification) ,no_text: true if can?(:delete, notification) %>
+                <%= link_to_delete notification, url: admin_customer_notification_url(notification), no_text: true if can?(:delete, notification) %>
               </span>
             </td>
           </tr>
-        <% end %>
+      <% end %>
     </tbody>
   </table>
 </div>
@@ -53,3 +53,27 @@
   </div>
 <% end %>
 
+<script>
+  $(document).ready(function() {
+    $(document).on('click', '.fetch-users', function() {
+      var notificationId = $(this).data('notification-id');
+      var endpoint = $(this).data('endpoint');
+      $.ajax({
+        url: endpoint,
+        success: function(users) {
+          console.log(users);
+          var selectOptions = '';
+          users.forEach(function(user) {
+            if (user.display_name) {
+              selectOptions += '<option value="' + user.id + '">' + user.display_name + '</option>';
+            }
+          });
+          $('#select2-' + notificationId).html(selectOptions);
+        },
+        error: function() {
+          console.log('Error fetching users');
+        }
+      });
+    });
+  });
+</script>
