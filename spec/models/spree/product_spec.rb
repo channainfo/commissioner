@@ -5,13 +5,17 @@ RSpec.describe Spree::Product, type: :model do
     it { should have_many(:prices_including_master).class_name('Spree::Price').through(:variants_including_master) }
     it { should have_many(:option_values).through(:option_types) }
     it { should have_many(:variant_kind_option_types).through(:product_option_types) }
-    it { should have_many(:product_kind_option_types).through(:product_option_types) } 
-    it { should have_many(:promoted_option_types).through(:product_option_types) } 
+    it { should have_many(:product_kind_option_types).through(:product_option_types) }
+    it { should have_many(:promoted_option_types).through(:product_option_types) }
   end
 
   describe 'attributes' do
     it { should define_enum_for :product_type }
     it { expect(described_class.product_types.keys).to match(SpreeCmCommissioner::ProductType::PRODUCT_TYPES.map(&:to_s)) }
+  end
+
+  describe 'validations' do
+    it { should validate_numericality_of(:commission_rate).is_greater_than_or_equal_to(0).is_less_than_or_equal_to(100).allow_nil }
   end
 
   describe 'scope' do

@@ -1,6 +1,6 @@
 module SpreeCmCommissioner
   module ProductDecorator
-    def self.prepended(base) # rubocop:disable Metrics/AbcSize
+    def self.prepended(base) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       base.include SpreeCmCommissioner::ProductType
       base.include SpreeCmCommissioner::KycBitwise
 
@@ -43,6 +43,7 @@ module SpreeCmCommissioner
       base.scope :subscribable, -> { where(subscribable: 1) }
 
       base.validate :validate_event_taxons, if: -> { taxons.event.present? }
+      base.validates :commission_rate, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }, allow_nil: true
 
       base.whitelisted_ransackable_attributes = %w[description name slug discontinue_on status vendor_id]
     end

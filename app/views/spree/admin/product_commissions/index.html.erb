@@ -1,0 +1,48 @@
+<%= render partial: 'spree/admin/shared/vendor_tabs', locals: { current: :product_commissions } %>
+
+<%= form_tag url_for(action: :update_default_commission), class: 'form-horizontal' do %>
+  <div class="card card-body mb-3">
+    <%= label_tag 'new_exception_date_start_date', 'Default commission rate', class: 'align-items-center mr-3' %>
+    <div class="row align-items-center p-0 m-0">
+      <%= text_field_tag "vendor[commission_rate]", @parent.commission_rate, class: 'form-control col mr-3' %>
+      <%= button Spree.t('actions.save'), nil, {}, class: 'btn btn-outline-primary' %>
+    </div>
+  </div>
+<% end %>
+
+<%= form_tag url_for(action: :update_commissions), class: 'form-horizontal' do %>
+  <div class="table-responsive border rounded bg-white">
+    <div id="variant_prices-table-wrapper">
+      <table class="table">
+        <thead class="text-muted">
+          <tr>
+            <th scope="col"><%= Spree.t(:product) %></th>
+            <th scope="col"><%= Spree.t(:price) %></th>
+            <th scope="col" class="text-center"><%= Spree.t(:commission_rate) %> (%)</th>
+          </tr>
+        </thead>
+        <tbody id="variant-prices" data-hook="variant_prices_body">
+          <% @collection.each_with_index do |product, index| %>
+            <% commission = commission_for(product) %>
+            <tr>
+              <td><%= link_to product.name, edit_admin_product_path(product) %></td>
+              <td>
+                <span class="mr-1" type="button" data-toggle="popover" data-trigger="hover" data-placement="left" data-title="Merchant can received"
+                      data-content="<%= product.price %> - <%= commission %> = <%= Spree::Money.new(product.price - commission).to_s %>">
+                  <%= svg_icon name: "info-circle-fill.svg", width: '14', height: '14' %>
+                </span>
+                <%= product.display_price %>
+              </td>
+              <td>
+                <%= text_field_tag "products[#{product.id}][commission_rate]", product.commission_rate, class: 'form-control', placeholder: "Default: #{product.vendor.commission_rate}" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="form-actions mt-3 d-flex justify-content-end" data-hook="buttons">
+    <%= button Spree.t('actions.update'), 'save.svg' %>
+  </div>
+<% end %>
