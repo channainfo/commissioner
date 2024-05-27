@@ -26,6 +26,9 @@
     <ul class="nav nav-sidebar" id="sidebarBillingPlace">
       <%= tab :places, label: I18n.t('spree.billing.places'), url: billing_places_path, icon: 'geo-alt-fill.svg',selected: request.path.include?('place') %>
     </ul>
+    <ul class="nav nav-sidebar" id="sidebarBusinesses">
+      <%= tab :businesses, label: I18n.t('spree.billing.businesses'), url: billing_businesses_path, icon: 'building.svg',selected: request.path.include?('business') %>
+    </ul>
     <ul class="nav nav-sidebar" id="sidebarSetting">
       <%= billing_main_menu_tree I18n.t('spree.billing.settings'), icon: "gear-fill.svg", sub_menu:"setting", url: "#sidebar-setting" %>
     </ul>

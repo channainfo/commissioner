@@ -266,6 +266,7 @@ Spree::Core::Engine.add_routes do
       put '/switch_vendor', to: 'base#switch_vendor'
       get '/forbidden', to: 'errors#forbidden', as: :forbidden
       root to: redirect('/billing/report')
+      resources :businesses
     end
   end
 
