@@ -37,7 +37,8 @@ RSpec.describe SpreeCmCommissioner::V2::Storefront::GuestSerializer, type: :seri
         :occupation,
         :nationality,
         :id_card,
-        :check_in
+        :check_in,
+        :line_item
       )
     end
   end

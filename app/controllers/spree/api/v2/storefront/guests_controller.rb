@@ -3,10 +3,6 @@ module Spree
     module V2
       module Storefront
         class GuestsController < ::Spree::Api::V2::ResourceController
-          include Spree::Api::V2::Storefront::OrderConcern
-
-          before_action :ensure_order
-
           # override
           def model_class
             SpreeCmCommissioner::Guest
@@ -55,7 +51,7 @@ module Spree
           end
 
           def line_item
-            @line_item ||= spree_current_order.line_items.find(params[:line_item_id])
+            @line_item ||= spree_current_user.line_items.find(params[:line_item_id])
           end
 
           def guest_params

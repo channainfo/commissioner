@@ -15,6 +15,8 @@ module SpreeCmCommissioner
         has_one :id_card, serializer: Spree::V2::Storefront::IdCardSerializer
         has_one :check_in
 
+        belongs_to :line_item, serializer: Spree::V2::Storefront::LineItemSerializer
+
         # allowed_checkout updates frequently
         cache_options store: nil
       end

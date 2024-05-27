@@ -1,17 +1,13 @@
 module SpreeCmCommissioner
   module LineItemDecorator
     def self.prepended(base)
-      base.include SpreeCmCommissioner::LineItemDurationable
-      base.include SpreeCmCommissioner::LineItemsFilterScope
-      base.include SpreeCmCommissioner::LineItemGuestsConcern
-      base.include SpreeCmCommissioner::ProductDelegation
-      base.include SpreeCmCommissioner::KycBitwise
+      include_modules(base)
 
       base.belongs_to :accepter, class_name: 'Spree::User', optional: true
       base.belongs_to :rejecter, class_name: 'Spree::User', optional: true
-
       base.has_many :taxons, class_name: 'Spree::Taxon', through: :product
       base.has_many :guests, class_name: 'SpreeCmCommissioner::Guest', dependent: :destroy
+      base.has_many :pending_guests, pending_guests_query, class_name: 'SpreeCmCommissioner::Guest', dependent: :destroy
       base.has_many :product_completion_steps, class_name: 'SpreeCmCommissioner::ProductCompletionStep', through: :product
 
       base.before_save :update_vendor_id
@@ -44,6 +40,21 @@ module SpreeCmCommissioner
         Spree::LineItem.joins(:order)
                        .find_by(id: line_item_id, spree_orders: { number: order_number, token: order_token })
       end
+    end
+
+    def self.include_modules(base)
+      base.include SpreeCmCommissioner::LineItemDurationable
+      base.include SpreeCmCommissioner::LineItemsFilterScope
+      base.include SpreeCmCommissioner::LineItemGuestsConcern
+      base.include SpreeCmCommissioner::ProductDelegation
+      base.include SpreeCmCommissioner::KycBitwise
+    end
+
+    def self.pending_guests_query
+      lambda {
+        left_outer_joins(:id_card)
+          .where(upload_later: true, id_card: { front_image: nil })
+      }
     end
 
     def reservation?
