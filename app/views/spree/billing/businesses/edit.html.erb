@@ -1,0 +1,21 @@
+
+<% content_for :page_title do %>
+  <%= page_header_back_button spree.billing_businesses_path %>
+  <%= @businesses_taxonomy.name %>/
+  <%= @taxon.name %>
+<% end %>
+
+<%# Because otherwise the form would attempt to use to_param of @taxon %>
+
+
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @taxon } %>
+
+<%= form_with model: @object, url: { action: 'update'}, id: "checkbox-form" do |f| %>
+  <%= render 'form', f: f %>
+
+  <div class="form-actions" data-hook="buttons">
+    <%= button Spree.t('actions.update'), 'save.svg' %>
+    <span class="or"><%= Spree.t(:or) %></span>
+    <%= button_link_to Spree.t('actions.cancel'), billing_businesses_url(), icon: "cancel.svg" %>
+  </div>
+<% end %>

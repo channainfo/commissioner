@@ -234,6 +234,7 @@ en:
       match_any: "Some line items must from selected age group"
       match_all: "All line items must from selected age group"
     billing:
+      businesses: "Businesses"
       places: "Places"
       code: "code"
       name: "name"
