@@ -19,6 +19,14 @@ RSpec.describe Spree::Vendor, type: :model do
     it { should have_many(:auto_apply_promotions).class_name('Spree::Promotion').through(:promotion_rules).source(:promotion) }
   end
 
+  describe 'validations' do
+    subject { create(:vendor) }
+
+    it { should validate_numericality_of(:commission_rate).is_greater_than_or_equal_to(0) }
+    it { should validate_numericality_of(:commission_rate).is_less_than_or_equal_to(100) }
+    it { should validate_presence_of(:commission_rate) }
+  end
+
   describe 'attributes' do
     it { should define_enum_for :primary_product_type }
     it { expect(described_class.primary_product_types.keys).to match(SpreeCmCommissioner::ProductType::PRODUCT_TYPES.map(&:to_s)) }

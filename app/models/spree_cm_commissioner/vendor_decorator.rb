@@ -69,6 +69,8 @@ module SpreeCmCommissioner
                                                                            payment_qrcode.present? && Spree::Store.default.code.include?('billing')
                                                                          }
 
+      base.validates :commission_rate, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
+
       def base.by_vendor_id!(vendor_id)
         if vendor_id.to_s =~ /^\d+$/
           find(vendor_id)
