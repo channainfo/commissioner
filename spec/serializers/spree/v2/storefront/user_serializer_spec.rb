@@ -23,7 +23,10 @@ describe Spree::V2::Storefront::UserSerializer, type: :serializer do
         :completed_orders,
         :phone_number,
         :intel_phone_number,
-        :country_code
+        :country_code,
+        :otp_enabled,
+        :otp_email,
+        :otp_phone_number
       )
     end
 

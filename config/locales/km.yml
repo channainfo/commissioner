@@ -348,6 +348,7 @@ km:
       registration_code: "លេខកូដចុះឈ្មោះ"
       confirmation_code: "លេខកូដបញ្ជាក់"
       update_user_login: "ធ្វើបច្ចុប្បន្នភាពលេខកូដអ្នកប្រើប្រាស់"
+      otp_code: "លេខកូដ OTP"
 
   notifications:
     spree_cm_commissioner:
