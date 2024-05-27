@@ -47,7 +47,7 @@ module SpreeCmCommissioner
       return emergency_contact.present? if field == :guest_emergency_contact
       return other_organization.present? if field == :guest_organization
       return expectation.present? if field == :guest_expectation
-      return id_card.present? && id_card.allowed_checkout? if field == :guest_id_card
+      return upload_later? || (id_card.present? && id_card.allowed_checkout?) if field == :guest_id_card
 
       false
     end

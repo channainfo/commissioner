@@ -343,6 +343,7 @@ Spree::Core::Engine.add_routes do
         resources :guests, only: %i[create update show] do
           resources :id_cards
         end
+        resources :pending_line_items, only: %i[show index]
       end
 
       namespace :operator do

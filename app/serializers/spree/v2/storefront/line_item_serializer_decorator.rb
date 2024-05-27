@@ -15,6 +15,8 @@ module Spree
 
           base.has_many :guests, serializer: SpreeCmCommissioner::V2::Storefront::GuestSerializer
 
+          base.has_many :pending_guests, serializer: SpreeCmCommissioner::V2::Storefront::GuestSerializer
+
           # completion_steps updates frequently
           base.cache_options store: nil
         end
