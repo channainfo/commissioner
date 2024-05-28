@@ -16,7 +16,7 @@
       <%= f.error_message_on :last_name %>
     <% end %>
     <%= f.field_container :place_id do %>
-      <%= f.label :place_id, Spree.t(:location) %>
+      <%= f.label :place_id, Spree.t(:place) %>
       <%= f.collection_select(:place_id, SpreeCmCommissioner::Place.all, :id, :name, { include_blank: true }, { class: 'select2-clear' }) %>
       <%= f.error_message_on :location %>
     <% end %>
@@ -27,8 +27,8 @@
     <% end %>
     <%= f.hidden_field :vendor_id, value: current_vendor.id %>
     <%= f.field_container :taxons do %>
-      <%= f.label :taxon_ids, I18n.t('activerecord.attributes.spree/order.taxon') %>
-      <%= f.collection_select(:taxon_ids, Spree::Taxon.where('depth > ? ',0).order('parent_id ASC').uniq, :id, :pretty_name, { include_blank: Spree.t('match_choices.none') }, { class: 'select2', multiple: true })%>
+      <%= f.label :taxon_ids, Spree.t('businesses') %>
+      <%= f.collection_select(:taxon_ids, @businesses, :id, :name, { include_blank: Spree.t('match_choices.none') }, { class: 'select2', multiple: true })%>
       <%= f.error_message_on :taxon_ids %>
     <% end %>
   </div>
