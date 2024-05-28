@@ -25,6 +25,13 @@ Spree::Core::Engine.add_routes do
     end
 
     resources :vendors do
+      resources :product_commissions, only: [:index] do
+        collection do
+          post :update_commissions
+          post :update_default_commission
+        end
+      end
+
       resources :vendor_photos do
         collection do
           post :update_positions

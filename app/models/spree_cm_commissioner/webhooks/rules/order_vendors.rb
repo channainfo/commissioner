@@ -17,11 +17,15 @@ module SpreeCmCommissioner
         preference :match_policy, :string, default: MATCH_POLICIES.first
         preference :vendors, :array
 
+        def vendor_ids
+          preferred_vendors || []
+        end
+
         # TODO: support all match policy
         def filter(orders)
           case preferred_match_policy
           when 'any'
-            orders.joins(:line_items).where(line_items: { vendor_id: preferred_vendors })
+            orders.joins(:line_items).where(line_items: { vendor_id: vendor_ids })
           end
         end
 
@@ -30,7 +34,7 @@ module SpreeCmCommissioner
         end
 
         def matches?(webhook_payload_body, _options = {})
-          return false if preferred_vendors.empty?
+          return false if vendor_ids.empty?
 
           payload_body = JSON.parse(webhook_payload_body)
 

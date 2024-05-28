@@ -1,3 +1,7 @@
 <!-- replace "erb[silent]:contains('content_for :page_title')" closing_selector "erb[silent]:contains('end')" -->
 
 <%= render partial: 'spree/admin/shared/vendor_tabs', locals: { current: :details } %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:view_products), admin_products_url(params: { q: { vendor_id_eq: @vendor.id }}), class: "btn-outline-success", icon: 'view.svg' %>
+<% end %>
