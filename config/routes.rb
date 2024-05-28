@@ -267,6 +267,12 @@ Spree::Core::Engine.add_routes do
       get '/forbidden', to: 'errors#forbidden', as: :forbidden
       root to: redirect('/billing/report')
       resources :businesses
+      resources :option_types do
+        collection do
+          post :update_positions
+          post :update_values_positions
+        end
+      end
     end
   end
 

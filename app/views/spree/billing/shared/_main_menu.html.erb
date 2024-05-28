@@ -21,7 +21,7 @@
       <%= tab :orders, label: I18n.t('spree.billing.orders'), url: billing_orders_path, icon: 'inbox-fill.svg',selected: request.path.include?('order') %>
     </ul>
     <ul class="nav nav-sidebar" id="sidebarBillingProduct">
-      <%= tab :products, label: I18n.t('spree.billing.products'), url: billing_products_path, icon: 'tag-fill.svg' ,selected: request.path.include?('product')%>
+      <%= billing_main_menu_tree I18n.t('spree.billing.products'), icon: 'tag-fill.svg' , sub_menu:"product", url:"#sidebar-product" %>
     </ul>
     <ul class="nav nav-sidebar" id="sidebarBillingPlace">
       <%= tab :places, label: I18n.t('spree.billing.places'), url: billing_places_path, icon: 'geo-alt-fill.svg',selected: request.path.include?('place') %>
