@@ -9,6 +9,7 @@ module SpreeCmCommissioner
 
     has_many :nearby_places, class_name: 'SpreeCmCommissioner::VendorPlace', dependent: :destroy
     has_many :vendors, through: :nearby_places, source: :vendor, class_name: 'Spree::Vendor'
+    has_many :customers, class_name: 'SpreeCmCommissioner::Customer'
 
     def self.ransackable_attributes(auth_object = nil)
       super & %w[name code]
