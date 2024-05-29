@@ -1,29 +1,34 @@
 module Spree
   module Billing
-    class ReportController < Spree::Billing::BaseController
-      before_action -> { parse_date!(params[:from_date]) }, only: [:show]
-      before_action -> { parse_date!(params[:to_date]) }, only: [:show]
+    class ReportsController < Spree::Billing::BaseController
+      before_action -> { parse_date!(params[:from_date]) }, only: [:index]
+      before_action -> { parse_date!(params[:to_date]) }, only: [:index]
 
       rescue_from Date::Error, with: :redirect_to_default_params
       helper_method :permitted_report_attributes
 
-      def show
-        set_date_range_from_period
-        @revenue_totals ||= revenue_report_query.reports_with_overdues
-        @search = searcher.ransack(params[:q])
-        @orders = @search.result.includes(:line_items).page(page).per(per_page)
+      rescue_from SpreeCmCommissioner::ExceedingRangeError, with: :handle_exceeding_range
+
+      def index
+        (from_date, to_date) = date_range_for_month
+        @revenue_totals = revenue_report_query(from_date, to_date).reports_with_overdues
+        @search = searcher(from_date, to_date).ransack(params[:q])
+        @orders = @search.result.page(page).per(per_page)
       end
 
+      # GET /billing/reports/paid
       def paid
         @search = Spree::Order.subscription.ransack(SpreeCmCommissioner::OrderParamsChecker.process_paid_params(params))
         @orders = @search.result.includes(:line_items).where(payment_state: 'paid').page(page).per(per_page)
       end
 
+      # GET /billing/reports/balance_due
       def balance_due
         @search = Spree::Order.subscription.ransack(SpreeCmCommissioner::OrderParamsChecker.process_balance_due_params(params))
         @orders = @search.result.includes(:line_items).where(payment_state: 'balance_due').page(page).per(per_page)
       end
 
+      # GET /billing/reports/overdue
       def overdue
         @search = Spree::Order.subscription.joins(:line_items).where.not(payment_state: %w[paid failed])
                               .where('spree_line_items.due_date < ?', Time.zone.today)
@@ -31,38 +36,19 @@ module Spree
         @orders = @search.result.page(page).per(per_page)
       end
 
+      # GET /billing/reports/failed_orders
       def failed_orders
         @search = Spree::Order.subscription.joins(:line_items).where(payment_state: 'failed').ransack(params[:q])
         @orders = @search.result.page(page).per(per_page)
       end
 
+      # GET /billing/reports/active_subscribers
       def active_subscribers
         @search = SpreeCmCommissioner::Customer.joins(:taxons).where('active_subscriptions_count > ?', 0).ransack(params[:q])
         @customers = @search.result.includes(:subscriptions, :taxons).page(page).per(per_page)
       end
 
-      def set_date_range_from_period
-        today = Time.zone.today
-        case params[:period]
-        when 'this_month'
-          fetch_date_range_for_this_month(today)
-        when 'last_month'
-          fetch_date_range_for_last_month(today)
-        when 'this_week'
-          fetch_date_range_for_this_week(today)
-        when 'last_week'
-          fetch_date_range_for_last_week(today)
-        when 'this_quarter'
-          fetch_date_range_for_this_quarter(today)
-        when 'last_quarter'
-          fetch_date_range_for_last_quarter(today)
-        when 'this_year'
-          fetch_date_range_for_this_year(today)
-        when 'last_year'
-          fetch_date_range_for_last_year(today)
-        end
-      end
-
+      # POST /billing/reports/print_all_invoices
       def print_all_invoices
         @orders = Spree::Order.subscription.joins(:invoice).where(payment_state: 'balance_due').where(cm_invoices: { vendor_id: current_vendor.id })
 
@@ -73,63 +59,39 @@ module Spree
 
       private
 
-      def fetch_date_range_for_this_month(today)
-        params[:from_date] = today.beginning_of_month
-        params[:to_date] = today.end_of_month
+      def handle_exceeding_range
+        flash[:error] = Spree.t('billing.exceeding_date_range')
+
+        redirect_to billing_report_path
       end
 
-      def fetch_date_range_for_last_month(today)
-        last_month = today - 1.month
-        params[:from_date] = last_month.beginning_of_month
-        params[:to_date] = last_month.end_of_month
+      def date_range_for_month
+        if params[:period].present?
+          today = Time.zone.today
+          month = params[:period]
+          from_date = Time.zone.local(today.year, month.to_i, 1).beginning_of_day
+          to_date = Time.zone.local(today.year, month.to_i, 31).end_of_day
+          [from_date, to_date]
+        else
+          from_date = params[:from_date]
+          to_date = params[:to_date]
+          raise SpreeCmCommissioner::ExceedingRangeError if (to_date.to_date - from_date.to_date).to_i > 180
+        end
       end
 
-      def fetch_date_range_for_this_week(today)
-        params[:from_date] = today.beginning_of_week
-        params[:to_date] = today.end_of_week
-      end
-
-      def fetch_date_range_for_last_week(today)
-        last_week = today - 1.week
-        params[:from_date] = last_week.beginning_of_week
-        params[:to_date] = last_week.end_of_week
-      end
-
-      def fetch_date_range_for_this_quarter(today)
-        params[:from_date] = today.beginning_of_quarter
-        params[:to_date] = today.end_of_quarter
-      end
-
-      def fetch_date_range_for_last_quarter(today)
-        last_quarter = (today - 3.months).beginning_of_quarter
-        params[:from_date] = last_quarter.beginning_of_quarter
-        params[:to_date] = last_quarter.end_of_quarter
-      end
-
-      def fetch_date_range_for_this_year(today)
-        params[:from_date] = today.beginning_of_year
-        params[:to_date] = today.end_of_year
-      end
-
-      def fetch_date_range_for_last_year(today)
-        last_year = today.prev_year
-        params[:from_date] = last_year.beginning_of_year
-        params[:to_date] = last_year.end_of_year
-      end
-
-      def revenue_report_query
+      def revenue_report_query(from_date, to_date)
         SpreeCmCommissioner::SubscriptionRevenueOverviewQuery.new(
-          from_date: params[:from_date],
-          to_date: params[:to_date],
+          from_date: from_date,
+          to_date: to_date,
           vendor_id: current_vendor.id
         )
       end
 
-      def searcher
+      def searcher(from_date, to_date)
         @searcher ||= filter_with_type_params(
           SpreeCmCommissioner::SubscriptionOrdersQuery.new(
-            from_date: params[:from_date],
-            to_date: params[:to_date],
+            from_date: from_date,
+            to_date: to_date,
             vendor_id: current_vendor.id
           )
         )

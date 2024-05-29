@@ -274,6 +274,7 @@ en:
         overdue: "Overdue"
         failed: "Failed"
         unknown: "Unknown"
+      exceeding_date_range: "Exceeding Date Range, Range must be less than 6 months"
     upsupported_payment: "Unsupported event"
     exceeded_available_quantity_on_date:
       zero: "Rooms are not available on %{date}"

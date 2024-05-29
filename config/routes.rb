@@ -219,8 +219,8 @@ Spree::Core::Engine.add_routes do
 
   scope '(:locale)', locale: /#{I18n.available_locales.join('|')}/ do
     namespace :billing do
-      resource :report, only: %i[show], controller: :report do
-        member do
+      resources :reports do
+        collection do
           get :failed_orders
           get :paid
           get :balance_due
@@ -272,7 +272,7 @@ Spree::Core::Engine.add_routes do
       resources :places
       put '/switch_vendor', to: 'base#switch_vendor'
       get '/forbidden', to: 'errors#forbidden', as: :forbidden
-      root to: redirect('/billing/report')
+      root to: redirect('/billing/reports')
       resources :businesses
     end
   end
