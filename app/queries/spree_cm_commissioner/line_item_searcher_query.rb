@@ -10,13 +10,13 @@ module SpreeCmCommissioner
       if @params[:qr_data].present?
         if order_qr_data?
           order = Spree::Order.search_by_qr_data!(@params[:qr_data])
-          order.line_items
+          order.line_items.complete
         elsif line_item_qr_data?
           line_item_id = Spree::LineItem.search_by_qr_data!(@params[:qr_data]).id
-          Spree::LineItem.where(id: line_item_id)
+          Spree::LineItem.complete.where(id: line_item_id)
         else
           guest = SpreeCmCommissioner::Guest.find_by!(token: @params[:qr_data])
-          Spree::LineItem.where(id: guest.line_item_id)
+          Spree::LineItem.complete.where(id: guest.line_item_id)
         end
       elsif @params[:term].present?
         search_by_ransack
@@ -71,9 +71,9 @@ module SpreeCmCommissioner
       phone_number = @params[:phone_number]
       taxon_id = @params[:taxon_id]
 
-      guests = SpreeCmCommissioner::Guest
-               .joins(line_item: { variant: { product: { classifications: { taxon: { parent: :parent } } } } })
-               .joins(line_item: :order)
+      guests = SpreeCmCommissioner::Guest.complete
+                                         .joins(line_item: { variant: { product: { classifications: { taxon: { parent: :parent } } } } })
+                                         .joins(line_item: :order)
 
       if first_name.present? && last_name.present?
         guests = guests.where('LOWER(cm_guests.first_name) LIKE LOWER(?) AND LOWER(cm_guests.last_name) LIKE LOWER(?)',
