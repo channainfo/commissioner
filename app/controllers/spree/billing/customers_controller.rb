@@ -3,6 +3,7 @@ module Spree
     class CustomersController < Spree::Billing::BaseController
       before_action :set_vendor, if: -> { member_action? }
       before_action :load_customer, if: -> { member_action? }
+      before_action :load_bussinesses, only: %i[new edit]
 
       def collection
         return [] if current_vendor.blank?
@@ -14,6 +15,10 @@ module Spree
 
       def load_customer
         @customer = @object
+      end
+
+      def load_bussinesses
+        @businesses = Spree::Taxonomy.businesses.taxons.where('depth > ? ', 1).order('parent_id ASC').uniq
       end
 
       # @overrided
