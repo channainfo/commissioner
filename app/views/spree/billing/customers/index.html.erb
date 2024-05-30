@@ -1,5 +1,5 @@
 <% content_for :page_title do %>
-  <%= I18n.t('spree.billing.customers') %>
+  <%= I18n.t('spree.billing.customers.customers') %>
 <% end %>
 <% content_for :page_actions do %>
   <%= button_link_to Spree.t(:add_customer), new_billing_customer_path, class: "btn-success", icon: 'add.svg', id: 'admin_new_customer_link' %>

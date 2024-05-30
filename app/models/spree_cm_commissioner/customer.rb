@@ -5,11 +5,12 @@ module SpreeCmCommissioner
     before_validation :generate_sequence_number, if: -> { sequence_number.nil? || place_id_changed? }
     before_validation :assign_number, if: -> { number.nil? }
     before_validation :clone_billing_address, if: :use_billing?
+    before_validation :create_customer_user, if: -> { user_id.nil? }
 
     attr_accessor :use_billing
 
     belongs_to :vendor, class_name: 'Spree::Vendor'
-    belongs_to :user, class_name: 'Spree::User', optional: true
+    belongs_to :user, class_name: 'Spree::User', dependent: :destroy
     belongs_to :place, class_name: 'SpreeCmCommissioner::Place', optional: true
 
     belongs_to :bill_address, class_name: 'Spree::Address',
@@ -24,7 +25,7 @@ module SpreeCmCommissioner
     has_many :active_subscriptions, -> { active }, class_name: 'SpreeCmCommissioner::Subscription', dependent: :destroy
     has_many :suspended_subscriptions, -> { suspended }, class_name: 'SpreeCmCommissioner::Subscription', dependent: :destroy
 
-    has_many :orders, class_name: 'Spree::Order', through: :subscriptions
+    has_many :orders, class_name: 'Spree::Order', through: :user
     has_many :customer_taxons, class_name: 'SpreeCmCommissioner::CustomerTaxon', dependent: :destroy
     has_many :taxons, through: :customer_taxons, class_name: 'Spree::Taxon'
 
@@ -108,6 +109,17 @@ module SpreeCmCommissioner
 
       errors.add(:base, :owner_name_cant_be_blank) if last_name.blank?
       errors.add(:base, :taxon_cant_be_blank) if taxons.blank?
+    end
+
+    def create_customer_user
+      nil if user.present?
+
+      user = Spree::User.create!(
+        email: "#{SecureRandom.hex(16)}@samram.com",
+        password: SecureRandom.hex(32).to_s
+      )
+
+      update(user_id: user.id)
     end
   end
 end

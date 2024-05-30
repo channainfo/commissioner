@@ -233,6 +233,8 @@ Spree::Core::Engine.add_routes do
         resource :payment_qrcodes, only: %i[destroy]
       end
       resources :customers do
+        post 're_create_order', to: 'customers#re_create_order'
+        resources :orders
         resources :subscriptions
         resources :addresses
       end

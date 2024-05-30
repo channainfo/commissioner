@@ -1,12 +1,19 @@
+<% if @customer.present? %>
+  <% content_for :page_actions do %>
+    <%= button_link_to I18n.t('spree.billing.new_order'), billing_customer_re_create_order_path, method: :post, class: "btn-success", icon: 'add.svg' %>
+  <% end %>
+<% end %>
 <% if @subscription.present? && @customer.present? %>
   <%= render partial: 'spree/billing/shared/subscription_tabs', locals: { current: :order } %>
+<% elsif @customer.present?%>
+  <%= render partial: 'spree/billing/shared/customer_tabs', locals: { current: :orders } %>
 <% else %>
   <% content_for :page_title do %>
     <%= plural_resource_name(Spree::Order) %>
   <% end %>
 <% end %>
-<% render 'search' %>
-<% unless @search.nil? %>
+<% render 'search' unless @subscription.present? || @customer.present? %>
+<% unless @search.nil?%>
   <div class="table-responsive border rounded bg-white mb-3">
     <table class="table" id="listing_subscriptions">
       <thead class="text-muted">

@@ -15,11 +15,12 @@ module SpreeCmCommissioner
     end
 
     def find_or_create_order
-      context.order = Spree::Order.joins(:subscription).find_by(cm_subscriptions: { customer_id: subscription.customer_id })
+      customer = subscription.customer
+      context.order = customer.orders.last
 
       return if context.order
 
-      context.order = subscription.orders.create!(
+      context.order = customer.user.orders.create!(
         subscription_id: subscription.id,
         phone_number: subscription.customer.phone_number,
         user_id: subscription.customer.user_id
