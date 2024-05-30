@@ -13,6 +13,8 @@ module Spree
 
           base.belongs_to :order, serializer: Spree::V2::Storefront::OrderSerializer
 
+          base.has_one :google_wallet, serializer: SpreeCmCommissioner::V2::Storefront::GoogleWalletSerializer
+
           base.has_many :guests, serializer: SpreeCmCommissioner::V2::Storefront::GuestSerializer
 
           base.has_many :pending_guests, serializer: SpreeCmCommissioner::V2::Storefront::GuestSerializer

@@ -1,6 +1,7 @@
+# rubocop:disable Metrics/MethodLength, Metrics/AbcSize
 module SpreeCmCommissioner
   module ProductDecorator
-    def self.prepended(base) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    def self.prepended(base)
       base.include SpreeCmCommissioner::ProductType
       base.include SpreeCmCommissioner::KycBitwise
 
@@ -26,6 +27,7 @@ module SpreeCmCommissioner
       base.has_many :product_completion_steps, class_name: 'SpreeCmCommissioner::ProductCompletionStep', dependent: :destroy
 
       base.has_one :default_state, through: :vendor
+      base.has_one :google_wallet, class_name: 'SpreeCmCommissioner::GoogleWallet', dependent: :destroy
 
       base.has_many :complete_line_items, through: :classifications, source: :line_items
 
@@ -60,3 +62,4 @@ module SpreeCmCommissioner
 end
 
 Spree::Product.prepend(SpreeCmCommissioner::ProductDecorator) unless Spree::Product.included_modules.include?(SpreeCmCommissioner::ProductDecorator)
+# rubocop:enable Metrics/MethodLength, Metrics/AbcSize
