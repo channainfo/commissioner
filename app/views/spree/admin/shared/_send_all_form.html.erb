@@ -11,7 +11,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <%= form_with(url: admin_customer_notification_notification_sender_path(notification), method: :post, class: "send-all-form") do |f| %>
+          <%= form_with(url: admin_notification_sender_index_path(notification), method: :post, class: "send-all-form") do |f| %>
             <%= f.hidden_field :notification_id, value: notification.id %>
             <%= f.hidden_field :send_all, value: true %>
             <%= f.submit "Send to All", class: "btn btn-primary" %>
