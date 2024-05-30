@@ -99,6 +99,11 @@ module SpreeCmCommissioner
             .where('spree_variants.is_master = FALSE AND spree_variants.deleted_at IS NULL')
     end
 
+    def filter_subscribable_variants
+      subscribed_variant_ids = subscriptions.map(&:variant_id)
+      subscribable_variants.where.not(id: subscribed_variant_ids)
+    end
+
     def fullname
       "#{first_name} #{last_name}"
     end

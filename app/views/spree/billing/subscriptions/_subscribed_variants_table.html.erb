@@ -1,0 +1,24 @@
+<div class="table-responsive border rounded bg-white mb-3">
+  <table class="table" id="listing_subscriptions">
+    <thead class="text-muted">
+      <th><%= Spree.t(:subscribed_variants) %></th>
+      <th><%= Spree.t(:variant_quantity) %></th>
+      <th><%= Spree.t(:subscribed_date) %></th>
+    </thead>
+    <tbody>
+      <% @subscribed_variants.includes(:variant).each do |subscription| %>
+        <tr>
+          <td>
+            <li><%= subscription.variant.display_variant %></li>
+          </td>
+          <td>
+            <%= subscription.quantity %>
+          </td>
+          <td>
+            <%= subscription.start_date %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

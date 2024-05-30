@@ -3,6 +3,7 @@ module Spree
     class SubscriptionsController < Spree::Billing::BaseController
       before_action :load_customer
       before_action :load_subscription, if: -> { member_action? }
+      before_action :load_subscribed_variants, only: %i[new create]
 
       protected
 
@@ -19,6 +20,10 @@ module Spree
 
       def load_subscription
         @subscription = @object
+      end
+
+      def load_subscribed_variants
+        @subscribed_variants = customer.subscriptions
       end
 
       def customer

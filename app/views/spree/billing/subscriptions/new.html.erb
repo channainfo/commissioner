@@ -7,6 +7,10 @@
   <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
 </div>
 
+<% if @subscribed_variants.any? %>
+  <%= render partial: 'subscribed_variants_table' %>
+<% end %>
+
 <div data-hook="admin_user_new_form">
   <%= form_for @object, url: spree.billing_customer_subscriptions_path, method: :post do |f| %>
     <%= render partial: 'form', locals: { f: f } %>
