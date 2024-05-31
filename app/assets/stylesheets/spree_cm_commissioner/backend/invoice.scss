@@ -23,6 +23,10 @@
   margin: auto;
 }
 
+.vendor-logo {
+  filter: grayscale(100%);
+}
+
 @media print {
 
   body {

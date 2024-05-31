@@ -34,6 +34,7 @@
   end
   @customer_name = @customer.first_name.present? ? @customer.first_name : @customer.last_name
   @customer_phone = @customer.phone_number
+  count = 1
 %>
 
 
@@ -43,7 +44,7 @@
       <div class="header-content">
         <div class="d-flex justify-content-center">
           <strong>
-            <div class="d-flex flex-column text-primary moul ">
+            <div class="d-flex flex-column moul ">
                 <div class="ml-4">ព្រះរាជាណាចក្រកម្ពុជា</div>
                 <div>ជាតិ​​ សាសនា ព្រះមហាក្សត្រ</div>
                 <div class="tacteng font-weight-light">3</div>
@@ -51,7 +52,7 @@
           </strong>
         </div>
         <div class="d-flex justify-content-between align-items-center">
-          <div>
+          <div class="vendor-logo">
             <%= render partial: 'spree/billing/shared/vendor_logo', locals: { size: :small } %>
           </div>
           <div class="text-center flex-grow-1">
@@ -104,8 +105,8 @@
         </div>
 
       <br>
-      <table class="table table-striped mt-2">
-          <thead  class=" bg-light">
+      <table class="table mt-2 border">
+          <thead>
             <tr>
               <th scope="col">ល.រ​​​ / N</th>
               <th scope="col">បរិយាយ / Description</th>
@@ -118,7 +119,7 @@
           <tbody class="list-unstyled">
             <% @invoice.order.line_items.each do |line_item| %>
               <tr>
-                <th scope="row">1</th>
+                <th scope="row"><%= count %></th><% count += 1 %>
                 <td>
                   <ul class="list-unstyled">
                     <li> <%= line_item.variant.sku %></li>
@@ -132,7 +133,7 @@
                 <td>
                   <ul class="list-unstyled">
                     <li>
-                      <%= line_item.variant.price %>
+                      <%= Spree::Money.new(line_item.variant.price, currency: @invoice.order.line_items.first.variant.currency).to_s %>
                     </li>
                   </ul>
                 </td>
@@ -143,14 +144,14 @@
                 </td>
                 <td>
                   <ul class="list-unstyled">
-                    <li> <%= line_item.variant.price * line_item.quantity %></li>
+                    <li><%= Spree::Money.new(line_item.variant.price * line_item.quantity, currency: @invoice.order.line_items.first.variant.currency).to_s %></li>
                   </ul>
                 </td>
               </tr>
             <% end %>
               <% @order.adjustments.eligible.each do |adjustment|  %>
                 <tr>
-                  <th scope="row">2</th>
+                  <th scope="row"><%= count %></th><% count += 1 %>
                   <td>
                     <ul class="list-unstyled">
                       <li> <%= adjustment.label %></li>
@@ -158,13 +159,13 @@
                   </td>
                   <td></td>
                   <td>
-                  </td>
-                  <td>
                     <ul class="list-unstyled">
                       <li>
                         <%= adjustment.display_amount %>
                       </li>
                     </ul>
+                  </td>
+                  <td>
                   </td>
                   <td>
                     <ul class="list-unstyled">
@@ -179,7 +180,7 @@
         </table>
 
         <div class="mt-2">
-          <div class="d-flex justify-content-between align-items-center bg-primary pt-3 px-2 font-weight-bold text-white">
+          <div class="d-flex justify-content-between align-items-center pt-3 px-2 border border-dark font-weight-bold text-black">
                 <p>ទឹកប្រាក់​ត្រូវទូទាត់​​ / Total Amount due</p>
                 <p>
                   <%= @total_price %>
