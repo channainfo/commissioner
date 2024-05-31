@@ -15,23 +15,11 @@
           <%= f.error_message_on :slug %>
         <% end %>
       </div>
-      <div data-hook="admin_product_form_taxons">
+      <div data-hook="billing_product_form_taxons">
         <%= f.field_container :taxons do %>
           <%= f.label :taxon_ids, Spree.t(:taxons) %>
-          <% if can? :modify, Spree::Classification %>
-            <%= f.select :taxon_ids, options_from_collection_for_select(@product.taxons, :id, :pretty_name, @product.taxon_ids),
-                                  { include_hidden: true },
-                                    multiple: true,
-                                    data: { minimum_input_length: 0 } %>
-          <% elsif @product.taxons.any? %>
-            <ul class="text_list">
-              <% @product.taxons.each do |taxon| %>
-                <li><%= taxon.name %></li>
-              <% end %>
-            </ul>
-          <% else %>
-            <div class="alert alert-info"><%= Spree.t(:no_resource_found, resource: :taxons) %></div>
-          <% end %>
+          <%= f.collection_select(:taxon_ids, @businesses, :id, :name, { include_blank: true }, { class: 'select2', multiple: true , :id => 'billing_product_taxon_ids' } ) %>
+          <%= f.error_message_on :taxon_ids %>
         <% end %>
       </div>
       <% variant_kind_option_types = @product.variant_kind_option_types %>
