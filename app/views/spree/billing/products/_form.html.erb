@@ -17,7 +17,7 @@
       </div>
       <div data-hook="billing_product_form_taxons">
         <%= f.field_container :taxons do %>
-          <%= f.label :taxon_ids, Spree.t(:taxons) %>
+          <%= f.label :taxon_ids, I18n.t('spree.billing.businesses') %>
           <%= f.collection_select(:taxon_ids, @businesses, :id, :name, { include_blank: true }, { class: 'select2', multiple: true , :id => 'billing_product_taxon_ids' } ) %>
           <%= f.error_message_on :taxon_ids %>
         <% end %>
