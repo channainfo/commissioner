@@ -40,14 +40,25 @@ Gem::Specification.new do |s|
   s.add_dependency 'byebug'
   s.add_dependency 'font-awesome-sass', '~> 6.4.0'
   s.add_dependency 'noticed', '~> 1.6'
+
+  # s3 active storage
   s.add_dependency 'aws-sdk-s3'
+
+  # Media streaming.
+  # mediaconvert for VOD
+  # medialive for live streaming
+  # mediapackage for live streaming playback ( VOD )
+  # mediatailor for ads insertion
+  s.add_dependency 'aws-sdk-mediaconvert' # vod
+  s.add_dependency 'aws-sdk-medialive' # live streaming
+
   s.add_dependency 'simple_calendar', '~> 2.4'
   s.add_dependency 'activerecord_json_validator', '~> 2.1', '>= 2.1.3'
   s.add_dependency 'googleauth'
   s.add_dependency 'telegram-bot'
   s.add_dependency 'exception_notification'
-  s.add_dependency "rqrcode", "~> 2.0"
-  s.add_dependency "premailer-rails"
+  s.add_dependency 'rqrcode', '~> 2.0'
+  s.add_dependency 'premailer-rails'
 
   s.add_development_dependency 'pg'
   s.add_development_dependency 'spree_dev_tools'
