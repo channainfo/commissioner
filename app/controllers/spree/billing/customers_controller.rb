@@ -21,6 +21,20 @@ module Spree
         @businesses = Spree::Taxonomy.businesses.taxons.where('depth > ? ', 1).order('parent_id ASC').uniq
       end
 
+      # POST  /billing/customers/:customer_id/re_create_order
+      # billing_customer_re_create_order_path
+      def re_create_order
+        customer = model_class.find_by(id: params[:customer_id])
+        result = SpreeCmCommissioner::SubscriptionsOrderCreator.call(customer: customer)
+
+        if result.failure?
+          flash[:error] = I18n.t('spree.billing.customers.re_create_order.fails', error: result.error)
+        else
+          flash[:success] = I18n.t('spree.billing.customers.re_create_order.success', success: result.success)
+        end
+        redirect_back(fallback_location: billing_customer_orders_path(customer))
+      end
+
       # @overrided
       def model_class
         SpreeCmCommissioner::Customer

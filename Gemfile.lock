@@ -660,6 +660,8 @@ GEM
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
+    rubocop-rspec (1.42.0)
+      rubocop (>= 0.87.0)
     ruby-progressbar (1.13.0)
     ruby-vips (2.1.4)
       ffi (~> 1.12)
@@ -867,6 +869,7 @@ DEPENDENCIES
   rubocop (~> 1.45)
   rubocop-performance (~> 1.16)
   rubocop-rails (~> 2.17)
+  rubocop-rspec (~> 1.42)
   shoulda-matchers (~> 5.0)
   spree_cm_commissioner!
   spree_dev_tools!

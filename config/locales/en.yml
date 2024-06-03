@@ -234,6 +234,7 @@ en:
       match_any: "Some line items must from selected age group"
       match_all: "All line items must from selected age group"
     billing:
+      new_order: "New Order"
       businesses: "Businesses"
       places: "Places"
       code: "code"
@@ -256,7 +257,6 @@ en:
       balance_due_orders: "Balance Due Invoices"
       overdue_orders: "Overdue Invoices"
       orders: "Invoices"
-      customers: "Customers"
       roles: "Role"
       subscriptions: "Service Usage"
       active_subscription: "Active"
@@ -275,6 +275,11 @@ en:
         failed: "Failed"
         unknown: "Unknown"
       exceeding_date_range: "Exceeding Date Range, Range must be less than 6 months"
+      customers:
+        re_create_order:
+          success: "Invoice Created"
+          fails: "Invoice for this month is already exist "
+        customers: "Customers"
       service_start_date: "Service Start Date"
     upsupported_payment: "Unsupported event"
     exceeded_available_quantity_on_date:

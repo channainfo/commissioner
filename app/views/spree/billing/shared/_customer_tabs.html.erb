@@ -20,6 +20,14 @@
 <% end %>
 <% content_for :page_tabs do %>
   <li class="nav-item">
+    <%= link_to_with_icon 'tag.svg',
+      Spree.t('billing.orders'),
+      spree.billing_customer_orders_path(@customer),
+      class: "nav-link #{'active' if current == :orders}" %>
+  </li>
+<% end %>
+<% content_for :page_tabs do %>
+  <li class="nav-item">
     <%= link_to_with_icon 'pin-map.svg',
       Spree.t(:address),
       spree.billing_customer_addresses_path(@customer),

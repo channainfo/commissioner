@@ -20,10 +20,10 @@
           <% order.line_items.each do |item| %>
             <tr class="line-item" id="line-item-<%= item.id %>">
               <td class="line-item-image image text-center">
-                <%= link_to small_image(item.variant), edit_admin_product_path(item.variant.product) %>
+                <%= link_to small_image(item.variant), edit_billing_product_path(item.variant.product) %>
               </td>
               <td class="line-item-name text-center">
-                <%= link_to item.name, edit_admin_product_path(item.variant.product) %>
+                <%= link_to item.name, edit_billing_product_path(item.variant.product) %>
                 <br>
                 <%= "(#{item.options_text})" if item.options_text.present? %>
               </td>
