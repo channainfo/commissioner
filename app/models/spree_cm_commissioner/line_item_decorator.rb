@@ -157,6 +157,11 @@ module SpreeCmCommissioner
       end
     end
 
+    # override
+    def sufficient_stock?
+      SpreeCmCommissioner::Stock::LineItemAvailabilityChecker.new(self).can_supply?(quantity)
+    end
+
     private
 
     def ensure_not_exceed_max_quantity_per_order
