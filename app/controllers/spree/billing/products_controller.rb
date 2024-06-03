@@ -15,10 +15,10 @@ module Spree
       end
 
       def load_data
-        @taxons = Taxon.order(:name)
         @option_types = OptionType.order(:name)
         @tax_categories = TaxCategory.order(:name)
         @shipping_categories = ShippingCategory.order(:name)
+        @businesses = Spree::Taxonomy.businesses.taxons.where('depth > ? ', 1).order('parent_id ASC').uniq
       end
 
       # overrided

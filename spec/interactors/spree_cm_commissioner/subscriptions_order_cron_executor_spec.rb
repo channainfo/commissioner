@@ -19,11 +19,11 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCronExecutor do
   before(:each) do
     variant.stock_items.first.adjust_count_on_hand(10)
 
-    customer = create(:cm_customer, vendor: vendor, phone_number: "0962200288", user: user)
+    customer = create(:cm_customer, vendor: vendor, phone_number: "0962200288")
     vendor.reload
-    customer2 = create(:cm_customer, vendor: vendor, phone_number: "0972200288", user: user)
+    customer2 = create(:cm_customer, vendor: vendor, phone_number: "0972200288")
     vendor.reload
-    customer3 = create(:cm_customer, vendor: vendor, phone_number: "0982200288", user: user)
+    customer3 = create(:cm_customer, vendor: vendor, phone_number: "0982200288")
     vendor.reload
 
     subscription1 = SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: '2021-01-01', customer: customer)

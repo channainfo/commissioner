@@ -280,6 +280,7 @@ en:
           success: "Invoice Created"
           fails: "Invoice for this month is already exist "
         customers: "Customers"
+      service_start_date: "Service Start Date"
     upsupported_payment: "Unsupported event"
     exceeded_available_quantity_on_date:
       zero: "Rooms are not available on %{date}"

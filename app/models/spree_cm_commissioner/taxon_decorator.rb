@@ -26,6 +26,9 @@ module SpreeCmCommissioner
       base.has_many :children, class_name: 'Spree::Taxon', foreign_key: :parent_id, dependent: :destroy
       base.has_many :children_classifications, through: :children, source: :classifications, class_name: 'Spree::Classification'
 
+      base.has_many :notification_taxons, class_name: 'SpreeCmCommissioner::NotificationTaxon'
+      base.has_many :customer_notifications, through: :notification_taxons, class_name: 'SpreeCmCommissioner::CustomerNotification'
+
       base.validates_associated :category_icon
       base.before_save :set_kind
       base.before_save :set_slug

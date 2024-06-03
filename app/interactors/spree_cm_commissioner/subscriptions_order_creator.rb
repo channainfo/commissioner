@@ -13,6 +13,7 @@ module SpreeCmCommissioner
 
         context.new_order.create_default_payment_if_eligble
         context.new_order.reload
+        context.customer.reload
       end
     end
 
@@ -20,6 +21,7 @@ module SpreeCmCommissioner
       active_subscriptions = context.customer.active_subscriptions
       return if active_subscriptions.blank?
 
+      today = Time.zone.today
       context.new_order = customer.user.orders.create!(
         subscription_id: active_subscriptions.first.id,
         phone_number: context.customer.phone_number,
@@ -32,8 +34,8 @@ module SpreeCmCommissioner
           variant: subscription.variant,
           quantity: subscription.quantity,
           options: {
-            from_date: Time.zone.today,
-            to_date: Time.zone.today + 1.month
+            from_date: today,
+            to_date: today + 1.month
           }
         )
       end
