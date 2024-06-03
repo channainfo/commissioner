@@ -1,7 +1,7 @@
 <div class="rounded border">
   <table class="table table-borderless admin-report" data-hook="sales_total">
     <thead class="text-muted">
-      <tr>
+      <tr class='text-center'>
         <% @revenue_totals.each_with_index do |hash, index| %>
           <% label = Spree.t("billing.payment_state.#{hash[:state].presence || :unknown}").to_s %>
           <% label += " (#{hash[:orders_count]})" if hash[:orders_count] != 0 %>
@@ -22,7 +22,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
+      <tr class="text-center" style="font-size: 22px;">
         <% @revenue_totals.each_with_index do |hash, index| %>
           <% classes = [] %>
           <% classes << 'bg-light' if params[:type] == hash[:state] %>
