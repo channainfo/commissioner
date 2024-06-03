@@ -80,7 +80,7 @@ module SpreeCmCommissioner
       overdue_id = query_builder.where('li.due_date < ?', Time.zone.today)
                                 .where.not("o.payment_state = 'paid' or o.payment_state = 'failed'")
                                 .where(customer_id: id).first&.id
-      return orders.where(subscription_id: overdue_id).first unless overdue_id.nil?
+      return Spree::Order.where(subscription_id: overdue_id).first unless overdue_id.nil?
 
       'none'
     end
@@ -112,8 +112,8 @@ module SpreeCmCommissioner
     def billing_customer_attributes
       return unless Spree::Store.default.code.include?('billing')
 
-      errors.add(:base, :owner_name_cant_be_blank) if last_name.blank?
-      errors.add(:base, :taxon_cant_be_blank) if taxons.blank?
+      errors.add(:base, :name_cant_be_blank) if first_name.blank? && last_name.blank?
+      errors.add(:base, :businesses_cant_be_blank) if taxons.blank?
     end
 
     def create_customer_user
