@@ -1,0 +1,106 @@
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :stock_managements } %>
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @product } %>
+
+<% if false && can?(:create, Spree::StockMovement) %>
+  <div id="add_stock_form" class="card mb-3">
+    <%= render 'add_stock_form' %>
+  </div>
+<% end %>
+
+<div class="table-responsive border rounded bg-white">
+  <table class="table" id="listing_product_stock">
+    <thead class="text-muted">
+      <tr data-hook="admin_product_stock_management_index_headers">
+        <th colspan="2"><%= Spree.t(:variant) %></th>
+        <th colspan="3"><%= Spree.t(:stock) %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @variants.each do |variant| %>
+        <tr id="<%= spree_dom_id variant %>" data-hook="admin_product_stock_management_index_rows">
+          <td class="image text-center">
+            <%= small_image(variant) %>
+          </td>
+          <td>
+            <%= variant.sku_and_options_text %>
+            <%= form_tag admin_product_variants_including_master_path(@product, variant, format: :js), method: :put, class: 'toggle_variant_track_inventory mt-2' do %>
+              <div class="checkbox">
+                <%= label_tag "track_inventory_#{ variant.id }", class: 'm-0' do %>
+                  <%= check_box_tag 'track_inventory', 1, variant.track_inventory?, class: 'track_inventory_checkbox', id: "track_inventory_#{ variant.id }" %>
+                  <%= Spree.t(:track_inventory) %>
+                  <%= hidden_field_tag 'variant[track_inventory]', variant.track_inventory?, class: 'variant_track_inventory', id: "variant_track_inventory_#{variant.id}" %>
+                <% end %>
+              </div>
+            <% end if can?(:update, @product) && can?(:update, variant) %>
+            <% if variant.permanent_stock? %>
+              <div>
+                <span type="button" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="This product stock will renew every day">
+                    <%= svg_icon name: "info-circle-fill.svg", width: '14', height: '14' %>
+                </span>
+                <%= label_tag "permanent_stock_#{ variant.id }", Spree.t(:permanent_stock) %>
+              </div>
+            <% end %>
+          </td>
+
+          <td colspan="3" class="stock_location_info">
+            <% if variant.vendor.stock_locations.any? %>
+              <div class="border rounded">
+                <table class="table mb-0">
+                  <thead class="text-muted">
+                    <th><%= Spree.t(:stock_location) %></th>
+                    <th class="text-center"><%= Spree.t(:inventory) %></th>
+                    <th class="text-center"><%= Spree.t(:modify) %> (+ / -)</th>
+                    <th class="text-center"><%= Spree.t(:backorderable) %></th>
+                    <th></th>
+                  </thead>
+                  <tbody>
+                    <% variant.vendor.stock_locations.each do |stock_location| %>
+                      <% item = variant.stock_items.find_or_initialize_by(stock_location_id: stock_location.id)  %>
+                      <tr id="stock-item-<%= item.id %>">
+                        <td><%= link_to stock_location.name, spree.edit_admin_stock_location_path(stock_location) %></td>
+                        <td class="text-center">
+                          <span><%= item.persisted? ? item.count_on_hand : 'N/A' %></span>
+                        </td>
+                        <td class="text-center d-flex flex-column align-items-center justify-content-center">
+                          <div style="width: 90px;">
+                            <%= form_tag admin_stock_items_path(variant_id: variant.id, stock_location_id: stock_location.id), method: :post do %>
+                              <div class="input-group input-group-sm">
+                                <%= number_field_tag 'stock_movement[quantity]', 0, class: 'form-control text-center p-0' %>
+                                <div class="input-group-append">
+                                  <%= button_tag(class: 'btn btn-outline-success pl-2 pr-1') do %>
+                                    <%= svg_icon(name: 'arrow-left-right.svg', classes: "icon", width: 14, height: 14) %>
+                                  <% end %>
+                                </div>
+                              </div>
+                            <% end if item.persisted? && can?(:update, item) %>
+                          </div>
+                        </td>
+                        <td class="text-center">
+                          <% if item.persisted? && can?(:update, item) %>
+                            <%= form_tag admin_stock_item_path(item), method: :put, class: 'toggle_stock_item_backorderable' do %>
+                              <%= check_box_tag 'stock_item[backorderable]', true, item.backorderable?, class: 'stock_item_backorderable', id: "stock_item_backorderable_#{stock_location.id}" %>
+                            <% end %>
+                          <% else %>
+                            <%= 'N/A' %>
+                          <% end %>
+                        </td>
+                        <td class="actions">
+                          <%= link_to_with_icon('capture.svg',
+                              Spree.t(:create),
+                              admin_stock_items_path(variant_id: variant.id, stock_location_id: stock_location.id, stock_movement: { quantity: 0 }),
+                              method: :post, class: 'icon_link btn btn-outline-primary btn-sm', no_text: true) unless item.persisted? %>
+                          <%= link_to_with_icon('delete.svg', Spree.t(:remove), [:admin, item],
+                              method: :delete, remote: false, class: 'icon_link btn btn-outline-danger btn-sm', data: { action: :remove, confirm: Spree.t(:are_you_sure) }, no_text: true) if item.persisted? %>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

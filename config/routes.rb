@@ -87,6 +87,8 @@ Spree::Core::Engine.add_routes do
         end
       end
 
+      resources :stock_managements
+
       resources :product_completion_steps do
         collection do
           post :update_positions
