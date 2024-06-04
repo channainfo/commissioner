@@ -84,6 +84,12 @@ Spree::Core::Engine.add_routes do
 
       resources :video_on_demands
 
+      resources :google_wallets do
+        member do
+          delete :remove_logo
+          delete :remove_hero_image
+        end
+      end
       resources :master_variant, only: %i[index update] do
         collection do
           patch :update

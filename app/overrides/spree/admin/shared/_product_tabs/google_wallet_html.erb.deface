@@ -1,0 +1,8 @@
+<!-- insert_after "erb[silent]:contains('Spree::Digital')" -->
+
+<%= content_tag :li, class: 'nav-item' do %>
+  <%= link_to_with_icon 'google.svg',
+    Spree.t(:google_wallet),
+    @product.google_wallet.present? ? edit_admin_product_google_wallet_url(@product, @product.google_wallet) : new_admin_product_google_wallet_url(@product),
+    class: "nav-link #{'active' if current == :google_wallet}" %>
+<% end if can?(:admin, SpreeCmCommissioner::GoogleWallet) %>
