@@ -2,13 +2,14 @@ require 'aws-sdk-mediaconvert'
 
 module SpreeCmCommissioner
   class MediaConverter
-    attr_reader :input_s3_uri_file, :output_s3_uri_path
+    attr_reader :input_s3_uri_file, :output_s3_uri_path, :allow_hd
 
     # input_s3_uri_file: s3://production-cm/media-convert/startwar.mp4
     # output_s3_uri_path: s3://production-cm/media-convert-output
-    def initialize(input_s3_uri_file, output_s3_uri_path)
+    def initialize(input_s3_uri_file, output_s3_uri_path, allow_hd: false)
       @input_s3_uri_file = input_s3_uri_file
       @output_s3_uri_path = output_s3_uri_path
+      @allow_hd = allow_hd
 
       @client = Aws::MediaConvert::Client.new(
         access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
@@ -51,23 +52,15 @@ module SpreeCmCommissioner
           }
         ],
         output_groups: [
-          # output_file,
-          output_hls,
-          output_dash
+          output_group_hls,
+          output_group_dash
         ]
       }
-
-      # @settings.deep_transform_keys! do |key|
-      #   p "key: #{key} / #{key.class}"
-      #   key.to_s.underscore.to_sym
-      # end
-
-      # p @settings
 
       @settings
     end
 
-    def output_hls
+    def output_group_hls
       # hls config
       {
         name: 'HLS Group',
@@ -80,15 +73,30 @@ module SpreeCmCommissioner
             segment_control: 'SEGMENTED_FILES'
           }
         },
-        outputs: [
-          create_output('HLS', '1280x720', 5_000_000),
-          create_output('HLS', '854x480', 3_000_000),
-          create_output('HLS', '640x360', 1_500_000)
-        ]
+        outputs: config_output_hlses
       }
     end
 
-    def output_dash
+    # protocol either: 'HLS' or DASH
+    def config_outputs(protocol)
+      result = [
+        create_output(protocol, :low),
+        create_output(protocol, :standard),
+        create_output(protocol, :medium)
+      ]
+      result << reate_output(protocol, :high) if allow_hd
+      result
+    end
+
+    def config_output_dashs
+      config_outputs('DASH')
+    end
+
+    def config_output_hlses
+      config_outputs('HLS')
+    end
+
+    def output_group_dash
       # dash config
       {
         name: 'DASH ISO Group',
@@ -102,60 +110,32 @@ module SpreeCmCommissioner
             segment_control: 'SEGMENTED_FILES'
           }
         },
-        outputs: [
-          create_output('DASH', '1280x720', 5_000_000),
-          create_output('DASH', '854x480', 3_000_000),
-          create_output('DASH', '640x360', 1_500_000)
-        ]
+        outputs: config_output_dashs
       }
     end
 
-    def output_file
-      # file config
-      {
-        name: 'File Group',
-        output_group_settings: {
-          type: 'FILE_GROUP_SETTINGS',
-          file_group_settings: {
-            destination: "#{output_s3_uri_path}/file"
-          }
-        },
-        outputs: [
-          {
-            container_settings: {
-              container: 'MP4',
-              mp_4_settings: {}
-            },
-            video_description: {
-              codec_settings: {
-                codec: 'H_264',
-                h264_settings: {
-                  rate_control_mode: 'QVBR',
-                  max_bitrate: 2048,
-                  scene_change_detect: 'TRANSITION_DETECTION',
-                  quality_tuning_level: 'SINGLE_PASS_HQ'
-                }
-              }
-            },
-            audio_descriptions: [
-              {
-                audio_type_control: 'FOLLOW_INPUT',
-                codec_settings: {
-                  codec: 'AAC',
-                  aac_settings: {
-                    bitrate: 96_000,
-                    coding_mode: 'CODING_MODE_2_0',
-                    sample_rate: 48_000
-                  }
-                }
-              }
-            ]
-          }
-        ]
+    # 1080p (1920x1080) - High quality
+    # 720p (1280x720) - Medium quality
+    # 480p (854x480) - Standard quality
+    # 360p (640x360) - Low quality
+    # 240p (426x240) - Very low quality
+    def video_qualities
+      @video_qualities ||= {
+        high: { resolution: '1920x1080', bitrate: 4500..6000, framerate: [24, 30, 60], audio_rate: 128 },
+        medium: { resolution: '1280x720', bitrate: 2500..3500, framerate: [24, 30, 60], audio_rate: 128 },
+        standard: { resolution: '854x480', bitrate: 1000..1500, framerate: [24, 30], audio_rate: 128 },
+        low: { resolution: '640x360', bitrate: 500..1000, framerate: [24, 30], audio_rate: 96 },
+        bottom: { resolution: '426x240', bitrate: 300..700, framerate: [24, 30], audio_rate: 64 }
       }
     end
 
-    def create_output(group_type, resolution, bitrate)
+    def create_output(group_type, video_quality_type)
+      video_quality = video_qualities[video_quality_type]
+      resolution = video_quality[:resolution]
+      bitrate = video_quality[:bitrate].first * 1_000
+      # max_bitrate = video_quality[:bitrate].last * 1_000
+      audio_bitrate = video_quality[:audio_rate] * 1_000
+
       name_modifier = resolution.gsub('x', '_')
 
       (width, height) = resolution.split('x').map(&:to_i)
@@ -166,14 +146,18 @@ module SpreeCmCommissioner
         codec_settings: {
           codec: 'H_264',
           h264_settings: {
-            rate_control_mode: 'CBR',
-            bitrate: bitrate,
+            # rate_control_mode: 'CBR',
+            # Use QVBR (Quality-Defined Variable Bitrate) to maintain consistent quality.
+            rate_control_mode: 'QVBR',
+            # bitrate: bitrate,
+            max_bitrate: bitrate,
             scene_change_detect: 'ENABLED',
             quality_tuning_level: 'SINGLE_PASS'
-
-            # afd_signaling: 'NONE',
-            # fixed_afd: 'AFD_0000',
-            # color_metadata: 'INSERT'
+            # qvbr_settings: {
+            #   max_average_bitrate: 1,
+            #   qvbr_quality_level: 1,
+            #   qvbr_quality_level_fine_tune: 1.0
+            # }
           }
         }
       }
@@ -183,7 +167,7 @@ module SpreeCmCommissioner
         codec_settings: {
           codec: 'AAC',
           aac_settings: {
-            bitrate: 96_000,
+            bitrate: audio_bitrate,
             coding_mode: 'CODING_MODE_2_0',
             sample_rate: 48_000
           }
