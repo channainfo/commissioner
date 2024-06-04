@@ -161,7 +161,6 @@
                   <td>
                     <ul class="list-unstyled">
                       <li>
-                        <%= adjustment.display_amount %>
                       </li>
                     </ul>
                   </td>
@@ -170,7 +169,11 @@
                   <td>
                     <ul class="list-unstyled">
                       <li>
-                        <%= adjustment.display_amount %>
+                        <% if adjustment.amount.negative?  %>
+                          <%= adjustment.display_negative_amount %>
+                        <% else %>
+                          <%= adjustment.display_amount %>
+                        <% end %>
                       </li>
                     </ul>
                   </td>

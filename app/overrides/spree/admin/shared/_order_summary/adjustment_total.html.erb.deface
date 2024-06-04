@@ -4,7 +4,12 @@
   <li class="list-group-item d-flex justify-content-between align-items-center">
     <small data-hook='admin_order_tab_adjustment_total_title'><%= Spree.t(:adjustment_total) %></small>
     <span class="state badge badge-pill text-capitalize" id='adjustment_total'>
-      <%= @order.display_adjustment_total.to_html %>
+      <% if @order.adjustment_total > 0 %>
+        <%= @order.display_adjustment_total.to_html %>
+      <% else %>
+        <%= "#{@order.adjustment_total} #{Money::Currency.find(@order.currency).symbol}" %>
+      <% end %>
     </span>
   </li>
 <% end %>
+
