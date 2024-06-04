@@ -10,17 +10,20 @@ module SpreeCmCommissioner
     end
 
     def reports_with_overdues
-      reports.concat(overdues)
-      reports.sort_by { |report| report_types.index(report[:state]) || report_types.size }
+      all_reports = reports.concat(overdues)
+      all_reports.sort_by { |report| report_types.index(report[:state]) || report_types.size }
     end
 
     def reports
-      @reports ||= Spree::Order.subscription
+      subquery ||= Spree::Order.subscription
                                .joins(:line_items)
                                .where(line_items: { vendor_id: vendor_id, from_date: from_date..to_date })
-                               .group(:payment_state)
-                               .select('payment_state AS state', *select_fields)
-                               .map { |r| r.slice(:state, :orders_count, :total, :payment_total).symbolize_keys }
+                               .select('DISTINCT ON (spree_orders.id) spree_orders.*, line_items.*')
+
+      Spree::Order.from(subquery, :orders)
+                  .group(:payment_state)
+                  .select('payment_state AS state', *select_fields)
+                  .map { |r| r.slice(:state, :orders_count, :total, :payment_total).symbolize_keys }
     end
 
     def overdues

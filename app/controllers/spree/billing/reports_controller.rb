@@ -13,7 +13,7 @@ module Spree
         (from_date, to_date) = date_range_for_month
         @revenue_totals = revenue_report_query(from_date, to_date).reports_with_overdues
         @search = searcher(from_date, to_date).ransack(params[:q])
-        @orders = @search.result.page(page).per(per_page)
+        @orders = @search.result.includes(:line_items).page(page).per(per_page)
       end
 
       # GET /billing/reports/paid
