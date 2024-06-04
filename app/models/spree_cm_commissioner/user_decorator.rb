@@ -21,6 +21,8 @@ module SpreeCmCommissioner
 
       base.whitelisted_ransackable_attributes = %w[email first_name last_name gender phone_number]
 
+      base.before_save :update_otp_enabled
+
       def base.end_users
         joins('LEFT JOIN spree_vendor_users ON spree_users.id = spree_vendor_users.user_id').where(spree_vendor_users: { user_id: nil })
       end
@@ -89,6 +91,10 @@ module SpreeCmCommissioner
       return if valid_password?(password)
 
       errors.add(:password, I18n.t('spree_user.invalid_password'))
+    end
+
+    def update_otp_enabled
+      self.otp_enabled = otp_email || otp_phone_number
     end
   end
 end
