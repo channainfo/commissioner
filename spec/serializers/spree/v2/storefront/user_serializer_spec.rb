@@ -26,7 +26,8 @@ describe Spree::V2::Storefront::UserSerializer, type: :serializer do
         :country_code,
         :otp_enabled,
         :otp_email,
-        :otp_phone_number
+        :otp_phone_number,
+        :encrypted_confirm_pin_code
       )
     end
 

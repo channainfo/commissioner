@@ -7,6 +7,8 @@ module SpreeCmCommissioner
 
       base.enum gender: %i[male female other]
 
+      base.encrypts :encrypted_confirm_pin_code
+
       base.has_many :subscriptions, through: :customer, class_name: 'SpreeCmCommissioner::Subscription'
       base.has_many :payments, as: :payable, class_name: 'Spree::Payment', dependent: :nullify
       base.has_many :role_permissions, through: :spree_roles, class_name: 'SpreeCmCommissioner::RolePermission'
