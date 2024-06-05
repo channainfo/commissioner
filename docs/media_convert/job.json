@@ -1,0 +1,258 @@
+{
+  "role": "arn:aws:iam::636758493619:role/MediaConvertRole",
+  "settings": {
+    "inputs": [
+      {
+        "file_input": "s3://production-cm/media-convert/thunder.mp4",
+        "audio_selectors": {
+          "Audio Selector 1": {
+            "default_selection": "DEFAULT"
+          }
+        },
+        "video_selector": {},
+        "timecode_source": "ZEROBASED"
+      }
+    ],
+    "output_groups": [
+      {
+        "name": "DASHGroup",
+        "output_group_settings": {
+          "type": "DASH_ISO_GROUP_SETTINGS",
+          "dash_iso_group_settings": {
+            "destination": "s3://production-cm/media-convert-output/dash/thunder/",
+            "segment_length": 6,
+            "segment_control": "SEGMENTED_FILES",
+            "min_buffer_time": 12000,
+            "fragment_length": 3
+          }
+        },
+        "outputs": [
+          {
+            "name_modifier": "-1280_720",
+            "container_settings": {
+              "container": "MPD",
+              "mpd_settings": {}
+            },
+            "video_description": {
+              "width": 1280,
+              "height": 720,
+              "codec_settings": {
+                "codec": "H_264",
+                "h264_settings": {
+                  "rate_control_mode": "CBR",
+                  "bitrate": 2500000,
+                  "scene_change_detect": "ENABLED",
+                  "quality_tuning_level": "SINGLE_PASS",
+                  "framerate_numerator": 24,
+                  "framerate_denominator": 1
+                }
+              }
+            },
+            "audio_descriptions": [
+              {
+                "audio_type_control": "FOLLOW_INPUT",
+                "codec_settings": {
+                  "codec": "AAC",
+                  "aac_settings": {
+                    "bitrate": 128000,
+                    "coding_mode": "CODING_MODE_2_0",
+                    "sample_rate": 48000
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name_modifier": "-854_480",
+            "container_settings": {
+              "container": "MPD",
+              "mpd_settings": {}
+            },
+            "video_description": {
+              "width": 854,
+              "height": 480,
+              "codec_settings": {
+                "codec": "H_264",
+                "h264_settings": {
+                  "rate_control_mode": "CBR",
+                  "bitrate": 1000000,
+                  "scene_change_detect": "ENABLED",
+                  "quality_tuning_level": "SINGLE_PASS",
+                  "framerate_numerator": 24,
+                  "framerate_denominator": 1
+                }
+              }
+            },
+            "audio_descriptions": [
+              {
+                "audio_type_control": "FOLLOW_INPUT",
+                "codec_settings": {
+                  "codec": "AAC",
+                  "aac_settings": {
+                    "bitrate": 128000,
+                    "coding_mode": "CODING_MODE_2_0",
+                    "sample_rate": 48000
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name_modifier": "-640_360",
+            "container_settings": {
+              "container": "MPD",
+              "mpd_settings": {}
+            },
+            "video_description": {
+              "width": 640,
+              "height": 360,
+              "codec_settings": {
+                "codec": "H_264",
+                "h264_settings": {
+                  "rate_control_mode": "CBR",
+                  "bitrate": 500000,
+                  "scene_change_detect": "ENABLED",
+                  "quality_tuning_level": "SINGLE_PASS",
+                  "framerate_numerator": 24,
+                  "framerate_denominator": 1
+                }
+              }
+            },
+            "audio_descriptions": [
+              {
+                "audio_type_control": "FOLLOW_INPUT",
+                "codec_settings": {
+                  "codec": "AAC",
+                  "aac_settings": {
+                    "bitrate": 96000,
+                    "coding_mode": "CODING_MODE_2_0",
+                    "sample_rate": 48000
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "HLSGroup",
+        "output_group_settings": {
+          "type": "HLS_GROUP_SETTINGS",
+          "hls_group_settings": {
+            "destination": "s3://production-cm/media-convert-output/hls/thunder/",
+            "segment_control": "SEGMENTED_FILES",
+            "segment_length": 6,
+            "min_segment_length": 3
+          }
+        },
+        "outputs": [
+          {
+            "name_modifier": "-1280_720",
+            "container_settings": {
+              "container": "M3U8",
+              "m3u_8_settings": {}
+            },
+            "video_description": {
+              "width": 1280,
+              "height": 720,
+              "codec_settings": {
+                "codec": "H_264",
+                "h264_settings": {
+                  "rate_control_mode": "CBR",
+                  "bitrate": 2500000,
+                  "scene_change_detect": "ENABLED",
+                  "quality_tuning_level": "SINGLE_PASS",
+                  "framerate_numerator": 24,
+                  "framerate_denominator": 1
+                }
+              }
+            },
+            "audio_descriptions": [
+              {
+                "audio_type_control": "FOLLOW_INPUT",
+                "codec_settings": {
+                  "codec": "AAC",
+                  "aac_settings": {
+                    "bitrate": 128000,
+                    "coding_mode": "CODING_MODE_2_0",
+                    "sample_rate": 48000
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name_modifier": "-854_480",
+            "container_settings": {
+              "container": "M3U8",
+              "m3u_8_settings": {}
+            },
+            "video_description": {
+              "width": 854,
+              "height": 480,
+              "codec_settings": {
+                "codec": "H_264",
+                "h264_settings": {
+                  "rate_control_mode": "CBR",
+                  "bitrate": 1000000,
+                  "scene_change_detect": "ENABLED",
+                  "quality_tuning_level": "SINGLE_PASS",
+                  "framerate_numerator": 24,
+                  "framerate_denominator": 1
+                }
+              }
+            },
+            "audio_descriptions": [
+              {
+                "audio_type_control": "FOLLOW_INPUT",
+                "codec_settings": {
+                  "codec": "AAC",
+                  "aac_settings": {
+                    "bitrate": 128000,
+                    "coding_mode": "CODING_MODE_2_0",
+                    "sample_rate": 48000
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name_modifier": "-640_360",
+            "container_settings": {
+              "container": "M3U8",
+              "m3u_8_settings": {}
+            },
+            "video_description": {
+              "width": 640,
+              "height": 360,
+              "codec_settings": {
+                "codec": "H_264",
+                "h264_settings": {
+                  "rate_control_mode": "CBR",
+                  "bitrate": 500000,
+                  "scene_change_detect": "ENABLED",
+                  "quality_tuning_level": "SINGLE_PASS",
+                  "framerate_numerator": 24,
+                  "framerate_denominator": 1
+                }
+              }
+            },
+            "audio_descriptions": [
+              {
+                "audio_type_control": "FOLLOW_INPUT",
+                "codec_settings": {
+                  "codec": "AAC",
+                  "aac_settings": {
+                    "bitrate": 96000,
+                    "coding_mode": "CODING_MODE_2_0",
+                    "sample_rate": 48000
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
