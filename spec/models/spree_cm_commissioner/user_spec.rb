@@ -90,4 +90,25 @@ RSpec.describe Spree::User, type: :model do
       expect(user.full_name).to eq 'First Last'
     end
   end
+
+  describe '#update_otp_enabled' do
+    let(:user) { build(:cm_user) }
+
+    context 'when otp_email or otp_phone_number is true' do
+      it 'sets otp_enabled to true' do
+        user.otp_email = true
+        user.save
+        expect(user.otp_enabled).to be true
+      end
+    end
+
+    context 'when otp_email and otp_phone_number are false' do
+      it 'sets otp_enabled to false' do
+        user.otp_email = false
+        user.otp_phone_number = false
+        user.save
+        expect(user.otp_enabled).to be false
+      end
+    end
+  end
 end
