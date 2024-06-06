@@ -1,0 +1,59 @@
+<div class="table-responsive border rounded bg-white">
+  <table class="table sortable" data-sortable-link="<%= update_positions_admin_product_pricing_models_path(@product) %>">
+    <thead class="text-muted">
+      <tr data-hook="variant_pricing_models_header">
+        <th></th>
+        <th scope="col" class="text-center"><%= Spree.t(:name) %></th>
+        <th scope="col" class="text-center"><%= Spree.t(:rules) %></th>
+        <th scope="col" class="text-center"><%= Spree.t(:match_policy) %></th>
+        <th scope="col" class="text-center"><%= Spree.t(:effective_from) %></th>
+        <th scope="col" class="text-center"><%= Spree.t(:effective_to) %></th>
+        <th scope="col" class="text-center"><%= Spree.t(:pricing_actions) %></th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody data-hook="variant_pricing_models_body">
+      <% @pricing_models.each do |pricing_model| %>
+        <tr id="<%= spree_dom_id pricing_model %>" data-hook="variant_pricing_models_row">
+          <td class="move-handle inline">
+            <%= svg_icon name: "grip-vertical.svg", width: '18', height: '18' %>
+          </td>
+          <td class="text-center">
+            <%= link_to edit_admin_product_pricing_model_path(pricing_model) do %>
+              <%= pricing_model.name %>
+            <% end %>
+          </td>
+          <td>
+            <ul class="m-0">
+              <% pricing_model.pricing_rules.each do |rule| %>
+                <li class="py-1 px-2"><%= rule.description %></li>
+              <% end %>
+            </ul>
+          </td>
+          <td class="text-center">
+            <p class="badge badge-secondary border bg-light m-0 text-dark" data-toggle="tooltip" data-placement="top" title='<%= Spree.t("pricing_model.match_#{pricing_model.match_policy}") %>'>
+              <span class="align-middle"><%= pricing_model.match_policy %></span>
+              <%= svg_icon name: "info-circle.svg", width: '14', height: '14' %>
+            </p>
+          </td>
+          <td class="text-center"><%= pretty_date(pricing_model.effective_from) if pricing_model.effective_from.present? %></td>
+          <td class="text-center"><%= pretty_date(pricing_model.effective_to) if pricing_model.effective_to.present? %></td>
+          <td class="text-center">
+            <ul class="m-0">
+              <% pricing_model.pricing_actions.each do |action| %>
+                <li class="py-1 px-2"><%= action.description %></li>
+              <% end %>
+            </ul>
+          </td>
+          <td class="actions">
+            <span class="d-flex justify-content-end">
+              <%= link_to_edit(pricing_model, no_text: true) %>
+              <%= link_to_with_icon('bricks.svg', Spree.t(:rules), admin_product_pricing_rules_path(pricing_model_id: pricing_model.id), class: 'btn btn-light btn-sm', no_text: true) %>
+              <%= link_to_delete(pricing_model, no_text: true) %>
+            </span>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

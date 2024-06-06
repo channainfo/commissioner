@@ -1,0 +1,16 @@
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :pricing_models } %>
+<%= render partial: 'spree/admin/shared/pricing_model_sidebar', locals: { current: :edit, pricing_model: @object } %>
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+
+<%= form_with model: @object, url: { action: :update } do |f| %>
+  <fieldset class="card card-body">
+    <%= render partial: 'form', locals: { f: f } %>
+    <div>
+      <%= button Spree.t('actions.update'), 'update.svg', 'submit', {class: 'btn-outline-success', data: { disable_with: "#{ Spree.t(:saving) }..." }} %>
+    </div>
+  </fieldset>
+<% end %>
+
+<div class="card mt-3">
+  <%= render partial: 'pricing_actions' %>
+</div>

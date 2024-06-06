@@ -1,0 +1,57 @@
+<div class="card-header">
+  <h5 class="card-title mb-0 h6">
+    <%= Spree.t(:pricing_actions) %>
+  </h5>
+</div>
+
+<div id="action_fields" class="card-body">
+  <%# to keep UI simpler, we hide field if no addable actions %>
+  <% if @object.available_pricing_actions.any? %>
+  <div class="card card-body mb-3">
+    <%= form_with model: SpreeCmCommissioner::PricingAction.new, url: admin_product_pricing_actions_path(pricing_model_id: @object.id), method: :post do |f| %>
+      <div class="row align-items-end p-0 pr-3">
+        <%= f.field_container :type, class: ['form-group col mb-0'] do %>
+          <%= f.label :type, Spree.t(:type) %> <span class="required">*</span>
+          <%= f.select :type, @object.available_pricing_actions.map {|t| [t.demodulize, t]}, {}, :class => "fullwidth select2" %>
+          <%= f.error_message_on :type %>
+        <% end %>
+        <div>
+          <%= button Spree.t('actions.create'), 'add.svg', 'submit', { class: @object.available_pricing_actions.empty? ? 'btn-outline-secondary' : 'btn-outline-success', disabled: @object.available_pricing_actions.empty?, data: { disable_with: "#{ Spree.t(:saving) }..." } } %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <% end %>
+
+  <div id="actions" class="filter_list">
+    <% @object.pricing_actions.each do |pricing_action| %>
+      <%= form_with model: pricing_action, url: admin_product_pricing_action_path(pricing_model_id: @object.id, id: pricing_action.id), action: :update do |f| %>
+        <div class="card card-body mb-3" id="<%= dom_id pricing_action %>">
+          <% type_name = pricing_action.type&.demodulize %>
+
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="p-0 m-0"><%= type_name %></h5>
+            <div>
+              <%= link_to_with_icon 'delete.svg', '', admin_product_pricing_action_path(pricing_model_id: @object.id, id: pricing_action.id), method: :delete, no_text: true, class: 'delete mr-2', data: { confirm: Spree.t(:are_you_sure_delete) } %>
+              <%= button '', 'update.svg', :submit, { class: "btn btn-outline-primary btn-sm icon-link" } %>
+            </div>
+          </div>
+          <hr>
+
+          <% param_prefix = "spree_cm_commissioner_pricing_action" %>
+
+          <%# eg. spree_cm_commissioner/pricing_actions/calculate_adjustment %>
+          <% partial_path = pricing_action.type&.underscore.tr('::', '/').downcase %>
+
+          <%= render partial: partial_path, locals: { pricing_action: pricing_action, param_prefix: param_prefix } if partial_path.present? %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <% if @object.pricing_actions.empty? %>
+      <div class="alert alert-warning">
+        <%= Spree.t(:no_actions_added) %>
+      </div>
+    <% end %>
+  </div>
+</div>
