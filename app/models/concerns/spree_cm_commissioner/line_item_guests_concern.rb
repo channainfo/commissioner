@@ -32,18 +32,7 @@ module SpreeCmCommissioner
     end
 
     def guest_options
-      @guest_options ||= {
-        remaining_total_guests: remaining_total_guests,
-        number_of_guests: number_of_guests,
-        allowed_extra_adults: allowed_extra_adults,
-        allowed_extra_kids: allowed_extra_kids,
-        allowed_total_adults: allowed_total_adults,
-        allowed_total_kids: allowed_total_kids,
-        number_of_adults: number_of_adults,
-        number_of_kids: number_of_kids,
-        extra_adults: extra_adults,
-        extra_kids: extra_kids
-      }
+      @guest_options ||= Pricings::GuestOptions.from_line_item(self)
     end
 
     def extra_adults?

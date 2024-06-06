@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe Spree::LineItem, type: :model do
+  include GuestOptionsHelper
+
   describe 'associations' do
     it { is_expected.to have_many(:applied_pricing_rates).class_name('SpreeCmCommissioner::AppliedPricingRate').dependent(:destroy) }
     it { is_expected.to have_many(:applied_pricing_models).class_name('SpreeCmCommissioner::AppliedPricingModel').dependent(:destroy) }
@@ -319,6 +321,30 @@ RSpec.describe Spree::LineItem, type: :model do
   end
 
   context 'guest options' do
+    describe '#guest_options' do
+      let(:variant) { create(:variant, option_values: [adults(4), allowed_extra_adults(2), kids(4), allowed_extra_kids(2)]) }
+      let(:line_item) { create(:line_item, quantity: 1, variant: variant, public_metadata: { number_of_adults: 6, number_of_kids: 5 }) }
+      let(:guest_options) { line_item.guest_options }
+
+      it 'return guest options as GuestOptions instance' do
+        expect(guest_options).to be_an_instance_of(SpreeCmCommissioner::Pricings::GuestOptions)
+        expect(guest_options.remaining_total_guests).to eq 11
+
+        expect(guest_options.number_of_guests).to eq 11
+        expect(guest_options.number_of_adults).to eq 6
+        expect(guest_options.number_of_kids).to eq 5
+
+        expect(guest_options.allowed_extra_adults).to eq 2
+        expect(guest_options.allowed_extra_kids).to eq 2
+
+        expect(guest_options.allowed_total_adults).to eq 6
+        expect(guest_options.allowed_total_kids).to eq 6
+
+        expect(guest_options.extra_adults).to eq 2
+        expect(guest_options.extra_kids).to eq 1
+      end
+    end
+
     describe '#number_of_adults' do
       let(:variant) { create(:variant, option_values: [adults(4), allowed_extra_adults(2)]) }
 
@@ -502,25 +528,5 @@ RSpec.describe Spree::LineItem, type: :model do
                                   .with_message("Validation failed: Quantity exceed_total_kids")
       end
     end
-  end
-
-  def kids(number)
-    kids_option_type = create(:cm_option_type, :kids)
-    create(:option_value, name: "#{number}-kids", presentation: "#{number}", option_type: kids_option_type)
-  end
-
-  def adults(number)
-    adults_option_type = create(:cm_option_type, :adults)
-    create(:option_value, name: "#{number}-adults", presentation: "#{number}", option_type: adults_option_type)
-  end
-
-  def allowed_extra_kids(number)
-    allowed_extra_kids_option_type = create(:cm_option_type, :allowed_extra_kids)
-    create(:option_value, name: "allowed-#{number}-kids", presentation: "#{number}", option_type: allowed_extra_kids_option_type)
-  end
-
-  def allowed_extra_adults(number)
-    allowed_extra_adults_option_type = create(:cm_option_type, :allowed_extra_adults)
-    create(:option_value, name: "allowed-#{number}-adults", presentation: "#{number}", option_type: allowed_extra_adults_option_type)
   end
 end
