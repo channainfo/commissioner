@@ -2,14 +2,6 @@
 
 <div class="col-12">
   <div class="d-flex justify-content-start">
-    <span>
-      <%= f.field_container :travel do %>
-        <%= f.label :travel do %>
-          <%= f.check_box :travel %>
-          <%= Spree.t(:travel) %>
-        <% end %>
-      <% end %>
-    </span>
     <span class="ml-2">
       <%= f.field_container :promoted do %>
         <%= f.label :promoted do %>

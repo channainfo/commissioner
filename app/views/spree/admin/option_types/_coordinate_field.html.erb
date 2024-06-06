@@ -1,0 +1,6 @@
+<div class="input-group">
+  <%= link_to "https://maps.google.com/?q=#{f.object.name}", target: "_blank", class: 'input-group-prepend' do %>
+    <span class="input-group-text"><%= svg_icon name: "map.svg", width: '14', height: '14' %></span>
+  <% end %>
+  <%= f.text_field :name, class: "form-control", required: true %>
+</div>

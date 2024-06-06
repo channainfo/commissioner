@@ -5,7 +5,7 @@ namespace :data do
     cambodia = Spree::Country.find_or_create_by(name: 'Cambodia')  # run `rake data:seed_kh_provinces` first
 
     cambodia.states.each do |province|
-      location_type.option_values.find_or_initialize_by(name: province.name, presentation: province.id)
+      location_type.option_values.find_or_initialize_by(name: province.id, presentation: province.name)
     end
     location_type.save
 

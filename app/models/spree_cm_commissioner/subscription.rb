@@ -44,10 +44,7 @@ module SpreeCmCommissioner
     end
 
     def months_count
-      month_option_type = variant.product.option_types.find_by(name: 'month')
-      month_option_value = variant.option_values.find_by(option_type_id: month_option_type.id)
-
-      month_option_value.presentation.to_i
+      variant.month
     end
 
     def display_total_price

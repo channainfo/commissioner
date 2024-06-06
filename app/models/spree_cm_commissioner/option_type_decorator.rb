@@ -1,14 +1,13 @@
 module SpreeCmCommissioner
   module OptionTypeDecorator
-    ATTRIBUTE_TYPES = %w[float integer string boolean date coordinate state_selection started_at reminder delivery_type].freeze
-
     def self.prepended(base)
       base.include SpreeCmCommissioner::ParameterizeName
+      base.include SpreeCmCommissioner::OptionTypeAttrType
+
       base.enum kind: %i[variant product vendor]
 
       base.validates :name, presence: true
-      base.validates :attr_type, inclusion: { in: ATTRIBUTE_TYPES }
-      base.validates :attr_type, presence: true, if: :travel?
+
       base.validate :kind_has_updated, on: :update, if: :kind_changed?
 
       base.scope :promoted, -> { where(promoted: true) }

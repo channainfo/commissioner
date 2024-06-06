@@ -4,9 +4,9 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCronExecutor do
   let(:user) { create(:user) }
 
   let(:option_type_month) {create(:option_type, name: "month", attr_type: :integer)}
-  let(:option_value_month){create(:option_value, name: "1 month", presentation: "1", option_type: option_type_month)}
+  let(:option_value_month){create(:option_value, presentation: "1 month", name: "1", option_type: option_type_month)}
   let(:option_type_day) {create(:option_type, name: "due-date", attr_type: :integer)}
-  let(:option_value_day){create(:option_value, name: "5 Days", presentation: "5", option_type: option_type_day)}
+  let(:option_value_day){create(:option_value, presentation: "5 Days", name: "5", option_type: option_type_day)}
   let(:option_type_payment) {create(:option_type, name: "payment-option", attr_type: :string)}
   let(:option_value_payment){create(:option_value, name: "post-paid", presentation: "post-paid", option_type: option_type_payment)}
 
