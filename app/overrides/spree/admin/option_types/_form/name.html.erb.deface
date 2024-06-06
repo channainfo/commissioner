@@ -1,0 +1,10 @@
+<!-- replace "erb[loud]:contains('field_container :name')" closing_selector "erb[silent]:contains('end')" -->
+
+<%= f.field_container :name do %>
+  <span class="mr-1" type="button" data-toggle="popover" data-placement="left" data-title="System options" data-html="true" data-content="&#8227; <%= f.object.class::RESERVED_OPTIONS.keys.join("<br>&#8227; ") %>">
+    <%= svg_icon name: "info-circle-fill.svg", width: '14', height: '14' %>
+  </span>
+  <%= f.label :name, raw(Spree.t(:name) + required_span_tag) %>
+  <%= f.text_field :name, class: "form-control", disabled: f.object.reserved_option? %>
+  <%= f.error_message_on :name %>
+<% end %>

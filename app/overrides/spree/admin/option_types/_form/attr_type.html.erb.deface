@@ -9,14 +9,9 @@
     <% end %>
   <% else %>
     <%= f.field_container :attr_type, class: ['form-group'] do %>
+      <% attr_type_valid = f.object.attr_type.in?(Spree::OptionType::ATTRIBUTE_TYPES) %>
       <%= f.label :attr_type, Spree.t(:attribute_type) %> <span class="required">*</span>
-      <%= f.text_field :attr_type, disabled: true, class: "form-control" %>
-      <% case @option_type.attr_type %>
-        <% when 'reminder' %>
-          <small class="form-text text-muted">
-            <%= raw I18n.t('option_type.time_format_info', time_format: '0d0h0m0s') %>
-          </small>
-      <% end %>
+      <%= f.select :attr_type, Spree::OptionType::ATTRIBUTE_TYPES, { }, { disabled: attr_type_valid ? true : false, class: "form-control select2" } %>
       <%= f.error_message_on :attr_type %>
     <% end %>
   <% end %>

@@ -22,7 +22,7 @@ RSpec.describe Spree::Product, type: :model do
     let(:vendor) { create(:active_vendor, name: 'Angkor Hotel') }
     let(:state) { create(:state, name: 'Siemreap') }
     let!(:option_type) { create(:option_type, name: 'location', presentation: 'Location', attr_type: 'state_selection') }
-    let!(:option_value) { create(:option_value, option_type: option_type, presentation: state.id) }
+    let!(:option_value) { create(:option_value, option_type: option_type, name: state.id) }
     let!(:stock_location) { vendor.stock_locations.first.update(state: state) }
 
     context 'vendor with many products' do

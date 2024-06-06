@@ -181,23 +181,15 @@ module SpreeCmCommissioner
     end
 
     def post_paid?
-      payment_option_type = order.subscription.variant.product.option_types.find_by(name: 'payment-option')
-      payment_option_value = order.subscription.variant.option_values.find_by(option_type_id: payment_option_type.id)
-      payment_option_value.name == 'post-paid'
+      order.subscription.variant.post_paid?
     end
 
     def due_days
-      due_date_option_type = order.subscription.variant.product.option_types.find_by(name: 'due-date')
-      due_date_option_value = order.subscription.variant.option_values.find_by(option_type_id: due_date_option_type.id)
+      variant = order.subscription.variant
+      day = variant.due_date
 
-      day = due_date_option_value.presentation.to_i
+      return from_date + variant.month.month + day.days if post_paid?
 
-      if post_paid?
-        month_option_type = order.subscription.variant.product.option_types.find_by(name: 'month')
-        month_option_value = order.subscription.variant.option_values.find_by(option_type_id: month_option_type.id)
-
-        return from_date + month_option_value.presentation.to_i.month + day.days
-      end
       from_date + day.days
     end
   end

@@ -14,7 +14,7 @@
       <%= content_tag(:strong, class: "badge #{@badge_class} text-uppercase ") do; option_type.kind ; end %>
     </td>
     <td><%= active_badge(option_type.filterable) %></td>
-    <td><%= active_badge(option_type.travel) %></td>
+    <td><%= active_badge(option_type.reserved_option?) %></td>
     <td class="actions">
       <span class="d-flex justify-content-end">
         <%= link_to_edit(option_type, class: 'admin_edit_option_type', no_text: true) if can?(:edit, option_type) %>

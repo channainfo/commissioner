@@ -7,7 +7,7 @@ RSpec.describe SpreeCmCommissioner::VendorUpdater do
   let(:vendor) { create(:active_vendor, name: 'Angkor Hotel', primary_product_type: accommodation ) }
   let(:state) { create(:state, name: 'Siemreap') }
   let!(:option_type) { create(:option_type, name: 'location', presentation: 'Location', attr_type: 'state_selection') }
-  let!(:option_value) { create(:option_value, option_type: option_type, presentation: state.id) }
+  let!(:option_value) { create(:option_value, option_type: option_type, name: state.id) }
   let!(:stock_location) { vendor.stock_locations.first.update(state: state) }
   let(:shipping_category) { create(:shipping_category, name: 'Digital') }
 

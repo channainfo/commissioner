@@ -2,8 +2,7 @@ module SpreeCmCommissioner
   module VariantDecorator
     def self.prepended(base)
       base.include SpreeCmCommissioner::ProductDelegation
-      base.include SpreeCmCommissioner::VariantGuestsConcern
-      base.include SpreeCmCommissioner::VariantOptionValuesConcern
+      base.include SpreeCmCommissioner::VariantOptionsConcern
 
       base.after_commit :update_vendor_price
       base.after_save   :update_vendor_total_inventory, if: :saved_change_to_permanent_stock?
@@ -15,6 +14,10 @@ module SpreeCmCommissioner
                                             }, through: :option_value_variants, source: :option_value
 
       base.scope :subscribable, -> { active.joins(:product).where(product: { subscribable: true, status: :active }) }
+    end
+
+    def option_value_name_for(option_type_name: nil)
+      option_values.detect { |o| o.option_type.name.downcase.strip == option_type_name.downcase.strip }.try(:name)
     end
 
     def delivery_required?
