@@ -1,0 +1,6 @@
+<div>
+  <div class="form-group mb-0">
+    <%= label_tag "#{param_prefix}_vendor_ids_string", Spree.t('weekend_rule.choose_weekend') %>
+    <%= select "#{param_prefix}", 'preferred_weekend_days', options_from_collection_for_select(pricing_rule.class::DAYS_INTO_WEEK, :last, :first, pricing_rule.preferred_weekend_days), { }, multiple: true, class: 'select2 form-control' %>
+  </div>
+</div>

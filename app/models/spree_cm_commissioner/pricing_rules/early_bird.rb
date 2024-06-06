@@ -6,8 +6,8 @@ module SpreeCmCommissioner
 
       validate :validate_booking_dates
 
-      def booking_date_from = preferred_booking_date_from.to_date
-      def booking_date_to = preferred_booking_date_to.to_date
+      def booking_date_from = preferred_booking_date_from&.to_date
+      def booking_date_to = preferred_booking_date_to&.to_date
 
       # override
       def applicable?(options)
@@ -22,7 +22,7 @@ module SpreeCmCommissioner
 
       # override
       def description
-        "Early bird between #{booking_date_from} to #{booking_date_to}"
+        "Early bird (#{booking_date_from} to #{booking_date_to})"
       end
 
       private
