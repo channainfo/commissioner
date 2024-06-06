@@ -15,7 +15,7 @@ module SpreeCmCommissioner
     end
 
     def date_unit
-      return nil unless reservation?
+      return nil unless permanent_stock?
 
       date_range_excluding_checkout.size if accommodation?
     end

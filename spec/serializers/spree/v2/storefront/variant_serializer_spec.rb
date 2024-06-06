@@ -10,6 +10,7 @@ describe Spree::V2::Storefront::VariantSerializer, type: :serializer do
         :images,
         :option_values,
         :vendor,
+        :stock_items,
         :stock_locations
       ]).serializable_hash
     }
@@ -33,7 +34,6 @@ describe Spree::V2::Storefront::VariantSerializer, type: :serializer do
         :display_price,
         :compare_at_price,
         :display_compare_at_price,
-        :permanent_stock,
         :kyc,
         :need_confirmation,
         :product_type,
@@ -53,7 +53,15 @@ describe Spree::V2::Storefront::VariantSerializer, type: :serializer do
         :option_values,
         :vendor,
         :stock_locations,
+        :stock_items,
       )
+    end
+
+    it 'returns [included] with stock_items' do
+      stock_items = subject[:included].filter { |item| item[:type] == :stock_item }
+
+      expect(stock_items[0][:attributes][:count_on_hand]).to eq 0
+      expect(stock_items[1][:attributes][:count_on_hand]).to eq 0
     end
   end
 end

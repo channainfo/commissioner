@@ -19,7 +19,8 @@ module SpreeCmCommissioner
       base.whitelisted_ransackable_associations |= %w[guests]
       base.whitelisted_ransackable_attributes |= %w[to_date from_date]
 
-      base.delegate :delivery_required?, to: :variant
+      base.delegate :delivery_required?, :permanent_stock?,
+                    to: :variant
 
       base.accepts_nested_attributes_for :guests, allow_destroy: true
 
@@ -57,10 +58,6 @@ module SpreeCmCommissioner
       }
     end
 
-    def reservation?
-      (accommodation? || service?) && date_present? && !subscription?
-    end
-
     # date_unit could be number of nights, or days or hours depending on usecases
     # For example:
     # - accomodation uses number of nights.
@@ -70,7 +67,7 @@ module SpreeCmCommissioner
     def amount
       base_price = price * quantity
 
-      if reservation? && date_unit
+      if permanent_stock? && date_unit.present?
         base_price * date_unit
       else
         base_price

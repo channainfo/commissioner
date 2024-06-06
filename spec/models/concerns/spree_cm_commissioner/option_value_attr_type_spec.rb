@@ -230,8 +230,8 @@ RSpec.describe SpreeCmCommissioner::OptionValueAttrType do
       let(:option_type) { create(:option_type, attr_type: 'time') }
       subject { create(:option_value, option_type: option_type, name: '12:53:00') }
 
-      it 'time in string' do
-        expect(subject.time).to eq '12:53:00'
+      it 'time in time object' do
+        expect(subject.time).to eq Time.zone.parse('12:53:00')
       end
     end
   end

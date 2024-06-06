@@ -3,13 +3,14 @@ module Spree
     module Storefront
       module VariantSerializerDecorator
         def self.prepended(base)
-          base.attributes :permanent_stock, :need_confirmation, :product_type, :kyc,
+          base.attributes :need_confirmation, :product_type, :kyc,
                           :reminder_in_time, :start_time, :delivery_option,
                           :number_of_guests, :max_quantity_per_order
 
           base.attribute :delivery_required, &:delivery_required?
 
           base.has_many :stock_locations
+          base.has_many :stock_items, serializer: ::SpreeCmCommissioner::V2::Storefront::StockItemSerializer
         end
       end
     end

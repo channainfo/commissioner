@@ -5,9 +5,10 @@ module SpreeCmCommissioner
       base.include SpreeCmCommissioner::VariantOptionsConcern
 
       base.after_commit :update_vendor_price
-      base.after_save   :update_vendor_total_inventory, if: :saved_change_to_permanent_stock?
       base.validate     :validate_option_types
       base.before_save -> { self.track_inventory = false }, if: :subscribable?
+
+      base.belongs_to :vendor, class_name: 'Spree::Vendor'
 
       base.has_many :visible_option_values, lambda {
                                               joins(:option_type).where(spree_option_types: { hidden: false })
@@ -56,10 +57,6 @@ module SpreeCmCommissioner
 
       vendor.update(min_price: price) if price < vendor.min_price
       vendor.update(max_price: price) if price > vendor.max_price
-    end
-
-    def update_vendor_total_inventory
-      SpreeCmCommissioner::VendorJob.perform_later(vendor.id)
     end
 
     def validate_option_types
