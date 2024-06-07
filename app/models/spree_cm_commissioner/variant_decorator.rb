@@ -80,4 +80,13 @@ module SpreeCmCommissioner
   end
 end
 
-Spree::Variant.prepend(SpreeCmCommissioner::VariantDecorator) unless Spree::Variant.included_modules.include?(SpreeCmCommissioner::VariantDecorator)
+if Spree::Variant.included_modules.exclude?(SpreeCmCommissioner::VariantDecorator)
+  # spree_multi_vendor use :vendor method for assoication, we should use association (belongs_to :vendor) instead.
+  #
+  # problem with those methods is that it store value in memeory,
+  # even we call variant.reload, the method value is no being reload.
+  SpreeMultiVendor::Spree::VariantDecorator.remove_method :vendor
+  SpreeMultiVendor::Spree::VariantDecorator.remove_method :vendor_id
+
+  Spree::Variant.prepend(SpreeCmCommissioner::VariantDecorator)
+end

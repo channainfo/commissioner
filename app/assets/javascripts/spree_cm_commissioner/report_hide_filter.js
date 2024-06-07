@@ -3,6 +3,8 @@ document.addEventListener("spree:load", function () {
     "#spree_cm_commissioner_report_use_custom_date_range"
   );
 
+  if (useCustomDateRange.length <= 0) return;
+
   $("#spree_cm_commissioner_report_use_custom_date_range").removeAttr(
     "checked"
   );

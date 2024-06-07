@@ -18,6 +18,29 @@ RSpec.describe Spree::Product, type: :model do
     it { should validate_numericality_of(:commission_rate).is_greater_than_or_equal_to(0).is_less_than_or_equal_to(100).allow_nil }
   end
 
+  describe 'callback: after_update' do
+    describe '#update_variants_vendor_id' do
+      let(:variant1) { build(:variant) }
+      let(:variant2) { build(:variant) }
+
+      let!(:vendor1) { create(:vendor) }
+      let!(:vendor2) { create(:vendor) }
+
+      let!(:product) { create(:product, variants: [variant1, variant2], vendor: vendor1) }
+
+      it 'update variants including master to new vendor' do
+        expect(variant1.vendor_id).to eq vendor1.id
+        expect(variant2.vendor_id).to eq vendor1.id
+
+        product.update!(vendor: vendor2)
+
+        expect(product.master.reload.vendor_id).to eq vendor2.id
+        expect(variant1.reload.vendor_id).to eq vendor2.id
+        expect(variant2.reload.vendor_id).to eq vendor2.id
+      end
+    end
+  end
+
   describe 'scope' do
     let(:vendor) { create(:active_vendor, name: 'Angkor Hotel') }
     let(:state) { create(:state, name: 'Siemreap') }
