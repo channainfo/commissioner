@@ -3,24 +3,20 @@ module SpreeCmCommissioner
     delegate :user_ids, :customer_notification, to: :context
 
     def call
-      update_customer_notification_sent_at
       send_notification
     end
 
-    def update_customer_notification_sent_at
-      return if customer_notification.sent_at.present?
+    def update_customer_notification_sent_at(force: false)
+      return if customer_notification.sent_at.present? && !force
 
-      customer_notification.sent_at = Time.current
-      customer_notification.save
+      customer_notification.update(sent_at: Time.current)
     end
 
     def send_notification
       if user_ids.present?
         send_to_specific_users(user_ids)
-      elsif user_ids.blank?
-        send_to_all_users_now
       else
-        send_to_all_users
+        send_to_all_users_now
       end
     end
 
@@ -29,18 +25,24 @@ module SpreeCmCommissioner
       users.find_each do |user|
         deliver_notification_to_user(user)
       end
+
+      update_customer_notification_sent_at(force: false)
     end
 
     def send_to_all_users
       users_not_received_notifications.find_each do |user|
         deliver_notification_to_user(user)
       end
+
+      update_customer_notification_sent_at(force: false)
     end
 
     def send_to_all_users_now
       end_users.find_each do |user|
         deliver_notification_to_user(user)
       end
+
+      update_customer_notification_sent_at(force: true)
     end
 
     def deliver_notification_to_user(user)
