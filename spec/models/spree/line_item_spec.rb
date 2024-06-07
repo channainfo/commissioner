@@ -98,7 +98,7 @@ RSpec.describe Spree::LineItem, type: :model do
 
   describe '#amount' do
     context 'product type: accommodation' do
-      let(:product) { create(:cm_accommodation_product, price: BigDecimal('10.0'), permanent_stock: 4) }
+      let(:product) { create(:cm_accommodation_product, price: BigDecimal('10.0'), total_inventory: 4) }
       let(:line_item) { create(:line_item, price: BigDecimal('10.0'), quantity: 2, product: product, from_date: '2023-01-10'.to_date, to_date: '2023-01-13'.to_date) }
 
       it 'caculate amount base on price, quantity & number of nights' do
@@ -135,39 +135,6 @@ RSpec.describe Spree::LineItem, type: :model do
     it 'it only return paid line items' do
       expect(described_class.paid.size).to eq 1
       expect(described_class.paid).to eq order1.line_items
-    end
-  end
-
-  describe '#reservation?' do
-    let(:ecommerce) { build(:product, product_type: :ecommerce)}
-    let(:service) { build(:product, product_type: :service)}
-    let(:accommodation) { build(:product, product_type: :accommodation)}
-
-    it 'not considered reservation if it not either service or accommodation' do
-      line_item = build(:line_item, variant: ecommerce.master)
-      expect(line_item.reservation?).to be false
-    end
-
-    it 'not considered reservation if it not contains duration' do
-      line_item1 = build(:line_item, variant: accommodation.master)
-      line_item2 = build(:line_item, variant: accommodation.master)
-
-      expect(line_item1.reservation?).to be false
-      expect(line_item2.reservation?).to be false
-    end
-
-    it 'not considered reservation if it ecommerce [even it has duration]' do
-      line_item = build(:line_item, variant: ecommerce.master, from_date: '2024-03-11'.to_date, to_date: '2024-03-13'.to_date)
-
-      expect(line_item.reservation?).to be false
-    end
-
-    it 'considered reservation if it service / accomodation, has date & not subscription' do
-      line_item1 = build(:line_item, variant: accommodation.master, from_date: '2024-03-11'.to_date, to_date: '2024-03-13'.to_date)
-      line_item2 = build(:line_item, variant: service.master, from_date: '2024-03-11'.to_date, to_date: '2024-03-13'.to_date)
-
-      expect(line_item1.reservation?).to be true
-      expect(line_item2.reservation?).to be true
     end
   end
 
@@ -250,12 +217,14 @@ RSpec.describe Spree::LineItem, type: :model do
 
     it 'return date_range_excluding_checkout when it is accomodation' do
       allow(line_item).to receive(:accommodation?).and_return(true)
+      allow(line_item).to receive(:permanent_stock?).and_return(true)
 
       expect(line_item.date_range).to eq (line_item.date_range_excluding_checkout)
     end
 
     it 'return date_range_including_checkout when it is not accomodation' do
       allow(line_item).to receive(:accommodation?).and_return(false)
+      allow(line_item).to receive(:permanent_stock?).and_return(true)
 
       expect(line_item.date_range).to eq (line_item.date_range_including_checkout)
     end
@@ -266,6 +235,7 @@ RSpec.describe Spree::LineItem, type: :model do
 
     it 'return number of night when it is accomodation' do
       allow(line_item).to receive(:accommodation?).and_return(true)
+      allow(line_item).to receive(:permanent_stock?).and_return(true)
 
       expect(line_item.date_unit).to eq 3
     end

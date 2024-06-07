@@ -23,17 +23,18 @@ FactoryBot.define do
 
     factory :cm_vendor_with_product do
       transient do
-        permanent_stock { 10 }
+        total_inventory { 10 }
       end
 
       after :create do |vendor, evaluator|
-        product = create(:product, vendor: vendor, product_type: vendor.primary_product_type)
+        if vendor.primary_product_type == :accommodation
+          product = create(:cm_accommodation_product, vendor: vendor, total_inventory: evaluator.total_inventory)
+        else
+          product = create(:product, vendor: vendor, product_type: vendor.primary_product_type)
+          product.master.stock_items.first.adjust_count_on_hand(evaluator.total_inventory)
+        end
 
-        variant = product.master
-        variant.permanent_stock = evaluator.permanent_stock
-        variant.save
-
-        vendor.update(total_inventory: vendor.variants.pluck(:permanent_stock).sum)
+        vendor.update_total_inventory
       end
     end
   end

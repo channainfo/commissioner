@@ -9,8 +9,8 @@ RSpec.describe SpreeCmCommissioner::SubscribedOrderCreator do
 
   let(:product1) { create(:base_product, option_types: [option_type], subscribable: true, vendor: vendor)}
   let(:product2) { create(:base_product, option_types: [option_type], subscribable: true, vendor: vendor)}
-  let(:variant1) { create(:base_variant, option_values: [option_value], price: 30, product: product1, permanent_stock: 1 )}
-  let(:variant2) { create(:base_variant, option_values: [option_value], price: 30, product: product2, permanent_stock: 1 )}
+  let(:variant1) { create(:cm_base_variant, option_values: [option_value], price: 30, product: product1, total_inventory: 1 )}
+  let(:variant2) { create(:cm_base_variant, option_values: [option_value], price: 30, product: product2, total_inventory: 1 )}
 
   let(:stock_location) { create(:stock_location, vendor: vendor) }
   let(:stock_item1) { create(:stock_item, stock_location: stock_location, variant: variant1, count_on_hand: 10) }

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::OrderRejectedStateUpdater do
   let(:order) { create(:order_with_line_items , request_state: :requested , state: :complete) }
-  let!(:product) { create(:cm_accommodation_product, permanent_stock: 3) }
+  let!(:product) { create(:cm_accommodation_product, total_inventory: 3) }
   let!(:line_item) { create(:line_item, quantity: 3, order: order, product: product ) }
 
   let(:user) { create(:cm_user) }

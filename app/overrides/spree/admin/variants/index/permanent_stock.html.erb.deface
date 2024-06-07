@@ -1,9 +1,0 @@
-<!-- insert_after "erb[loud]:contains('variant.options_text')" -->
-
-<td>
-  <span class="d-flex justify-content-center">
-    <%= content_tag(:strong, class: "badge badge-active text-uppercase mx-auto") do %>
-      <%= variant.permanent_stock.to_s %>
-    <% end %>
-  </span>
-</td>

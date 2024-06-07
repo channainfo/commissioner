@@ -21,6 +21,8 @@ module SpreeCmCommissioner
       base.has_many :option_types, through: :vendor_option_types
       base.has_many :nearby_places, -> { order(position: :asc) }, class_name: 'SpreeCmCommissioner::VendorPlace', dependent: :destroy
 
+      base.has_many :stock_items, through: :variants, class_name: 'Spree::StockItem'
+
       base.has_many :taxon_vendors, class_name: 'SpreeCmCommissioner::TaxonVendor'
       base.has_many :taxons, through: :taxon_vendors
 
@@ -129,7 +131,7 @@ module SpreeCmCommissioner
       end
 
       def update_total_inventory
-        update(total_inventory: variants.pluck(:permanent_stock).sum)
+        update(total_inventory: stock_items.pluck(:count_on_hand).sum)
       end
 
       def update_min_max_price
