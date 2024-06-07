@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-12">
+    <%= f.field_container :title do %>
+      <%= f.label :title, raw(Spree.t(:title) + required_span_tag) %>
+      <%= f.text_field :title, class: 'form-control', placeholder: 'eg. Video Title', required: true %>
+      <%= f.error_message_on :title %>
+    <% end %>
+    <%= f.field_container :description do %>
+      <%= f.label :description, raw(Spree.t(:description) + required_span_tag) %>
+      <%= f.text_area :description, cols: 60, rows: 6, class: 'form-control', placeholder: 'eg. This product required to complete following step.' , required: true %>
+      <%= f.error_message_on :description %>
+    <% end %>
+    <div class="form-group">
+      <%= f.label :variant_id, raw(Spree::Variant.model_name.human + required_span_tag) %>
+      <%= f.select :variant_id, options_for_select(@variants.map { |v| [v.options_text, v.id, { disabled: v.id != f.object.variant_id && @video_on_demands.map(&:variant_id).include?(v.id) }] }, f.object.variant_id), {}, { class: 'select2' } %>
+      <%= f.error_message_on :variant_id %>
+    </div>
+    <div class="field mb-4">
+      <%= f.label :thumbnail, raw(Spree.t(:thumbnail) + required_span_tag) %>
+      <%= f.file_field :thumbnail, required: true, accept: 'image/*' %>
+      <%= f.error_message_on :thumbnail %>
+    </div>
+    <div class="field">
+      <%= f.label :file, raw(Spree.t(:video) + required_span_tag)%>
+      <%= f.file_field :file, accept: 'video/*'  %>
+      <%= f.error_message_on :file, required: true %>
+    </div>
+  </div>
+</div>

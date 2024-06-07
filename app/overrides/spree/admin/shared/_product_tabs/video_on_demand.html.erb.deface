@@ -1,0 +1,7 @@
+<!-- insert_after "erb[silent]:contains('Spree::Digital')" -->
+<%= content_tag :li, class: 'nav-item' do %>
+    <%= link_to_with_icon 'collection-play.svg', Spree.t(:video),
+      admin_product_video_on_demands_url(@product),
+      class: "nav-link #{'active' if current == :video_on_demand}" %>
+<% end %>
+

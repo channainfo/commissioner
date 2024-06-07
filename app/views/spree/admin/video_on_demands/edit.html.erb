@@ -1,0 +1,34 @@
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :video_on_demand } %>
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+
+<%= form_with model: @object, url: { action: 'update' } do |f| %>
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <div class="form-group">
+            <%= f.label :thumbnail, Spree.t(:thumbnail) %>
+            <div class="small-img">
+              <%= image_tag (main_app.rails_blob_url(@video_on_demand.thumbnail)), height: "200px" if @video_on_demand&.thumbnail %>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="form-group">
+            <%= f.label :video, Spree.t(:video) %>
+            <div class="small-img">
+              <video controls height="200">
+                <source src="<%= main_app.rails_blob_url(@video_on_demand.file) %>" type="<%= @video_on_demand.file.content_type %>">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-hook="admin_variant_video_on_demand_edit_form">
+        <%= render partial: 'form', locals: { f: f} %>
+        <%= render partial: 'spree/admin/shared/edit_resource_links' %>
+      </div>
+    </div>
+  </div>
+<% end %>
