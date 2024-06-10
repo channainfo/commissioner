@@ -16,33 +16,86 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCreator do
   let(:stock_item1) { create(:stock_item, stock_location: stock_location, variant: variant1, count_on_hand: 10) }
   let(:stock_item2) { create(:stock_item, stock_location: stock_location, variant: variant2, count_on_hand: 10) }
 
-  let(:subscription1) { create(:cm_subscription, customer: customer, quantity: 2, start_date: '2023-01-02'.to_date) }
-  let(:subscription2) { create(:cm_subscription, customer: customer, quantity: 2, start_date: '2023-01-02'.to_date) }
   describe ".call" do
     context "when customer has no subscription" do
       it "does nothing" do
         described_class.call(customer: customer)
         expect(customer.orders).to be_empty
+        expect(customer.last_invoice_date).to eq nil
       end
     end
-    context "when customer has subscription" do
-      it "creates a new order" do
-        expect(customer.subscriptions).to include(subscription2)
-        expect(customer.subscriptions).to include(subscription1)
-        expect(customer.orders.count).to eq 1
-        described_class.call(customer: customer)
-        expect(customer.orders.count).to eq 2
+    context "when customer has subscriptions" do
+      context "when there are 3 missed months" do
+        before do
+          create(:cm_subscription, customer: customer, quantity: 2, start_date: 3.months.ago.beginning_of_month)
+          create(:cm_subscription, customer: customer, quantity: 2, start_date: 3.months.ago.beginning_of_month)
+          customer.last_invoice_date =  3.months.ago
+        end
+
+        it "create invoices for all the missing months" do
+          described_class.call(customer: customer)
+          expect(customer.orders.count).to eq 4
+        end
+        it "update the last_invoice_date of the customer" do
+          described_class.call(customer: customer)
+          expect(customer.last_invoice_date).to eq Time.zone.now.to_date
+        end
       end
-    end
-    context "when customer already have invoice for this month" do
-      it 'throw error' do
-        expect(customer.subscriptions).to include(subscription2)
-        expect(customer.subscriptions).to include(subscription1)
-        described_class.call(customer: customer)
-        expect(customer.orders.count).to eq 2
-        result = described_class.call(customer: customer)
-        expect(customer.orders.count).to eq 2
-        expect(result.error).to eq 'Invoice for this month is already existed'
+      context "when there are 3 missed months and also time for future subscription to start" do
+        before do
+          create(:cm_subscription, customer: customer, quantity: 2, start_date: 3.months.ago.beginning_of_month)
+          create(:cm_subscription, customer: customer, quantity: 2, start_date: 3.months.ago.beginning_of_month)
+          create(:cm_subscription, customer: customer, quantity: 2, start_date: Time.zone.now + 1.month )
+          customer.subscriptions.last.update(start_date: Time.zone.now)
+          customer.last_invoice_date =  3.months.ago
+        end
+        it "create invoices for all missing months " do
+          described_class.call(customer: customer)
+          expect(customer.orders.count).to eq 4
+        end
+        it "does not include the future subscription in the first two missing months" do
+          described_class.call(customer: customer)
+          expect(customer.orders[0].line_items.count).to eq 2
+          expect(customer.orders[1].line_items.count).to eq 2
+          expect(customer.orders[2].line_items.count).to eq 2
+          expect(customer.orders[3].line_items.count).to eq 3
+        end
+        it "create invoices for the failed invoice generation of the future subscription " do
+          create(:cm_subscription, customer: customer, quantity: 2, start_date: Time.zone.now + 1.month )
+          customer.subscriptions.last.update(start_date: Time.zone.now - 1.month)
+          customer.last_invoice_date =  3.months.ago
+          described_class.call(customer: customer)
+          expect(customer.orders[0].line_items.count).to eq 2
+          expect(customer.orders[1].line_items.count).to eq 2
+          expect(customer.orders[2].line_items.count).to eq 3
+          expect(customer.orders[3].line_items.count).to eq 4
+        end
+      end
+      context "When there are no missed month" do
+        before do
+          create(:cm_subscription, customer: customer, quantity: 2, start_date: Time.zone.now)
+        end
+        it "doesn't create any orders" do
+          described_class.call(customer: customer)
+          expect(customer.orders.count).to eq 1
+        end
+        it "doesn't update the last_invoice_date of the customer" do
+          described_class.call(customer: customer)
+          expect(customer.last_invoice_date).to eq Time.zone.now.to_date
+        end
+      end
+      context "When there are no missed month but it's time for future subscription to start" do
+        before do
+          subscription = create(:cm_subscription, customer: customer, quantity: 2, start_date: Time.zone.now + 1.month)
+          subscription.update(start_date: Time.zone.now)
+        end
+        it " create a new order for the future subscription " do
+          expect(customer.orders.count).to eq 0
+          expect(customer.last_invoice_date).to eq nil
+          described_class.call(customer: customer)
+          expect(customer.orders.count).to eq 1
+          expect(customer.last_invoice_date).to eq Time.zone.now.to_date
+        end
       end
     end
   end
