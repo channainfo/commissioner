@@ -28,27 +28,30 @@ RSpec.describe SpreeCmCommissioner::NotificationSendCreator do
         create(:cm_notification_taxon, customer_notification: customer_notification, taxon: taxon)
       end
 
-      it 'sends notification to specific users' do
+      it 'sends notification to specific users and sets notice_key' do
         interactor = described_class.new(send_all: true, customer_notification: customer_notification)
         expect(SpreeCmCommissioner::CustomerNotificationSenderJob).to receive(:perform_later).with(customer_notification.id, any_args)
         interactor.call
+        expect(interactor.context.notice_key).to eq 'notification.send_specific_in_progress'
       end
     end
 
     context 'when customer_notification does not have notification_taxons' do
-      it 'sends notification to all users' do
+      it 'sends notification to all users and sets notice_key' do
         interactor = described_class.new(send_all: true, customer_notification: customer_notification)
         expect(SpreeCmCommissioner::CustomerNotificationSenderJob).to receive(:perform_later).with(customer_notification.id, nil)
         interactor.call
+        expect(interactor.context.notice_key).to eq 'notification.send_all_in_progress'
       end
     end
   end
 
   describe '#handle_send_specific' do
-    it 'sends notification to specific users' do
+    it 'sends notification to specific users and sets notice_key' do
       interactor = described_class.new(send_all: false, customer_notification: customer_notification)
       expect(SpreeCmCommissioner::CustomerNotificationSenderJob).to receive(:perform_later).with(customer_notification.id, any_args)
       interactor.call
+      expect(interactor.context.notice_key).to eq 'notification.send_specific_in_progress'
     end
   end
 end
