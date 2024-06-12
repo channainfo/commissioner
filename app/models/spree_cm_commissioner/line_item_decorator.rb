@@ -5,13 +5,15 @@ module SpreeCmCommissioner
 
       base.belongs_to :accepter, class_name: 'Spree::User', optional: true
       base.belongs_to :rejecter, class_name: 'Spree::User', optional: true
+
+      base.has_one :google_wallet, class_name: 'SpreeCmCommissioner::GoogleWallet', through: :product
+
       base.has_many :taxons, class_name: 'Spree::Taxon', through: :product
       base.has_many :guests, class_name: 'SpreeCmCommissioner::Guest', dependent: :destroy
       base.has_many :pending_guests, pending_guests_query, class_name: 'SpreeCmCommissioner::Guest', dependent: :destroy
       base.has_many :product_completion_steps, class_name: 'SpreeCmCommissioner::ProductCompletionStep', through: :product
-
       base.before_save :update_vendor_id
-
+      base.before_save :generate_number
       base.before_create :add_due_date, if: :subscription?
 
       base.validate :ensure_not_exceed_max_quantity_per_order, if: -> { variant&.max_quantity_per_order.present? }
@@ -142,6 +144,12 @@ module SpreeCmCommissioner
         resize_gte_to: false,
         size: size
       )
+    end
+
+    def generate_number
+      return unless number.nil?
+
+      self.number = "L#{id}-#{order.number[1..]}"
     end
 
     def qr_data
