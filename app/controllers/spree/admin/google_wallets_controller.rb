@@ -4,6 +4,7 @@ module Spree
       before_action :product
       before_action :build_assets, only: :update
 
+      # POST /google_wallets
       def create
         wallet = model_class.new(product_id: product.id, review_status: permitted_resource_params[:review_status])
         if wallet.save
@@ -13,12 +14,32 @@ module Spree
         end
       end
 
-      # DELETE remove_logo_admin_product_google_wallet
+      # POST /google_wallets/:id/create_google_wallet_class
+      def create_google_wallet_class
+        service = object.class_creator.call
+        if service[:status] == '200'
+          redirect_to location_after_save, notice: I18n.t('google_wallet.google_wallet_class_created')
+        else
+          redirect_to location_after_save, alert: I18n.t('google_wallet.google_wallet_class_create_fail')
+        end
+      end
+
+      # PATCH /google_wallets/:id/update_google_wallet_class
+      def update_google_wallet_class
+        service = object.class_updater.call
+        if service[:status] == '200'
+          redirect_to location_after_save, notice: I18n.t('google_wallet.google_wallet_class_updated')
+        else
+          redirect_to location_after_save, alert: I18n.t('google_wallet.google_wallet_class_update_fail')
+        end
+      end
+
+      # DELETE /google_wallets/:id/remove_logo
       def remove_logo
         handle_asset(object.logo)
       end
 
-      # DELETE remove_hero_image_admin_product_google_wallet
+      # DELETE /google_wallets/:id/remove_hero_image
       def remove_hero_image
         handle_asset(object.hero_image)
       end

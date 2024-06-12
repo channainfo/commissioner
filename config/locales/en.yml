@@ -51,7 +51,11 @@ en:
     empty_info: "No vendor information available."
 
   google_wallet:
-    empty_info: "Google Wallet not create yet"
+    note: "Click <b>Create</b> or <b> Update</b> to connect to Google Wallet after filled all information "
+    google_wallet_class_created: "Google Wallet class created successfully."
+    google_wallet_class_updated: "Google Wallet class updated successfully."
+    google_wallet_class_create_fail: "Google Wallet class created fail."
+    google_wallet_class_update_fail: "Google Wallet class updated fail."
 
   user_taxon:
     empty_info: "No user information available."
