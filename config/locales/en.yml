@@ -50,6 +50,9 @@ en:
   taxon_vendor:
     empty_info: "No vendor information available."
 
+  google_wallet:
+    empty_info: "Google Wallet not create yet"
+
   user_taxon:
     empty_info: "No user information available."
 
