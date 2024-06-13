@@ -1,6 +1,6 @@
 module SpreeCmCommissioner
   class CustomerNotification < SpreeCmCommissioner::Base
-    has_many :notifications, as: :notificable, dependent: :destroy
+    has_many :notifications, as: :notificable, dependent: :destroy, class_name: 'SpreeCmCommissioner::Notification'
     has_one :feature_image, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::FeatureImage'
 
     has_many :notification_taxons, class_name: 'SpreeCmCommissioner::NotificationTaxon'

@@ -67,6 +67,7 @@ Spree::Core::Engine.add_routes do
           post :update_positions
         end
       end
+      resources :notifications, only: [:index]
     end
 
     resources :notification_sender, only: [:create]
