@@ -5,7 +5,7 @@ module Spree
         def self.prepended(base)
           base.attributes :from_date, :to_date, :need_confirmation, :product_type, :event_status, :amount, :display_amount,
                           :kyc, :kyc_fields, :remaining_total_guests, :number_of_guests,
-                          :completion_steps
+                          :completion_steps, :allowed_self_check_in
 
           base.attribute :delivery_required, &:delivery_required?
 

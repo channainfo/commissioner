@@ -66,6 +66,11 @@ module SpreeCmCommissioner
     # - appointment uses number of hours, etc.
     #
     # override
+
+    def allowed_self_check_in
+      product.product_type != 'ecommerce'
+    end
+
     def amount
       base_price = price * quantity
 
