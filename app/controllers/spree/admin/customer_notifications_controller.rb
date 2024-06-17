@@ -21,7 +21,7 @@ module Spree
 
       def customer_notification_params
         params.require(:customer_notification).permit(
-          :title, :body, :url, :notification_type, :payload, :excerpt, :started_at, :sent_at, :send_all,
+          :title, :body, :url, :notification_type, :payload, :excerpt, :started_at, :sent_at,
           :match_policy, :preferences, taxon_ids: []
         )
       end

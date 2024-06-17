@@ -3,7 +3,7 @@
 <small class="form-text text-muted">
   <ul>
     <li>Total: <%= @notifications.size %> / <%= @notifications.total_count %> Recipient</li>
-    <li>Read notifications: <%= @notifications.count { |notification| notification.read_at.present? } %></li>
+    <li>Read notifications: <%= @read_notifications_count %></li>
   </ul>
 </small>
 

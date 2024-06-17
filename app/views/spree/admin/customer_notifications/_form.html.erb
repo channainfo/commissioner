@@ -2,20 +2,20 @@
   <div class="row">
     <div class="col-lg-12 col-sm-12">
       <div class="form-group">
-        <%= f.label :title, class: "text-md" %>
-        <%= f.text_field :title, class: 'form-control border-radius-5' %>
+        <%= f.label :title, class: "text-md" %> <span class="required text-danger">*</span>
+        <%= f.text_field :title, required: true, class: 'form-control border-radius-5' %>
         <%= f.error_message_on :title %>
       </div>
     </div>
 
     <div class="col-lg-12 col-sm-12">
-      <%= f.label :excerpt, class: "text-md" %>
-      <%= f.text_field :excerpt, class: 'form-control border-radius-5' %>
+      <%= f.label :excerpt, class: "text-md" %> <span class="required text-danger">*</span>
+      <%= f.text_field :excerpt, required: true, class: 'form-control border-radius-5' %>
       <%= f.error_message_on :excerpt %>
     </div>
 
-    <div class="col-lg-12 col-sm-12">
-      <%= f.label :body, Spree.t(:body) %>
+    <div class="col-lg-12 col-sm-12 mt-3">
+      <%= f.label :body, Spree.t(:body) %> <span class="required text-danger">*</span>
       <%= f.text_area :body, rows: "20", class: 'form-control spree-rte border-radius-5' %>
       <%= f.error_message_on :body %>
     </div>
@@ -38,9 +38,22 @@
 
     <div class="col-lg-12 col-sm-12">
       <div class="form-group">
-        <%= f.label :url, class: "text-md" %>
-        <%= f.text_field :url, class: 'form-control border-radius-5' %>
+        <%= f.label :url, class: "text-md" %> <span class="required text-danger">*</span>
+        <%= f.text_field :url, required: true, class: 'form-control border-radius-5' %>
         <%= f.error_message_on :url %>
+        <small class="form-text text-muted">
+          Open app: bookmeplus://www.bookme.plus/t/events/preah-vihear-temple-run<br>
+          Open web view: https://bookmebus.com/en/about_us<br>
+          Open browser: https://t.me/runwithsaiofficial?target=_blank<br>
+        </small>
+      </div>
+    </div>
+
+    <div class="col-lg-12 col-sm-12">
+      <div class="form-group">
+        <%= f.label :action_label, class: "text-md" %>
+        <%= f.text_field :action_label, placeholder: 'default: "Book Now"', class: 'form-control border-radius-5' %>
+        <%= f.error_message_on :action_label %>
       </div>
     </div>
 
@@ -51,13 +64,6 @@
           <%= f.text_field :started_at, value: @object.started_at, placeholder: Spree.t(:select_a_date), class: 'form-control shadow-none', 'data-input': '' %>
           <%= render partial: 'spree/admin/shared/cal_close' %>
         </div>
-      </div>
-    </div>
-
-    <div class="col-lg-12 col-sm-12">
-      <div class="form-group">
-        <%= f.label :send_all %>
-        <%= f.check_box :send_all %>
       </div>
     </div>
 

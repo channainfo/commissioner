@@ -4,6 +4,7 @@ module Spree
       before_action :load_customer_notification
 
       def index
+        @read_notifications_count = @customer_notification.notifications.where.not(read_at: nil).count
         @notifications = @customer_notification.notifications
                                                .page(params[:page])
                                                .per(params[:per_page])
