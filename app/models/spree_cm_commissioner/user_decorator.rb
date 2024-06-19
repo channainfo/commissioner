@@ -18,6 +18,8 @@ module SpreeCmCommissioner
       base.has_many :user_events, class_name: 'SpreeCmCommissioner::UserEvent'
       base.has_many :events, through: :user_events, class_name: 'Spree::Taxon', source: 'taxon'
 
+      base.has_many :wished_items, class_name: 'Spree::WishedItem', through: :wishlists
+
       base.has_one :profile, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::UserProfile'
       base.has_one :customer, class_name: 'SpreeCmCommissioner::Customer'
 

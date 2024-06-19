@@ -4,7 +4,7 @@ module Spree
       module Storefront
         class WishedItemsController < Spree::Api::V2::ResourceController
           def collection
-            @collection ||= Spree::WishedItem.where(variant_id: params[:variant_id])
+            @collection ||= spree_current_user.wished_items.where(variant_id: params[:variant_id])
           end
 
           def model_class
