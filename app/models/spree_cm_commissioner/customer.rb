@@ -41,7 +41,7 @@ module SpreeCmCommissioner
     validate :billing_customer_attributes
 
     acts_as_paranoid
-    self.whitelisted_ransackable_attributes = %w[number phone_number first_name last_name sequence_number place_id]
+    self.whitelisted_ransackable_attributes = %w[number phone_number first_name last_name sequence_number place_id active_subscriptions_count]
     self.whitelisted_ransackable_associations = %w[taxons]
 
     accepts_nested_attributes_for :ship_address, :bill_address

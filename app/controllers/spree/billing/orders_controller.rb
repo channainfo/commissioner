@@ -23,7 +23,7 @@ module Spree
         filter_by_month(*default_date_range)
 
         @search = scope.ransack(params[:q])
-        @collection = @search.result.includes(:subscription, :customer, :invoice).page(page).per(per_page)
+        @collection = @search.result.includes(:subscription, :customer, :invoice).order(created_at: :desc).page(page).per(per_page)
       end
 
       def load_resource_instance
