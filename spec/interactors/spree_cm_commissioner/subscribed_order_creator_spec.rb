@@ -28,6 +28,21 @@ RSpec.describe SpreeCmCommissioner::SubscribedOrderCreator do
         expect(context.order.line_items.size).to eq 1
         expect(context.order.line_items[0].variant).to eq subscription.variant
         expect(context.order.line_items[0].quantity).to eq 2
+        expect(customer.last_invoice_date).to eq Time.zone.now.to_date
+      end
+    end
+
+    context "when subscriptions is later than this month" do
+      it "do not create any order"do
+        subscription1 = create(:cm_subscription, customer: customer, quantity: 2, start_date: '2024-07-02'.to_date)
+        subscription2 = create(:cm_subscription, customer: customer, quantity: 2, start_date: '2025-01-02'.to_date)
+        expect(customer.orders.count).to eq 0
+        expect(customer.subscriptions.count).to eq 2
+        expect(customer.subscriptions).to include(subscription1)
+        expect(customer.subscriptions).to include(subscription2)
+      end
+      it "doesn't set last_invoice_date" do
+        expect(customer.last_invoice_date).to eq nil
       end
     end
 
