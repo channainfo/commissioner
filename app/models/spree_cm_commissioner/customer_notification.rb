@@ -10,7 +10,6 @@ module SpreeCmCommissioner
     validates :url, presence: true
     validates_associated :feature_image
 
-    validates :payload, presence: true
     validates :notification_type, presence: true
 
     enum notification_type: { :promotion => 0, :announcement => 1 }
@@ -27,7 +26,7 @@ module SpreeCmCommissioner
     end
 
     def self.scheduled_items
-      where(['sent_at IS NULL AND started_at <= ? AND send_all = ?', Time.current, true])
+      where(['sent_at IS NULL AND started_at <= ?', Time.current])
     end
   end
 end
