@@ -322,6 +322,7 @@ en:
         payable: "Payable"
         invoice_id: "Invoice ID"
         status: "Status"
+        invoice_start_date: "Invoice Start Date"
         invoice_due_date: "Invoice Due Date"
         type: "Type"
         select_date: "Select Date"
