@@ -52,6 +52,33 @@ RSpec.describe SpreeCmCommissioner::Stock::AvailabilityChecker do
           expect(subject.can_supply?).to be true
         end
       end
+
+      context 'when variant.delivery_required? is true (it check stock base on default spree instead)' do
+        let(:product) { create(:product, product_type: :ecommerce) }
+        let(:variant) { create(:variant, product: product) }
+        let!(:stock_item) do
+          stock_item = variant.stock_items.first
+          stock_item.backorderable = false
+          stock_item.set_count_on_hand(3)
+          stock_item
+        end
+
+        subject { described_class.new(variant) }
+
+        context 'stock items is available' do
+          it 'return can_supply? true' do
+            expect(variant.delivery_required?).to be true
+            expect(subject.can_supply?(3)).to be true
+          end
+        end
+
+        context 'stock items is not available' do
+          it 'return can_supply? false' do
+            expect(variant.delivery_required?).to be true
+            expect(subject.can_supply?(4)).to be false
+          end
+        end
+      end
     end
 
     context 'real time validation conditions (after passed basic conditions above)' do
