@@ -14,7 +14,19 @@ module Spree
 
             builder = line_item.google_wallet.object_builder.new(line_item: line_item)
 
-            render json: { token: builder.object_token }
+            render_serialized_payload(201) do
+              {
+                data: {
+                  id: id,
+                  type: 'google_wallet_object',
+                  token: builder.object_token
+                }
+              }
+            end
+          end
+
+          def id
+            SecureRandom.hex
           end
         end
       end
