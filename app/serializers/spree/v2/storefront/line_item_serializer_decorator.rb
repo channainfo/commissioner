@@ -4,6 +4,7 @@ module Spree
       module LineItemSerializerDecorator
         def self.prepended(base)
           base.attributes :from_date, :to_date, :need_confirmation, :product_type, :event_status, :amount, :display_amount,
+                          :number, :qr_data,
                           :kyc, :kyc_fields, :remaining_total_guests, :number_of_guests,
                           :completion_steps
 

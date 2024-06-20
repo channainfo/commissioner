@@ -44,6 +44,8 @@ RSpec.describe Spree::V2::Storefront::LineItemSerializer, type: :serializer do
         :need_confirmation,
         :product_type,
         :event_status,
+        :qr_data,
+        :number,
         :kyc,
         :kyc_fields,
         :remaining_total_guests,
@@ -51,6 +53,9 @@ RSpec.describe Spree::V2::Storefront::LineItemSerializer, type: :serializer do
         :completion_steps,
         :delivery_required,
       )
+
+      expect(subject[:data][:attributes][:qr_data]).to eq line_item.qr_data
+      expect(subject[:data][:attributes][:number]).to eq line_item.number
     end
 
     it 'returns exact accommodation relationships' do
