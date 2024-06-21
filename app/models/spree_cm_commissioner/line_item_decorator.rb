@@ -13,7 +13,6 @@ module SpreeCmCommissioner
       base.has_many :pending_guests, pending_guests_query, class_name: 'SpreeCmCommissioner::Guest', dependent: :destroy
       base.has_many :product_completion_steps, class_name: 'SpreeCmCommissioner::ProductCompletionStep', through: :product
       base.before_save :update_vendor_id
-      base.before_save :generate_number
       base.before_create :add_due_date, if: :subscription?
 
       base.validate :ensure_not_exceed_max_quantity_per_order, if: -> { variant&.max_quantity_per_order.present? }
@@ -46,6 +45,7 @@ module SpreeCmCommissioner
     end
 
     def self.include_modules(base)
+      base.include Spree::Core::NumberGenerator.new(prefix: 'L')
       base.include SpreeCmCommissioner::LineItemDurationable
       base.include SpreeCmCommissioner::LineItemsFilterScope
       base.include SpreeCmCommissioner::LineItemGuestsConcern
@@ -146,13 +146,9 @@ module SpreeCmCommissioner
       )
     end
 
-    def generate_number
-      return unless number.nil?
-
-      self.number = "L#{id}-#{order.number[1..]}"
-    end
-
     def qr_data
+      return nil if order.nil?
+
       "#{order.number}-#{order.token}-L#{id}"
     end
 
