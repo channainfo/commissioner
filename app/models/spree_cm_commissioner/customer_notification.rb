@@ -1,13 +1,15 @@
 module SpreeCmCommissioner
   class CustomerNotification < SpreeCmCommissioner::Base
-    has_many :notifications, as: :notificable, dependent: :destroy
+    has_many :notifications, as: :notificable, dependent: :destroy, class_name: 'SpreeCmCommissioner::Notification'
     has_one :feature_image, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::FeatureImage'
+
+    has_many :notification_taxons, class_name: 'SpreeCmCommissioner::NotificationTaxon'
+    has_many :taxons, through: :notification_taxons, class_name: 'Spree::Taxon'
 
     validates :title, presence: true
     validates :url, presence: true
     validates_associated :feature_image
 
-    validates :payload, presence: true
     validates :notification_type, presence: true
 
     enum notification_type: { :promotion => 0, :announcement => 1 }
@@ -24,7 +26,7 @@ module SpreeCmCommissioner
     end
 
     def self.scheduled_items
-      where(['sent_at IS NULL AND started_at <= ? AND send_all = ?', Time.current, true])
+      where(['sent_at IS NULL AND started_at <= ?', Time.current])
     end
   end
 end

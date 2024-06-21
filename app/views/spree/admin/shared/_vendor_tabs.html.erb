@@ -14,6 +14,14 @@
     <% end if can?(:admin, Spree::Vendor) %>
 
     <%= content_tag :li do %>
+      <%= link_to_with_icon 'receipt.svg',
+        Spree.t(:commissions),
+        admin_vendor_product_commissions_url(@vendor),
+        class: "nav-link #{'active' if current == :product_commissions }"
+      %>
+    <% end if can?(:admin, Spree::Product) %>
+
+    <%= content_tag :li do %>
       <%= link_to_with_icon 'images.svg',
         Spree.t(:photos),
         admin_vendor_vendor_photos_url(@vendor),

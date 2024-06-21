@@ -1,6 +1,7 @@
+# rubocop:disable Metrics/MethodLength, Metrics/AbcSize
 module SpreeCmCommissioner
   module ProductDecorator
-    def self.prepended(base) # rubocop:disable Metrics/AbcSize
+    def self.prepended(base)
       base.include SpreeCmCommissioner::ProductType
       base.include SpreeCmCommissioner::KycBitwise
 
@@ -26,6 +27,7 @@ module SpreeCmCommissioner
       base.has_many :product_completion_steps, class_name: 'SpreeCmCommissioner::ProductCompletionStep', dependent: :destroy
 
       base.has_one :default_state, through: :vendor
+      base.has_one :google_wallet, class_name: 'SpreeCmCommissioner::GoogleWallet', dependent: :destroy
 
       base.has_many :complete_line_items, through: :classifications, source: :line_items
 
@@ -43,19 +45,29 @@ module SpreeCmCommissioner
       base.scope :subscribable, -> { where(subscribable: 1) }
 
       base.validate :validate_event_taxons, if: -> { taxons.event.present? }
+      base.validates :commission_rate, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }, allow_nil: true
 
       base.whitelisted_ransackable_attributes = %w[description name slug discontinue_on status vendor_id]
+
+      base.after_update :update_variants_vendor_id, if: :saved_change_to_vendor_id?
+    end
+
+    def associated_event
+      taxons.event.first&.parent
+    end
+
+    private
+
+    def update_variants_vendor_id
+      variants_including_master.find_each { |variant| variant.update!(vendor_id: vendor_id) }
     end
 
     def validate_event_taxons
       errors.add(:taxons, 'Event Taxon can\'t not be more than 1') if taxons.event.size > 1
       errors.add(:taxons, 'Must add event date to taxon') if taxons.event.first.from_date.nil? || taxons.event.first.to_date.nil?
     end
-
-    def associated_event
-      taxons.event.first&.parent
-    end
   end
 end
 
 Spree::Product.prepend(SpreeCmCommissioner::ProductDecorator) unless Spree::Product.included_modules.include?(SpreeCmCommissioner::ProductDecorator)
+# rubocop:enable Metrics/MethodLength, Metrics/AbcSize

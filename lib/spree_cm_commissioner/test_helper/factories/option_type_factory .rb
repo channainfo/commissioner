@@ -3,55 +3,112 @@ FactoryBot.define do
     sequence(:name) { |n| "foo-size-#{n}" }
     presentation    { 'Size' }
 
-    trait :month do
-      name { 'month' }
-      presentation { 'Month' }
+    trait :location do
+      attr_type { :state_selection }
+      name { 'location' }
+      presentation { 'location' }
     end
 
-    trait :due_date do
-      name { 'due-date' }
-      presentation { 'due-date' }
+    trait :start_date do
+      attr_type { :date }
+      name { 'start-date' }
+      presentation { 'start-date' }
+    end
+
+    trait :end_date do
+      attr_type { :date }
+      name { 'end-date' }
+      presentation { 'end-date' }
+    end
+
+    trait :start_time do
+      attr_type { :time }
+      name { 'start-time' }
+      presentation { 'start-time' }
+    end
+
+    trait :reminder_in_time do
+      attr_type { :time }
+      name { 'reminder-in-time' }
+      presentation { 'reminder-in-time' }
+    end
+
+    trait :duration_in_hours do
+      attr_type { :integer }
+      name { 'duration-in-hours' }
+      presentation { 'duration-in-hours' }
+    end
+
+    trait :duration_in_minutes do
+      attr_type { :integer }
+      name { 'duration-in-minutes' }
+      presentation { 'duration-in-minutes' }
+    end
+
+    trait :duration_in_seconds do
+      attr_type { :integer }
+      name { 'duration-in-seconds' }
+      presentation { 'duration-in-seconds' }
     end
 
     trait :payment_option do
+      attr_type { :payment_option }
       name { 'payment-option' }
       presentation { 'payment-option' }
     end
 
-    trait :adults do
-      attr_type { 'integer' }
-      name { 'adults' }
-      presentation { 'Adults' }
-    end
-
-    trait :kids do
-      attr_type { 'integer' }
-      name { 'kids' }
-      presentation { 'Kids' }
-    end
-
-    trait :kids_age_max do
-      attr_type { 'integer' }
-      name { 'kids-age-max' }
-      presentation { 'Kids age max' }
-    end
-
-    trait :allowed_extra_adults do
-      attr_type { 'integer' }
-      name { 'allowed-extra-adults' }
-      presentation { 'Allowed extra adults' }
-    end
-
-    trait :allowed_extra_kids do
-      attr_type { 'integer' }
-      name { 'allowed-extra-kids' }
-      presentation { 'Allowed extra kids' }
+    trait :delivery_option do
+      attr_type { :delivery_option }
+      name { 'delivery-option' }
+      presentation { 'delivery-option' }
     end
 
     trait :max_quantity_per_order do
-      attr_type { 'integer' }
+      attr_type { :integer }
       name { 'max-quantity-per-order' }
-      presentation { 'Max quantity per order' }
+      presentation { 'max-quantity-per-order' }
+    end
+
+    trait :due_date do
+      attr_type { :integer }
+      name { 'due-date' }
+      presentation { 'due-date' }
+    end
+
+    trait :month do
+      attr_type { :integer }
+      name { 'month' }
+      presentation { 'month' }
+    end
+
+    trait :number_of_adults do
+      attr_type { :integer }
+      name { 'number-of-adults' }
+      presentation { 'number-of-adults' }
+    end
+
+    trait :number_of_kids do
+      attr_type { :integer }
+      name { 'number-of-kids' }
+      presentation { 'number-of-kids' }
+    end
+
+    trait :kids_age_max do
+      attr_type { :integer }
+      name { 'kids-age-max' }
+      presentation { 'kids-age-max' }
+    end
+
+    trait :allowed_extra_adults do
+      attr_type { :integer }
+      name { 'allowed-extra-adults' }
+      presentation { 'allowed-extra-adults' }
+    end
+
+    trait :allowed_extra_kids do
+      attr_type { :integer }
+      name { 'allowed-extra-kids' }
+      presentation { 'allowed-extra-kids' }
     end
 
     initialize_with { Spree::OptionType.where(name: name).first_or_initialize }

@@ -50,6 +50,13 @@ en:
   taxon_vendor:
     empty_info: "No vendor information available."
 
+  google_wallet:
+    note: "Click <b>Create</b> or <b> Update</b> to connect to Google Wallet after filled all information "
+    google_wallet_class_created: "Google Wallet class created successfully."
+    google_wallet_class_updated: "Google Wallet class updated successfully."
+    google_wallet_class_create_fail: "Google Wallet class created fail."
+    google_wallet_class_update_fail: "Google Wallet class updated fail."
+
   user_taxon:
     empty_info: "No user information available."
 
@@ -234,7 +241,9 @@ en:
       match_any: "Some line items must from selected age group"
       match_all: "All line items must from selected age group"
     billing:
-      places: "places"
+      new_order: "New Order"
+      businesses: "Businesses"
+      places: "Places"
       code: "code"
       name: "name"
       logo: "logo"
@@ -255,7 +264,6 @@ en:
       balance_due_orders: "Balance Due Invoices"
       overdue_orders: "Overdue Invoices"
       orders: "Invoices"
-      customers: "Customers"
       roles: "Role"
       subscriptions: "Service Usage"
       active_subscription: "Active"
@@ -273,6 +281,13 @@ en:
         overdue: "Overdue"
         failed: "Failed"
         unknown: "Unknown"
+      exceeding_date_range: "Exceeding Date Range, Range must be less than 6 months"
+      customers:
+        re_create_order:
+          success: "Invoice Created"
+          fails: "Invoice for this month is already exist "
+        customers: "Customers"
+      service_start_date: "Service Start Date"
     upsupported_payment: "Unsupported event"
     exceeded_available_quantity_on_date:
       zero: "Rooms are not available on %{date}"
@@ -311,12 +326,14 @@ en:
         payable: "Payable"
         invoice_id: "Invoice ID"
         status: "Status"
+        invoice_start_date: "Invoice Start Date"
         invoice_due_date: "Invoice Due Date"
         type: "Type"
         select_date: "Select Date"
         taxon: "Taxon"
         quantity: "Quantity"
         amount: "Amount"
+        show_invoices: "Show Invoices"
       spree/report:
         cashier: "Cashier"
     errors:
@@ -328,8 +345,8 @@ en:
         spree_cm_commissioner/customer:
           attributes:
             base:
-              owner_name_cant_be_blank: "Owner name can't be blank"
-              taxon_cant_be_blank: "Taxon can't be blank"
+              name_cant_be_blank: "Name can't be blank"
+              businesses_cant_be_blank: "Businesses can't be blank"
               phone_number_cant_be_blank: "Phone number can't be blank"
               quantity_cant_be_less_than_or_equal_to_zero: "Quantity can't be less or equal than 0"
 
@@ -362,7 +379,8 @@ en:
   webhooks_subscriber_rules:
     empty_info: "No <b>Webhooks Subscriber Rules</b> found"
   notification:
-    send_test_success: "Test Send Successfully"
+    send_specific_in_progress: "Send Specific is in Progress"
+    send_all_in_progress: "Send To All is in Progress"
 
   pincode_sender:
     sms:
@@ -376,6 +394,7 @@ en:
       confirmation_code: "confirmation code"
       update_user_login: "update user code"
       contact_update: "update contact code"
+      otp_code: "OTP code"
 
   notifications:
     spree_cm_commissioner:

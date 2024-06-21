@@ -1,12 +1,27 @@
+<% if @customer.present? %>
+  <% content_for :page_actions do %>
+    <%= button_link_to I18n.t('spree.billing.new_order'), billing_customer_re_create_order_path, method: :post, class: "btn-success", icon: 'add.svg' %>
+  <% end %>
+<% end %>
 <% if @subscription.present? && @customer.present? %>
   <%= render partial: 'spree/billing/shared/subscription_tabs', locals: { current: :order } %>
+<% elsif @customer.present?%>
+  <%= render partial: 'spree/billing/shared/customer_tabs', locals: { current: :orders } %>
+  <style>
+    .current-month {
+    border: 2px green solid;
+  }
+    .before-current-month {
+    border: 2px yellow solid;
+  }
+  </style>
 <% else %>
   <% content_for :page_title do %>
     <%= plural_resource_name(Spree::Order) %>
   <% end %>
 <% end %>
-<% render 'search' %>
-<% unless @search.nil? %>
+<% render 'search' unless @subscription.present? || @customer.present? %>
+<% unless @search.nil?%>
   <div class="table-responsive border rounded bg-white mb-3">
     <table class="table" id="listing_subscriptions">
       <thead class="text-muted">
@@ -15,7 +30,6 @@
           <th><%= sort_link @search, :invoice_due_date, I18n.t(:invoice_due_date, scope: 'activerecord.attributes.spree/order') %></th>
           <th><%= I18n.t(:customer_id, scope: 'activerecord.attributes.spree/order') %></th>
           <th><%= I18n.t(:phone_number, scope: 'activerecord.attributes.spree/order') %></th>
-          <th><%= I18n.t(:type, scope: 'activerecord.attributes.spree/order') %></th>
           <th><%= sort_link @search, :total, I18n.t(:total, scope: 'activerecord.attributes.spree/order') %></th>
           <th><%= I18n.t(:payment_state, scope: 'activerecord.attributes.spree/order') %></th>
           <th data-hook="admin_orders_index_header_actions" class="actions"></th>
@@ -23,7 +37,7 @@
       </thead>
       <tbody>
         <% @orders.each do |order| %>
-          <tr id="<%= spree_dom_id order %>" data-hook="admin_subscriptions_index_rows">
+          <tr id="<%= spree_dom_id order %>" data-hook="admin_subscriptions_index_rows" data-invoice-date="<%= order.line_items[0].from_date %>">
             <td><%= link_to order.invoice&.invoice_number, edit_billing_order_path(order) %></td>
             <td>
               <%= order.line_items[0].due_date&.to_date %>
@@ -32,9 +46,6 @@
               <%= link_to order.customer.customer_number, edit_billing_customer_path(order.customer) %>
             </td>
             <td><%= order.customer.phone_number %></td>
-            <td class='taxon'>
-              <% order.customer.taxons.map(&:name).join(' ') %>
-            </td>
             <td><%= order.display_total.to_html %></td>
             <td class="no-wrap">
               <% if order.payment_state %>
@@ -55,3 +66,16 @@
   </div>
   <%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>
 <% end %>
+
+<script>
+  var firstRow = document.querySelector('tbody tr:first-child');
+  var invoiceDate = new Date(firstRow.dataset.invoiceDate);
+  var currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0); // remove time from the current date
+  if (invoiceDate.getMonth() === currentDate.getMonth() &&
+      invoiceDate.getFullYear() === currentDate.getFullYear()) {
+    firstRow.classList.add('current-month');
+  } else if (invoiceDate < currentDate) {
+    firstRow.classList.add('before-current-month');
+  }
+</script>

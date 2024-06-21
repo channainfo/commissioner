@@ -23,6 +23,7 @@ RSpec.describe SpreeCmCommissioner::V2::Storefront::GuestSerializer, type: :seri
         :other_occupation,
         :created_at,
         :updated_at,
+        :qr_data,
         :age,
         :emergency_contact,
         :other_organization,
@@ -30,6 +31,7 @@ RSpec.describe SpreeCmCommissioner::V2::Storefront::GuestSerializer, type: :seri
         :allowed_checkout,
         :upload_later,
       )
+      expect(subject[:data][:attributes][:qr_data]).to eq guest.token
     end
 
     it 'returns exact guest associations' do
@@ -37,7 +39,8 @@ RSpec.describe SpreeCmCommissioner::V2::Storefront::GuestSerializer, type: :seri
         :occupation,
         :nationality,
         :id_card,
-        :check_in
+        :check_in,
+        :line_item
       )
     end
   end

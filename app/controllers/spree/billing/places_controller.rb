@@ -5,7 +5,7 @@ module Spree
 
       def collection
         params[:q] = {} if params[:q].blank?
-        places = SpreeCmCommissioner::Place.where(name: %w[KR KRS KSD])
+        places = SpreeCmCommissioner::Place.all
 
         @search = places.ransack(params[:q])
         @collection = @search.result.page(page).per(per_page)

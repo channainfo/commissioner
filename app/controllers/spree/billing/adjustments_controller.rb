@@ -9,13 +9,13 @@ module Spree
       update.after :update_totals
 
       skip_before_action :load_resource, only: %i[toggle_state edit update destroy]
-      before_action :set_current_user_instance, only: %i[create update]
+      before_action :set_payable, only: %i[create update]
       before_action :find_adjustment, only: %i[destroy edit update]
 
       after_action :delete_promotion_from_order, only: [:destroy], if: -> { @adjustment.destroyed? && @adjustment.promotion? }
 
-      def set_current_user_instance
-        @adjustment.current_user_instance = spree_current_user
+      def set_payable
+        @adjustment.payable = spree_current_user
       end
 
       def index

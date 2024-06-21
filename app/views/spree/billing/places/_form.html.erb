@@ -6,4 +6,11 @@
       <%= f.error_message_on :name %>
     <% end %>
   </div>
+  <div class="col-12 ">
+    <%= f.field_container :code do %>
+      <%= f.label :code, Spree.t(:code) %>
+      <%= f.text_field :code, class: 'form-control', required: true %>
+      <%= f.error_message_on :code %>
+    <% end %>
+  </div>
 </div>

@@ -11,7 +11,11 @@
     <%= adjustment.label %>
   </td>
   <td class="text-center">
-    <%= adjustment.display_amount.to_html %>
+    <% if adjustment.amount.negative?  %>
+      <%= adjustment.display_negative_amount %>
+    <% else %>
+      <%= adjustment.display_amount %>
+    <% end %>
   </td>
   <td class="text-center">
     <span class="text-lowercase badge badge-pill badge-<%= adjustment.state %>">

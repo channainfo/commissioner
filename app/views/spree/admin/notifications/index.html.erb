@@ -1,0 +1,35 @@
+<%= render partial: 'spree/admin/shared/customer_notification_tabs', locals: { current: :notifications , object: @customer_notification } %>
+
+<small class="form-text text-muted">
+  <ul>
+    <li>Total: <%= @notifications.size %> / <%= @notifications.total_count %> Recipient</li>
+    <li>Read notifications: <%= @read_notifications_count %></li>
+  </ul>
+</small>
+
+<% if @notifications.any? %>
+  <div class="table-responsive border rounded bg-white">
+    <table class="table" id="listing_notifications">
+      <thead>
+        <tr data-hook="admin_notifications_index_headers">
+          <th scope="col"><%= Spree.t("notification.recipient") %></th>
+          <th scope="col"><%= Spree.t("notification.created_at") %></th>
+          <th scope="col"><%= Spree.t("notification.updated_at") %></th>
+          <th scope="col"><%= Spree.t("notification.read_at") %></th>
+          <th scope="col" data-hook="admin_notifications_index_header_actions" class="actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @notifications.each do |notification| %>
+          <tr data-hook="admin_notifications_index_rows" class="<%= cycle('odd', 'even') %>">
+            <td><%= Spree::User.find(notification.recipient_id).display_name %></td>
+            <td><%= notification.created_at %></td>
+            <td><%= notification.updated_at %></td>
+            <td><%= notification.read_at %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+<%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @notifications } %>

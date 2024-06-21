@@ -5,12 +5,12 @@ RSpec.describe SpreeCmCommissioner::SubscribedOrderCreator do
   let(:vendor) {create(:vendor)}
 
   let(:option_type) {create(:option_type, name: "due-date", attr_type: :integer)}
-  let(:option_value){create(:option_value, name: "5 Days", presentation: "5", option_type: option_type)}
+  let(:option_value){create(:option_value, name: "5", presentation: "5 Days", option_type: option_type)}
 
   let(:product1) { create(:base_product, option_types: [option_type], subscribable: true, vendor: vendor)}
   let(:product2) { create(:base_product, option_types: [option_type], subscribable: true, vendor: vendor)}
-  let(:variant1) { create(:base_variant, option_values: [option_value], price: 30, product: product1, permanent_stock: 1 )}
-  let(:variant2) { create(:base_variant, option_values: [option_value], price: 30, product: product2, permanent_stock: 1 )}
+  let(:variant1) { create(:cm_base_variant, option_values: [option_value], price: 30, product: product1, total_inventory: 1 )}
+  let(:variant2) { create(:cm_base_variant, option_values: [option_value], price: 30, product: product2, total_inventory: 1 )}
 
   let(:stock_location) { create(:stock_location, vendor: vendor) }
   let(:stock_item1) { create(:stock_item, stock_location: stock_location, variant: variant1, count_on_hand: 10) }
@@ -28,6 +28,21 @@ RSpec.describe SpreeCmCommissioner::SubscribedOrderCreator do
         expect(context.order.line_items.size).to eq 1
         expect(context.order.line_items[0].variant).to eq subscription.variant
         expect(context.order.line_items[0].quantity).to eq 2
+        expect(customer.last_invoice_date).to eq Time.zone.now.to_date
+      end
+    end
+
+    context "when subscriptions is later than this month" do
+      it "do not create any order"do
+        subscription1 = create(:cm_subscription, customer: customer, quantity: 2, start_date: '2024-07-02'.to_date)
+        subscription2 = create(:cm_subscription, customer: customer, quantity: 2, start_date: '2025-01-02'.to_date)
+        expect(customer.orders.count).to eq 0
+        expect(customer.subscriptions.count).to eq 2
+        expect(customer.subscriptions).to include(subscription1)
+        expect(customer.subscriptions).to include(subscription2)
+      end
+      it "doesn't set last_invoice_date" do
+        expect(customer.last_invoice_date).to eq nil
       end
     end
 

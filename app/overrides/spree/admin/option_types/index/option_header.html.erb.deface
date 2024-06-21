@@ -6,6 +6,6 @@
   <th><%= Spree.t(:presentation) %></th>
   <th><%= sort_link @search,:kind, Spree.t(:kind), { default_order: "asenc" }, {title: 'admin_option_types_kind_title'} %> %></th>
   <th><%= Spree.t(:filterable) %></th>
-  <th><%= Spree.t(:travel) %></th>
+  <th><%= Spree.t(:system) %></th>
   <th class="actions"></th>
 </tr>

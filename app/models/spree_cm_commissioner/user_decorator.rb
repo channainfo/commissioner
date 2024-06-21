@@ -7,8 +7,9 @@ module SpreeCmCommissioner
 
       base.enum gender: %i[male female other]
 
-      base.has_many :customers, class_name: 'SpreeCmCommissioner::Customer'
-      base.has_many :subscriptions, through: :customers, class_name: 'SpreeCmCommissioner::Subscription'
+      base.encrypts :encrypted_confirm_pin_code
+
+      base.has_many :subscriptions, through: :customer, class_name: 'SpreeCmCommissioner::Subscription'
       base.has_many :payments, as: :payable, class_name: 'Spree::Payment', dependent: :nullify
       base.has_many :role_permissions, through: :spree_roles, class_name: 'SpreeCmCommissioner::RolePermission'
       base.has_many :permissions, through: :role_permissions, class_name: 'SpreeCmCommissioner::Permission'
@@ -17,9 +18,14 @@ module SpreeCmCommissioner
       base.has_many :user_events, class_name: 'SpreeCmCommissioner::UserEvent'
       base.has_many :events, through: :user_events, class_name: 'Spree::Taxon', source: 'taxon'
 
+      base.has_many :wished_items, class_name: 'Spree::WishedItem', through: :wishlists
+
       base.has_one :profile, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::UserProfile'
+      base.has_one :customer, class_name: 'SpreeCmCommissioner::Customer'
 
       base.whitelisted_ransackable_attributes = %w[email first_name last_name gender phone_number]
+
+      base.before_save :update_otp_enabled
 
       def base.end_users
         joins('LEFT JOIN spree_vendor_users ON spree_users.id = spree_vendor_users.user_id').where(spree_vendor_users: { user_id: nil })
@@ -46,6 +52,15 @@ module SpreeCmCommissioner
 
     def full_name
       [first_name, last_name].compact_blank.join(' ')
+    end
+
+    def display_name
+      return full_name if full_name.present?
+      return first_name if first_name.present?
+      return last_name if last_name.present?
+      return email if email.present?
+
+      phone_number
     end
 
     def ensure_unique_database_delivery_method(attributes)
@@ -80,6 +95,10 @@ module SpreeCmCommissioner
       return if valid_password?(password)
 
       errors.add(:password, I18n.t('spree_user.invalid_password'))
+    end
+
+    def update_otp_enabled
+      self.otp_enabled = otp_email || otp_phone_number
     end
   end
 end

@@ -1,5 +1,5 @@
 <% content_for :page_title do %>
-  <%= I18n.t('spree.billing.customers') %>
+  <%= I18n.t('spree.billing.customers.customers') %>
 <% end %>
 <% content_for :page_actions do %>
   <%= button_link_to Spree.t(:add_customer), new_billing_customer_path, class: "btn-success", icon: 'add.svg', id: 'admin_new_customer_link' %>
@@ -39,7 +39,7 @@
         <div class="col-12 col-lg-6">
           <div class="form-group">
             <%= f.label :place_id_eq, Spree.t(:location) %>
-            <%= f.collection_select(:place_id_eq, SpreeCmCommissioner::Place.where(name: %w[KR KRS KSD]), :id, :name, { include_blank: true }, { class: "select2 form-control js-filterable" }) %>
+            <%= f.collection_select(:place_id_eq, SpreeCmCommissioner::Place.all, :id, :name, { include_blank: true }, { class: "select2 form-control js-filterable" }) %>
           </div>
         </div>
       </div>
@@ -59,13 +59,13 @@
             <%= sort_link @search, :id, Spree.t(:id), {}, {title:"id_title"} %>
           </th>
           <th>
+            <%= sort_link @search, :full_name, Spree.t(:business_name), {}, {title: 'fullname_title'} %>
+          </th>
+          <th>
             <%= sort_link @search, :full_name, Spree.t(:full_name), {}, {title: 'fullname_title'} %>
           </th>
           <th>
             <%= sort_link @search, :phone_number, Spree.t(:phone_number), {}, {title: 'phone_number_title'} %>
-          </th>
-          <th>
-            <%= sort_link @search, :taxons_id, Spree.t(:type), {}, {title: 'taxon_title'} %>
           </th>
           <th>
             <%= sort_link @search, :created_at, Spree.t(:created_at),{},{title:'created_at_title'} %>
@@ -74,7 +74,7 @@
             <%= sort_link @search, :active_subscriptions_count, I18n.t("spree.billing.active_subscription"),{},{title:'active_subscriptions_count_title'} %>
           </th>
           <th>
-            <%=sort_link @search, :suspended_subscriptions, I18n.t("spree.billing.suspended") %>
+            <%=I18n.t("spree.billing.suspended") %>
           </th>
           <th>
             <%= I18n.t("spree.billing.overdue") %>
@@ -89,17 +89,13 @@
               <%= link_to customer.customer_number, edit_billing_customer_path(customer) %>
             </td>
             <td>
-              <% if customer.first_name.present? %>
-                <%= link_to customer.first_name, edit_billing_customer_path(customer) %>
-              <% else %>
-                <%= link_to customer.last_name, edit_billing_customer_path(customer) %>
-              <% end %>
+              <%= link_to customer.first_name, edit_billing_customer_path(customer) %>
+            </td>
+            <td>
+              <%= link_to customer.last_name, edit_billing_customer_path(customer) %>
             </td>
             <td>
               <%= customer.phone_number %>
-            </td>
-            <td class='taxon'>
-              <%= customer.taxons.map(&:name).join(' ') %>
             </td>
             <td>
               <%= customer.created_at.to_date %>

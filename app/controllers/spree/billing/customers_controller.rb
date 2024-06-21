@@ -3,6 +3,7 @@ module Spree
     class CustomersController < Spree::Billing::BaseController
       before_action :set_vendor, if: -> { member_action? }
       before_action :load_customer, if: -> { member_action? }
+      before_action :load_bussinesses
 
       def collection
         return [] if current_vendor.blank?
@@ -14,6 +15,24 @@ module Spree
 
       def load_customer
         @customer = @object
+      end
+
+      def load_bussinesses
+        @businesses = Spree::Taxonomy.businesses.taxons.where('depth > ? ', 1).order('parent_id ASC').uniq
+      end
+
+      # POST  /billing/customers/:customer_id/re_create_order
+      # billing_customer_re_create_order_path
+      def re_create_order
+        customer = model_class.find_by(id: params[:customer_id])
+        result = SpreeCmCommissioner::SubscriptionsOrderCreator.call(customer: customer)
+
+        if result.failure?
+          flash[:error] = I18n.t('spree.billing.customers.re_create_order.fails', error: result.error)
+        else
+          flash[:success] = I18n.t('spree.billing.customers.re_create_order.success', success: result.success)
+        end
+        redirect_back(fallback_location: billing_customer_orders_path(customer))
       end
 
       # @overrided

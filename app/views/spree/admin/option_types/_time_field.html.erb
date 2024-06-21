@@ -1,0 +1,6 @@
+<div class="input-group">
+  <div class="input-group-prepend">
+    <span class="input-group-text"><%= svg_icon name: "clock.svg", width: '14', height: '14' %></span>
+  </div>
+  <%= time_select f.object_name, "name[time]", { ampm: true, time_separator: "", default: { hour: f.object.time&.hour, minute: f.object.time&.min } }, { class: 'form-control' } %>
+</div>

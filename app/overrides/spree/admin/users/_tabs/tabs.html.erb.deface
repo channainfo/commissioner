@@ -43,4 +43,10 @@
       spree.admin_user_user_identity_providers_path(@user),
       class: "nav-link #{'active' if current == :user_identity_providers}" %>
   </li>
+  <li class="nav-item">
+    <%= link_to_with_icon 'calendar-event.svg',
+      Spree.t(:user_events),
+      admin_user_events_path,
+      class: "nav-link #{'active' if current == :user_events }" %>
+  </li>
 <% end %>

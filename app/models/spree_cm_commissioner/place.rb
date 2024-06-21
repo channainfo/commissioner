@@ -5,12 +5,14 @@ module SpreeCmCommissioner
     validates :reference, presence: true, unless: -> { Spree::Store.default.code.include?('billing') }
     validates :lat, presence: true, unless: -> { Spree::Store.default.code.include?('billing') }
     validates :lon, presence: true, unless: -> { Spree::Store.default.code.include?('billing') }
+    validates :name, presence: true, uniqueness: true, if: -> { Spree::Store.default.code.include?('billing') }
 
     has_many :nearby_places, class_name: 'SpreeCmCommissioner::VendorPlace', dependent: :destroy
     has_many :vendors, through: :nearby_places, source: :vendor, class_name: 'Spree::Vendor'
+    has_many :customers, class_name: 'SpreeCmCommissioner::Customer'
 
     def self.ransackable_attributes(auth_object = nil)
-      super & %w[name]
+      super & %w[name code]
     end
   end
 end

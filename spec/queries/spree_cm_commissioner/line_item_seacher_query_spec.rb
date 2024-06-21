@@ -96,8 +96,11 @@ RSpec.describe SpreeCmCommissioner::LineItemSearcherQuery do
     end
 
     context 'when guest qr_data is present' do
-      let(:line_item) { create(:cm_line_item) }
-      let(:guest) { create(:guest, token: 'aa242f4c-c53e-4e91-bd3c-afa84d3ed722', line_item: line_item) }
+      before do
+        ENV['GUEST_TOKEN'] = 'aa242f4c-c53e-4e91-bd3c-afa84d3ed722'
+      end
+      let(:line_item) { create(:cm_line_item, order: order) }
+      let(:guest) { create(:guest, token: ENV['GUEST_TOKEN'], line_item: line_item) }
       let(:params) { { qr_data: guest.token } }
 
       it 'calls find_by with qr_data' do

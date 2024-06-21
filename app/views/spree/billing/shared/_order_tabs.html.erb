@@ -1,5 +1,8 @@
 <% content_for :page_title do %>
+  <% customer = @order.customer %>
   <%= page_header_back_button spree.billing_orders_path %>
+  <%= link_to Spree.t(customer.first_name.present? ? customer.first_name : customer.last_name), edit_billing_customer_path(customer) %>
+  <%= "/" %>
   <%= @order.invoice.invoice_number %>
 <% end %>
 <% content_for :page_tabs do %>

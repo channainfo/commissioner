@@ -12,8 +12,6 @@ module SpreeCmCommissioner
 
     validates :start_date, :status, presence: true
 
-    validate :product_subscribed?
-
     with_options unless: :persisted? do
       validate :variant_in_stock?
       validate :product_active?
@@ -36,13 +34,7 @@ module SpreeCmCommissioner
     def variant_subscribed?
       return false if customer.subscriptions.where(variant: variant).blank?
 
-      errors.add(:variant, I18n.t('variant.validation.subscribed', product_name: variant.product.name))
-    end
-
-    def product_subscribed?
-      return false if customer.active_variants.where.not(id: variant.id).where(product: variant.product).blank?
-
-      errors.add(:variant, I18n.t('variant.validation.subscribed', product_name: variant.product.name))
+      errors.add(:variant, I18n.t('variant.validation.subscribed', product_name: variant.sku))
     end
 
     def product_active?
@@ -52,10 +44,7 @@ module SpreeCmCommissioner
     end
 
     def months_count
-      month_option_type = variant.product.option_types.find_by(name: 'month')
-      month_option_value = variant.option_values.find_by(option_type_id: month_option_type.id)
-
-      month_option_value.presentation.to_i
+      variant.month
     end
 
     def display_total_price

@@ -11,6 +11,10 @@ module Spree
       dob gender
       phone_number
       profile
+      otp_enabled
+      otp_email
+      otp_phone_number
+      encrypted_confirm_pin_code
     ]
     @@taxon_attributes += %i[
       category_icon

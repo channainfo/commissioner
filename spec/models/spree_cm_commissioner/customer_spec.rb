@@ -3,9 +3,9 @@ require 'spec_helper'
 RSpec.describe SpreeCmCommissioner::Customer, type: :model do
   describe '#callback before_validation' do
     let!(:vendor1) { create(:cm_vendor_with_product, name: 'Phnom Penh Hotel', code: 'PPH') }
-    let!(:place1) { create(:cm_place, name: 'KRS') }
-    let!(:place2) { create(:cm_place, name: 'KSD') }
-    let!(:place3) { create(:cm_place, name: 'KR') }
+    let!(:place1) { create(:cm_place, code: 'KRS') }
+    let!(:place2) { create(:cm_place, code: 'KSD') }
+    let!(:place3) { create(:cm_place, code: 'KR') }
     let!(:customer1) { create(:cm_customer, place_id: place1.id , vendor: vendor1)}
     let!(:customer2) { create(:cm_customer, place_id: place1.id, email: 'panhachom@gmail.com', vendor: vendor1)}
 

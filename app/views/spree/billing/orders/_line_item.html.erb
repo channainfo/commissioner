@@ -20,14 +20,14 @@
           <% order.line_items.each do |item| %>
             <tr class="line-item" id="line-item-<%= item.id %>">
               <td class="line-item-image image text-center">
-                <%= link_to small_image(item.variant), edit_admin_product_path(item.variant.product) %>
+                <%= link_to small_image(item.variant), edit_billing_product_path(item.variant.product) %>
               </td>
               <td class="line-item-name text-center">
-                <%= link_to item.name, edit_admin_product_path(item.variant.product) %>
+                <%= link_to item.name, edit_billing_product_path(item.variant.product) %>
                 <br>
                 <%= "(#{item.options_text})" if item.options_text.present? %>
               </td>
-              <td class="text-center"><%= item.to_date.strftime("%B %Y") %></td>
+              <td class="text-center"><%= item.from_date.strftime("%B %Y") %></td>
               <td class="line-item-price text-center"><%= item.single_money.to_html %></td>
               <td class="line-item-qty-show text-center" style="width:120px;">
                 <%= item.quantity %>

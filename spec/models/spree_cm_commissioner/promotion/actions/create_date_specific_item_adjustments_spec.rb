@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::Promotion::Actions::CreateDateSpecificItemAdjustments do
-  let(:product) { create(:cm_accommodation_product, price: BigDecimal('10.0'), permanent_stock: 4) }
+  let(:product) { create(:cm_accommodation_product, price: BigDecimal('10.0'), total_inventory: 4) }
   let(:order) { create(:order) }
   let(:line_item_10_to_12) {
     create(:line_item,

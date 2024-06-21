@@ -2,18 +2,39 @@ module SpreeCmCommissioner
   module VariantDecorator
     def self.prepended(base)
       base.include SpreeCmCommissioner::ProductDelegation
-      base.include SpreeCmCommissioner::VariantGuestsConcern
-      base.include SpreeCmCommissioner::VariantOptionValuesConcern
+      base.include SpreeCmCommissioner::VariantOptionsConcern
 
       base.after_commit :update_vendor_price
-      base.after_save   :update_vendor_total_inventory, if: :saved_change_to_permanent_stock?
       base.validate     :validate_option_types
+      base.before_save -> { self.track_inventory = false }, if: :subscribable?
+
+      base.belongs_to :vendor, class_name: 'Spree::Vendor'
 
       base.has_many :visible_option_values, lambda {
                                               joins(:option_type).where(spree_option_types: { hidden: false })
                                             }, through: :option_value_variants, source: :option_value
 
+      base.has_one :video_on_demand, class_name: 'SpreeCmCommissioner::VideoOnDemand', dependent: :destroy
+
       base.scope :subscribable, -> { active.joins(:product).where(product: { subscribable: true, status: :active }) }
+    end
+
+    def option_value_name_for(option_type_name: nil)
+      option_values.detect { |o| o.option_type.name.downcase.strip == option_type_name.downcase.strip }.try(:name)
+    end
+
+    def delivery_required?
+      return true if non_digital_ecommerce?
+
+      delivery_option == 'delivery'
+    end
+
+    def non_digital_ecommerce?
+      !digital? && ecommerce?
+    end
+
+    def permanent_stock?
+      accommodation?
     end
 
     # override
@@ -40,10 +61,6 @@ module SpreeCmCommissioner
       vendor.update(max_price: price) if price > vendor.max_price
     end
 
-    def update_vendor_total_inventory
-      SpreeCmCommissioner::VendorJob.perform_later(vendor.id)
-    end
-
     def validate_option_types
       variant = self
 
@@ -65,4 +82,13 @@ module SpreeCmCommissioner
   end
 end
 
-Spree::Variant.prepend(SpreeCmCommissioner::VariantDecorator) unless Spree::Variant.included_modules.include?(SpreeCmCommissioner::VariantDecorator)
+if Spree::Variant.included_modules.exclude?(SpreeCmCommissioner::VariantDecorator)
+  # spree_multi_vendor use :vendor method for assoication, we should use association (belongs_to :vendor) instead.
+  #
+  # problem with those methods is that it store value in memeory,
+  # even we call variant.reload, the method value is no being reload.
+  SpreeMultiVendor::Spree::VariantDecorator.remove_method :vendor
+  SpreeMultiVendor::Spree::VariantDecorator.remove_method :vendor_id
+
+  Spree::Variant.prepend(SpreeCmCommissioner::VariantDecorator)
+end

@@ -10,7 +10,7 @@ module SpreeCmCommissioner
     end
 
     def convert_name_to_paramaterize
-      self.name = name.parameterize unless name.nil?
+      self.name = name.to_s.parameterize unless name.nil?
     end
   end
 end

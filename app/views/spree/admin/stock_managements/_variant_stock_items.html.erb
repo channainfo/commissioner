@@ -1,0 +1,53 @@
+<div class="border rounded">
+  <table class="table mb-0">
+    <thead class="text-muted">
+      <th><%= Spree.t(:stock_location) %></th>
+      <th class="text-center"><%= Spree.t(:inventory) %></th>
+      <th class="text-center"><%= Spree.t(:modify) %> (+ / -)</th>
+      <th class="text-center"><%= Spree.t(:backorderable) %></th>
+      <th></th>
+    </thead>
+    <tbody>
+      <% variant.vendor.stock_locations.each do |stock_location| %>
+        <% item = variant.stock_items.find_or_initialize_by(stock_location_id: stock_location.id)  %>
+        <tr id="stock-item-<%= item.id %>">
+          <td><%= link_to stock_location.name, spree.edit_admin_stock_location_path(stock_location) %></td>
+          <td class="text-center">
+            <span><%= item.persisted? ? item.count_on_hand : 'N/A' %></span>
+          </td>
+          <td class="text-center d-flex flex-column align-items-center justify-content-center">
+            <div style="width: 90px;">
+              <%= form_tag admin_stock_items_path(variant_id: variant.id, stock_location_id: stock_location.id), method: :post do %>
+                <div class="input-group input-group-sm">
+                  <%= number_field_tag 'stock_movement[quantity]', 0, class: 'form-control text-center p-0' %>
+                  <div class="input-group-append">
+                    <%= button_tag(class: 'btn btn-outline-success pl-2 pr-1') do %>
+                      <%= svg_icon(name: 'arrow-left-right.svg', classes: "icon", width: 14, height: 14) %>
+                    <% end %>
+                  </div>
+                </div>
+              <% end if item.persisted? && can?(:update, item) %>
+            </div>
+          </td>
+          <td class="text-center">
+            <% if item.persisted? && can?(:update, item) %>
+              <%= form_tag admin_stock_item_path(item), method: :put, class: 'toggle_stock_item_backorderable' do %>
+                <%= check_box_tag 'stock_item[backorderable]', true, item.backorderable?, class: 'stock_item_backorderable', id: "stock_item_backorderable_#{stock_location.id}" %>
+              <% end %>
+            <% else %>
+              <%= 'N/A' %>
+            <% end %>
+          </td>
+          <td class="actions">
+            <%= link_to_with_icon('capture.svg',
+                Spree.t(:create),
+                admin_stock_items_path(variant_id: variant.id, stock_location_id: stock_location.id, stock_movement: { quantity: 0 }),
+                method: :post, class: 'icon_link btn btn-outline-primary btn-sm', no_text: true) unless item.persisted? %>
+            <%= link_to_with_icon('delete.svg', Spree.t(:remove), [:admin, item],
+                method: :delete, remote: false, class: 'icon_link btn btn-outline-danger btn-sm', data: { action: :remove, confirm: Spree.t(:are_you_sure) }, no_text: true) if item.persisted? %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

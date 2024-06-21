@@ -1,0 +1,23 @@
+<div class="actions">
+  <%= link_to_with_icon 'bell.svg', '', 'Send Notification to All', no_text: true, class: 'btn btn-outline-success', data: { toggle: 'modal', target: "#sendAllModal#{notification.id}" } %>
+
+  <div class="modal fade" id="sendAllModal<%= notification.id %>" tabindex="-1" role="dialog" aria-labelledby="sendAllModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="sendAllModalLabel">Send Notification to All</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <%= form_with(url: admin_notification_sender_index_path(notification), method: :post, class: "send-all-form") do |f| %>
+            <%= f.hidden_field :notification_id, value: notification.id %>
+            <%= f.hidden_field :send_all, value: true %>
+            <%= f.submit "Send to All", class: "btn btn-primary" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

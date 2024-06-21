@@ -26,6 +26,16 @@ module Spree
         redirect_to admin_import_orders_url
       end
 
+      # GET: /admin/orders/download_order_csv_template
+      def download_order_csv_template
+        respond_with do |format|
+          format.csv do
+            context = SpreeCmCommissioner::ImportCsvTemplateDownloader.call
+            send_file context.filepath, filename: context.filename, type: 'text/csv'
+          end
+        end
+      end
+
       # override
       def collection
         @collection ||= model_class.all.page(params[:page])

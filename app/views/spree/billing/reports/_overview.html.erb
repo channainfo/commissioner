@@ -1,0 +1,48 @@
+<div class="rounded border">
+  <table class="table table-borderless admin-report" data-hook="sales_total">
+    <thead class="text-muted">
+      <tr class='text-center'>
+        <% @revenue_totals.each_with_index do |hash, index| %>
+          <% label = Spree.t("billing.payment_state.#{hash[:state].presence || :unknown}").to_s %>
+          <% label += " (#{hash[:orders_count]})" if hash[:orders_count] != 0 %>
+
+          <% classes = [] %>
+          <% classes << 'bg-light' if params[:type] == hash[:state] %>
+          <% classes << 'border-right' if index != @revenue_totals.size - 1 %>
+
+          <% icon = 'piggy-bank.svg' if hash[:state] == 'paid' %>
+          <% icon = 'void.svg' if hash[:state] == 'failed' %>
+          <% icon = 'exclamation-circle.svg' if hash[:state] == 'overdue' %>
+
+          <th class="<%= classes.join(' ') %>">
+            <% type_params = params.merge({type: hash[:state]}) %>
+            <%= link_to_with_icon icon.presence || 'patch-question.svg', label, type_params.permit(type_params.keys) %>
+          </th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="text-center" style="font-size: 22px;">
+        <% @revenue_totals.each_with_index do |hash, index| %>
+          <% classes = [] %>
+          <% classes << 'bg-light' if params[:type] == hash[:state] %>
+          <% classes << 'border-right' if index != @revenue_totals.size - 1 %>
+
+          <% remaining = (hash[:total] || 0) - (hash[:payment_total] || 0) %>
+          <% received = hash[:payment_total] %>
+
+          <td class="<%= classes.join(' ') %>">
+            <div>
+            <% if received != 0 %>
+              <small>+</small><%= Spree::Money.new(received).to_s %>
+            <% end %>
+            <% if remaining != 0.0 %>
+              <small class="text-danger"><%= Spree::Money.new(remaining).to_s %></small>
+            <% end %>
+            </div>
+          </td>
+        <% end %>
+      </tr>
+    </tbody>
+  </table>
+</div>

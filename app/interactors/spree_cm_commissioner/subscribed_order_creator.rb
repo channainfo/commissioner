@@ -4,9 +4,13 @@ module SpreeCmCommissioner
 
     def call
       # reject if locked?
+      today = Time.zone.today
+      start_date = subscription.start_date
+      return if  start_date.beginning_of_month > today.beginning_of_month
       return unless subscription.update(last_occurence: subscription.renewal_date)
 
       find_or_create_order
+      set_last_invoice_date
       create_line_item
       create_invoice
 
@@ -14,12 +18,15 @@ module SpreeCmCommissioner
       context.order.reload
     end
 
+    private
+
     def find_or_create_order
-      context.order = Spree::Order.joins(:subscription).find_by(cm_subscriptions: { customer_id: subscription.customer_id })
+      customer = subscription.customer
+      context.order = customer.orders.last
 
       return if context.order
 
-      context.order = subscription.orders.create!(
+      context.order = customer.user.orders.create!(
         subscription_id: subscription.id,
         phone_number: subscription.customer.phone_number,
         user_id: subscription.customer.user_id
@@ -45,6 +52,13 @@ module SpreeCmCommissioner
           }
         )
       end
+    end
+
+    def set_last_invoice_date
+      last_invoice_date = context.subscription.customer.last_invoice_date
+      return if last_invoice_date.present? && last_invoice_date.beginning_of_month > Time.zone.now.beginning_of_month
+
+      context.subscription.customer.last_invoice_date = Time.zone.now
     end
 
     def renewal_date

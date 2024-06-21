@@ -82,7 +82,7 @@ RSpec.describe Spree::Variant, type: :model do
       let(:vendor) { create(:active_vendor, name: 'Angkor Hotel', min_price: 10, max_price: 30) }
       let(:state) { create(:state, name: 'Siemreap') }
       let!(:option_type) { create(:option_type, name: 'location', presentation: 'Location', attr_type: 'state_selection') }
-      let!(:option_value) { create(:option_value, option_type: option_type, presentation: state.id) }
+      let!(:option_value) { create(:option_value, option_type: option_type, name: state.id) }
       let!(:stock_location) { vendor.stock_locations.first.update(state: state) }
       let!(:product1) { create(:base_product, name: 'Bedroom 1', vendor: vendor, price: 10 ) }
       let!(:product2) { create(:base_product, name: 'Bedroom 2', vendor: vendor, price: 20 ) }
@@ -110,95 +110,74 @@ RSpec.describe Spree::Variant, type: :model do
     end
   end
 
-  context 'guests options' do
-    let(:product) { create(:product, option_types: [option_type]) }
-    subject { create(:variant, product: product, option_values: [option_value]) }
+  describe '#delivery_required?' do
+    context 'when non_digital ecommerce? is true' do
+      let(:product) { create(:product, product_type: :ecommerce) }
+      subject { create(:variant, product: product) }
 
-    describe '#number_of_kids' do
-      let(:option_type) { create(:cm_option_type, :kids) }
-      let(:option_value) { create(:option_value, name: '1-kid', presentation: '1', option_type: option_type) }
-
-      it 'return result in integer' do
-        expect(subject.number_of_kids).to eq 1
+      it 'returns true' do
+        expect(subject.non_digital_ecommerce?).to be true
+        expect(subject.delivery_required?).to be true
       end
     end
 
-    describe '#number_of_adults' do
-      context 'when option value is present' do
-        let(:option_type) { create(:cm_option_type, :adults) }
-        let(:option_value) { create(:option_value, name: '2-adults', presentation: '2', option_type: option_type) }
+    context 'when non_digital_ecommerce? is false' do
+      let(:product) { create(:product, product_type: :ecommerce, option_types: [option_type]) }
+      let(:option_type) { create(:cm_option_type, :delivery_option) }
 
-        it 'return result in integer' do
-          expect(subject.number_of_adults).to eq 2
+      subject { build(:variant, product: product, digitals: [create(:digital)], option_values: [option_value]) }
+
+      context 'when deliver option is "delivery"' do
+        let(:option_value) { create(:option_value, name: 'delivery', presentation: 'Delivery', option_type: option_type) }
+
+        it 'returns true' do
+          expect(subject.non_digital_ecommerce?).to be false
+          expect(subject.delivery_required?).to be true
         end
       end
 
-      context 'when option value is not present' do
-        subject { create(:variant) }
+      context 'when deliver option is "pickup"' do
+        let(:option_value) { create(:option_value, name: 'pickup', presentation: 'Pickup', option_type: option_type) }
 
-        it 'return default 1 when optino value is not present' do
-          expect(subject.adults_option_value).to eq nil
-          expect(subject.number_of_adults).to eq 1
-
-          expect(subject.class::DEFAULT_NUMBER_OF_ADULTS).to eq 1
+        it 'returns false' do
+          expect(subject.non_digital_ecommerce?).to be false
+          expect(subject.delivery_required?).to be false
         end
       end
     end
+  end
 
-    describe '#number_of_guests' do
-      subject { create(:variant) }
+  describe '#non_digital_ecommerce?' do
+    context 'when digital? is false and ecommerce? is true' do
+      let(:product) { create(:product, product_type: :ecommerce) }
+      subject { build(:variant, product: product, digitals: []) }
 
-      it 'return result of number of kids + adults' do
-        allow(subject).to receive(:number_of_kids).and_return(2)
-        allow(subject).to receive(:number_of_adults).and_return(1)
-
-        expect(subject.number_of_guests).to eq 2 + 1
+      it 'returns true' do
+        expect(subject.digital?).to be false
+        expect(subject.ecommerce?).to be true
+        expect(subject.non_digital_ecommerce?).to be true
       end
     end
 
-    describe '#kids_age_max' do
-      let(:option_type) { create(:cm_option_type, :kids_age_max) }
-      let(:option_value) { create(:option_value, name: 'max-14-year', presentation: '14', option_type: option_type) }
+    context 'when digital? is true' do
+      let(:product) { create(:product, product_type: :ecommerce) }
+      subject { build(:variant, product: product, digitals: [create(:digital)]) }
 
-      it 'return result in integer' do
-        expect(subject.kids_age_max).to eq 14
+      it 'returns false even variant is ecommerce' do
+        expect(subject.ecommerce?).to be true
+        expect(subject.digital?).to be true
+        expect(subject.non_digital_ecommerce?).to be false
       end
     end
 
-    describe '#allowed_extra_adults' do
-      let(:option_type) { create(:cm_option_type, :allowed_extra_adults) }
-      let(:option_value) { create(:option_value, name: 'allowed-2-adults', presentation: '2', option_type: option_type) }
+    context 'when ecommerce? is false' do
+      let(:product) { create(:product, product_type: :service) }
+      subject { build(:variant, product: product, digitals: []) }
 
-      it 'return result of presentation in integer' do
-        expect(subject.allowed_extra_adults).to eq 2
-      end
-    end
-
-    describe '#allowed_extra_kids' do
-      let(:option_type) { create(:cm_option_type, :allowed_extra_kids) }
-      let(:option_value) { create(:option_value, name: '2-kids', presentation: '2', option_type: option_type) }
-
-      it 'return result of presentation in integer' do
-        expect(subject.allowed_extra_kids).to eq 2
-      end
-    end
-
-    describe '#max_quantity_per_order' do
-      context 'when has option type/value' do
-        let(:option_type) { create(:cm_option_type, :max_quantity_per_order) }
-        let(:option_value) { create(:option_value, name: '1-quantity', presentation: '1', option_type: option_type) }
-
-        it 'return result of presentation in integer' do
-          expect(subject.max_quantity_per_order).to eq 1
-        end
-      end
-
-      context 'when does not have optino type/value' do
-        subject { create(:variant) }
-
-        it 'return null indicate no limited' do
-          expect(subject.max_quantity_per_order).to eq nil
-        end
+      it 'returns false event variant is not digital' do
+        expect(subject.ecommerce?).to be false
+        expect(subject.digital?).to be false
+        expect(subject.non_digital_ecommerce?).to be false
       end
     end
   end

@@ -1,21 +1,19 @@
 module SpreeCmCommissioner
   module LineItemDecorator
     def self.prepended(base)
-      base.include SpreeCmCommissioner::LineItemDurationable
-      base.include SpreeCmCommissioner::LineItemsFilterScope
-      base.include SpreeCmCommissioner::LineItemGuestsConcern
-      base.include SpreeCmCommissioner::ProductDelegation
-      base.include SpreeCmCommissioner::KycBitwise
+      include_modules(base)
 
       base.belongs_to :accepter, class_name: 'Spree::User', optional: true
       base.belongs_to :rejecter, class_name: 'Spree::User', optional: true
 
+      base.has_one :google_wallet, class_name: 'SpreeCmCommissioner::GoogleWallet', through: :product
+
       base.has_many :taxons, class_name: 'Spree::Taxon', through: :product
       base.has_many :guests, class_name: 'SpreeCmCommissioner::Guest', dependent: :destroy
+      base.has_many :pending_guests, pending_guests_query, class_name: 'SpreeCmCommissioner::Guest', dependent: :destroy
       base.has_many :product_completion_steps, class_name: 'SpreeCmCommissioner::ProductCompletionStep', through: :product
-
       base.before_save :update_vendor_id
-
+      base.before_save :generate_number
       base.before_create :add_due_date, if: :subscription?
 
       base.validate :ensure_not_exceed_max_quantity_per_order, if: -> { variant&.max_quantity_per_order.present? }
@@ -23,7 +21,8 @@ module SpreeCmCommissioner
       base.whitelisted_ransackable_associations |= %w[guests]
       base.whitelisted_ransackable_attributes |= %w[to_date from_date]
 
-      delegate :kyc?, to: :product
+      base.delegate :delivery_required?, :permanent_stock?,
+                    to: :variant
 
       base.accepts_nested_attributes_for :guests, allow_destroy: true
 
@@ -46,8 +45,19 @@ module SpreeCmCommissioner
       end
     end
 
-    def reservation?
-      (accommodation? || service?) && date_present? && !subscription?
+    def self.include_modules(base)
+      base.include SpreeCmCommissioner::LineItemDurationable
+      base.include SpreeCmCommissioner::LineItemsFilterScope
+      base.include SpreeCmCommissioner::LineItemGuestsConcern
+      base.include SpreeCmCommissioner::ProductDelegation
+      base.include SpreeCmCommissioner::KycBitwise
+    end
+
+    def self.pending_guests_query
+      lambda {
+        left_outer_joins(:id_card)
+          .where(upload_later: true, id_card: { front_image: nil })
+      }
     end
 
     # date_unit could be number of nights, or days or hours depending on usecases
@@ -59,7 +69,7 @@ module SpreeCmCommissioner
     def amount
       base_price = price * quantity
 
-      if reservation? && date_unit
+      if permanent_stock? && date_unit.present?
         base_price * date_unit
       else
         base_price
@@ -68,6 +78,18 @@ module SpreeCmCommissioner
 
     def amount_per_guest
       amount / quantity
+    end
+
+    def commission_rate
+      product.commission_rate || vendor&.commission_rate || 0
+    end
+
+    def commission_amount
+      pre_tax_amount * commission_rate / 100.0
+    end
+
+    def pre_commission_amount
+      [0, pre_tax_amount - commission_amount].max
     end
 
     def accepted?
@@ -124,6 +146,12 @@ module SpreeCmCommissioner
       )
     end
 
+    def generate_number
+      return unless number.nil?
+
+      self.number = "L#{id}-#{order.number[1..]}"
+    end
+
     def qr_data
       "#{order.number}-#{order.token}-L#{id}"
     end
@@ -132,6 +160,11 @@ module SpreeCmCommissioner
       @completion_steps ||= product_completion_steps.map do |completion_step|
         completion_step.construct_hash(line_item: self)
       end
+    end
+
+    # override
+    def sufficient_stock?
+      SpreeCmCommissioner::Stock::LineItemAvailabilityChecker.new(self).can_supply?(quantity)
     end
 
     private
@@ -153,23 +186,15 @@ module SpreeCmCommissioner
     end
 
     def post_paid?
-      payment_option_type = order.subscription.variant.product.option_types.find_by(name: 'payment-option')
-      payment_option_value = order.subscription.variant.option_values.find_by(option_type_id: payment_option_type.id)
-      payment_option_value.name == 'post-paid'
+      order.subscription.variant.post_paid?
     end
 
     def due_days
-      due_date_option_type = order.subscription.variant.product.option_types.find_by(name: 'due-date')
-      due_date_option_value = order.subscription.variant.option_values.find_by(option_type_id: due_date_option_type.id)
+      variant = order.subscription.variant
+      day = variant.due_date
 
-      day = due_date_option_value.presentation.to_i
+      return from_date + variant.month.month + day.days if post_paid?
 
-      if post_paid?
-        month_option_type = order.subscription.variant.product.option_types.find_by(name: 'month')
-        month_option_value = order.subscription.variant.option_values.find_by(option_type_id: month_option_type.id)
-
-        return from_date + month_option_value.presentation.to_i.month + day.days
-      end
       from_date + day.days
     end
   end

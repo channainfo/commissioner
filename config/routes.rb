@@ -25,6 +25,13 @@ Spree::Core::Engine.add_routes do
     end
 
     resources :vendors do
+      resources :product_commissions, only: [:index] do
+        collection do
+          post :update_commissions
+          post :update_default_commission
+        end
+      end
+
       resources :vendor_photos do
         collection do
           post :update_positions
@@ -54,13 +61,16 @@ Spree::Core::Engine.add_routes do
     end
 
     resources :customer_notifications do
-      post :send_test
+      resources :notification_users, only: [:index]
       resources :feature_images do
         collection do
           post :update_positions
         end
       end
+      resources :notifications, only: [:index]
     end
+
+    resources :notification_sender, only: [:create]
 
     resources :users do
       resources :device_tokens
@@ -72,11 +82,24 @@ Spree::Core::Engine.add_routes do
         get 'edit_kyc', to: 'kyc#edit'
         put 'update_kyc', to: 'kyc#update'
       end
+
+      resources :video_on_demands
+
+      resources :google_wallets do
+        member do
+          post  :create_google_wallet_class
+          patch :update_google_wallet_class
+          delete :remove_logo
+          delete :remove_hero_image
+        end
+      end
       resources :master_variant, only: %i[index update] do
         collection do
           patch :update
         end
       end
+
+      resources :stock_managements
 
       resources :product_completion_steps do
         collection do
@@ -92,7 +115,6 @@ Spree::Core::Engine.add_routes do
     resources :taxonomies do
       resources :taxons do
         resources :taxon_vendors
-        resources :user_taxons
         resources :classifications do
           collection do
             post :recalculate_conversions
@@ -140,6 +162,7 @@ Spree::Core::Engine.add_routes do
     resources :orders, except: [:show] do
       collection do
         resources :import_orders, only: %i[index new create]
+        get :download_order_csv_template, controller: 'import_orders'
       end
       member do
         put :accept_all
@@ -160,6 +183,8 @@ Spree::Core::Engine.add_routes do
         end
       end
     end
+
+    resources :user_events, except: %i[show edit update]
 
     resources :webhooks_subscribers do
       resources :rules, controller: :webhooks_subscriber_rules, except: %i[index show]
@@ -210,8 +235,8 @@ Spree::Core::Engine.add_routes do
 
   scope '(:locale)', locale: /#{I18n.available_locales.join('|')}/ do
     namespace :billing do
-      resource :report, only: %i[show], controller: :report do
-        member do
+      resources :reports do
+        collection do
           get :failed_orders
           get :paid
           get :balance_due
@@ -224,6 +249,8 @@ Spree::Core::Engine.add_routes do
         resource :payment_qrcodes, only: %i[destroy]
       end
       resources :customers do
+        post 're_create_order', to: 'customers#re_create_order'
+        resources :orders
         resources :subscriptions
         resources :addresses
       end
@@ -263,7 +290,14 @@ Spree::Core::Engine.add_routes do
       resources :places
       put '/switch_vendor', to: 'base#switch_vendor'
       get '/forbidden', to: 'errors#forbidden', as: :forbidden
-      root to: redirect('/billing/report')
+      root to: redirect('/billing/reports')
+      resources :businesses
+      resources :option_types do
+        collection do
+          post :update_positions
+          post :update_values_positions
+        end
+      end
     end
   end
 
@@ -278,7 +312,7 @@ Spree::Core::Engine.add_routes do
           patch :restart_checkout_flow
         end
 
-        resources :wished, only: [:show]
+        resources :wished_items
 
         resource :cart_guests, only: %i[create destroy]
         resources :cart_payment_method_groups, only: %i[index]
@@ -293,6 +327,7 @@ Spree::Core::Engine.add_routes do
         end
 
         resource :s3_signed_urls
+        resources :google_wallet_object_tokens
         resources :provinces, only: %i[index]
         resources :user_deletion_reasons, only: [:index]
         resource :profile_images, only: [:update]
@@ -313,6 +348,8 @@ Spree::Core::Engine.add_routes do
         resource :user_registration_with_pin_codes, only: [:create]
         resources :user_device_token_registrations, only: %i[create destroy]
         resources :user_account_linkages, only: %i[index create destroy]
+        resources :pin_code_otp_generators, only: [:create]
+        resource :pin_code_otp_checkers, only: [:update]
         resources :pin_code_generators, only: [:create]
         resource :pin_code_checkers, only: [:update]
 
@@ -338,6 +375,7 @@ Spree::Core::Engine.add_routes do
         resources :guests, only: %i[create update show] do
           resources :id_cards
         end
+        resources :pending_line_items, only: %i[show index]
       end
 
       namespace :operator do

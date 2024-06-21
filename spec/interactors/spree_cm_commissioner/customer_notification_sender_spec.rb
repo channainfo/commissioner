@@ -3,7 +3,7 @@ require 'spec_helper'
 RSpec.describe SpreeCmCommissioner::CustomerNotificationSender do
   let(:now) { '10-10-2021'.to_date }
 
-  describe '#update customer_notification_send_at' do
+  describe '#update_customer_notification_sent_at' do
     it 'does not update sent_at if customer_notification has already been sent' do
       sent_at = now - 1.day
       customer_notification = create(:customer_notification, sent_at: sent_at)
@@ -12,12 +12,12 @@ RSpec.describe SpreeCmCommissioner::CustomerNotificationSender do
       expect(customer_notification.sent_at).to eq sent_at
     end
 
-    it 'update sent_at if it is nil' do
+    it 'updates sent_at if it is nil' do
       customer_notification = create(:customer_notification, sent_at: nil)
       alert = described_class.new(customer_notification: customer_notification)
       alert.update_customer_notification_sent_at
       customer_notification.reload
-      expect(customer_notification.sent_at).to_not eq nil
+      expect(customer_notification.sent_at).to_not be_nil
     end
   end
 
@@ -62,17 +62,17 @@ RSpec.describe SpreeCmCommissioner::CustomerNotificationSender do
     end
   end
 
-  describe '#users_not_recieved_notifications' do
+  describe '#users_not_received_notifications' do
     it 'return user_2 that has not recieved notification yet' do
       user_1 = create(:cm_user, device_tokens_count: 1)
       user_2 = create(:cm_user, device_tokens_count: 2)
 
       customer_notification = create(:customer_notification)
       alert = described_class.new(customer_notification: customer_notification)
-      users = alert.users_not_recieved_notifications
+      users = alert.users_not_received_notifications
 
       # pushed
-      notification = create(
+      create(
         :notification,
         recipient: user_1,
         notificable: customer_notification
@@ -83,9 +83,34 @@ RSpec.describe SpreeCmCommissioner::CustomerNotificationSender do
     end
   end
 
+  describe '#send_notification' do
+    it 'calls send_to_specific_users if user_ids are present' do
+      user_ids = [1, 2, 3]
+      customer_notification = create(:customer_notification)
+      alert = described_class.new(customer_notification: customer_notification, user_ids: user_ids)
+
+      expect(alert).to receive(:send_to_specific_users).with(user_ids).and_call_original
+      expect(alert).not_to receive(:send_to_all_users_now)
+      expect(alert).to receive(:update_customer_notification_sent_at).with(force: false)
+
+      alert.send_notification
+    end
+
+    it 'calls send_to_all_users_now if user_ids are not present' do
+      customer_notification = create(:customer_notification)
+      alert = described_class.new(customer_notification: customer_notification)
+
+      expect(alert).to receive(:send_to_all_users_now).and_call_original
+      expect(alert).not_to receive(:send_to_specific_users)
+      expect(alert).to receive(:update_customer_notification_sent_at).with(force: true)
+
+      alert.send_notification
+    end
+  end
+
   describe '#send_to_all_users' do
-    it 'deliver notification to users' do
-      user_1 = create(:cm_user, device_tokens_count: 0)
+    it 'delivers notification to users' do
+      create(:cm_user, device_tokens_count: 0)
       user_2 = create(:cm_user, device_tokens_count: 2)
       user_3 = create(:cm_user, device_tokens_count: 1)
 
@@ -94,41 +119,18 @@ RSpec.describe SpreeCmCommissioner::CustomerNotificationSender do
 
       expect(alert).to receive(:deliver_notification_to_user).with(user_2)
       expect(alert).to receive(:deliver_notification_to_user).with(user_3)
+      expect(alert).to receive(:update_customer_notification_sent_at).with(force: false)
 
       alert.send_to_all_users
     end
   end
 
-  describe '#send_to_specific_users' do
-    it 'calls send_to_specific_users if user_ids is present' do
-      user_ids = [1, 2, 3]
-      customer_notification = create(:customer_notification)
-      alert = described_class.new(customer_notification: customer_notification, user_ids: user_ids)
-
-      expect(alert).to receive(:send_to_specific_users).with(user_ids)
-      expect(alert).not_to receive(:send_to_all_users)
-
-      alert.send_notification
-    end
-
-    it 'calls send_to_all_users if user_ids is not present' do
-      customer_notification = create(:customer_notification)
-      alert = described_class.new(customer_notification: customer_notification)
-
-      expect(alert).not_to receive(:send_to_specific_users)
-      expect(alert).to receive(:send_to_all_users)
-
-      alert.send_notification
-    end
-  end
-
   describe '#call' do
-    it 'sends notification and update record' do
+    it 'sends notification and updates the record' do
       customer_notification = create(:customer_notification)
       alert = described_class.new(customer_notification: customer_notification)
 
       expect(alert).to receive(:send_notification)
-      expect(alert).to receive(:update_customer_notification_sent_at)
       alert.call
     end
   end

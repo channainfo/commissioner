@@ -19,6 +19,14 @@ RSpec.describe Spree::Vendor, type: :model do
     it { should have_many(:auto_apply_promotions).class_name('Spree::Promotion').through(:promotion_rules).source(:promotion) }
   end
 
+  describe 'validations' do
+    subject { create(:vendor) }
+
+    it { should validate_numericality_of(:commission_rate).is_greater_than_or_equal_to(0) }
+    it { should validate_numericality_of(:commission_rate).is_less_than_or_equal_to(100) }
+    it { should validate_presence_of(:commission_rate) }
+  end
+
   describe 'attributes' do
     it { should define_enum_for :primary_product_type }
     it { expect(described_class.primary_product_types.keys).to match(SpreeCmCommissioner::ProductType::PRODUCT_TYPES.map(&:to_s)) }
@@ -155,19 +163,19 @@ RSpec.describe Spree::Vendor, type: :model do
     let!(:stock_location) { vendor.stock_locations.first }
     let!(:product1) { create(:product, vendor: vendor)}
     let!(:product2) { create(:product, vendor: vendor)}
-    let!(:variant1) { create(:base_variant, product: product1, permanent_stock: 5, price: 20)}
-    let!(:variant2) { create(:base_variant, product: product2, permanent_stock: 5, price: 30)}
+    let!(:variant1) { create(:cm_base_variant, product: product1, total_inventory: 5, price: 20)}
+    let!(:variant2) { create(:cm_base_variant, product: product2, total_inventory: 5, price: 30)}
 
     context '#update_total_inventory' do
       it 'should update total inventory' do
         vendor.update_total_inventory
-        expect(vendor.total_inventory).to eq 12 # master_variant has 1 item each by default
+        expect(vendor.total_inventory).to eq 10
       end
     end
 
     context '#update_min_max_price' do
       it 'should update min max price ' do
-        variant3 = create(:base_variant, product: product2, permanent_stock: 5, price: 10)
+        variant3 = create(:cm_base_variant, product: product2, total_inventory: 5, price: 10)
         vendor.update_min_max_price
 
         expect(vendor.min_price.to_f).to eq 10.0

@@ -1,19 +1,13 @@
 module SpreeCmCommissioner
   module AdjustmentDecorator
     def self.prepended(base)
-      base.attr_accessor :current_user_instance
-
       base.belongs_to :payable, polymorphic: true, optional: true
-
-      base.before_save :set_payable
 
       base.whitelisted_ransackable_attributes |= %w[payable_id]
     end
 
-    # must set current_user_instance
-    # before hand
-    def set_payable
-      self.payable = current_user_instance.presence
+    def display_negative_amount
+      "#{amount} #{Money::Currency.find(currency).symbol}"
     end
   end
 end

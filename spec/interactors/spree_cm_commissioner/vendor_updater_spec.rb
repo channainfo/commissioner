@@ -7,7 +7,7 @@ RSpec.describe SpreeCmCommissioner::VendorUpdater do
   let(:vendor) { create(:active_vendor, name: 'Angkor Hotel', primary_product_type: accommodation ) }
   let(:state) { create(:state, name: 'Siemreap') }
   let!(:option_type) { create(:option_type, name: 'location', presentation: 'Location', attr_type: 'state_selection') }
-  let!(:option_value) { create(:option_value, option_type: option_type, presentation: state.id) }
+  let!(:option_value) { create(:option_value, option_type: option_type, name: state.id) }
   let!(:stock_location) { vendor.stock_locations.first.update(state: state) }
   let(:shipping_category) { create(:shipping_category, name: 'Digital') }
 
@@ -15,6 +15,10 @@ RSpec.describe SpreeCmCommissioner::VendorUpdater do
     context 'without product variants' do
       let!(:product1) { create(:product, name: 'Bedroom 1', vendor: vendor, product_type: accommodation, price: 10, shipping_category: shipping_category ) }
       let!(:product3) { create(:product, name: 'Bedroom 3', vendor: vendor, product_type: accommodation, price: 20, shipping_category: shipping_category ) }
+
+      before do
+        vendor.stock_items.first.adjust_count_on_hand(2)
+      end
 
       it 'update min and max price' do
         context = SpreeCmCommissioner::VendorUpdater.call(vendor: vendor)
@@ -30,7 +34,7 @@ RSpec.describe SpreeCmCommissioner::VendorUpdater do
 
         vendor.reload
 
-        expect(vendor.total_inventory).to eq 2 # default master_variant has 1 item each by default
+        expect(vendor.total_inventory).to eq 2
       end
     end
 

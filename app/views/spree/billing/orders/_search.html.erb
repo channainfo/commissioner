@@ -10,10 +10,10 @@
         </div>
       </div>
 
-      <div class="date-range-filter col-12 col-lg-6">
+      <div class="col-12 col-lg-6">
         <div class="form-group">
-          <%= f.label :line_items_to_date_lteq, I18n.t(:select_date, scope: 'activerecord.attributes.spree/order') %>
-          <%= f.date_field :line_items_to_date_lteq, class: 'form-control js-quick-search-target js-filterable datepicker', data: {behavior: 'datepicker', format: 'yyyy-mm-dd'}, placeholder: 'Select date' %>
+          <%= label_tag :month, Spree.t(:month) %>
+          <%= select_tag :month, options_for_select((1..12).map { |m| [Date::MONTHNAMES[m], "#{Time.current.year}-#{m.to_s.rjust(2, '0')}"] }, params[:month]),  include_blank: 'All', class: 'select2 form-control js-filterable' %>
         </div>
       </div>
     </div>

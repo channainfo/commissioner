@@ -1,9 +1,7 @@
 module SpreeCmCommissioner
   module OptionValueDecorator
     def self.prepended(base)
-      base.include SpreeCmCommissioner::AttrTypeValidation
-
-      base.act_as_presentation
+      base.include SpreeCmCommissioner::OptionValueAttrType
     end
 
     def display_icon

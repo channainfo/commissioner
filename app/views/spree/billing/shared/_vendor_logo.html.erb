@@ -1,1 +1,1 @@
-<img src="<%= main_app.rails_blob_url(@current_vendor.logo.attachment) %>" alt="vendor's logo" style="width: 50px">
+<img src="<%= main_app.rails_blob_url(@current_vendor.logo.attachment.try(:blob)) %>" alt="vendor's logo" style="width: 50px">
