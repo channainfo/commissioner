@@ -16,6 +16,20 @@ RSpec.describe Spree::LineItem, type: :model do
     end
   end
 
+  describe 'callback before_validation' do
+    let(:line_item) { build(:line_item) }
+
+    describe 'Spree::Core::NumberGenerator#generate_permalink' do
+      it 'generate number for line item with base length 10' do
+        expect(line_item.number).to eq nil
+
+        line_item.save
+
+        expect(line_item.number.size).to eq 10
+      end
+    end
+  end
+
   describe 'validations' do
     context 'make sure quantity not exceed max-quantity-per-order' do
       let(:line_item) { create(:line_item) }
