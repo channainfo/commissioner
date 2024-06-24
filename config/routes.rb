@@ -365,6 +365,7 @@ Spree::Core::Engine.add_routes do
         resources :homepage_sections, only: [:index]
         resources :order_qrs, only: [:show]
         resources :line_item_qrs, only: [:show]
+        resources :event_qrs, only: [:show]
 
         resources :homepage, only: [] do
           resources :homepage_sections, only: [:index]
@@ -376,6 +377,7 @@ Spree::Core::Engine.add_routes do
           resources :id_cards
         end
         resources :pending_line_items, only: %i[show index]
+        resources :self_check_in, only: %i[index create]
       end
 
       namespace :operator do
@@ -383,7 +385,8 @@ Spree::Core::Engine.add_routes do
         resources :check_ins, only: %i[index create]
         resource :check_in_bulks, only: %i[index create]
         resources :dashboard_crew_events, only: %i[index]
-        resources :taxons do
+        resources :event_qrs, only: [:show]
+        resources :taxons, only: %i[show] do
           resource :event_ticket_aggregators, only: %i[show]
           resource :pie_chart_event_aggregators, only: %i[show]
         end
