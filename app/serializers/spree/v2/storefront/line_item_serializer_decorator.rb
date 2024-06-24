@@ -8,6 +8,7 @@ module Spree
                           :kyc, :kyc_fields, :remaining_total_guests, :number_of_guests,
                           :completion_steps
 
+          base.attribute :allowed_self_check_in, &:allowed_self_check_in?
           base.attribute :delivery_required, &:delivery_required?
 
           base.has_one :vendor
