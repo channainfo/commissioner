@@ -10,10 +10,10 @@ module SpreeCmCommissioner
       scope :filter_by_event, lambda { |event|
         case event
         when 'upcoming'
-          where.not(to_date: nil).where('to_date >= ?', Date.current)
+          where.not(to_date: nil).where('to_date >= ?', Time.zone.now)
 
         when 'complete'
-          where.not(to_date: nil).where('to_date < ?', Date.current)
+          where.not(to_date: nil).where('to_date < ?', Time.zone.now)
 
         else
           none
@@ -21,9 +21,9 @@ module SpreeCmCommissioner
       }
 
       def event_status
-        return 'upcoming' if to_date.present? && to_date >= Date.current
+        return 'upcoming' if to_date.present? && to_date >= Time.zone.now
 
-        'complete' if to_date.present? && to_date < Date.current
+        'complete' if to_date.present? && to_date < Time.zone.now
       end
     end
   end

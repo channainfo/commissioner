@@ -12,7 +12,7 @@
       <div data-hook="admin_line_item_form_date">
         <%= f.field_container :from_date do %>
           <%= f.label :from_date, raw(Spree.t(:from_date) + required_span_tag) %>
-          <%= f.text_field :from_date, class: 'form-control datePickerFrom mb-2', 'data-input': '', value: (@line_item.from_date ? @line_item.from_date.to_date : nil) %>
+          <%= f.text_field :from_date, class: 'form-control datePickerFrom mb-2', 'data-alt-input': true, 'data-enable-time': true, value: (@line_item.from_date ? @line_item.from_date.to_date : nil) %>
           <%= f.error_message_on :from_date %>
         <% end %>
       </div>
@@ -20,7 +20,7 @@
       <div data-hook="admin_line_item_to_date">
         <%= f.field_container :to_date do %>
           <%= f.label :to_date, raw(Spree.t(:to_date) + required_span_tag) %>
-          <%= f.text_field :to_date, class: 'form-control datePickerTo', 'data-input': '', value: (@line_item.to_date ? @line_item.to_date.to_date : nil), 'data-min-date': (@line_item.from_date ? @line_item.from_date.to_date : nil) %>
+          <%= f.text_field :to_date, class: 'form-control datePickerTo', 'data-alt-input': true, 'data-enable-time': true, value: @line_item.to_date, 'data-min-date': @line_item.from_date %>
           <%= f.error_message_on :to_date %>
         <% end %>
       </div>

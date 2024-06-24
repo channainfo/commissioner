@@ -90,7 +90,7 @@ RSpec.describe Spree::LineItem, type: :model do
   describe '#set_duration' do
 
     let(:taxonomy) { create(:taxonomy, kind: :event) }
-    let(:taxon) { taxon = create(:taxon, name: 'events', from_date: '2023-01-10'.to_date, to_date: '2023-01-13'.to_date, taxonomy: taxonomy) }
+    let(:taxon) { create(:taxon, name: 'events', from_date: '2023-01-10'.to_date, to_date: '2023-01-13'.to_date, taxonomy: taxonomy) }
     let(:product) { create(:product, taxons: [taxon]) }
     let(:order) { create(:order) }
 
@@ -136,19 +136,73 @@ RSpec.describe Spree::LineItem, type: :model do
 
     it 'filter only complete line items base on complete order' do
       line_item1 = create(:line_item, order: complete_order)
-      line_item2 = create(:line_item, order: incomplete_order)
+      _line_item2 = create(:line_item, order: incomplete_order)
 
       expect(described_class.complete).to eq [line_item1]
     end
   end
 
-  describe 'paid' do
+  describe '.paid' do
     let!(:order1) { create(:order_with_line_items, payment_state: :paid, line_items_count: 1) }
     let!(:order2) { create(:order_with_line_items, payment_state: :void, line_items_count: 1) }
 
     it 'it only return paid line items' do
       expect(described_class.paid.size).to eq 1
       expect(described_class.paid).to eq order1.line_items
+    end
+  end
+
+  describe '.filter_by_event' do
+    # we call Time.zone.now later in filter_by_event scope,
+    # so we add 5 second to make sure it still matched within 5 seconds different
+    let(:current) { Time.zone.now + 5.second }
+
+    context 'when event is upcoming' do
+      context 'when current not yet pass line_item.to_date' do
+        let!(:order) { create(:order, state: :complete, completed_at: current, line_items: [line_item_a, line_item_b])}
+
+        let(:line_item_a) { create(:line_item, to_date: current) }
+        let(:line_item_b) { create(:line_item, to_date: current + 1.days) }
+
+        it 'return line item as upcoming' do
+          expect(Spree::LineItem.filter_by_event('upcoming').pluck(:id)).to eq [line_item_a.id, line_item_b.id]
+        end
+      end
+
+      context 'when current pass to_date (can ignore from_date)' do
+        let!(:order) { create(:order, state: :complete, completed_at: current, line_items: [line_item_a, line_item_b])}
+
+        let(:line_item_a) { create(:line_item, to_date: current - 10.seconds) }
+        let(:line_item_b) { create(:line_item, to_date: current - 1.days) }
+
+        it 'return line item as upcoming' do
+          expect(Spree::LineItem.filter_by_event('upcoming').pluck(:id)).to eq []
+        end
+      end
+    end
+
+    context 'when event is complete' do
+      context 'when current pass to_date (can ignore from_date)' do
+        let!(:order) { create(:order, state: :complete, completed_at: current, line_items: [line_item_a, line_item_b])}
+
+        let(:line_item_a) { create(:line_item, to_date: current - 10.seconds) }
+        let(:line_item_b) { create(:line_item, to_date: current - 2.days) }
+
+        it 'return both line items as complete' do
+          expect(Spree::LineItem.filter_by_event('complete').pluck(:id)).to eq [line_item_a.id, line_item_b.id]
+        end
+      end
+
+      context 'when current not yet pass to_date' do
+        let!(:order) { create(:order, state: :complete, completed_at: current, line_items: [line_item_a, line_item_b])}
+
+        let(:line_item_a) { create(:line_item, to_date: current) }
+        let(:line_item_b) { create(:line_item, to_date: current) }
+
+        it 'return empty' do
+          expect(Spree::LineItem.filter_by_event('complete').pluck(:id)).to eq []
+        end
+      end
     end
   end
 
