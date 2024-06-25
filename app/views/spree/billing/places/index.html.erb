@@ -3,7 +3,7 @@
 <% end %>
 
 <% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:new_place), new_billing_place_path, { class: "btn-success", icon: 'add.svg', id: 'admin_new_place' } %>
+  <%= button_link_to I18n.t('spree.billing.new_place'), new_billing_place_path, { class: "btn-success", icon: 'add.svg', id: 'admin_new_place' } %>
 <% end if can?(:create, SpreeCmCommissioner::Place) %>
 
 <% content_for :table_filter do %>
@@ -37,8 +37,8 @@
         <tr data-hook="admin_places_index_headers">
           <th><%= sort_link @search,:name, Spree.t(:name), { default_order: "desc" }, {title: 'admin_places_listing_name_title'} %></th>
           <th><%= sort_link @search,:code, Spree.t(:code), { default_order: "desc" }, {title: 'admin_places_listing_code_title'} %></th>
-          <th><%= sort_link @search,:updated_at, Spree.t(:updated_at), { default_order: "desc" }, {title: 'admin_places_listing_updated_at_title'} %></th>
-          <th><%= sort_link @search,:created_at, Spree.t(:created_at), { default_order: "desc" }, {title: 'admin_places_listing_created_at_title'} %></th>
+          <th><%= sort_link @search,:updated_at, I18n.t(:updated_at, scope: 'activerecord.attributes.spree/order'), { default_order: "desc" }, {title: 'admin_places_listing_updated_at_title'} %></th>
+          <th><%= sort_link @search,:created_at, I18n.t(:created_at, scope: 'activerecord.attributes.spree/order'), { default_order: "desc" }, {title: 'admin_places_listing_created_at_title'} %></th>
           <th class="text-center" data-hook="admin_places_index_header_actions" class="actions"></th>
         </tr>
       </thead>

@@ -1,9 +1,9 @@
 <% content_for :page_title do %>
-  <%= @businesses_taxonomy&.name %>
+  <%= I18n.t('spree.billing.businesses') %>
 <% end %>
 
 <% content_for :page_actions do %>
-    <%= button_link_to Spree.t('billing.businesses.add_new_business'), spree.new_billing_business_path(), icon: 'add.svg', class: 'no-wrap btn btn-success align-self-center' %>
+    <%= button_link_to I18n.t('spree.billing.add_new_business'), spree.new_billing_business_path(), icon: 'add.svg', class: 'no-wrap btn btn-success align-self-center' %>
 <% end %>
 
 

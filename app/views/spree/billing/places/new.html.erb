@@ -1,6 +1,6 @@
 <% content_for :page_title do %>
   <%= page_header_back_button spree.billing_places_path %>
-  <%= Spree.t(:new_place) %>
+  <%= Spree.t('billing.new_place') %>
 <% end %>
 <div data-hook="admin_user_new_form_header">
   <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
