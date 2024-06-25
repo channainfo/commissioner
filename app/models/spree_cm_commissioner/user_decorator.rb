@@ -7,8 +7,6 @@ module SpreeCmCommissioner
 
       base.enum gender: %i[male female other]
 
-      base.encrypts :encrypted_confirm_pin_code
-
       base.has_many :subscriptions, through: :customer, class_name: 'SpreeCmCommissioner::Subscription'
       base.has_many :payments, as: :payable, class_name: 'Spree::Payment', dependent: :nullify
       base.has_many :role_permissions, through: :spree_roles, class_name: 'SpreeCmCommissioner::RolePermission'
@@ -22,6 +20,8 @@ module SpreeCmCommissioner
 
       base.has_one :profile, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::UserProfile'
       base.has_one :customer, class_name: 'SpreeCmCommissioner::Customer'
+
+      base.has_secure_password :confirm_pin_code, validations: false
 
       base.whitelisted_ransackable_attributes = %w[email first_name last_name gender phone_number]
 
