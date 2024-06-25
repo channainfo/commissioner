@@ -34,6 +34,20 @@ RSpec.describe SpreeCmCommissioner::DashboardCrewEventQuery do
         expect(incoming_event_c.from_date).to be >= start_from_date
         expect(subject.events.pluck(:taxon_id)).to eq([incoming_event_a.id, incoming_event_b.id, incoming_event_c.id])
       end
+
+      context 'when start_from_date not yet pass to_date (can ignore from_date)' do
+        let!(:start_from_date) { Time.zone.now }
+
+        let(:incoming_event_a) { create(:cm_taxon_event, name: 'LongTedX', to_date: start_from_date + 10.second) }
+        let(:incoming_event_b) { create(:cm_taxon_event, name: 'LongTedX', to_date: start_from_date + 1.days) }
+
+        let!(:user) { create(:cm_operator_user, events: [incoming_event_a, incoming_event_b]) }
+
+        it 'return both events' do
+          query_a = SpreeCmCommissioner::DashboardCrewEventQuery.new(user_id: user.id, section: 'incoming')
+          expect(query_a.events.pluck(:taxon_id)).to eq([incoming_event_a.id, incoming_event_b.id])
+        end
+      end
     end
 
     context 'when section is previous' do
