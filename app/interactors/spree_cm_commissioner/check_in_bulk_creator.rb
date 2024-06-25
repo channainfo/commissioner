@@ -30,7 +30,7 @@ module SpreeCmCommissioner
 
       return guest.check_in if guest.check_in.present?
 
-      event = guest.line_item.product.taxons.where(kind: :event).first.parent
+      event = guest.event
 
       check_in = SpreeCmCommissioner::CheckIn.new(
         guest: guest,
