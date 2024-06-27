@@ -1,29 +1,70 @@
 <div class="row">
   <div class="col-12">
+    <%= f.hidden_field :uuid %>
     <%= f.field_container :title do %>
-      <%= f.label :title, raw(Spree.t(:title) + required_span_tag) %>
-      <%= f.text_field :title, class: 'form-control', placeholder: 'eg. Video Title', required: true %>
-      <%= f.error_message_on :title %>
+      <div class="form-group">
+        <%= f.label :title, raw(Spree.t(:title) + required_span_tag) %>
+        <%= f.text_field :title, class: 'form-control', placeholder: 'eg. Video Title', required: true %>
+        <%= f.error_message_on :title %>
+      </div>
     <% end %>
     <%= f.field_container :description do %>
-      <%= f.label :description, raw(Spree.t(:description) + required_span_tag) %>
-      <%= f.text_area :description, cols: 60, rows: 6, class: 'form-control', placeholder: 'eg. This product required to complete following step.' , required: true %>
-      <%= f.error_message_on :description %>
+      <div class="form-group">
+        <%= f.label :description, raw(Spree.t(:description) + required_span_tag) %>
+        <%= f.text_area :description, cols: 60, rows: 6, class: 'form-control', placeholder: 'eg. This product required to complete following step.', required: true %>
+        <%= f.error_message_on :description %>
+      </div>
     <% end %>
     <div class="form-group">
       <%= f.label :variant_id, raw(Spree::Variant.model_name.human + required_span_tag) %>
-      <%= f.select :variant_id, options_for_select(@variants.map { |v| [v.options_text, v.id, { disabled: v.id != f.object.variant_id && @video_on_demands.map(&:variant_id).include?(v.id) }] }, f.object.variant_id), {}, { class: 'select2' } %>
+      <%= f.select :variant_id, options_for_select(@variants.map { |v| [v.options_text, v.id, { disabled: v.id != f.object.variant_id && @video_on_demands.map(&:variant_id).include?(v.id) }] }, f.object.variant_id), {}, { class: 'select2 form-control' } %>
       <%= f.error_message_on :variant_id %>
     </div>
-    <div class="field mb-4">
+    <div class="form-group">
       <%= f.label :thumbnail, raw(Spree.t(:thumbnail) + required_span_tag) %>
-      <%= f.file_field :thumbnail, required: true, accept: 'image/*' %>
+      <%= f.file_field :thumbnail, required: f.object.new_record?, accept: 'image/*', class: 'form-control-file' %>
       <%= f.error_message_on :thumbnail %>
     </div>
-    <div class="field">
-      <%= f.label :file, raw(Spree.t(:video) + required_span_tag)%>
-      <%= f.file_field :file, accept: 'video/*'  %>
-      <%= f.error_message_on :file, required: true %>
+    <div class="form-group">
+      <%= f.label :file, raw(Spree.t(:video) + required_span_tag) %>
+      <%= f.file_field :file, required: f.object.new_record?, accept: 'video/*', class: 'form-control-file' %>
+      <%= f.error_message_on :file %>
+    </div>
+    <div class="form-group">
+      <%= f.label :video_quality, raw(Spree.t(:video_quality)) %>
+      <div class="form-check form-check-inline">
+        <% SpreeCmCommissioner::VideoOnDemandBitwise::QUALITY_BIT_FIELDS.each do |field, bit_value| %>
+          <div class="form-check form-check-inline ml-3">
+            <%= f.check_box field, class: 'form-check-input', checked: f.object.quality_value_enabled?(bit_value) %>
+            <%= f.label field, t("video_on_demand.quality.#{field}"), class: 'form-check-label' %>
+          </div>
+        <% end %>
+        <%= f.error_message_on :video_quality, class: 'text-danger' %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :video_protocol, raw(Spree.t(:video_protocol)) %>
+      <div class="form-check form-check-inline">
+        <% SpreeCmCommissioner::VideoOnDemandBitwise::PROTOCOL_BIT_FIELDS.each do |protocol, bit_value| %>
+          <div class="form-check form-check-inline ml-3">
+            <%= f.check_box protocol, class: 'form-check-input', checked: f.object.protocol_fields.include?(protocol) %>
+            <%= f.label protocol, t("video_on_demand.protocol.#{protocol}"), class: 'form-check-label' %>
+          </div>
+        <% end %>
+        <%= f.error_message_on :video_protocol, class: 'text-danger' %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :frame_rate, raw(Spree.t(:frame_rate) + required_span_tag) %>
+      <div class="form-check form-check-inline">
+        <% SpreeCmCommissioner::VideoOnDemand.frame_rates.keys.each do |frame_rate| %>
+          <div class="form-check form-check-inline ml-3">
+            <%= f.radio_button :frame_rate, frame_rate, class: 'form-check-input frame_rates_radios', required: true %>
+            <%= f.label :frame_rate, t("video_on_demand.frame_rates.#{frame_rate}"), class: 'form-check-label' %>
+          </div>
+        <% end %>
+        <%= f.error_message_on :frame_rate, class: 'text-danger' %>
+      </div>
     </div>
   </div>
 </div>

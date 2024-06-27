@@ -418,3 +418,17 @@ en:
     cannot_delete_account: "You cannot delete this account because you own a special role"
   kyc:
     note: "<b>Note:</b> Select Required KYC Field For this Product"
+  video_on_demand:
+    quality:
+      low: 'Low (320p)'
+      standard: 'Standard (480p)'
+      medium: 'Medium (720p)'
+      high: 'High (1080p)'
+    protocol:
+      p_hls: 'HLS'
+      p_dash: 'DASH'
+      p_file: 'File'
+    frame_rates:
+      FPS_TWEENTY_FOUR: "24 (Cinematic Mode)"
+      FPS_THIRTY: "30 (TV Show or Online Video)"
+      FPS_SIXTY: "60 (Sport and Gaming)"
