@@ -24,8 +24,17 @@ module SpreeCmCommissioner
       self.preferred_event_name ||= product.name
       self.preferred_venue_name ||= product.vendor.stock_location.city
       self.preferred_venue_address ||= product.vendor.stock_location.address1
-      self.preferred_start_date ||= product.taxons.first.from_date
-      self.preferred_end_date ||= product.taxons.first.to_date
+      self.preferred_start_date = event_start_date unless event_start_date.nil?
+      self.preferred_end_date = event_end_date unless event_end_date.nil?
+      self.preferred_background_color = '#000000'
+    end
+
+    def event_start_date
+      product.taxons.first&.from_date
+    end
+
+    def event_end_date
+      product.taxons.first&.to_date
     end
 
     def set_class_id

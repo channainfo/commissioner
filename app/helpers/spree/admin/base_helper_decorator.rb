@@ -13,16 +13,15 @@ module Spree
 
       def preference_field_for(form, field, options)
         case field
-        when 'preferred_start_date' || 'preferred_end_date'
+        when 'preferred_start_date', 'preferred_end_date'
           value = parse_date(form.object.send(field))
-          return form.date_field(field, class: 'form-control datepicker bg-transparent', value: value)
+          return form.date_field(field, class: 'form-control datepicker bg-transparent', value: value, 'data-enable-time': 'true')
         end
-
         super
       end
 
       def parse_date(date)
-        Date.parse(date)
+        DateTime.parse(date)
       rescue StandardError
         nil
       end

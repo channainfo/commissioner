@@ -46,11 +46,11 @@ module SpreeCmCommissioner
       end
 
       def logo
-        (vendor_logo_url.presence || @google_wallet_class.logo.styles.first[:url])
+        (vendor_logo_url.presence || @google_wallet_class.logo.original_url)
       end
 
       def hero_image
-        @google_wallet_class.hero_image.styles.first[:url]
+        @google_wallet_class.hero_image.original_url
       end
 
       def start_date
@@ -67,7 +67,7 @@ module SpreeCmCommissioner
       end
 
       def vendor_logo_url
-        @google_wallet_class.product.vendor.logo&.styles&.first&.[](:url)
+        @google_wallet_class.product.vendor.logo&.original_url
       end
 
       def build_request_body
