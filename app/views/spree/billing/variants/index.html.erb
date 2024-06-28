@@ -25,8 +25,8 @@
             <td><%= display_price(variant) %></td>
             <td class="actions">
               <span class="d-flex justify-content-end">
-                <%= link_to_edit(variant, no_text: true) if can?(:edit, variant) && !variant.deleted? %>
-                <%= link_to_delete variant, no_text: true if can?(:delete, variant) && !variant.deleted? %>
+                <%= link_to_edit(variant, no_text: true) if spree_current_user.permissions.exists?(entry: 'spree/billing/variants', action: 'edit') && !variant.deleted? %>
+                <%= link_to_delete variant, no_text: true if spree_current_user.permissions.exists?(entry: 'spree/billing/variants', action: 'destroy') && !variant.deleted? %>
               </span>
             </td>
           </tr>

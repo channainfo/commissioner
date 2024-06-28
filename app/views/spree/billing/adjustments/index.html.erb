@@ -1,7 +1,7 @@
 <%= render partial: 'spree/billing/shared/order_tabs', locals: { current: :adjustment } %>
 
 <% content_for :page_actions do %>
-  <%= button_link_to(Spree.t(:new_adjustment), new_billing_order_adjustment_path(@order), class: "btn-success", icon: 'add.svg') if can? :create, Spree::Adjustment %>
+  <%= button_link_to(Spree.t(:new_adjustment), new_billing_order_adjustment_path(@order), class: "btn-success", icon: 'add.svg') if spree_current_user.permissions.exists?(entry: 'spree/billing/adjustments', action: 'create') %>
 <% end %>
 
 <% if @adjustments.present? %>

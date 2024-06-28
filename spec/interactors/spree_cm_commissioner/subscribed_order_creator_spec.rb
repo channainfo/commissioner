@@ -34,7 +34,7 @@ RSpec.describe SpreeCmCommissioner::SubscribedOrderCreator do
 
     context "when subscriptions is later than this month" do
       it "do not create any order"do
-        subscription1 = create(:cm_subscription, customer: customer, quantity: 2, start_date: '2024-07-02'.to_date)
+        subscription1 = create(:cm_subscription, customer: customer, quantity: 2, start_date: '2024-12-02'.to_date)
         subscription2 = create(:cm_subscription, customer: customer, quantity: 2, start_date: '2025-01-02'.to_date)
         expect(customer.orders.count).to eq 0
         expect(customer.subscriptions.count).to eq 2

@@ -79,8 +79,8 @@
             </td>
             <td data-hook="admin_customers_index_row_actions" class="actions">
               <span class="d-flex justify-content-end">
-                <%= link_to_edit customer ,url: edit_billing_customer_path(customer) ,no_text: true if can?(:edit, customer) %>
-                <%= link_to_delete customer,url: billing_customer_path(customer), no_text: true if can?(:delete, customer) %>
+                <%= link_to_edit customer ,url: edit_billing_customer_path(customer) ,no_text: true if spree_current_user.permissions.exists?(entry: 'spree/billing/customers', action: 'edit') %>
+                <%= link_to_delete customer,url: billing_customer_path(customer), no_text: true if spree_current_user.permissions.exists?(entry: 'spree/billing/customers', action: 'destroy') %>
               </span>
             </td>
           </tr>
@@ -91,7 +91,7 @@
 <% end %>
 <% if @customers.empty? %>
   <div class="text-center no-objects-found m-5">
-    <%= Spree.t(:no_resource_found, resource: plural_resource_name(SpreeCmCommissioner::Customer)) %><% if can? :create, SpreeCmCommissioner::Customer %>,
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(SpreeCmCommissioner::Customer)) %><% if spree_current_user.permissions.exists?(entry: 'spree/billing/customers', action: 'create') %>,
       <%= link_to(Spree.t(:add_one), new_billing_customer_path) %>!<% end %>
   </div>
 <% end %>

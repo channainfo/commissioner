@@ -4,7 +4,7 @@
 
 <% content_for :page_actions do %>
   <%= button_link_to Spree.t(:new_place), new_billing_place_path, { class: "btn-success", icon: 'add.svg', id: 'admin_new_place' } %>
-<% end if can?(:create, SpreeCmCommissioner::Place) %>
+<% end if spree_current_user.permissions.exists?(entry: 'spree/billing/places', action: 'create') %>
 
 <% content_for :table_filter do %>
   <div data-hook="admin_places_index_search">
@@ -59,8 +59,8 @@
             </td>
             <td class="actions" data-hook="admin_places_index_row_actions">
               <span class="d-flex justify-content-end">
-                <%= link_to_edit place ,url: edit_billing_place_path(place) ,no_text: true if can?(:edit, place) %>
-                <%= link_to_delete place,url: billing_place_path(place), no_text: true if can?(:delete, place) %>
+                <%= link_to_edit place ,url: edit_billing_place_path(place) ,no_text: true if spree_current_user.permissions.exists?(entry: 'spree/billing/places', action: 'edit') %>
+                <%= link_to_delete place,url: billing_place_path(place), no_text: true if spree_current_user.permissions.exists?(entry: 'spree/billing/places', action: 'destroy') %>
               </span>
             </td>
           </tr>
