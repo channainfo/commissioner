@@ -36,15 +36,8 @@ FactoryBot.define do
     factory :route do
       route_type {:automobile}
       product_type { :transit }
-      trip_attributes do
-        departure_time { '13:00' }
-        duration { 5 }
-        vehicle_id {1}
-        origin_id {1}
-        destination_id {2}
-      end
       before(:create) do |route, evaluator|
-        stock_location = create(:stock_location) unless Spree::StockLocation.any?
+        create(:stock_location) unless Spree::StockLocation.any?
         if route.stores.empty?
           default_store = Spree::Store.default.persisted? ? Spree::Store.default : nil
           store = default_store || create(:store)

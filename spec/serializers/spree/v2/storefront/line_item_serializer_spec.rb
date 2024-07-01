@@ -2,7 +2,8 @@ require 'spec_helper'
 
 RSpec.describe Spree::V2::Storefront::LineItemSerializer, type: :serializer do
   describe '#serializable_hash' do
-    let(:line_item) { create(:cm_line_item) }
+  product = Spree::Product.create(name: 'Test Product', price: 10.00, product_type: :accommodation)
+  line_item = Spree::LineItem.new(quantity: 1, price: 10.00, currency: 'USD', product: product)
 
     subject {
       described_class.new(line_item, include: [
