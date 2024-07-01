@@ -1,6 +1,6 @@
 class CreateCmVideoOnDemands < ActiveRecord::Migration[7.0]
   def change
-    create_table :cm_video_on_demands do |t|
+    create_table :cm_video_on_demands, if_not_exists: true do |t|
           t.string :title
 
           t.text :description

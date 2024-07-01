@@ -3,6 +3,16 @@ module Spree
     class VideoOnDemandsController < Spree::Admin::ResourceController
       before_action :load_parent
       before_action :load_video_on_demands, only: %i[index new edit]
+      before_action :build_thumbnails, only: :create
+      before_action :create_thumbnails, only: :update
+
+      def build_thumbnails
+        @object.build_thumbnail(attachment: permitted_resource_params.delete(:thumbnail)) if permitted_resource_params[:thumbnail]
+      end
+
+      def create_thumbnails
+        @object.create_thumbnail(attachment: permitted_resource_params.delete(:thumbnail)) if permitted_resource_params[:thumbnail]
+      end
 
       def edit
         @video_on_demand = SpreeCmCommissioner::VideoOnDemand.find(params[:id])
