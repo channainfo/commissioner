@@ -5,5 +5,5 @@
   <% if spree_current_user.has_spree_role?('admin') || spree_current_user.permissions.exists?(entry: 'spree/billing/roles') %>
     <%= configurations_sidebar_menu_item(I18n.t('spree.billing.roles'), billing_roles_url) %>
   <% end %>
-  <%= tab :vendor, selected: request.path.include?('/vendors'), url: edit_billing_vendor_url(@current_vendor.id), label: Spree.t('billing.vendor') %>
+  <%= tab :vendor, selected: request.path.include?('/vendors'), url: edit_billing_vendor_url(@current_vendor.id), label: I18n.t('spree.vendor') %>
 </ul>

@@ -59,7 +59,7 @@
             <%= sort_link @search, :id, Spree.t(:id), {}, {title:"id_title"} %>
           </th>
           <th>
-            <%= sort_link @search, :full_name, Spree.t(:business_name), {}, {title: 'fullname_title'} %>
+            <%= sort_link @search, :full_name, I18n.t("spree.billing.business_name"), {}, {title: 'fullname_title'} %>
           </th>
           <th>
             <%= sort_link @search, :full_name, Spree.t(:full_name), {}, {title: 'fullname_title'} %>

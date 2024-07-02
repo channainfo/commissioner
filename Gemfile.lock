@@ -53,10 +53,10 @@ PATH
       rqrcode (~> 2.0)
       searchkick (~> 5.1)
       simple_calendar (~> 2.4)
-      spree (>= 4.5.0)
-      spree_api_v1 (>= 4.5.0)
-      spree_auth_devise (>= 4.5.0)
-      spree_backend (>= 4.5.0)
+      spree (~> 4.5.0)
+      spree_api_v1 (~> 4.5.0)
+      spree_auth_devise (~> 4.5.0)
+      spree_backend (~> 4.5.0)
       spree_extension
       spree_multi_vendor (>= 2.4.1)
       telegram-bot
@@ -719,7 +719,7 @@ GEM
       responders
       spree (>= 4.4.0.rc1)
       spree_extension
-    spree_auth_devise (4.6.0)
+    spree_auth_devise (4.5.0)
       devise (~> 4.7)
       devise-encryptable (= 0.2.0)
       spree_core (>= 4.5.0)

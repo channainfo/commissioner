@@ -228,12 +228,19 @@ km:
       match_any: "Some line items must from selected age group"
       match_all: "All line items must from selected age group"
     billing:
-      code: "code"
-      name: "name"
-      logo: "logo"
-      payment_qrcode: "Payment QRCode"
-      image: "image"
-      order_line_items: "Order Line Items"
+      owner_name: "MISSING"
+      new_place: "MISSING"
+      new_order: "MISSING"
+      businesses: "MISSING"
+      add_new_business: "MISSING"
+      business_name: "MISSING"
+      places: "MISSING"
+      code: "MISSING"
+      name: "MISSING"
+      logo: "MISSING"
+      payment_qrcode: "MISSING"
+      image: "MISSING"
+      order_line_items: "MISSING"
       new_role: "បង្កើតតួនាទីថ្មី"
       role_id: "កូដតួនាទី"
       settings: "ការកំណត់"
@@ -248,7 +255,11 @@ km:
       balance_due_orders: "វិក្កយបត្រមិនទាន់បង់"
       overdue_orders: "វិក្កយបត្រហួសថ្ងៃបង់"
       orders: "វិក្កយបត្រ"
-      customers: "អតិថិជន"
+      customers:
+        re_create_order:
+          success: "Invoice Created"
+          fails: "Invoice for this month is already exist "
+        customers: "អតិថិជន"
       roles: "តួនាទី"
       subscriptions: "ការប្រើប្រាស់"
       active_subscription: "កំពុងប្រើប្រាស់"
@@ -257,7 +268,8 @@ km:
       users: "គណនីបុគ្គលិក"
       day: "ថ្ងៃ"
       products: "ទំនិញ"
-      vendor: "vendor"
+      account_name: "MISSING"
+      account_number: "MISSING"
       payment_state:
         paid: "បង់រួច"
         balance_due: "មិនទាន់បង់"
@@ -281,10 +293,16 @@ km:
   activerecord:
     attributes:
       spree/order:
+        product_type: "MISSING"
+        customer_name: "MISSING"
+        issued_date: "MISSING"
+        payment_date: "MISSING"
+        printing_date: "MISSING"
         customer_id: "លេខកូដអតិថិជន"
         to_date: "រហូតដល់ថ្ងៃ"
         from_date: "ពីថ្ងៃ"
         created_at: "បង្កើតនៅថ្ងៃ"
+        updated_at: "MISSING"
         start_date: "ថ្ងៃចាប់ផ្តើម"
         start_date_range: "ចន្លោះថ្ងៃចាប់ផ្តើម"
         phone_number: "លេខទូរសព្ទ"
@@ -295,8 +313,13 @@ km:
         type: "ប្រភេទ"
         select_date: "ជ្រើសរើសថ្ងៃ"
         taxon: "ប្រភេទ"
+        quantity: "MISSING"
+        amount: "MISSING"
+        show_invoices: "MISSING"
       spree/report:
         cashier: "អ្នកគិតលុយ"
+      spree/payment:
+        number: "MISSING"
     errors:
       models:
         spree_cm_commissioner/service_calendar:
