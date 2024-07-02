@@ -60,8 +60,8 @@
               </td>
               <td data-hook="admin_users_index_row_actions" class="actions">
                 <span class="d-flex justify-content-end">
-                  <%= link_to_edit subscription ,url: edit_billing_customer_subscription_path(@customer.id,subscription.id) ,no_text: true if can?(:edit, subscription) %>
-                  <%= link_to_delete subscription,url: billing_customer_subscription_path(@customer.id, subscription.id), no_text: true if can?(:delete, subscription) %>
+                  <%= link_to_edit subscription ,url: edit_billing_customer_subscription_path(@customer.id,subscription.id) ,no_text: true if spree_current_user.permissions.exists?(entry: 'spree/billing/subscriptions', action: 'edit') %>
+                  <%= link_to_delete subscription,url: billing_customer_subscription_path(@customer.id, subscription.id), no_text: true if spree_current_user.permissions.exists?(entry: 'spree/billing/subscriptions', action: 'destroy') %>
                 </span>
               </td>
             </tr>

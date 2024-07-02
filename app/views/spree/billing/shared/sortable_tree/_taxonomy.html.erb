@@ -23,7 +23,7 @@
   </div>
 
   <div class="d-flex align-items-center space-buttons px-2">
-    <%= link_to_edit(taxon, no_text: true, url: edit_billing_business_path(taxon.id)) %>
-    <%= link_to_delete(taxon, no_text: true, url: spree.billing_business_path(taxon.id)) if can?(:destroy, taxon) %>
+    <%= link_to_edit(taxon, no_text: true, url: edit_billing_business_path(taxon.id)) if spree_current_user.permissions.exists?(entry: 'spree/billing/businesses', action: 'edit') %>
+    <%= link_to_delete(taxon, no_text: true, url: spree.billing_business_path(taxon.id)) if spree_current_user.permissions.exists?(entry: 'spree/billing/businesses', action: 'destroy') %>
   </div>
 </div>

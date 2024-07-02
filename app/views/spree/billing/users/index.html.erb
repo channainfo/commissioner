@@ -4,7 +4,7 @@
 
 <% content_for :page_actions do %>
   <%= button_link_to Spree.t(:new_user), new_billing_user_path, class: "btn-success", icon: 'add.svg', id: 'admin_new_user_link' %>
-<% end if can? :create, Spree::user_class %>
+<% end if spree_current_user.permissions.exists?(entry: 'spree/billing/users', action: 'create') %>
 
 <% content_for :table_filter do %>
   <div data-hook="admin_users_index_search">
@@ -98,8 +98,8 @@
             </td>
             <td data-hook="admin_users_index_row_actions" class="actions">
               <span class="d-flex justify-content-end">
-                <%= link_to_edit user ,url: edit_billing_user_path(user) ,no_text: true if can?(:edit, user) %>
-                <%= link_to_delete user,url: billing_user_path(user), no_text: true if can?(:delete, user) %>
+                <%= link_to_edit user ,url: edit_billing_user_path(user) ,no_text: true if spree_current_user.permissions.exists?(entry: 'spree/billing/users', action: 'edit') %>
+                <%= link_to_delete user,url: billing_user_path(user), no_text: true if spree_current_user.permissions.exists?(entry: 'spree/billing/users', action: 'destroy') %>
               </span>
             </td>
           </tr>

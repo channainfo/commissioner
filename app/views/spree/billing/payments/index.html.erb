@@ -1,6 +1,6 @@
 <%= render partial: 'spree/billing/shared/order_tabs', locals: { current: :payments } %>
 <% content_for :page_actions do %>
-  <% if @order.outstanding_balance? && can?(:create, Spree::Payment) %>
+  <% if @order.outstanding_balance? && spree_current_user.permissions.exists?(entry: 'spree/billing/payments', action: 'create') %>
     <span id="new_payment_section">
       <%= button_link_to Spree.t(:new_payment), new_billing_order_payment_url(@order), class: "btn-success", icon: 'add.svg' %>
     </span>
@@ -11,7 +11,7 @@
     <%= I18n.t('spree.billing.overdue')%>
     <%= @penalty_in_day %>
     <%= I18n.t('spree.billing.day') %>
-    <%= button_link_to(I18n.t('spree.billing.add_penalty'), new_billing_order_adjustment_path(@order), class: "btn-success", icon: 'add.svg') if can? :create, Spree::Adjustment %>
+    <%= button_link_to(I18n.t('spree.billing.add_penalty'), new_billing_order_adjustment_path(@order), class: "btn-success", icon: 'add.svg') if spree_current_user.permissions.exists?(entry: 'spree/billing/adjustments', action: 'create') %>
   </div>
 <% end %>
 <% if @order.outstanding_balance? %>

@@ -12,7 +12,7 @@
             </div>
 
             <div class="card-body">
-              <% if can? :edit, @order.user %>
+              <% if spree_current_user.permissions.exists?(entry: 'spree/billing/orders', action: 'edit') %>
                 <%= f.fields_for :bill_address do |ba_form| %>
                   <%= render 'spree/admin/shared/address_form', f: ba_form, type: "billing" %>
                 <% end %>
@@ -29,7 +29,7 @@
               <h5 class="card-title mb-0 h6"><%= Spree.t(:shipping_address) %></h5>
             </div>
             <div class="card-body">
-              <% if can? :edit, @order.user %>
+              <% if spree_current_user.permissions.exists?(entry: 'spree/billing/orders', action: 'edit') %>
                 <%= f.fields_for :ship_address do |sa_form| %>
                   <div class="form-group">
                     <span data-hook="use_billing">
