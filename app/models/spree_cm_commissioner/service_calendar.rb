@@ -10,7 +10,7 @@ module SpreeCmCommissioner
     include SpreeCmCommissioner::ServiceCalendarType
     EXCEPTION_RULE_JSON_SCHEMA = Pathname.new("#{COMMISSIONER_ROOT}/config/schemas/service_calendar_exception_rule.json")
 
-    belongs_to :calendarable, polymorphic: true
+    belongs_to :calendarable, polymorphic: true, optional: false
     validates :exception_rules, json: { schema: EXCEPTION_RULE_JSON_SCHEMA }
     self.whitelisted_ransackable_attributes = %w[name]
 

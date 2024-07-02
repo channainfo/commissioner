@@ -188,7 +188,7 @@ let!(:tomorrow) {today + 1.day}
 
         result.each do |r|
           table.add_row [r["trip_id"], r["route_name"], r["vendor_name"], r['short_name'],
-                        r["origin"] + " - " + r['origin_id'].to_s, r["destination"] +" - " +r['destination_id'].to_s, r["total_seats"], r['total_sold'],
+                        r["origin"] + " - " + r['origin_id'].to_s, r["destination"] + " - " + r['destination_id'].to_s, r["total_seats"], r['total_sold'],
                         r['total_seats'] - r['total_sold'], r['departure_time'].strftime("%H:%M"), r['duration'], r['vehicle_id']]
           table.add_separator unless r.equal?(result.last) # Avoid adding separator after the last row
         end
