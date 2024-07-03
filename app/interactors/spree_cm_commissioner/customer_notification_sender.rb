@@ -4,19 +4,21 @@ module SpreeCmCommissioner
 
     def call
       send_notification
+      update_sent_at
     end
 
-    def update_customer_notification_sent_at(force: false)
-      return if customer_notification.sent_at.present? && !force
-
-      customer_notification.update(sent_at: Time.current)
+    # even sent_at is present, it still can be sent
+    # but will only to users that not yet received the notification
+    def update_sent_at
+      customer_notification.sent_at = Time.current
+      customer_notification.save
     end
 
     def send_notification
       if user_ids.present?
         send_to_specific_users(user_ids)
       else
-        send_to_all_users_now
+        send_to_target_users
       end
     end
 
@@ -25,24 +27,12 @@ module SpreeCmCommissioner
       users.find_each do |user|
         deliver_notification_to_user(user)
       end
-
-      update_customer_notification_sent_at(force: false)
     end
 
-    def send_to_all_users
+    def send_to_target_users
       users_not_received_notifications.find_each do |user|
         deliver_notification_to_user(user)
       end
-
-      update_customer_notification_sent_at(force: false)
-    end
-
-    def send_to_all_users_now
-      end_users.find_each do |user|
-        deliver_notification_to_user(user)
-      end
-
-      update_customer_notification_sent_at(force: true)
     end
 
     def deliver_notification_to_user(user)
@@ -53,17 +43,30 @@ module SpreeCmCommissioner
     end
 
     def users_not_received_notifications
-      end_users.where(cm_notifications: { id: nil })
+      end_users
+        .joins(
+          "LEFT JOIN cm_notifications ON (
+            cm_notifications.recipient_id = spree_users.id
+            AND cm_notifications.notificable_type = 'SpreeCmCommissioner::CustomerNotification'
+            AND cm_notifications.notificable_id = #{customer_notification.id}
+          )"
+        )
+        .where(cm_notifications: { id: nil })
     end
 
     def end_users
-      Spree.user_class.end_users_push_notificable.joins(
-        "LEFT JOIN cm_notifications ON (
-          cm_notifications.recipient_id = spree_users.id
-          AND cm_notifications.notificable_type = 'SpreeCmCommissioner::CustomerNotification'
-          AND cm_notifications.notificable_id = #{customer_notification.id}
-        )"
-      )
+      if customer_notification.notification_taxons.exists?
+        taxon_ids = []
+        customer_notification.notification_taxons.select(:taxon_id).find_each(batch_size: 1000) do |taxon|
+          taxon_ids << taxon.taxon_id
+        end
+        SpreeCmCommissioner::UsersByEventFetcherQuery
+          .new(taxon_ids)
+          .call
+          .end_users_push_notificable
+      else
+        Spree.user_class.end_users_push_notificable
+      end
     end
   end
 end

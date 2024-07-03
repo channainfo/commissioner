@@ -14,9 +14,8 @@ module Spree
           def create
             spree_authorize! :create, model_class
 
-            guest_ids = [params[:guest_id]]
             context = SpreeCmCommissioner::CheckInBulkCreator.call(
-              guest_ids: guest_ids,
+              check_ins_attributes: [{ guest_id: guest_id }],
               check_in_by: spree_current_user
             )
 
