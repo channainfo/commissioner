@@ -24,7 +24,7 @@ module Spree
         @product ||= Spree::Product.find_by!(slug: params[:product_id])
         @taxon_star_ratings ||= @product.taxon_star_ratings.where(kind: params[:kind]).all
         @group_taxon_star_ratings ||= @taxon_star_ratings.group_by(&:star)
-        @review_type_taxons = Spree::Taxon.where(kind: :review).first.children
+        @review_type_taxons ||= Spree::Taxon.where(kind: :review).first.children
       end
     end
   end

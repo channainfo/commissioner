@@ -38,6 +38,8 @@ module SpreeCmCommissioner
       base.has_many :places,
                     through: :nearby_places, source: :place, class_name: 'SpreeCmCommissioner::Place'
 
+      base.has_many :reviews, through: :products
+
       base.has_one  :logo, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorLogo'
       base.has_one  :payment_qrcode, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorPaymentQrcode'
       base.has_one  :web_promotion_banner, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorWebPromotionBanner'

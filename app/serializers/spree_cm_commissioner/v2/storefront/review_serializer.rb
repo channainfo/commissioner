@@ -8,6 +8,7 @@ module SpreeCmCommissioner
 
         has_one :user, serializer: ::Spree::V2::Storefront::UserSerializer
         has_one :product, serializer: ::Spree::V2::Storefront::ProductSerializer
+        has_many :images, serializer: SpreeCmCommissioner::V2::Storefront::AssetSerializer
       end
     end
   end
