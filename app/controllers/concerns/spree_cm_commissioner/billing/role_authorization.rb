@@ -26,7 +26,9 @@ module SpreeCmCommissioner
       end
 
       def auth_user
-        try_spree_current_user
+        ActiveRecord::Base.connected_to(role: :writing) do
+          try_spree_current_user
+        end
       end
 
       def auth_entry
