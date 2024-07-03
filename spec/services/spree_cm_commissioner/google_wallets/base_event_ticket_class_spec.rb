@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::GoogleWallets::BaseEventTicketClass do
-  let(:product) { create(:cm_product ) }
-  let(:image) { create(:cm_image) }
-
+  let(:product) { create(:cm_product) }
   let(:google_wallet_class) { instance_double('SpreeCmCommissioner::EventTicketGoogleWallet',
                                               class_id: 'product_slug_class_id',
                                               preferred_issuer_name: 'BookMe+',
@@ -13,12 +11,17 @@ RSpec.describe SpreeCmCommissioner::GoogleWallets::BaseEventTicketClass do
                                               preferred_start_date: '2024-08-12',
                                               preferred_end_date: '2024-08-13',
                                               preferred_background_color: '#FFFFFF',
-                                              logo: image,
-                                              hero_image: image,
+                                              logo: double('logo'),
+                                              hero_image: double('hero_image'),
                                               product: product
                                               ) }
 
   let(:creator) { described_class.new(google_wallet_class) }
+
+  before do
+    allow(creator).to receive(:logo).and_return('mock_logo_url')
+    allow(creator).to receive(:hero_image).and_return('mock_hero_image_url')
+  end
 
   describe '#class_id' do
     it 'returns correct class_id format' do

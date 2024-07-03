@@ -43,7 +43,14 @@ module SpreeCmCommissioner
       self.class_id = product.slug
     end
 
-    # default to event
+    def class_creator
+      SpreeCmCommissioner::GoogleWallets::EventTicketClassCreator.new(self)
+    end
+
+    def class_updater
+      SpreeCmCommissioner::GoogleWallets::EventTicketClassUpdater.new(self)
+    end
+
     def object_builder
       SpreeCmCommissioner::GoogleWallets::EventTicketObjectBuilder
     end
