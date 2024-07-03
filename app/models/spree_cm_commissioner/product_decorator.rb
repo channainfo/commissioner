@@ -31,6 +31,8 @@ module SpreeCmCommissioner
 
       base.has_many :complete_line_items, through: :classifications, source: :line_items
 
+      base.has_many :taxon_star_ratings, class_name: 'SpreeCmCommissioner::TaxonStarRating', dependent: :destroy
+
       base.scope :min_price, lambda { |vendor|
         joins(:prices_including_master)
           .where(vendor_id: vendor.id, product_type: vendor.primary_product_type)

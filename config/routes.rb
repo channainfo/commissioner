@@ -80,6 +80,7 @@ Spree::Core::Engine.add_routes do
     resources :s3_presigned_urls, only: %i[create new]
 
     resources :products do
+      resources :taxon_star_ratings, only: %i[index create]
       member do
         get 'edit_kyc', to: 'kyc#edit'
         put 'update_kyc', to: 'kyc#update'
@@ -368,6 +369,7 @@ Spree::Core::Engine.add_routes do
         resource :confirm_pin_code_checkers, only: [:update]
 
         resources :order_products_taxons, only: [:index]
+        resources :vendor_review_taxons, only: %i[index]
 
         resource :change_passwords, only: [:update]
         resource :account_deletions, only: %i[destroy]
