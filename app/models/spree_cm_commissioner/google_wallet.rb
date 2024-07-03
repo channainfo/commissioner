@@ -6,8 +6,15 @@ module SpreeCmCommissioner
 
     belongs_to :product, class_name: 'Spree::Product'
 
-    has_one :logo, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::GoogleWalletLogo'
-    has_one :hero_image, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::GoogleWalletHero'
+    has_one_attached :logo do |attachable|
+      attachable.variant :thumb, resize_to_limit: [60, 60]
+      attachable.variant :small, resize_to_limit: [180, 180]
+    end
+    has_one_attached :hero_image do |attachable|
+      attachable.variant :mini, resize_to_limit: [240, 120]
+      attachable.variant :small, resize_to_limit: [180, 180]
+      attachable.variant :large, resize_to_limit: [960, 480]
+    end
 
     validates :hero_image, presence: true, on: :update
 

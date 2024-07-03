@@ -1,13 +1,13 @@
 module Spree
   module Admin
-    class GoogleWalletsController < Spree::Admin::ResourceController
+    class HotelGoogleWalletsController < Spree::Admin::ResourceController
       before_action :product
 
       # POST /google_wallets
       def create
         wallet = model_class.new(product_id: product.id, review_status: permitted_resource_params[:review_status])
         if wallet.save
-          redirect_to edit_admin_product_google_wallet_path(product, wallet.id)
+          redirect_to edit_admin_product_hotel_google_wallet_path(product, wallet.id)
         else
           render :new
         end
@@ -33,12 +33,12 @@ module Spree
         end
       end
 
-      # DELETE /google_wallets/:id/remove_logo
+      # DELETE /hotel_google_wallets/:id/remove_logo
       def remove_logo
         object.logo.purge
       end
 
-      # DELETE /google_wallets/:id/remove_hero_image
+      # DELETE /hotel_google_wallets/:id/remove_hero_image
       def remove_hero_image
         object.hero_image.purge
       end
@@ -54,21 +54,25 @@ module Spree
       end
 
       def object_name
-        'spree_cm_commissioner_event_ticket_google_wallet'
-      end
-
-      def location_after_save
-        edit_admin_product_google_wallet_path(product, object.id)
+        'spree_cm_commissioner_hotel_google_wallet'
       end
 
       # @overrided
       def model_class
-        SpreeCmCommissioner::EventTicketGoogleWallet
+        SpreeCmCommissioner::HotelGoogleWallet
+      end
+
+      def location_after_save
+        edit_admin_product_hotel_google_wallet_path(product, object.id)
       end
 
       # @overrided
       def collection_url(options = {})
-        admin_product_google_wallets_url(options)
+        admin_product_hotel_google_wallets_url(options)
+      end
+
+      def permitted_resource_params
+        params.require(object_name).permit(:review_status, :logo, :hero_image)
       end
     end
   end
