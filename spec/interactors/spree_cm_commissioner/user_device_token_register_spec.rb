@@ -14,14 +14,6 @@ RSpec.describe SpreeCmCommissioner::UserDeviceTokenRegister do
     }
   }
 
-  let!(:options_without_token) {
-    {
-      user: user,
-      client_name: 'cm-market',
-      client_version: '1.0.0'
-    }
-  }
-
   let!(:options_with_new_token) {
     {
       user: user,
@@ -72,5 +64,38 @@ RSpec.describe SpreeCmCommissioner::UserDeviceTokenRegister do
       expect(existing_device_token.device_type).to eq nil # Assuming device_type is reset in the test setup
     end
 
+    context 'when device token is not exist' do
+      it 'does not delete any device token' do
+        user_device_token = SpreeCmCommissioner::UserDeviceTokenRegister.new(options_with_new_token)
+        expect(SpreeCmCommissioner::DeviceToken).not_to receive(:delete)
+
+        user_device_token.call
+      end
+
+      it 'create a new device token for the user' do
+        user_device_token = SpreeCmCommissioner::UserDeviceTokenRegister.new(options_with_new_token)
+
+        user_device_token.call
+
+        expect(user_device_token.context.device_token).to be_persisted
+      end
+    end
+
+    context 'when device token is exist' do
+      it 'deletes the existing device token and creates a new unique device token' do
+        # Create a new token with the same registration token but different client version
+        user_device_token = SpreeCmCommissioner::UserDeviceTokenRegister.new(options_with_existing_token.merge(client_version: '2.0.0'))
+        user_device_token.call
+
+        # Verify the new token is created and the old one is deleted
+        new_device_token = user.device_tokens.find_by(registration_token: 'ios-device-token')
+        expect(new_device_token).to be_present
+        expect(new_device_token.client_version).to eq '2.0.0'
+        expect(new_device_token.device_type).to be_nil
+
+        # Verify that only one device token exists with the updated attributes
+        expect(SpreeCmCommissioner::DeviceToken.where(registration_token: 'ios-device-token').count).to eq 1
+      end
+    end
   end
 end
