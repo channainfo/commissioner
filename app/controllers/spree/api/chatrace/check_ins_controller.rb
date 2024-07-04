@@ -7,7 +7,8 @@ module Spree
         end
 
         def create
-          context = SpreeCmCommissioner::CheckInBulkCreator.call(guest_ids: [guest.id])
+          context = SpreeCmCommissioner::CheckInBulkCreator.call(check_ins_attributes: [{ guest_id: guest.id }])
+
           if context.success?
             render json: { checked_in_at: context.check_ins[0].confirmed_at }, status: :ok
           else

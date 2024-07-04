@@ -13,7 +13,7 @@ module Spree
             if params[:check_ins].present?
               check_ins = params[:check_ins].map { |check_in| check_in.permit(:guest_id, :confirmed_at).to_h }
             elsif params[:guest_ids].present?
-              check_ins = guest_ids.map { |guest_id| { guest_id: guest_id } }.to_a
+              check_ins = params[:guest_ids].map { |guest_id| { guest_id: guest_id } }.to_a
             end
 
             context = SpreeCmCommissioner::CheckInBulkCreator.call(
