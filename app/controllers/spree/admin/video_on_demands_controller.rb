@@ -8,6 +8,30 @@ module Spree
         @video_on_demand = SpreeCmCommissioner::VideoOnDemand.find(params[:id])
       end
 
+      def create
+        video_on_demand_params = params.require(:spree_cm_commissioner_video_on_demand)
+        result = SpreeCmCommissioner::VideoOnDemandCreator.call(video_on_demand_params: video_on_demand_params)
+
+        if result.success?
+          redirect_to collection_url
+        else
+          flash[:error] = result.error
+          render :new
+        end
+      end
+
+      def update
+        @video_on_demand = SpreeCmCommissioner::VideoOnDemand.find(params[:id])
+        result = SpreeCmCommissioner::VideoOnDemandUpdater.call(video_on_demand: @video_on_demand, params: params)
+
+        if result.success?
+          redirect_to collection_url
+        else
+          flash[:error] = result.error
+          render :edit
+        end
+      end
+
       private
 
       def model_class
