@@ -15,9 +15,11 @@ RSpec.describe SpreeCmCommissioner::V2::Operator::LineItemSerializer, type: :ser
 
     it 'returns exact line_item attributes' do
       expect(subject[:data][:attributes].keys).to contain_exactly(
+        :number,
         :name,
         :quantity,
         :options_text,
+        :qr_data,
       )
 
       expect(subject[:data][:attributes][:name]).to eq line_item.name
@@ -32,10 +34,10 @@ RSpec.describe SpreeCmCommissioner::V2::Operator::LineItemSerializer, type: :ser
       )
 
       order = subject[:included].find { |item| item[:type] == :order }
-      expect(order[:attributes].keys).to contain_exactly(:email, :number, :phone_number, :state)
+      expect(order[:attributes].keys).to contain_exactly(:email, :number, :phone_number, :state, :qr_data)
 
       guest = subject[:included].find { |item| item[:type] == :guest }
-      expect(guest[:attributes].keys).to contain_exactly(:first_name, :last_name, :dob, :gender)
+      expect(guest[:attributes].keys).to contain_exactly(:dob, :event_id, :first_name, :gender, :last_name, :qr_data)
     end
   end
 end

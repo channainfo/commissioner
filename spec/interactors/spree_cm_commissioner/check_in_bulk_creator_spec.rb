@@ -20,28 +20,38 @@ RSpec.describe SpreeCmCommissioner::CheckInBulkCreator do
     let(:guest_b) { create(:guest, first_name: 'Guest B', last_name: 'B', line_item: line_item_b)}
     let(:guest_c) { create(:guest, first_name: 'Guest C', last_name: 'C', line_item: line_item_a)}
 
-    let(:guest_ids) { [guest_a.id, guest_b.id, guest_c.id] }
+    let(:guest_ids) { [
+      { guest_id: guest_a.id },
+      { guest_id: guest_b.id },
+      { guest_id: guest_c.id }
+    ] }
 
     it 'should creates check_ins for each guest' do
-      context = described_class.call(guest_ids: guest_ids)
+      context = described_class.call(check_ins_attributes: guest_ids)
 
       expect(context.success?).to be true
       expect(context.check_ins.size).to eq (guest_ids.size)
     end
 
     it 'creates multiple check_ins for multiple guests' do
-      multiple_guest_ids = [guest_a.id, guest_b.id, guest_c.id]
+      multiple_guest_ids = [
+        { guest_id: guest_a.id },
+        { guest_id: guest_b.id },
+        { guest_id: guest_c.id }
+      ]
 
-      context = described_class.call(guest_ids: multiple_guest_ids)
+      context = described_class.call(check_ins_attributes: multiple_guest_ids)
 
       expect(context.success?).to be true
       expect(context.check_ins.size).to eq(3)
     end
 
     it 'does not create check_ins for invalid guest ids' do
-      invalid_guest_id = [9999]
+      invalid_guest_id = [
+        { guest_id: 9999 }
+      ]
 
-      context = described_class.call(guest_ids: invalid_guest_id)
+      context = described_class.call(check_ins_attributes: invalid_guest_id)
 
       expect(context.success?).to be false
       expect(context.check_ins).to be_nil
@@ -49,14 +59,17 @@ RSpec.describe SpreeCmCommissioner::CheckInBulkCreator do
 
     it 'does not create if one of guest invalid' do
       invalid_guest_id = 9999
-      guest_ids = [guest_a.id, guest_b.id, invalid_guest_id]
+      guest_ids = [
+        { guest_id: guest_a.id },
+        { guest_id: guest_b.id },
+        { guest_id: invalid_guest_id }
+      ]
 
-      context = described_class.call(guest_ids: guest_ids)
+      context = described_class.call(check_ins_attributes: guest_ids)
 
       expect(context.message).to eq :guest_not_found
       expect(context.success?).to be false
       expect(context.check_ins).to be_nil
     end
-
   end
 end

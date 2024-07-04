@@ -14,7 +14,7 @@ module Spree
       def check_in
         guest_ids = [params[:id]]
         context = SpreeCmCommissioner::CheckInBulkCreator.call(
-          guest_ids: guest_ids,
+          check_ins_attributes: guest_ids.map { |guest_id| { guest_id: guest_id } },
           check_in_by: spree_current_user
         )
 

@@ -5,7 +5,12 @@ module SpreeCmCommissioner
         set_type :order
 
         has_one :user, serializer: Spree::V2::Storefront::UserSerializer
-        attributes :number, :state, :phone_number, :email
+        belongs_to :billing_address,
+                   id_method_name: :bill_address_id,
+                   record_type: :address,
+                   serializer: Spree::V2::Storefront::AddressSerializer
+
+        attributes :number, :state, :phone_number, :email, :qr_data
       end
     end
   end
