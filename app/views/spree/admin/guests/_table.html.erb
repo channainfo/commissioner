@@ -33,7 +33,7 @@
           </tr>
         </thead>
         <tbody>
-          <% (0...line_item.number_of_guests).each do |index| %>
+          <% (0...[line_item.number_of_guests, line_item.guests.size].max).each do |index| %>
             <% guest = line_item.guests[index] || line_item.guests.new %>
             <% if guest.persisted? %>
               <% if guest.full_name.blank? %>
