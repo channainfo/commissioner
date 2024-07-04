@@ -12,6 +12,8 @@ module SpreeCmCommissioner
       base.has_many :guests, class_name: 'SpreeCmCommissioner::Guest', dependent: :destroy
       base.has_many :pending_guests, pending_guests_query, class_name: 'SpreeCmCommissioner::Guest', dependent: :destroy
       base.has_many :product_completion_steps, class_name: 'SpreeCmCommissioner::ProductCompletionStep', through: :product
+      base.has_many :taxon_star_ratings, class_name: 'SpreeCmCommissioner::TaxonStarRating', through: :product
+
       base.before_save :update_vendor_id
       base.before_create :add_due_date, if: :subscription?
 

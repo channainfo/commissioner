@@ -18,7 +18,7 @@ module Spree
           private
 
           def review
-            @review ||= Spree::Review.find(params[:review_id])
+            @review ||= Spree::Review.find(params[:user_review_id])
           end
 
           def resource_serializer

@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/bookmebus/spree_reviews.git
-  revision: e0e49ba10f37dc41c3fc10ed2093d2b0cdabfcf5
+  revision: 60030182da9ef6c9c1fa7b859e19b8208f7a3b2a
   branch: spree-4-5-0-only-backend
   specs:
     spree_reviews (4.0.0)

@@ -394,6 +394,12 @@ Spree::Core::Engine.add_routes do
         end
         resources :pending_line_items, only: %i[show index]
         resources :self_check_in, only: %i[index create]
+        resources :reviews, only: %i[index show]
+        resources :feedback_reviews, only: %i[create]
+        resources :user_reviews do
+          resources :review_images, only: [:create]
+        end
+        resources :taxon_star_ratings
       end
 
       namespace :operator do
