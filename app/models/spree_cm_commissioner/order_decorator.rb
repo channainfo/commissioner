@@ -31,7 +31,7 @@ module SpreeCmCommissioner
       base.delegate :customer, to: :subscription, allow_nil: true
 
       base.whitelisted_ransackable_associations |= %w[customer taxon payments invoice]
-      base.whitelisted_ransackable_attributes |= %w[phone_number email number]
+      base.whitelisted_ransackable_attributes |= %w[intel_phone_number phone_number email number]
 
       base.after_update :precalculate_conversion, if: -> { state_changed_to_complete? }
       base.after_update :precalculate_conversion, if: -> { state_changed_to_canceled? }

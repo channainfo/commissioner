@@ -5,6 +5,7 @@
     <thead class="text-muted">
       <tr>
         <th class="text-center"><%= Spree.t(:name) %></th>
+        <th class="text-center"><%= Spree.t(:number) %></th>
         <th class="text-center"><%= Spree.t(:option_text) %></th>
         <th class="text-center"><%= Spree.t(:price) %></th>
         <th class="text-center"><%= Spree.t(:total_price) %></th>
@@ -20,6 +21,7 @@
           <td class="line-item-name text-center">
             <%= link_to item.name, edit_admin_product_path(item.variant.product) %>
           </td>
+          <td class="line-item-number text-center"><%= item.number %></td>
           <td class="line-item-name text-center">
             <%= item.options_text if item.options_text.present? %>
           </td>

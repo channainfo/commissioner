@@ -1,0 +1,8 @@
+<!-- insert_after ".date-range-filter" -->
+
+<div class="col-12 col-lg-4">
+  <div class="form-group">
+    <%= label_tag :q_line_items_number_cont, Spree.t(:search_line_item_number) %>
+    <%= f.text_field :line_items_number_cont, class: 'form-control' %>
+  </div>
+</div>
