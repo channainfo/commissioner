@@ -8,9 +8,16 @@ module Spree
           def create
             spree_authorize! :create, model_class
 
-            guest_ids = params[:guest_ids]
+            check_ins = []
+
+            if params[:check_ins].present?
+              check_ins = params[:check_ins].map { |check_in| check_in.permit(:guest_id, :confirmed_at).to_h }
+            elsif params[:guest_ids].present?
+              check_ins = guest_ids.map { |guest_id| { guest_id: guest_id } }.to_a
+            end
+
             context = SpreeCmCommissioner::CheckInBulkCreator.call(
-              guest_ids: guest_ids,
+              check_ins_attributes: check_ins,
               check_in_by: spree_current_user
             )
 
