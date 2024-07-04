@@ -24,6 +24,9 @@
           <th>
             <%=Spree.t(:registration_token)%>
           </th>
+          <th>
+            <%=Spree.t(:updated_at)%>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -46,7 +49,9 @@
                 <%= device_token.registration_token.truncate(36)  %>
               </small>
             </td>
-
+            <td>
+              <%= device_token.updated_at  %>
+            </td>
             <td data-hook="admin_device_token_index_row_actions" class="actions">
               <span class="d-flex justify-content-end">
                 <%= link_to_edit device_token, url: edit_admin_user_device_token_path(id:device_token.id), no_text: true if can?(:edit,:amdin ,device_token) %>
