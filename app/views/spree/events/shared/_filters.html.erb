@@ -20,7 +20,7 @@
         <div class="col-12 col-lg-6">
           <div class="form-group">
             <%= f.label :gender_eq, Spree.t(:gender) %>
-            <%= f.select :gender_eq, options_for_select(SpreeCmCommissioner::Guest.genders.map { |k, v| [Spree.t("spree.genders.#{k}"), v] }), { include_blank: true, prompt: Spree.t(:select_gender) }, class: "form-control js-filterable" %>
+            <%= f.select :gender_eq, options_for_select(SpreeCmCommissioner::Guest.genders.map { |k, v| [Spree.t("spree.genders.#{k}"), v] }), { include_blank: Spree.t('match_choices.none') }, class: "form-control js-filterable" %>
           </div>
         </div>
 
@@ -29,7 +29,7 @@
             <%= f.label :occupation_id_eq, Spree.t(:occupation) %>
             <%= f.select :occupation_id_eq,
               options_from_collection_for_select(Spree::Taxon.where(kind: Spree::Taxon.kinds[:occupation]).order(:position), :id, :name),
-                { include_hidden: true },
+                { include_blank: Spree.t('match_choices.none') },
                 class: 'select2 form-control' %>
           </div>
         </div>
@@ -38,7 +38,7 @@
         <div class="col-12 col-lg-6">
           <div class="form-group">
             <%= f.label :id_card_card_type_eq, Spree.t(:id_card_type) %>
-            <%= f.select :id_card_card_type_eq, options_for_select(SpreeCmCommissioner::IdCard.card_types.map { |k, v| [Spree.t("spree.card_type.#{k}"), v] }), { include_blank: true, prompt: Spree.t(:select_card_type) }, class: "form-control js-filterable" %>
+            <%= f.select :id_card_card_type_eq, options_for_select(SpreeCmCommissioner::IdCard.card_types.map { |k, v| [Spree.t("spree.card_type.#{k}"), v] }), { include_blank: Spree.t('match_choices.none') }, class: "form-control js-filterable" %>
           </div>
         </div>
       </div>
