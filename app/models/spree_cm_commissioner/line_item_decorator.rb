@@ -77,7 +77,7 @@ module SpreeCmCommissioner
     end
 
     def allowed_self_check_in?
-      ecommerce? && guests.any?
+      ecommerce? && guests.any? && product.allow_self_check_in?
     end
 
     def amount_per_guest

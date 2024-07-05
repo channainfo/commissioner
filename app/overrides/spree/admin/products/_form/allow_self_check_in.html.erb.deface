@@ -1,0 +1,9 @@
+<!-- insert_after "[data-hook='admin_product_form_subscribable']" -->
+
+<div data-hook="admin_product_form_allow_self_check_in">
+  <%= f.field_container :allow_self_check_in do %>
+    <%= f.check_box :allow_self_check_in %>
+    <%= f.label :allow_self_check_in, Spree.t(:allow_self_check_in) %>
+    <%= f.error_message_on :allow_self_check_in %>
+  <% end %>
+</div>
