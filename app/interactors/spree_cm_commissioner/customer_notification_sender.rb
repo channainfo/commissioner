@@ -56,10 +56,7 @@ module SpreeCmCommissioner
 
     def end_users
       if customer_notification.notification_taxons.exists?
-        taxon_ids = []
-        customer_notification.notification_taxons.select(:taxon_id).find_each(batch_size: 1000) do |taxon|
-          taxon_ids << taxon.taxon_id
-        end
+        taxon_ids = customer_notification.notification_taxons.pluck(:taxon_id)
         SpreeCmCommissioner::UsersByEventFetcherQuery
           .new(taxon_ids)
           .call
