@@ -54,10 +54,10 @@ PATH
       rqrcode (~> 2.0)
       searchkick (~> 5.1)
       simple_calendar (~> 2.4)
-      spree (>= 4.5.0)
-      spree_api_v1 (>= 4.5.0)
-      spree_auth_devise (>= 4.5.0)
-      spree_backend (>= 4.5.0)
+      spree (~> 4.5)
+      spree_api_v1 (~> 4.5)
+      spree_auth_devise (~> 4.5)
+      spree_backend (~> 4.5)
       spree_extension
       spree_multi_vendor (>= 2.4.1)
       telegram-bot
