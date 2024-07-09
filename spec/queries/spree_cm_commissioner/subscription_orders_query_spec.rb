@@ -2,6 +2,12 @@ require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::SubscriptionOrdersQuery do
   let(:customer) { create(:cm_customer) }
+  let(:spree_current_user) { create(:user) }
+  let(:admin_role) { create(:role, name: 'admin') }
+
+  before do
+    spree_current_user.spree_roles << admin_role
+  end
 
   let(:subscription_jan2) { create(:cm_subscription, start_date: '2023-01-02'.to_date, customer: customer, price: 13.0, month: 1, due_date: 5) }
   describe '#overdues' do
@@ -13,6 +19,7 @@ RSpec.describe SpreeCmCommissioner::SubscriptionOrdersQuery do
         vendor_id: customer.vendor.id,
         from_date: '2000-01-01',
         to_date: '2100-01-01',
+        spree_current_user: spree_current_user
       )
 
       expect(query.overdues.size).to eq 0
@@ -26,6 +33,7 @@ RSpec.describe SpreeCmCommissioner::SubscriptionOrdersQuery do
         vendor_id: customer.vendor.id,
         from_date: '2000-01-01',
         to_date: '2100-01-01',
+        spree_current_user: spree_current_user
       )
 
       expect(query.overdues.size).to eq 0
@@ -39,6 +47,7 @@ RSpec.describe SpreeCmCommissioner::SubscriptionOrdersQuery do
         vendor_id: customer.vendor.id,
         from_date: '2000-01-01',
         to_date: '2100-01-01',
+        spree_current_user: spree_current_user
       )
 
       expect(query.overdues.size).to eq 1
@@ -52,6 +61,7 @@ RSpec.describe SpreeCmCommissioner::SubscriptionOrdersQuery do
         vendor_id: customer.vendor.id,
         from_date: '2000-01-01',
         to_date: '2100-01-01',
+        spree_current_user: spree_current_user
       )
     end
   end

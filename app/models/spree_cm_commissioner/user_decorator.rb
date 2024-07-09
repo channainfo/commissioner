@@ -27,6 +27,8 @@ module SpreeCmCommissioner
 
       base.before_save :update_otp_enabled
 
+      define_user_places(base)
+
       def base.end_users
         joins('LEFT JOIN spree_vendor_users ON spree_users.id = spree_vendor_users.user_id').where(spree_vendor_users: { user_id: nil })
       end
@@ -40,6 +42,11 @@ module SpreeCmCommissioner
       def soft_deleted?
         !account_deletion_at.nil?
       end
+    end
+
+    def self.define_user_places(base)
+      base.has_many :user_places, class_name: 'SpreeCmCommissioner::UserPlace'
+      base.has_many :places, through: :user_places, class_name: 'SpreeCmCommissioner::Place'
     end
 
     def early_adopter?

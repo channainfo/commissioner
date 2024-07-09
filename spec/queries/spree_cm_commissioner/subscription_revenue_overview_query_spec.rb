@@ -5,7 +5,12 @@ RSpec.describe SpreeCmCommissioner::SubscriptionRevenueOverviewQuery do
   let(:customer1) { create(:cm_customer, vendor: vendor, sequence_number: 01) }
   let(:customer2) { create(:cm_customer, vendor: vendor, sequence_number: 02) }
   let(:customer3) { create(:cm_customer, vendor: vendor, sequence_number: 03) }
+  let(:spree_current_user) { create(:user) }
+  let(:admin_role) { create(:role, name: 'admin') }
 
+  before do
+    spree_current_user.spree_roles << admin_role
+  end
 
   describe '#reports' do
     let(:subscription_jan2) { create(:cm_subscription, start_date: '2023-01-02'.to_date, customer: customer1, price: 13.0, due_date: 5) }
@@ -18,7 +23,9 @@ RSpec.describe SpreeCmCommissioner::SubscriptionRevenueOverviewQuery do
       subscription_feb4.orders.each {|o| o.payments.last.capture! }
 
       # only for january
-      query = described_class.new(from_date: '2023-01-01', to_date: '2023-01-31', vendor_id: vendor.id)
+      query = described_class.new(from_date: '2023-01-01', to_date: '2023-01-31', vendor_id: vendor.id, spree_current_user: spree_current_user)
+      result = query.reports
+      puts "Debug: Result - #{result}"
 
       expect(query.reports).to match_array [
         {:orders_count => 2, :state => "paid", :total => 13.0 + 25.0, :payment_total => 13.0 + 25.0}
@@ -30,7 +37,7 @@ RSpec.describe SpreeCmCommissioner::SubscriptionRevenueOverviewQuery do
       subscription_jan4.orders.each {|o| o.payments.last.void! }
       subscription_feb4.orders.each {|o| o.payments.last.capture! }
 
-      query = described_class.new(from_date: '2000-01-01', to_date: '2100-01-01', vendor_id: vendor.id)
+      query = described_class.new(from_date: '2000-01-01', to_date: '2100-01-01', vendor_id: vendor.id, spree_current_user: spree_current_user)
 
       expect(query.reports).to match_array [
         {:orders_count => 1, :state => "paid", :total => 32.0, :payment_total => 32.0},
@@ -51,6 +58,7 @@ RSpec.describe SpreeCmCommissioner::SubscriptionRevenueOverviewQuery do
         vendor_id: vendor.id,
         from_date: '2000-01-01',
         to_date: '2100-01-01',
+        spree_current_user: spree_current_user
       )
 
       expect(query.reports_with_overdues).to match_array [
