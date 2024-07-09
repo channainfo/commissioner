@@ -35,7 +35,7 @@ module SpreeCmCommissioner
 
       return if period.cover?(start_date) || start_date > period_end
 
-      errors.add(:subscription, I18n.t('subscription.validation.out_of_range'))
+      errors.add(:subscription, Spree.t('Selected date is out of range'))
     end
 
     def quanitiy_is_not_nil?

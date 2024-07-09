@@ -22,8 +22,8 @@ module SpreeCmCommissioner
 
       missed_months = missed_months(last_invoice_date, boundary_date)
       missed_months.times do |i|
-        month = i
-        generate_invoice(last_invoice_date, month, active_subscriptions)
+        month = i + 1
+        generate_invoice(last_invoice_date, month, active_subscriptions, boundary_date)
       end
       context.customer.update(last_invoice_date: Time.zone.now)
     end
@@ -47,24 +47,24 @@ module SpreeCmCommissioner
       )
     end
 
-    def generate_invoice(last_invoice_date, month, active_subscriptions)
+    def generate_invoice(last_invoice_date, month, active_subscriptions, boundary_date)
       create_order(active_subscriptions)
-      add_subscription_variant_to_line_item(last_invoice_date, active_subscriptions, month)
-      apply_promotion
+      add_subscription_variant_to_line_item(last_invoice_date, active_subscriptions, month, boundary_date)
       create_invoice
 
       context.new_order.create_default_payment_if_eligble
       context.new_order.reload
     end
 
-    def add_subscription_variant_to_line_item(last_invoice_date, active_subscriptions, month)
+    def add_subscription_variant_to_line_item(last_invoice_date, active_subscriptions, month, _boundary_date)
       # 1 May 15th, June 14th
       # 2 June 15th, July 14th
       # 3 July 15th, August 14th
-      from_date = customer.last_invoice_date.blank? ? last_invoice_date - 1.month + month.month + 1.day : last_invoice_date + month.month
+      from_date = last_invoice_date + month.month
       to_date = from_date + 1.month
+
       active_subscriptions.each do |subscription|
-        next if subscription.start_date >= to_date
+        next if subscription.start_date >= from_date
 
         Spree::Cart::AddItem.call(
           order: context.new_order,
@@ -80,11 +80,6 @@ module SpreeCmCommissioner
 
     def active_subscriptions_query(boundary_date)
       context.customer.active_subscriptions.where('start_date <= ?', boundary_date)
-    end
-
-    def apply_promotion
-      promotion = Spree::Promotion.where(code: customer.number).last
-      promotion.present? && promotion.activate(order: context.new_order)
     end
 
     def create_invoice
