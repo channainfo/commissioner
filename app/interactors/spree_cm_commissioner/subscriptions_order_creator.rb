@@ -61,7 +61,6 @@ module SpreeCmCommissioner
       # 3 July 15th, August 14th
       from_date = customer.last_invoice_date.blank? ? last_invoice_date - 1.month + month.month + 1.day : last_invoice_date + month.month
       to_date = from_date + 1.month
-
       active_subscriptions.each do |subscription|
         next if subscription.start_date >= to_date
 
