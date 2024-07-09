@@ -4,8 +4,8 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCreator do
   let(:customer) { create(:cm_customer) }
   let(:vendor) { create(:vendor) }
 
-  let(:option_type) { create(:option_type, name: "due-date", attr_type: :integer) }
-  let(:option_value) { create(:option_value, name: "15", presentation: "5 Days", option_type: option_type) }
+  let(:option_type) {create(:option_type, name: "due-date", attr_type: :integer)}
+  let(:option_value){create(:option_value, name: "15", presentation: "5 Days", option_type: option_type)}
 
   let(:product1) { create(:base_product, option_types: [option_type], subscribable: true, vendor: vendor) }
   let(:product2) { create(:base_product, option_types: [option_type], subscribable: true, vendor: vendor) }
