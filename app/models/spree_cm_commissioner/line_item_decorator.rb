@@ -18,7 +18,7 @@ module SpreeCmCommissioner
       base.validate :ensure_not_exceed_max_quantity_per_order, if: -> { variant&.max_quantity_per_order.present? }
 
       base.whitelisted_ransackable_associations |= %w[guests]
-      base.whitelisted_ransackable_attributes |= %w[number to_date from_date]
+      base.whitelisted_ransackable_attributes |= %w[to_date from_date]
 
       base.delegate :delivery_required?, :permanent_stock?,
                     to: :variant
@@ -77,7 +77,7 @@ module SpreeCmCommissioner
     end
 
     def allowed_self_check_in?
-      ecommerce? && guests.any? && product.allow_self_check_in?
+      ecommerce? && guests.any?
     end
 
     def amount_per_guest
@@ -197,9 +197,7 @@ module SpreeCmCommissioner
       variant = order.subscription.variant
       day = variant.due_date
 
-      return from_date + variant.month.month + day.days if post_paid?
-
-      from_date + day.days
+      from_date + variant.month.month + day.days
     end
   end
 end
