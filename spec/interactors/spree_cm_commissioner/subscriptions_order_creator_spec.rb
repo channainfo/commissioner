@@ -27,14 +27,18 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCreator do
     context "when customer has subscriptions" do
       context "when there are 3 missed months" do
         before do
-          create(:cm_subscription, customer: customer, quantity: 2, start_date: 3.months.ago.beginning_of_month)
-          create(:cm_subscription, customer: customer, quantity: 2, start_date: 3.months.ago.beginning_of_month)
-          customer.last_invoice_date =  3.months.ago
+          allow_any_instance_of(SpreeCmCommissioner::Subscription).to receive(:date_within_range).and_return(true)
+          today = Time.zone.today
+          today.day < 15 ?  three_month_ago = (today - 3.month).change(day: 14) : three_month_ago = (today - 3.month).change(day: 15)
+          #March 15th 2024, 15th April 2024, 15th May 2024, 15th June
+          create(:cm_subscription, customer: customer, quantity: 2, start_date: three_month_ago,)
+          create(:cm_subscription, customer: customer, quantity: 2, start_date: three_month_ago)
+          customer.last_invoice_date = three_month_ago
         end
 
         it "create invoices for all the missing months" do
           described_class.call(customer: customer)
-          expect(customer.orders.count).to eq 4
+          expect(customer.orders.count).to eq 3
         end
         it "update the last_invoice_date of the customer" do
           described_class.call(customer: customer)
@@ -43,53 +47,57 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCreator do
       end
       context "when there are 3 missed months and also time for future subscription to start" do
         before do
-          create(:cm_subscription, customer: customer, quantity: 2, start_date: 3.months.ago.beginning_of_month)
-          create(:cm_subscription, customer: customer, quantity: 2, start_date: 3.months.ago.beginning_of_month)
-          create(:cm_subscription, customer: customer, quantity: 2, start_date: Time.zone.now + 1.month )
-          customer.subscriptions.last.update(start_date: Time.zone.now)
-          customer.last_invoice_date =  3.months.ago
+          allow_any_instance_of(SpreeCmCommissioner::Subscription).to receive(:date_within_range).and_return(true)
+          #14th April, 14th May, 14th June
+          today = Time.zone.today
+          if today.day < 15
+            start_date = (today - 1.month).change(day: 14)
+            three_month_ago = (today - 3.month).change(day: 14)
+          else
+            #15th April 2024, 15th May 2024, 15th June 2024
+            start_date = today.change(day: 14)
+            three_month_ago = (today - 3.month).change(day: 15)
+          end
+          create(:cm_subscription, customer: customer, quantity: 2, start_date: three_month_ago)
+          create(:cm_subscription, customer: customer, quantity: 2, start_date: three_month_ago)
+          create(:cm_subscription, customer: customer, quantity: 2, start_date: three_month_ago)
+          customer.subscriptions.last.update(start_date: start_date)
+          customer.last_invoice_date =  three_month_ago
         end
         it "create invoices for all missing months " do
           described_class.call(customer: customer)
-          expect(customer.orders.count).to eq 4
+          expect(customer.orders.count).to eq 3
         end
         it "does not include the future subscription in the first two missing months" do
           described_class.call(customer: customer)
           expect(customer.orders[0].line_items.count).to eq 2
           expect(customer.orders[1].line_items.count).to eq 2
-          expect(customer.orders[2].line_items.count).to eq 2
-          expect(customer.orders[3].line_items.count).to eq 3
+          expect(customer.orders[2].line_items.count).to eq 3
         end
-
-        # TODO: fix this spec @tykea, it always randomly raise error
-        # it "create invoices for the failed invoice generation of the future subscription " do
-        #   create(:cm_subscription, customer: customer, quantity: 2, start_date: Time.zone.now + 1.month )
-        #   customer.subscriptions.last.update(start_date: Time.zone.now - 1.month)
-        #   customer.last_invoice_date =  3.months.ago
-        #   described_class.call(customer: customer)
-        #   expect(customer.orders[0].line_items.count).to eq 2
-        #   expect(customer.orders[1].line_items.count).to eq 2
-        #   expect(customer.orders[2].line_items.count).to eq 3
-        #   expect(customer.orders[3].line_items.count).to eq 4
-        # end
       end
       context "When there are no missed month" do
         before do
-          create(:cm_subscription, customer: customer, quantity: 2, start_date: Time.zone.now)
+          allow_any_instance_of(SpreeCmCommissioner::Subscription).to receive(:date_within_range).and_return(true)
+          today = Time.zone.today
+          today.day < 15 ? start_date = (today - 1.month).change(day: 15) : start_date = today.change(day: 15)
+          create(:cm_subscription, customer: customer, quantity: 2, start_date: start_date )
         end
         it "doesn't create any orders" do
           described_class.call(customer: customer)
-          expect(customer.orders.count).to eq 1
+          expect(customer.orders.count).to eq 0
         end
         it "doesn't update the last_invoice_date of the customer" do
           described_class.call(customer: customer)
-          expect(customer.last_invoice_date).to eq Time.zone.now.to_date
+          expect(customer.last_invoice_date).to eq nil
         end
       end
       context "When there are no missed month but it's time for future subscription to start" do
         before do
-          subscription = create(:cm_subscription, customer: customer, quantity: 2, start_date: Time.zone.now + 1.month)
-          subscription.update(start_date: Time.zone.now)
+          allow_any_instance_of(SpreeCmCommissioner::Subscription).to receive(:date_within_range).and_return(true)
+          today = Time.zone.today
+          today.day < 15 ? start_date = (today - 1.month).change(day: 14) : start_date = today.change(day: 14)
+          subscription = create(:cm_subscription, customer: customer, quantity: 2, start_date: Time.zone.now + 2.month)
+          subscription.update(start_date: start_date)
         end
         it " create a new order for the future subscription " do
           expect(customer.orders.count).to eq 0

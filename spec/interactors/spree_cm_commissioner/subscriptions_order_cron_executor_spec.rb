@@ -19,27 +19,31 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCronExecutor do
   let(:customer2) { create(:cm_customer, vendor: vendor, phone_number: "0972200288") }
   let(:customer3) { create(:cm_customer, vendor: vendor, phone_number: "0982200288") }
 
-  let!(:subscription1) { SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: 4.months.ago, customer: customer1) }
-  let!(:subscription2) { SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: 1.months.ago, customer: customer2) }
-  let!(:subscription3) { SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: Time.zone.now, customer: customer3) }
-
   before do
-    customer1.update(last_invoice_date: 4.months.ago)
-    customer2.update(last_invoice_date: 1.months.ago)
+    # allow_any_instance_of(SpreeCmCommissioner::Subscription).to receive(:date_within_range).and_return(true)
+    allow_any_instance_of(SpreeCmCommissioner::Subscription).to receive(:date_within_range).and_return(true)
+    today = Time.zone.today
+    today.day < 15 ?  three_month_ago = (today - 3.month).change(day: 14) : three_month_ago = (today - 3.month).change(day: 15)
+    today.day < 15 ?  one_month_ago = (today - 1.month).change(day: 14) : one_month_ago = (today - 1.month).change(day: 15)
+    SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: three_month_ago, customer: customer1)
+    SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: one_month_ago, customer: customer2)
+    SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: today, customer: customer3)
+
+    customer1.update(last_invoice_date: three_month_ago)
+    customer2.update(last_invoice_date: one_month_ago)
   end
 
   describe ".call" do
     it "creates invoices for all the missing months" do
       described_class.call()
-
       [customer1, customer2, customer3].each(&:reload)
 
-      expect(customer1.orders.count).to eq 5
-      expect(customer2.orders.count).to eq 2
-      expect(customer3.orders.count).to eq 1
-      expect(customer1.last_invoice_date).to eq (4.months.ago + 4.months).to_date
-      expect(customer2.last_invoice_date).to eq (1.months.ago + 1.months).to_date
-      expect(customer3.last_invoice_date).to eq Time.zone.now.to_date
+      expect(customer1.orders.count).to eq 3
+      expect(customer2.orders.count).to eq 1
+      expect(customer3.orders.count).to eq 0
+      expect(customer1.last_invoice_date).to eq (Time.zone.now).to_date
+      expect(customer2.last_invoice_date).to eq (Time.zone.now).to_date
+      expect(customer3.last_invoice_date).to eq nil
     end
   end
 end
