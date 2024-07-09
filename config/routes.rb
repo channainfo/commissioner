@@ -399,6 +399,7 @@ Spree::Core::Engine.add_routes do
 
     namespace :webhook do
       resources :orders, only: [:show]
+      resources :media_convert_queues, only: [:create]
     end
 
     namespace :chatrace do
