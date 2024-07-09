@@ -49,13 +49,13 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCreator do
           end
           start_date = today.day < 15 ? today.change(day: 15) - 2.month : today.change(day: 15) - 1.month
           customer.subscriptions.last.update(start_date: start_date)
+          customer.last_invoice_date =  three_month_ago
         end
 
         it "creates invoices for all missing months" do
           described_class.call(customer: customer, today: today)
           expect(customer.orders.count).to eq 3
         end
-
         it "does not include the future subscription in the first two missing months" do
           described_class.call(customer: customer, today: today)
           expect(customer.orders[0].line_items.count).to eq 2

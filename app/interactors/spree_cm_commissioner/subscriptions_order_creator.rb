@@ -22,8 +22,8 @@ module SpreeCmCommissioner
 
       missed_months = missed_months(last_invoice_date, boundary_date)
       missed_months.times do |i|
-        month = i
-        generate_invoice(last_invoice_date, month, active_subscriptions)
+        month = i + 1
+        generate_invoice(last_invoice_date, month, active_subscriptions, boundary_date)
       end
       context.customer.update(last_invoice_date: today)
     end
@@ -89,14 +89,15 @@ module SpreeCmCommissioner
       create_invoice
     end
 
-    def add_subscription_variant_to_line_item(last_invoice_date, active_subscriptions, month)
+    def add_subscription_variant_to_line_item(last_invoice_date, active_subscriptions, month, _boundary_date)
       # 1 May 15th, June 14th
       # 2 June 15th, July 14th
       # 3 July 15th, August 14th
-      from_date = customer.last_invoice_date.blank? ? last_invoice_date - 1.month + month.month + 1.day : last_invoice_date + month.month
+      from_date = last_invoice_date + month.month
       to_date = from_date + 1.month
+
       active_subscriptions.each do |subscription|
-        next if subscription.start_date >= to_date
+        next if subscription.start_date >= from_date
 
         Spree::Cart::AddItem.call(
           order: context.new_order,
