@@ -3,34 +3,36 @@
   <%= @customer.fullname %>
 <% end %>
 <% content_for :page_tabs do %>
-  <li class="nav-item">
-    <%= link_to_with_icon 'person.svg',
-      Spree.t(:customer),
-      spree.edit_billing_customer_path(@customer),
-      class: "nav-link #{'active' if current == :account}" %>
-  </li>
-<% end %>
-<% content_for :page_tabs do %>
-  <li class="nav-item">
-    <%= link_to_with_icon 'tag.svg',
-      Spree.t('billing.subscriptions'),
-      spree.billing_customer_subscriptions_path(@customer),
-      class: "nav-link #{'active' if current == :subscriptions}" %>
-  </li>
-<% end %>
-<% content_for :page_tabs do %>
-  <li class="nav-item">
-    <%= link_to_with_icon 'tag.svg',
-      Spree.t('billing.orders'),
-      spree.billing_customer_orders_path(@customer),
-      class: "nav-link #{'active' if current == :orders}" %>
-  </li>
-<% end %>
-<% content_for :page_tabs do %>
-  <li class="nav-item">
-    <%= link_to_with_icon 'pin-map.svg',
-      Spree.t(:address),
-      spree.billing_customer_addresses_path(@customer),
-      class: "nav-link #{'active' if current == :addresses}" %>
-  </li>
+  <% if spree_current_user.permissions.exists?(entry: 'spree/billing/customers', action: 'edit') %>
+    <li class="nav-item">
+      <%= link_to_with_icon 'person.svg',
+        Spree.t(:customer),
+        spree.edit_billing_customer_path(@customer),
+        class: "nav-link #{'active' if current == :account}" %>
+    </li>
+  <% end %>
+  <% if spree_current_user.permissions.exists?(entry: 'spree/billing/subscriptions', action: 'index') %>
+    <li class="nav-item">
+      <%= link_to_with_icon 'tag.svg',
+        Spree.t('billing.subscriptions'),
+        spree.billing_customer_subscriptions_path(@customer),
+        class: "nav-link #{'active' if current == :subscriptions}" %>
+    </li>
+  <% end %>
+  <% if spree_current_user.permissions.exists?(entry: 'spree/billing/orders', action: 'index') %>
+    <li class="nav-item">
+      <%= link_to_with_icon 'tag.svg',
+        Spree.t('billing.orders'),
+        spree.billing_customer_orders_path(@customer),
+        class: "nav-link #{'active' if current == :orders}" %>
+    </li>
+  <% end %>
+  <% if spree_current_user.permissions.exists?(entry: 'spree/billing/addresses', action: 'index') %>
+    <li class="nav-item">
+      <%= link_to_with_icon 'pin-map.svg',
+        Spree.t(:address),
+        spree.billing_customer_addresses_path(@customer),
+        class: "nav-link #{'active' if current == :addresses}" %>
+    </li>
+  <% end %>
 <% end %>

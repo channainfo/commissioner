@@ -58,7 +58,7 @@ module Spree
 
       def include_permission_hashes
         @include_permission_hashes ||= {
-          'spree/billing/reports' => %w[index paid balance_due overdue failed_orders active_subscribers],
+          'spree/billing/reports' => %w[index paid balance_due overdue failed_orders active_subscribers print_all_invoices],
           'spree/billing/orders' => %w[index create new edit show update destroy],
           'spree/billing/users' => %w[index create new edit show update destroy],
           'spree/billing/subscriptions' => %w[index create new edit show update destroy],
@@ -68,10 +68,12 @@ module Spree
           'spree/billing/places' => %w[index create new edit show update destroy],
           'spree/billing/businesses' => %w[index create new edit show update destroy],
           'spree/billing/products' => %w[index create new edit show update destroy],
+          'spree/billing/variants' => %w[index create new edit show update destroy],
           'spree/billing/option_types' => %w[index create new edit show update destroy],
           'spree/billing/adjustments' => %w[index create new edit show update destroy],
           'spree/billing/payments' => %w[index create new edit show update destroy],
-          'spree/billing/invoice' => %w[index show]
+          'spree/billing/invoice' => %w[index show print_invoice_date],
+          'spree/billing/addresses' => %w[index create new edit show update destroy]
         }
       end
 
