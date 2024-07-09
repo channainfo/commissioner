@@ -7,7 +7,11 @@ module Spree
       protected
 
       def scope
-        @subscription&.orders || @customer&.orders || current_vendor&.subscription_orders
+        if spree_current_user.has_spree_role?('admin')
+          admin_scope
+        else
+          non_admin_scope
+        end
       end
 
       # @overrided
@@ -56,6 +60,25 @@ module Spree
           params[:q][:created_at_gteq] = default_from_date
           params[:q][:created_at_lteq] = default_to_date
         end
+      end
+
+      private
+
+      def admin_scope
+        @subscription&.orders || @customer&.orders || current_vendor&.subscription_orders
+      end
+
+      def non_admin_scope
+        place_ids = spree_current_user.place_ids
+        filter_orders_by_place(@subscription&.orders, place_ids) ||
+          filter_orders_by_place(@customer&.orders, place_ids) ||
+          filter_orders_by_place(current_vendor&.subscription_orders, place_ids)
+      end
+
+      def filter_orders_by_place(orders, place_ids)
+        return nil unless orders
+
+        orders.joins(subscription: :customer).where(cm_customers: { place_id: place_ids })
       end
     end
   end

@@ -18,19 +18,19 @@ module Spree
 
       # GET /billing/reports/paid
       def paid
-        @search = Spree::Order.subscription.ransack(SpreeCmCommissioner::OrderParamsChecker.process_paid_params(params))
+        @search = orders_scope.ransack(SpreeCmCommissioner::OrderParamsChecker.process_paid_params(params))
         @orders = @search.result.includes(:line_items).where(payment_state: 'paid').page(page).per(per_page)
       end
 
       # GET /billing/reports/balance_due
       def balance_due
-        @search = Spree::Order.subscription.ransack(SpreeCmCommissioner::OrderParamsChecker.process_balance_due_params(params))
+        @search = orders_scope.ransack(SpreeCmCommissioner::OrderParamsChecker.process_balance_due_params(params))
         @orders = @search.result.includes(:line_items).where(payment_state: 'balance_due').page(page).per(per_page)
       end
 
       # GET /billing/reports/overdue
       def overdue
-        @search = Spree::Order.subscription.joins(:line_items).where.not(payment_state: %w[paid failed])
+        @search = orders_scope.joins(:line_items).where.not(payment_state: %w[paid failed])
                               .where('spree_line_items.due_date < ?', Time.zone.today)
                               .ransack(params[:q])
         @orders = @search.result.page(page).per(per_page)
@@ -38,19 +38,19 @@ module Spree
 
       # GET /billing/reports/failed_orders
       def failed_orders
-        @search = Spree::Order.subscription.joins(:line_items).where(payment_state: 'failed').ransack(params[:q])
+        @search = orders_scope.joins(:line_items).where(payment_state: 'failed').ransack(params[:q])
         @orders = @search.result.page(page).per(per_page)
       end
 
       # GET /billing/reports/active_subscribers
       def active_subscribers
-        @search = SpreeCmCommissioner::Customer.joins(:taxons).where('active_subscriptions_count > ?', 0).ransack(params[:q])
+        @search = customers_scope.ransack(params[:q])
         @customers = @search.result.includes(:subscriptions, :taxons).page(page).per(per_page)
       end
 
       # POST /billing/reports/print_all_invoices
       def print_all_invoices
-        @orders = Spree::Order.subscription.joins(:invoice).where(payment_state: 'balance_due').where(cm_invoices: { vendor_id: current_vendor.id })
+        @orders = orders_scope.joins(:invoice).where(payment_state: 'balance_due').where(cm_invoices: { vendor_id: current_vendor.id })
 
         @orders.each do |order|
           order.invoice.update(invoice_issued_date: Time.zone.today) if order.invoice.invoice_issued_date.blank?
@@ -58,6 +58,25 @@ module Spree
       end
 
       private
+
+      def orders_scope
+        if spree_current_user.has_spree_role?('admin')
+          Spree::Order.subscription
+        else
+          Spree::Order.subscription
+                      .joins(subscription: :customer)
+                      .where(cm_customers: { place_id: spree_current_user.place_ids })
+        end
+      end
+
+      def customers_scope
+        if spree_current_user.has_spree_role?('admin')
+          SpreeCmCommissioner::Customer.joins(:taxons).where('active_subscriptions_count > ?', 0)
+        else
+          @search = SpreeCmCommissioner::Customer.joins(:taxons).where('active_subscriptions_count > ?', 0)
+                                                 .where(cm_customers: { place_id: spree_current_user.place_ids })
+        end
+      end
 
       def handle_exceeding_range
         flash[:error] = Spree.t('billing.exceeding_date_range')
@@ -83,7 +102,8 @@ module Spree
         SpreeCmCommissioner::SubscriptionRevenueOverviewQuery.new(
           from_date: from_date,
           to_date: to_date,
-          vendor_id: current_vendor.id
+          vendor_id: current_vendor.id,
+          spree_current_user: spree_current_user
         )
       end
 
@@ -92,7 +112,8 @@ module Spree
           SpreeCmCommissioner::SubscriptionOrdersQuery.new(
             from_date: from_date,
             to_date: to_date,
-            vendor_id: current_vendor.id
+            vendor_id: current_vendor.id,
+            spree_current_user: spree_current_user
           )
         )
       end

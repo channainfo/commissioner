@@ -1,12 +1,13 @@
 module SpreeCmCommissioner
   class SubscriptionRevenueOverviewQuery
-    attr_reader :from_date, :to_date, :vendor_id, :current_date
+    attr_reader :from_date, :to_date, :vendor_id, :current_date, :spree_current_user
 
-    def initialize(from_date:, to_date:, vendor_id:, current_date: Time.zone.today)
+    def initialize(from_date:, to_date:, vendor_id:, spree_current_user:, current_date: Time.zone.today)
       @from_date = from_date
       @to_date = to_date
       @vendor_id = vendor_id
       @current_date = current_date
+      @spree_current_user = spree_current_user
     end
 
     def reports_with_overdues
@@ -15,10 +16,21 @@ module SpreeCmCommissioner
     end
 
     def reports
-      subquery ||= Spree::Order.subscription
-                               .joins(:line_items)
-                               .where(line_items: { vendor_id: vendor_id, from_date: from_date..to_date })
-                               .select('DISTINCT ON (spree_orders.id) spree_orders.*, line_items.*')
+      subquery ||= if spree_current_user.has_spree_role?('admin')
+                     Spree::Order.subscription
+                                 .joins(:line_items)
+                                 .where(line_items: { vendor_id: vendor_id, from_date: from_date..to_date })
+                                 .select('DISTINCT ON (spree_orders.id) spree_orders.*, line_items.*')
+                   else
+                     Spree::Order.subscription
+                                 .joins(:line_items)
+                                 .joins(subscription: :customer)
+                                 .where(line_items: { vendor_id: vendor_id })
+                                 .where(created_at: from_date..to_date)
+                                 .where(cm_customers: { place_id: spree_current_user.place_ids })
+                                 .select('DISTINCT ON (spree_orders.id) spree_orders.*, line_items.*')
+
+                   end
 
       Spree::Order.from(subquery, :orders)
                   .group(:payment_state)
@@ -31,7 +43,8 @@ module SpreeCmCommissioner
         from_date: from_date,
         to_date: to_date,
         vendor_id: vendor_id,
-        current_date: current_date
+        current_date: current_date,
+        spree_current_user: spree_current_user
       ).overdues.select(*select_fields).map do |report|
         report.slice(:orders_count, :total, :payment_total)
               .symbolize_keys

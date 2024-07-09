@@ -5,11 +5,19 @@ module Spree
       before_action :load_customer, if: -> { member_action? }
       before_action :load_bussinesses
 
+      def scope
+        if spree_current_user.has_spree_role?('admin')
+          current_vendor.customers
+        else
+          current_vendor.customers.where(place_id: spree_current_user.place_ids)
+        end
+      end
+
       def collection
         return [] if current_vendor.blank?
         return @collection if defined?(@collection)
 
-        @search = current_vendor.customers.ransack(params[:q])
+        @search = scope.ransack(params[:q])
         @collection = @search.result.includes(:subscriptions, :taxons).page(page).per(per_page)
       end
 
