@@ -13,7 +13,8 @@ module SpreeCmCommissioner
       guest_age: 0b1000000,
       guest_emergency_contact: 0b10000000,
       guest_organization: 0b100000000,
-      guest_expectation: 0b1000000000
+      guest_expectation: 0b1000000000,
+      guest_social_contact: 0b10000000000
     }.freeze
 
     ORDERED_BIT_FIELDS = %i[
@@ -25,6 +26,7 @@ module SpreeCmCommissioner
       guest_age
       guest_emergency_contact
       guest_organization
+      guest_social_contact
       guest_expectation
       guest_id_card
     ].freeze
@@ -49,6 +51,11 @@ module SpreeCmCommissioner
 
     def kyc_value_enabled?(bit_value)
       kyc & bit_value != 0
+    end
+
+    def available_social_contact_platforms
+      platforms = SpreeCmCommissioner::Guest.social_contact_platforms.keys
+      platforms.sort_by { |platform| platform == 'other' ? 1 : 0 }
     end
   end
 end
