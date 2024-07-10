@@ -52,15 +52,15 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCreator do
           today = Time.zone.today
           if today.day < 15
             start_date = (today - 1.month).change(day: 14)
-            three_month_ago = (today - 3.month).change(day: 14)
+            three_month_ago = (today - 4.month).change(day: 15)
           else
             #15th April 2024, 15th May 2024, 15th June 2024
             start_date = today.change(day: 14)
             three_month_ago = (today - 3.month).change(day: 15)
           end
-          create(:cm_subscription, customer: customer, quantity: 2, start_date: three_month_ago)
-          create(:cm_subscription, customer: customer, quantity: 2, start_date: three_month_ago)
-          create(:cm_subscription, customer: customer, quantity: 2, start_date: three_month_ago)
+          create(:cm_subscription, customer: customer, quantity: 2, start_date: three_month_ago) #14th April
+          create(:cm_subscription, customer: customer, quantity: 2, start_date: three_month_ago) # 14th April
+          create(:cm_subscription, customer: customer, quantity: 2, start_date: three_month_ago) # 14th June
           customer.subscriptions.last.update(start_date: start_date)
           customer.last_invoice_date =  three_month_ago
         end
