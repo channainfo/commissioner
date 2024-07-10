@@ -5,6 +5,15 @@ module SpreeCmCommissioner
     delegate :kyc, to: :line_item
 
     enum gender: { :other => 0, :male => 1, :female => 2 }
+    enum social_contact_platform: {
+      :other => 0,
+      :telegram => 1,
+      :facebook => 2,
+      :wechat => 3,
+      :whatsapp => 4,
+      :line => 5,
+      :viber => 6
+    }, _prefix: true
 
     scope :complete, -> { joins(:line_item).merge(Spree::LineItem.complete) }
     scope :unassigned_event, -> { where(event_id: nil) }
@@ -47,6 +56,7 @@ module SpreeCmCommissioner
       return emergency_contact.present? if field == :guest_emergency_contact
       return other_organization.present? if field == :guest_organization
       return expectation.present? if field == :guest_expectation
+      return social_contact_platform.present? && social_contact.present? if field == :guest_social_contact
       return upload_later? || (id_card.present? && id_card.allowed_checkout?) if field == :guest_id_card
 
       false

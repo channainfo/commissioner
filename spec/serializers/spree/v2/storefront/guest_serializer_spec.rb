@@ -25,11 +25,14 @@ RSpec.describe SpreeCmCommissioner::V2::Storefront::GuestSerializer, type: :seri
         :updated_at,
         :qr_data,
         :age,
+        :social_contact_platform,
+        :social_contact,
         :emergency_contact,
         :other_organization,
         :expectation,
         :allowed_checkout,
         :upload_later,
+        :available_social_contact_platforms
       )
       expect(subject[:data][:attributes][:qr_data]).to eq guest.token
     end

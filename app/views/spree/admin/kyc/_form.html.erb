@@ -1,85 +1,11 @@
 <div class="d-flex flex-column my-4">
-  <div class="form-check form-check-inline">
-    <%= form.field_container :guest_name do %>
-      <%= form.check_box :guest_name, class: 'form-check-input', checked: form.object.guest_name? %>
-      <%= form.label :guest_name, Spree.t(:guest_name), class: 'form-check-label' %>
-      <%= form.error_message_on :guest_name, class: 'text-danger' %>
-    <% end %>
-  </div>
-
-  <div class="form-check form-check-inline">
-    <%= form.field_container :guest_gender do %>
-      <%= form.check_box :guest_gender, class: 'form-check-input', checked: form.object.guest_gender? %>
-      <%= form.label :guest_gender, Spree.t(:guest_gender), class: 'form-check-label' %>
-      <%= form.error_message_on :guest_gender, class: 'text-danger' %>
-    <% end %>
-  </div>
-
-  <div class="form-check form-check-inline">
-    <%= form.field_container :guest_dob do %>
-      <%= form.check_box :guest_dob, class: 'form-check-input', checked: form.object.guest_dob? %>
-      <%= form.label :guest_dob, Spree.t(:guest_dob), class: 'form-check-label' %>
-      <%= form.error_message_on :guest_dob, class: 'text-danger' %>
-    <% end %>
-  </div>
-
-  <div class="form-check form-check-inline">
-    <%= form.field_container :guest_occupation do %>
-      <%= form.check_box :guest_occupation, class: 'form-check-input', checked: form.object.guest_occupation? %>
-      <%= form.label :guest_occupation, Spree.t(:guest_occupation), class: 'form-check-label' %>
-      <%= form.error_message_on :guest_occupation, class: 'text-danger' %>
-    <% end %>
-  </div>
-
-  <div class="form-check form-check-inline">
-    <%= form.field_container :guest_id_card do %>
-      <%= form.check_box :guest_id_card, class: 'form-check-input', checked: form.object.guest_id_card? %>
-      <%= form.label :guest_id_card, Spree.t(:guest_id_card), class: 'form-check-label' %>
-      <%= form.error_message_on :guest_id_card, class: 'text-danger' %>
-    <% end %>
-  </div>
-
-  <div class="form-check form-check-inline">
-    <%= form.field_container :guest_nationality do %>
-      <%= form.check_box :guest_nationality, class: 'form-check-input', checked: form.object.guest_nationality? %>
-      <%= form.label :guest_nationality, Spree.t(:guest_nationality), class: 'form-check-label' %>
-      <%= form.error_message_on :guest_nationality, class: 'text-danger' %>
-    <% end %>
-  </div>
-
-  <div class="form-check form-check-inline">
-    <%= form.field_container :guest_age do %>
-      <%= form.check_box :guest_age, class: 'form-check-input', checked: form.object.guest_age? %>
-      <%= form.label :guest_age, Spree.t(:guest_age), class: 'form-check-label' %>
-      <%= form.error_message_on :guest_age, class: 'text-danger' %>
-    <% end %>
-  </div>
-
-  <div class="form-check form-check-inline">
-    <%= form.field_container :guest_emergency_contact do %>
-      <%= form.check_box :guest_emergency_contact, class: 'form-check-input', checked: form.object.guest_emergency_contact? %>
-      <%= form.label :guest_emergency_contact, Spree.t(:guest_emergency_contact), class: 'form-check-label' %>
-      <%= form.error_message_on :guest_emergency_contact, class: 'text-danger' %>
-    <% end %>
-  </div>
-
-  <div class="form-check form-check-inline">
-    <%= form.field_container :guest_organization do %>
-      <%= form.check_box :guest_organization, class: 'form-check-input', checked: form.object.guest_organization? %>
-      <%= form.label :guest_organization, Spree.t(:guest_organization), class: 'form-check-label' %>
-      <%= form.error_message_on :guest_organization, class: 'text-danger' %>
-    <% end %>
-  </div>
-
-  <div class="form-check form-check-inline">
-    <%= form.field_container :guest_expectation do %>
-      <%= form.check_box :guest_expectation, class: 'form-check-input', checked: form.object.guest_expectation? %>
-      <%= form.label :guest_expectation, Spree.t(:guest_expectation), class: 'form-check-label' %>
-      <%= form.error_message_on :guest_expectation, class: 'text-danger' %>
-    <% end %>
-  </div>
+  <% @product.class::BIT_FIELDS.each do |key, value| %>
+    <div class="form-check form-check-inline">
+      <%= form.field_container key do %>
+        <%= form.check_box key, class: 'form-check-input', checked: form.object.kyc_value_enabled?(value) %>
+        <%= form.label key, Spree.t(key), class: 'form-check-label' %>
+        <%= form.error_message_on key, class: 'text-danger' %>
+      <% end %>
+    </div>
+  <% end %>
 </div>
-
-
-
-

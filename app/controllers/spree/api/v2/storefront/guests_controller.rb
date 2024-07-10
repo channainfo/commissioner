@@ -63,6 +63,8 @@ module Spree
               :occupation_id,
               :nationality_id,
               :other_occupation,
+              :social_contact,
+              :social_contact_platform,
               :age,
               :emergency_contact,
               :other_organization,
