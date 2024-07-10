@@ -13,9 +13,11 @@ require 'spree_cm_commissioner/calendar_event'
 require 'spree_cm_commissioner/s3_url_generator'
 
 require 'google/cloud/recaptcha_enterprise'
+require 'opensearch-ruby'
 require 'searchkick'
 require 'twilio-ruby'
-require 'elasticsearch'
+# require 'elasticsearch'
+
 require 'interactor'
 require 'phonelib'
 require 'jwt'
