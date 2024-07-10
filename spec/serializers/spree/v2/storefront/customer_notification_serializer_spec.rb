@@ -7,6 +7,7 @@ RSpec.describe Spree::V2::Storefront::CustomerNotificationSerializer, type: :ser
     subject {
       described_class.new(customer_notification, include: [
         :feature_image,
+        :feature_images,
       ]).serializable_hash
     }
 
@@ -25,7 +26,8 @@ RSpec.describe Spree::V2::Storefront::CustomerNotificationSerializer, type: :ser
 
     it 'returns exact notification associations' do
       expect(subject[:data][:relationships].keys).to contain_exactly(
-        :feature_image
+        :feature_image,
+        :feature_images
       )
     end
   end
