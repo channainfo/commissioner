@@ -28,7 +28,8 @@ module Spree
     @@store_attributes += [
       :preferred_telegram_order_alert_chat_id,
       :preferred_telegram_order_request_alert_chat_id,
-      { default_notification_image_attributes: {} }
+      { default_notification_image_attributes: {} },
+      :term_and_condition_promotion
     ]
 
     @@checkout_attributes += %i[
