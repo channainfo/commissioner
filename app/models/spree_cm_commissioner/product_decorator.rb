@@ -2,6 +2,8 @@
 module SpreeCmCommissioner
   module ProductDecorator
     def self.prepended(base)
+      base.include SpreeCmCommissioner::ProductIndexable
+      base.include SpreeCmCommissioner::ProductSearchable
       base.include SpreeCmCommissioner::ProductType
       base.include SpreeCmCommissioner::KycBitwise
 
@@ -25,6 +27,8 @@ module SpreeCmCommissioner
 
       # after finish purchase an order, user must complete these steps
       base.has_many :product_completion_steps, class_name: 'SpreeCmCommissioner::ProductCompletionStep', dependent: :destroy
+
+      base.has_many :purchasers, through: :orders, source: :user, class_name: 'Spree::User'
 
       base.has_one :default_state, through: :vendor
       base.has_one :google_wallet, class_name: 'SpreeCmCommissioner::GoogleWallet', dependent: :destroy
