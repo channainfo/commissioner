@@ -4,7 +4,7 @@ module Spree
       module VariantSerializerDecorator
         def self.prepended(base)
           base.attributes :need_confirmation, :product_type, :kyc,
-                          :reminder_in_time, :start_time, :delivery_option,
+                          :reminder_in_hours, :start_time, :delivery_option,
                           :number_of_guests, :max_quantity_per_order
 
           base.attribute :delivery_required, &:delivery_required?

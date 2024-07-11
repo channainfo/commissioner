@@ -28,6 +28,43 @@ RSpec.describe Spree::LineItem, type: :model do
         expect(line_item.number.size).to eq 10
       end
     end
+
+    describe '#set_duration' do
+      let(:option_type1) { create(:cm_option_type, :start_date) }
+      let(:option_type2) { create(:cm_option_type, :start_time) }
+      let(:option_type3) { create(:cm_option_type, :end_date) }
+      let(:option_type4) { create(:cm_option_type, :end_time) }
+
+      let(:option_value1) { create(:cm_option_value, name: '2024-01-01', option_type: option_type1) }
+      let(:option_value2) { create(:cm_option_value, name: '03:00:00', option_type: option_type2) }
+      let(:option_value3) { create(:cm_option_value, name: '2024-02-02', option_type: option_type3) }
+      let(:option_value4) { create(:cm_option_value, name: '05:00:00', option_type: option_type4) }
+
+      let(:product) { create(:product, option_types: [option_type1, option_type2, option_type3, option_type4]) }
+      let(:variant) { create(:variant, product: product, option_values: [option_value1, option_value2, option_value3, option_value4]) }
+
+      context 'when from_date & to_date not yet present?' do
+        let(:line_item) { build(:line_item, variant: variant, from_date: nil, to_date: nil) }
+
+        it 'set from_date & to_date base on variant' do
+          line_item.save
+
+          expect(line_item.from_date).to eq Time.zone.parse('2024-01-01 03:00:00')
+          expect(line_item.to_date).to eq Time.zone.parse('2024-02-02 05:00:00')
+        end
+      end
+
+      context 'when from_date & to_date already present?' do
+        let(:line_item) { build(:line_item, variant: variant, from_date: '2024-08-08 02:00:00', to_date: '2024-08-09 04:00:00') }
+
+        it 'does not set from_date & to_date' do
+          line_item.save
+
+          expect(line_item.from_date).to eq Time.zone.parse('2024-08-08 02:00:00')
+          expect(line_item.to_date).to eq Time.zone.parse('2024-08-09 04:00:00')
+        end
+      end
+    end
   end
 
   describe 'validations' do
@@ -84,29 +121,6 @@ RSpec.describe Spree::LineItem, type: :model do
       it 'returns an empty array' do
         expect(line_item.completion_steps).to eq([])
       end
-    end
-  end
-
-  describe '#set_duration' do
-
-    let(:taxonomy) { create(:taxonomy, kind: :event) }
-    let(:taxon) { create(:taxon, name: 'events', from_date: '2023-01-10'.to_date, to_date: '2023-01-13'.to_date, taxonomy: taxonomy) }
-    let(:product) { create(:product, taxons: [taxon]) }
-    let(:order) { create(:order) }
-
-    it 'save duration to line item base on event' do
-
-      line_item = order.line_items.create(variant: product.master)
-
-      expect(line_item.from_date).to eq taxon.from_date
-      expect(line_item.to_date).to eq taxon.to_date
-    end
-
-    it 'not save duration to line item already has duration' do
-      line_item = order.line_items.create(variant: product.master, from_date: '2024-03-11'.to_date, to_date: '2024-03-15'.to_date)
-
-      expect(line_item.from_date).to eq '2024-03-11'.to_date
-      expect(line_item.to_date).to eq '2024-03-15'.to_date
     end
   end
 
@@ -313,8 +327,8 @@ RSpec.describe Spree::LineItem, type: :model do
     let(:line_item) { create(:line_item, quantity: 2) }
 
     it 'return number of guest base on variant and quantity' do
-      allow(line_item.variant).to receive(:number_of_kids).and_return(1)
-      allow(line_item.variant).to receive(:number_of_adults).and_return(2)
+      allow(line_item.variant.options).to receive(:number_of_kids).and_return(1)
+      allow(line_item.variant.options).to receive(:number_of_adults).and_return(2)
 
       expect(line_item.variant.number_of_guests).to eq 3
       expect(line_item.number_of_guests).to eq 6
