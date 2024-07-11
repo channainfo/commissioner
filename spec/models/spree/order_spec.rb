@@ -67,7 +67,7 @@ RSpec.describe Spree::Order, type: :model do
         order = build(:order, promo_total: -1)
 
         expect(order.save).to be true
-        expect(order.promo_total).to eq -1
+        expect(order.promo_total).to eq(-1)
       end
     end
   end
@@ -148,44 +148,30 @@ RSpec.describe Spree::Order, type: :model do
 
     let(:order) { create(:order, line_items: [line_item1, line_item2]) }
 
-    context 'required delivery' do
-      it 'required delivery when all products are :ecommerce & not digital' do
-        order.line_items[0].product.update_columns(product_type: :ecommerce)
-        order.line_items[1].product.update_columns(product_type: :ecommerce)
+    context 'when some line items required delivery' do
+      it 'return true' do
+        allow(order.line_items[0]).to receive(:delivery_required?).and_return(true)
+        allow(order.line_items[1]).to receive(:delivery_required?).and_return(false)
 
-        allow(order.line_items[0]).to receive(:digital?).and_return(false)
-        allow(order.line_items[1]).to receive(:digital?).and_return(false)
-
-        expect(order.delivery_required?).to eq true
-      end
-
-      it 'required delivery when some of products are :ecommerce & not digital' do
-        order.line_items[0].product.update_columns(product_type: :ecommerce)
-        order.line_items[1].product.update_columns(product_type: :service)
-
-        allow(order.line_items[0]).to receive(:digital?).and_return(false)
-        allow(order.line_items[1]).to receive(:digital?).and_return(false)
-
-        expect(order.delivery_required?).to eq true
+        expect(order.delivery_required?).to be true
       end
     end
 
-    context 'not required delivery' do
-      it 'not required delivery when products are not :ecommerce (digital? are ignored this case)' do
-        order.line_items[0].product.update_columns(product_type: :accommodation)
-        order.line_items[1].product.update_columns(product_type: :service)
+    context 'when all line items required delivery' do
+      it 'return true' do
+        allow(order.line_items[0]).to receive(:delivery_required?).and_return(true)
+        allow(order.line_items[1]).to receive(:delivery_required?).and_return(true)
 
-        expect(order.delivery_required?).to eq false
+        expect(order.delivery_required?).to be true
       end
+    end
 
-      it 'not required delivery when some of products are :ecommerce & it is digital' do
-        order.line_items[0].product.update_columns(product_type: :ecommerce)
-        order.line_items[1].product.update_columns(product_type: :service)
+    context 'when none of line items required delivery' do
+      it 'return false' do
+        allow(order.line_items[0]).to receive(:delivery_required?).and_return(false)
+        allow(order.line_items[1]).to receive(:delivery_required?).and_return(false)
 
-        allow(order.line_items[0]).to receive(:digital?).and_return(true)
-        allow(order.line_items[1]).to receive(:digital?).and_return(false)
-
-        expect(order.delivery_required?).to eq false
+        expect(order.delivery_required?).to be false
       end
     end
   end

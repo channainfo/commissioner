@@ -110,39 +110,28 @@ RSpec.describe Spree::Variant, type: :model do
     end
   end
 
+  # delivery required will be base entirely on option type
   describe '#delivery_required?' do
-    context 'when non_digital ecommerce? is true' do
-      let(:product) { create(:product, product_type: :ecommerce) }
-      subject { create(:variant, product: product) }
+    let(:product) { create(:product, product_type: :ecommerce, option_types: [option_type]) }
+    let(:option_type) { create(:cm_option_type, :delivery_option) }
+
+    subject { build(:variant, product: product, digitals: [create(:digital)], option_values: [option_value]) }
+
+    context 'when deliver option is "delivery"' do
+      let(:option_value) { create(:option_value, name: 'delivery', presentation: 'Delivery', option_type: option_type) }
 
       it 'returns true' do
-        expect(subject.non_digital_ecommerce?).to be true
+        expect(subject.non_digital_ecommerce?).to be false
         expect(subject.delivery_required?).to be true
       end
     end
 
-    context 'when non_digital_ecommerce? is false' do
-      let(:product) { create(:product, product_type: :ecommerce, option_types: [option_type]) }
-      let(:option_type) { create(:cm_option_type, :delivery_option) }
+    context 'when deliver option is "pickup"' do
+      let(:option_value) { create(:option_value, name: 'pickup', presentation: 'Pickup', option_type: option_type) }
 
-      subject { build(:variant, product: product, digitals: [create(:digital)], option_values: [option_value]) }
-
-      context 'when deliver option is "delivery"' do
-        let(:option_value) { create(:option_value, name: 'delivery', presentation: 'Delivery', option_type: option_type) }
-
-        it 'returns true' do
-          expect(subject.non_digital_ecommerce?).to be false
-          expect(subject.delivery_required?).to be true
-        end
-      end
-
-      context 'when deliver option is "pickup"' do
-        let(:option_value) { create(:option_value, name: 'pickup', presentation: 'Pickup', option_type: option_type) }
-
-        it 'returns false' do
-          expect(subject.non_digital_ecommerce?).to be false
-          expect(subject.delivery_required?).to be false
-        end
+      it 'returns false' do
+        expect(subject.non_digital_ecommerce?).to be false
+        expect(subject.delivery_required?).to be false
       end
     end
   end
