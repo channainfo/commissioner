@@ -27,10 +27,16 @@ FactoryBot.define do
       presentation { 'start-time' }
     end
 
-    trait :reminder_in_time do
+    trait :end_time do
       attr_type { :time }
-      name { 'reminder-in-time' }
-      presentation { 'reminder-in-time' }
+      name { 'end-time' }
+      presentation { 'end-time' }
+    end
+
+    trait :reminder_in_hours do
+      attr_type { :integer }
+      name { 'reminder-in-hours' }
+      presentation { 'reminder-in-hours' }
     end
 
     trait :duration_in_hours do

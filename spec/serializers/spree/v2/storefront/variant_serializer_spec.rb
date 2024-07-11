@@ -37,7 +37,7 @@ describe Spree::V2::Storefront::VariantSerializer, type: :serializer do
         :kyc,
         :need_confirmation,
         :product_type,
-        :reminder_in_time,
+        :reminder_in_hours,
         :start_time,
         :max_quantity_per_order,
         :number_of_guests,

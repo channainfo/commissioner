@@ -3,7 +3,7 @@ module SpreeCmCommissioner
     extend ActiveSupport::Concern
 
     included do
-      before_validation :set_duration, if: -> { event.present? }
+      before_validation :set_duration
     end
 
     def date_present?
@@ -46,9 +46,11 @@ module SpreeCmCommissioner
       taxons.event.first
     end
 
+    private
+
     def set_duration
-      self.from_date ||= event.from_date
-      self.to_date ||= event.to_date
+      self.from_date ||= variant.start_date_time
+      self.to_date ||= variant.end_date_time
     end
   end
 end

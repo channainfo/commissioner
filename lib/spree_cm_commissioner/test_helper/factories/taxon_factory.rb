@@ -2,6 +2,10 @@ FactoryBot.define do
   factory :cm_taxon_event_section, parent: :taxon do
     kind { :event }
     sequence(:name) { |n| "Ticket Type #{n}" }
+
+    after(:build) do |taxon, evaluator|
+      taxon.taxonomy.update(kind: taxon.kind)
+    end
   end
 
   factory :cm_taxon_event, parent: :taxon do

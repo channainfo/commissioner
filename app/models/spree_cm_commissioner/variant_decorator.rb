@@ -10,6 +10,7 @@ module SpreeCmCommissioner
 
       base.belongs_to :vendor, class_name: 'Spree::Vendor'
 
+      base.has_many :taxons, class_name: 'Spree::Taxon', through: :product
       base.has_many :visible_option_values, lambda {
                                               joins(:option_type).where(spree_option_types: { hidden: false })
                                             }, through: :option_value_variants, source: :option_value
@@ -33,6 +34,10 @@ module SpreeCmCommissioner
 
     def permanent_stock?
       accommodation?
+    end
+
+    def event
+      taxons.event.first
     end
 
     # override

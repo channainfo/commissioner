@@ -2,88 +2,64 @@ module SpreeCmCommissioner
   module VariantOptionsConcern
     extend ActiveSupport::Concern
 
-    DEFAULT_KIDS_AGE_MAX = 17
-    DEFAULT_NUMBER_OF_ADULTS = 1
+    def options
+      @options ||= VariantOptions.new(self)
+    end
 
-    def location
-      @location ||= option_value_name_for(option_type_name: 'location')&.to_i
+    delegate :location,
+             :reminder_in_hours,
+             :duration_in_hours,
+             :duration_in_minutes,
+             :duration_in_seconds,
+             :payment_option,
+             :delivery_option,
+             :max_quantity_per_order,
+             :due_date,
+             :month,
+             :number_of_adults,
+             :number_of_kids,
+             :kids_age_max,
+             :allowed_extra_adults,
+             :allowed_extra_kids,
+             :number_of_guests,
+             to: :options
+
+    def start_date_time
+      return nil if start_date.blank?
+      return start_date if start_time.blank?
+
+      start_date.change(hour: start_time.hour, min: start_time.min, sec: start_time.sec)
+    end
+
+    def end_date_time
+      return nil if end_date.blank?
+      return end_date if end_time.blank?
+
+      end_date.change(hour: end_time.hour, min: end_time.min, sec: end_time.sec)
     end
 
     def start_date
-      @start_date ||= option_value_name_for(option_type_name: 'start-date')
+      options.start_date || event&.from_date
     end
 
     def end_date
-      @end_date ||= option_value_name_for(option_type_name: 'end-date')
+      return start_date + options.total_duration_in_seconds.seconds if start_date.present? && options.total_duration_in_seconds.positive?
+
+      options.end_date || event&.to_date
     end
 
     def start_time
-      @start_time ||= option_value_name_for(option_type_name: 'start-time')
+      options.start_time || event&.from_date
     end
 
-    def reminder_in_time
-      @reminder_in_time ||= option_value_name_for(option_type_name: 'reminder-in-time')
-    end
+    def end_time
+      return start_time + options.total_duration_in_seconds.seconds if start_time.present? && options.total_duration_in_seconds.positive?
 
-    def duration_in_hours
-      @duration_in_hours ||= option_value_name_for(option_type_name: 'duration-in-hours')&.to_i
-    end
-
-    def duration_in_minutes
-      @duration_in_minutes ||= option_value_name_for(option_type_name: 'duration-in-minutes')&.to_i
-    end
-
-    def duration_in_seconds
-      @duration_in_seconds ||= option_value_name_for(option_type_name: 'duration-in-seconds')&.to_i
-    end
-
-    def payment_option
-      @payment_option ||= option_value_name_for(option_type_name: 'payment-option')
+      options.end_time || event&.to_date
     end
 
     def post_paid?
-      payment_option == 'post-paid'
-    end
-
-    def delivery_option
-      @delivery_option ||= option_value_name_for(option_type_name: 'delivery-option')
-    end
-
-    def max_quantity_per_order
-      @max_quantity_per_order ||= option_value_name_for(option_type_name: 'max-quantity-per-order')&.to_i
-    end
-
-    def due_date
-      @due_date ||= option_value_name_for(option_type_name: 'due-date')&.to_i
-    end
-
-    def month
-      @month ||= option_value_name_for(option_type_name: 'month')&.to_i
-    end
-
-    def number_of_adults
-      @number_of_adults ||= option_value_name_for(option_type_name: 'number-of-adults')&.to_i || DEFAULT_NUMBER_OF_ADULTS
-    end
-
-    def number_of_kids
-      @number_of_kids ||= option_value_name_for(option_type_name: 'number-of-kids')&.to_i || 0
-    end
-
-    # can consider as customers.
-    def number_of_guests
-      number_of_adults + number_of_kids
-    end
-
-    def kids_age_max
-      @kids_age_max ||= option_value_name_for(option_type_name: 'kids-age-max')&.to_i || DEFAULT_KIDS_AGE_MAX
-    end
-
-    def allowed_extra_adults
-      @allowed_extra_adults ||= option_value_name_for(option_type_name: 'allowed-extra-adults')&.to_i || 0
-    end
-
-    def allowed_extra_kids
-      @allowed_extra_kids ||= option_value_name_for(option_type_name: 'allowed-extra-kids')&.to_i || 0
+      options.payment_option == 'post-paid'
     end
   end
 end
