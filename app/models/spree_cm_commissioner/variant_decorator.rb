@@ -24,8 +24,6 @@ module SpreeCmCommissioner
     end
 
     def delivery_required?
-      return true if non_digital_ecommerce?
-
       delivery_option == 'delivery'
     end
 

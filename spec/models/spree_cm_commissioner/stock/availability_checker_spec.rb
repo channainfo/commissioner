@@ -67,14 +67,16 @@ RSpec.describe SpreeCmCommissioner::Stock::AvailabilityChecker do
 
         context 'stock items is available' do
           it 'return can_supply? true' do
-            expect(variant.delivery_required?).to be true
+            allow(variant).to receive(:delivery_required?).and_return(true)
+
             expect(subject.can_supply?(3)).to be true
           end
         end
 
         context 'stock items is not available' do
           it 'return can_supply? false' do
-            expect(variant.delivery_required?).to be true
+            allow(variant).to receive(:delivery_required?).and_return(true)
+
             expect(subject.can_supply?(4)).to be false
           end
         end

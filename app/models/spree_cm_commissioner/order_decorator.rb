@@ -86,14 +86,8 @@ module SpreeCmCommissioner
       saved_change_to_state? && state == 'canceled'
     end
 
-    # required only in one case,
-    # some of line_items are ecommerce & not digital.
     def delivery_required?
-      contain_non_digital_ecommerce?
-    end
-
-    def contain_non_digital_ecommerce?
-      line_items.select { |item| item.ecommerce? && !item.digital? }.size.positive?
+      line_items.any?(&:delivery_required?)
     end
 
     # overrided not to send email yet to user if order needs confirmation
