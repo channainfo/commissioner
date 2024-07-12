@@ -53,7 +53,8 @@ RSpec.describe Spree::V2::Storefront::LineItemSerializer, type: :serializer do
         :completion_steps,
         :delivery_required,
         :allowed_self_check_in,
-        :available_social_contact_platforms
+        :available_social_contact_platforms,
+        :allowed_upload_later,
       )
 
       expect(subject[:data][:attributes][:qr_data]).to eq line_item.qr_data

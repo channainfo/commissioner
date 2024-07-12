@@ -5,11 +5,18 @@ module Spree
 
       include SpreeCmCommissioner::Admin::KycableHelper
 
+      update.fails :flash_error
+      create.fails :flash_error
+
       # @overrided
       def permitted_resource_params
-        result = calculate_kyc_value(params[:product])
+        kyc_result = calculate_kyc_value(params[:product])
 
-        { kyc: result }
+        params.require(:product).permit(:allowed_upload_later).merge(kyc: kyc_result)
+      end
+
+      def flash_error
+        flash[:error] = @object.errors.full_messages.join(', ')
       end
 
       # @overrided

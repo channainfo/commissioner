@@ -37,6 +37,8 @@ module SpreeCmCommissioner
     self.whitelisted_ransackable_associations = %w[id_card event]
     self.whitelisted_ransackable_attributes = %w[first_name last_name gender occupation_id card_type]
 
+    delegate :allowed_upload_later?, to: :line_item
+
     def self.csv_importable_columns
       column_names.map(&:to_sym)
     end

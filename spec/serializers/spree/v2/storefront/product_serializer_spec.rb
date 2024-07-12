@@ -47,6 +47,7 @@ RSpec.describe Spree::V2::Storefront::ProductSerializer, type: :serializer do
         :kyc,
         :product_type,
         :reveal_description,
+        :allowed_upload_later,
       )
     end
 
