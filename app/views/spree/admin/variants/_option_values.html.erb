@@ -1,0 +1,35 @@
+<%= f.fields_for :option_values do |ff| %>
+  <% option_type = ff.object.option_type %>
+
+  <div class="form-group" data-hook="presentation">
+    <%= label :new_variant, option_type.presentation %>
+    <%= link_to_with_icon 'edit.svg', Spree.t(:edit), edit_admin_option_type_url(option_type), no_text: true, target: '_blank' %>
+
+    <% case option_type.attr_type %>
+    <% when "float" %>
+      <%= render partial: 'default_field', locals: { f: ff } %>
+    <% when "integer" %>
+      <%= render partial: 'default_field', locals: { f: ff } %>
+    <% when "string" %>
+      <%= render partial: 'default_field', locals: { f: ff } %>
+    <% when "boolean" %>
+      <%= render partial: 'default_field', locals: { f: ff } %>
+    <% when "date" %>
+      <%= render partial: 'date_field', locals: { f: ff } %>
+    <% when "time" %>
+      <%= render partial: 'time_field', locals: { f: ff } %>
+    <% when "coordinate" %>
+      <%= render partial: 'default_field', locals: { f: ff } %>
+    <% when "state_selection" %>
+      <%= render partial: 'default_field', locals: { f: ff } %>
+    <% when "payment_option" %>
+      <%= render partial: 'default_field', locals: { f: ff } %>
+    <% when "delivery_option" %>
+      <%= render partial: 'default_field', locals: { f: ff } %>
+    <% else %>
+      <%= render partial: 'default_field', locals: { f: ff } %>
+    <% end %>
+
+    <%= ff.hidden_field :option_type_id, value: option_type.id %>
+  </div>
+<% end %>
