@@ -170,4 +170,31 @@ RSpec.describe Spree::Variant, type: :model do
       end
     end
   end
+
+  describe '#discontinued?' do
+    let(:product) { create(:product) }
+    let(:variant) { create(:variant, product: product) }
+
+    context 'when variant is discontinued' do
+      it 'return true' do
+        variant.discontinue!
+
+        expect(variant.discontinued?).to be true
+      end
+    end
+
+    context 'when variant is not discontinued but product is discountinued' do
+      it 'return true' do
+        product.discontinue!
+
+        expect(variant.discontinued?).to be true
+      end
+    end
+
+    context 'when both variant, product are not discontinued' do
+      it 'return false' do
+        expect(variant.discontinued?).to be false
+      end
+    end
+  end
 end
