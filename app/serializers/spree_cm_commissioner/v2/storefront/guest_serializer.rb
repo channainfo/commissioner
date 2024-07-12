@@ -9,6 +9,7 @@ module SpreeCmCommissioner
                    :age, :emergency_contact, :other_organization, :expectation, :upload_later
 
         attribute :allowed_checkout, &:allowed_checkout?
+        attribute :allowed_upload_later, &:allowed_upload_later?
 
         belongs_to :occupation, serializer: Spree::V2::Storefront::TaxonSerializer
         belongs_to :nationality, serializer: Spree::V2::Storefront::TaxonSerializer
