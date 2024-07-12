@@ -148,6 +148,8 @@ en:
     invalid_password: "Invalid Password"
 
   spree:
+    cancel: "Cancel"
+    confirm: "Confirm"
     en: "English"
     date_of_birth: "Date of Birth"
     kind: "Kind"
@@ -243,7 +245,10 @@ en:
       match_all: "All line items must from selected age group"
     billing:
       subscription:
-        quantity_is_missing: "Qauntity cannot be nil or zero."
+        quantity_is_missing: "Quantity cannot be nil or zero."
+      payment_amount_received: "Payment amount received"
+      void_confirmation: "Void Confirmation"
+      capture_confirmation: "Capture Confirmation"
       new_order: "New Order"
       businesses: "Businesses"
       places: "Places"

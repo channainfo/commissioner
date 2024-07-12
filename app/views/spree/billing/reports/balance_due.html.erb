@@ -70,21 +70,27 @@
             </td>
             <td><%= order.display_total.to_html %></td>
             <td class="actions">
-              <% if order.payments.any? %>
-                <% payment = order.payments.last %>
-                <span class="d-flex justify-content-center payment-action-buttons">
-                  <% payment.actions.each do |action| %>
-                    <% if action == 'credit' %>
-                      <%= link_to_with_icon('exit.svg', Spree.t(:refund), new_billing_order_payment_refund_path(order, payment), no_text: true, class: "btn btn-light btn-sm") if can?(:create, Spree::Refund) %>
-                    <% else %>
-                      <%= link_to_with_icon(action + '.svg', Spree.t(action), billing_order_payment_path(order, payment, e: action), method: :put, no_text: true, data: { action: action }, class: "btn btn-light btn-sm") if spree_current_user.permissions.exists?(entry: 'spree/billing/orders', action: 'edit') %>
+              <% if spree_current_user.permissions.exists?(entry: 'spree/billing/orders', action: 'edit') %>
+                <% if order.payments.any? %>
+                  <% payment = order.payments.last %>
+                  <span class="d-flex justify-content-center payment-action-buttons">
+                    <% payment.actions.each do |action| %>
+                      <% if action == 'credit' %>
+                        <%= link_to_with_icon('exit.svg', Spree.t(:refund), new_billing_order_payment_refund_path(order, payment), no_text: true, class: "btn btn-light btn-sm") if can?(:create, Spree::Refund) %>
+                      <% elsif action == 'capture' %>
+                        <%= link_to_with_icon("#{action}.svg", Spree.t(action), nil, no_text: true, data: { toggle: 'modal', target: '#capture-modal' }, class: "btn btn-light btn-sm") %>
+                        <%= render partial: 'pop_up_confirmation', locals: { action: action, order: order, payment: payment } %>
+                      <% elsif action == 'void' %>
+                        <%= link_to_with_icon("#{action}.svg", Spree.t(action), nil, no_text: true, data: { toggle: 'modal', target: '#void-modal' }, class: "btn btn-light btn-sm") %>
+                        <%= render partial: 'pop_up_confirmation', locals: { action: action, order: order, payment: payment } %>
+                      <% end %>
                     <% end %>
-                  <% end %>
-                </span>
+                  </span>
+                <% end %>
               <% end %>
             </td>
             <td class="print-button">
-              <%= link_to Spree.t(:print), spree.print_invoice_date_billing_order_invoice_path(order), method: :put, class: 'btn btn-success mb-3 print-invoice', data: { order_id: order.id, invoice_url: billing_order_invoice_path(order) } %>
+              <%= link_to Spree.t(:print), spree.print_invoice_date_billing_order_invoice_path(order), method: :put, class: 'btn btn-success mb-3 print-invoice', data: { order_id: order.id, invoice_url: billing_order_invoice_path(order)} if spree_current_user.permissions.exists?(entry: 'spree/billing/invoice', action: 'print_invoice_date') %>
             </td>
           </tr>
         <% end %>

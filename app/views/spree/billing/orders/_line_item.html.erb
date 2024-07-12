@@ -42,4 +42,16 @@
       </table>
     </div>
   </div>
+  <% if order.payment_state == 'failed' && order.internal_note.present? %>
+    <div class="card mb-3">
+      <div class="card-header">
+        <h5 class="card-title mb-0 h6">
+          <%= Spree.t(:void_reason) %>
+        </h5>
+      </div>
+      <div class="card-body">
+        <td><%= order.internal_note %></td>
+      </div>
+    </div>
+  <% end %>
 <% end %>
