@@ -34,6 +34,11 @@ module SpreeCmCommissioner
       !digital? && ecommerce?
     end
 
+    # override
+    def discontinued?
+      super || product.discontinued?
+    end
+
     def permanent_stock?
       accommodation?
     end
