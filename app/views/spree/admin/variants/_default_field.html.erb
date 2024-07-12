@@ -1,0 +1,5 @@
+<% option_type = f.object.option_type %>
+
+<%= f.collection_select :name, option_type.option_values, :name, :presentation,
+  { include_blank: true },
+  { class: 'select2-clear', id: "option_value_ids-#{option_type.id}"  } %>

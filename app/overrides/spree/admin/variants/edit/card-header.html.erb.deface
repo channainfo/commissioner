@@ -1,0 +1,10 @@
+<!-- replace ".card-header" -->
+
+<% header = @variant.sku || @variant.options_text %>
+<% if header.present? %>
+  <div class="card-header">
+    <h5 class="mb-0"><%= header %></h5>
+  </div>
+<% else %>
+  <hr class="m-0">
+<% end %>

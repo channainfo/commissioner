@@ -18,6 +18,8 @@ module SpreeCmCommissioner
       base.has_one :video_on_demand, class_name: 'SpreeCmCommissioner::VideoOnDemand', dependent: :destroy
 
       base.scope :subscribable, -> { active.joins(:product).where(product: { subscribable: true, status: :active }) }
+
+      base.accepts_nested_attributes_for :option_values
     end
 
     def option_value_name_for(option_type_name: nil)
