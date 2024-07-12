@@ -4,7 +4,7 @@ module SpreeCmCommissioner
       {
         mini: '187x67>',
         small: '375x135>',
-        large: '750x270>'
+        large: '960x480>'
       }
     end
   end
