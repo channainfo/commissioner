@@ -1,6 +1,10 @@
 module SpreeCmCommissioner
   module OptionTypeDecorator
     def self.prepended(base)
+      def base.filter_separator
+        "fo_"
+      end
+
       base.include SpreeCmCommissioner::ParameterizeName
       base.include SpreeCmCommissioner::OptionTypeAttrType
 
@@ -12,6 +16,14 @@ module SpreeCmCommissioner
 
       base.scope :promoted, -> { where(promoted: true) }
       base.whitelisted_ransackable_attributes = %w[kind]
+    end
+
+
+    def filter_name
+      # name.downcase.to_s
+      # name_en = translations_by_locale[:en].name
+      # "fo_#{name_en.downcase.to_s}"
+      "#{Spree::OptionType.filter_separator}#{id}"
     end
 
     private

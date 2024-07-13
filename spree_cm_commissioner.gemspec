@@ -31,10 +31,15 @@ Gem::Specification.new do |s|
   s.add_dependency 'phonelib'
   s.add_dependency 'google-cloud-recaptcha_enterprise'
   s.add_dependency 'jwt', '>= 2.5.0'
-  s.add_dependency 'elasticsearch', '~> 8.5'
+
   s.add_dependency 'interactor', '~> 3.1'
   s.add_dependency 'rails', '~> 7.0.4'
-  s.add_dependency 'searchkick', '~> 5.1'
+
+  s.add_dependency 'oj'
+  s.add_dependency 'opensearch-ruby'
+  s.add_dependency 'searchkick', '~> 5.3.1'
+  # s.add_dependency 'typhoeus'
+
   s.add_dependency 'twilio-ruby', '~> 5.48.0'
   s.add_dependency 'dry-validation', '~> 1.10'
   s.add_dependency 'byebug'
@@ -49,6 +54,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rqrcode", "~> 2.0"
   s.add_dependency "premailer-rails"
 
+  s.add_development_dependency 'annotate'
   s.add_development_dependency 'pg'
   s.add_development_dependency 'spree_dev_tools'
   s.metadata['rubygems_mfa_required'] = 'true'
