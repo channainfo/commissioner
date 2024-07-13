@@ -1,0 +1,339 @@
+{
+  "Queue": "arn:aws:mediaconvert:ap-southeast-1:636758493619:queues/Default",
+  "UserMetadata": {},
+  "Role": "arn:aws:iam::636758493619:role/MediaConvertRole",
+  "Settings": {
+    "OutputGroups": [
+      {
+        "Name": "DASHGroup",
+        "Outputs": [
+          {
+            "ContainerSettings": {
+              "Container": "MPD",
+              "MpdSettings": {}
+            },
+            "VideoDescription": {
+              "Width": 1280,
+              "Height": 720,
+              "CodecSettings": {
+                "Codec": "H_264",
+                "H264Settings": {
+                  "Bitrate": 5000000,
+                  "RateControlMode": "CBR"
+                }
+              }
+            },
+            "AudioDescriptions": [
+              {
+                "AudioTypeControl": "FOLLOW_INPUT",
+                "AudioSourceName": "Audio Selector 1",
+                "CodecSettings": {
+                  "Codec": "AAC",
+                  "AacSettings": {
+                    "Bitrate": 128000,
+                    "CodingMode": "CODING_MODE_2_0",
+                    "SampleRate": 48000
+                  }
+                }
+              }
+            ],
+            "NameModifier": "-1280_720"
+          },
+          {
+            "ContainerSettings": {
+              "Container": "MPD",
+              "MpdSettings": {}
+            },
+            "VideoDescription": {
+              "Width": 854,
+              "Height": 480,
+              "CodecSettings": {
+                "Codec": "H_264",
+                "H264Settings": {
+                  "FramerateDenominator": 1,
+                  "Bitrate": 1000000,
+                  "RateControlMode": "CBR",
+                  "FramerateNumerator": 24,
+                  "SceneChangeDetect": "ENABLED",
+                  "QualityTuningLevel": "SINGLE_PASS"
+                }
+              }
+            },
+            "AudioDescriptions": [
+              {
+                "AudioTypeControl": "FOLLOW_INPUT",
+                "CodecSettings": {
+                  "Codec": "AAC",
+                  "AacSettings": {
+                    "Bitrate": 128000,
+                    "CodingMode": "CODING_MODE_2_0",
+                    "SampleRate": 48000
+                  }
+                }
+              }
+            ],
+            "NameModifier": "-854_480"
+          },
+          {
+            "ContainerSettings": {
+              "Container": "MPD",
+              "MpdSettings": {}
+            },
+            "VideoDescription": {
+              "Width": 640,
+              "Height": 360,
+              "CodecSettings": {
+                "Codec": "H_264",
+                "H264Settings": {
+                  "FramerateDenominator": 1,
+                  "Bitrate": 500000,
+                  "RateControlMode": "CBR",
+                  "FramerateNumerator": 24,
+                  "SceneChangeDetect": "ENABLED",
+                  "QualityTuningLevel": "SINGLE_PASS"
+                }
+              }
+            },
+            "AudioDescriptions": [
+              {
+                "AudioTypeControl": "FOLLOW_INPUT",
+                "CodecSettings": {
+                  "Codec": "AAC",
+                  "AacSettings": {
+                    "Bitrate": 96000,
+                    "CodingMode": "CODING_MODE_2_0",
+                    "SampleRate": 48000
+                  }
+                }
+              }
+            ],
+            "NameModifier": "-640_360"
+          }
+        ],
+        "OutputGroupSettings": {
+          "Type": "DASH_ISO_GROUP_SETTINGS",
+          "DashIsoGroupSettings": {
+            "SegmentLength": 6,
+            "SegmentLengthControl": "GOP_MULTIPLE",
+            "Destination": "s3://production-cm/media-convert-output/dash/thunder/",
+            "MinBufferTime": 12,
+            "FragmentLength": 3,
+            "SegmentControl": "SEGMENTED_FILES"
+          }
+        }
+      },
+      {
+        "Name": "HLSGroup",
+        "Outputs": [
+          {
+            "ContainerSettings": {
+              "Container": "M3U8",
+              "M3u8Settings": {}
+            },
+            "VideoDescription": {
+              "Width": 1280,
+              "Height": 720,
+              "VideoPreprocessors": {
+                "ImageInserter": {
+                  "InsertableImages": [
+                    {
+                      "Width": 155,
+                      "Height": 148,
+                      "ImageX": 0,
+                      "ImageY": 300,
+                      "Layer": 0,
+                      "ImageInserterInput": "s3://production-cm/media-convert/watermark.png",
+                      "Opacity": 50
+                    }
+                  ]
+                },
+                "TimecodeBurnin": {
+                  "FontSize": 16,
+                  "Position": "TOP_CENTER",
+                  "Prefix": "We burn in the \"BookMe+ Free\""
+                }
+              },
+              "TimecodeInsertion": "DISABLED",
+              "CodecSettings": {
+                "Codec": "H_264",
+                "H264Settings": {
+                  "FramerateDenominator": 1,
+                  "Bitrate": 2500000,
+                  "RateControlMode": "CBR",
+                  "FramerateNumerator": 24,
+                  "SceneChangeDetect": "ENABLED",
+                  "QualityTuningLevel": "SINGLE_PASS"
+                }
+              },
+              "DropFrameTimecode": "DISABLED"
+            },
+            "AudioDescriptions": [
+              {
+                "AudioTypeControl": "FOLLOW_INPUT",
+                "CodecSettings": {
+                  "Codec": "AAC",
+                  "AacSettings": {
+                    "Bitrate": 128000,
+                    "CodingMode": "CODING_MODE_2_0",
+                    "SampleRate": 48000
+                  }
+                }
+              }
+            ],
+            "NameModifier": "-1280_720"
+          },
+          {
+            "ContainerSettings": {
+              "Container": "M3U8",
+              "M3u8Settings": {}
+            },
+            "VideoDescription": {
+              "Width": 854,
+              "Height": 480,
+              "CodecSettings": {
+                "Codec": "H_264",
+                "H264Settings": {
+                  "FramerateDenominator": 1,
+                  "Bitrate": 1000000,
+                  "RateControlMode": "CBR",
+                  "FramerateNumerator": 24,
+                  "SceneChangeDetect": "ENABLED",
+                  "QualityTuningLevel": "SINGLE_PASS"
+                }
+              }
+            },
+            "AudioDescriptions": [
+              {
+                "AudioTypeControl": "FOLLOW_INPUT",
+                "CodecSettings": {
+                  "Codec": "AAC",
+                  "AacSettings": {
+                    "Bitrate": 128000,
+                    "CodingMode": "CODING_MODE_2_0",
+                    "SampleRate": 48000
+                  }
+                }
+              }
+            ],
+            "NameModifier": "-854_480"
+          },
+          {
+            "ContainerSettings": {
+              "Container": "M3U8",
+              "M3u8Settings": {}
+            },
+            "VideoDescription": {
+              "Width": 640,
+              "Height": 360,
+              "CodecSettings": {
+                "Codec": "H_264",
+                "H264Settings": {
+                  "FramerateDenominator": 1,
+                  "Bitrate": 500000,
+                  "RateControlMode": "CBR",
+                  "FramerateNumerator": 24,
+                  "SceneChangeDetect": "ENABLED",
+                  "QualityTuningLevel": "SINGLE_PASS"
+                }
+              }
+            },
+            "AudioDescriptions": [
+              {
+                "AudioTypeControl": "FOLLOW_INPUT",
+                "CodecSettings": {
+                  "Codec": "AAC",
+                  "AacSettings": {
+                    "Bitrate": 96000,
+                    "CodingMode": "CODING_MODE_2_0",
+                    "SampleRate": 48000
+                  }
+                }
+              }
+            ],
+            "NameModifier": "-640_360"
+          }
+        ],
+        "OutputGroupSettings": {
+          "Type": "HLS_GROUP_SETTINGS",
+          "HlsGroupSettings": {
+            "SegmentLength": 6,
+            "SegmentLengthControl": "GOP_MULTIPLE",
+            "Destination": "s3://production-cm/media-convert-output/hls/thunder/",
+            "MinSegmentLength": 3,
+            "SegmentControl": "SEGMENTED_FILES"
+          }
+        }
+      },
+      {
+        "CustomName": "Thumnail",
+        "Name": "File Group",
+        "Outputs": [
+          {
+            "ContainerSettings": {
+              "Container": "RAW"
+            },
+            "VideoDescription": {
+              "Width": 1280,
+              "Height": 720,
+              "CodecSettings": {
+                "Codec": "FRAME_CAPTURE",
+                "FrameCaptureSettings": {
+                  "FramerateNumerator": 1,
+                  "FramerateDenominator": 5,
+                  "MaxCaptures": 500
+                }
+              }
+            },
+            "NameModifier": "thumnail"
+          }
+        ],
+        "OutputGroupSettings": {
+          "Type": "FILE_GROUP_SETTINGS",
+          "FileGroupSettings": {
+            "Destination": "s3://production-cm/media-convert-output/thumnails",
+            "DestinationSettings": {
+              "S3Settings": {
+                "StorageClass": "STANDARD"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "FollowSource": 1,
+    "Inputs": [
+      {
+        "InputClippings": [
+          {
+            "EndTimecode": "00:02:00:00",
+            "StartTimecode": "00:00:00:00"
+          }
+        ],
+        "AudioSelectors": {
+          "Audio Selector 1": {
+            "DefaultSelection": "DEFAULT"
+          }
+        },
+        "VideoSelector": {},
+        "TimecodeSource": "ZEROBASED",
+        "FileInput": "s3://production-cm/media-convert/thunder.mp4"
+      },
+      {
+        "AudioSelectors": {
+          "Audio Selector 1": {
+            "DefaultSelection": "DEFAULT"
+          }
+        },
+        "VideoSelector": {},
+        "TimecodeSource": "ZEROBASED",
+        "FileInput": "s3://production-cm/media-convert/dragon-trailer.mp4"
+      }
+    ]
+  },
+  "BillingTagsSource": "JOB",
+  "AccelerationSettings": {
+    "Mode": "DISABLED"
+  },
+  "StatusUpdateInterval": "SECONDS_60",
+  "Priority": 0
+}

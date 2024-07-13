@@ -1,0 +1,82 @@
+{
+  "TimecodeConfig": {
+    "Source": "ZEROBASED"
+  },
+  "Inputs": [
+    {
+      "InputClippings": [
+        {
+          "EndTimecode": "00:02:00:00",
+          "StartTimecode": "00:00:00:00"
+        },
+        {
+          "EndTimecode": "00:04:00:00",
+          "StartTimecode": "00:02:00:00"
+        },
+        {
+          "EndTimecode": "00:06:00:00",
+          "StartTimecode": "00:04:00:00"
+        }
+      ],
+      "AudioSelectors": {
+        "Audio Selector 1": {
+          "DefaultSelection": "DEFAULT"
+        }
+      },
+      "VideoSelector": {},
+      "TimecodeSource": "ZEROBASED",
+      "FileInput": "s3://production-cm/media-convert/dragon-thunder.mp4"
+    }
+  ],
+  "OutputGroups": [
+    {
+      "CustomName": "VOD",
+      "Name": "File Group",
+      "Outputs": [
+        {
+          "ContainerSettings": {
+            "Container": "MP4",
+            "Mp4Settings": {}
+          },
+          "VideoDescription": {
+            "CodecSettings": {
+              "Codec": "H_264",
+              "H264Settings": {
+                "MaxBitrate": 2048,
+                "RateControlMode": "QVBR",
+                "SceneChangeDetect": "TRANSITION_DETECTION",
+                "QualityTuningLevel": "SINGLE_PASS_HQ"
+              }
+            }
+          },
+          "AudioDescriptions": [
+            {
+              "AudioSourceName": "Audio Selector 1",
+              "CodecSettings": {
+                "Codec": "AAC",
+                "AacSettings": {
+                  "Bitrate": 96000,
+                  "CodingMode": "CODING_MODE_2_0",
+                  "SampleRate": 48000
+                }
+              }
+            }
+          ],
+          "NameModifier": "dragon"
+        }
+      ],
+      "OutputGroupSettings": {
+        "Type": "FILE_GROUP_SETTINGS",
+        "FileGroupSettings": {
+          "Destination": "s3://production-cm/media-convert-output/",
+          "DestinationSettings": {
+            "S3Settings": {
+              "StorageClass": "STANDARD"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "FollowSource": 1
+}
