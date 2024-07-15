@@ -13,6 +13,7 @@ module SpreeCmCommissioner
     validates :start_date, :status, presence: true
 
     with_options unless: :persisted? do
+      validate :quanitiy_is_not_nil?
       validate :variant_in_stock?
       validate :product_active?
       validate :variant_subscribed?
@@ -23,6 +24,12 @@ module SpreeCmCommissioner
 
     def create_order
       SpreeCmCommissioner::SubscribedOrderCreator.call(subscription: self)
+    end
+
+    def quanitiy_is_not_nil?
+      return false unless quantity.nil? || quantity.zero?
+
+      errors.add(:subscription, I18n.t('spree..billing.subscription.quantity_is_missing'))
     end
 
     def variant_in_stock?
