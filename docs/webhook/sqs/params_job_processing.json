@@ -1,0 +1,11 @@
+{
+  "_json": [
+    {
+      "message_type": "media_convert_job_status",
+      "arn": "arn:aws:mediaconvert:ap-southeast-1:636758493619:jobs/1718867702267-tfl96w",
+      "job_id": "1718867702267-tfl96w",
+      "status": "PROGRESSING",
+      "output_groups": []
+    }
+  ]
+}

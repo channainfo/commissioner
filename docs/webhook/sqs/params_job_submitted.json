@@ -1,0 +1,12 @@
+{
+  "_json": [
+    {
+      "id": "1718867702267-tfl96w",
+      "arn": "arn:aws:mediaconvert:ap-southeast-1:636758493619:jobs/1718867702267-tfl96w",
+      "status": "SUBMITTED",
+      "created_at": "2024-06-20 07:15:02 +0000",
+      "message_type": "media_convert_create_job",
+      "input_file": "s3://input-production-cm/medias/%E1%9E%8F%E1%9E%97%E1%9E%96%E1%9E%A2%E1%9E%99%E1%9E%80.mp4"
+    }
+  ]
+}
