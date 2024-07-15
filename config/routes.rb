@@ -77,12 +77,13 @@ Spree::Core::Engine.add_routes do
       resources :user_identity_providers
     end
 
+    resources :s3_presigned_urls, only: %i[create new]
+
     resources :products do
       member do
         get 'edit_kyc', to: 'kyc#edit'
         put 'update_kyc', to: 'kyc#update'
       end
-
       resources :video_on_demands
 
       resources :google_wallets do
