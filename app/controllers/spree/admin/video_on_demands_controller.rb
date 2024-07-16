@@ -2,7 +2,12 @@ module Spree
   module Admin
     class VideoOnDemandsController < Spree::Admin::ResourceController
       before_action :load_parent
-      before_action :load_video_on_demands, only: %i[index new edit]
+      before_action :load_video_on_demands, only: %i[index new edit create]
+
+      def new
+        uuid = SecureRandom.uuid.gsub('-', '')
+        @object = SpreeCmCommissioner::VideoOnDemand.new(uuid: uuid)
+      end
 
       def edit
         @video_on_demand = SpreeCmCommissioner::VideoOnDemand.find(params[:id])
@@ -11,7 +16,6 @@ module Spree
       def create
         video_on_demand_params = params.require(:spree_cm_commissioner_video_on_demand)
         result = SpreeCmCommissioner::VideoOnDemandCreator.call(video_on_demand_params: video_on_demand_params)
-
         if result.success?
           redirect_to collection_url
         else
@@ -23,7 +27,6 @@ module Spree
       def update
         @video_on_demand = SpreeCmCommissioner::VideoOnDemand.find(params[:id])
         result = SpreeCmCommissioner::VideoOnDemandUpdater.call(video_on_demand: @video_on_demand, params: params)
-
         if result.success?
           redirect_to collection_url
         else

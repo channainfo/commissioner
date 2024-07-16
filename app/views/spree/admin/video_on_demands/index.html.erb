@@ -15,16 +15,19 @@
     <table class="table table-striped">
       <thead class="text-muted">
         <tr>
+          <th class="text-center"><%= Spree.t(:uuid) %></th>
           <th class="text-center"><%= Spree.t(:title) %></th>
           <th class="text-center"><%= Spree.t(:variant) %></th>
           <th class="text-center"><%= Spree.t(:thumbnail) %></th>
-          <th class="text-center"><%= Spree.t(:Video) %></th>
+          <th class="text-center"><%= Spree.t(:video) %></th>
+          <th class="text-center"><%= Spree.t(:created_at) %></th>
           <th class="action"></th>
         </tr>
       </thead>
       <tbody>
         <% @video_on_demands.each do |video_on_demand| %>
           <tr id="<%= dom_id(video_on_demand) %>">
+            <td class="text-center"><%= video_on_demand.uuid %></td>
             <td class="text-center"><%= video_on_demand.title %></td>
             <td class="text-center"><%= video_on_demand.variant.options_text %></td>
             <td class="image text-center">
@@ -38,8 +41,10 @@
                   <source src="<%= main_app.rails_blob_url(video_on_demand.file) %>" type="<%= video_on_demand.file.content_type %>" if video_on_demand&.file&.attached? %>
                   Your browser does not support the video tag.
                 </video>
+                <p><%=  %></p>
               <% end %>
             </td>
+            <td class="text-center"><%= video_on_demand.created_at.strftime("%B %d %Y") %></td>
             <td class="actions">
               <span class="d-flex justify-content-end">
                 <%= link_to_edit video_on_demand, url: edit_admin_product_video_on_demand_path(@product, video_on_demand), no_text: true if can?(:edit, :admin, video_on_demand) %>

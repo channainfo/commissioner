@@ -8,12 +8,18 @@ module SpreeCmCommissioner
       protocol_result = instance.calculate_protocol_value(video_on_demand_params)
       frame_rate = SpreeCmCommissioner::VideoOnDemand.frame_rates[video_on_demand_params[:frame_rate]]
 
-      uuid = SecureRandom.uuid.gsub('-', '')
+      uuid = video_on_demand_params[:uuid]
       new_file_name = generate_new_file_name(video_on_demand_params[:file], quality_result, protocol_result, frame_rate, uuid)
       video_on_demand_params[:file].original_filename = new_file_name
       permitted_params = permit_params(video_on_demand_params, quality_result, protocol_result, frame_rate, uuid)
 
-      create_video_on_demand(permitted_params)
+      video_on_demand = SpreeCmCommissioner::VideoOnDemand.new(permitted_params)
+
+      if video_on_demand.save
+        context.video_on_demand = video_on_demand
+      else
+        context.fail!(error: 'Failed to create VideoOnDemand')
+      end
     end
 
     private
@@ -30,16 +36,6 @@ module SpreeCmCommissioner
         video_protocol: protocol_result,
         frame_rate: frame_rate
       ).permit(:title, :description, :uuid, :file, :thumbnail, :variant_id, :video_quality, :video_protocol, :frame_rate)
-    end
-
-    def create_video_on_demand(permitted_params)
-      video_on_demand = SpreeCmCommissioner::VideoOnDemand.new(permitted_params)
-
-      if video_on_demand.save
-        context.video_on_demand = video_on_demand
-      else
-        context.fail!(error: 'Failed to create VideoOnDemand')
-      end
     end
   end
 end
