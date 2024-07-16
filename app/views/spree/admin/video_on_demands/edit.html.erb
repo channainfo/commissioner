@@ -8,9 +8,8 @@
         <div class="col-12 col-md-6">
           <div class="form-group">
             <%= f.label :thumbnail, Spree.t(:thumbnail) %>
-            <div class="small-img">
-              <%= image_tag (main_app.rails_blob_url(@video_on_demand.thumbnail)), height: "200px" if @video_on_demand&.thumbnail %>
-            </div>
+            <%= image_tag main_app.cdn_image_url(@video_on_demand.thumbnail.url(:medium)) if @video_on_demand.thumbnail %>
+
           </div>
         </div>
         <div class="col-12 col-md-6">

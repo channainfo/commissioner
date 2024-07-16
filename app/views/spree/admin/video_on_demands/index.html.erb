@@ -8,7 +8,7 @@
 <% if !@video_on_demands.any? %>
   <div class="text-center no-objects-found m-5">
     <%= Spree.t(:no_resource_found, resource: plural_resource_name(SpreeCmCommissioner::VideoOnDemand)) %>,
-    <%= link_to(Spree.t(:add_one), admin_product_video_on_demands_url(@product)) if can? :create, SpreeCmCommissioner::VideoOnDemand %>!
+    <%= link_to(Spree.t(:add_one), new_admin_product_video_on_demand_url(@product)) if can? :create, SpreeCmCommissioner::VideoOnDemand %>!
   </div>
 <% else %>
   <div class="table-responsive border rounded bg-white">
@@ -28,9 +28,7 @@
             <td class="text-center"><%= video_on_demand.title %></td>
             <td class="text-center"><%= video_on_demand.variant.options_text %></td>
             <td class="image text-center">
-              <div class="admin-product-image-container small-img">
-                <%= image_tag (main_app.rails_blob_url(video_on_demand.thumbnail)) if video_on_demand&.thumbnail&.attached? %>
-              </div>
+              <%= image_tag main_app.cdn_image_url(video_on_demand.thumbnail.url(:mini)) if video_on_demand.thumbnail %>
             </td>
             <td class="image text-center">
               <% if video_on_demand&.file.attached? %>

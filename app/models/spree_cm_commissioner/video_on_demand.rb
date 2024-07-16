@@ -8,7 +8,9 @@ module SpreeCmCommissioner
     belongs_to :variant, class_name: 'Spree::Variant'
 
     has_one_attached :file
-    has_one_attached :thumbnail
+    has_one :thumbnail, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VideoOnDemandThumbnail'
+
+    validates_associated :thumbnail
 
     validates :video_quality, :video_protocol, :frame_rate, presence: true
     validates :file, presence: true, if: :new_record?
