@@ -27,7 +27,7 @@
                 <br>
                 <%= "(#{item.options_text})" if item.options_text.present? %>
               </td>
-              <td class="text-center"><%= item.from_date.strftime("%B %Y") %></td>
+              <td class="text-center"><%= item.month %></td>
               <td class="line-item-price text-center"><%= item.single_money.to_html %></td>
               <td class="line-item-qty-show text-center" style="width:120px;">
                 <%= item.quantity %>

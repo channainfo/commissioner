@@ -167,6 +167,10 @@ module SpreeCmCommissioner
       SpreeCmCommissioner::Stock::LineItemAvailabilityChecker.new(self).can_supply?(quantity)
     end
 
+    def month
+      from_date.day < 15 ? from_date.strftime('%B %Y') : from_date.next_month.strftime('%B %Y')
+    end
+
     private
 
     def ensure_not_exceed_max_quantity_per_order
