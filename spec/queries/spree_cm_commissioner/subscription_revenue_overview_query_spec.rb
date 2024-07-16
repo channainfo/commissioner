@@ -24,16 +24,15 @@ RSpec.describe SpreeCmCommissioner::SubscriptionRevenueOverviewQuery do
       SpreeCmCommissioner::SubscriptionsOrderCreator.call!(customer: customer2, today: today)
       SpreeCmCommissioner::SubscriptionsOrderCreator.call!(customer: customer3, today: today)
     end
-    it 'only return totals in May' do
+    it 'only return totals in January' do
       SpreeCmCommissioner::Subscription.all.each do |subscription|
         subscription.orders.each {|o| o.payments.last.capture! }
       end
 
       # # only for may
-      query = described_class.new(from_date: '2024-05-15', to_date: '2024-07-14', vendor_id: vendor.id, spree_current_user: spree_current_user)
+      query = described_class.new(from_date: '2024-06-15', to_date: '2024-07-14', vendor_id: vendor.id, spree_current_user: spree_current_user)
       result = query.reports
       puts "Debug: Result - #{result}"
-
       expect(query.reports).to match_array [
         {:orders_count => 3, :state => "paid", :total => 13.0 + 25.0+ 32.0, :payment_total => 13.0 + 25.0+ 32.0}
       ]
