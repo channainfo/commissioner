@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/MethodLength
 module SpreeCmCommissioner
   module UserDecorator
     def self.prepended(base)
@@ -19,6 +20,7 @@ module SpreeCmCommissioner
       base.has_many :events, through: :user_events, class_name: 'Spree::Taxon', source: 'taxon'
 
       base.has_many :wished_items, class_name: 'Spree::WishedItem', through: :wishlists
+      base.has_many :promotions, through: :promotion_rules, class_name: 'Spree::Promotion'
 
       base.has_one :profile, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::UserProfile'
       base.has_one :customer, class_name: 'SpreeCmCommissioner::Customer'
@@ -111,3 +113,4 @@ module SpreeCmCommissioner
 end
 
 Spree::User.prepend(SpreeCmCommissioner::UserDecorator) unless Spree::User.included_modules.include?(SpreeCmCommissioner::UserDecorator)
+# rubocop:enable Metrics/MethodLength
