@@ -2,10 +2,13 @@
   @vendor = @invoice.order.line_items.first.vendor
   @address =  @vendor.stock_locations.first&.address1
   @location_code = @vendor.stock_locations.first&.reference
-  @title =  @vendor.name
+  @title = 'VET WASTE KOH RONG CO., LTD.'
+  @title_translation = 'ក្រុមហ៊ុនវិរៈប៊ុនថាំ ប្រមូលសំរាមក្រុងកោះរ៉ុង'
   @contact =  @vendor.contact_us
   @email =  @vendor.notification_email
   @note =  @vendor.note
+  @invoice_title = 'Solid Waste Collection Service Invoice'
+  @invoice_title_translation = 'វិក័្កយបត្រថ្លៃសេវាដឹកជញ្ជូនសំរាម'
 
   @quantity = @subscription.quantity
   @product = @invoice.order.line_items.first.variant.sku
@@ -26,7 +29,7 @@
 
   @invoice_number = @invoice.invoice_number
   @customer_number = @customer.customer_number
-  @customer_address = @order.billing_address&.address1
+  @customer_address = @customer.billing_address&.address1
   if @current_vendor.payment_qrcode.present?
     @qrcode = payment_qrcode_image(@current_vendor.payment_qrcode.attachment)
     @account_name = @current_vendor.account_name
@@ -43,20 +46,22 @@
     <div class="print-area">
       <div class="header-content">
         <div class="d-flex justify-content-center">
-          <strong>
-            <div class="d-flex flex-column moul ">
-                <div class="ml-4">ព្រះរាជាណាចក្រកម្ពុជា</div>
-                <div>ជាតិ​​ សាសនា ព្រះមហាក្សត្រ</div>
-                <div class="tacteng font-weight-light">3</div>
-            </div>
-          </strong>
+          <div class="text-center moul">
+              <h4 class="ml-4" style="font-size: 125%;">ព្រះរាជាណាចក្រកម្ពុជា</h4>
+              <h4 class="ml-4" style="font-size: 125%;">ជាតិ​​ សាសនា ព្រះមហាក្សត្រ</h4>
+          </div>
         </div>
         <div class="d-flex justify-content-between align-items-center">
-          <div class="vendor-logo">
+          <div class="vendor-logo col-2">
             <%= render partial: 'spree/billing/shared/vendor_logo', locals: { size: :small } %>
           </div>
-          <div class="text-center flex-grow-1">
-            <h4 class="pt-0"> <%= @title %></h4>
+          <div class="text-center flex-grow-1 col-8">
+            <h5 class="pt-0 moul"><%= @title_translation %></h5>
+            <h5 class="pt-0 serif"><%= @title %></h5>
+            <h5 class="pt-0 moul"><%= @invoice_title_translation %></h5>
+            <h5 class="pt-0 serif"><%= @invoice_title %></h5>
+          </div>
+          <div class="col-2">
           </div>
         </div>
 
@@ -189,6 +194,9 @@
                   <%= @total_price %>
                 </p>
           </div>
+          <div class="d-flex justify-content-between align-items-center pt-3 px-2 border border-dark font-weight-bold text-black">
+                <p> អត្រាប្ដូរប្រាក់ / Exchange Rate 1$ = 4100៛</p>
+          </div>
         </div>
           <br>
           <div class="d-flex align-items-start">
@@ -207,20 +215,22 @@
 
       <div class="footer-content">
         <div class="d-flex justify-content-between mt-4">
-          <div>
+          <div class="text=left">
             <p>អ្នកទទួលប្រាក់​​ / Received By : ............................. </p>
             <p>កាលបរិច្ចេទ / Date : ............................. </p>
           </div>
-          <div>
+          <div class="text-right">
             <p>ទឹកប្រាក់​បានបង់ / Paid Amount : ............................. </p>
             <p>កាលបរិច្ចេទ / Date : .............................  </p>
           </div>
         </div>
+        <br>
+        <hr>
         <div class="d-flex justify-content-center mt-4">
-          <div class="list-unstyled">
-            <li> អាសយដ្ធាន / Address : <%= @address %> </li>
-            <li>ទំនាក់ទំនង / Contact : <%= @contact %></li>
-            <li>អុីមែល / Email : <%= @email %></li>
+          <div class="list-unstyled text-center">
+            <li> អាសយដ្ធាន / Address : ផ្លូវឯករាជ្យ ក្រុមទី៣ សង្កាត់២ ក្រុង ព្រះសីហនុ ខេត្តក្រោះសីហនុ  </li>
+            <li> St. Ek Reach, Krom Ti 3, Sangkat 2, Preah Sihanouk City, Sihanouk Ville. </li>
+            <li>ទំនាក់ទំនង / Contact : 099 766 593 / Telegram: 099 766 593 </li>
           </div>
         </div>
       </div>

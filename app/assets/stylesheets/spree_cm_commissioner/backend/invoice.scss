@@ -17,6 +17,11 @@
   margin: -15px 0 0 60px;
 }
 
+.serif {
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+}
+
 .invoice-content{
   width: 1200px;
   font-size: 13px;
@@ -45,5 +50,12 @@
 
   .header-content {
     margin-top: 40px;
+  }
+
+  .footer-content {
+    position: fixed;
+    bottom: 0;
+    width: 92%;
+    padding-bottom: 30px;
   }
 }
