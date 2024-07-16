@@ -168,7 +168,7 @@ module SpreeCmCommissioner
     end
 
     def month
-      from_date.day < 15 ? from_date.strftime('%B %Y') : from_date.next_month.strftime('%B %Y')
+      to_date.strftime('%B %Y')
     end
 
     private
