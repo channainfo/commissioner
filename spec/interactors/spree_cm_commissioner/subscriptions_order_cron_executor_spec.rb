@@ -25,9 +25,9 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCronExecutor do
     today = Time.zone.today
     today.day < 15 ?  three_month_ago = (today - 3.month).change(day: 14) : three_month_ago = (today - 3.month).change(day: 15)
     today.day < 15 ?  one_month_ago = (today - 1.month).change(day: 14) : one_month_ago = (today - 1.month).change(day: 15)
-    SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: three_month_ago, customer: customer1)
-    SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: one_month_ago, customer: customer2)
-    SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: today, customer: customer3)
+    SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: three_month_ago, customer: customer1, quantity: 1)
+    SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: one_month_ago, customer: customer2, quantity: 1)
+    SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: today, customer: customer3, quantity: 1)
 
     customer1.update(last_invoice_date: three_month_ago)
     customer2.update(last_invoice_date: one_month_ago)
