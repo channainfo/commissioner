@@ -26,6 +26,11 @@ module Spree
       def balance_due
         @search = orders_scope.ransack(SpreeCmCommissioner::OrderParamsChecker.process_balance_due_params(params))
         @orders = @search.result.includes(:line_items).where(payment_state: 'balance_due').page(page).per(per_page)
+
+        respond_to do |format|
+          format.html
+          format.js
+        end
       end
 
       # GET /billing/reports/overdue
