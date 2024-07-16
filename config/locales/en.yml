@@ -242,6 +242,8 @@ en:
       match_any: "Some line items must from selected age group"
       match_all: "All line items must from selected age group"
     billing:
+      subscription:
+        quantity_is_missing: "Qauntity cannot be nil or zero."
       new_order: "New Order"
       businesses: "Businesses"
       places: "Places"

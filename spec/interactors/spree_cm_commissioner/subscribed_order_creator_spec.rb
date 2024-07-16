@@ -60,7 +60,7 @@ RSpec.describe SpreeCmCommissioner::SubscribedOrderCreator do
     end
 
     it 'created a default payment' do
-      subscription = create(:cm_subscription, customer: customer)
+      subscription = create(:cm_subscription, customer: customer, quantity: 1)
 
       context = described_class.call(subscription: subscription)
 
@@ -70,12 +70,12 @@ RSpec.describe SpreeCmCommissioner::SubscribedOrderCreator do
     end
 
     it 'update invoice everytime a new service is subscribed' do
-      subscription1 = create(:cm_subscription, customer: customer, start_date: '2023-01-02'.to_date)
+      subscription1 = create(:cm_subscription, customer: customer, start_date: '2023-01-02'.to_date, quantity: 1)
       context1 = described_class.call(subscription: subscription1)
 
       expect(context1.order.line_items.size).to eq 1
 
-      subscription2 = create(:cm_subscription, customer: customer)
+      subscription2 = create(:cm_subscription, customer: customer, quantity: 1)
       context2 = described_class.call(subscription: subscription2)
 
       expect(context1.order.line_items.size).to eq 2
@@ -84,7 +84,7 @@ RSpec.describe SpreeCmCommissioner::SubscribedOrderCreator do
     end
 
     it 'create an order with the correct due date with pre-paid option' do
-      subscription = create(:cm_subscription, customer: customer, start_date: '2023-01-02'.to_date, price: 13.0, month: 1)
+      subscription = create(:cm_subscription, customer: customer, start_date: '2023-01-02'.to_date, price: 13.0, month: 1, quantity: 1)
 
       context = described_class.call(subscription: subscription)
 
@@ -92,7 +92,7 @@ RSpec.describe SpreeCmCommissioner::SubscribedOrderCreator do
     end
 
     it 'create an order with the correct due date with post-paid option' do
-      subscription = create(:cm_subscription, customer: customer, start_date: '2023-01-02'.to_date, price: 13.0, month: 1, payment_option:'post-paid')
+      subscription = create(:cm_subscription, customer: customer, start_date: '2023-01-02'.to_date, price: 13.0, month: 1, payment_option:'post-paid', quantity: 1)
 
       context = described_class.call(subscription: subscription)
 

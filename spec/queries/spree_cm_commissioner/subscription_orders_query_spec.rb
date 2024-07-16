@@ -9,7 +9,7 @@ RSpec.describe SpreeCmCommissioner::SubscriptionOrdersQuery do
     spree_current_user.spree_roles << admin_role
   end
 
-  let(:subscription_jan2) { create(:cm_subscription, start_date: '2023-01-02'.to_date, customer: customer, price: 13.0, month: 1, due_date: 5) }
+  let(:subscription_jan2) { create(:cm_subscription, start_date: '2023-01-02'.to_date, customer: customer, price: 13.0, month: 1, due_date: 5, quantity: 1) }
   describe '#overdues' do
     it 'return 0 overdues when subscription not yet exceed due date' do
       subscription_jan2.orders.each {|o| o.payments.each{|p| p.void! }}

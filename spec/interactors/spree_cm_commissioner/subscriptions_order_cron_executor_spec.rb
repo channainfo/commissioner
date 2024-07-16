@@ -19,9 +19,9 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCronExecutor do
   let(:customer2) { create(:cm_customer, vendor: vendor, phone_number: "0972200288") }
   let(:customer3) { create(:cm_customer, vendor: vendor, phone_number: "0982200288") }
 
-  let!(:subscription1) { SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: 4.months.ago, customer: customer1) }
-  let!(:subscription2) { SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: 1.months.ago, customer: customer2) }
-  let!(:subscription3) { SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: Time.zone.now, customer: customer3) }
+  let!(:subscription1) { SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: 4.months.ago, customer: customer1, quantity: 1) }
+  let!(:subscription2) { SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: 1.months.ago, customer: customer2, quantity: 1) }
+  let!(:subscription3) { SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: Time.zone.now, customer: customer3, quantity: 1) }
 
   before do
     customer1.update(last_invoice_date: 4.months.ago)
