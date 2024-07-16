@@ -40,7 +40,10 @@ module SpreeCmCommissioner
     delegate :allowed_upload_later?, to: :line_item
 
     def self.csv_importable_columns
-      column_names.map(&:to_sym)
+      %i[
+        first_name last_name age dob gender other_occupation other_organization
+        entry_type nationality_id other_organization expectation emergency_contact
+      ]
     end
 
     # no validation for each field as we allow user to save data to model partially.
