@@ -2,8 +2,10 @@ module SpreeCmCommissioner
   module PromotionDecorator
     def self.prepended(base)
       base.attr_accessor :auto_apply
-
       base.before_validation :setup_auto_apply_promotion, if: :auto_apply?
+
+      base.has_one :store_promotion, class_name: 'Spree::StorePromotion'
+      base.has_one :default_store, through: :store_promotion, source: :store, class_name: 'Spree::Store'
     end
 
     def setup_auto_apply_promotion
