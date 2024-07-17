@@ -14,7 +14,7 @@ module Spree
       otp_enabled
       otp_email
       otp_phone_number
-      encrypted_confirm_pin_code
+      confirm_pin_code_enabled
     ]
     @@taxon_attributes += %i[
       category_icon
