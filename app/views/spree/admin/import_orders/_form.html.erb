@@ -5,13 +5,13 @@
         <div class="form-group">
           <%= f.hidden_field :orders_json %>
           <%= f.field_container :name do %>
-            <%= f.label :name %>
-            <%= f.text_field :name, class: 'form-control' %>
+            <%= f.label :name %> <span class="required text-danger">*</span>
+            <%= f.text_field :name, required: true, class: 'form-control' %>
           <% end %>
 
           <%= f.field_container :file do %>
-            <%= f.label :file %>
-            <%= file_field_tag :file, id: 'csv-file' %>
+            <%= f.label :file %> <span class="required text-danger">*</span>
+            <%= file_field_tag :file, require: true, id: 'csv-file' %>
           <% end %>
         </div>
       </div>

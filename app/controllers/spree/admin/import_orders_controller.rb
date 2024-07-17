@@ -12,7 +12,13 @@ module Spree
         name = params[:spree_cm_commissioner_imports_import_order][:name]
 
         orders_json = params[:spree_cm_commissioner_imports_import_order][:orders_json]
-        orders = JSON.parse(orders_json)
+
+        begin
+          orders = JSON.parse(orders_json)
+        rescue JSON::ParserError
+          flash[:error] = 'Invalid JSON format for orders' # rubocop:disable Rails/I18nLocaleTexts
+          redirect_to admin_import_orders_url and return
+        end
 
         import_order = SpreeCmCommissioner::Imports::ImportOrder.new(name: name)
 
