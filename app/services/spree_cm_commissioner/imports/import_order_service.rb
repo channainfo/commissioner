@@ -29,24 +29,35 @@ module SpreeCmCommissioner
       end
 
       def create_order(order)
-        order = order.deep_symbolize_keys
+        order_json = order.deep_symbolize_keys
 
         params = {
-          channel: order[:order_channel],
-          email: order[:order_email],
-          phone_number: order[:order_phone_number],
+          channel: order_json[:order_channel],
+          email: order_json[:order_email],
+          phone_number: order_json[:order_phone_number],
           line_items_attributes: [
             {
               quantity: 1,
-              variant_id: order[:variant_id]&.to_i,
+              sku: order_json[:variant_sku],
               guests_attributes: [
-                order.slice(*SpreeCmCommissioner::Guest.csv_importable_columns)
+                order_json.slice(*SpreeCmCommissioner::Guest.csv_importable_columns)
               ]
             }
           ]
         }
 
-        Spree::Core::Importer::Order.import(import_by, params)
+        order = Spree::Core::Importer::Order.import(import_by, params)
+
+        update_order_state(order)
+      end
+
+      def update_order_state(order)
+        order.update!(
+          completed_at: Time.zone.now,
+          state: 'complete',
+          payment_total: order.total,
+          payment_state: 'paid'
+        )
       end
 
       def import_order

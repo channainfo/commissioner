@@ -3,8 +3,8 @@ module SpreeCmCommissioner
     def call
       filename = 'import_order_csv_template.csv'
       filepath = Rails.root.join('tmp', filename)
-      require_headers = %w[order_channel order_email order_phone_number variant_id]
-      guest_attributes = SpreeCmCommissioner::Guest.csv_importable_columns - [:id]
+      require_headers = %w[order_channel order_email order_phone_number variant_sku]
+      guest_attributes = SpreeCmCommissioner::Guest.csv_importable_columns
 
       headers = require_headers + guest_attributes
 
