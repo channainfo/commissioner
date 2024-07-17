@@ -1,0 +1,10 @@
+<!-- insert_after "[data-hook='admin_product_form_promotionable']" -->
+
+<div>
+  <%= f.field_container :allow_anonymous_booking do %>
+    <%= f.label :allow_anonymous_booking do %>
+      <%= f.check_box :allow_anonymous_booking %>
+      <%= Spree.t(:allow_anonymous_booking) %>
+    <% end %>
+  <% end %>
+</div>
