@@ -94,6 +94,16 @@ Spree::Core::Engine.add_routes do
           delete :remove_hero_image
         end
       end
+
+      resources :hotel_google_wallets do
+        member do
+          post  :create_google_wallet_class
+          patch :update_google_wallet_class
+          delete :remove_logo
+          delete :remove_hero_image
+        end
+      end
+
       resources :master_variant, only: %i[index update] do
         collection do
           patch :update
