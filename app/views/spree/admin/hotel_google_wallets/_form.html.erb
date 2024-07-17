@@ -18,7 +18,7 @@
       </div>
     </div>
 
-     <% unless  @object.new_record? %>
+     <% unless @object.new_record? %>
       <div class="col-12 col-md-6">
         <div class="card mb-3">
           <div class="card-header">
@@ -33,7 +33,7 @@
                     field: :logo,
                     label: 'Logo',
                     asset: @object.logo,
-                    remove_url: remove_logo_admin_product_google_wallet_url(@product.slug, @object),
+                    remove_url: remove_logo_admin_product_hotel_google_wallet_path,
                     form: f,
                     classes: ['col-md-5 ml-3']
                   %>
@@ -42,7 +42,7 @@
                     field: :hero_image,
                     label: 'Hero Image',
                     asset: @object.hero_image,
-                    remove_url: remove_hero_image_admin_product_google_wallet_url( @product.slug, @object),
+                    remove_url: remove_hero_image_admin_product_hotel_google_wallet_path,
                     form:f,
                     classes: ['col-md-5 ml-3']
 

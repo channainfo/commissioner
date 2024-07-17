@@ -1,6 +1,8 @@
 module SpreeCmCommissioner
   module GoogleWallets
     class BaseEventTicketClass
+      include Rails.application.routes.url_helpers
+
       GOOGLE_API_ENDPOINT = 'https://walletobjects.googleapis.com/walletobjects/v1/eventTicketClass'.freeze
       GOOGLE_OAUTH_SCOPE = 'https://www.googleapis.com/auth/wallet_object.issuer'.freeze
 
@@ -46,11 +48,11 @@ module SpreeCmCommissioner
       end
 
       def logo
-        (vendor_logo_url.presence || @google_wallet_class.logo.original_url)
+        (vendor_logo_url.presence || rails_blob_url(@google_wallet_class.logo))
       end
 
       def hero_image
-        @google_wallet_class.hero_image.original_url
+        rails_blob_url(@google_wallet_class.hero_image)
       end
 
       def start_date
