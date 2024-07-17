@@ -355,6 +355,8 @@ Spree::Core::Engine.add_routes do
         resources :pin_code_generators, only: [:create]
         resource :pin_code_checkers, only: [:update]
 
+        resource :confirm_pin_code_checkers, only: [:update]
+
         resources :order_products_taxons, only: [:index]
 
         resource :change_passwords, only: [:update]
