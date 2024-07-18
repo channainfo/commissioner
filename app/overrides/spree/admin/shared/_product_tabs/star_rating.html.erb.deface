@@ -1,0 +1,8 @@
+<!-- insert_after "erb[silent]:contains('Spree::Digital')" -->
+
+<%= content_tag :li, class: 'nav-item' do %>
+  <%= link_to_with_icon 'star.svg',
+    Spree.t(:star_rating),
+    admin_product_taxon_star_ratings_url(@product, kind: :sub_rating),
+    class: "nav-link #{'active' if current == :star_rating}" %>
+<% end  %>

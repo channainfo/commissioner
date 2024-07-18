@@ -80,6 +80,7 @@ Spree::Core::Engine.add_routes do
     resources :s3_presigned_urls, only: %i[create new]
 
     resources :products do
+      resources :taxon_star_ratings, only: %i[index create]
       member do
         get 'edit_kyc', to: 'kyc#edit'
         put 'update_kyc', to: 'kyc#update'
@@ -368,6 +369,7 @@ Spree::Core::Engine.add_routes do
         resource :confirm_pin_code_checkers, only: [:update]
 
         resources :order_products_taxons, only: [:index]
+        resources :vendor_review_taxons, only: %i[index]
 
         resource :change_passwords, only: [:update]
         resource :account_deletions, only: %i[destroy]
@@ -392,6 +394,12 @@ Spree::Core::Engine.add_routes do
         end
         resources :pending_line_items, only: %i[show index]
         resources :self_check_in, only: %i[index create]
+        resources :reviews, only: %i[index show]
+        resources :feedback_reviews, only: %i[create]
+        resources :user_reviews do
+          resources :review_images, only: [:create]
+        end
+        resources :taxon_star_ratings
       end
 
       namespace :operator do

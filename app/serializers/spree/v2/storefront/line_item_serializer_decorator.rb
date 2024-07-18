@@ -23,6 +23,7 @@ module Spree
 
           # completion_steps updates frequently
           base.cache_options store: nil
+          base.has_many :taxon_star_ratings, serializer: SpreeCmCommissioner::V2::Storefront::TaxonStarRatingSerializer
         end
       end
     end

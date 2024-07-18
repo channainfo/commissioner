@@ -1,0 +1,48 @@
+
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :star_rating } %>
+
+<%= form_tag(admin_product_taxon_star_ratings_path(kind: params[:kind]), method: :post) do %>
+  <% unless @review_type_taxons.empty? %>
+    <small class="form-text text-muted">
+      <%= raw I18n.t('star_rating.note') %>
+    </small>
+    <br>
+    <%= render partial: 'spree/admin/shared/taxon_star_rating_tabs', locals: { current: params[:kind] } %>
+
+    <% 5.downto(1) do |star| %>
+      <div class="card my-4">
+        <div class="card-body">
+          <h5>
+            <% star.times do  %><span class="text-warning">&#9733;</span> <% end %>
+            <% (5 - star).times do  %><span class="">&#9734;</span> <% end %></span>
+          </h5>
+          <div class="row mt-4">
+            <% @review_type_taxons.each_slice(3) do |taxons| %>
+              <% taxons.each do |taxon| %>
+                <div class="col-md-4">
+                  <div class="field my-1">
+                    <% checked = @group_taxon_star_ratings[star]&.pluck(:taxon_id)&.include?(taxon.id) %>
+                    <%= check_box_tag "taxon_star_ratings[]", "#{taxon.id},#{star}", checked %>
+                    <%= label_tag "taxon_#{taxon.id}", taxon.name %>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    <div class='form-actions' data-hook='buttons'>
+      <%= button Spree.t('actions.update'), 'save.svg', 'submit', { class: 'btn-success', data: { disable_with: "#{ Spree.t(:saving) }..." }} %>
+    </div>
+  <% else %>
+    <small class="form-text text-muted">
+      <%= raw I18n.t('star_rating.empty_info') %>
+    </small>
+  <% end %>
+<% end %>
+
+
+
+
+
