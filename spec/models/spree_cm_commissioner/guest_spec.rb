@@ -183,4 +183,47 @@ RSpec.describe SpreeCmCommissioner::Guest, type: :model do
       end
     end
   end
+
+  describe '#generate_bib_number' do
+    let(:taxonomy) { create(:taxonomy, kind: :event) }
+    let(:event1) { create(:taxon, name: 'BunPhum', taxonomy: taxonomy) }
+    let(:event2) { create(:taxon, name: 'BunPhum 2', taxonomy: taxonomy) }
+
+    let(:product) { create(:cm_bib_number_product, product_type: :ecommerce, taxons: [event1, event2]) }
+
+    let(:order) { create(:order, completed_at: Date.current) }
+
+    let(:line_item1) { create(:line_item, order: order, variant: product.variants.first) }
+    let(:line_item2) { create(:line_item, order: order, variant: product.variants.last) }
+
+    context "when guest has the same prefix" do
+      let!(:guest1) { create(:guest, line_item: line_item1) }
+      let!(:guest2) { create(:guest, line_item: line_item1) }
+
+      it 'generate bib_number for guest' do
+        guest1.generate_bib_number
+        guest2.generate_bib_number
+
+        expect(guest1.bib_number).to eq '001'
+        expect(guest2.bib_number).to eq '002'
+        expect(guest1.full_bib_number).to eq '3KM001'
+        expect(guest2.full_bib_number).to eq '3KM002'
+      end
+    end
+
+    context "when guest has different prefix" do
+      let!(:guest1) { create(:guest, line_item: line_item1) }
+      let!(:guest2) { create(:guest, line_item: line_item2) }
+
+      it 'generate bib_number for guest' do
+        guest1.generate_bib_number
+        guest2.generate_bib_number
+
+        expect(guest1.bib_number).to eq '001'
+        expect(guest2.bib_number).to eq '001'
+        expect(guest1.full_bib_number).to eq '3KM001'
+        expect(guest2.full_bib_number).to eq '5KM001'
+      end
+    end
+  end
 end

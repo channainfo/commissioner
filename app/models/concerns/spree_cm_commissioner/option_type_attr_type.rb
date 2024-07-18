@@ -34,7 +34,8 @@ module SpreeCmCommissioner
       'number-of-kids' => 'integer',
       'kids-age-max' => 'integer',
       'allowed-extra-adults' => 'integer',
-      'allowed-extra-kids' => 'integer'
+      'allowed-extra-kids' => 'integer',
+      'bib-number-prefix' => 'string'
     }.freeze
 
     included do

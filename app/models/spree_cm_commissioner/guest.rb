@@ -33,6 +33,7 @@ module SpreeCmCommissioner
     preference :telegram_user_verified_at, :string
 
     before_validation :set_event_id
+    before_validation :set_bib_number_prefix
 
     self.whitelisted_ransackable_associations = %w[id_card event]
     self.whitelisted_ransackable_attributes = %w[first_name last_name gender occupation_id card_type]
@@ -111,6 +112,31 @@ module SpreeCmCommissioner
       return nil if dob.nil?
 
       ((Time.zone.now - dob.to_time) / 1.year.seconds).floor
+    end
+
+    def set_bib_number_prefix
+      self.bib_number_prefix = bib_number_prefix
+    end
+
+    def generate_bib_number
+      return if event.blank?
+
+      last_bib_number = event.guests.complete
+                             .where(bib_number_prefix: bib_number_prefix)
+                             .maximum(:bib_number)
+
+      sequence_number = last_bib_number ? last_bib_number.to_i + 1 : 1
+
+      self.bib_number = format('%03d', sequence_number)
+      save
+    end
+
+    def bib_number_prefix
+      line_item.variant.bib_number_prefix
+    end
+
+    def full_bib_number
+      "#{bib_number_prefix}#{bib_number}"
     end
   end
 end

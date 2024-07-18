@@ -22,6 +22,7 @@ module SpreeCmCommissioner
              :allowed_extra_adults,
              :allowed_extra_kids,
              :number_of_guests,
+             :bib_number_prefix,
              to: :options
 
     def start_date_time

@@ -111,6 +111,10 @@ module SpreeCmCommissioner
       @allowed_extra_kids ||= option_value_name_for(option_type_name: 'allowed-extra-kids')&.to_i || 0
     end
 
+    def bib_number_prefix
+      @bib_number_prefix ||= option_value_name_for(option_type_name: 'bib-number-prefix')
+    end
+
     # can consider as customers.
     def number_of_guests
       number_of_adults + number_of_kids

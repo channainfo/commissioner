@@ -3,15 +3,15 @@ module SpreeCmCommissioner
     def self.prepended(base)
       base.include SpreeCmCommissioner::PhoneNumberSanitizer
       base.include SpreeCmCommissioner::OrderRequestable
+      base.include SpreeCmCommissioner::BibNumberConcern
 
       base.scope :subscription, -> { where.not(subscription_id: nil) }
       base.scope :paid, -> { where(payment_state: :paid) }
 
       base.scope :filter_by_request_state, lambda {
-        where(state: :complete)
-          .where.not(request_state: nil)
-          .where.not(payment_state: :paid)
-          .order(created_at: :desc)
+        where(state: :complete).where.not(request_state: nil)
+                               .where.not(payment_state: :paid)
+                               .order(created_at: :desc)
       }
 
       base.before_create :link_by_phone_number

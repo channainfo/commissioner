@@ -8,6 +8,8 @@ module Spree
           SpreeCmCommissioner::ConversionPreCalculatorJob.perform_later(product.id)
         end
 
+        SpreeCmCommissioner::BibNumberGeneratorJob.perform_later(@taxon.id)
+
         flash[:success] = flash_message_for(@taxon, :successfully_updated)
         redirect_to collection_url
       end

@@ -117,6 +117,12 @@ FactoryBot.define do
       presentation { 'allowed-extra-kids' }
     end
 
+    trait :bib_number_prefix do
+      attr_type { :string }
+      name { 'bib-number-prefix' }
+      presentation { 'bib-number-prefix' }
+    end
+
     initialize_with { Spree::OptionType.where(name: name).first_or_initialize }
   end
 end
