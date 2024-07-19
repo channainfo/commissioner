@@ -244,6 +244,7 @@ en:
       match_any: "Some line items must from selected age group"
       match_all: "All line items must from selected age group"
     billing:
+      customer_id: "Customer ID"
       subscription:
         quantity_is_missing: "Quantity cannot be nil or zero."
       payment_amount_received: "Payment amount received"
@@ -251,7 +252,9 @@ en:
       capture_confirmation: "Capture Confirmation"
       new_order: "New Order"
       businesses: "Businesses"
+      business: "Business"
       places: "Places"
+      place: "Place"
       code: "code"
       name: "name"
       logo: "logo"

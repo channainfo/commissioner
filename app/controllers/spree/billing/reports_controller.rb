@@ -49,6 +49,8 @@ module Spree
 
       # GET /billing/reports/active_subscribers
       def active_subscribers
+        load_bussinesses
+
         @search = customers_scope.ransack(params[:q])
         @customers = @search.result.includes(:subscriptions, :taxons).page(page).per(per_page)
       end
@@ -63,6 +65,10 @@ module Spree
       end
 
       private
+
+      def load_bussinesses
+        @businesses = Spree::Taxonomy.businesses.taxons.where('depth > ? ', 1).order('parent_id ASC').uniq
+      end
 
       def orders_scope
         if spree_current_user.has_spree_role?('admin')

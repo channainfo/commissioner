@@ -30,16 +30,22 @@
         </div>
         <div class="col-12 col-lg-6">
           <div class="form-group">
-            <%= f.label :taxons_id_eq, Spree.t(:type) %>
-            <%= f.collection_select(:taxons_id_eq, Spree::Taxon.all.uniq, :id, :pretty_name, { include_blank: true }, { class: 'select2 form-control js-filterable' }) %>
+            <%= f.label :taxons_id_eq, I18n.t(:business, scope: 'spree.billing') %>
+            <%= f.collection_select(:taxons_id_eq, @businesses, :id, :name, { include_blank: true }, { class: 'select2 form-control js-filterable' }) %>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-12 col-lg-6">
           <div class="form-group">
-            <%= f.label :place_id_eq, Spree.t(:location) %>
+            <%= f.label :place_id_eq, Spree.t('billing.place') %>
             <%= f.collection_select(:place_id_eq, SpreeCmCommissioner::Place.all, :id, :name, { include_blank: true }, { class: "select2 form-control js-filterable" }) %>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :sequence_number_cont, Spree.t('billing.customer_id') %>
+            <%= f.text_field :sequence_number_cont, class: 'form-control js-filterable' %>
           </div>
         </div>
       </div>
