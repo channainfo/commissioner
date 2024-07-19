@@ -26,15 +26,21 @@
           </td>
           <td class="text-center"><%= payment.payable.is_a?(Spree::User) ? payment.payable.full_name : nil %></td>
           <td class="actions">
-            <span class="d-flex justify-content-center payment-action-buttons">
-              <% payment.actions.each do |action| %>
-                <% if action == 'credit' %>
-                  <%= link_to_with_icon('exit.svg', Spree.t(:refund), new_billing_order_payment_refund_path(@order, payment), no_text: true, class: "btn btn-light btn-sm") if can?(:create, Spree::Refund) %>
-                <% else %>
-                  <%= link_to_with_icon(action + '.svg', Spree.t(action), billing_order_payment_path(@order, payment, e: action), method: :put, no_text: true, data: { action: action }, class: "btn btn-light btn-sm") if spree_current_user.permissions.exists?(entry: 'spree/billing/payments', action: 'edit') %>
+            <% if spree_current_user.permissions.exists?(entry: 'spree/billing/payments', action: 'edit') %>
+              <span class="d-flex justify-content-center payment-action-buttons">
+                <% payment.actions.each do |action| %>
+                  <% if action == 'credit' %>
+                    <%= link_to_with_icon('exit.svg', Spree.t(:refund), new_billing_order_payment_refund_path(order, payment), no_text: true, class: "btn btn-light btn-sm") if can?(:create, Spree::Refund) %>
+                  <% elsif action == 'capture' %>
+                    <%= link_to_with_icon("#{action}.svg", Spree.t(action), nil, no_text: true, data: { toggle: 'modal', target: '#capture-modal' }, class: "btn btn-light btn-sm") %>
+                    <%= render partial: 'spree/billing/shared/pop_up_confirmation', locals: { action: action, order: @order, payment: payment } %>
+                  <% elsif action == 'void' %>
+                    <%= link_to_with_icon("#{action}.svg", Spree.t(action), nil, no_text: true, data: { toggle: 'modal', target: '#void-modal' }, class: "btn btn-light btn-sm") %>
+                    <%= render partial: 'spree/billing/shared/pop_up_confirmation', locals: { action: action, order: @order, payment: payment } %>
+                  <% end %>
                 <% end %>
-              <% end %>
-            </span>
+              </span>
+            <% end %>
           </td>
         </tr>
       <% end %>
