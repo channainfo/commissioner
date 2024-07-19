@@ -68,7 +68,7 @@
         <br>
         <div class="d-flex justify-content-between">
           <div>
-            <ul class="list-unstyled">
+            <ul class="list-unstyled sub-header-size li-spacing">
               <li>
                 <span> លេខអតិថិជន / Customer No : </span>
                 <%= @customer_number %>
@@ -88,7 +88,7 @@
             </ul>
           </div>
           <div>
-            <ul class="list-unstyled">
+            <ul class="list-unstyled sub-header-size li-spacing">
               <li>
                 <span>លេខវិក្កយបត្រ​​ / Invoice No :</span>
                 <strong> <%= @invoice_number %> </strong>
@@ -98,7 +98,7 @@
                 <%= @date %>
               </li>
               <li>
-                <span>កាលបរិច្ចេទត្រូវបង់ / Invoice Due Date : </span>
+                <span> ថ្ងៃផុតកំណត់បង់ប្រាក់ / Invoice Due Date : </span>
                 <%= @due_date %>
               </li>
               <li>
@@ -110,110 +110,111 @@
         </div>
 
       <br>
-      <table class="table mt-2 border">
-          <thead>
+      <table class="table table-bordered border border-black mt-2 body-size">
+        <thead>
+          <tr>
+            <th scope="col">ល.រ​​​ / N</th>
+            <th scope="col">បរិយាយ / Description</th>
+            <th scope="col">ប្រចាំខែ / Month</th>
+            <th scope="col">ទឹកប្រាក់​ / Amount</th>
+            <th scope="col">ចំនួន / Quantity</th>
+            <th scope="col text-right">ទឹកប្រាក់​សរុប / Total Amount</th>
+          </tr>
+        </thead>
+        <tbody class="list-unstyled">
+          <% @invoice.order.line_items.each do |line_item| %>
             <tr>
-              <th scope="col">ល.រ​​​ / N</th>
-              <th scope="col">បរិយាយ / Description</th>
-              <th scope="col">ប្រចាំខែ / Month</th>
-              <th scope="col">ទឹកប្រាក់​ / Amount</th>
-              <th scope="col">ចំនួន / Quantity</th>
-              <th scope="col">ទឹកប្រាក់​សរុប / Total Amount</th>
+              <th scope="row"><%= count %></th><% count += 1 %>
+              <td>
+                <ul class="list-unstyled">
+                  <li> <%= line_item.variant.sku %></li>
+                </ul>
+              </td>
+              <td>
+                <ul class="list-unstyled">
+                    <li> <%= line_item.month %></li>
+                </ul>
+              </td>
+              <td>
+                <ul class="list-unstyled">
+                  <li>
+                    <%= Spree::Money.new(line_item.variant.price, currency: @invoice.order.line_items.first.variant.currency).to_s %>
+                  </li>
+                </ul>
+              </td>
+              <td>
+                <ul class="list-unstyled">
+                  <li> <%= line_item.quantity %></li>
+                </ul>
+              </td>
+              <td>
+                <ul class="list-unstyled text-right">
+                  <li><%= Spree::Money.new(line_item.variant.price * line_item.quantity, currency: @invoice.order.line_items.first.variant.currency).to_s %></li>
+                </ul>
+              </td>
             </tr>
-          </thead>
-          <tbody class="list-unstyled">
-            <% @invoice.order.line_items.each do |line_item| %>
+          <% end %>
+            <% @order.adjustments.eligible.each do |adjustment|  %>
               <tr>
                 <th scope="row"><%= count %></th><% count += 1 %>
                 <td>
                   <ul class="list-unstyled">
-                    <li> <%= line_item.variant.sku %></li>
+                    <li> <%= adjustment.label %></li>
                   </ul>
                 </td>
-                <td>
-                  <ul class="list-unstyled">
-                      <li> <%= line_item.month %></li>
-                  </ul>
-                </td>
+                <td></td>
                 <td>
                   <ul class="list-unstyled">
                     <li>
-                      <%= Spree::Money.new(line_item.variant.price, currency: @invoice.order.line_items.first.variant.currency).to_s %>
                     </li>
                   </ul>
                 </td>
                 <td>
-                  <ul class="list-unstyled">
-                    <li> <%= line_item.quantity %></li>
-                  </ul>
                 </td>
                 <td>
-                  <ul class="list-unstyled">
-                    <li><%= Spree::Money.new(line_item.variant.price * line_item.quantity, currency: @invoice.order.line_items.first.variant.currency).to_s %></li>
+                  <ul class="list-unstyled text-right">
+                    <li>
+                      <% if adjustment.amount.negative?  %>
+                        <%= adjustment.display_negative_amount %>
+                      <% else %>
+                        <%= adjustment.display_amount %>
+                      <% end %>
+                    </li>
                   </ul>
                 </td>
               </tr>
             <% end %>
-              <% @order.adjustments.eligible.each do |adjustment|  %>
-                <tr>
-                  <th scope="row"><%= count %></th><% count += 1 %>
-                  <td>
-                    <ul class="list-unstyled">
-                      <li> <%= adjustment.label %></li>
-                    </ul>
-                  </td>
-                  <td></td>
-                  <td>
-                    <ul class="list-unstyled">
-                      <li>
-                      </li>
-                    </ul>
-                  </td>
-                  <td>
-                  </td>
-                  <td>
-                    <ul class="list-unstyled">
-                      <li>
-                        <% if adjustment.amount.negative?  %>
-                          <%= adjustment.display_negative_amount %>
-                        <% else %>
-                          <%= adjustment.display_amount %>
-                        <% end %>
-                      </li>
-                    </ul>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
+          </tbody>
         </table>
 
-        <div class="mt-2">
-          <div class="d-flex justify-content-between align-items-center pt-3 px-2 border border-dark font-weight-bold text-black">
+        <div class="mt-2 body-size">
+          <div class="d-flex justify-content-between align-items-center pt-3 px-2 border border-black font-weight-bold text-black">
                 <p>ទឹកប្រាក់​ត្រូវទូទាត់​​ / Total Amount due</p>
                 <p>
                   <%= @total_price %>
                 </p>
           </div>
-          <div class="d-flex justify-content-between align-items-center pt-3 px-2 border border-dark font-weight-bold text-black">
+          <div class="d-flex justify-content-between align-items-center pt-3 px-2 border border-black font-weight-bold text-black">
                 <p> អត្រាប្ដូរប្រាក់ / Exchange Rate 1$ = 4100៛</p>
           </div>
         </div>
           <br>
-          <div class="d-flex align-items-start">
-            <div class="p-0 col-8 list-unstyled">
-              <li><span>កំណត់ចំណាំសំខាន់ / Important Note :</span></li>
-              <li><%= @note %></li>
+        <div class="d-flex align-items-start body-size">
+          <div class="p-0 col-8 list-unstyled">
+            <li><span>កំណត់ចំណាំសំខាន់ / Important Note :</span></li>
+            <li><%= @note %></li>
+          </div>
+          <div class="ml-auto  qrcode-container">
+            <%= @qrcode %>
+            <div class="list-unstyled text-center">
+              <li><span><%= @account_name %></span></li>
+              <li><span><%= @account_number %></span></li>
             </div>
-            <div class="ml-auto  qrcode-container">
-              <%= @qrcode %>
-              <div class="list-unstyled text-center">
-                <li><span><%= @account_name %></span></li>
-                <li><span><%= @account_number %></span></li>
-              </div>
-            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="footer-content">
+      <div class="footer-content footer-size">
         <div class="d-flex justify-content-between mt-4">
           <div class="text=left">
             <p>អ្នកទទួលប្រាក់​​ / Received By : ............................. </p>
