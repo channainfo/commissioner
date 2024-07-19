@@ -3,7 +3,7 @@ module Spree
     module Storefront
       module VariantSerializerDecorator
         def self.prepended(base)
-          base.attributes :need_confirmation, :product_type, :kyc,
+          base.attributes :need_confirmation, :product_type, :kyc, :allow_anonymous_booking,
                           :reminder_in_hours, :start_time, :delivery_option,
                           :number_of_guests, :max_quantity_per_order
 

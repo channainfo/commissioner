@@ -55,6 +55,7 @@ RSpec.describe Spree::V2::Storefront::LineItemSerializer, type: :serializer do
         :allowed_self_check_in,
         :available_social_contact_platforms,
         :allowed_upload_later,
+        :allow_anonymous_booking
       )
 
       expect(subject[:data][:attributes][:qr_data]).to eq line_item.qr_data
