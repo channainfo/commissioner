@@ -24,6 +24,7 @@ module Spree
 
         load_customer
         load_subscription
+        load_bussinesses
         filter_by_month(*default_date_range)
 
         @search = scope.ransack(params[:q])
@@ -34,6 +35,10 @@ module Spree
         return scope.new if new_actions.include?(action)
 
         scope.find_by!(number: params[:id])
+      end
+
+      def load_bussinesses
+        @businesses = Spree::Taxonomy.businesses.taxons.where('depth > ? ', 1).order('parent_id ASC').uniq
       end
 
       def model_class
