@@ -26,6 +26,14 @@
         <%= f.label :invoice_invoice_issued_date_not_null, I18n.t(:show_invoices, scope: 'activerecord.attributes.spree/order') %>
         <%= f.select :invoice_invoice_issued_date_not_null, options_for_select([['All', 'all'], ['Printed', true], ['Not Printed', false]]), { include_blank: false }, { class: 'select2-clear js-filterable' } %>
       </div>
+      <div class="form-group">
+        <%= f.label :customer_phone_number_cont, I18n.t(:customer_phone_number, scope: 'activerecord.attributes.spree/order') %>
+        <%= f.text_field :customer_phone_number_cont, class: "form-control js-quick-search-target js-filterable" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :invoice_invoice_number_cont, I18n.t(:invoice_id, scope: 'activerecord.attributes.spree/order') %>
+        <%= f.text_field :invoice_invoice_number_cont, class: "form-control js-quick-search-target js-filterable" %>
+      </div>
       <div class="form-actions">
         <%= button Spree.t(:search), 'search.svg', nil, { class: 'btn-outline-primary' } %>
       </div>

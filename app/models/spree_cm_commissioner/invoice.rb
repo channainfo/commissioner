@@ -7,7 +7,7 @@ module SpreeCmCommissioner
     validates :invoice_number, presence: true, uniqueness: { scope: :vendor_id }
 
     def self.ransackable_attributes(auth_object = nil)
-      super & %w[invoice_issued_date]
+      super & %w[invoice_issued_date invoice_number]
     end
   end
 end
