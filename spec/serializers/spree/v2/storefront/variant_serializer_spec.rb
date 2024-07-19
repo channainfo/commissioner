@@ -43,6 +43,7 @@ describe Spree::V2::Storefront::VariantSerializer, type: :serializer do
         :number_of_guests,
         :delivery_option,
         :delivery_required,
+        :allow_anonymous_booking
       )
     end
 
