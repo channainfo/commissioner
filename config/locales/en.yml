@@ -319,6 +319,7 @@ en:
   activerecord:
     attributes:
       spree/order:
+        customer_phone_number: "Customer Phone Number"
         product_type: "Product Type"
         customer_name: "Customer Name"
         issued_date: "Issued Date"

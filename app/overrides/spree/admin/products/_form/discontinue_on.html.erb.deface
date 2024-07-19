@@ -1,0 +1,23 @@
+<!-- replace "[data-hook='admin_product_form_discontinue_on']" -->
+
+<div data-hook="admin_product_form_discontinue_on" data-product-edit-target="discontinueOn">
+<%= f.field_container :discontinue_on do %>
+<%= f.label :discontinue_on, Spree.t(:discontinue_on) %>
+<%= f.error_message_on :discontinue_on %>
+
+<div class="input-group datePickerFrom"
+data-wrap="true"
+data-alt-format="<%= Spree.t(:fpr_human_friendly_date_format, scope: 'date_picker', default: 'M j, Y H:i') %>"
+data-min-date="<%= @product.available_on %>"
+data-enable-time="true">
+
+<%= f.text_field :discontinue_on,
+value: datepicker_field_value(@product.discontinue_on),
+placeholder: Spree.t(:select_a_date),
+class: 'form-control ',
+'data-input':'' %>
+
+<%= render partial: 'spree/admin/shared/cal_close' %>
+</div>
+<% end %>
+</div>
