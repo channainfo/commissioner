@@ -88,14 +88,6 @@ module SpreeCmCommissioner
       product.commission_rate || vendor&.commission_rate || 0
     end
 
-    def commission_amount
-      pre_tax_amount * commission_rate / 100.0
-    end
-
-    def pre_commission_amount
-      [0, pre_tax_amount - commission_amount].max
-    end
-
     def accepted?
       accepted_at.present?
     end

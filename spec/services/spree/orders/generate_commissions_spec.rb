@@ -23,12 +23,12 @@ RSpec.describe Spree::Orders::GenerateCommissions do
       result = subject.generate_commissions_group_by_vendor_ids(order)
 
       # vendor_a
-      expect(line_item_a1.commission_amount).to eq 10
-      expect(line_item_a2.commission_amount).to eq 10
+      expect(subject.commission_amount(line_item_a1)).to eq 10
+      expect(subject.commission_amount(line_item_a2)).to eq 10
 
       # vendor_b
-      expect(line_item_b1.commission_amount).to eq 15
-      expect(line_item_b2.commission_amount).to eq 15
+      expect(subject.commission_amount(line_item_b1)).to eq 15
+      expect(subject.commission_amount(line_item_b2)).to eq 15
 
       expect(result.keys).to eq([vendor_a.id, vendor_b.id])
       expect(result[vendor_a.id]).to eq(10 + 10)

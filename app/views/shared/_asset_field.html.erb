@@ -11,7 +11,7 @@
 <%= form.field_container field, class: @classes do %>
   <%= image_tag(main_app.rails_blob_url(asset.attachment),
     class: 'rounded border mb-4 mw-100',
-    style: 'max-height: 100px') if asset.attachment %>
+    style: 'max-height: 100px') if asset.present? && asset.attachment.present? %>
 
   <div data-hook="file" class="form-group">
     <%= form.label field, label || Spree.t(field) %>

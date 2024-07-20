@@ -1,0 +1,5 @@
+<!-- insert_before ".actions" -->
+
+<td class="text-center">
+  <%= adjustment.payable.is_a?(Spree::User) ? adjustment.payable.display_name : nil %>
+</td>

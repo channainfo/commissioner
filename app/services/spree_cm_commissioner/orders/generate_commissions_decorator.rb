@@ -15,8 +15,17 @@ module SpreeCmCommissioner
 
       def generate_commissions_group_by_vendor_ids(order)
         order.line_items.each_with_object(Hash.new(0)) do |line_item, commissions|
-          commissions[line_item.vendor_id] += line_item.commission_amount if line_item.vendor_id.present?
+          commissions[line_item.vendor_id] += commission_amount(line_item) if line_item.vendor_id.present?
         end
+      end
+
+      # return default line item commission amount
+      # spree_vpago have different construction of commision.
+      # if they define, should follow them.
+      def commission_amount(line_item)
+        return line_item.commission_amount if line_item.respond_to?(:commission_amount)
+
+        line_item.pre_tax_amount * line_item.commission_rate / 100.0
       end
     end
   end

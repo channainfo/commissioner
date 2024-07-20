@@ -11,6 +11,7 @@ module Spree
         Rack::Utils.escape_html(render(render_payload))
       end
 
+      # override
       def preference_field_for(form, field, options)
         case field
         when 'preferred_start_date', 'preferred_end_date'
