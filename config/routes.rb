@@ -330,6 +330,7 @@ Spree::Core::Engine.add_routes do
 
         resources :wished_items
         resources :user_promotion
+        resources :order_promotions
 
         resource :cart_guests, only: %i[create destroy]
         resources :cart_payment_method_groups, only: %i[index]
