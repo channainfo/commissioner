@@ -5,8 +5,24 @@
     <div class="row">
       <div class="col-12 col-lg-6">
         <div class="form-group">
+          <%= f.label :invoice_invoice_number_cont, I18n.t(:invoice_id, scope: 'activerecord.attributes.spree/order') %>
+          <%= f.text_field :invoice_invoice_number_cont, class: "form-control js-quick-search-target js-filterable" %>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6">
+        <div class="form-group">
+          <%= f.label :customer_phone_number_cont, Spree.t(:phone_number) %>
+          <%= f.text_field :customer_phone_number_cont, class: "form-control js-filterable" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 col-lg-6">
+        <div class="form-group">
           <%= f.label :customer_sequence_number_cont, I18n.t(:customer_id, scope: 'activerecord.attributes.spree/order') %>
-          <%= f.text_field :customer_sequence_number_cont, class: "form-control js-quick-search-target js-filterable" %>
+          <%= f.text_field :customer_sequence_number_cont, class: "form-control js-filterable" %>
         </div>
       </div>
 
