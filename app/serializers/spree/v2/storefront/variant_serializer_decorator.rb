@@ -5,7 +5,7 @@ module Spree
         def self.prepended(base)
           base.attributes :need_confirmation, :product_type, :kyc, :allow_anonymous_booking,
                           :reminder_in_hours, :start_time, :delivery_option,
-                          :number_of_guests, :max_quantity_per_order
+                          :number_of_guests, :max_quantity_per_order, :discontinue_on
 
           base.attribute :delivery_required, &:delivery_required?
 
