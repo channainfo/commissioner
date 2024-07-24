@@ -22,6 +22,7 @@ module SpreeCmCommissioner
     config.after_initialize do
       Rails.application.config.spree.promotions.rules.concat [
         SpreeCmCommissioner::Promotion::Rules::Vendors,
+        SpreeCmCommissioner::Promotion::Rules::Customers,
         SpreeCmCommissioner::Promotion::Rules::FixedDate,
         SpreeCmCommissioner::Promotion::Rules::Weekend,
         SpreeCmCommissioner::Promotion::Rules::CustomDates,

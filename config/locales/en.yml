@@ -215,6 +215,9 @@ en:
       guest_age_group:
         name: "Guest Age Group"
         description: "Guest Age Group"
+      customers:
+        name: "Customers"
+        description: "Customers"
     promotion_action_types:
       create_date_specific_item_adjustments:
         name: "Create date specific item adjustment"
@@ -233,6 +236,9 @@ en:
       choose_vendors: "Choose vendors"
       match_any: "Some line items must from selected vendor"
       match_all: "All line items must from selected vendor"
+    customer_rule:
+      label: "Customer"
+      choose_customers: "Choose customers"
     guest_occupation_rule:
       label: "Guest Occupation"
       choose_guest_occupation: "Choose Guest occupations"
