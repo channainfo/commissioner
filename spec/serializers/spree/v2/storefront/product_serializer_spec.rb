@@ -6,20 +6,20 @@ RSpec.describe Spree::V2::Storefront::ProductSerializer, type: :serializer do
 
     subject {
       described_class.new(product, params: { 'store': product.stores.first }, include: [
-                                     :variants,
-                                     :option_types,
-                                     :product_properties,
-                                     :taxons,
-                                     :images,
-                                     :default_variant,
-                                     :primary_variant,
-                                     :vendor,
-                                     :variant_kind_option_types,
-                                     :product_kind_option_types,
-                                     :promoted_option_types,
-                                     :possible_promotions,
-                                     :default_state,
-                                   ]).serializable_hash
+        :variants,
+        :option_types,
+        :product_properties,
+        :taxons,
+        :images,
+        :default_variant,
+        :primary_variant,
+        :vendor,
+        :variant_kind_option_types,
+        :product_kind_option_types,
+        :promoted_option_types,
+        :possible_promotions,
+        :default_state,
+      ]).serializable_hash
     }
 
     it 'returns exact attributes' do
