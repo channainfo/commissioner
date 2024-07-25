@@ -15,7 +15,7 @@ module SpreeCmCommissioner
                                               joins(:option_type).where(spree_option_types: { hidden: false })
                                             }, through: :option_value_variants, source: :option_value
 
-      base.has_one :video_on_demand, class_name: 'SpreeCmCommissioner::VideoOnDemand', dependent: :destroy
+      base.has_many :video_on_demands, class_name: 'SpreeCmCommissioner::VideoOnDemand', dependent: :destroy
 
       base.scope :subscribable, -> { active.joins(:product).where(product: { subscribable: true, status: :active }) }
 

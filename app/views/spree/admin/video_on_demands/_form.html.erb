@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-12">
-
+    
     <%= f.hidden_field :uuid, id: "uuid" %>
     <%= f.hidden_field :config, id: "config"%>
 
@@ -21,9 +21,9 @@
     <% end %>
 
     <div class="form-group">
-      <%= f.label :variant_id, raw(Spree::Variant.model_name.human + required_span_tag) %>
+     <%= f.label :variant_id, raw(Spree::Variant.model_name.human + required_span_tag) %>
       <% if @variants.present? %>
-        <%= f.select :variant_id, options_for_select(@variants.map { |v| [v.options_text, v.id, { disabled: v.id != f.object.variant_id && @video_on_demands.map(&:variant_id).include?(v.id) }] }, f.object.variant_id), {}, { class: 'select2 form-control' } %>
+        <%= f.select :variant_id, @variants, {}, {class: 'select2'} %>
       <% else %>
         <p>No variants available</p>
       <% end %>

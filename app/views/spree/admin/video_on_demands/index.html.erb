@@ -8,13 +8,14 @@
 <% if !@video_on_demands.any? %>
   <div class="text-center no-objects-found m-5">
     <%= Spree.t(:no_resource_found, resource: plural_resource_name(SpreeCmCommissioner::VideoOnDemand)) %>,
-    <%= link_to(Spree.t(:add_one), admin_product_video_on_demands_url(@product)) if can? :create, SpreeCmCommissioner::VideoOnDemand %>!
+    <%= link_to(Spree.t(:add_one), new_admin_product_video_on_demand_url(@product)) if can? :create, SpreeCmCommissioner::VideoOnDemand %>!
   </div>
 <% else %>
   <div class="table-responsive border rounded bg-white">
-    <table class="table table-striped">
-      <thead class="text-muted">
+    <table class="table sortable" data-sortable-link="<%= update_positions_admin_product_video_on_demands_path(@product) %>">
+      <thead data-hook= "video_on_demands_header" class="text-muted">
         <tr>
+          <th></th>
           <th class="text-center"><%= Spree.t(:uuid) %></th>
           <th class="text-center"><%= Spree.t(:title) %></th>
           <th class="text-center"><%= Spree.t(:variant) %></th>
@@ -24,12 +25,23 @@
           <th class="action"></th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="sortVert">
         <% @video_on_demands.each do |video_on_demand| %>
-          <tr id="<%= dom_id(video_on_demand) %>">
+          <tr id="<%= spree_dom_id video_on_demand %>" data-hook="video_on_demand_row">
+            <td class="move-handle">
+              <% if can? :edit, video_on_demand %>
+                <%= svg_icon name: "grip-vertical.svg", width: '18', height: '18' %>
+              <% end %>
+            </td>
             <td class="text-center"><%= video_on_demand.uuid %></td>
             <td class="text-center"><%= video_on_demand.title %></td>
-            <td class="text-center"><%= video_on_demand.variant.options_text %></td>
+            <td class="text-center">
+              <% if video_on_demand.variant.id == @product.master_id %>
+                <%= 'Default' %>
+              <% else %>
+                <%= video_on_demand.variant.options_text %>
+              <% end %>
+            </td>
             <td class="image text-center">
               <div class="admin-product-image-container small-img">
                 <%= image_tag (main_app.rails_blob_url(video_on_demand.thumbnail)) if video_on_demand&.thumbnail&.attached? %>

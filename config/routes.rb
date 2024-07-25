@@ -84,7 +84,12 @@ Spree::Core::Engine.add_routes do
         get 'edit_kyc', to: 'kyc#edit'
         put 'update_kyc', to: 'kyc#update'
       end
-      resources :video_on_demands
+
+      resources :video_on_demands do
+        collection do
+          post :update_positions
+        end
+      end
 
       resources :google_wallets do
         member do
