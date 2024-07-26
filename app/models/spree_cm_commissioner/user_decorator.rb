@@ -51,6 +51,10 @@ module SpreeCmCommissioner
       base.has_many :places, through: :user_places, class_name: 'SpreeCmCommissioner::Place'
     end
 
+    def super_admin?
+      has_spree_role?('super_admin')
+    end
+
     def early_adopter?
       has_spree_role?('early_adopter')
     end

@@ -1,6 +1,10 @@
 module Spree
   module Admin
     module BaseControllerDecorator
+      def self.prepended(base)
+        base.before_action :redirect_to_billing, if: -> { Spree::Store.default.code.include?('billing') }
+      end
+
       # even db in read only mode, authorizor still need to run Warden callbacks which will write to db
       # this include update tracked fields such as sign_in_count, last_sign_in_at, etc.
       def authorize!(*args)
@@ -25,6 +29,14 @@ module Spree
         parse_date!(date, format)
       rescue Date::Error
         nil
+      end
+
+      private
+
+      def redirect_to_billing
+        return if request.path.include?('/billing')
+
+        redirect_to billing_root_url unless spree_current_user.super_admin?
       end
     end
   end
