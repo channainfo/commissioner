@@ -3,9 +3,6 @@
 <% end %>
 <% content_for :sidebar do %>
   <%= render partial: 'date_range_picker' %><br>
-  <% unless @orders.empty? %>
-    <small class='text-muted'><%= I18n.t('orders.total', orders_count: @orders.total_count) %></small>
-  <% end %>
 <% end %>
 <%= render partial: 'overview' %>
 <br>
