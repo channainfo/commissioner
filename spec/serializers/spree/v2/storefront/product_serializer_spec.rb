@@ -49,7 +49,8 @@ RSpec.describe Spree::V2::Storefront::ProductSerializer, type: :serializer do
         :reveal_description,
         :allowed_upload_later,
         :allow_anonymous_booking,
-        :discontinue_on
+        :discontinue_on,
+        :use_video_as_default
       )
     end
 

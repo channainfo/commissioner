@@ -1,0 +1,9 @@
+<!-- insert_after "[data-hook='admin_product_form_promotionable']" -->
+
+<div data-hook="admin_product_form_use_video_as_default">
+  <%= f.field_container :use_video_as_default do %>
+    <%= f.check_box :use_video_as_default %>
+    <%= f.label :use_video_as_default, Spree.t(:use_video_as_default) %>
+    <%= f.error_message_on :use_video_as_default %>
+  <% end %>
+</div>
