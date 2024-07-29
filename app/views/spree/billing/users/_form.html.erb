@@ -38,12 +38,14 @@
     <div data-hook="admin_user_form_roles" class="form-group">
       <strong><%= Spree.t(:roles) %></strong>
       <%= f.collection_check_boxes :spree_role_ids, Spree::Role.all, :id, :name do |role_form| %>
-        <div class="checkbox">
-          <%= role_form.label for: "user_spree_role_#{role_form.object.name}" do %>
-            <%= role_form.check_box id: "user_spree_role_#{role_form.object.name}" %>
-            <%= role_form.object.name %>
-          <% end %>
-        </div>
+        <% unless role_form.object.name == 'super_admin' %>
+          <div class="checkbox">
+            <%= role_form.label for: "user_spree_role_#{role_form.object.name}" do %>
+              <%= role_form.check_box id: "user_spree_role_#{role_form.object.name}" %>
+              <%= role_form.object.name %>
+            <% end %>
+          </div>
+        <% end %>
       <% end %>
     </div>
   </div>
