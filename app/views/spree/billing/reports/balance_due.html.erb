@@ -46,7 +46,7 @@
     <table class="table" id="listing_subscriptions">
       <thead class="text-muted">
         <tr data-hook="admin_subscriptions_index_headers">
-          <th><%= I18n.t(:number, scope: 'activerecord.attributes.spree/order') %></th>
+          <th><%= sort_link @search, :invoice_invoice_number, I18n.t(:number, scope: 'activerecord.attributes.spree/order') %></th>
           <th><%= sort_link @search, :created_at, I18n.t(:issued_date, scope: 'activerecord.attributes.spree/order') %></th>
           <th><%= I18n.t(:customer_name, scope: 'activerecord.attributes.spree/order') %></th>
           <th><%= I18n.t(:phone_number, scope: 'activerecord.attributes.spree/order') %></th>
