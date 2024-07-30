@@ -99,8 +99,9 @@ module Spree
         if params[:period].present?
           today = Time.zone.today
           month = params[:period]
-          from_date = Time.zone.local(today.year, month.to_i, 1).beginning_of_day
-          to_date = Time.zone.local(today.year, month.to_i, 31).end_of_day
+          year = (params[:year].presence || today.year)
+          from_date = Time.zone.local(year, month.to_i, 1).beginning_of_day
+          to_date = Time.zone.local(year, month.to_i, 31).end_of_day
           [from_date, to_date]
         else
           from_date = params[:from_date]
