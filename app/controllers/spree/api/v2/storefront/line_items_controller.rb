@@ -3,10 +3,12 @@ module Spree
     module V2
       module Storefront
         class LineItemsController < ::Spree::Api::V2::ResourceController
-          before_action :require_spree_current_user
-
           def collection
-            spree_current_user.line_items.complete.paid.filter_by_event(params[:event])
+            if spree_current_user.nil?
+              line_items_by_order_tokens
+            else
+              spree_current_user.line_items.complete.paid.filter_by_event(params[:event])
+            end
           end
 
           def show
@@ -25,6 +27,19 @@ module Spree
 
           def collection_serializer
             Spree::V2::Storefront::LineItemSerializer
+          end
+
+          def line_items_by_order_tokens
+            order_tokens = params[:order_tokens]
+            event = params[:event]
+
+            return Spree::LineItem.none if order_tokens.blank?
+
+            Spree::LineItem.joins(:order)
+                           .where(spree_orders: { token: order_tokens, state: 'complete' })
+                           .filter_by_event(event)
+                           .page(params[:page])
+                           .per(params[:per_page])
           end
         end
       end

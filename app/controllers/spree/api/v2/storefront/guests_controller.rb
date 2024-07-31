@@ -24,12 +24,12 @@ module Spree
           end
 
           def create
-            resource = line_item.guests.create(guest_params)
+            resource = parent.guests.create(guest_params)
 
             if resource.save
               render_serialized_payload(201) { serialize_resource(resource) }
             else
-              render_error_payload(context, 400)
+              render_error_payload(resource.errors, 400)
             end
           end
 
@@ -47,11 +47,15 @@ module Spree
 
           # override
           def scope
-            line_item.guests
+            parent.guests
           end
 
-          def line_item
-            @line_item ||= spree_current_user.line_items.find(params[:line_item_id])
+          def parent
+            @parent ||= if spree_current_user.nil?
+                          Spree::LineItem.find(params[:line_item_id])
+                        else
+                          spree_current_user.line_items.find(params[:line_item_id])
+                        end
           end
 
           def guest_params
