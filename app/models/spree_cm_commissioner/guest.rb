@@ -23,6 +23,8 @@ module SpreeCmCommissioner
     belongs_to :nationality, class_name: 'Spree::Taxon'
 
     has_many :state_changes, as: :stateful, class_name: 'Spree::StateChange'
+    has_many :metafields, as: :metadatable, class_name: 'SpreeCmCommissioner::Metafield', dependent: :destroy
+    accepts_nested_attributes_for :metafields, allow_destroy: true
 
     belongs_to :event, class_name: 'Spree::Taxon'
 
@@ -111,6 +113,20 @@ module SpreeCmCommissioner
       return nil if dob.nil?
 
       ((Time.zone.now - dob.to_time) / 1.year.seconds).floor
+    end
+
+    def set_metafield(key, value)
+      metafield = SpreeCmCommissioner::Metafield.find_or_initialize_by(key: key)
+      metafield.value = value
+      metafield.save
+    end
+
+    def get_metafield(key)
+      SpreeCmCommissioner::Metafield.find_by(key: key)&.value
+    end
+
+    def remove_metafield(key)
+      SpreeCmCommissioner::Metafield.find_by(key: key)&.destroy
     end
   end
 end

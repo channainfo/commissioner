@@ -79,8 +79,13 @@ Spree::Core::Engine.add_routes do
 
     resources :s3_presigned_urls, only: %i[create new]
 
+    resources :metafields, only: :update
+
     resources :products do
       member do
+        get 'edit_metafields', to: 'metafields#edit'
+        put 'update_private_metafields', to: 'metafields#update_private_metafields'
+        put 'update_public_metafields', to: 'metafields#update_public_metafields'
         get 'edit_kyc', to: 'kyc#edit'
         put 'update_kyc', to: 'kyc#update'
       end
