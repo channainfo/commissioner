@@ -16,21 +16,7 @@ module SpreeCmCommissioner
     end
 
     def reports
-      subquery ||= if spree_current_user.has_spree_role?('admin')
-                     Spree::Order.subscription
-                                 .joins(:line_items)
-                                 .where(line_items: { vendor_id: vendor_id, from_date: from_date..to_date })
-                                 .select('DISTINCT ON (spree_orders.id) spree_orders.*, line_items.*')
-                   else
-                     Spree::Order.subscription
-                                 .joins(:line_items)
-                                 .joins(subscription: :customer)
-                                 .where(line_items: { vendor_id: vendor_id })
-                                 .where(created_at: from_date..to_date)
-                                 .where(cm_customers: { place_id: spree_current_user.place_ids })
-                                 .select('DISTINCT ON (spree_orders.id) spree_orders.*, line_items.*')
-
-                   end
+      subquery ||= build_subquery
 
       Spree::Order.from(subquery, :orders)
                   .group(:payment_state)
@@ -39,13 +25,12 @@ module SpreeCmCommissioner
     end
 
     def overdues
-      @overdues ||= SpreeCmCommissioner::SubscriptionOrdersQuery.new(
-        from_date: from_date,
-        to_date: to_date,
-        vendor_id: vendor_id,
-        current_date: current_date,
-        spree_current_user: spree_current_user
-      ).overdues.select(*select_fields).map do |report|
+      subquery = build_subquery(overdue: true)
+
+      Spree::Order.from(subquery, :orders)
+                  .group(:payment_state)
+                  .select(*select_fields)
+                  .map do |report|
         report.slice(:orders_count, :total, :payment_total)
               .symbolize_keys
               .merge({ state: 'overdue' })
@@ -53,6 +38,24 @@ module SpreeCmCommissioner
     end
 
     private
+
+    def build_subquery(overdue: false)
+      base_query = Spree::Order.subscription
+                               .joins(:line_items)
+                               .where(line_items: { vendor_id: vendor_id, from_date: from_date..to_date })
+
+      unless spree_current_user.has_spree_role?('admin')
+        base_query = base_query.joins(subscription: :customer)
+                               .where(cm_customers: { place_id: spree_current_user.place_ids })
+      end
+
+      if overdue
+        base_query = base_query.where.not(payment_state: :paid)
+                               .where('line_items.due_date < ?', current_date)
+      end
+
+      base_query.select('DISTINCT ON (spree_orders.id) spree_orders.*, line_items.*')
+    end
 
     def select_fields
       ['COUNT(*) AS orders_count', 'SUM(total) AS total', 'SUM(payment_total) AS payment_total']
