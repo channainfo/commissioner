@@ -71,7 +71,8 @@ RSpec.describe Spree::V2::Storefront::LineItemSerializer, type: :serializer do
         :order,
         :google_wallet,
         :guests,
-        :pending_guests
+        :pending_guests,
+        :product
       )
     end
   end

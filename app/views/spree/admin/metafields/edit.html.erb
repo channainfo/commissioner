@@ -1,0 +1,27 @@
+<% content_for :sidebar do %>
+  <% key_param = params[:key] || 'guests' %>
+  <ul class="nav flex-column nav-pills" data-hook="product_metafields_tabs">
+    <%= content_tag :li do %>
+      <%= link_to 'Guests',
+        url_for(request.params.merge(key: 'guests')),
+        class: "nav-link #{'active' if key_param == 'guests'}"
+      %>
+    <% end %>
+  </ul>
+<% end %>
+
+<% if params[:scope] == 'private' %>
+  <%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :private_metafields } %>
+
+  <%= form_with model: @product, url: update_metafields_admin_product_path(@product,  scope: 'private'), method: :put do |form| %>
+    <%= render partial: 'private_metafields_form', locals: { form: form } %>
+    <%= render partial: 'spree/admin/shared/edit_resource_links' %>
+  <% end %>
+<% else %>
+  <%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :public_metafields } %>
+
+  <%= form_with model: @product, url: update_metafields_admin_product_path(@product,  scope: 'public'), method: :put do |form| %>
+    <%= render partial: 'public_metafields_form', locals: { form: form } %>
+    <%= render partial: 'spree/admin/shared/edit_resource_links' %>
+  <% end %>
+<% end %>

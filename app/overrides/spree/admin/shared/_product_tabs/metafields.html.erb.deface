@@ -1,0 +1,15 @@
+<!-- insert_before "erb[silent]:contains('Spree::ProductProperty')" -->
+
+<%= content_tag :li, class: 'nav-item' do %>
+  <%= link_to_with_icon 'card-heading.svg',
+    Spree.t(:public_metafields),
+    edit_metafields_admin_product_path(@product, scope: 'public'),
+    class: "nav-link #{'active' if current == :public_metafields}" %>
+<% end %>
+
+ <%= content_tag :li, class: 'nav-item' do %>
+  <%= link_to_with_icon 'card-heading.svg',
+    Spree.t(:private_metafields),
+    edit_metafields_admin_product_path(@product, scope: 'private'),
+    class: "nav-link #{'active' if current == :private_metafields}" %>
+<% end %>
