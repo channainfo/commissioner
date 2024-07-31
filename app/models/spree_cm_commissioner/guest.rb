@@ -2,7 +2,8 @@ module SpreeCmCommissioner
   class Guest < SpreeCmCommissioner::Base
     include SpreeCmCommissioner::KycBitwise
 
-    delegate :kyc, to: :line_item
+    delegate :kyc, to: :line_item, allow_nil: true
+    delegate :allowed_upload_later?, to: :line_item, allow_nil: true
 
     enum gender: { :other => 0, :male => 1, :female => 2 }
     enum social_contact_platform: {
@@ -18,7 +19,8 @@ module SpreeCmCommissioner
     scope :complete, -> { joins(:line_item).merge(Spree::LineItem.complete) }
     scope :unassigned_event, -> { where(event_id: nil) }
 
-    belongs_to :line_item, class_name: 'Spree::LineItem', optional: false
+    belongs_to :line_item, class_name: 'Spree::LineItem'
+    belongs_to :user, class_name: 'Spree::User'
     belongs_to :occupation, class_name: 'Spree::Taxon'
     belongs_to :nationality, class_name: 'Spree::Taxon'
 
@@ -36,8 +38,6 @@ module SpreeCmCommissioner
 
     self.whitelisted_ransackable_associations = %w[id_card event]
     self.whitelisted_ransackable_attributes = %w[first_name last_name gender occupation_id card_type]
-
-    delegate :allowed_upload_later?, to: :line_item
 
     def self.csv_importable_columns
       %i[
@@ -69,7 +69,7 @@ module SpreeCmCommissioner
     end
 
     def set_event_id
-      self.event_id = line_item.associated_event&.id
+      self.event_id = line_item.associated_event&.id if line_item.present?
     end
 
     def full_name
