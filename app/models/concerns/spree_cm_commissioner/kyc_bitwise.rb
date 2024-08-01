@@ -14,7 +14,8 @@ module SpreeCmCommissioner
       guest_emergency_contact: 0b10000000,
       guest_organization: 0b100000000,
       guest_expectation: 0b1000000000,
-      guest_social_contact: 0b10000000000
+      guest_social_contact: 0b10000000000,
+      guest_state: 0b100000000000
     }.freeze
 
     ORDERED_BIT_FIELDS = %i[
@@ -29,6 +30,7 @@ module SpreeCmCommissioner
       guest_social_contact
       guest_expectation
       guest_id_card
+      guest_state
     ].freeze
 
     def kyc? = kyc != 0
