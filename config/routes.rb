@@ -397,6 +397,7 @@ Spree::Core::Engine.add_routes do
         end
         resources :pending_line_items, only: %i[show index]
         resources :self_check_in, only: %i[index create]
+        resources :guest_orders, only: %i[index show]
       end
 
       namespace :operator do

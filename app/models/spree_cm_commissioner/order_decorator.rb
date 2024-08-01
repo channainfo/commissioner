@@ -7,11 +7,12 @@ module SpreeCmCommissioner
       base.scope :subscription, -> { where.not(subscription_id: nil) }
       base.scope :paid, -> { where(payment_state: :paid) }
 
-      base.scope :filter_by_request_state, lambda {
-        where(state: :complete)
-          .where.not(request_state: nil)
-          .where.not(payment_state: :paid)
-          .order(created_at: :desc)
+      base.scope :filter_by_match_user_contact, lambda { |user|
+        complete.where(
+          '(email = :email OR intel_phone_number = :intel_phone_number) AND user_id IS NULL',
+          email: user.email,
+          intel_phone_number: user.intel_phone_number
+        )
       }
 
       base.before_create :link_by_phone_number

@@ -5,7 +5,6 @@ module Spree
         class CartPaymentMethodGroupsController < Spree::Api::V2::ResourceController
           include OrderConcern
 
-          before_action :require_spree_current_user
           before_action :ensure_order
 
           # override
@@ -19,7 +18,7 @@ module Spree
           def collection
             @collection ||= SpreeCmCommissioner::PaymentMethods::GroupByBank.new.execute(
               payment_methods: spree_current_order.available_payment_methods,
-              preferred_payment_method_id: spree_current_user.preferred_payment_method_id
+              preferred_payment_method_id: spree_current_user&.preferred_payment_method_id
             )
           end
 

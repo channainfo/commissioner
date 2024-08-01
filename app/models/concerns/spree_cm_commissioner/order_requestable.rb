@@ -5,6 +5,13 @@ module SpreeCmCommissioner
     included do
       scope :accepted, -> { where(request_state: 'accepted') }
 
+      scope :filter_by_request_state, lambda {
+        where(state: :complete)
+          .where.not(request_state: nil)
+          .where.not(payment_state: :paid)
+          .order(created_at: :desc)
+      }
+
       # use after_update instead of after_transition
       # since it has usecase that order state is forced to update which not fire after_transition
 

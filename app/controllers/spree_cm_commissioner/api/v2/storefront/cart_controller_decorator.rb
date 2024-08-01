@@ -4,7 +4,6 @@ module SpreeCmCommissioner
       module Storefront
         module CartControllerDecorator
           def self.prepended(base)
-            base.before_action :require_spree_current_user
             base.before_action :ensure_cart_exist, only: :add_item
           end
 
