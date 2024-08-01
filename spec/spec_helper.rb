@@ -15,6 +15,7 @@ Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].sort.each { |f| requir
 RSpec.configure do |config|
   config.include Helper
   config.include DoorkeeperAuthHelper
+  config.include ActiveSupport::Testing::TimeHelpers
   config.extend Spree::TestingSupport::AuthorizationHelpers::Request, type: :request
 
   # https://github.com/channainfo/commissioner/pull/316

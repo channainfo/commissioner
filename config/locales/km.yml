@@ -86,6 +86,10 @@ km:
     product_kind_option_types:
       empty_info: "<b>ចំណាំ:</b> កំណត់ប្រភេទសម្រាប់ផលិតផល. ដើម្បីកែប្រែ, សូមចូលទៅ <b>លម្អិត</b> tab > <b>ប្រភេទ</b>"
 
+  subscription:
+    validation:
+      out_of_range: "Subscription date is out of range."
+
   vectors:
     icons:
       info_rules: 'Only allow <b>%{allow_extensions}</b> files. Icons are stored inside "images/" folder, eg. app/assets/images/backend-adjust.svg.'

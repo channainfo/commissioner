@@ -2,9 +2,12 @@ require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::SubscriptionRevenueOverviewQuery do
   let(:vendor) { create(:vendor) }
-  let(:customer1) { create(:cm_customer, vendor: vendor, sequence_number: 01) }
-  let(:customer2) { create(:cm_customer, vendor: vendor, sequence_number: 02) }
-  let(:customer3) { create(:cm_customer, vendor: vendor, sequence_number: 03) }
+
+  today = Time.zone.today
+  last_invoice_date = today.day < 15 ? (today - 2.month).change(day: 15) : (today - 1.month).change(day: 15)
+  let!(:customer1) { create(:cm_customer, vendor: vendor, sequence_number: 01, last_invoice_date: last_invoice_date.to_date) }
+  let!(:customer2) { create(:cm_customer, vendor: vendor, sequence_number: 02, last_invoice_date: last_invoice_date.to_date) }
+  let!(:customer3) { create(:cm_customer, vendor: vendor, sequence_number: 03, last_invoice_date: last_invoice_date.to_date) }
   let(:spree_current_user) { create(:user) }
   let(:admin_role) { create(:role, name: 'admin') }
 
@@ -13,29 +16,34 @@ RSpec.describe SpreeCmCommissioner::SubscriptionRevenueOverviewQuery do
   end
 
   describe '#reports' do
-    let(:subscription_jan2) { create(:cm_subscription, start_date: '2023-01-02'.to_date, customer: customer1, price: 13.0, due_date: 5, quantity: 1) }
-    let(:subscription_jan4) { create(:cm_subscription, start_date: '2023-01-04'.to_date, customer: customer2, price: 25.0, due_date: 5, quantity: 1) }
-    let(:subscription_feb4) { create(:cm_subscription, start_date: '2023-02-04'.to_date, customer: customer3, price: 32.0, due_date: 5, quantity: 1) }
-
+    before do
+      allow_any_instance_of(SpreeCmCommissioner::Subscription).to receive(:date_within_range).and_return(true)
+      create(:cm_subscription, start_date: '2024-05-15'.to_date, customer: customer1, price: 13.0, due_date: 5, quantity: 1)
+      create(:cm_subscription, start_date: '2024-05-16'.to_date, customer: customer2, price: 25.0, due_date: 5, quantity: 1)
+      create(:cm_subscription, start_date: '2024-05-17'.to_date, customer: customer3, price: 32.0, due_date: 5, quantity: 1)
+      SpreeCmCommissioner::SubscriptionsOrderCreator.call(customer: customer1)
+      SpreeCmCommissioner::SubscriptionsOrderCreator.call(customer: customer2)
+      SpreeCmCommissioner::SubscriptionsOrderCreator.call(customer: customer3)
+    end
     it 'only return totals in January' do
-      subscription_jan2.orders.each {|o| o.payments.last.capture! }
-      subscription_jan4.orders.each {|o| o.payments.last.capture! }
-      subscription_feb4.orders.each {|o| o.payments.last.capture! }
+      SpreeCmCommissioner::Subscription.all.each do |subscription|
+        subscription.orders.each {|o| o.payments.last.capture! }
+      end
 
-      # only for january
-      query = described_class.new(from_date: '2023-01-01', to_date: '2023-01-31', vendor_id: vendor.id, spree_current_user: spree_current_user)
+      # # only for may
+      query = described_class.new(from_date: '2024-06-15', to_date: '2024-07-14', vendor_id: vendor.id, spree_current_user: spree_current_user)
       result = query.reports
       puts "Debug: Result - #{result}"
-
       expect(query.reports).to match_array [
-        {:orders_count => 2, :state => "paid", :total => 13.0 + 25.0, :payment_total => 13.0 + 25.0}
+        {:orders_count => 3, :state => "paid", :total => 13.0 + 25.0+ 32.0, :payment_total => 13.0 + 25.0+ 32.0}
       ]
     end
 
     it 'return totals group by payment state' do
-      subscription_jan2.orders.each {|o| o.payments.last.pend! }
-      subscription_jan4.orders.each {|o| o.payments.last.void! }
-      subscription_feb4.orders.each {|o| o.payments.last.capture! }
+      subscriptions = SpreeCmCommissioner::Subscription.all
+      subscriptions[0].orders.each {|o| o.payments.last.pend! }
+      subscriptions[1].orders.each {|o| o.payments.last.void! }
+      subscriptions[2].orders.each {|o| o.payments.last.capture! }
 
       query = described_class.new(from_date: '2000-01-01', to_date: '2100-01-01', vendor_id: vendor.id, spree_current_user: spree_current_user)
 
@@ -49,12 +57,16 @@ RSpec.describe SpreeCmCommissioner::SubscriptionRevenueOverviewQuery do
 
   # reference: subscription_orders_query_spec.rb
   describe '#reports_with_overdues' do
+    before do
+      allow_any_instance_of(SpreeCmCommissioner::Subscription).to receive(:date_within_range).and_return(true)
+      create(:cm_subscription, start_date: '2024-05-15'.to_date, customer: customer1, price: 13.0, due_date: 5, quantity: 1)
+      SpreeCmCommissioner::SubscriptionsOrderCreator.call(customer: customer1)
+    end
     it 'return reports + overdue on feb' do
-      subscription = create(:cm_subscription, start_date: '2023-01-02'.to_date, customer: customer1, price: 13.0, month: 1, due_date: 5, quantity: 1)
-      subscription.orders[0].payments.each{|p| p.pend!}
+      SpreeCmCommissioner::Subscription.last.orders[0].payments.each{|p| p.pend!}
 
       query = described_class.new(
-        current_date: '2023-01-28',
+        current_date: '2024-09-07 ',
         vendor_id: vendor.id,
         from_date: '2000-01-01',
         to_date: '2100-01-01',

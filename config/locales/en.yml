@@ -87,6 +87,10 @@ en:
   user_identity_provider:
     not_found: "User identity provider for %{identity_type} not found in the system"
 
+  subscription:
+    validation:
+      out_of_range: "Subscription date is out of range."
+
   variant:
     validation:
       option_type_is_not_variant: "%{option_type_name} / %{option_value_name} is not kind of variant"

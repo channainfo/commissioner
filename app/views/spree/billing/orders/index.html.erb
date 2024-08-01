@@ -71,11 +71,14 @@
   var firstRow = document.querySelector('tbody tr:first-child');
   var invoiceDate = new Date(firstRow.dataset.invoiceDate);
   var currentDate = new Date();
-  currentDate.setHours(0, 0, 0, 0); // remove time from the current date
-  if (invoiceDate.getMonth() === currentDate.getMonth() &&
-      invoiceDate.getFullYear() === currentDate.getFullYear()) {
-    firstRow.classList.add('current-month');
-  } else if (invoiceDate < currentDate) {
+  currentDate.setHours(0, 0, 0, 0); // Remove time from the current date
+
+  // Calculate the 14th of the last month
+  var fourteenthLastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 14);
+
+  if (currentDate.day < 15 && invoiceDate < fourteenthLastMonth) {
     firstRow.classList.add('before-current-month');
+  } else {
+    firstRow.classList.add('current-month');
   }
 </script>

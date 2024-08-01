@@ -17,13 +17,25 @@ module SpreeCmCommissioner
       validate :variant_in_stock?
       validate :product_active?
       validate :variant_subscribed?
+      validate :date_within_range
     end
 
-    after_create :create_order
     after_commit :update_customer_active_subscriptions_count
 
-    def create_order
-      SpreeCmCommissioner::SubscribedOrderCreator.call(subscription: self)
+    def date_within_range
+      today = Time.zone.today
+      if today.day < 15
+        period_start = (today - 1.month).change(day: 15)
+        period_end = today.change(day: 14)
+      else
+        period_start = today.change(day: 15)
+        period_end = (today + 1.month).change(day: 14)
+      end
+      period = period_start..period_end
+
+      return if period.cover?(start_date) || start_date > period_end
+
+      errors.add(:subscription, I18n.t('subscription.validation.out_of_range'))
     end
 
     def quanitiy_is_not_nil?
