@@ -8,9 +8,9 @@ RSpec.describe SpreeCmCommissioner::Media::SignedCookieGenerator do
   let(:expiration_in_second) { 36000 }
 
   before(:each) do
-    ENV['CF_DOMAIN'] = domain
-    ENV['CF_PUBLIC_KEY_ID'] = key_pair_id
-    ENV['CF_PRIVATE_KEY'] = my_private_key
+    ENV['AWS_CF_MEDIA_DOMAIN'] = domain
+    ENV['AWS_CF_PUBLIC_KEY_ID'] = key_pair_id
+    ENV['AWS_CF_PRIVATE_KEY'] = my_private_key
   end
 
   subject { described_class.new(s3_object_key: s3_object, expiration_in_second: expiration_in_second) }

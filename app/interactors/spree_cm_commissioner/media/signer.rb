@@ -17,7 +17,7 @@ module SpreeCmCommissioner
       end
 
       def distribution_domain
-        ENV.fetch('CF_DOMAIN')
+        ENV.fetch('AWS_CF_MEDIA_DOMAIN')
       end
 
       def expiration_time
@@ -26,11 +26,11 @@ module SpreeCmCommissioner
 
       # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-creating-signed-url-canned-policy.html
       def key_pair_id
-        ENV.fetch('CF_PUBLIC_KEY_ID')
+        ENV.fetch('AWS_CF_PUBLIC_KEY_ID')
       end
 
       def private_key
-        ENV.fetch('CF_PRIVATE_KEY')
+        ENV.fetch('AWS_CF_PRIVATE_KEY')
       end
     end
   end

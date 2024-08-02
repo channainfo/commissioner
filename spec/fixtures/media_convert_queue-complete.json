@@ -1,0 +1,182 @@
+{
+  "_json": [
+    {
+      "message_type": "media_convert_job_status",
+      "arn": "arn:aws:mediaconvert:ap-southeast-1:636758493619:jobs/1722483175671-mtvkv3",
+      "job_id": "1722483175671-mtvkv3",
+      "status": "COMPLETE",
+      "output_groups": [
+        {
+          "outputDetails": [
+            {
+              "outputFilePaths": [
+                "s3://output-production-cm/medias/file/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7-640_360.mp4"
+              ],
+              "durationInMs": 315748,
+              "videoDetails": {
+                "widthInPx": 640,
+                "heightInPx": 360,
+                "averageBitrate": 500468
+              }
+            },
+            {
+              "outputFilePaths": [
+                "s3://output-production-cm/medias/file/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7-854_480.mp4"
+              ],
+              "durationInMs": 315748,
+              "videoDetails": {
+                "widthInPx": 854,
+                "heightInPx": 480,
+                "averageBitrate": 1000956
+              }
+            },
+            {
+              "outputFilePaths": [
+                "s3://output-production-cm/medias/file/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7-1280_720.mp4"
+              ],
+              "durationInMs": 315748,
+              "videoDetails": {
+                "widthInPx": 1280,
+                "heightInPx": 720,
+                "averageBitrate": 2502943
+              }
+            }
+          ],
+          "type": "FILE_GROUP"
+        },
+        {
+          "outputDetails": [
+            {
+              "outputFilePaths": [
+                "s3://output-production-cm/medias/hls/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7-640_360.m3u8"
+              ],
+              "durationInMs": 315748,
+              "videoDetails": {
+                "widthInPx": 640,
+                "heightInPx": 360,
+                "averageBitrate": 500361
+              }
+            },
+            {
+              "outputFilePaths": [
+                "s3://output-production-cm/medias/hls/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7-854_480.m3u8"
+              ],
+              "durationInMs": 315748,
+              "videoDetails": {
+                "widthInPx": 854,
+                "heightInPx": 480,
+                "averageBitrate": 1000717
+              }
+            },
+            {
+              "outputFilePaths": [
+                "s3://output-production-cm/medias/hls/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7-1280_720.m3u8"
+              ],
+              "durationInMs": 315748,
+              "videoDetails": {
+                "widthInPx": 1280,
+                "heightInPx": 720,
+                "averageBitrate": 2502040
+              }
+            }
+          ],
+          "playlistFilePaths": [
+            "s3://output-production-cm/medias/hls/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7.m3u8"
+          ],
+          "type": "HLS_GROUP"
+        }
+      ]
+    }
+  ],
+  "media_convert_queue": {
+    "_json": [
+      {
+        "message_type": "media_convert_job_status",
+        "arn": "arn:aws:mediaconvert:ap-southeast-1:636758493619:jobs/1722483175671-mtvkv3",
+        "job_id": "1722483175671-mtvkv3",
+        "status": "COMPLETE",
+        "output_groups": [
+          {
+            "outputDetails": [
+              {
+                "outputFilePaths": [
+                  "s3://output-production-cm/medias/file/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7-640_360.mp4"
+                ],
+                "durationInMs": 315748,
+                "videoDetails": {
+                  "widthInPx": 640,
+                  "heightInPx": 360,
+                  "averageBitrate": 500468
+                }
+              },
+              {
+                "outputFilePaths": [
+                  "s3://output-production-cm/medias/file/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7-854_480.mp4"
+                ],
+                "durationInMs": 315748,
+                "videoDetails": {
+                  "widthInPx": 854,
+                  "heightInPx": 480,
+                  "averageBitrate": 1000956
+                }
+              },
+              {
+                "outputFilePaths": [
+                  "s3://output-production-cm/medias/file/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7-1280_720.mp4"
+                ],
+                "durationInMs": 315748,
+                "videoDetails": {
+                  "widthInPx": 1280,
+                  "heightInPx": 720,
+                  "averageBitrate": 2502943
+                }
+              }
+            ],
+            "type": "FILE_GROUP"
+          },
+          {
+            "outputDetails": [
+              {
+                "outputFilePaths": [
+                  "s3://output-production-cm/medias/hls/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7-640_360.m3u8"
+                ],
+                "durationInMs": 315748,
+                "videoDetails": {
+                  "widthInPx": 640,
+                  "heightInPx": 360,
+                  "averageBitrate": 500361
+                }
+              },
+              {
+                "outputFilePaths": [
+                  "s3://output-production-cm/medias/hls/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7-854_480.m3u8"
+                ],
+                "durationInMs": 315748,
+                "videoDetails": {
+                  "widthInPx": 854,
+                  "heightInPx": 480,
+                  "averageBitrate": 1000717
+                }
+              },
+              {
+                "outputFilePaths": [
+                  "s3://output-production-cm/medias/hls/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7-1280_720.m3u8"
+                ],
+                "durationInMs": 315748,
+                "videoDetails": {
+                  "widthInPx": 1280,
+                  "heightInPx": 720,
+                  "averageBitrate": 2502040
+                }
+              }
+            ],
+            "playlistFilePaths": [
+              "s3://output-production-cm/medias/hls/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7.m3u8"
+            ],
+            "type": "HLS_GROUP"
+          }
+        ]
+      }
+    ]
+  }
+}
