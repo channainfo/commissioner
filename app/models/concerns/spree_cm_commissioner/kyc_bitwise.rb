@@ -2,7 +2,6 @@ module SpreeCmCommissioner
   module KycBitwise
     extend ActiveSupport::Concern
 
-    # must add migration to cm_guests when adding new field.
     BIT_FIELDS = {
       guest_name: 0b1,
       guest_gender: 0b10,
@@ -14,7 +13,8 @@ module SpreeCmCommissioner
       guest_emergency_contact: 0b10000000,
       guest_organization: 0b100000000,
       guest_expectation: 0b1000000000,
-      guest_social_contact: 0b10000000000
+      guest_social_contact: 0b10000000000,
+      guest_address: 0b100000000000
     }.freeze
 
     ORDERED_BIT_FIELDS = %i[
@@ -27,6 +27,7 @@ module SpreeCmCommissioner
       guest_emergency_contact
       guest_organization
       guest_social_contact
+      guest_address
       guest_expectation
       guest_id_card
     ].freeze

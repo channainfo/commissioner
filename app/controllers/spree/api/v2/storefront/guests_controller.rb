@@ -71,6 +71,7 @@ module Spree
               :social_contact_platform,
               :age,
               :emergency_contact,
+              :address,
               :other_organization,
               :expectation,
               :upload_later
