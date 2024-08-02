@@ -34,6 +34,7 @@ RSpec.describe SpreeCmCommissioner::V2::Storefront::GuestSerializer, type: :seri
         :upload_later,
         :available_social_contact_platforms,
         :allowed_upload_later,
+        :address
       )
       expect(subject[:data][:attributes][:qr_data]).to eq guest.token
     end

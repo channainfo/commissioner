@@ -63,6 +63,7 @@ module SpreeCmCommissioner
       return expectation.present? if field == :guest_expectation
       return social_contact_platform.present? && social_contact.present? if field == :guest_social_contact
       return upload_later? || (id_card.present? && id_card.allowed_checkout?) if field == :guest_id_card
+      return address.present? if field == :guest_address
 
       false
     end
