@@ -11,6 +11,7 @@ module SpreeCmCommissioner
                :accommodation?, :service?, :ecommerce?,
                :associated_event,
                :allow_self_check_in,
+               :discontinue_on,
                to: :product
     end
   end
