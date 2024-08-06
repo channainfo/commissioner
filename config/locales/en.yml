@@ -308,6 +308,10 @@ en:
           success: "Invoice Created"
           fails: "Invoice for this month is already exist "
         customers: "Customers"
+        apply_promotion:
+         success: "Promotion Created"
+         fails: "Promotion Creation Failed"
+      service_start_date: "Service Start Date"
       service_start_date: "Service Start Date"
     upsupported_payment: "Unsupported event"
     exceeded_available_quantity_on_date:

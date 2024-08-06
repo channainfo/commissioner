@@ -46,6 +46,10 @@ module SpreeCmCommissioner
 
     accepts_nested_attributes_for :ship_address, :bill_address
 
+    def promotion
+      Spree::Promotion.where(code: number).first
+    end
+
     def generate_sequence_number
       last_customer_with_same_place = vendor.customers.where(place_id: place_id).where.not(id: id).last
       self.sequence_number = last_customer_with_same_place.present? ? last_customer_with_same_place.sequence_number.to_i + 1 : 1
