@@ -1,6 +1,6 @@
 module SpreeCmCommissioner
   module LineItemDecorator
-    def self.prepended(base)
+    def self.prepended(base) # rubocop:disable Metrics/MethodLength
       include_modules(base)
 
       base.belongs_to :accepter, class_name: 'Spree::User', optional: true
@@ -22,6 +22,8 @@ module SpreeCmCommissioner
 
       base.delegate :delivery_required?, :permanent_stock?,
                     to: :variant
+      base.delegate :discontinue_on,
+                    to: :product
 
       base.accepts_nested_attributes_for :guests, allow_destroy: true
 
