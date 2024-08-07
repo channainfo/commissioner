@@ -7,7 +7,7 @@ RSpec.describe SpreeCmCommissioner::Imports::ImportOrderService do
   let(:orders) {
     [
       {
-        order_channel: 'web',
+        order_channel: 'google_form',
         order_email: 'abc@gmail.com',
         order_phone_number: '1234567890',
         variant_sku: variant1.sku,
@@ -16,7 +16,7 @@ RSpec.describe SpreeCmCommissioner::Imports::ImportOrderService do
         age: 10,
       },
       {
-        order_channel: 'app',
+        order_channel: 'spree',
         order_email: 'valo@gmail.com',
         order_phone_number: '1234567890',
         variant_sku: variant2.sku,
@@ -25,7 +25,7 @@ RSpec.describe SpreeCmCommissioner::Imports::ImportOrderService do
         age: 10,
       },
       {
-        order_channel: 'mobile',
+        order_channel: 'telegram',
         order_email: 'zerko@gmail.com',
         order_phone_number: '1234567890',
         variant_sku: variant3.sku,

@@ -33,6 +33,7 @@ module Spree
     ]
 
     @@checkout_attributes += %i[
+      channel
       phone_number
       country_code
     ]

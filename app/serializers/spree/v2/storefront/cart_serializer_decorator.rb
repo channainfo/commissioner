@@ -3,7 +3,8 @@ module Spree
     module Storefront
       module CartSerializerDecorator
         def self.prepended(base)
-          base.attributes :phone_number, :intel_phone_number, :country_code, :request_state, :qr_data
+          base.attributes :phone_number, :intel_phone_number, :country_code, :request_state, :qr_data,
+                          :channel
         end
       end
     end
