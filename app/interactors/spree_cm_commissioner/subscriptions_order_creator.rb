@@ -23,7 +23,7 @@ module SpreeCmCommissioner
       missed_months = missed_months(last_invoice_date, boundary_date)
       missed_months.times do |i|
         month = i
-        generate_invoice(last_invoice_date, month, active_subscriptions, boundary_date)
+        generate_invoice(last_invoice_date, month, active_subscriptions)
       end
       context.customer.update(last_invoice_date: Time.zone.now)
     end
@@ -42,20 +42,22 @@ module SpreeCmCommissioner
       context.new_order = customer.user.orders.create!(
         subscription_id: active_subscriptions.first.id,
         phone_number: context.customer.phone_number,
-        user_id: context.customer.user_id
+        user_id: context.customer.user_id,
+        state: 'payment'
       )
     end
 
-    def generate_invoice(last_invoice_date, month, active_subscriptions, boundary_date)
+    def generate_invoice(last_invoice_date, month, active_subscriptions)
       create_order(active_subscriptions)
-      add_subscription_variant_to_line_item(last_invoice_date, active_subscriptions, month, boundary_date)
+      add_subscription_variant_to_line_item(last_invoice_date, active_subscriptions, month)
+      apply_promotion
       create_invoice
 
       context.new_order.create_default_payment_if_eligble
       context.new_order.reload
     end
 
-    def add_subscription_variant_to_line_item(last_invoice_date, active_subscriptions, month, _boundary_date)
+    def add_subscription_variant_to_line_item(last_invoice_date, active_subscriptions, month)
       # 1 May 15th, June 14th
       # 2 June 15th, July 14th
       # 3 July 15th, August 14th
@@ -78,6 +80,11 @@ module SpreeCmCommissioner
 
     def active_subscriptions_query(boundary_date)
       context.customer.active_subscriptions.where('start_date <= ?', boundary_date)
+    end
+
+    def apply_promotion
+      promotion = Spree::Promotion.where(code: customer.number).last
+      promotion.present? && promotion.activate(order: context.new_order)
     end
 
     def create_invoice

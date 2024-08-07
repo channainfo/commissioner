@@ -199,8 +199,8 @@ RSpec.describe Spree::LineItem, type: :model do
       context 'when current pass to_date (can ignore from_date)' do
         let!(:order) { create(:order, state: :complete, completed_at: current, line_items: [line_item_a, line_item_b])}
 
-        let(:line_item_a) { create(:line_item, to_date: current - 10.seconds) }
-        let(:line_item_b) { create(:line_item, to_date: current - 2.days) }
+        let!(:line_item_a) { create(:line_item, to_date: current - 10.seconds) }
+        let!(:line_item_b) { create(:line_item, to_date: current - 2.days) }
 
         it 'return both line items as complete' do
           expect(Spree::LineItem.filter_by_event('complete').pluck(:id)).to eq [line_item_a.id, line_item_b.id]

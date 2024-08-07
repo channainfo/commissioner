@@ -43,6 +43,25 @@ module Spree
         redirect_back(fallback_location: billing_customer_orders_path(customer))
       end
 
+      # POST  /billing/customers/:customer_id/apply_promotion
+      # billing_customer_apply_promotion_path
+      def apply_promotion
+        result = SpreeCmCommissioner::CustomerPromotionCreator.call(
+          customer_id: params[:customer_id],
+          reason: params[:reason],
+          discount_amount: params[:discount_amount],
+          store: current_store
+        )
+
+        if result.success?
+          flash[:success] = I18n.t('spree.billing.customers.apply_promotion.success')
+        else
+          flash[:error] = I18n.t('spree.billing.customers.apply_promotion.fails', error: result.message)
+        end
+
+        redirect_back(fallback_location: billing_customer_orders_path(params[:customer_id]))
+      end
+
       # @overrided
       def model_class
         SpreeCmCommissioner::Customer

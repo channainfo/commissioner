@@ -266,6 +266,7 @@ Spree::Core::Engine.add_routes do
       end
       resources :customers do
         post 're_create_order', to: 'customers#re_create_order'
+        post 'apply_promotion', to: 'customers#apply_promotion'
         resources :orders
         resources :subscriptions
         resources :addresses

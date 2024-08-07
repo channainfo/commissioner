@@ -1,5 +1,10 @@
+<% promotion = @customer.promotion%>
 <%= render partial: 'spree/billing/shared/customer_tabs', locals: { current: :subscriptions } %>
+<%= render partial: 'spree/billing/shared/customer_promotion_form' %>
 <% content_for :page_actions do %>
+  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#applyPromotionModal" >
+    Apply Promotion
+  </button>
   <%= button_link_to I18n.t('spree.subscribe'), new_billing_customer_subscription_path, class: "btn-success", icon: 'add.svg', id: 'billing_customer_subscription' %>
 <% end %>
 <% if @subscriptions.any?  %>
@@ -76,3 +81,6 @@
       <%= link_to(Spree.t(:add_one), new_billing_customer_subscription_path) %>!<% end %>
   </div>
 <% end %>
+<% if promotion.present?%>
+  <%= render partial: 'spree/billing/shared/customer_promotion_table', locals: {promotion: promotion} %>
+<%end%>

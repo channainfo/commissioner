@@ -1,0 +1,39 @@
+<%amount = promotion.actions.first.calculator.preferences[:amount]%>
+<div class="card table-responsive">
+  <div class="card-body">
+    <h5 class="card-title">Promotion</h5>
+    <hr/>
+    <table class="table table-borderless">
+      <thead class="text-muted">
+        <tr>
+          <th><%= Spree.t(:name) %></th>
+          <th><%= Spree.t(:usage_limit) %></th>
+          <th><%= Spree.t(:amount) %></th>
+          <th><%= Spree.t(:promotion_uses) %></th>
+          <th><%= Spree.t(:expiration) %></th>
+          <th></th>
+        </tr>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="p">
+            <%=link_to promotion.name, edit_admin_promotion_path(promotion.id)%>
+          </td>
+          <td><%=promotion.usage_limit || '∞'%></td>
+          <td class="p"><%= Spree::Money.new(amount.to_i, currency: 'KHR').to_s %></td>
+          <td class="p"><%= Spree.t(:current_promotion_usage, count: promotion.credits_count) %></td>
+          <td><%= promotion.expires_at.to_date.to_s(:short_date) if promotion.expires_at %></td>
+          <td class="actions" data-hook="admin_promotions_index_row_actions">
+            <span class="d-flex justify-content-end">
+                <button class="btn btn-light btn-sm" data-toggle="modal" data-target="#applyPromotionModal" >
+                  <%= svg_icon name:"edit.svg", width:'14', height:'14', classes:"icon icon-edit" %>
+                </button>
+              <%= link_to_delete promotion, url: admin_promotion_url(promotion),no_text: true if can?(:delete, promotion) %>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
