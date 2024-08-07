@@ -28,4 +28,12 @@ RSpec.describe SpreeCmCommissioner::UserAuthenticator do
                                                   )
     end
   end
+
+  describe '.flow_type' do
+    it 'return [telegram_web_app_auth] when params contain telegram_init_data' do
+      flow_type = described_class.flow_type({ telegram_init_data: 'anything-as-long-as-present' })
+
+      expect(flow_type).to eq 'telegram_web_app_auth'
+    end
+  end
 end
