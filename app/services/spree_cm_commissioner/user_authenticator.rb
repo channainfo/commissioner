@@ -18,12 +18,16 @@ module SpreeCmCommissioner
       when 'social_auth'
         options = { id_token: params[:id_token] }
         SpreeCmCommissioner::UserIdTokenAuthenticator.call(options)
+      when 'telegram_web_app_auth'
+        options = { telegram_init_data: params[:telegram_init_data] }
+        SpreeCmCommissioner::UserTelegramWebAppAuthenticator.call(options)
       end
     end
 
     def self.flow_type(params)
       return 'login_auth' if params.key?(:username) && params.key?(:password)
       return 'social_auth' if params.key?(:id_token)
+      return 'telegram_web_app_auth' if params.key?(:telegram_init_data)
 
       raise exception(I18n.t('authenticator.invalid_or_missing_params'))
     end
