@@ -4,7 +4,7 @@ module SpreeCmCommissioner
     include SpreeCmCommissioner::Admin::VideoOnDemandHelper
 
     enum frame_rate: { FPS_TWEENTY_FOUR: 24, FPS_THIRTY: 30, FPS_SIXTY: 60 }
-    enum statu: { SUBMITED: 0, COMPLETED: 1, FAILED: 3 }
+    enum status: { NONE: 0, SUBMITTED: 1, PROGRESSING: 2, COMPLETE: 3, ERROR: 4 }
 
     belongs_to :variant, class_name: 'Spree::Variant'
 
@@ -12,7 +12,5 @@ module SpreeCmCommissioner
     has_one_attached :thumbnail
 
     validates :video_quality, :video_protocol, :frame_rate, :uuid, presence: true
-    validates :file, presence: true, if: :new_record?
-    validates :thumbnail, presence: true, if: :new_record?
   end
 end

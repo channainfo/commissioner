@@ -1,0 +1,24 @@
+{
+  "_json": [
+    {
+      "id": "1722483175671-mtvkv3",
+      "arn": "arn:aws:mediaconvert:ap-southeast-1:636758493619:jobs/1722483175671-mtvkv3",
+      "status": "SUBMITTED",
+      "created_at": "2024-08-01 03:32:55 +0000",
+      "message_type": "media_convert_create_job",
+      "input_file": "s3://input-production-cm/medias/2024-08/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7.mp4"
+    }
+  ],
+  "media_convert_queue": {
+    "_json": [
+      {
+        "id": "1722483175671-mtvkv3",
+        "arn": "arn:aws:mediaconvert:ap-southeast-1:636758493619:jobs/1722483175671-mtvkv3",
+        "status": "SUBMITTED",
+        "created_at": "2024-08-01 03:32:55 +0000",
+        "message_type": "media_convert_create_job",
+        "input_file": "s3://input-production-cm/medias/2024-08/ELECTRIC-7777776811db43f8bd33e8613b852f08-f24-p3-q7.mp4"
+      }
+    ]
+  }
+}
