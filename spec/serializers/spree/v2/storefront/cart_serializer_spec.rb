@@ -59,6 +59,7 @@ RSpec.describe Spree::V2::Storefront::CartSerializer, type: :serializer do
         :country_code,
         :request_state,
         :qr_data,
+        :channel,
       )
     end
 

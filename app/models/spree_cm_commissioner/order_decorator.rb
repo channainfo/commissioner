@@ -1,6 +1,6 @@
 module SpreeCmCommissioner
   module OrderDecorator
-    def self.prepended(base)
+    def self.prepended(base) # rubocop:disable Metrics/MethodLength
       base.include SpreeCmCommissioner::PhoneNumberSanitizer
       base.include SpreeCmCommissioner::OrderRequestable
 
@@ -19,6 +19,7 @@ module SpreeCmCommissioner
       base.before_create :associate_customer
 
       base.validates :promo_total, base::MONEY_VALIDATION
+      base.validates :channel, inclusion: { in: %w[spree google_form telegram] }, if: :channel_changed?
 
       base.validates :phone_number, presence: true, if: :require_phone_number
       base.has_one :invoice, dependent: :destroy, class_name: 'SpreeCmCommissioner::Invoice'
