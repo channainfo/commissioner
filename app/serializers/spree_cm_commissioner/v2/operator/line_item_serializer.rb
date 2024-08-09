@@ -7,7 +7,7 @@ module SpreeCmCommissioner
         attributes :number, :name, :quantity, :options_text, :qr_data
 
         belongs_to :order, serializer: SpreeCmCommissioner::V2::Operator::LineItemOrderSerializer
-
+        has_one  :variant, serializer: SpreeCmCommissioner::V2::Storefront::EventVariantSerializer
         has_many :guests, serializer: SpreeCmCommissioner::V2::Operator::GuestSerializer
       end
     end

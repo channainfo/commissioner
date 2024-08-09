@@ -31,6 +31,7 @@ RSpec.describe SpreeCmCommissioner::V2::Operator::LineItemSerializer, type: :ser
       expect(subject[:data][:relationships].keys).to contain_exactly(
         :order,
         :guests,
+        :variant
       )
 
       order = subject[:included].find { |item| item[:type] == :order }
