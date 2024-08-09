@@ -131,6 +131,7 @@ Spree::Core::Engine.add_routes do
     resources :taxonomies do
       resources :taxons do
         resources :taxon_vendors
+        resources :guest_card_classes
         resources :classifications do
           collection do
             post :recalculate_conversions
