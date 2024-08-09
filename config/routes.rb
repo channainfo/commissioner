@@ -78,6 +78,7 @@ Spree::Core::Engine.add_routes do
     end
 
     resources :s3_presigned_urls, only: %i[create new]
+    resources :guest_qr_codes, only: %i[index]
 
     resources :products do
       member do
