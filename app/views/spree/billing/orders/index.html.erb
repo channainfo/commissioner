@@ -49,7 +49,7 @@
             <td><%= order.display_total.to_html %></td>
             <td class="no-wrap">
               <% if order.payment_state %>
-                <%= link_to Spree.t("payment_states.#{order.payment_state}"),
+                <%= link_to I18n.t("spree.billing.payment_state.#{order.payment_state}"),
                   admin_order_payments_path(order),
                   class: "badge badge-pill badge-#{order.payment_state}" %>
               <% end %>

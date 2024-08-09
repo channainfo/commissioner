@@ -300,7 +300,7 @@ en:
         paid: "Paid"
         balance_due: "Balance Due"
         overdue: "Overdue"
-        failed: "Failed"
+        failed: "Voided"
         unknown: "Unknown"
       exceeding_date_range: "Exceeding Date Range, Range must be less than 6 months"
       customers:
