@@ -1,0 +1,32 @@
+<div class="d-flex align-items-center justify-content-between mb-4 hide-section">
+  <div class="ml-4">
+    <%= link_to @variant.name, edit_admin_product_variant_path(product_id: @variant.product.slug, id: @variant.id), class: 'h2' %>
+    <div> Guest Count: <strong><%= @guests.count %></strong></div>
+  </div>
+  <button class="btn btn-success"onclick="window.print()"> <%= raw I18n.t('guest_qr_code.label') %></button>
+</div>
+
+<% unless @guests.empty? %>
+  <div class="print-section">
+    <div class="ml-4 hidden mb-3">
+      <div><%= @variant.name %> </div>
+      <div>(<%= @guests.count %> guests) </div>
+    </div>
+    <% @guests.each_slice(5).with_index do |guest_slice, row_index| %>
+      <div class="row-wrapper">
+        <div class="small mr-3"><%= row_index + 1 %></div>
+        <div class="cards-container">
+          <% guest_slice.each do |guest| %>
+            <%= render partial: 'spree/admin/shared/guest_qr_code', locals: { guest: guest } %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+<% else %>
+<small class="form-text text-muted ml-4">
+  <%= raw I18n.t('guest_qr_code.empty_info') %>
+</small>
+<% end %>
+
