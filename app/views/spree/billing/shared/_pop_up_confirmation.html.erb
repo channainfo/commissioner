@@ -1,4 +1,4 @@
-<div id="capture-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+<div id="capture-modal-<%= order.id %>" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -18,7 +18,7 @@
   </div>
 </div>
 
-<div id="void-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+<div id="void-modal-<%= order.id %>" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -28,6 +28,7 @@
         </button>
       </div>
       <div class="modal-body">
+        <p><%= Spree.t('billing.invoice') %> : <%= order.invoice.invoice_number %></p>
         <%= form_with model: order, url: billing_order_path(order), id:"void-form", method: :put, remote: true do |f| %>
           <div class="form-group">
           <%= f.field_container :internal_note do %>
@@ -39,8 +40,7 @@
       </div>
       <div class="modal-footer  d-flex justify-content-between">
         <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= Spree.t(:cancel) %></button>
-        <%= button_tag Spree.t(:confirm), onclick: "event.preventDefault();
-                submitVoidForm();", class: 'btn btn-primary' %>
+        <%= link_to Spree.t(:confirm), billing_order_payment_path(order, payment, e: 'void'), method: :put, onclick: "event.preventDefault(); submitVoidForm();", class: 'btn btn-primary' %>
       </div>
     </div>
   </div>
@@ -49,21 +49,13 @@
 <script>
   function submitVoidForm() {
     var form = $("#void-form");
+
     $.ajax({
       url: form.attr("action"),
       method: form.attr("method"),
       data: form.serialize(),
       success: function(response) {
-        $.ajax({
-          url: '<%= billing_order_payment_path(order, payment, e: 'void') %>',
-          method: 'PUT',
-          success: function(response) {
-            location.reload();
-          },
-          error: function(xhr, status, error) {
-            console.error("Second request error:", error);
-          }
-        });
+        console.log("Form submission successful:", response);
         location.reload();
       },
       error: function(xhr, status, error) {
