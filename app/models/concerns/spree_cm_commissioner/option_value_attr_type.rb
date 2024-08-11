@@ -8,10 +8,13 @@ module SpreeCmCommissioner
       validates :name, inclusion: %w[1 0], if: :attr_type_boolean?
       validates :name, inclusion: { in: %w[delivery pickup] }, if: :attr_type_delivery_option?
 
+      validate :ensure_name_is_not_changed, on: :update
       validate :validate_coordinate, if: :attr_type_coordinate?
 
       before_validation :construct_time, if: :attr_type_time?
       before_validation :construct_date, if: :attr_type_date?
+
+      after_save :update_variants_metadata, if: :saved_change_to_name?
 
       delegate :reserved_option?,
                to: :option_type
@@ -58,7 +61,18 @@ module SpreeCmCommissioner
       nil
     end
 
+    def update_variants_metadata
+      SpreeCmCommissioner::OptionValueVariantsPublicMetadataUpdaterJob.perform_later(id)
+    end
+
     private
+
+    def ensure_name_is_not_changed
+      return unless name_changed?
+      return unless reserved_option?
+
+      errors.add(:name, 'cannot be changed after it has been set')
+    end
 
     def validate_coordinate
       return if latitude.present? && longitude.present? && latitude.to_f.between?(-90, 90) && longitude.to_f.between?(-180, 180)

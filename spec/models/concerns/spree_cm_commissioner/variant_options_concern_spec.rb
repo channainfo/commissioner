@@ -4,9 +4,70 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
   let(:option_values) { [option_value] }
   let(:variant) { create(:variant, option_values: option_values) }
 
+  context 'callback :before_save' do
+    let(:option_type1) { create(:cm_option_type, name: 'color') }
+    let(:option_type2) { create(:cm_option_type, name: 'storage') }
+
+    let(:option_value1) { create(:cm_option_value, name: 'red', option_type: option_type1) }
+    let(:option_value2) { create(:cm_option_value, name: '256GB', option_type: option_type2) }
+
+    let(:variant) { build(:variant, option_values: [option_value1, option_value2]) }
+
+    describe '#set_options_to_public_metadata' do
+      it 'save latest option values to public_metadata[:cm_options]' do
+        expect(variant).to receive(:set_options_to_public_metadata).and_call_original
+
+        variant.save!
+
+        expect(variant.public_metadata[:cm_options]).to eq({'color' => 'red', 'storage' => '256GB'})
+        expect(variant.options_in_hash).to eq variant.public_metadata[:cm_options]
+      end
+    end
+  end
+
+  describe '#option_value_name_for' do
+    let(:option_type1) { create(:cm_option_type, name: 'color') }
+    let(:option_type2) { create(:cm_option_type, name: 'storage') }
+
+    let(:option_value1) { create(:cm_option_value, name: 'red', option_type: option_type1) }
+    let(:option_value2) { create(:cm_option_value, name: '256GB', option_type: option_type2) }
+
+    let(:variant) { create(:variant, option_values: [option_value1, option_value2]) }
+
+    context 'when options already saved in public_metadata' do
+      it 'read option value from options_in_hash' do
+        expect(variant.public_metadata[:cm_options]).to eq({'color' => 'red', 'storage' => '256GB'})
+
+        expect(variant).to receive(:options_in_hash).twice.and_call_original
+        expect(variant).to_not receive(:find_option_value_name_for)
+
+        expect(variant.option_value_name_for(option_type_name: 'color')).to eq 'red'
+      end
+    end
+
+    # mostly this case only for old variants.
+    context 'when options not yet save to public_metadata' do
+      it 'read option value from find_option_value_name_for to look in db' do
+        variant.update_column(:public_metadata, {})
+
+        expect(variant.public_metadata[:cm_options]).to eq(nil)
+        expect(variant.options_in_hash).to eq(nil)
+
+        expect(variant).to receive(:find_option_value_name_for).with(option_type_name: 'color').and_call_original
+
+        expect(variant.option_value_name_for(option_type_name: 'color')).to eq 'red'
+      end
+    end
+  end
+
   describe "#post_paid?" do
     let(:option_type) { create(:cm_option_type, :payment_option) }
     let(:option_value) { create(:cm_option_value, name: 'post-paid', option_type: option_type) }
+
+    before do
+      # just to make sure it not find option value via db.
+      expect(variant).to_not receive(:find_option_value_name_for)
+    end
 
     it 'return true when payment_option is post-paid' do
       expect(variant.payment_option).to eq 'post-paid'
@@ -24,7 +85,12 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
     let(:product) { create(:product, option_types: [option_type1, option_type2]) }
     let(:variant) { create(:variant, product: product, option_values: [option_value1, option_value2]) }
 
-    it 'conbine start_date & start_time' do
+    before do
+      # just to make sure it not find option value via db.
+      expect(variant).to_not receive(:find_option_value_name_for)
+    end
+
+    it 'combine start_date & start_time' do
       expect(variant.start_date_time).to eq Time.zone.parse('2024-01-01 03:00:00')
     end
   end
@@ -39,6 +105,11 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
     let(:product) { create(:product, option_types: [option_type1, option_type2]) }
     let(:variant) { create(:variant, product: product, option_values: [option_value1, option_value2]) }
 
+    before do
+      # just to make sure it not find option value via db.
+      expect(variant).to_not receive(:find_option_value_name_for)
+    end
+
     it 'conbine end_date & end_time' do
       expect(variant.end_date_time).to eq Time.zone.parse('2024-02-02 05:00:00')
     end
@@ -48,6 +119,12 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
     let(:section) { create(:cm_taxon_event_section, from_date: '2024-02-02'.to_date, to_date: '2024-03-03') }
     let(:option_type) { create(:cm_option_type, :start_date) }
     let(:option_value) { create(:cm_option_value, name: '2024-01-01', option_type: option_type) }
+
+
+    before do
+      # just to make sure it not find option value via db.
+      expect(variant).to_not receive(:find_option_value_name_for)
+    end
 
     context 'when variant has event & [start_date] option value' do
       let(:product) { create(:product, option_types: [option_type], taxons: [section]) }
@@ -87,6 +164,11 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
   end
 
   describe '#end_date' do
+    before do
+      # just to make sure it not find option value via db.
+      expect(variant).to_not receive(:find_option_value_name_for)
+    end
+
     context 'when variant has duration option values' do
       let(:section) { create(:cm_taxon_event_section, from_date: '2024-02-02') }
 
@@ -154,6 +236,11 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
     let(:option_type) { create(:cm_option_type, :start_time) }
     let(:option_value) { create(:cm_option_value, name: '03:00:00', option_type: option_type) }
 
+    before do
+      # just to make sure it not find option value via db.
+      expect(variant).to_not receive(:find_option_value_name_for)
+    end
+
     context 'when variant has event & [start_time] option value' do
       let(:product) { create(:product, option_types: [option_type], taxons: [section]) }
       let(:variant) { create(:variant, product: product, option_values: [option_value]) }
@@ -192,6 +279,11 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
   end
 
   describe '#end_time' do
+    before do
+      # just to make sure it not find option value via db.
+      expect(variant).to_not receive(:find_option_value_name_for)
+    end
+
     context 'when variant has duration option values' do
       let(:section) { create(:cm_taxon_event_section, from_date: '2024-02-02 03:00:00') }
 

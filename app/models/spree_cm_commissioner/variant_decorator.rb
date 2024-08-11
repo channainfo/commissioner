@@ -22,10 +22,6 @@ module SpreeCmCommissioner
       base.accepts_nested_attributes_for :option_values
     end
 
-    def option_value_name_for(option_type_name: nil)
-      option_values.detect { |o| o.option_type.name.downcase.strip == option_type_name.downcase.strip }.try(:name)
-    end
-
     def delivery_required?
       delivery_option == 'delivery'
     end
@@ -97,8 +93,8 @@ if Spree::Variant.included_modules.exclude?(SpreeCmCommissioner::VariantDecorato
   #
   # problem with those methods is that it store value in memeory,
   # even we call variant.reload, the method value is no being reload.
-  SpreeMultiVendor::Spree::VariantDecorator.remove_method :vendor
-  SpreeMultiVendor::Spree::VariantDecorator.remove_method :vendor_id
+  SpreeMultiVendor::Spree::VariantDecorator.remove_method :vendor if SpreeMultiVendor::Spree::VariantDecorator.method_defined?(:vendor)
+  SpreeMultiVendor::Spree::VariantDecorator.remove_method :vendor_id if SpreeMultiVendor::Spree::VariantDecorator.method_defined?(:vendor_id)
 
   Spree::Variant.prepend(SpreeCmCommissioner::VariantDecorator)
 end

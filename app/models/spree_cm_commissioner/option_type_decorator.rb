@@ -10,6 +10,8 @@ module SpreeCmCommissioner
 
       base.validate :kind_has_updated, on: :update, if: :kind_changed?
 
+      base.has_many :variants, through: :products
+
       base.scope :promoted, -> { where(promoted: true) }
       base.whitelisted_ransackable_attributes = %w[kind]
     end

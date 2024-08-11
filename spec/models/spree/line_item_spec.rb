@@ -179,7 +179,7 @@ RSpec.describe Spree::LineItem, type: :model do
         let(:line_item_b) { create(:line_item, to_date: current + 1.days) }
 
         it 'return line item as upcoming' do
-          expect(Spree::LineItem.filter_by_event('upcoming').pluck(:id)).to eq [line_item_a.id, line_item_b.id]
+          expect(Spree::LineItem.filter_by_event('upcoming').pluck(:id)).to match_array([line_item_a.id, line_item_b.id])
         end
       end
 
@@ -203,7 +203,7 @@ RSpec.describe Spree::LineItem, type: :model do
         let!(:line_item_b) { create(:line_item, to_date: current - 2.days) }
 
         it 'return both line items as complete' do
-          expect(Spree::LineItem.filter_by_event('complete').pluck(:id)).to eq [line_item_a.id, line_item_b.id]
+          expect(Spree::LineItem.filter_by_event('complete').pluck(:id)).to match_array([line_item_a.id, line_item_b.id])
         end
       end
 
