@@ -408,7 +408,7 @@ en:
     send_specific_in_progress: "Send Specific is in Progress"
     send_all_in_progress: "Send To All is in Progress"
   guest_qr_code:
-    label: "Print Guest QR Codes"
+    label: "Print QR Codes"
     empty_info: "No <b>Guest Qr Code</b> found"
 
   pincode_sender:

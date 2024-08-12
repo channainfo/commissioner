@@ -1,0 +1,22 @@
+  <div class="print-section">
+    <div class="ml-4 show-when-print mb-3">
+      <div><%= @variant.name %> </div>
+      <div>Section <%= params[:page].present? ? params[:page] : 1 %> (<%= guests.count %> guests)</div>
+    </div>
+    <% guests.each_slice(5).with_index do |guest_slice, row_index| %>
+      <div class="row-wrapper">
+        <div class="small mr-3"><%= row_index + 1 %></div>
+        <div class="cards-container">
+          <% guest_slice.each do |guest| %>
+            <div class="show-when-print"><%= render partial: 'spree/admin/guest_qr_codes/guest_qr_code', locals: { guest: guest } %></div>
+            <div class="hidden-when-print card p-2 order-data">
+                <div><%= guest.line_item.order.number %></div>
+                <div class="small">N. 001</div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+

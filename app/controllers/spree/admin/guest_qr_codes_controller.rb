@@ -4,7 +4,9 @@ module Spree
       before_action :load_variant
 
       def index
-        @guests = guests_by_variant
+        @guests ||= guests_by_variant.page(params[:page]).per(params[:per_page])
+        @total_guests_count ||= @guests.total_count
+        @index_number = ((@guests.current_page - 1) * @guests.limit_value) + 1
       end
 
       def model_class

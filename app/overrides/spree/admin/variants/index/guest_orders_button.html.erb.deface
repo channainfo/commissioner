@@ -1,0 +1,8 @@
+<!-- insert_after "erb[loud]:contains('link_to_delete(variant, no_text: true)')" -->
+
+<%= link_to admin_guest_qr_codes_path(variant_id: variant.id),
+            class: 'btn btn-info btn-sm with-tip icon-link',
+            data: { toggle: 'tooltip', placement: 'top', title: 'Guest Orders' } do %>
+  <%= svg_icon name: "qr-code.svg", width: '12', height: '12' %>
+<% end %>
+
