@@ -1,5 +1,5 @@
 <% content_for :page_title do %>
-  <%= Spree.t('billing.failed_orders') %>
+  <%= Spree.t('billing.voided_orders') %>
 <% end %>
 <% content_for :sidebar do %>
   <div data-hook="billing_report_index_search">
@@ -39,7 +39,7 @@
             <td><%= order.customer&.phone_number %></td>
             <td class="no-wrap">
               <% if order.payment_state %>
-                <%= link_to Spree.t("payment_states.#{order.payment_state}"),
+                <%= link_to I18n.t("spree.billing.payment_state.#{order.payment_state}"),
                   admin_order_payments_path(order),
                   class: "badge badge-pill badge-#{order.payment_state}" %>
               <% end %>
