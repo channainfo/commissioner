@@ -5,6 +5,8 @@
 <%= render partial: 'spree/events/shared/guest_tabs', locals: { current: :edit } %>
 
 <% content_for(:sidebar) do %>
+  <%= render partial: 'swap_guest_bib_number', locals: { guests: @filtered_guests } %>
+
   <% if @guest.check_in.present? %>
     <%= render partial: 'check_in_status' %>
   <% else %>

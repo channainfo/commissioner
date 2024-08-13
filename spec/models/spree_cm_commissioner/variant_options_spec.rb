@@ -267,4 +267,23 @@ RSpec.describe SpreeCmCommissioner::VariantOptions do
       end
     end
   end
+
+  describe "#bib_prefix" do
+    context "when variant has bib-prefix option value" do
+      let(:option_type) { create(:cm_option_type, :bib_prefix) }
+      let(:option_value) { create(:cm_option_value, name: 'running-ticket', option_type: option_type) }
+
+      it 'return bib_prefix in string' do
+        expect(subject.bib_prefix).to eq 'running-ticket'
+      end
+    end
+
+    context "when variant has no bib-prefix option value" do
+      let(:option_values) { [ create(:option_value) ] }
+
+      it 'return nil' do
+        expect(subject.bib_prefix).to eq nil
+      end
+    end
+  end
 end
