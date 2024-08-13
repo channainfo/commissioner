@@ -17,7 +17,7 @@
   </style>
 <% else %>
   <% content_for :page_title do %>
-    <%= plural_resource_name(Spree::Order) %>
+    <%= I18n.t('spree.billing.orders') %>
   <% end %>
 <% end %>
 <% render 'search' unless @subscription.present? || @customer.present? %>
