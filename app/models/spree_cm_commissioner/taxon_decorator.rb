@@ -6,6 +6,7 @@ module SpreeCmCommissioner
       base.has_many :taxon_vendors, class_name: 'SpreeCmCommissioner::TaxonVendor'
       base.has_many :vendors, through: :taxon_vendors
 
+      base.has_many :guest_card_classes, class_name: 'SpreeCmCommissioner::GuestCardClass'
       base.has_many :homepage_section_relatables,
                     class_name: 'SpreeCmCommissioner::HomepageSectionRelatable',
                     dependent: :destroy, as: :relatable

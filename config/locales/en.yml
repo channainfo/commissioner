@@ -49,6 +49,8 @@ en:
 
   taxon_vendor:
     empty_info: "No vendor information available."
+  guest_card_classes:
+    empty_info: "No guest card classes information available."
 
   google_wallet:
     note: "Click <b>Create</b> or <b> Update</b> to connect to Google Wallet after filled all information "

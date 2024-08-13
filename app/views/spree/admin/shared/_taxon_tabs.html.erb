@@ -27,4 +27,11 @@
       admin_user_events_path(params: {taxon_id: @taxon.id, taxonomy_id: @taxonomy}),
       class: "nav-link #{'active' if current == :user_events}" %>
   <% end if can?(:admin, SpreeCmCommissioner::UserTaxon) %>
+
+ <%= content_tag :li, class: 'nav-item' do %>
+    <%= link_to_with_icon 'store.svg',
+      Spree.t(:guest_card_classes),
+      admin_taxonomy_taxon_guest_card_classes_url(@taxonomy.id, @taxon.id),
+      class: "nav-link #{'active' if current == :guest_card_classes}" %>
+  <% end if can?(:admin,SpreeCmCommissioner::GuestCardClasses)%>
 <% end %>
