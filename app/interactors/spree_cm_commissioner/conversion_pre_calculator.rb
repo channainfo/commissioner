@@ -5,6 +5,7 @@ module SpreeCmCommissioner
     def call
       update_conversion
       reassign_guests_event_id
+      generate_guests_bib_number
     end
 
     def update_conversion
@@ -16,9 +17,6 @@ module SpreeCmCommissioner
 
     # reassign event_id if it's wrong.
     def reassign_guests_event_id
-      return unless product_taxon.taxon&.event?
-
-      event_id = product_taxon.taxon&.parent_id
       return if event_id.blank?
 
       SpreeCmCommissioner::Guest
@@ -28,6 +26,22 @@ module SpreeCmCommissioner
         guest.event_id = event_id
         guest.save!
       end
+    end
+
+    def generate_guests_bib_number
+      return if event_id.blank?
+
+      SpreeCmCommissioner::Guest
+        .complete
+        .where(event_id: event_id)
+        .none_bib
+        .find_each(&:generate_bib!)
+    end
+
+    def event_id
+      return nil unless product_taxon.taxon&.event?
+
+      context.event_id ||= product_taxon.taxon&.parent_id
     end
 
     def total_count

@@ -6,6 +6,7 @@ module SpreeCmCommissioner
       scope :complete, -> { joins(:order).merge(Spree::Order.complete.not_canceled) }
       scope :accepted, -> { joins(:order).merge(Spree::Order.accepted) }
       scope :paid, -> { joins(:order).merge(Spree::Order.paid) }
+      scope :with_bib_prefix, -> { joins(:option_types).where(option_types: { name: 'bib-prefix' }) }
 
       scope :filter_by_event, lambda { |event|
         case event

@@ -183,4 +183,77 @@ RSpec.describe SpreeCmCommissioner::Guest, type: :model do
       end
     end
   end
+
+   describe ".none_bib" do
+    let(:order) { create(:order, completed_at: Date.current) }
+    let(:line_item) { create(:line_item, order: order) }
+    let(:guest1) { create(:guest, line_item: line_item) }
+    let(:guest2) { create(:guest, line_item: line_item, bib_prefix: '20KM') }
+    let(:guest3) { create(:guest, line_item: line_item) }
+
+    let(:guests) { SpreeCmCommissioner::Guest.where(id: [guest1.id, guest2.id, guest3.id]) }
+
+    it 'return guests that has no bib_prefix' do
+      expect(guests.none_bib.to_a).to eq [guest1, guest3]
+    end
+  end
+
+  describe '#generate_bib' do
+    let(:taxonomy) { create(:taxonomy, kind: :event) }
+    let(:event1) { create(:taxon, name: 'BunPhum', taxonomy: taxonomy) }
+    let(:event2) { create(:taxon, name: 'BunPhum 2', taxonomy: taxonomy) }
+
+    let(:product_without_bib) { create(:cm_product, product_type: :ecommerce, taxons: [event1]) }
+    let(:product_with_bib1) { create(:cm_bib_number_product, product_type: :ecommerce, taxons: [event1]) }
+    let(:product_with_bib2) { create(:cm_bib_number_product, product_type: :ecommerce, taxons: [event2]) }
+
+    let(:order) { create(:order, completed_at: Date.current) }
+
+    context "when guest has no prefix" do
+      let(:line_item) { create(:line_item, order: order) }
+      let(:guest) { create(:guest, line_item: line_item) }
+
+      it 'generate bib_number for guest' do
+        expect(guest.bib_number).to eq nil
+        expect(guest.bib_prefix).to eq nil
+      end
+    end
+
+
+    context "when guest in the same event" do
+      context "when guest has the same prefix" do
+        let(:line_item) { create(:line_item, order: order, variant: product_with_bib1.variants.first) }
+        let(:guest1) { create(:guest, line_item: line_item) }
+        let(:guest2) { create(:guest, line_item: line_item) }
+
+        it 'generate bib_number for guest' do
+          guest1.generate_bib!
+          guest2.generate_bib!
+
+          expect(guest1.bib_number).to eq 1
+          expect(guest2.bib_number).to eq 2
+          expect(guest1.formatted_bib_number).to eq '3KM001'
+          expect(guest2.formatted_bib_number).to eq '3KM002'
+        end
+      end
+
+      context "when guest has different prefix" do
+        let(:line_item1) { create(:line_item, order: order, variant: product_with_bib1.variants.first) }
+        let(:line_item2) { create(:line_item, order: order, variant: product_with_bib1.variants.last) }
+
+        let(:guest1) { create(:guest, line_item: line_item1) }
+        let(:guest2) { create(:guest, line_item: line_item2) }
+
+        it 'generate bib_number for guest' do
+          guest1.generate_bib!
+          guest2.generate_bib!
+
+          expect(guest1.bib_number).to eq 1
+          expect(guest2.bib_number).to eq 1
+          expect(guest1.formatted_bib_number).to eq '3KM001'
+          expect(guest2.formatted_bib_number).to eq '5KM001'
+        end
+      end
+    end
+  end
 end
