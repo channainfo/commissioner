@@ -3,6 +3,7 @@ module SpreeCmCommissioner
     def self.prepended(base) # rubocop:disable Metrics/MethodLength
       base.include SpreeCmCommissioner::PhoneNumberSanitizer
       base.include SpreeCmCommissioner::OrderRequestable
+      base.include SpreeCmCommissioner::OrderBibNumberConcern
 
       base.scope :subscription, -> { where.not(subscription_id: nil) }
       base.scope :paid, -> { where(payment_state: :paid) }

@@ -81,6 +81,31 @@ FactoryBot.define do
       end
     end
 
+    factory :cm_bib_number_product, parent: :cm_kyc_product do
+      option_types { [
+        create(:cm_option_type, :bib_prefix),
+      ] }
+
+
+      transient do
+        variant1_bib_prefix { '3KM' }
+        variant2_bib_prefix { '5KM' }
+      end
+
+      after(:create) do |product, evaluator|
+        option_value1 = create(:cm_option_value, presentation: evaluator.variant1_bib_prefix, name: evaluator.variant1_bib_prefix, option_type: product.option_types[0])
+        option_value2 = create(:cm_option_value, presentation: evaluator.variant2_bib_prefix, name: evaluator.variant2_bib_prefix, option_type: product.option_types[0])
+
+        variant1 = create(:variant, price: product.price, product: product)
+        variant1.option_values = [option_value1]
+        variant1.save!
+
+        variant2 = create(:variant, price: product.price, product: product)
+        variant2.option_values = [option_value2]
+        variant2.save!
+      end
+    end
+
     factory :cm_kyc_product do
       transient do
         select_fields { [ :guest_name, :guest_gender, :guest_dob]}

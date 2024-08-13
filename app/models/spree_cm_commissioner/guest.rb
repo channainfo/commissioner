@@ -18,6 +18,7 @@ module SpreeCmCommissioner
 
     scope :complete, -> { joins(:line_item).merge(Spree::LineItem.complete) }
     scope :unassigned_event, -> { where(event_id: nil) }
+    scope :none_bib, -> { where(bib_prefix: [nil, '']) }
 
     belongs_to :line_item, class_name: 'Spree::LineItem'
     belongs_to :user, class_name: 'Spree::User'
@@ -36,13 +37,15 @@ module SpreeCmCommissioner
 
     before_validation :set_event_id
 
+    validates :bib_index, uniqueness: true, allow_nil: true
+
     self.whitelisted_ransackable_associations = %w[id_card event]
     self.whitelisted_ransackable_attributes = %w[first_name last_name gender occupation_id card_type]
 
     def self.csv_importable_columns
       %i[
         first_name last_name age dob gender other_occupation other_organization
-        entry_type nationality_id other_organization expectation emergency_contact
+        entry_type nationality_id other_organization expectation emergency_contact bib_number
       ]
     end
 
@@ -69,7 +72,7 @@ module SpreeCmCommissioner
     end
 
     def set_event_id
-      self.event_id = line_item.associated_event&.id if line_item.present?
+      self.event_id ||= line_item.associated_event&.id if line_item.present?
     end
 
     def full_name
@@ -112,6 +115,39 @@ module SpreeCmCommissioner
       return nil if dob.nil?
 
       ((Time.zone.now - dob.to_time) / 1.year.seconds).floor
+    end
+
+    def bib_required?
+      line_item.variant.bib_prefix.present?
+    end
+
+    def generate_bib
+      return if bib_prefix.present?
+      return unless bib_required?
+      return if event_id.blank?
+
+      self.bib_prefix = line_item.variant.bib_prefix
+
+      last_bib_number = event.guests.complete
+                             .where(bib_prefix: bib_prefix)
+                             .maximum(:bib_number) || 0
+
+      self.bib_number = last_bib_number + 1
+      self.bib_index = "#{event_id}-#{bib_prefix}-#{bib_number}"
+    end
+
+    def generate_bib!
+      generate_bib
+      save!
+    end
+
+    # bib_number: 345, bib_prefix: 5KM, bib_zerofill: 5 => return 5KM00345
+    # bib_number: 345, bib_prefix: 5KM, bib_zerofill: 2 => return 5KM345
+    def formatted_bib_number
+      return nil if bib_prefix.blank?
+
+      filled_bib_number = bib_number.to_s.rjust(line_item.variant.bib_zerofill.to_i, '0')
+      "#{bib_prefix}#{filled_bib_number}"
     end
   end
 end
