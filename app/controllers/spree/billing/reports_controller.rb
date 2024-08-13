@@ -37,13 +37,16 @@ module Spree
       def overdue
         @search = orders_scope.joins(:line_items).where.not(payment_state: %w[paid failed])
                               .where('spree_line_items.due_date < ?', Time.zone.today)
+                              .select('DISTINCT ON (spree_orders.id) spree_orders.*, spree_line_items.*')
                               .ransack(params[:q])
         @orders = @search.result.page(page).per(per_page)
       end
 
       # GET /billing/reports/failed_orders
       def failed_orders
-        @search = orders_scope.joins(:line_items).where(payment_state: 'failed').ransack(params[:q])
+        @search = orders_scope.joins(:line_items).where(payment_state: 'failed')
+                              .select('DISTINCT ON (spree_orders.id) spree_orders.*, spree_line_items.*')
+                              .ransack(params[:q])
         @orders = @search.result.page(page).per(per_page)
       end
 
