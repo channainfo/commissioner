@@ -311,6 +311,9 @@ en:
         apply_promotion:
          success: "Promotion Created"
          fails: "Promotion Creation Failed"
+        delete_promotion:
+         success: "Promotion deleted"
+         fails: "Promotion Deletion Failed"
       service_start_date: "Service Start Date"
       service_start_date: "Service Start Date"
     upsupported_payment: "Unsupported event"

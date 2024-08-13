@@ -62,7 +62,7 @@ module Spree
           'spree/billing/orders' => %w[index create new edit show update destroy],
           'spree/billing/users' => %w[index create new edit show update destroy],
           'spree/billing/subscriptions' => %w[index create new edit show update destroy],
-          'spree/billing/customers' => %w[index create new edit show update destroy apply_promotion],
+          'spree/billing/customers' => %w[index create new edit show update destroy apply_promotion delete_promotion],
           'spree/billing/roles' => %w[index create new edit show update destroy],
           'spree/billing/vendors' => %w[edit show update],
           'spree/billing/places' => %w[index create new edit show update destroy],

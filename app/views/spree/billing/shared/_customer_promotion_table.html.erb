@@ -29,7 +29,7 @@
                 <button class="btn btn-light btn-sm" data-toggle="modal" data-target="#applyPromotionModal" >
                   <%= svg_icon name:"edit.svg", width:'14', height:'14', classes:"icon icon-edit" %>
                 </button>
-              <%= link_to_delete promotion, url: admin_promotion_url(promotion),no_text: true if can?(:delete, promotion) %>
+                <%= link_to_with_icon 'delete.svg', Spree.t('delete'), billing_customer_delete_promotion_url, method: :delete, class: 'btn btn-danger btn-sm', no_text: true %>
             </span>
           </td>
         </tr>
