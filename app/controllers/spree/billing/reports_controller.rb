@@ -97,18 +97,18 @@ module Spree
       end
 
       def date_range_for_month
-        if params[:period].present?
+        if params.dig(:spree_cm_commissioner_report, :use_custom_date_range) == '1'
+          from_date = params[:from_date]
+          to_date = params[:to_date]
+          raise SpreeCmCommissioner::ExceedingRangeError if (to_date.to_date - from_date.to_date).to_i > 180
+        elsif params[:period].present?
           today = Time.zone.today
           month = params[:period]
           year = (params[:year].presence || today.year)
           from_date = Time.zone.local(year, month.to_i, 1).beginning_of_day
           to_date = Time.zone.local(year, month.to_i, 31).end_of_day
-          [from_date, to_date]
-        else
-          from_date = params[:from_date]
-          to_date = params[:to_date]
-          raise SpreeCmCommissioner::ExceedingRangeError if (to_date.to_date - from_date.to_date).to_i > 180
         end
+        [from_date, to_date]
       end
 
       def revenue_report_query(from_date, to_date)
