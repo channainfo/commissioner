@@ -1,0 +1,28 @@
+<% content_for :page_title do %>
+  <%= link_to Spree.t(:taxonomies), spree.admin_taxonomies_url %> /
+  <%= link_to @taxonomy.root.name, spree.edit_admin_taxonomy_url(@taxonomy) %>
+  <% unless @taxon.root? %>
+    / <%= link_to @taxon.name %>
+  <% end %> / <%= Spree.t(:new) %>
+<% end %>
+
+<div data-hook="admin_new_user_identity_provider_new_form_header">
+  <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <%= form_with model: @object, url: { action: 'create' } do |f| %>
+      <%= f.hidden_field :taxon_id, value: @taxon.id %>
+      <div class="form-group" data-hook="guest_card_classes">
+        <%= f.field_container :type do %>
+          <%= f.label :type, Spree.t('guest_card_classes_types') %>
+          <%= f.collection_select :type, SpreeCmCommissioner::GuestCardClass::TYPES, :to_s, :demodulize, { prompt: Spree.t('match_choices.none') }, class: 'form-control' %>
+        <% end %>
+      </div>
+      <fieldset data-hook="new_guest_card_classes">
+        <%= render partial: 'spree/admin/shared/new_resource_links' %>
+      </fieldset>
+    <% end %>
+  </div>
+</div>

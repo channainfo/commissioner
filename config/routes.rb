@@ -132,6 +132,11 @@ Spree::Core::Engine.add_routes do
     resources :taxonomies do
       resources :taxons do
         resources :taxon_vendors
+        resources :guest_card_classes do
+          member do
+            delete :remove_background_image
+          end
+        end
         resources :classifications do
           collection do
             post :recalculate_conversions

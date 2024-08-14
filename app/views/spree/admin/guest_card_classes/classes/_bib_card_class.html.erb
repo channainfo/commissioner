@@ -1,0 +1,49 @@
+<div class="form-group" data-hook="guest_card_classes">
+  <%= f.field_container :type do %>
+    <%= f.label :type, Spree.t('guest_card_classes_types') %>
+    <%= f.collection_select :type, SpreeCmCommissioner::GuestCardClass::TYPES, :to_s, :demodulize, { prompt: Spree.t('match_choices.none') }, { class: 'form-control', disabled: !@object.new_record? } %>
+  <% end %>
+</div>
+
+<% unless @object.new_record? %>
+  <div data-hook="admin_taxonomy_taxon_guest_card_classes_form_fields" class="row">
+    <div class="form-group col-md-12">
+      <div class="row" style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div class="col-md-5">
+          <% @object.preferences.keys.each do |key| %>
+            <%= f.label :"preferred_#{key}", Spree.t(key), class: 'form-label' %>
+            <% if key.to_s == 'background_color' %>
+              <%= f.text_field :"preferred_#{key}", class: 'form-control', placeholder: '#FFFFFF', data: { behavior: 'color-picker' } %>
+              <div id="color-preview" style="margin-top: 10px;">
+                <%= content_tag :div, nil, style: "background-color: #{@object.send("preferred_#{key}")}; width: 60px; height: 60px; border: 1px solid #ccc; box-sizing: border-box; display: block;" %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+        <div class="col-md-6">
+          <%= render 'shared/asset_field',
+            field: :background_image,
+            label: 'Background Image',
+            asset: @object.background_image,
+            remove_url: remove_background_image_admin_taxonomy_taxon_guest_card_class_url(@taxonomy.id, @taxon.id, @object.id),
+            form: f,
+            classes: ['col-md-6 ml-3']
+          %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const colorInput = document.querySelector('[data-behavior="color-picker"]');
+    const colorPreview = document.querySelector('#color-preview > div');
+
+    if (colorInput) {
+      colorInput.addEventListener('input', function() {
+        colorPreview.style.backgroundColor = colorInput.value;
+      });
+    }
+  });
+</script>

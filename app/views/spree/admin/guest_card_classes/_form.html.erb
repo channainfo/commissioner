@@ -1,0 +1,10 @@
+<% content_for :page_title do %>
+  <%= link_to Spree.t(:taxonomies), spree.admin_taxonomies_url %> /
+  <%= link_to @taxonomy.root.name, spree.edit_admin_taxonomy_url(@taxonomy) %>
+  <% unless @taxon.root? %>
+    / <%= link_to @taxon.name %>
+  <% end %> / <%= Spree.t(:edit) %>
+<% end %>
+
+
+<%= render partial: 'spree/admin/guest_card_classes/classes/bib_card_class', locals: { f: f, object: @object } %>
