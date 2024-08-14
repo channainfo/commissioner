@@ -97,8 +97,8 @@ if Spree::Variant.included_modules.exclude?(SpreeCmCommissioner::VariantDecorato
   #
   # problem with those methods is that it store value in memeory,
   # even we call variant.reload, the method value is no being reload.
-  SpreeMultiVendor::Spree::VariantDecorator.remove_method :vendor
-  SpreeMultiVendor::Spree::VariantDecorator.remove_method :vendor_id
+  SpreeMultiVendor::Spree::VariantDecorator.remove_method :vendor if SpreeMultiVendor::Spree::VariantDecorator.method_defined?(:vendor)
+  SpreeMultiVendor::Spree::VariantDecorator.remove_method :vendor_id if SpreeMultiVendor::Spree::VariantDecorator.method_defined?(:vendor_id)
 
   Spree::Variant.prepend(SpreeCmCommissioner::VariantDecorator)
 end
