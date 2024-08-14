@@ -222,6 +222,8 @@ Spree::Core::Engine.add_routes do
     root to: 'events/guests#index'
     resources :guests, only: %i[index show edit update], controller: 'events/guests' do
       post :send_email, on: :member, as: :send_email
+      post :generate_guest_bib_number, on: :member
+      patch :swap_guest_bib_number, on: :member
       collection do
         post :generate_guest_csv
       end

@@ -1,6 +1,8 @@
 module Spree
   module Events
     class GuestsController < Spree::Events::BaseController
+      before_action :load_guest_and_event, only: %i[edit send_email generate_guest_bib_number swap_guest_bib_number]
+      before_action :load_filtered_guests, only: %i[edit swap_guest_bib_number]
       helper SpreeCmCommissioner::Admin::GuestHelper
 
       def collection_url
@@ -45,24 +47,39 @@ module Spree
 
       def edit
         @check_in = @guest.check_in
-        @event = @guest.event
       end
 
-      # override
       def edit_object_url
         edit_event_guest_url
       end
 
       def send_email
-        @guest = SpreeCmCommissioner::Guest.find(params[:id])
-        @event = @guest.event
-
         @email = params[:guest][:email]
 
         Spree::OrderMailer.ticket_email(@guest, @email).deliver_later
 
         flash[:success] = 'Email sent successfully' # rubocop:disable Rails/I18nLocaleTexts
         redirect_to event_guest_path
+      end
+
+      def generate_guest_bib_number
+        @guest.generate_bib!
+
+        flash[:success] = 'Bib number generated successfully' # rubocop:disable Rails/I18nLocaleTexts
+        redirect_to event_guest_path
+      end
+
+      def swap_guest_bib_number
+        target_guest = @filtered_guests.find(params[:target_guest_id])
+
+        SpreeCmCommissioner::BibNumberSwapper.call(
+          guests: @filtered_guests,
+          current_guest: @guest,
+          target_guest: target_guest
+        )
+
+        flash[:success] = 'Bib number swapped successfully' # rubocop:disable Rails/I18nLocaleTexts
+        redirect_to event_guests_path
       end
 
       # POST: /guests/generate_guest_csv
@@ -91,13 +108,23 @@ module Spree
 
       private
 
+      def load_guest_and_event
+        @guest = SpreeCmCommissioner::Guest.find(params[:id])
+        @event = @guest.event
+      end
+
+      def load_filtered_guests
+        @filtered_guests = @event.guests
+                                 .where(bib_prefix: @guest.bib_prefix)
+                                 .where.not(id: @guest.id).order(:bib_number)
+      end
+
       def permitted_resource_params
         params.required(:spree_cm_commissioner_guest).permit(:entry_type)
       end
 
       def collection
         scope = model_class.where(event_id: current_event&.id)
-
         @search = scope.ransack(params[:q])
         @collection = @search.result
                              .includes(:id_card)
