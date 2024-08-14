@@ -346,6 +346,18 @@ RSpec.describe Spree::LineItem, type: :model do
     end
   end
 
+  describe "#generate_remaining_guests" do
+    let(:line_item) { create(:line_item) }
+
+    it 'create remaining total guests' do
+      allow(line_item).to receive(:remaining_total_guests).and_return(2)
+
+      expect(line_item.guests.count).to eq 0
+      expect { line_item.generate_remaining_guests }.to change { line_item.guests.count }.by(2)
+    end
+  end
+
+
   context 'guest options' do
     describe '#number_of_adults' do
       let(:variant) { create(:variant, option_values: [adults(4), allowed_extra_adults(2)]) }
