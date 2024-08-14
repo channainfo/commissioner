@@ -1,9 +1,9 @@
-  .hidden {
-    display: none;
+  .hidden-when-print {
+    display: block;
   }
 
-  .hide-section {
-    display: block;
+  .show-when-print {
+    display: none;
   }
 
   .card {
@@ -35,20 +35,18 @@
 
   @media print {
 
-    .hidden {
-      display: block;
+    .hidden-when-print {
+      display: none !important;;
     }
 
+    .show-when-print {
+      display: block !important;
+      }
     .cards-container {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 18px;
       flex: 1;
-    }
-
-
-    .hide-section {
-    display: none !important;
     }
 
     .print-section {
