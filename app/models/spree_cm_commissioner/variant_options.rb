@@ -9,6 +9,8 @@ module SpreeCmCommissioner
     DEFAULT_KIDS_AGE_MAX = 17
     DEFAULT_NUMBER_OF_ADULTS = 1
 
+    # these method read option value from public metadata first
+    # if no public metadata found, it will find in db.
     def option_value_name_for(option_type_name: nil)
       variant.option_value_name_for(option_type_name: option_type_name)
     end

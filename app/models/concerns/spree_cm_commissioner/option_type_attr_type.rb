@@ -45,9 +45,12 @@ module SpreeCmCommissioner
       validates :attr_type, inclusion: { in: ATTRIBUTE_TYPES }
       validates :attr_type, presence: true
 
+      validate :ensure_name_is_not_changed, on: :update
+
       before_validation :set_reverved_options_attributes, if: :reserved_option?
 
       after_save :sort_date_time_option_values, if: -> { attr_type == 'date' || attr_type == 'time' }
+      after_save :update_variants_metadata, if: :saved_change_to_name?
 
       ATTRIBUTE_TYPES.each do |attr_type|
         define_method "attr_type_#{attr_type}?" do
@@ -57,6 +60,8 @@ module SpreeCmCommissioner
     end
 
     def reserved_option?
+      return name_was.in?(RESERVED_OPTIONS.keys) if name_changed?
+
       name.in?(RESERVED_OPTIONS.keys)
     end
 
@@ -71,6 +76,19 @@ module SpreeCmCommissioner
         position = index + 1
         value.update(position: position)
       end
+    end
+
+    def update_variants_metadata
+      SpreeCmCommissioner::OptionTypeVariantsPublicMetadataUpdaterJob.perform_later(id)
+    end
+
+    private
+
+    def ensure_name_is_not_changed
+      return unless name_changed?
+      return unless reserved_option?
+
+      errors.add(:name, 'cannot be changed after it has been set')
     end
   end
 end
