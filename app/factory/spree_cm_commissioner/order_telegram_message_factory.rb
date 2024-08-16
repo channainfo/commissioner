@@ -22,13 +22,14 @@
 
 module SpreeCmCommissioner
   class OrderTelegramMessageFactory < TelegramMessageFactory
-    attr_reader :order, :vendor
+    attr_reader :order, :vendor, :show_details_link
 
-    def initialize(title:, order:, vendor: nil)
+    def initialize(title:, order:, subtitle: nil, show_details_link: nil, vendor: nil)
       @order = order
       @vendor = vendor
+      @show_details_link = show_details_link || false
 
-      super(title: title)
+      super(title: title, subtitle: subtitle)
     end
 
     def selected_line_items
@@ -78,6 +79,11 @@ module SpreeCmCommissioner
       text << "Name: #{order.name}"
       text << "Tel: #{inline_code(order.intel_phone_number || order.phone_number)}"
       text << "Email: #{inline_code(order.email)}" if order.email.present?
+
+      if show_details_link
+        text << ''
+        text << "<a href='#{Spree::Store.default.url}/orders/#{order.qr_data}'>More details</a>"
+      end
 
       text.compact.join("\n")
     end

@@ -1,15 +1,17 @@
 module SpreeCmCommissioner
   class TelegramMessageFactory
-    attr_reader :title
+    attr_reader :title, :subtitle
 
-    def initialize(title:)
+    def initialize(title:, subtitle: nil)
       @title = title
+      @subtitle = subtitle
     end
 
     def message
       text = []
 
       text << header.presence
+      text << subtitle.presence if subtitle.present?
       text << body.presence
       text << footer.presence
 

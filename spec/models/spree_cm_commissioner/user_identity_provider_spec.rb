@@ -3,7 +3,7 @@ require 'spec_helper'
 RSpec.describe SpreeCmCommissioner::UserIdentityProvider, type: :model do
   let(:user) { create(:user) }
   let(:user_identity_provider) { create(:user_identity_provider, user: user) }
-  
+
   describe 'test association' do
     it { should belong_to(:user) }
   end
@@ -15,7 +15,7 @@ RSpec.describe SpreeCmCommissioner::UserIdentityProvider, type: :model do
   end
 
   describe 'create user identity provider' do
-    context 'return error when sub redundant' do 
+    context 'return error when sub redundant' do
       it 'when sub is not unique' do
         user_1 = create(:user)
         user_2 = create(:user)
