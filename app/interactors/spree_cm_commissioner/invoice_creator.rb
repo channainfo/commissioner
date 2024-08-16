@@ -17,12 +17,12 @@ module SpreeCmCommissioner
 
     # 04-12-2023 -> 0412
     def load_prefix
-      context.prefix = order.line_items.first.from_date.strftime('%m%y')
+      context.prefix = order.line_items.first.to_date.strftime('%m%y')
     end
 
     def load_invoices_count
-      from = order.line_items.first.from_date.beginning_of_month
-      to = order.line_items.first.from_date.end_of_month
+      from = order.line_items.first.to_date.beginning_of_month
+      to = order.line_items.first.to_date.end_of_month
 
       context.invoices_count = SpreeCmCommissioner::Invoice.where(
         vendor: order.line_items.first.vendor,
@@ -34,7 +34,7 @@ module SpreeCmCommissioner
       context.invoice = SpreeCmCommissioner::Invoice.where(
         vendor: order.line_items.first.vendor,
         order: order,
-        date: order.line_items.first.from_date
+        date: order.line_items.first.to_date
       ).first_or_create do |invoice|
         invoice.invoice_number = context.invoice_number
       end
