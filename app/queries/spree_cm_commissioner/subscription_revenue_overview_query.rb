@@ -42,7 +42,7 @@ module SpreeCmCommissioner
     def build_subquery(overdue: false)
       base_query = Spree::Order.subscription
                                .joins(:line_items)
-                               .where(line_items: { vendor_id: vendor_id, from_date: from_date..to_date })
+                               .where(line_items: { vendor_id: vendor_id, to_date: from_date..to_date })
 
       unless spree_current_user.has_spree_role?('admin')
         base_query = base_query.joins(subscription: :customer)
@@ -50,7 +50,7 @@ module SpreeCmCommissioner
       end
 
       if overdue
-        base_query = base_query.where.not(payment_state: :paid)
+        base_query = base_query.where(payment_state: :balance_due)
                                .where('line_items.due_date < ?', current_date)
       end
 

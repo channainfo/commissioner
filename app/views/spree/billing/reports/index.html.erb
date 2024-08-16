@@ -4,7 +4,9 @@
 <% content_for :sidebar do %>
   <%= render partial: 'date_range_picker' %><br>
 <% end %>
-<%= render partial: 'overview' %>
+<% if @revenue_totals.any? %>
+  <%= render partial: 'overview' %>
+<% end %>
 <br>
 <% unless @search.nil? || @orders.empty? %>
   <div class="table-responsive border rounded bg-whit mb-3">
