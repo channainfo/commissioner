@@ -1,4 +1,9 @@
 <div class="form-group" data-hook="guest_card_classes">
+  <%= f.field_container :name do %>
+    <%= f.label :name, raw(Spree.t(:name) + required_span_tag) %>
+    <%= f.text_field :name, class: 'form-control title', required: :required %>
+    <%= f.error_message_on :name %>
+  <% end %>
   <%= f.field_container :type do %>
     <%= f.label :type, Spree.t('guest_card_classes_types') %>
     <%= f.collection_select :type, SpreeCmCommissioner::GuestCardClass::TYPES, :to_s, :demodulize, { prompt: Spree.t('match_choices.none') }, { class: 'form-control', disabled: !@object.new_record? } %>

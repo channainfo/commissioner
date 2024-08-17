@@ -19,6 +19,7 @@
       <thead class="text-muted">
         <tr data-hook="admin_taxonomy_taxon_guest_card_class_index_headers">
           <th><%= Spree.t(:id) %></th>
+          <th><%= Spree.t(:name) %></th>
           <th><%= Spree.t(:type) %></th>
           <th><%= Spree.t(:created_at) %></th>
           <th><%= Spree.t(:updated_at) %></th>
@@ -28,6 +29,7 @@
         <% @guest_card_classes.each do |guest_card_class| %>
           <tr id="<%= spree_dom_id guest_card_class %>" data-hook="admin_taxonomy_taxon_guest_card_class_index_rows">
             <td><%= guest_card_class.id %></td>
+            <td><%= guest_card_class.name %></td>
             <td><%= guest_card_class.type&.demodulize %></td>
             <td><%= guest_card_class.created_at %></td>
             <td><%= guest_card_class.updated_at %></td>
