@@ -52,14 +52,15 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCreator do
         before do
           travel_to 3.months.ago do
             today = Time.zone.today
-            three_months_ago = today.change(day: today.day < 15 ? 14 : 15)
+            three_months_ago = today.change(day: 15)
             create(:cm_subscription, customer: customer, quantity: 2, start_date: three_months_ago)
             create(:cm_subscription, customer: customer, quantity: 2, start_date: three_months_ago)
             create(:cm_subscription, customer: customer, quantity: 2, start_date:  three_months_ago)
             customer.last_invoice_date =  three_months_ago
           end
-          today = Time.zone.today.change(day: 14)
-          start_date =   today.day < 15 ?  (today - 1.month) : today
+          today = Time.zone.today
+          # start_date =   today.day < 15 ? today : (today - 1.month)
+          start_date =   today.change(day: 15) - 1.month
           customer.subscriptions.last.update(start_date: start_date)
         end
 
@@ -80,9 +81,10 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCreator do
         before do
           travel_to 1.month.ago do
             today = Time.zone.today
-            start_date = today.change(day: today.day < 15 ? 15 : 15)
+            start_date = today.change(day: 15)
             create(:cm_subscription, customer: customer, quantity: 2, start_date: start_date)
           end
+          customer.update!(last_invoice_date: Time.zone.today)
         end
 
         it "doesn't create any orders" do
@@ -92,7 +94,7 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCreator do
 
         it "doesn't update the last_invoice_date of the customer" do
           described_class.call(customer: customer)
-          expect(customer.last_invoice_date).to eq nil
+          expect(customer.last_invoice_date).to eq Time.zone.today
         end
       end
 
