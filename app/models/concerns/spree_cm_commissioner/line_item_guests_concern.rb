@@ -7,7 +7,7 @@ module SpreeCmCommissioner
       validate :validate_total_kids, if: -> { public_metadata[:number_of_kids].present? }
     end
 
-    def remaining_total_guests = number_of_guests - guests.size
+    def remaining_total_guests = [number_of_guests - guests.size, 0].max
     def number_of_guests = number_of_adults + number_of_kids
 
     def allowed_extra_adults = variant.allowed_extra_adults * quantity
@@ -18,6 +18,14 @@ module SpreeCmCommissioner
 
     def number_of_adults = public_metadata[:number_of_adults] || (variant.number_of_adults * quantity)
     def number_of_kids = public_metadata[:number_of_kids] || (variant.number_of_kids * quantity)
+
+    def generate_remaining_guests
+      return if remaining_total_guests.zero?
+
+      remaining_total_guests.times do
+        guests.create!
+      end
+    end
 
     def extra_adults
       return 0 unless extra_adults?
