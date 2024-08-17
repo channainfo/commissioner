@@ -128,7 +128,7 @@ module SpreeCmCommissioner
 
       self.bib_prefix = line_item.variant.bib_prefix
 
-      last_bib_number = event.guests.complete
+      last_bib_number = event.guests
                              .where(bib_prefix: bib_prefix)
                              .maximum(:bib_number) || 0
 
