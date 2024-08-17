@@ -9,10 +9,6 @@
         <div class="cards-container">
           <% guest_slice.each do |guest| %>
             <div class="show-when-print"><%= render partial: 'spree/admin/guest_qr_codes/guest_qr_code', locals: { guest: guest } %></div>
-            <div class="hidden-when-print card p-2 order-data">
-                <div><%= guest.line_item.order.number %></div>
-                <div class="small">N. 001</div>
-            </div>
           <% end %>
         </div>
       </div>
