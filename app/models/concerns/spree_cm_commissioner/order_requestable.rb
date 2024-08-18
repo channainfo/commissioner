@@ -113,6 +113,7 @@ module SpreeCmCommissioner
 
     def notify_order_complete_app_notification_to_user
       SpreeCmCommissioner::OrderCompleteNotificationSender.call(order: self)
+      SpreeCmCommissioner::OrderCompleteTelegramSenderJob.perform_later(id) if user_id.present?
     end
 
     def send_order_requested_app_notification_to_user

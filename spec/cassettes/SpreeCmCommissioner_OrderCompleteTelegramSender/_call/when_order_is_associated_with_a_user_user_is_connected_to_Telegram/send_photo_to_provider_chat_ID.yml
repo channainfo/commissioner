@@ -1,0 +1,50 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.telegram.org/botthis-is-bot-token/sendPhoto
+    body:
+      encoding: UTF-8
+      string: chat_id=2241690414&photo=https%3A%2F%2Fbookmeplus-api.ngrok.io%2Fi%2FR217269552-fC1OS8P6ohqr5X3Eiqc0GQ1723095552953&show_caption_above_media=false&parse_mode=HTML&caption=%3Cb%3EBooking+Successful+%F0%9F%8E%89%3C%2Fb%3E%0A%0AShow+the+QR+code+above+to+the+crew+to+check-in+on+the+event+day%0A%0AOrder+Number%3A%0A%3Ccode%3ER060218759%3C%2Fcode%3E%0A%0A%5B+x1+%5D%0A%3Cb%3EProduct+12939%3C%2Fb%3E%0A%0A%3Cb%3E%F0%9F%99%8D+Customer+Info%3C%2Fb%3E%0AName%3A+John+Doe%0ATel%3A+%3Ccode%3E%3C%2Fcode%3E%0AEmail%3A+%3Ccode%3Eruben%40rutherford.name%3C%2Fcode%3E%0A%0A%3Ca+href%3D%27www.example.com%2Forders%2FR060218759-U9Zct6gFBRkdqSJf62rnSw1723870715286%27%3EMore+details%3C%2Fa%3E
+    headers:
+      User-Agent:
+      - HTTPClient/1.0 (2.8.3, ruby 3.2.0 (2022-12-25))
+      Accept:
+      - "*/*"
+      Date:
+      - Sat, 17 Aug 2024 04:58:35 GMT
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.18.0
+      Date:
+      - Sat, 17 Aug 2024 04:58:37 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1237'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Expose-Headers:
+      - Content-Length,Content-Type,Date,Server,Connection
+    body:
+      encoding: UTF-8
+      string: '{"ok":true,"result":{"message_id":4835,"from":{"id":6441690414,"is_bot":true,"first_name":"Contigo
+        Asia","username":"contigoasiabot"},"chat":{"id":2241690414,"first_name":"Thea","last_name":"Choem","username":"theachoem","type":"private"},"date":1723870716,"photo":[{"file_id":"AgACAgQAAxkDAAIS42bALfw2jjvfyW86W5IrxSitvIGDAALpszEbdjoFUmP4ieja25u9AQADAgADcwADNQQ","file_unique_id":"AQAD6bMxG3Y6BVJ4","file_size":2955,"width":90,"height":90},{"file_id":"AgACAgQAAxkDAAIS42bALfw2jjvfyW86W5IrxSitvIGDAALpszEbdjoFUmP4ieja25u9AQADAgADbQADNQQ","file_unique_id":"AQAD6bMxG3Y6BVJy","file_size":14787,"width":200,"height":200}],"caption":"Booking
+        Successful \ud83c\udf89\n\nShow the QR code above to the crew to check-in
+        on the event day\n\nOrder Number:\nR060218759\n\n[ x1 ]\nProduct 12939\n\n\ud83d\ude4d
+        Customer Info\nName: John Doe\nTel: \nEmail: ruben@rutherford.name\n\nMore
+        details","caption_entities":[{"offset":0,"length":21,"type":"bold"},{"offset":102,"length":10,"type":"code"},{"offset":121,"length":13,"type":"bold"},{"offset":136,"length":16,"type":"bold"},{"offset":181,"length":21,"type":"code"},{"offset":204,"length":12,"type":"text_link","url":"http://www.example.com/orders/R060218759-U9Zct6gFBRkdqSJf62rnSw1723870715286"}]}}'
+  recorded_at: Sat, 17 Aug 2024 04:58:37 GMT
+recorded_with: VCR 6.2.0
