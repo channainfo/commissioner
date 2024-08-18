@@ -1,6 +1,25 @@
 require 'spec_helper'
 
 RSpec.describe Spree::Order, type: :model do
+  describe '.whitelisted_ransackable_associations' do
+    it 'return expected associations' do
+      expect(described_class.whitelisted_ransackable_associations).to match_array([
+        "shipments", "user", "created_by", "approver", "canceler", "promotions", "bill_address", "ship_address",
+        "line_items", "store", "customer", "taxon", "payments", "invoice"
+      ])
+    end
+  end
+
+
+  describe '.whitelisted_ransackable_attributes' do
+    it 'return expected attributes' do
+      expect(described_class.whitelisted_ransackable_attributes).to match_array([
+        "completed_at", "email", "number", "state", "payment_state", "shipment_state", "total", "item_total",
+        "considered_risky", "channel", "intel_phone_number", "phone_number"
+      ])
+    end
+  end
+
   describe 'validations' do
     context 'state is either cart or address' do
       it 'not required present of email or phone number' do
