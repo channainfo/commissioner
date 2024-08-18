@@ -1,6 +1,25 @@
 require 'spec_helper'
 
 RSpec.describe Spree::LineItem, type: :model do
+  describe '.whitelisted_ransackable_associations' do
+    it 'return expected associations' do
+      expect(described_class.whitelisted_ransackable_associations).to match_array([
+        "variant", "order", "tax_category", "guests"
+      ])
+    end
+  end
+
+
+  describe '.whitelisted_ransackable_attributes' do
+    it 'return expected attributes' do
+      expect(described_class.whitelisted_ransackable_attributes).to match_array([
+        "variant_id", "order_id", "tax_category_id", "quantity", "price", "cost_price", "cost_currency", "adjustment_total",
+        "additional_tax_total", "promo_total", "included_tax_total", "pre_tax_amount", "taxable_adjustment_total",
+        "non_taxable_adjustment_total", "number", "to_date", "from_date"
+      ])
+    end
+  end
+
   describe '#callback before_save' do
     let(:phnom_penh) { create(:state, name: 'Phnom Penh') }
     let!(:vendor) { create(:cm_vendor_with_product, name: 'Phnom Penh Hotel', default_state_id: phnom_penh.id) }
