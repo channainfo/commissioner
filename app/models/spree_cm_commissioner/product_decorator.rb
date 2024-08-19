@@ -31,6 +31,11 @@ module SpreeCmCommissioner
 
       base.has_many :complete_line_items, through: :classifications, source: :line_items
 
+      base.has_many :product_places, class_name: 'SpreeCmCommissioner::ProductPlace', dependent: :destroy
+      base.has_many :places, through: :product_places
+
+      base.accepts_nested_attributes_for :product_places, allow_destroy: true
+
       base.scope :min_price, lambda { |vendor|
         joins(:prices_including_master)
           .where(vendor_id: vendor.id, product_type: vendor.primary_product_type)
