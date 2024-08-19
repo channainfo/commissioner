@@ -1,0 +1,19 @@
+<% selected_type = params[:type] || 'venue' %>
+
+<% content_for :sidebar do %>
+  <ul class="nav flex-column nav-pills" data-hook="admin_product_places_tabs">
+    <%= content_tag :li do %>
+      <%= link_to_with_icon 'edit.svg',
+        Spree.t(:venues),
+        admin_product_product_places_path(@product, type: :venue),
+        class: "nav-link #{'active' if selected_type == 'venue'}" %>
+    <% end if can?(:admin, SpreeCmCommissioner::ProductPlace) %>
+
+    <%= content_tag :li do %>
+      <%= link_to_with_icon 'images.svg',
+        Spree.t(:nearby_places),
+        admin_product_product_places_path(@product, type: :nearby_place),
+        class: "nav-link #{'active' if selected_type == 'nearby_place'}" %>
+    <% end if can?(:admin, SpreeCmCommissioner::ProductPlace) %>
+  </ul>
+<% end %>

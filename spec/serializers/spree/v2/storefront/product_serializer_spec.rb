@@ -69,6 +69,7 @@ RSpec.describe Spree::V2::Storefront::ProductSerializer, type: :serializer do
         :promoted_option_types,
         :possible_promotions,
         :default_state,
+        :venue
       )
     end
   end

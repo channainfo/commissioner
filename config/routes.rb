@@ -123,6 +123,14 @@ Spree::Core::Engine.add_routes do
           post :update_positions
         end
       end
+
+      resources :product_places do
+        collection do
+          post :update_positions
+          get :venues
+          get :nearby_places
+        end
+      end
     end
 
     namespace :calendars do
