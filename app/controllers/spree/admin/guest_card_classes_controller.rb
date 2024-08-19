@@ -2,6 +2,7 @@ module Spree
   module Admin
     class GuestCardClassesController < Spree::Admin::ResourceController
       before_action :load_taxonomy_taxon
+      before_action :build_assets, only: :update
 
       def index
         @guest_card_classes = @taxon.guest_card_classes
@@ -11,6 +12,8 @@ module Spree
       def remove_background_image
         remove_asset(@object.background_image)
       end
+
+      private
 
       def remove_asset(asset)
         if asset.destroy
@@ -22,7 +25,12 @@ module Spree
         end
       end
 
-      private
+      def build_assets
+        return unless @object.is_a?(SpreeCmCommissioner::GuestCardClasses::BibCardClass)
+        return unless permitted_resource_params[:background_image]
+
+        @object.build_background_image(attachment: permitted_resource_params.delete(:background_image))
+      end
 
       def load_taxonomy_taxon
         @taxonomy = Spree::Taxonomy.find(params[:taxonomy_id])
@@ -53,9 +61,16 @@ module Spree
       # override
       # permit all attributes for now.
       def permitted_resource_params
-        key = ActiveModel::Naming.param_key(@object)
-        permit_keys = params.require(key).keys
-        params.require(key).permit(permit_keys)
+        @permitted_resource_params ||= begin
+          key = ActiveModel::Naming.param_key(@object)
+          params.require(key).permit(
+            :name,
+            :type,
+            :taxon_id,
+            :preferred_background_color,
+            :background_image
+          )
+        end
       end
     end
   end

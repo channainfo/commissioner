@@ -51,6 +51,7 @@ en:
     empty_info: "No vendor information available."
   guest_card_classes:
     empty_info: "No guest card classes information available."
+    background_image: "Background Image"
 
   google_wallet:
     note: "Click <b>Create</b> or <b> Update</b> to connect to Google Wallet after filled all information "
