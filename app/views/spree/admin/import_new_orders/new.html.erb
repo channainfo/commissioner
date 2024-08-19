@@ -1,0 +1,15 @@
+
+<%= render partial: 'spree/admin/shared/import_order_tabs', locals: { current: :import_new_order } %>
+<%= render 'spree/admin/import_new_orders/import_new_order_instruction' %>
+
+<% content_for :page_title do %>
+  <%= page_header_back_button spree.admin_import_new_orders_path %>
+  <%= Spree.t(:import_new_order) %>
+<% end %>
+
+<%= form_with model: @object, url: { action: 'create' }, html: { multipart: true } do |f| %>
+  <fieldset>
+    <%= render partial: 'form', locals: { f: f } %>
+    <%= render partial: 'spree/admin/shared/new_resource_links' %>
+  </fieldset>
+<% end %>

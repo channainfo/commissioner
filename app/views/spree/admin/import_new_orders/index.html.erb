@@ -1,0 +1,86 @@
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:import_new_order), new_admin_import_new_order_path, { class: "btn-success", icon: 'add.svg' } %>
+  <%= button_link_to Spree.t(:download_import_template), download_new_order_csv_template_admin_orders_path(format: 'csv'), { class: "btn btn-outline-success", icon: 'cloud-download.svg', id: 'download_import_template' } %>
+<% end %>
+
+<% content_for :page_title do %>
+  <%= page_header_back_button spree.admin_import_new_orders_path %>
+  <%= Spree.t(:import_new_order) %>
+<% end %>
+
+
+<%= render partial: 'spree/admin/shared/import_order_tabs', locals: { current: :import_new_order } %>
+
+
+<% if @collection.any? %>
+<div class="table-responsive border rounded bg-white">
+  <table class="table" id="listing_products">
+    <thead class="text-muted">
+      <tr data-hook="admin_products_index_headers">
+        <th scope="col" class="text-left"><%= Spree.t(:import_type) %></th>
+        <th scope="col" class="text-left"><%= Spree.t(:name) %></th>
+        <th scope="col" class="text-left"><%= Spree.t(:status) %></th>
+        <th scope="col" class="text-center"><%= Spree.t(:fail_orders) %></th>
+        <th scope="col" class="text-left"><%= Spree.t(:started_at) %></th>
+        <th scope="col" class="text-left"><%= Spree.t(:finished_at) %></th>
+        <th scope="col" class="text-left">View</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @collection.each do |import| %>
+        <tr data-hook="order_imports_index_rows">
+          <td class="text-left">
+            <% case import.import_type %>
+              <% when 'new_order' %>
+                <span class="badge badge-secondary"><%= import.import_type %></span>
+              <% when 'existing_order' %>
+                <span class="badge badge-info"><%= import.import_type %></span>
+              <% else %>
+                <span class="badge badge-secondary"><%= import.import_type %></span>
+            <% end %>
+          </td>
+          <td class="text-left"><%= import.name %></td>
+          <td class="text-left">
+            <% case import.status %>
+            <% when 'queue' %>
+              <span class="badge badge-primary"><%= import.status %></span>
+            <% when 'progress' %>
+              <span class="badge badge-warning"><%= import.status %></span>
+            <% when 'done' %>
+              <span class="badge badge-success"><%= import.status %></span>
+            <% when 'failed' %>
+              <span class="badge badge-danger"><%= import.status %></span>
+            <% else %>
+              <span class="badge badge-secondary"><%= import.status %></span>
+            <% end %>
+          </td>
+          <td class="text-center">
+            <% if import.preferred_fail_orders.present? %>
+              <% failed_orders = import.preferred_fail_orders.split(', ').map(&:strip) %>
+              <span class="badge badge-danger"><%= failed_orders.count %></span>
+            <% end %>
+          </td>
+          <td class="text-left">
+            <%= pretty_time(import.started_at) %>
+          </td>
+          <td class="text-left">
+            <%= pretty_time(import.finished_at) %>
+          </td>
+          <td class="text-left">
+            <%= link_to admin_import_new_order_url(import),
+              class: 'btn btn-success btn-sm with-tip icon-link' do %>
+                <%= svg_icon name: "eye.svg", width: '14', height: '14' %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>
+<% else %>
+  <div class="text-left no-objects-found m-5">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(SpreeCmCommissioner::Imports::ImportOrder)) %>
+  </div>
+<% end %>

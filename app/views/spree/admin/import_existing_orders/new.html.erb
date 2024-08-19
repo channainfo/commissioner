@@ -1,0 +1,14 @@
+
+<% content_for :page_title do %>
+  <%= page_header_back_button spree.admin_import_existing_orders_path %>
+  <%= Spree.t(:import_existing_order) %>
+<% end %>
+
+<%= render partial: 'spree/admin/shared/import_order_tabs', locals: { current: :import_existing_order } %>
+
+<%= form_with model: @object, url: { action: 'create' }, html: { multipart: true } do |f| %>
+  <fieldset>
+    <%= render partial: 'form', locals: { f: f } %>
+    <%= render partial: 'spree/admin/shared/new_resource_links' %>
+  </fieldset>
+<% end %>
