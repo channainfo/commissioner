@@ -12,9 +12,10 @@ module Spree
         admin_import_existing_orders_url
       end
 
-      # override
-      def build_import_order(name)
-        model_class.existing_order.new(name: name)
+      def build_import_order(name, imported_file)
+        import_order = model_class.existing_order.new(name: name)
+        import_order.imported_file.attach(imported_file) if imported_file.present?
+        import_order
       end
 
       # GET: /admin/orders/download_existing_order_csv_template

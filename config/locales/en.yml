@@ -464,3 +464,7 @@ en:
       FPS_TWEENTY_FOUR: "24 (Cinematic Mode)"
       FPS_THIRTY: "30 (TV Show or Online Video)"
       FPS_SIXTY: "60 (Sport and Gaming)"
+  import_orders:
+    invalid_json_format: "Invalid JSON format for orders"
+    success_message: "Importing guests..."
+    error_message: "Error importing guests"
