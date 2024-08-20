@@ -117,6 +117,12 @@ en:
   nearby_place:
     empty_info: "No <b>Nearby places</b> found."
 
+  product_place:
+    empty_info: "No <b>Places</b> found."
+    already_exist: "This place is already exist."
+    created_successfully: "Place was successfully added to product."
+    place_required: "Please select a place before creating the product place."
+
   telegram_chat_bot:
     vendor_channel_group_info: "This channel/group will be recieve order notifications"
     only_for_authorized_user_info: "Only authorized users can approve/reject line items, make sure to input their telegram username"

@@ -1,0 +1,21 @@
+<% selected_type = params[:type] || 'all' %>
+
+<% content_for :page_sub_tabs do %>
+  <ul class="nav nav-pills mb-3">
+    <li class="nav-item">
+      <%= link_to Spree.t(:all),
+                  admin_product_product_places_path(@product),
+                  class: "nav-link #{'active' if selected_type == 'all'}" %>
+    </li>
+    <li class="nav-item">
+      <%= link_to Spree.t(:venues),
+                  admin_product_product_places_path(@product, type: :venue),
+                  class: "nav-link #{'active' if selected_type == 'venue'}" %>
+    </li>
+    <li class="nav-item">
+      <%= link_to Spree.t(:nearby_places),
+                  admin_product_product_places_path(@product, type: :nearby_place),
+                  class: "nav-link #{'active' if selected_type == 'nearby_place'}" %>
+    </li>
+  </ul>
+<% end %>
