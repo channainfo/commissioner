@@ -9,9 +9,9 @@
             <% end %>
 
             <%= f.hidden_field :orders_json %>
-            <%= f.field_container :file do %>
-              <%= f.label :file %> <span class="required text-danger">*</span>
-              <%= file_field_tag :file, require: true, id: 'csv-file' %>
+            <%= f.field_container :imported_file do %>
+              <%= f.label :imported_file %> <span class="required text-danger">*</span>
+              <%= file_field_tag :imported_file, require: true, id: 'csv-file' %>
             <% end %>
           </div>
         </div>
