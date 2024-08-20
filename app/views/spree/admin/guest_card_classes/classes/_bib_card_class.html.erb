@@ -28,7 +28,7 @@
         <div class="col-md-6">
           <%= render 'shared/asset_field',
             field: :background_image,
-            label: 'Background Image',
+            label: I18n.t('guest_card_classes.background_image'),
             asset: @object.background_image,
             remove_url: remove_background_image_admin_taxonomy_taxon_guest_card_class_url(@taxonomy.id, @taxon.id, @object.id),
             form: f,

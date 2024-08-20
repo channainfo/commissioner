@@ -51,7 +51,7 @@ km:
     empty_info: "មិនមានព័ត៌មានអំពីអ្នកលក់ទេ"
   guest_card_classes:
     empty_info: "មិនមានព័ត៌មានអំពីកាតភ្ញៀវទេ"
-
+    background_image: "រូបភាពផ្ទៃខាងក្រោយ"
 
   user_update_contact:
     phone_number_is_already_used: "លេខទូរស័ព្ធបានប្រើប្រាស់រួច"
