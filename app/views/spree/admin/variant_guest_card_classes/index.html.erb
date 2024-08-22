@@ -1,0 +1,17 @@
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :guest_card } %>
+
+<% content_for :page_actions do %>
+  <%= yield :page_actions %>
+  <%= external_page_preview_link(@product) %>
+<% end %>
+
+<%= form_tag admin_product_variant_guest_card_classes_path(@product), method: :post, class: 'form-horizontal' do %>
+  <div class="my-3">
+    <%= render 'variant_guest_card_class' %>
+  </div>
+  <div class="form-actions" data-hook="buttons">
+    <%= button Spree.t('actions.update'), 'save.svg' %>
+    <span class="or"><%= Spree.t(:or) %></span>
+    <%= button_link_to Spree.t('actions.cancel'), admin_product_path(@product), icon: 'cancel.svg' %>
+  </div>
+<% end %>

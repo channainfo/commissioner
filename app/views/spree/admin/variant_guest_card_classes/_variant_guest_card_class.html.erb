@@ -1,0 +1,28 @@
+<div class="table-responsive border rounded bg-white">
+  <div id="variant_prices-table-wrapper">
+    <table class="table">
+      <thead class="text-muted">
+        <tr data-hook="variant_guest_card_class_header">
+          <th scope="col" class="text-center"><%= Spree.t(:options) %></th>
+          <th scope="col" class="text-center"><%= Spree.t(:guest_card_class) %></th>
+        </tr>
+      </thead>
+      <tbody id="variant_guest_card_class" data-hook="variant_guest_card_class_body">
+        <% @product.variants.each do |variant| %>
+          <tr id="variant_guest_card_class_row_<%= variant.id %>" data-hook="variant_guest_card_class_row">
+            <td class="text-center align-middle">
+              <%= variant.options_text %>
+            </td>
+            <td>
+              <%= select_tag "variant_guest_card_class[#{variant.id}]",
+                  options_from_collection_for_select(@guest_card_classes, :id, :name, variant.guest_card_classes.first&.id),
+                  include_blank: Spree.t(:None),
+                  class: 'select2',
+                  id: "guest_card_class_#{variant.id}" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

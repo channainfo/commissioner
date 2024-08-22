@@ -1,0 +1,9 @@
+<!-- insert_after "erb[silent]:contains('Spree::Digital')" -->
+
+ <%= content_tag :li, class: 'nav-item' do %>
+    <%= link_to_with_icon 'box-seam.svg',
+      Spree.t(:guest_card),
+      admin_product_variant_guest_card_classes_url(@product),
+      class: "nav-link #{'active' if current == :guest_card}" %>
+ <% end %>
+

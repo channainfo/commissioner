@@ -77,6 +77,11 @@ RSpec.describe Spree::Variant, type: :model do
     end
   end
 
+  describe 'associations' do
+    it { is_expected.to have_many(:variant_guest_card_class).class_name('SpreeCmCommissioner::VariantGuestCardClass') }
+    it { is_expected.to have_many(:guest_card_classes).through(:variant_guest_card_class).class_name('SpreeCmCommissioner::GuestCardClass') }
+  end
+
   describe 'callbacks' do
     context '#after_commit' do
       let(:vendor) { create(:active_vendor, name: 'Angkor Hotel', min_price: 10, max_price: 30) }
