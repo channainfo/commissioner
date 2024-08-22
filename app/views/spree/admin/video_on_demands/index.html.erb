@@ -43,9 +43,11 @@
               <% end %>
             </td>
             <td class="image text-center">
-              <div class="admin-product-image-container small-img">
-                <%= image_tag (main_app.rails_blob_url(video_on_demand.thumbnail)) if video_on_demand&.thumbnail&.attached? %>
-              </div>
+              <% if video_on_demand&.thumbnail&.attached?  %>
+                <div class="admin-product-image-container small-img">
+                  <%= image_tag (main_app.rails_blob_url(video_on_demand.thumbnail)) %>
+                </div>
+              <% end %>
             </td>
             <td class="image text-center">
               <% if video_on_demand&.file.attached? %>

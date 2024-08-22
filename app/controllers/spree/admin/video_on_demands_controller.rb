@@ -17,7 +17,7 @@ module Spree
         video_on_demand_params = params.require(:spree_cm_commissioner_video_on_demand)
         result = SpreeCmCommissioner::VideoOnDemandCreator.call(video_on_demand_params: video_on_demand_params)
         if result.success?
-          redirect_to collection_url
+          redirect_to edit_admin_product_video_on_demand_url(product, result.video_on_demand)
         else
           flash[:error] = result.error
           render :new
