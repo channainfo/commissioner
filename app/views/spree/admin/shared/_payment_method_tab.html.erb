@@ -1,0 +1,18 @@
+<% content_for(:page_tabs) do %>
+
+  <%= content_tag :li, class: 'nav-item' do %>
+    <%= link_to_with_icon 'edit.svg',
+      Spree.t(:details),
+      edit_admin_payment_method_url(@payment_method),
+      class: "nav-link #{'active' if current == :details}" %>
+
+  <% end if can?(:admin, Spree::PaymentMethod) %>
+
+  <%= content_tag :li, class: 'nav-item' do %>
+    <%= link_to_with_icon 'user.svg',
+      Spree.t(:payable_users),
+      admin_payment_method_user_payment_options_path(@payment_method),
+      class: "nav-link #{'active' if current == :payable_users}" %>
+  <% end if can?(:admin, SpreeCmCommissioner::UserPaymentOption) %>
+  
+<% end %>

@@ -1,0 +1,3 @@
+<!-- insert_after "erb[silent]:contains('content_for :page_title')" -->
+
+<%= render partial: 'spree/admin/shared/payment_method_tab', locals: { current: :details } %>

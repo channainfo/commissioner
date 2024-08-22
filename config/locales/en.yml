@@ -475,3 +475,6 @@ en:
     invalid_json_format: "Invalid JSON format for orders"
     success_message: "Importing guests..."
     error_message: "Error importing guests"
+  user_payment_option:
+    empty_info: "No <b> Payable Users</b> yet."
+

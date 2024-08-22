@@ -227,6 +227,9 @@ Spree::Core::Engine.add_routes do
 
     resources :user_events, except: %i[show edit update]
 
+    resources :payment_methods do
+      resources :user_payment_options
+    end
     resources :webhooks_subscribers do
       resources :rules, controller: :webhooks_subscriber_rules, except: %i[index show]
       resources :orders, controller: :webhooks_subscriber_orders do

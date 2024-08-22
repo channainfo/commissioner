@@ -6,6 +6,9 @@ module SpreeCmCommissioner
       base.const_set(:DISPLAY, DISPLAY)
 
       base.scope :available_on_frontend_for_early_adopter, -> { active.where(display_on: %i[both front_end frontend_for_early_adopter]) }
+
+      base.has_many :user_payment_options, class_name: 'SpreeCmCommissioner::UserPaymentOption'
+      base.has_many :users, through: :user_payment_options, class_name: 'Spree::User'
     end
   end
 end

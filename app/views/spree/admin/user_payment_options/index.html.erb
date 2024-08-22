@@ -1,0 +1,58 @@
+<% content_for :page_title do %>
+  <%= link_to Spree.t(:payment_methods), spree.admin_payment_methods_path %> /
+  <%= @payment_method.name %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:add_payable_user), new_admin_payment_method_user_payment_option_path, class: "btn-success", icon: 'add.svg' %>
+<% end %>
+
+<%= render partial: 'spree/admin/shared/payment_method_tab', locals: { current: :payable_users } %>
+
+<% if @collection.any? %>
+<div class="table-responsive border rounded bg-white mb-3">
+    <table class="table" id="listing_user_taxon" data-hook>
+      <thead class="text-muted">
+        <tr data-hook="admin_taxonomy_taxon_user_taxons_index_headers">
+          <th><%= Spree.t(:id) %></th>
+          <th><%= Spree.t(:name) %></th>
+          <th><%= Spree.t(:email) %></th>
+          <th><%= Spree.t(:phone_number) %></th>
+          <th><%= Spree.t(:created_at) %></th>
+          <th><%= Spree.t(:updated_at) %></th>
+          <th><%= Spree.t(:action) %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @collection.each do |user_payment_option| %>
+
+          <tr id="<%= spree_dom_id user_payment_option %>" >
+            <td><%= user_payment_option.user.id %></td>
+            <td><%= user_payment_option.user.full_name %></td>
+            <td><%= user_payment_option.user.email %></td>
+            <td><%= user_payment_option.user.phone_number %></td>
+            <td><%= user_payment_option.user.created_at %></td>
+            <td><%= user_payment_option.user.updated_at %></td>
+            <td class="actions">
+              <%= link_to_delete(user_payment_option, { url: admin_payment_method_user_payment_option_url(@payment_method, user_payment_option), no_text: true }) if can? :destroy, user_payment_option %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  
+<%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>
+
+<% else %>
+   <small class="form-text text-muted">
+      <%= raw I18n.t('user_payment_option.empty_info') %>
+      <%= link_to Spree.t(:add_one), new_admin_payment_method_user_payment_option_url if can?(:create, SpreeCmCommissioner::CustomerNotification) %>!
+  </small>
+<% end  %>
+
+
+
+
+
+
