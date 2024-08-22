@@ -1,19 +1,18 @@
 module SpreeCmCommissioner
   module Imports
     class ImportOrderService
-      attr_reader :import_order_id, :orders, :import_by, :import_type
+      attr_reader :import_order_id, :import_by_user_id, :import_type
 
-      def initialize(import_order_id:, orders:, import_by:, import_type:)
+      def initialize(import_order_id:, import_by_user_id:, import_type:)
         @import_order_id = import_order_id
-        @orders = orders
-        @import_by = import_by
+        @import_by_user_id = import_by_user_id
         @import_type = import_type
         @fail_order_numbers = []
       end
 
       def call
         update_import_status_when_start(:progress)
-        import_orders(orders)
+        import_orders
         save_fail_orders
         update_import_status_when_finish(:done)
       rescue StandardError => e
@@ -25,43 +24,43 @@ module SpreeCmCommissioner
         import_order.update!(preferred_fail_orders: @fail_order_numbers.join(', ')) unless @fail_order_numbers.empty?
       end
 
-      def import_orders(orders)
-        ActiveRecord::Base.transaction do
+      def import_orders
+        content = fetch_content
+
+        CSV.parse(content, headers: true) do |row|
+          order_data = row.to_hash.symbolize_keys
           case import_type
           when 'new_order'
-            orders.each { |order| process_new_order(order) }
+            process_new_order(order_data)
           when 'existing_order'
-            orders.each { |order| process_existing_order(order) }
+            process_existing_order(order_data)
           else
             raise ArgumentError, "Unknown import_type: #{import_type}"
           end
         end
       end
 
-      def process_existing_order(order)
-        order_json = order.deep_symbolize_keys
-        existing_order = Spree::Order.find_by(number: order_json[:order_number])
+      def process_existing_order(order_data)
+        existing_order = Spree::Order.find_by(number: order_data[:order_number])
 
         if existing_order
-          update_existing_order(existing_order, order_json)
+          update_existing_order(existing_order, order_data)
         else
-          record_failure(order_json[:order_number])
+          record_failure(order_data[:order_number])
         end
       end
 
-      def process_new_order(order)
-        order_json = order.deep_symbolize_keys
-
+      def process_new_order(order_data)
         params = {
-          channel: order_json[:order_channel],
-          email: order_json[:order_email],
-          phone_number: order_json[:order_phone_number],
+          channel: construct_channel(order_data[:order_channel]),
+          email: order_data[:order_email],
+          phone_number: order_data[:order_phone_number],
           line_items_attributes: [
             {
               quantity: 1,
-              sku: order_json[:variant_sku],
+              sku: order_data[:variant_sku],
               guests_attributes: [
-                order_json.slice(*SpreeCmCommissioner::Guest.csv_importable_columns)
+                order_data.slice(*SpreeCmCommissioner::Guest.csv_importable_columns)
               ]
             }
           ]
@@ -71,25 +70,25 @@ module SpreeCmCommissioner
         update_order_state(order)
       end
 
-      def update_existing_order(order, order_json)
+      def update_existing_order(order, order_data)
         if order.update(
-          channel: order_json[:order_channel],
-          email: order_json[:order_email],
-          phone_number: order_json[:order_phone_number]
+          channel: order_data[:order_channel],
+          email: order_data[:order_email],
+          phone_number: order_data[:order_phone_number]
         )
-          update_guest(order, order_json)
+          update_guest(order, order_data)
         else
-          record_failure(order_json[:order_number])
+          record_failure(order_data[:order_number])
         end
       end
 
-      def update_guest(order, order_json)
+      def update_guest(order, order_data)
         guest = order.line_items.first.guests.first
         if guest.present?
-          guest_attributes = order_json.slice(*SpreeCmCommissioner::Guest.csv_importable_columns)
+          guest_attributes = order_data.slice(*SpreeCmCommissioner::Guest.csv_importable_columns)
           guest.update!(guest_attributes)
         else
-          record_failure(order_json[:order_number])
+          record_failure(order_data[:order_number])
         end
       end
 
@@ -112,12 +111,29 @@ module SpreeCmCommissioner
         @import_order ||= SpreeCmCommissioner::Imports::ImportOrder.find(import_order_id)
       end
 
+      def import_by
+        @import_by ||= Spree::User.find(import_by_user_id)
+      end
+
       def update_import_status_when_start(status)
         import_order.update(status: status, started_at: Time.zone.now)
       end
 
       def update_import_status_when_finish(status)
         import_order.update(status: status, finished_at: Time.zone.now)
+      end
+
+      def construct_channel(order_channel)
+        "#{order_channel}-#{import_order.id}-#{import_order.slug}"
+      end
+
+      def fetch_content
+        url = import_order.imported_file.url
+        response = Faraday.get(url)
+
+        raise "Failed to fetch content: #{response.status}" unless response.success?
+
+        response.body
       end
     end
   end

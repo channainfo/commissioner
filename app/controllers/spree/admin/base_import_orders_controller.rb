@@ -7,20 +7,17 @@ module Spree
 
       def create
         name = permitted_resource_params[:name]
-        orders_json = permitted_resource_params[:orders_json]
         imported_file = permitted_resource_params[:imported_file]
 
-        begin
-          orders = JSON.parse(orders_json)
-        rescue JSON::ParserError
-          flash[:error] = I18n.t('import_orders.invalid_json_format')
-          redirect_to admin_import_new_orders_url and return
+        unless imported_file&.original_filename&.match?(/\.(csv)$/)
+          flash[:error] = I18n.t('import_orders.invalid_file')
+          redirect_to collection_url and return
         end
 
         import_order = build_import_order(name, imported_file)
 
         if import_order.save
-          SpreeCmCommissioner::ImportOrderJob.perform_later(import_order.id, spree_current_user, orders, import_order.import_type)
+          SpreeCmCommissioner::ImportOrderJob.perform_later(import_order.id, spree_current_user.id, import_order.import_type)
           flash[:success] = I18n.t('import_orders.success_message')
         else
           flash[:error] = I18n.t('import_orders.error_message')
@@ -44,7 +41,7 @@ module Spree
       end
 
       def permitted_resource_params
-        params.require(object_name).permit(:name, :orders_json).merge(imported_file: params[:imported_file])
+        params.require(object_name).permit(:name).merge(imported_file: params[:imported_file])
       end
 
       # GET: /admin/orders/import_new_orders/:id/download

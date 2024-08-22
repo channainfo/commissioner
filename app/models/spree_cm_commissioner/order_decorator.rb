@@ -20,7 +20,7 @@ module SpreeCmCommissioner
       base.before_create :associate_customer
 
       base.validates :promo_total, base::MONEY_VALIDATION
-      base.validates :channel, inclusion: { in: %w[spree google_form telegram] }, if: :channel_changed?
+      base.validate :validate_channel_prefix, if: :channel_changed?
 
       base.validates :phone_number, presence: true, if: :require_phone_number
       base.has_one :invoice, dependent: :destroy, class_name: 'SpreeCmCommissioner::Invoice'
@@ -211,6 +211,13 @@ module SpreeCmCommissioner
 
       self.bill_address ||= customer.bill_address.try(:clone)
       self.ship_address ||= customer.ship_address.try(:clone)
+    end
+
+    def validate_channel_prefix
+      allowed_prefixes = %w[spree google_form telegram]
+      return if allowed_prefixes.any? { |prefix| channel.start_with?(prefix) }
+
+      errors.add(:channel, "must start with one of the following: #{allowed_prefixes.join(', ')}")
     end
   end
 end
