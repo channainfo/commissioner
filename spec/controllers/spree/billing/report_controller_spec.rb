@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe Spree::Billing::ReportsController, type: :controller do
-  today = Time.zone.today
-  let!(:customer) { create(:cm_customer, last_invoice_date: (today - 2.month).change(day: 15)) }
+  today = '2021-08-15'.to_date
+  let!(:customer) { create(:cm_customer, last_invoice_date: today - 2.month) }
   let(:spree_current_user) { create(:user) }
   let(:admin_role) { create(:role, name: 'admin') }
 
@@ -11,11 +11,11 @@ RSpec.describe Spree::Billing::ReportsController, type: :controller do
   end
 
   before(:each) do
-    allow_any_instance_of(SpreeCmCommissioner::Subscription).to receive(:date_within_range).and_return(true)
-    create(:cm_subscription, start_date: (today - 2.month).change(day: 15), customer: customer, price: 13.0, due_date: 5, quantity: 1)
-    create(:cm_subscription, start_date: (today - 2.month).change(day: 15), customer: customer, price: 25.0, due_date: 5, quantity: 1)
-    create(:cm_subscription, start_date: (today - 2.month).change(day: 15), customer: customer, price: 32.0, due_date: 5, quantity: 1)
-    SpreeCmCommissioner::SubscriptionsOrderCreator.call!(customer: customer)
+    start_date = today - 2.month
+    create(:cm_subscription, start_date: start_date, customer: customer, price: 13.0, due_date: 5, quantity: 1)
+    create(:cm_subscription, start_date: start_date, customer: customer, price: 25.0, due_date: 5, quantity: 1)
+    create(:cm_subscription, start_date: start_date, customer: customer, price: 32.0, due_date: 5, quantity: 1)
+    SpreeCmCommissioner::SubscriptionsOrderCreator.call!(customer: customer, today: today)
   end
 
   describe 'overdue_report' do
@@ -28,7 +28,7 @@ RSpec.describe Spree::Billing::ReportsController, type: :controller do
     # one order with 3 line items
     it 'returns only 1 order with overdue payment state' do
       search = Spree::Order.subscription.joins(:line_items).where(payment_state: :balance_due)
-                                                           .where('spree_line_items.due_date < ?', Time.zone.today)
+                                                           .where('spree_line_items.due_date < ?', today)
 
       result = search.includes(:line_items)
 
@@ -39,7 +39,7 @@ RSpec.describe Spree::Billing::ReportsController, type: :controller do
     # 3 orders with 3 line items each (same order number)
     it 'returns duplicate orders with overdue payment state' do
       search = Spree::Order.subscription.joins(:line_items).where(payment_state: :balance_due)
-                                                           .where('spree_line_items.due_date < ?', Time.zone.today)
+                                                           .where('spree_line_items.due_date < ?', today)
 
       # 3 overdue and 3 balance_due orders in 2 months
       expect(search.size).to eq 3
@@ -75,4 +75,3 @@ RSpec.describe Spree::Billing::ReportsController, type: :controller do
     end
   end
 end
-

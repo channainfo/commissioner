@@ -32,8 +32,9 @@ module Spree
       # POST  /billing/customers/:customer_id/re_create_order
       # billing_customer_re_create_order_path
       def re_create_order
+        today = Time.zone.today
         customer = model_class.find_by(id: params[:customer_id])
-        result = SpreeCmCommissioner::SubscriptionsOrderCreator.call(customer: customer)
+        result = SpreeCmCommissioner::SubscriptionsOrderCreator.call(customer: customer, today: today)
 
         if result.failure?
           flash[:error] = I18n.t('spree.billing.customers.re_create_order.fails', error: result.error)

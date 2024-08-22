@@ -21,9 +21,9 @@ RSpec.describe SpreeCmCommissioner::SubscriptionRevenueOverviewQuery do
       create(:cm_subscription, start_date: (today - 1.month).change(day: 15), customer: customer1, price: 13.0, due_date: 5, quantity: 1)
       create(:cm_subscription, start_date: (today - 1.month).change(day: 15), customer: customer2, price: 25.0, due_date: 5, quantity: 1)
       create(:cm_subscription, start_date: (today - 1.month).change(day: 15), customer: customer3, price: 32.0, due_date: 5, quantity: 1)
-      SpreeCmCommissioner::SubscriptionsOrderCreator.call!(customer: customer1)
-      SpreeCmCommissioner::SubscriptionsOrderCreator.call!(customer: customer2)
-      SpreeCmCommissioner::SubscriptionsOrderCreator.call!(customer: customer3)
+      SpreeCmCommissioner::SubscriptionsOrderCreator.call!(customer: customer1, today: today)
+      SpreeCmCommissioner::SubscriptionsOrderCreator.call!(customer: customer2, today: today)
+      SpreeCmCommissioner::SubscriptionsOrderCreator.call!(customer: customer3, today: today)
     end
     it 'only return totals in May' do
       SpreeCmCommissioner::Subscription.all.each do |subscription|
@@ -60,7 +60,7 @@ RSpec.describe SpreeCmCommissioner::SubscriptionRevenueOverviewQuery do
     before do
       allow_any_instance_of(SpreeCmCommissioner::Subscription).to receive(:date_within_range).and_return(true)
       create(:cm_subscription, start_date: '2024-05-15'.to_date, customer: customer1, price: 13.0, due_date: 5, quantity: 1)
-      SpreeCmCommissioner::SubscriptionsOrderCreator.call(customer: customer1)
+      SpreeCmCommissioner::SubscriptionsOrderCreator.call(customer: customer1, today: today)
     end
     it 'return reports + overdue on feb' do
       SpreeCmCommissioner::Subscription.last.orders[0].payments.each{|p| p.pend!}
