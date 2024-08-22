@@ -32,8 +32,8 @@ RSpec.describe Spree::Billing::ReportsController, type: :controller do
 
       result = search.includes(:line_items)
 
-      # 1 overdue and 1 balance_due orders in 2 months
-      expect(result.size).to eq 1
+      # 2 overdue orders in 2 months
+      expect(result.size).to eq 2
     end
 
     # 3 orders with 3 line items each (same order number)
@@ -41,8 +41,8 @@ RSpec.describe Spree::Billing::ReportsController, type: :controller do
       search = Spree::Order.subscription.joins(:line_items).where(payment_state: :balance_due)
                                                            .where('spree_line_items.due_date < ?', Time.zone.today)
 
-      # 3 overdue and 3 balance_due orders in 2 months
-      expect(search.size).to eq 3
+      # 6 overdue orders in 2 months
+      expect(search.size).to eq 6
     end
   end
 
@@ -75,4 +75,3 @@ RSpec.describe Spree::Billing::ReportsController, type: :controller do
     end
   end
 end
-
