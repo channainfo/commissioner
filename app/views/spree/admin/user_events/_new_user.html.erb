@@ -13,12 +13,14 @@
     <%= form_with model: @object, url: { action: 'create' } do |f| %>
       <%= f.hidden_field :taxon_id, value: @taxon.id %>
       <div  class="form-group" data-hook="new_user">
-          <%= f.field_container :user do %>
+          <%= f.field_container :users do %>
             <%= f.label :user_id, Spree.t(:users) %>
-            <%= f.select :user_id,
-              options_from_collection_for_select(Spree::User.all, :id, :email),
-                { include_hidden: true },
-                class: 'select2 form-control' %>
+            <%= f.select :user_id, options_from_collection_for_select([], :id, :email),
+                                      { include_hidden: true },
+                                        data: { autocomplete_url_value: 'users_api_v2',
+                                                autocomplete_return_attr_value: 'email',
+                                                autocomplete_search_query_value: 'email_i_cont',
+                                                minimum_input_length: 3 } %>
             <%= f.error_message_on :user_id %>
           <% end %>
         </div>
