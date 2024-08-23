@@ -13,12 +13,18 @@
             <td class="text-center align-middle">
               <%= variant.options_text %>
             </td>
-            <td>
-              <%= select_tag "variant_guest_card_class[#{variant.id}]",
-                  options_from_collection_for_select(@guest_card_classes, :id, :name, variant.guest_card_classes.first&.id),
-                  include_blank: Spree.t(:None),
-                  class: 'select2',
-                  id: "guest_card_class_#{variant.id}" %>
+            <td class="d-flex justify-content-end align-items-center" style="padding: 10px;">
+              <div class="flex-grow-1 me-3">
+                <%= select_tag "variant_guest_card_class[#{variant.id}]",
+                    options_from_collection_for_select(@guest_card_classes, :id, :name, variant.guest_card_classes.first&.id),
+                    include_blank: Spree.t(:None),
+                    class: 'form-select select2',
+                    id: "guest_card_class_#{variant.id}",
+                    style: 'width: 100%; padding: 5px;' %>
+              </div>
+              <%= button_tag(class: 'btn btn-outline-success px-2', style: 'margin-left: 10px;') do %>
+                <%= svg_icon(name: 'save.svg', classes: "icon", width: 14, height: 14) %>
+              <% end %>
             </td>
           </tr>
         <% end %>
