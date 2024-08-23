@@ -86,6 +86,8 @@ Spree::Core::Engine.add_routes do
         put 'update_kyc', to: 'kyc#update'
       end
 
+      resources :variant_guest_card_classes
+
       resources :video_on_demands do
         collection do
           post :update_positions
