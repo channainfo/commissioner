@@ -10,11 +10,15 @@ module SpreeCmCommissioner
       # current implmenetation of identity providers is only allow user to connect 1 Telegram account.
       # but we loop here just in case those logics are changed.
       context.user.user_identity_providers.telegram.each do |provider|
-        send(provider.telegram_chat_id)
+        next unless provider.telegram_bots.any?
+
+        telegram_bot = get_last_sign_in_bot(provider)
+        send(telegram_bot.token, provider.telegram_chat_id)
       end
     end
 
-    def send(chat_id)
+    def send(telegram_bot_token, chat_id)
+      telegram_client = ::Telegram::Bot::Client.new(telegram_bot_token)
       telegram_client.send_photo(
         chat_id: chat_id,
         photo: Rails.application.routes.url_helpers.qr_image_url(order.qr_data),
@@ -33,8 +37,8 @@ module SpreeCmCommissioner
       )
     end
 
-    def telegram_client
-      context.telegram_client ||= ::Telegram.bots[:default]
+    def get_last_sign_in_bot(user_identity_provider)
+      user_identity_provider.user_identity_provider_telegram_bots.last_sign_in.telegram_bot
     end
   end
 end

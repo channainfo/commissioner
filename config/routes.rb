@@ -228,6 +228,7 @@ Spree::Core::Engine.add_routes do
     end
 
     resources :user_events, except: %i[show edit update]
+    resources :telegram_bots
 
     resources :webhooks_subscribers do
       resources :rules, controller: :webhooks_subscriber_rules, except: %i[index show]

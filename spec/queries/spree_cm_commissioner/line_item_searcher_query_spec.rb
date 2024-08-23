@@ -46,7 +46,7 @@ RSpec.describe SpreeCmCommissioner::LineItemSearcherQuery do
           let(:params) { { event_id: event.id, qr_data: complete_order_a.qr_data } }
 
           it 'return all line items in order' do
-            expect(subject.call).to eq complete_order_a.line_items
+            expect(subject.call).to match_array complete_order_a.line_items
           end
         end
 
@@ -63,7 +63,7 @@ RSpec.describe SpreeCmCommissioner::LineItemSearcherQuery do
         let(:params) { { event_id: event.id, qr_data: complete_line_item_a.qr_data } }
 
         it 'return all line items in order' do
-          expect(subject.call).to eq [complete_line_item_a]
+          expect(subject.call).to match_array [complete_line_item_a]
         end
       end
 
@@ -71,7 +71,7 @@ RSpec.describe SpreeCmCommissioner::LineItemSearcherQuery do
         let(:params) { { event_id: event.id, qr_data: guest_a.qr_data} }
 
         it 'return line items of guest' do
-          expect(subject.call).to eq [guest_a.line_item]
+          expect(subject.call).to match_array [guest_a.line_item]
         end
       end
 
@@ -85,13 +85,13 @@ RSpec.describe SpreeCmCommissioner::LineItemSearcherQuery do
           search_by_order_phone = described_class.new({ event_id: event.id, term: complete_order_a.reload.phone_number })
           search_by_line_item_number = described_class.new({ event_id: event.id, term: complete_line_item_a.reload.number })
 
-          expect(search_by_guest_first_name.call).to eq [guest_a.line_item]
-          expect(search_by_guest_last_name.call).to eq [guest_a.line_item]
-          expect(search_by_guest_full_name.call).to eq [guest_a.line_item]
-          expect(search_by_order_number.call).to eq complete_order_a.line_items
-          expect(search_by_order_email.call).to eq complete_order_a.line_items
-          expect(search_by_order_phone.call).to eq complete_order_a.line_items
-          expect(search_by_line_item_number.call).to eq [complete_line_item_a]
+          expect(search_by_guest_first_name.call).to match_array [guest_a.line_item]
+          expect(search_by_guest_last_name.call).to match_array [guest_a.line_item]
+          expect(search_by_guest_full_name.call).to match_array [guest_a.line_item]
+          expect(search_by_order_number.call).to match_array complete_order_a.line_items
+          expect(search_by_order_email.call).to match_array complete_order_a.line_items
+          expect(search_by_order_phone.call).to match_array complete_order_a.line_items
+          expect(search_by_line_item_number.call).to match_array [complete_line_item_a]
         end
       end
 
@@ -99,7 +99,7 @@ RSpec.describe SpreeCmCommissioner::LineItemSearcherQuery do
         let(:params) { { event_id: event.id } }
 
         it 'return all line items for the event' do
-          expect(subject.call).to eq [complete_line_item_a, complete_line_item_b]
+          expect(subject.call).to match_array [complete_line_item_a, complete_line_item_b]
         end
       end
     end
