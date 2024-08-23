@@ -1,0 +1,8 @@
+<!-- insert_after ".date-range-filter" -->
+
+<div class="col-12 col-lg-4">
+  <div class="form-group">
+    <%= label_tag :q_payments_payment_method_id_eq, Spree.t(:search_payment_method) %>
+    <%= f.select :payments_payment_method_id_eq, Spree::PaymentMethod.pluck(:name, :id), { include_blank: true }, class: 'select2-clear js-filterable' %>
+  </div>
+</div>
