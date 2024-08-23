@@ -58,12 +58,12 @@
           <td class="text-left">
             <%= pretty_time(import.finished_at) %>
           </td>
-          <td class="text-left">
-            <%= link_to admin_import_existing_order_url(import),
-              class: 'btn btn-light btn-sm with-tip icon-link shadow-md' do %>
+          <td class="text-left d-flex">
+            <%= link_to admin_import_existing_order_path(import.id),
+              class: 'btn btn-light btn-sm with-tip icon-link mx-2' do %>
                 <%= svg_icon name: "eye.svg", width: '14', height: '14' %>
             <% end %>
-            <%= link_to download_admin_import_existing_order_path(import),
+            <%= link_to download_admin_import_existing_order_path(import.id),
               method: :get,
               class: 'btn btn-success btn-sm with-tip text-white icon-link' do %>
                 <%= svg_icon name: "download.svg", width: '14', height: '14' %>
