@@ -44,6 +44,8 @@ RSpec.describe Spree::V2::Storefront::TaxonSerializer, type: :serializer do
         :subtitle,
         :from_date,
         :to_date,
+        :background_color,
+        :foreground_color
       )
     end
 

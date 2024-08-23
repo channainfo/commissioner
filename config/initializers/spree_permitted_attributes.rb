@@ -23,6 +23,8 @@ module Spree
       from_date
       kind
       subtitle
+      background_color
+      foreground_color
     ]
 
     @@store_attributes += [

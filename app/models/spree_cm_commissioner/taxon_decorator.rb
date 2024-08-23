@@ -3,6 +3,9 @@ module SpreeCmCommissioner
     def self.prepended(base)
       base.include SpreeCmCommissioner::TaxonKind
 
+      base.preference :background_color, :string
+      base.preference :foreground_color, :string
+
       base.has_many :taxon_vendors, class_name: 'SpreeCmCommissioner::TaxonVendor'
       base.has_many :vendors, through: :taxon_vendors
 
@@ -35,6 +38,14 @@ module SpreeCmCommissioner
       base.before_save :set_slug
 
       base.whitelisted_ransackable_attributes |= %w[kind]
+    end
+
+    def background_color
+      preferred_background_color
+    end
+
+    def foreground_color
+      preferred_foreground_color
     end
 
     def set_kind
