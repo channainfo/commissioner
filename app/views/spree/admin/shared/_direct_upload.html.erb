@@ -74,14 +74,19 @@
         alert('File uploaded successfully.');
 
         // Proceed with the form submission
-        form.submit();
+          form.submit();
       } catch (error) {
         alert(error.message);
       }
     });
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
     handleFileUploadToS3('form-presignable');
-  });
+    });
+  } else {
+    location.reload();
+  }
+
 </script>

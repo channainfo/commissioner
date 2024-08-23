@@ -16,6 +16,12 @@ module SpreeCmCommissioner
       p_file: 0b100
     }.freeze
 
+    DISPLAY_PROTOCOL_NAMES = {
+      p_hls: 'HLS',
+      p_dash: 'DASH',
+      p_file: 'File'
+    }.freeze
+
     def quality? = quality != 0
     def protocol? = protocol != 0
 
@@ -36,6 +42,10 @@ module SpreeCmCommissioner
       video_quality & bit_value != 0
     end
 
+    def quality_fields_uppercase
+      quality_fields.map(&:to_s).map(&:upcase)
+    end
+
     # Protocol
     PROTOCOL_BIT_FIELDS.each do |field, bit_value|
       define_method "#{field}?" do
@@ -47,6 +57,10 @@ module SpreeCmCommissioner
       PROTOCOL_BIT_FIELDS.filter_map do |field, bit_value|
         field if video_protocol & bit_value != 0
       end
+    end
+
+    def protocol_fields_uppercase
+      protocol_fields.map { |protocol| DISPLAY_PROTOCOL_NAMES[protocol] || protocol.to_s.upcase }
     end
   end
 end
