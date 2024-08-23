@@ -30,7 +30,7 @@
           <% user = user_event.user %>
           <tr id="<%= spree_dom_id user %>" data-hook="admin_taxonomy_taxon_user_events_index_rows">
             <td><%= user.id %></td>
-            <td><%= user.email %></td>
+            <td class='user_email'><%= link_to user.email, edit_admin_user_url(user) %></td>
             <td><%= user.created_at %></td>
             <td><%= user.updated_at %></td>
             <td data-hook="admin_taxonomy_taxon_user_events_index_row_actions" class="actions">
