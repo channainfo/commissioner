@@ -39,5 +39,10 @@ module Spree
       phone_number
       country_code
     ]
+
+    @@address_attributes += %i[
+      age
+      gender
+    ]
   end
 end
