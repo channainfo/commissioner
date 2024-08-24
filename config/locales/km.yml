@@ -215,6 +215,9 @@ km:
         name: "Create guest item adjustment"
         description: "Create guest item adjustment"
     term_and_condition_promotion: "Term And Condition Of Promotions"
+    telegram_bots:
+      title: "Telegram Bots"
+      empty_info: "No <b>Telegram Bot</b> found"
     date_rule:
       match_any: "Some line items must within selected date"
       match_all: "All line items must within selected date"

@@ -1,0 +1,43 @@
+<% content_for :page_title do %>
+  <%= link_to Spree.t('telegram_bots.title'), spree.admin_telegram_bots_url %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:new_telegram_bot), new_admin_telegram_bot_path, class: "btn-success", icon: 'add.svg' %>
+<% end if can? :create, SpreeCmCommissioner::TelegramBot %>
+
+<% if @telegram_bots.any? %>
+  <div class="table-responsive border rounded bg-white mb-3">
+    <table class="table" id="listing_telegram_bots" data-hook>
+      <thead class="text-muted">
+        <tr data-hook="admin_user_telegram_bots_index_headers">
+          <th><%= Spree.t(:id) %></th>
+          <th><%= Spree.t(:username) %></th>
+          <th><%= Spree.t(:created_at) %></th>
+          <th><%= Spree.t(:updated_at) %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @telegram_bots.each do |telegram_bot| %>
+          <tr id="<%= spree_dom_id telegram_bot %>" data-hook="admin_telegram_bots_index_rows">
+            <td><%= telegram_bot.id %></td>
+            <td><%= telegram_bot.username %></td>
+            <td><%= telegram_bot.created_at %></td>
+            <td><%= telegram_bot.updated_at %></td>
+
+            <td data-hook="admin_telegram_bots_index_row_actions" class="actions">
+              <span class="d-flex justify-content-end">
+                <%= link_to_edit telegram_bot, url: edit_admin_telegram_bot_path(telegram_bot), no_text: true if can?(:edit, telegram_bot) %>
+                <%= link_to_delete telegram_bot, url: admin_telegram_bot_path(telegram_bot), no_text: true if can?(:delete, telegram_bot) %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <small class="form-text text-muted">
+      <%= raw Spree.t('telegram_bots.empty_info') %>
+   </small>
+<% end %>
