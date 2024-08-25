@@ -49,6 +49,10 @@ en:
 
   taxon_vendor:
     empty_info: "No vendor information available."
+
+  telegram_bot:
+      empty_info: "No <b>Telegram Bot</b> found"
+
   guest_card_classes:
     empty_info: "No guest card classes information available."
     background_image: "Background Image"
@@ -239,9 +243,7 @@ en:
         name: "Create guest item adjustment"
         description: "Create guest item adjustment"
     term_and_condition_promotion: "Term And Condition Of Promotions"
-    telegram_bots:
-      title: "Telegram Bots"
-      empty_info: "No <b>Telegram Bot</b> found"
+    telegram_bot: "Telegram Bot"
     date_rule:
       match_any: "Some line items must within selected date"
       match_all: "All line items must within selected date"
@@ -323,7 +325,6 @@ en:
         apply_promotion:
          success: "Promotion Created"
          fails: "Promotion Creation Failed"
-      service_start_date: "Service Start Date"
       service_start_date: "Service Start Date"
     upsupported_payment: "Unsupported event"
     exceeded_available_quantity_on_date:
