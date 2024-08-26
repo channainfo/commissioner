@@ -4,6 +4,7 @@ module SpreeCmCommissioner
     def self.prepended(base)
       base.include SpreeCmCommissioner::ProductType
       base.include SpreeCmCommissioner::KycBitwise
+      base.include SpreeCmCommissioner::Metafield
 
       base.has_many :variant_kind_option_types, -> { where(kind: :variant).order(:position) },
                     through: :product_option_types, source: :option_type

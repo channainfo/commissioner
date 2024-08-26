@@ -80,8 +80,13 @@ Spree::Core::Engine.add_routes do
     resources :s3_presigned_urls, only: %i[create new]
     resources :guest_qr_codes, only: %i[index]
 
+    resources :metafields, only: :update
+
     resources :products do
       member do
+        get 'edit_metafields', to: 'metafields#edit'
+        put 'update_metafields', to: 'metafields#update_metafields'
+        delete 'remove_metafield', to: 'metafields#remove_metafield'
         get 'edit_kyc', to: 'kyc#edit'
         put 'update_kyc', to: 'kyc#update'
       end
