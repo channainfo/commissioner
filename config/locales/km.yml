@@ -49,6 +49,10 @@ km:
 
   taxon_vendor:
     empty_info: "មិនមានព័ត៌មានអំពីអ្នកលក់ទេ"
+
+  telegram_bot:
+      empty_info: "No <b>Telegram Bot</b> found"
+
   guest_card_classes:
     empty_info: "មិនមានព័ត៌មានអំពីកាតភ្ញៀវទេ"
     background_image: "រូបភាពផ្ទៃខាងក្រោយ"
@@ -215,9 +219,7 @@ km:
         name: "Create guest item adjustment"
         description: "Create guest item adjustment"
     term_and_condition_promotion: "Term And Condition Of Promotions"
-    telegram_bots:
-      title: "Telegram Bots"
-      empty_info: "No <b>Telegram Bot</b> found"
+    telegram_bot: "Telegram Bot"
     date_rule:
       match_any: "Some line items must within selected date"
       match_all: "All line items must within selected date"

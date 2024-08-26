@@ -1,5 +1,5 @@
 <% content_for :page_title do %>
-  <%= link_to Spree.t('telegram_bots.title'), spree.admin_telegram_bots_url %>
+  <%= link_to Spree.t('telegram_bot'), spree.admin_telegram_bots_url %>
 <% end %>
 
 <% content_for :page_actions do %>
@@ -38,6 +38,6 @@
   </div>
 <% else %>
   <small class="form-text text-muted">
-      <%= raw Spree.t('telegram_bots.empty_info') %>
+      <%= raw I18n.t('telegram_bot.empty_info') %>
    </small>
 <% end %>

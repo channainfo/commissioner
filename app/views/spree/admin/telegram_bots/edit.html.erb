@@ -1,11 +1,11 @@
 <% content_for :page_title do %>
-  <%= link_to Spree.t('telegram_bots.title'), spree.admin_telegram_bots_url %> / @<%= @object.username %>
+  <%= link_to Spree.t('telegram_bot'), spree.admin_telegram_bots_url %> / @<%= @object.username %>
 <% end %>
 
 <div data-hook="admin_telegram_bots" class="card mb-3">
   <div class="card-header">
     <h5 class="card-title mb-0 h6">
-      <%= Spree.t('telegram_bots.title') %>
+      <%= Spree.t('telegram_bot') %>
     </h5>
   </div>
   <div class="card-body">
