@@ -94,6 +94,9 @@ Spree::Core::Engine.add_routes do
       resources :variant_guest_card_classes
 
       resources :video_on_demands do
+        member do
+          post :video_upload
+        end
         collection do
           post :update_positions
         end

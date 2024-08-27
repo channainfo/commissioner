@@ -42,7 +42,7 @@
                 <%= video_on_demand.variant.options_text %>
               <% end %>
             </td>
-            <td class="image text-center">
+            <!-- <td class="image text-center">
               <% if video_on_demand&.thumbnail&.attached?  %>
                 <div class="admin-product-image-container small-img">
                   <%= image_tag (main_app.rails_blob_url(video_on_demand.thumbnail)) %>
@@ -57,10 +57,11 @@
                 </video>
                 <p><%=  %></p>
               <% end %>
-            </td>
+            </td> -->
             <td class="text-center"><%= video_on_demand.created_at.strftime("%B %d %Y") %></td>
             <td class="actions">
               <span class="d-flex justify-content-end">
+                
                 <%= link_to_edit video_on_demand, url: edit_admin_product_video_on_demand_path(@product, video_on_demand), no_text: true if can?(:edit, :admin, video_on_demand) %>
                 &nbsp;
                 <%= link_to_delete video_on_demand, url: admin_product_video_on_demand_path(id: video_on_demand.id), no_text: true if can?(:delete, video_on_demand) %>

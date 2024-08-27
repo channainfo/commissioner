@@ -8,8 +8,7 @@ module SpreeCmCommissioner
 
     belongs_to :variant, class_name: 'Spree::Variant'
 
-    has_one_attached :file
-    has_one_attached :thumbnail
+    has_one :video_upload, class_name: 'SpreeCmCommissioner::VideoUpload', dependent: :destroy
 
     validates :video_quality, :video_protocol, :frame_rate, :uuid, presence: true
   end

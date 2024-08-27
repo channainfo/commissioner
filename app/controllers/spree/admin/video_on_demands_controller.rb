@@ -35,6 +35,17 @@ module Spree
         end
       end
 
+      def video_upload
+        @video_on_demand = SpreeCmCommissioner::VideoOnDemand.find(params[:id])
+        result = SpreeCmCommissioner::VideoOnDemandUpdater.call(video_on_demand: @video_on_demand, params: params)
+        if result.success?
+          redirect_to collection_url
+        else
+          flash[:error] = result.error
+          render :edit
+        end
+      end
+
       def update_positions
         params[:positions].each do |id, index|
           video_on_demand = SpreeCmCommissioner::VideoOnDemand.find(id)
