@@ -1,16 +1,66 @@
-<div data-hook="admin_telegram_bot_form_fields" class= "row">
-   <div class="col-6">
+<div data-hook="admin_telegram_bot_form_fields" class="row">
+  <!-- Username Field -->
+  <div class="col-6">
     <%= f.field_container :username do %>
-      <%= f.label :username, Spree.t(:username) %> <span class="required">*</span>
-      <%= f.text_field :username, class: 'form-control', placeholder: 'eg. bookmeplus_bot', disabled: @object.persisted? %>
+      <%= f.label :username, raw(Spree.t(:username) + required_span_tag) %>
+      <%= f.text_field :username, required: true, class: 'form-control', placeholder: 'eg. bookmeplus_bot', disabled: @object.persisted? %>
       <%= f.error_message_on :username %>
     <% end %>
   </div>
+
+  <!-- Token Field -->
   <div class="col-6">
     <%= f.field_container :token do %>
-      <%= f.label :token, Spree.t(:token) %> <span class="required">*</span>
-      <%= f.text_field :token, class: 'form-control', value: nil, placeholder: obfuscate_token(f.object.token) %>
+      <%= f.label :token, raw(Spree.t(:token) + required_span_tag) %>
+      <%= f.text_field :token, required: true, class: 'form-control', placeholder: obfuscate_token(f.object.token) %>
       <%= f.error_message_on :token %>
+    <% end %>
+  </div>
+
+  <!-- Start Photo Field -->
+  <div class="col-12">
+    <%= render 'shared/asset_field',
+      field: :start_photo,
+      label: raw(Spree.t(:start_photo) + required_span_tag),
+      asset: @object.start_photo,
+      form: f,
+      required: true
+    %>
+  </div>
+
+  <!-- Start Button Text Field -->
+  <div class="col-6">
+    <%= f.field_container :preferred_start_button_text do %>
+      <%= f.label :preferred_start_button_text, raw(Spree.t(:start_button_text) + required_span_tag) %>
+      <%= preference_field_for(f, "preferred_start_button_text", type: :string) %>
+      <%= f.error_message_on :preferred_start_button_text %>
+    <% end %>
+  </div>
+
+  <!-- Start Button URL Field -->
+  <div class="col-6">
+    <%= f.field_container :preferred_start_button_url do %>
+      <%= f.label :preferred_start_button_url, raw(Spree.t(:start_button_url) + required_span_tag) %>
+      <%= preference_field_for(f, "preferred_start_button_url", type: :string) %>
+      <%= f.error_message_on :preferred_start_button_url %>
+    <% end %>
+  </div>
+
+  <!-- Start Caption Field -->
+  <div class="col-12">
+    <%= f.field_container :preferred_start_caption do %>
+      <%= f.label :preferred_start_caption, Spree.t(:start_caption) %>
+      <%= preference_field_for(f, "preferred_start_caption", type: :text) %>
+      <%= f.error_message_on :preferred_start_caption %>
+    <% end %>
+  </div>
+
+  <!-- Start Caption Field -->
+  <div class="col-12">
+    <%= f.field_container :preferred_start_parse_mode do %>
+      <%= f.label :preferred_start_parse_mode, Spree.t(:start_parse_mode) %>
+      <%= preference_field_for(f, "preferred_start_parse_mode", type: :string) %>
+      <%= f.error_message_on :preferred_start_parse_mode %>
     <% end %>
   </div>
 </div>

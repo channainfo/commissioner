@@ -2,6 +2,10 @@
   <%= link_to Spree.t('telegram_bot'), spree.admin_telegram_bots_url %> / @<%= @object.username %>
 <% end %>
 
+<% content_for :page_actions do %>
+  <%= button_to Spree.t(:set_webhook), set_webhook_admin_telegram_bot_path, method: :post, class: 'btn btn-outline-primary' %>
+<% end %>
+
 <div data-hook="admin_telegram_bots" class="card mb-3">
   <div class="card-header">
     <h5 class="card-title mb-0 h6">

@@ -233,7 +233,11 @@ Spree::Core::Engine.add_routes do
     end
 
     resources :user_events, except: %i[show edit update]
-    resources :telegram_bots
+    resources :telegram_bots do
+      member do
+        post :set_webhook
+      end
+    end
 
     resources :webhooks_subscribers do
       resources :rules, controller: :webhooks_subscriber_rules, except: %i[index show]
@@ -463,6 +467,7 @@ Spree::Core::Engine.add_routes do
     namespace :webhook do
       resources :orders, only: [:show]
       resources :media_convert_queues, only: [:create]
+      resources :telegram_bots
     end
 
     namespace :chatrace do
