@@ -62,6 +62,20 @@ module Spree
         redirect_back(fallback_location: billing_customer_orders_path(params[:customer_id]))
       end
 
+      # delete /billing/customers/:customer_id/delete_promotion/:id
+      # billing_customer_delete_promotion_url
+      def delete_promotion
+        customer = model_class.find(params[:customer_id])
+        promotion = Spree::Promotion.find_by(code: customer.number)
+        if promotion.destroy
+          flash[:success] = I18n.t('spree.billing.customers.delete_promotion.success')
+        else
+          flash[:error] = I18n.t('spree.billing.customers.delete_promotion.fails', error: result.message)
+        end
+
+        redirect_back(fallback_location: billing_customer_orders_path(params[:customer_id]))
+      end
+
       # @overrided
       def model_class
         SpreeCmCommissioner::Customer
