@@ -1,8 +1,18 @@
-<!-- insert_after ".date-range-filter" -->
+<!-- insert_before "[data-hook='admin_orders_index_search'] .row:nth-child(5) .col-12.col-lg-4:nth-child(3)" -->
 
 <div class="col-12 col-lg-4">
-  <div class="form-group">
-    <%= label_tag :q_payments_payment_method_id_eq, Spree.t(:search_payment_method) %>
-    <%= f.select :payments_payment_method_id_eq, Spree::PaymentMethod.pluck(:name, :id), { include_blank: true }, class: 'select2-clear js-filterable' %>
+  <div class="row">
+    <div class="col-12 col-lg-6">
+      <div class="form-group">
+        <%= label_tag :q_payments_payment_method_id_eq, Spree.t(:payment_method) %>
+        <%= f.select :payments_payment_method_id_eq, Spree::PaymentMethod.pluck(:name, :id), { include_blank: true }, class: 'select2-clear js-filterable' %>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6">
+      <div class="form-group">
+        <%= label_tag :q_payments_state_eq, Spree.t(:state_by_payment_method) %>
+        <%= f.select :payments_state_eq, Spree::Payment.state_machine.states.map(&:name), { include_blank: true }, class: 'select2-clear js-filterable' %>
+      </div>
+    </div>
   </div>
 </div>
