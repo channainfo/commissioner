@@ -85,6 +85,7 @@ module SpreeCmCommissioner
     def apply_promotion
       promotion = Spree::Promotion.where(code: customer.number).last
       promotion.present? && promotion.activate(order: context.new_order)
+      context.new_order.update_with_updater!
     end
 
     def create_invoice
