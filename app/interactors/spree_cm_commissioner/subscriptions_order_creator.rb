@@ -1,8 +1,8 @@
 module SpreeCmCommissioner
   class SubscriptionsOrderCreator < BaseInteractor
     delegate :customer, to: :context
+    delegate :today, to: :context
     def call
-      today = Time.zone.today
       if today.day < 15
         period_start = (today - 1.month).change(day: 15)
         period_end = today.change(day: 14)
@@ -25,7 +25,7 @@ module SpreeCmCommissioner
         month = i
         generate_invoice(last_invoice_date, month, active_subscriptions)
       end
-      context.customer.update(last_invoice_date: Time.zone.now)
+      context.customer.update(last_invoice_date: today)
     end
 
     private

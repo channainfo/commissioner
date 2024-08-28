@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::SubscriptionOrdersQuery do
+  today = Time.zone.today
   let(:customer) { create(:cm_customer, last_invoice_date: "2024-06-14") }
   let(:spree_current_user) { create(:user) }
   let(:admin_role) { create(:role, name: 'admin') }
@@ -44,7 +45,7 @@ RSpec.describe SpreeCmCommissioner::SubscriptionOrdersQuery do
 
     it 'return 1 overdues when due date < current date' do
       subscription_jan2
-      SpreeCmCommissioner::SubscriptionsOrderCreator.call(customer: customer)
+      SpreeCmCommissioner::SubscriptionsOrderCreator.call(customer: customer, today: today)
       subscription_jan2.orders.each {|o| o.payments.each{|p| p.void! }}
       query = described_class.new(
         current_date: '2024-08-01'.to_date,
