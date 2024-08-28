@@ -129,6 +129,12 @@ FactoryBot.define do
       presentation { 'bib-zerofill' }
     end
 
+    trait :seat_number_positions do
+      attr_type { :array }
+      name { 'seat-number-positions' }
+      presentation { 'seat-number-positions' }
+    end
+
     initialize_with { Spree::OptionType.where(name: name).first_or_initialize }
   end
 end

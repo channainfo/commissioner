@@ -15,6 +15,8 @@
     <td class="name"><%= f.text_field :name, class: "form-control", required: true %></td>
   <% when "boolean" %>
     <td class="name"><%= f.select :name, [['Yes', '1'], ['No', '0']], { include_blank: true } , class: "form-control", required: true %></td>
+  <% when "array" %>
+    <td class="name"><%= render partial: 'array_field', locals: { f: f } %></td>
   <% when "date" %>
     <td class="name"><%= render partial: 'date_field', locals: { f: f } %></td>
   <% when "time" %>

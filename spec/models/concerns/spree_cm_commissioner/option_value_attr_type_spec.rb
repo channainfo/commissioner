@@ -252,6 +252,53 @@ RSpec.describe SpreeCmCommissioner::OptionValueAttrType do
     end
   end
 
+  describe 'callback: before_validation' do
+    describe '#normalize_items' do
+      before { allow(subject).to receive(:normalize_items).and_call_original }
+
+      context 'when option type attr_type is not array' do
+        let(:option_type) { create(:option_type, attr_type: 'string') }
+        subject { build(:option_value, name: 'item', option_type: option_type) }
+
+        it 'does not call normalize_items' do
+          expect(subject).not_to receive(:normalize_items)
+          subject.validate
+
+          expect(subject.name).to eq('item')
+          expect(subject.items).to eq(nil)
+        end
+      end
+
+      context 'when option type attr_type is array' do
+        let(:option_type) { create(:option_type, attr_type: 'array') }
+
+        context 'when name contains commas and extra spaces' do
+          subject { build(:option_value, name: '  item1,  item2 ,item3  ', option_type: option_type) }
+
+          it 'normalizes the name by trimming spaces and separating with single commas' do
+            expect(subject).to receive(:normalize_items)
+
+            subject.validate
+
+            expect(subject.name).to eq('item1,item2,item3')
+            expect(subject.items).to eq(['item1', 'item2', 'item3'])
+          end
+        end
+
+        context 'when name does not contain commas' do
+          subject { build(:option_value, name: 'item', option_type: option_type) }
+
+          it 'does not alter the name' do
+            subject.validate
+
+            expect(subject.name).to eq('item')
+            expect(subject.items).to eq(['item'])
+          end
+        end
+      end
+    end
+  end
+
   describe '#latitude' do
     context 'when attr_type is coordinate & name is valid geocode' do
       let(:option_type) { create(:option_type, attr_type: 'coordinate') }

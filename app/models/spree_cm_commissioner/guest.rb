@@ -36,6 +36,7 @@ module SpreeCmCommissioner
     preference :telegram_user_verified_at, :string
 
     before_validation :set_event_id
+    before_validation :assign_seat_number, if: -> { bib_number.present? }
 
     validates :bib_index, uniqueness: true, allow_nil: true
 
@@ -73,6 +74,19 @@ module SpreeCmCommissioner
 
     def set_event_id
       self.event_id ||= line_item.associated_event&.id if line_item.present?
+    end
+
+    def assign_seat_number
+      return if seat_number.present? # avoid reassign seat to guest
+
+      assign_seat_number!
+    end
+
+    def assign_seat_number!
+      index = bib_number - 1
+      positions = line_item.variant.seat_number_positions || []
+
+      self.seat_number = (positions[index] if index >= 0 && index < positions.size)
     end
 
     def full_name

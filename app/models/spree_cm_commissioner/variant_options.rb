@@ -121,6 +121,10 @@ module SpreeCmCommissioner
       @bib_zerofill ||= option_value_name_for(option_type_name: 'bib-zerofill')&.to_i || 3
     end
 
+    def seat_number_positions
+      @seat_number_positions ||= option_value_name_for(option_type_name: 'seat-number-positions')&.split(',')
+    end
+
     # can consider as customers.
     def number_of_guests
       number_of_adults + number_of_kids
