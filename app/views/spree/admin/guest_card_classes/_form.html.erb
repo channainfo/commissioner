@@ -6,5 +6,8 @@
   <% end %> / <%= Spree.t(:edit) %>
 <% end %>
 
-
-<%= render partial: 'spree/admin/guest_card_classes/classes/bib_card_class', locals: { f: f, object: @object } %>
+<% if @object.type == 'SpreeCmCommissioner::GuestCardClasses::BookingCardClass' %>
+    <%= render partial: 'spree/admin/guest_card_classes/classes/booking_card_class', locals: { f: f, object: @object } %>
+<% else %>
+    <%= render partial: 'spree/admin/guest_card_classes/classes/bib_card_class', locals: { f: f, object: @object } %>
+<% end %>

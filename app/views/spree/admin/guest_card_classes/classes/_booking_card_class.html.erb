@@ -1,0 +1,32 @@
+<div class="form-group" data-hook="guest_card_classes">
+  <%= f.field_container :name do %>
+    <%= f.label :name, raw(Spree.t(:name) + required_span_tag) %>
+    <%= f.text_field :name, class: 'form-control title', required: :required %>
+    <%= f.error_message_on :name %>
+  <% end %>
+  <%= f.field_container :type do %>
+    <%= f.label :type, Spree.t('guest_card_classes_types') %>
+    <%= f.collection_select :type, SpreeCmCommissioner::GuestCardClass::TYPES, :to_s, :demodulize, { prompt: Spree.t('match_choices.none') }, { class: 'form-control', disabled: !@object.new_record? } %>
+  <% end %>
+</div>
+
+<% unless @object.new_record? %>
+  <div data-hook="admin_taxonomy_taxon_guest_card_classes_form_fields" class="row">
+    <div class="form-group col-md-12">
+      <div class="row" style="display: flex; justify-content: space-between; align-items: flex-start;">
+
+        <div class="col-md-6">
+          <%= render 'shared/asset_field',
+            field: :background_image,
+            label: I18n.t('guest_card_classes.background_image'),
+            asset: @object.background_image,
+            remove_url: remove_background_image_admin_taxonomy_taxon_guest_card_class_url(@taxonomy.id, @taxon.id, @object.id),
+            form: f,
+            classes: ['col-md-6 ml-3']
+          %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+

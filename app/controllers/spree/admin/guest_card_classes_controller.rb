@@ -26,7 +26,6 @@ module Spree
       end
 
       def build_assets
-        return unless @object.is_a?(SpreeCmCommissioner::GuestCardClasses::BibCardClass)
         return unless permitted_resource_params[:background_image]
 
         @object.build_background_image(attachment: permitted_resource_params.delete(:background_image))
