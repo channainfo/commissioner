@@ -11,7 +11,7 @@ module SpreeCmCommissioner
       def available?(quantity)
         Spree::LineItem
           .complete
-          .select('(SUM(spree_stock_items.count_on_hand) - SUM(spree_line_items.quantity)) AS available_quantity')
+          .select('(SUM(DISTINCT spree_stock_items.count_on_hand) - SUM(spree_line_items.quantity)) AS available_quantity')
           .joins(variant: :stock_items)
           .where(variant_id: variant.id)
           .where.not(id: except_line_item_id)

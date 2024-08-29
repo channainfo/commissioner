@@ -31,7 +31,7 @@ module SpreeCmCommissioner
           Spree::LineItem
           .complete
           .select(
-            '(SUM(spree_stock_items.count_on_hand) - SUM(spree_line_items.quantity)) AS available_quantity',
+            '(SUM(DISTINCT spree_stock_items.count_on_hand) - SUM(spree_line_items.quantity)) AS available_quantity',
             'dates.date AS reservation_date'
           )
           .joins(variant: :stock_items)
