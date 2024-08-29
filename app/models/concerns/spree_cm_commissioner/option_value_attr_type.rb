@@ -13,6 +13,7 @@ module SpreeCmCommissioner
 
       before_validation :construct_time, if: :attr_type_time?
       before_validation :construct_date, if: :attr_type_date?
+      before_validation :normalize_items, if: :attr_type_array?
 
       after_save :update_variants_metadata, if: :saved_change_to_name?
 
@@ -24,6 +25,12 @@ module SpreeCmCommissioner
           option_type.send("attr_type_#{attr_type}?")
         end
       end
+    end
+
+    def items
+      return nil unless attr_type_array?
+
+      name.split(',')
     end
 
     def latitude
@@ -78,6 +85,10 @@ module SpreeCmCommissioner
       return if latitude.present? && longitude.present? && latitude.to_f.between?(-90, 90) && longitude.to_f.between?(-180, 180)
 
       errors.add(:name, :invalid)
+    end
+
+    def normalize_items
+      self.name = name.split(',').map(&:strip).join(',')
     end
 
     def construct_time

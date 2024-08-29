@@ -286,4 +286,23 @@ RSpec.describe SpreeCmCommissioner::VariantOptions do
       end
     end
   end
+
+  describe "#seat_number_positions" do
+    context "when variant has seat-number-positions option value" do
+      let(:option_type) { create(:cm_option_type, :seat_number_positions) }
+      let(:option_value) { create(:cm_option_value, name: 'G1,G2, G3', option_type: option_type) }
+
+      it 'return bib_prefix in string' do
+        expect(subject.seat_number_positions).to eq ['G1', 'G2', 'G3']
+      end
+    end
+
+    context "when variant has no seat-number-positions option value" do
+      let(:option_values) { [ create(:option_value) ] }
+
+      it 'return nil' do
+        expect(subject.seat_number_positions).to eq nil
+      end
+    end
+  end
 end

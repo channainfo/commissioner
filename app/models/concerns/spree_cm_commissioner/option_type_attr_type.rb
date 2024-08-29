@@ -7,6 +7,7 @@ module SpreeCmCommissioner
       integer
       string
       boolean
+      array
       date
       time
       coordinate
@@ -36,7 +37,8 @@ module SpreeCmCommissioner
       'allowed-extra-adults' => 'integer',
       'allowed-extra-kids' => 'integer',
       'bib-prefix' => 'string',
-      'bib-zerofill' => 'integer'
+      'bib-zerofill' => 'integer',
+      'seat-number-positions' => 'array'
     }.freeze
 
     included do

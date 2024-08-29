@@ -8,6 +8,71 @@ RSpec.describe SpreeCmCommissioner::Guest, type: :model do
 
   subject { line_item.guests.new }
 
+  describe 'before validation' do
+    describe '#assign_seat_number' do
+      context 'when guest does not have bib_number' do
+        it 'assign seat number = nil' do
+          guest = create(:guest, bib_number: nil)
+          expect(guest.seat_number).to eq nil
+        end
+      end
+
+      context 'when guest variant does not have :seat_number_positions option value' do
+        let(:variant) { create(:variant) }
+        let(:line_item) { create(:line_item, variant: variant, quantity: 2) }
+
+        it 'assign seat number = nil' do
+          guest = create(:guest, bib_number: 'VIP')
+          expect(guest.seat_number).to eq nil
+        end
+      end
+
+      context 'when guest has bib_number & :seat_number_positions option type' do
+        let(:option_type) { create(:cm_option_type, :seat_number_positions) }
+        let(:option_value) { create(:option_value, name: 'P39,P41,P43,P45,P47', option_type: option_type)}
+        let(:product) { create(:product, option_types: [option_type]) }
+        let(:variant) { create(:variant, option_values: [option_value]) }
+        let(:line_item) { create(:line_item, variant: variant, quantity: 2) }
+
+        context 'when bib invalid (exceed positions range or negative value)' do
+          it 'assign seat number = nil' do
+            invalid_guest_1 = create(:guest, bib_number: -1, line_item: line_item)
+            invalid_guest_2 = create(:guest, bib_number: 6, line_item: line_item)
+
+            expect(invalid_guest_1.seat_number).to eq nil
+            expect(invalid_guest_2.seat_number).to eq nil
+          end
+        end
+
+        context 'when bib valid' do
+          it 'assign seat number base on bib number & seat_number_positions' do
+            guest5 = create(:guest, bib_number: 5, line_item: line_item)
+            guest2 = create(:guest, bib_number: 2, line_item: line_item)
+            guest1 = create(:guest, bib_number: 1, line_item: line_item)
+            guest3 = create(:guest, bib_number: 3, line_item: line_item)
+            guest4 = create(:guest, bib_number: 4, line_item: line_item)
+
+            expect(guest1.seat_number).to eq 'P39'
+            expect(guest2.seat_number).to eq 'P41'
+            expect(guest3.seat_number).to eq 'P43'
+            expect(guest4.seat_number).to eq 'P45'
+            expect(guest5.seat_number).to eq 'P47'
+          end
+        end
+
+        context 'when seat number already assigned' do
+          it 'does not reassign seat number' do
+            guest1 = create(:guest, bib_number: 1, line_item: line_item)
+            expect(guest1.seat_number).to eq 'P39'
+
+            guest1.update(bib_number: 2)
+            expect(guest1.seat_number).to eq 'P39'
+          end
+        end
+      end
+    end
+  end
+
   describe '.complete' do
     let(:order1) { create(:order, completed_at: Date.current) }
     let(:order2) { create(:order, completed_at: nil) }

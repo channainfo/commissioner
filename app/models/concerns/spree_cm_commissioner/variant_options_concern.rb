@@ -23,6 +23,7 @@ module SpreeCmCommissioner
                :number_of_guests,
                :bib_prefix,
                :bib_zerofill,
+               :seat_number_positions,
                to: :options
     end
 

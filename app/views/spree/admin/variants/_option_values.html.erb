@@ -14,6 +14,8 @@
       <%= render partial: 'default_field', locals: { f: ff } %>
     <% when "boolean" %>
       <%= render partial: 'default_field', locals: { f: ff } %>
+    <% when "array" %>
+      <%= render partial: 'default_field', locals: { f: ff } %>
     <% when "date" %>
       <%= render partial: 'date_field', locals: { f: ff } %>
     <% when "time" %>
