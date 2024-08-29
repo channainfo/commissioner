@@ -31,5 +31,20 @@ RSpec.describe SpreeCmCommissioner::VariantAvailability::NonPermanentStockQuery 
         end
       end
     end
+
+    context 'when previously has multiple purchased line items' do
+      let(:available_quantity) { 5 }
+
+      let(:line_item1) { build(:line_item, quantity: 2, variant: variant) }
+      let(:line_item2) { build(:line_item, quantity: 2, variant: variant) }
+      let!(:order) { create(:order, state: :complete, completed_at: Date.current, line_items: [line_item1, line_item2]) }
+
+      it 'return availability when remaining 1' do
+        expect(subject.available?(1)).to eq true
+        expect(subject.available?(2)).to eq false
+        expect(subject.available?(3)).to eq false
+        expect(subject.available?(4)).to eq false
+      end
+    end
   end
 end
