@@ -16,11 +16,6 @@ module SpreeCmCommissioner
         )
       }
 
-      # filter by payment_method
-      base.scope :filter_by_payment_method, lambda { |payment_method_id|
-        joins(:payments).where(spree_payments: { payment_method_id: payment_method_id })
-      }
-
       base.before_create :link_by_phone_number
       base.before_create :associate_customer
 
