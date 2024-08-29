@@ -1,9 +1,10 @@
 module SpreeCmCommissioner
   class GuestCardClass < SpreeCmCommissioner::Base
-    TYPES = [
-      SpreeCmCommissioner::GuestCardClasses::BibCardClass
-    ].map(&:to_s)
+    belongs_to :taxon, class_name: 'Spree::Taxon'
 
-    belongs_to :taxon, class_name: 'Spree::Taxon', optional: true
+    TYPES = [
+      SpreeCmCommissioner::GuestCardClasses::BibCardClass,
+      SpreeCmCommissioner::GuestCardClasses::BookingCardClass
+    ].map(&:to_s)
   end
 end

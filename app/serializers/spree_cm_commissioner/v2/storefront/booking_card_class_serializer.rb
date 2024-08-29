@@ -1,9 +1,8 @@
 module SpreeCmCommissioner
   module V2
     module Storefront
-      class BibCardClassSerializer < GuestCardClassSerializer
-        attribute :background_color, :class_type, :background_color
-
+      class BookingCardClassSerializer < GuestCardClassSerializer
+        attributes :name, :class_type
         has_one :background_image, serializer: SpreeCmCommissioner::V2::Storefront::AssetSerializer
       end
     end

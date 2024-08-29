@@ -5,7 +5,7 @@ module Spree
         class GuestCardClassesController < Spree::Api::V2::ResourceController
           def show
             variant = Spree::Variant.find(params[:id])
-            @guest_card_class = variant.guest_card_class.first
+            @guest_card_class = variant.guest_card_classes.first
 
             render_serialized_payload { serialize_resource(@guest_card_class) }
           end
@@ -24,7 +24,7 @@ module Spree
             if @guest_card_class.is_a?(SpreeCmCommissioner::GuestCardClasses::BibCardClass)
               SpreeCmCommissioner::V2::Storefront::BibCardClassSerializer
             else
-              SpreeCmCommissioner::V2::Storefront::GuestCardClassSerializer
+              SpreeCmCommissioner::V2::Storefront::BookingCardClassSerializer
             end
           end
         end
