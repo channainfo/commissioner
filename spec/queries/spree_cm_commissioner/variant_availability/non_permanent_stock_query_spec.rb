@@ -46,5 +46,15 @@ RSpec.describe SpreeCmCommissioner::VariantAvailability::NonPermanentStockQuery 
         expect(subject.available?(4)).to eq false
       end
     end
+
+    context 'when previously has no purchased line items' do
+      let(:available_quantity) { 5 }
+
+      it 'return availability base on quantity' do
+        expect(subject.available?(5)).to eq true
+        expect(subject.available?(6)).to eq false
+        expect(subject.available?(8)).to eq false
+      end
+    end
   end
 end
