@@ -2,25 +2,25 @@ module Spree
   module Api
     module Webhook
       class TelegramBotsController < BaseController
-        include Rails.application.routes.url_helpers
-
         before_action :load_telegram_bot
         skip_before_action :load_subsriber
 
         def create
-          chat_id = params[:message][:chat][:id]
+          chat_id = params.dig(:message, :chat, :id)
+          text = params.dig(:message, :text)
 
-          client = ::Telegram::Bot::Client.new(@telegram_bot.token)
+          if text == '/start' && chat_id.present?
+            send_message_to_user_in_queue(chat_id)
+            head :ok
+          else
+            head :unprocessable_entity
+          end
+        end
 
-          client.send_photo(
+        def send_message_to_user_in_queue(chat_id)
+          SpreeCmCommissioner::TelegramStartMessageSenderJob.perform_later(
             chat_id: chat_id,
-            caption: @telegram_bot.preferred_start_caption,
-            photo: url_for(@telegram_bot.start_photo),
-            reply_markup: {
-              inline_keyboard: [
-                [{ text: @telegram_bot.preferred_start_button_text, url: @telegram_bot.preferred_start_button_url }]
-              ]
-            }.to_json
+            telegram_bot_id: @telegram_bot.id
           )
         end
 
@@ -29,6 +29,7 @@ module Spree
         def load_telegram_bot
           secure_token = request.headers['X-Telegram-Bot-Api-Secret-Token']
           @telegram_bot = SpreeCmCommissioner::TelegramBot.find_by(secure_token: secure_token)
+
           raise CanCan::AccessDenied if @telegram_bot.blank?
         end
       end

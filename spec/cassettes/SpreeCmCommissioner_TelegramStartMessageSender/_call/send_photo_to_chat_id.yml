@@ -1,0 +1,46 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.telegram.org/botthis-is-bot-token/sendPhoto
+    body:
+      encoding: UTF-8
+      string: chat_id=734348432&caption=&photo=https%3A%2F%2Fbookmeplus-api.ap.ngrok.io%2Frails%2Factive_storage%2Fblobs%2Fproxy%2FeyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBc3dPIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--079ac571ec03a4aae1cf26f879f44fb649794bfc%2Ftele-bot-im.png&reply_markup=%7B%22inline_keyboard%22%3A%5B%5B%7B%22text%22%3A%22Start%22%2C%22url%22%3A%22https%3A%2F%2Fwww.contigoasia.com%22%7D%5D%5D%7D
+    headers:
+      User-Agent:
+      - HTTPClient/1.0 (2.8.3, ruby 3.2.0 (2022-12-25))
+      Accept:
+      - "*/*"
+      Date:
+      - Fri, 30 Aug 2024 16:44:53 GMT
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.18.0
+      Date:
+      - Fri, 30 Aug 2024 16:44:54 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '888'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Expose-Headers:
+      - Content-Length,Content-Type,Date,Server,Connection
+    body:
+      encoding: UTF-8
+      string: '{"ok":true,"result":{"message_id":4975,"from":{"id":6441690414,"is_bot":true,"first_name":"Contigo
+        Asia","username":"contigoasiabot"},"chat":{"id":734348432,"first_name":"Thea","last_name":"Choem","username":"theachoem","type":"private"},"date":1725036294,"photo":[{"file_id":"AgACAgQAAxkDAAITb2bR9wZKJoVpu2VcWoAzKm5ilqzXAAKOtDEb4OKUUqHzQh4Kk_zxAQADAgADcwADNQQ","file_unique_id":"AQADjrQxG-DilFJ4","file_size":1274,"width":90,"height":51},{"file_id":"AgACAgQAAxkDAAITb2bR9wZKJoVpu2VcWoAzKm5ilqzXAAKOtDEb4OKUUqHzQh4Kk_zxAQADAgADbQADNQQ","file_unique_id":"AQADjrQxG-DilFJy","file_size":19941,"width":320,"height":180},{"file_id":"AgACAgQAAxkDAAITb2bR9wZKJoVpu2VcWoAzKm5ilqzXAAKOtDEb4OKUUqHzQh4Kk_zxAQADAgADeAADNQQ","file_unique_id":"AQADjrQxG-DilFJ9","file_size":75146,"width":640,"height":360}],"reply_markup":{"inline_keyboard":[[{"text":"Start","url":"https://www.contigoasia.com/"}]]}}}'
+  recorded_at: Fri, 30 Aug 2024 16:44:54 GMT
+recorded_with: VCR 6.2.0
