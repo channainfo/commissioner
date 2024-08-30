@@ -25,9 +25,13 @@
             <%= f.label :product_id, Spree.t(:products) %>
             <%= f.select :product_id,
               options_from_collection_for_select(Spree::Product.all, :id, :name),
-                { include_hidden: true },
-                class: 'select2 form-control' %>
+                { include_hidden: true }, class: 'select2 form-control', disabled: f.object.persisted? %>
             <%= f.error_message_on :product_id %>
+          <% end %>
+          <%= f.field_container :visible do %>
+            <%= f.label :visible, Spree.t(:visible) %>
+            <%= f.select :visible, [['Yes', true], ['No', false]], { } , class: "form-control select2", required: true %>
+            <%= f.error_message_on :visible %>
           <% end %>
         </div>
         <div data-hook="admin_taxonomy_taxon_taxon_products_edit_form_button">

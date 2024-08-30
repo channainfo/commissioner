@@ -4,6 +4,7 @@ module Spree
       module TaxonSerializerDecorator
         def self.prepended(base)
           base.has_many :vendors, serializer: ::Spree::V2::Storefront::VendorSerializer
+          base.has_many :visible_products, serializer: ::Spree::V2::Storefront::ProductSerializer
 
           base.has_one :category_icon, serializer: ::SpreeCmCommissioner::V2::Storefront::AssetSerializer
           base.has_one :app_banner, serializer: ::SpreeCmCommissioner::V2::Storefront::AssetSerializer
