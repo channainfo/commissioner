@@ -18,7 +18,7 @@ RSpec.describe SpreeCmCommissioner::OrderTelegramMessageFactory do
       it 'return body of all line items' do
         subject = described_class.new(title: '🎫 --- [NEW ORDER FROM BOOKME+] ---', order: order)
 
-        expect(subject.body).to eq "Order Number:\n<code>#{order.number}</code>\n\n[ x1 ]\n<b>5km Running Ticket</b>\n<i>🗓️ Jan 11, 2023 -> Jan 12, 2023</i>\n<i>🏪 Sai</i>"
+        expect(subject.body).to eq "Order Number:\n<code>#{order.number}</code>\n\n<b>5km Running Ticket</b>\nQuantity: 1\n<i>🗓️ Jan 11, 2023 -> Jan 12, 2023</i>\n<i>🏪 Sai</i>"
       end
     end
 
@@ -37,7 +37,7 @@ RSpec.describe SpreeCmCommissioner::OrderTelegramMessageFactory do
       it 'return body with line item of vendor1' do
         subject = described_class.new(title: '🎫 --- [NEW ORDER FROM BOOKME+] ---', order: order, vendor: vendor1)
 
-        expect(subject.body).to eq "Order Number:\n<code>#{order.number}</code>\n\n[ x1 ]\n<b>#{product1.name}</b>\n<i>🗓️ Jan 11, 2023 -> Jan 12, 2023</i>"
+        expect(subject.body).to eq "Order Number:\n<code>#{order.number}</code>\n\n<b>#{product1.name}</b>\nQuantity: 1\n<i>🗓️ Jan 11, 2023 -> Jan 12, 2023</i>"
       end
     end
 
@@ -50,7 +50,7 @@ RSpec.describe SpreeCmCommissioner::OrderTelegramMessageFactory do
       it 'return body of all line items' do
         subject = described_class.new(title: '🎫 --- [NEW ORDER FROM BOOKME+] ---', order: order)
 
-        expect(subject.body).to eq "Order Number:\n<code>#{order.number}</code>\n\n[ x1 ]\n<b>5km Running Ticket</b>\n<i>🗓️ Jan 11, 2023</i>\n<i>🏪 Sai</i>"
+        expect(subject.body).to eq "Order Number:\n<code>#{order.number}</code>\n\n<b>5km Running Ticket</b>\nQuantity: 1\n<i>🗓️ Jan 11, 2023</i>\n<i>🏪 Sai</i>"
       end
     end
   end

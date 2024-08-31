@@ -481,4 +481,5 @@ Rails.application.routes.draw do
   get 'i/:id', to: 'spree_cm_commissioner/qr_images#show', as: 'qr_image'
   get 'o/:id', to: 'spree_cm_commissioner/orders#show', as: 'order'
   get 'li/:id', to: 'spree_cm_commissioner/line_item_qr_images#show', as: 'line_item_qr_image'
+  get 'g/:id', to: 'spree_cm_commissioner/guest_cards#show', as: 'guest_cards'
 end

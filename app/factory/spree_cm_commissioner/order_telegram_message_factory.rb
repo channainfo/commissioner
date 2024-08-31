@@ -49,8 +49,8 @@ module SpreeCmCommissioner
     def line_item_content(line_item)
       text = []
 
-      text << "[ x#{line_item.quantity} ]"
       text << bold(line_item.product.name.to_s)
+      text << "Quantity: #{line_item.quantity}"
       text << italic("👉 #{line_item.options_text}") if line_item.options_text.present?
       text << italic(pretty_date_for(line_item)) if pretty_date_for(line_item).present?
       text << italic("🏪 #{line_item.vendor.name}") if line_item.vendor&.name.present? && vendor.blank?
@@ -82,7 +82,17 @@ module SpreeCmCommissioner
 
       if show_details_link
         text << ''
-        text << "<a href='#{Spree::Store.default.url}/orders/#{order.qr_data}'>More details</a>"
+
+        order.guests.each_with_index do |guest, index|
+          button_label = '🔗 View Ticket'
+          button_label += if guest.seat_number.present?
+                            " #{guest.seat_number}"
+                          else
+                            " ##{index + 1}"
+                          end
+
+          text << "<a href='#{Rails.application.routes.url_helpers.guest_cards_url(guest.token)}'>#{button_label}</a>"
+        end
       end
 
       text.compact.join("\n")
