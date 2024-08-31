@@ -1,0 +1,13 @@
+<!-- insert_bottom "[data-hook='admin_variant_form_additional_fields']" -->
+
+<div class="form-row">
+  <div class="form-group col-md-12">
+    <%= f.field_container :high_demand do %>
+      <%= f.label :high_demand, Spree.t(:high_demand) %>
+      <%= f.radio_button :high_demand, true %>
+      <%= f.label :high_demand, Spree.t(:yes), value: true %>
+      <%= f.radio_button :high_demand, false %>
+      <%= f.label :high_demand, Spree.t(:no), value: false %>
+    <% end %>
+  </div>
+</div>

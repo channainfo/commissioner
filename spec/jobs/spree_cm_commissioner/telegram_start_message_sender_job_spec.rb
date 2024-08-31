@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::TelegramStartMessageSenderJob do
   let(:chat_id) { 123456 }
-  let(:telegram_bot_id) { 1 }
+  let(:telegram_bot_id) { telegram_bot.id }
 
   let(:telegram_bot) { create(:cm_telegram_bot) }
 

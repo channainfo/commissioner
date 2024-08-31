@@ -21,7 +21,7 @@ module SpreeCmCommissioner
       base.whitelisted_ransackable_associations |= %w[guests]
       base.whitelisted_ransackable_attributes |= %w[number to_date from_date]
 
-      base.delegate :delivery_required?, :permanent_stock?,
+      base.delegate :delivery_required?, :permanent_stock?, :high_demand,
                     to: :variant
       base.delegate :discontinue_on,
                     to: :product
