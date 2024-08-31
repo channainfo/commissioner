@@ -46,7 +46,7 @@ module SpreeCmCommissioner
     def self.csv_importable_columns
       %i[
         first_name last_name age dob gender other_occupation other_organization
-        entry_type nationality_id other_organization expectation emergency_contact bib_number
+        entry_type nationality_id other_organization expectation emergency_contact bib_number seat_number
       ]
     end
 
@@ -158,7 +158,7 @@ module SpreeCmCommissioner
     # bib_number: 345, bib_prefix: 5KM, bib_zerofill: 5 => return 5KM00345
     # bib_number: 345, bib_prefix: 5KM, bib_zerofill: 2 => return 5KM345
     def formatted_bib_number
-      return nil if bib_prefix.blank?
+      return nil if bib_prefix.blank? || line_item.nil?
 
       filled_bib_number = bib_number.to_s.rjust(line_item.variant.bib_zerofill.to_i, '0')
       "#{bib_prefix}#{filled_bib_number}"

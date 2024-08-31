@@ -14,7 +14,8 @@ module Spree
       end
 
       def check_in
-        guest_ids = [params[:id]]
+        guest = SpreeCmCommissioner::Guest.find_by(id: params[:id])
+        guest_ids = [guest.id]
         context = SpreeCmCommissioner::CheckInBulkCreator.call(
           check_ins_attributes: guest_ids.map { |guest_id| { guest_id: guest_id } },
           check_in_by: spree_current_user
@@ -120,7 +121,7 @@ module Spree
       end
 
       def permitted_resource_params
-        params.required(:spree_cm_commissioner_guest).permit(:entry_type)
+        params.required(:spree_cm_commissioner_guest).permit(:entry_type, :seat_number)
       end
 
       def collection
