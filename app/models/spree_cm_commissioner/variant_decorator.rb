@@ -16,6 +16,7 @@ module SpreeCmCommissioner
                                             }, through: :option_value_variants, source: :option_value
 
       base.has_many :video_on_demands, class_name: 'SpreeCmCommissioner::VideoOnDemand', dependent: :destroy
+      base.has_many :complete_line_items, -> { complete }, class_name: 'Spree::LineItem'
 
       base.has_many :variant_guest_card_class, class_name: 'SpreeCmCommissioner::VariantGuestCardClass'
       base.has_many :guest_card_classes, class_name: 'SpreeCmCommissioner::GuestCardClass', through: :variant_guest_card_class
