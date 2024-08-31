@@ -56,11 +56,13 @@ RSpec.describe Spree::V2::Storefront::LineItemSerializer, type: :serializer do
         :available_social_contact_platforms,
         :allowed_upload_later,
         :allow_anonymous_booking,
-        :discontinue_on
+        :discontinue_on,
+        :high_demand
       )
 
       expect(subject[:data][:attributes][:qr_data]).to eq line_item.qr_data
       expect(subject[:data][:attributes][:number]).to eq line_item.number
+      expect(subject[:data][:attributes][:high_demand]).to eq line_item.high_demand
     end
 
     it 'returns exact accommodation relationships' do
