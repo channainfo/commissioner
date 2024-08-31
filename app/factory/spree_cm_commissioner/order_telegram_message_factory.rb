@@ -80,22 +80,38 @@ module SpreeCmCommissioner
       text << "Tel: #{inline_code(order.intel_phone_number || order.phone_number)}"
       text << "Email: #{inline_code(order.email)}" if order.email.present?
 
-      if show_details_link
+      if show_details_link && order.guests.any?
         text << ''
-
-        order.guests.each_with_index do |guest, index|
-          button_label = '🔗 View Ticket'
-          button_label += if guest.seat_number.present?
-                            " #{guest.seat_number}"
-                          else
-                            " ##{index + 1}"
-                          end
-
-          text << "<a href='#{Rails.application.routes.url_helpers.guest_cards_url(guest.token)}'>#{button_label}</a>"
-        end
+        text << 'View Tickets:'
+        text += generate_guests_links(order.guests)
       end
 
       text.compact.join("\n")
+    end
+
+    # Result:
+    # | No. A24 | No. A24 |
+    # | No. A24 | No. A24 |
+    # | No. A24 | No. A24 |
+    # | No. A24 | No. A24 |
+    # | No. A24 | No. A24 |
+    # | No. A24 |
+    def generate_guests_links(guests, guests_per_row = 2)
+      rows = (guests.size.to_f / guests_per_row).ceil
+      formatted_rows = []
+
+      rows.times do |i|
+        row_guests = guests.slice(i * guests_per_row, guests_per_row)
+        formatted_row = row_guests.map do |guest|
+          button_label = guest.seat_number.present? ? "No. #{guest.seat_number}" : "No. #{guest.formatted_bib_number || 'N/A'}"
+          link = Rails.application.routes.url_helpers.guest_cards_url(guest.token)
+          "| <a href='#{link}'>#{button_label}</a>"
+        end.join(' ')
+
+        formatted_rows << ("#{formatted_row} |")
+      end
+
+      formatted_rows
     end
   end
 end
