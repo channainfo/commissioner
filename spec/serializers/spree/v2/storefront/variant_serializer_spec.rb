@@ -44,7 +44,8 @@ describe Spree::V2::Storefront::VariantSerializer, type: :serializer do
         :delivery_option,
         :delivery_required,
         :allow_anonymous_booking,
-        :discontinue_on
+        :discontinue_on,
+        :high_demand
       )
     end
 
@@ -64,6 +65,16 @@ describe Spree::V2::Storefront::VariantSerializer, type: :serializer do
 
       expect(stock_items[0][:attributes][:count_on_hand]).to eq 0
       expect(stock_items[1][:attributes][:count_on_hand]).to eq 0
+    end
+
+    it 'returns high_demand' do
+      variant.update!(high_demand: true)
+      expect(subject[:data][:attributes][:high_demand]).to eq(true)
+    end
+
+    it 'returns high_demand as false when it is not set' do
+      variant.update!(high_demand: false)
+      expect(subject[:data][:attributes][:high_demand]).to eq(false)
     end
   end
 end
