@@ -30,6 +30,7 @@ module SpreeCmCommissioner
       base.has_many :taxons, class_name: 'Spree::Taxon', through: :customer
       base.has_many :vendors, through: :products, class_name: 'Spree::Vendor'
       base.has_many :taxons, through: :products, class_name: 'Spree::Taxon'
+      base.has_many :guests, through: :line_items, class_name: 'SpreeCmCommissioner::Guest'
 
       base.delegate :customer, to: :subscription, allow_nil: true
 

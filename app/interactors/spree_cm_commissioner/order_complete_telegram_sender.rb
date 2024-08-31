@@ -19,19 +19,16 @@ module SpreeCmCommissioner
 
     def send(telegram_bot_token, chat_id)
       telegram_client = ::Telegram::Bot::Client.new(telegram_bot_token)
-      telegram_client.send_photo(
+      telegram_client.send_message(
         chat_id: chat_id,
-        photo: Rails.application.routes.url_helpers.qr_image_url(order.qr_data),
-        show_caption_above_media: false,
         parse_mode: message_factory.parse_mode,
-        caption: message_factory.message
+        text: message_factory.message
       )
     end
 
     def message_factory
       context.message_factory ||= OrderTelegramMessageFactory.new(
-        title: 'Booking Successful 🎉',
-        subtitle: 'Show the QR code above to the crew to check-in on the event day',
+        title: 'Order Summary',
         show_details_link: true,
         order: order
       )
