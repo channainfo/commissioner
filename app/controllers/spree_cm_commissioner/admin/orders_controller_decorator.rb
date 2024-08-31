@@ -82,6 +82,9 @@ module SpreeCmCommissioner
           send_order_requested_telegram_alert_to_store
           send_order_accepted_telegram_alert_to_store
           send_order_rejected_telegram_alert_to_store
+
+          notify_order_complete_app_notification_to_user
+          notify_order_complete_telegram_notification_to_user
         ]
 
         @webhook_events = [

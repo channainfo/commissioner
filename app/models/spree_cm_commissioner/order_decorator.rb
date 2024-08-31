@@ -2,8 +2,8 @@ module SpreeCmCommissioner
   module OrderDecorator
     def self.prepended(base) # rubocop:disable Metrics/MethodLength
       base.include SpreeCmCommissioner::PhoneNumberSanitizer
-      base.include SpreeCmCommissioner::OrderRequestable
       base.include SpreeCmCommissioner::OrderBibNumberConcern
+      base.include SpreeCmCommissioner::OrderRequestable
 
       base.scope :subscription, -> { where.not(subscription_id: nil) }
       base.scope :paid, -> { where(payment_state: :paid) }

@@ -1,3 +1,5 @@
+# Make sure to put this concern below other concern or methods that generating additional order info like guests, seat number, etc.
+# This will ensure that when each notification is sent with neccessary data.
 module SpreeCmCommissioner
   module OrderRequestable
     extend ActiveSupport::Concern
@@ -16,6 +18,7 @@ module SpreeCmCommissioner
       # since it has usecase that order state is forced to update which not fire after_transition
 
       after_update :notify_order_complete_app_notification_to_user, if: -> { payment_state_changed_to_paid? }
+      after_update :notify_order_complete_telegram_notification_to_user, if: -> { state_changed_to_complete? }
       after_update :request, if: -> { state_changed_to_complete? && need_confirmation? }
       after_update :send_order_complete_telegram_alert_to_vendors, if: -> { state_changed_to_complete? && !need_confirmation? }
       after_update :send_order_complete_telegram_alert_to_store, if: -> { state_changed_to_complete? && !need_confirmation? }
@@ -113,6 +116,9 @@ module SpreeCmCommissioner
 
     def notify_order_complete_app_notification_to_user
       SpreeCmCommissioner::OrderCompleteNotificationSender.call(order: self)
+    end
+
+    def notify_order_complete_telegram_notification_to_user
       SpreeCmCommissioner::OrderCompleteTelegramSenderJob.perform_later(id) if user_id.present?
     end
 
