@@ -1,0 +1,3 @@
+<!-- insert_before "[data-hook='payments_row'] td.actions" -->
+
+<th class="text-center"><%= payment.gateway_status %></th>
