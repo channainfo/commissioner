@@ -10,7 +10,7 @@ module SpreeCmCommissioner
       event_date = guest.line_item.from_date.strftime('%d %b %Y | %I%p')
       venue = guest.line_item.product.venue.place.name || 'N/A'
       ticket_type = guest.line_item.name
-      seat_number = guest.seat_number || 'N/A'
+      seat_number = guest.seat_number || guest.formatted_bib_number || 'N/A'
 
       render(
         template: 'spree_cm_commissioner/guest_cards/show',
