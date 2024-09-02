@@ -127,4 +127,20 @@ RSpec.describe SpreeCmCommissioner::Imports::ImportOrderService do
       end
     end
   end
+
+  describe "#recalculate_order for existing order type" do
+    let(:line_item) { create(:line_item) }
+    let(:existing_order) { create(:order, state: 'cart', line_items: [line_item]) }
+
+    subject { described_class.new(import_order_id: import_exist_order.id, import_by_user_id: user.id, import_type: 'existing_order') }
+
+    before do
+      allow_any_instance_of(described_class).to receive(:fetch_content).and_return(existing_orders_data)
+    end
+    
+    it "recalculates the order successfully with line items" do
+      expect(existing_order).to receive(:update_with_updater!)
+      subject.recalculate_order(existing_order)
+    end
+  end
 end
