@@ -216,7 +216,7 @@ module SpreeCmCommissioner
 
     def validate_channel_prefix
       allowed_prefixes = %w[spree google_form telegram]
-      return if allowed_prefixes.any? { |prefix| channel.start_with?(prefix) }
+      return if allowed_prefixes.any? { |prefix| channel&.start_with?(prefix) }
 
       errors.add(:channel, "must start with one of the following: #{allowed_prefixes.join(', ')}")
     end

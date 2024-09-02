@@ -74,12 +74,18 @@ module SpreeCmCommissioner
         if order.update(
           channel: order_data[:order_channel],
           email: order_data[:order_email],
-          phone_number: order_data[:order_phone_number]
+          phone_number: order_data[:order_phone_number],
+          internal_note: order_data[:note]
         )
+          recalculate_order(order)
           update_guest(order, order_data)
         else
           record_failure(order_data[:order_number])
         end
+      end
+
+      def recalculate_order(order)
+        order.update_with_updater!
       end
 
       def update_guest(order, order_data)
