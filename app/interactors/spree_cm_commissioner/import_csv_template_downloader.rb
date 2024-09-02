@@ -15,6 +15,8 @@ module SpreeCmCommissioner
       guest_attributes = SpreeCmCommissioner::Guest.csv_importable_columns
       headers = require_headers + guest_attributes
 
+      headers << 'note'
+
       filename = 'import_order_csv_template.csv'
       filepath = Rails.root.join('tmp', filename)
 
