@@ -38,6 +38,7 @@ module SpreeCmCommissioner
     before_validation :set_event_id
     before_validation :assign_seat_number, if: -> { bib_number.present? }
 
+    validates :seat_number, uniqueness: { scope: :event_id }
     validates :bib_index, uniqueness: true, allow_nil: true
 
     self.whitelisted_ransackable_associations = %w[id_card event]

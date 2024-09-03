@@ -9,6 +9,7 @@
       <table class="table line-items" data-hook="line-items">
         <thead class="text-muted">
           <tr>
+            <th scope="col" class="text-left"><%= Spree.t(:id) %></th>
             <% line_item.kyc_fields.each do |field| %>
               <% case field %>
                 <% when :guest_name %>
@@ -38,6 +39,7 @@
             <% if guest.persisted? %>
               <% if guest.full_name.blank? %>
                 <tr>
+                  <td class="text-left"><%= guest.id %></td>
                   <td class="text-left flex-grow-1" colspan="<%= line_item.kyc_fields.count %>">
                     <%= link_to Spree.t(:fill_guest_infomation), edit_admin_order_guest_path(@order, guest) %>
                   </td>
@@ -48,6 +50,7 @@
                 </tr>
               <% else %>
                 <tr data-hook="event_guests_index_rows">
+                  <td class="text-left"><%= guest.id %></td>
                   <% line_item.kyc_fields.each do |field| %>
                     <% case field %>
                       <% when :guest_name %>

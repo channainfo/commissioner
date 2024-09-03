@@ -2,6 +2,11 @@
   <div class="col-12">
     <div class="card mb-3">
       <div class="card-body">
+        <%= f.field_container :seat_number do %>
+          <%= f.label :seat_number, raw(Spree.t(:seat_number) + required_span_tag) %>
+          <%= f.text_field :seat_number, class: 'form-control', disabled: f.object.seat_number.present? %>
+        <% end %>
+
         <% @kyc_fields.each do |field| %>
           <% case field %>
           <% when :guest_name %>

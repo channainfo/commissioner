@@ -11,7 +11,7 @@
 <% end %>
 
 <% @order.line_items.map do |line_item| %>
-  <% if line_item.kyc? %>
+  <% if line_item.guests.any? %>
     <%= render partial: 'table', locals: { line_item: line_item } %>
   <% end %>
 <% end %>
