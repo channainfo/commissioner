@@ -9,6 +9,9 @@
       <table class="table line-items" data-hook="line-items">
         <thead class="text-muted">
           <tr>
+            <th scope="col" class="text-left"><%= Spree.t(:id) %></th>
+            <th scope="col" class="text-left"><%= Spree.t(:seat_number) %></th>
+            <th scope="col" class="text-left"><%= Spree.t(:formatted_bib_number) %></th>
             <% line_item.kyc_fields.each do |field| %>
               <% case field %>
                 <% when :guest_name %>
@@ -38,9 +41,9 @@
             <% if guest.persisted? %>
               <% if guest.full_name.blank? %>
                 <tr>
-                  <td class="text-left flex-grow-1" colspan="<%= line_item.kyc_fields.count %>">
-                    <%= link_to Spree.t(:fill_guest_infomation), edit_admin_order_guest_path(@order, guest) %>
-                  </td>
+                  <td class="text-left"><%= guest.id %></td>
+                  <td class="text-left"><%= guest.seat_number %></td>
+                  <td class="text-left"><%= guest.formatted_bib_number %></td>
                   <td class="text-right">
                     <%= link_to_edit guest, url: edit_admin_order_guest_path(@order, guest), no_text: true %>
                     <%= link_to_delete guest, url: remove_guest_admin_order_guests_path(@order, params: {line_item_id: guest.line_item_id, guest_id: guest.id }) ,no_text: true %>
@@ -48,6 +51,7 @@
                 </tr>
               <% else %>
                 <tr data-hook="event_guests_index_rows">
+                  <td class="text-left"><%= guest.id %></td>
                   <% line_item.kyc_fields.each do |field| %>
                     <% case field %>
                       <% when :guest_name %>

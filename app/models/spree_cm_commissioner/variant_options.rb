@@ -125,6 +125,10 @@ module SpreeCmCommissioner
       @seat_number_positions ||= option_value_name_for(option_type_name: 'seat-number-positions')&.split(',')
     end
 
+    def seat_number_layouts
+      @seat_number_layouts ||= option_value_name_for(option_type_name: 'seat-number-layouts')&.split(',')
+    end
+
     # can consider as customers.
     def number_of_guests
       number_of_adults + number_of_kids

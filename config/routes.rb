@@ -362,6 +362,7 @@ Spree::Core::Engine.add_routes do
     namespace :v2 do
       namespace :platform do
         resources :homepage_section_relatable_options
+        resources :seat_number_layouts
       end
 
       namespace :storefront do

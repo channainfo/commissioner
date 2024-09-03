@@ -21,6 +21,7 @@ module SpreeCmCommissioner
     scope :none_bib, -> { where(bib_prefix: [nil, '']) }
 
     belongs_to :line_item, class_name: 'Spree::LineItem'
+    has_one :variant, class_name: 'Spree::Variant', through: :line_item
     belongs_to :user, class_name: 'Spree::User'
     belongs_to :occupation, class_name: 'Spree::Taxon'
     belongs_to :nationality, class_name: 'Spree::Taxon'
@@ -38,6 +39,7 @@ module SpreeCmCommissioner
     before_validation :set_event_id
     before_validation :assign_seat_number, if: -> { bib_number.present? }
 
+    validates :seat_number, uniqueness: { scope: :event_id }, allow_nil: true, if: -> { event_id.present? }
     validates :bib_index, uniqueness: true, allow_nil: true
 
     self.whitelisted_ransackable_associations = %w[id_card event]
@@ -56,7 +58,7 @@ module SpreeCmCommissioner
     end
 
     def allowed_checkout_for?(field) # rubocop:disable Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
-      return (first_name.present? && last_name.present?) if field == :guest_name
+      return first_name.present? && last_name.present? if field == :guest_name
       return gender.present? if field == :guest_gender
       return dob.present? if field == :guest_dob
       return occupation.present? || other_occupation.present? if field == :guest_occupation

@@ -29,6 +29,7 @@ module SpreeCmCommissioner
 
     def items
       return nil unless attr_type_array?
+      return nil if name.nil?
 
       name.split(',')
     end

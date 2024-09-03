@@ -1,6 +1,6 @@
 <div class="input-group">
   <div class="input-group-prepend">
-    <span class="input-group-text"><%= f.object.items.size %> items</span>
+    <span class="input-group-text"><%= f.object.items&.size || 0 %> items</span>
   </div>
   <%= f.text_field :name, class: "form-control", required: true %>
 </div>

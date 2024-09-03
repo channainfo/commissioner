@@ -2,7 +2,30 @@
   <div class="col-12">
     <div class="card mb-3">
       <div class="card-body">
-        <% @kyc_fields.each do |field| %>
+        <%= f.field_container :seat_number do %>
+          <%= f.label :seat_number, raw(Spree.t(:seat_number) + required_span_tag) %>
+          <% if f.object.seat_number.present? %>
+            <%= f.select :seat_number, options_from_collection_for_select([[f.object.seat_number, f.object.seat_number]], :first, :last),
+                { include_hidden: true },
+                class: 'select2autocomplete',
+                data: { autocomplete_url_value: 'seat_number_layouts_api_v2',
+                        autocomplete_return_attr_value: :name,
+                        autocomplete_min_input_value: 1,
+                        autocomplete_additional_url_params_value: "guest_id=#{f.object.id}" },
+                disabled: true %>
+          <% else %>
+            <%= f.select :seat_number, options_from_collection_for_select([], :id, :name),
+                { include_hidden: true },
+                class: 'select2autocomplete',
+                data: { autocomplete_url_value: 'seat_number_layouts_api_v2',
+                        autocomplete_return_attr_value: :name,
+                        autocomplete_min_input_value: 1,
+                        autocomplete_additional_url_params_value: "guest_id=#{f.object.id}" } %>
+          <% end %>
+          <%= f.error_message_on :seat_number %>
+        <% end %>
+
+        <% @kyc_fields&.each do |field| %>
           <% case field %>
           <% when :guest_name %>
             <div class="row">
