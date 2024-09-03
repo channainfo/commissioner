@@ -17,6 +17,27 @@ RSpec.describe SpreeCmCommissioner::Guest, type: :model do
         end
       end
 
+      context 'when assigning seat numbers' do
+        let(:option_type) { create(:cm_option_type, :seat_number_positions) }
+        let(:option_value) { create(:option_value, name: 'P39,P41,P43,P45,P47', option_type: option_type) }
+        let(:product) { create(:product, option_types: [option_type]) }
+        let(:variant) { create(:variant, product: product, option_values: [option_value]) }
+        let(:line_item1) { create(:line_item, variant: variant, quantity: 1) }
+        let(:line_item2) { create(:line_item, variant: variant, quantity: 1) }
+        let(:event_id) { 111 }
+
+        before do
+          create(:guest, line_item: line_item1, seat_number: 'P01', event_id: event_id)
+        end
+
+        it 'does not allow duplicate seat numbers within the same event' do
+          guest2 = build(:guest, line_item: line_item2, seat_number: 'P01', event_id: event_id)
+
+          expect(guest2).not_to be_valid
+          expect(guest2.errors[:seat_number]).to include('has already been taken')
+        end
+      end
+
       context 'when guest variant does not have :seat_number_positions option value' do
         let(:variant) { create(:variant) }
         let(:line_item) { create(:line_item, variant: variant, quantity: 2) }
@@ -35,11 +56,15 @@ RSpec.describe SpreeCmCommissioner::Guest, type: :model do
         let(:line_item) { create(:line_item, variant: variant, quantity: 2) }
 
         context 'when bib invalid (exceed positions range or negative value)' do
-          it 'assign seat number = nil' do
+          it 'assign seat number = nil if bib_number negative value' do
             invalid_guest_1 = create(:guest, bib_number: -1, line_item: line_item)
-            invalid_guest_2 = create(:guest, bib_number: 6, line_item: line_item)
 
             expect(invalid_guest_1.seat_number).to eq nil
+          end
+
+          it 'assign seat number = nil if bib_number positions value' do
+            invalid_guest_2 = create(:guest, bib_number: 6, line_item: line_item)
+
             expect(invalid_guest_2.seat_number).to eq nil
           end
         end
@@ -80,8 +105,8 @@ RSpec.describe SpreeCmCommissioner::Guest, type: :model do
     let(:line_item1) { create(:line_item, order: order1) }
     let(:line_item2) { create(:line_item, order: order2) }
 
-    let!(:guest1) { create(:guest, line_item: line_item1) }
-    let!(:guest2) { create(:guest, line_item: line_item2) }
+    let!(:guest1) { create(:guest, line_item: line_item1, seat_number: 1) }
+    let!(:guest2) { create(:guest, line_item: line_item2, seat_number: 2) }
 
     it 'return guests that has complete line item' do
       expect(described_class.complete.to_a).to eq [guest1]
@@ -249,12 +274,12 @@ RSpec.describe SpreeCmCommissioner::Guest, type: :model do
     end
   end
 
-   describe ".none_bib" do
+  describe ".none_bib" do
     let(:order) { create(:order, completed_at: Date.current) }
     let(:line_item) { create(:line_item, order: order) }
-    let(:guest1) { create(:guest, line_item: line_item) }
-    let(:guest2) { create(:guest, line_item: line_item, bib_prefix: '20KM') }
-    let(:guest3) { create(:guest, line_item: line_item) }
+    let(:guest1) { create(:guest, line_item: line_item, seat_number: 1) }
+    let(:guest2) { create(:guest, line_item: line_item, bib_prefix: '20KM', seat_number: 2) }
+    let(:guest3) { create(:guest, line_item: line_item, seat_number: 3) }
 
     let(:guests) { SpreeCmCommissioner::Guest.where(id: [guest1.id, guest2.id, guest3.id]) }
 
@@ -288,8 +313,8 @@ RSpec.describe SpreeCmCommissioner::Guest, type: :model do
     context "when guest in the same event" do
       context "when guest has the same prefix" do
         let(:line_item) { create(:line_item, order: order, variant: product_with_bib1.variants.first) }
-        let(:guest1) { create(:guest, line_item: line_item) }
-        let(:guest2) { create(:guest, line_item: line_item) }
+        let(:guest1) { create(:guest, line_item: line_item, seat_number: 1) }
+        let(:guest2) { create(:guest, line_item: line_item, seat_number: 2) }
 
         it 'generate bib_number for guest' do
           guest1.generate_bib!
@@ -306,8 +331,8 @@ RSpec.describe SpreeCmCommissioner::Guest, type: :model do
         let(:line_item1) { create(:line_item, order: order, variant: product_with_bib1.variants.first) }
         let(:line_item2) { create(:line_item, order: order, variant: product_with_bib1.variants.last) }
 
-        let(:guest1) { create(:guest, line_item: line_item1) }
-        let(:guest2) { create(:guest, line_item: line_item2) }
+        let(:guest1) { create(:guest, line_item: line_item1, seat_number: 1) }
+        let(:guest2) { create(:guest, line_item: line_item2, seat_number: 2) }
 
         it 'generate bib_number for guest' do
           guest1.generate_bib!
