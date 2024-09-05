@@ -9,7 +9,7 @@ module SpreeCmCommissioner
           edit update cancel resume approve resend open_adjustments
           close_adjustments cart channel set_channel
           accept_all reject_all alert_request_to_vendor
-          notifications fire_notification queue_webhooks_requests
+          notifications fire_notification queue_webhooks_requests update_order_status
         ]
 
         base.before_action :initialize_notification_methods, only: %i[
@@ -68,6 +68,16 @@ module SpreeCmCommissioner
       end
 
       def notifications; end
+
+      def update_order_status
+        if @order.next
+          flash[:success] = I18n.t('orders.update_order_status.success')
+        else
+          error_message = @order.errors.full_messages.to_sentence
+          flash[:error] = (error_message.presence || I18n.t('orders.update_order_status.fail'))
+        end
+        redirect_back fallback_location: spree.edit_admin_order_url(@order)
+      end
 
       # override
       def initialize_order_events
