@@ -220,6 +220,7 @@ Spree::Core::Engine.add_routes do
         get :notifications
         put :fire_notification
         put :queue_webhooks_requests
+        put :update_order_status
       end
 
       resources :line_items, only: %i[edit update]

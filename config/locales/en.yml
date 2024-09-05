@@ -153,6 +153,9 @@ en:
 
   orders:
     total: "Total: %{orders_count} invoices"
+    update_order_status:
+      success: 'Order Status update successfully'
+      fail: 'Order Status fail to update '
 
   account_deletion:
     title:
