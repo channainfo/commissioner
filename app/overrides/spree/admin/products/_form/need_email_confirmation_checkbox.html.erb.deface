@@ -1,0 +1,9 @@
+<!-- insert_after "[data-hook='admin_product_form_promotionable']" -->
+<div>
+  <%= f.field_container :need_email_confirmation do %>
+    <%= f.label :need_email_confirmation do %>
+      <%= f.check_box :need_email_confirmation %>
+      <%= Spree.t(:need_email_confirmation) %>
+    <% end %>
+  <% end %>
+</div>

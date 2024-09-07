@@ -63,6 +63,19 @@ module SpreeCmCommissioner
       precalculate_conversion
     end
 
+    def need_email_confirmation?
+      line_items.all? { |item| item.product.need_email_confirmation? }
+    end
+
+    # override
+    # trigger in def finalize!
+    def deliver_order_confirmation_email
+      return unless need_email_confirmation?
+
+      OrderMailer.confirm_email(id).deliver_later
+      update_column(:confirmation_delivered, true) # rubocop:disable Rails/SkipsModelValidations
+    end
+
     def precalculate_conversion
       line_items.each do |item|
         SpreeCmCommissioner::ConversionPreCalculatorJob.perform_later(item.product_id)
