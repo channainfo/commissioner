@@ -108,6 +108,22 @@ module SpreeCmCommissioner
     end
 
     # overrided
+    # add phone_number
+    # trigger when update customer detail
+    def associate_user!(user, override_email = true) # rubocop:disable Style/OptionalBooleanParameter
+      self.user           = user
+      self.email          = user.email if override_email
+      self.phone_number   = user.phone_number if user.phone_number.present?
+      self.created_by   ||= user
+      self.bill_address ||= user.bill_address.try(:clone)
+      self.ship_address ||= user.ship_address.try(:clone)
+
+      changes = slice(:user_id, :email, :phone_number, :created_by_id, :bill_address_id, :ship_address_id)
+
+      self.class.unscoped.where(id: self).update_all(changes) # rubocop:disable Rails/SkipsModelValidations
+    end
+
+    # overrided
     # avoid raise error when source_id is nil.
     # https://github.com/channainfo/commissioner/pull/843
     def valid_promotion_ids

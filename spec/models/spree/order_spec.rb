@@ -425,4 +425,20 @@ RSpec.describe Spree::Order, type: :model do
       expect(order.valid_promotion_ids).to eq []
     end
   end
+
+  describe '#associate_user' do
+    let!(:order) { create(:order) }
+    let(:user_with_phone_number) { create(:user , phone_number: '012290564') }
+    let(:user_with_email) { create(:user , email: 'panhachom@gmail.com') }
+
+    it 'save user phone_number to order if exist' do
+      order.associate_user!(user_with_phone_number)
+      expect(order.reload.phone_number).to eq user_with_phone_number.phone_number
+    end
+
+    it 'not save user phone_number to order if not exist' do
+      order.associate_user!(user_with_email)
+      expect(order.reload.phone_number).to eq nil
+    end
+  end
 end
