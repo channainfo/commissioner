@@ -23,10 +23,6 @@ module Spree
 
       private
 
-      def taxon_params
-        params.require(:taxon).permit(permitted_taxon_attributes, :preferred_background_color, :preferred_foreground_color)
-      end
-
       def remove_asset(asset)
         if asset.destroy
           flash[:success] = Spree.t('notice_messages.icon_removed')
