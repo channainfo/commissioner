@@ -46,7 +46,8 @@ RSpec.describe Spree::V2::Storefront::TaxonSerializer, type: :serializer do
         :from_date,
         :to_date,
         :background_color,
-        :foreground_color
+        :foreground_color,
+        :show_event_status
       )
     end
 
