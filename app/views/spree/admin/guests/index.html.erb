@@ -11,9 +11,7 @@
 <% end %>
 
 <% @order.line_items.map do |line_item| %>
-  <% if line_item.kyc? %>
-    <%= render partial: 'table', locals: { line_item: line_item } %>
-  <% end %>
+  <%= render partial: 'table', locals: { line_item: line_item } %>
 <% end %>
 
 <%= render 'spree/admin/shared/order_summary' %>
