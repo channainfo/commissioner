@@ -37,6 +37,7 @@ RSpec.describe SpreeCmCommissioner::V2::Storefront::GuestSerializer, type: :seri
         :address,
         :seat_number,
         :formatted_bib_number,
+        :phone_number
       )
       expect(subject[:data][:attributes][:qr_data]).to eq guest.token
     end
