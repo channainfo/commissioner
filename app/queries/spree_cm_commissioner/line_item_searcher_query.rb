@@ -88,7 +88,9 @@ module SpreeCmCommissioner
           LOWER(spree_orders.phone_number) LIKE ANY (ARRAY[:terms]) OR
           LOWER(spree_orders.email) LIKE ANY (ARRAY[:terms]) OR
           LOWER(guests.first_name) LIKE ANY (ARRAY[:terms]) OR
-          LOWER(guests.last_name) LIKE ANY (ARRAY[:terms])",
+          LOWER(guests.last_name) LIKE ANY (ARRAY[:terms]) OR
+          LOWER(guests.seat_number) LIKE ANY (ARRAY[:terms]) OR
+          LOWER(guests.phone_number) LIKE ANY (ARRAY[:terms])",
           { terms: terms }
         )
         .distinct
