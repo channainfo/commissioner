@@ -1,0 +1,9 @@
+<%= render partial: 'spree/admin/shared/customer_notification_tabs', locals: { current: :details , object: @customer_notification } %>
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+
+<%= form_with model: @object, url: { action: 'update' }, html: { multipart: true } do |f| %>
+  <fieldset data-hook="edit_image">
+    <%= render partial: 'form', locals: { f: f, preview: true } %>
+    <%= render partial: 'spree/admin/shared/edit_resource_links' %>
+  </fieldset>
+<% end %>

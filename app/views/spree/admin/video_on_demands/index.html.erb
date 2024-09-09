@@ -1,0 +1,74 @@
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :video_on_demand } %>
+<% content_for :page_actions do %>
+  <%= yield :page_actions %>
+  <%= button_link_to(Spree.t(:video), new_admin_product_video_on_demand_url(@product),
+      { class: "btn-success", icon: 'add.svg', id: 'new_upload_video_link' }
+    ) if can?(:create, SpreeCmCommissioner::VideoOnDemand) %>
+<% end %>
+<% if !@video_on_demands.any? %>
+  <div class="text-center no-objects-found m-5">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(SpreeCmCommissioner::VideoOnDemand)) %>,
+    <%= link_to(Spree.t(:add_one), new_admin_product_video_on_demand_url(@product)) if can? :create, SpreeCmCommissioner::VideoOnDemand %>!
+  </div>
+<% else %>
+  <div class="table-responsive border rounded bg-white">
+    <table class="table sortable" data-sortable-link="<%= update_positions_admin_product_video_on_demands_path(@product) %>">
+      <thead data-hook= "video_on_demands_header" class="text-muted">
+        <tr>
+          <th></th>
+          <th class="text-center"><%= Spree.t(:uuid) %></th>
+          <th class="text-center"><%= Spree.t(:title) %></th>
+          <th class="text-center"><%= Spree.t(:variant) %></th>
+          <th class="text-center"><%= Spree.t(:thumbnail) %></th>
+          <th class="text-center"><%= Spree.t(:video) %></th>
+          <th class="text-center"><%= Spree.t(:created_at) %></th>
+          <th class="action"></th>
+        </tr>
+      </thead>
+      <tbody id="sortVert">
+        <% @video_on_demands.each do |video_on_demand| %>
+          <tr id="<%= spree_dom_id video_on_demand %>" data-hook="video_on_demand_row">
+            <td class="move-handle">
+              <% if can? :edit, video_on_demand %>
+                <%= svg_icon name: "grip-vertical.svg", width: '18', height: '18' %>
+              <% end %>
+            </td>
+            <td class="text-center"><%= video_on_demand.uuid %></td>
+            <td class="text-center"><%= video_on_demand.title %></td>
+            <td class="text-center">
+              <% if video_on_demand.variant.id == @product.master_id %>
+                <%= 'Default' %>
+              <% else %>
+                <%= video_on_demand.variant.options_text %>
+              <% end %>
+            </td>
+            <td class="image text-center">
+              <% if video_on_demand&.thumbnail&.attached?  %>
+                <div class="admin-product-image-container small-img">
+                  <%= image_tag (main_app.rails_blob_url(video_on_demand.thumbnail)) %>
+                </div>
+              <% end %>
+            </td>
+            <td class="image text-center">
+              <% if video_on_demand&.file.attached? %>
+                <video controls width="200" height="100">
+                  <source src="<%= main_app.rails_blob_url(video_on_demand.file) %>" type="<%= video_on_demand.file.content_type %>" if video_on_demand&.file&.attached? %>
+                  Your browser does not support the video tag.
+                </video>
+                <p><%=  %></p>
+              <% end %>
+            </td>
+            <td class="text-center"><%= video_on_demand.created_at.strftime("%B %d %Y") %></td>
+            <td class="actions">
+              <span class="d-flex justify-content-end">
+                <%= link_to_edit video_on_demand, url: edit_admin_product_video_on_demand_path(@product, video_on_demand), no_text: true if can?(:edit, :admin, video_on_demand) %>
+                &nbsp;
+                <%= link_to_delete video_on_demand, url: admin_product_video_on_demand_path(id: video_on_demand.id), no_text: true if can?(:delete, video_on_demand) %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

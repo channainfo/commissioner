@@ -1,0 +1,11 @@
+<div class="d-flex flex-column my-4">
+  <% @product.class::BIT_FIELDS.each do |key, value| %>
+    <div class="form-check form-check-inline">
+      <%= form.field_container key do %>
+        <%= form.check_box key, class: 'form-check-input', checked: form.object.kyc_value_enabled?(value) %>
+        <%= form.label key, Spree.t(key), class: 'form-check-label' %>
+        <%= form.error_message_on key, class: 'text-danger' %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

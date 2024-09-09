@@ -1,0 +1,50 @@
+
+<% content_for :page_actions do %>
+  <%= yield :page_actions %>
+  <%= button_link_to(Spree.t(:new_nearby_place), new_admin_vendor_nearby_place_url(@vendor), { class: "btn-success", icon: 'add.svg', id: 'new_nearby_place_link' }) if can? :create, SpreeCmCommissioner::VendorPlace %>
+<% end %>
+
+<%= render partial: 'spree/admin/shared/vendor_tabs', locals: {current: :nearby_places} %>
+<% unless @nearby_places.empty? %>
+   <div class="table-responsive">
+    <table class="table sortable" data-hook="images_table" data-sortable-link="<%= update_positions_admin_vendor_nearby_places_url(@vendor) %>">
+      <thead>
+        <tr data-hook="images_header">
+          <th colspan="3">
+            <%= Spree.t(:name) %>
+          </th>
+            <th colspan="2">
+            <%= Spree.t(:type) %>
+          </th>
+            <th colspan="1">
+            <%= Spree.t(:rating) %>
+          </th>
+          <th colspan="2">
+            <%= Spree.t(:distance_estimation) %>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody class="pb-3">
+        <% @nearby_places.each do |nearby_place| %>
+          <tr>
+            <td colspan="3" class="move-handle">
+              <%= svg_icon name: "sort.svg", width: '18', height: '18' %>
+              <label class="ml-2 mr-2" ><%= nearby_place.place.name %></label>
+            </td>
+            <td colspan="2"><%= nearby_place.place.types %></td>
+            <td colspan="1"><%= nearby_place.place.rating %></td>
+            <td colspan="2"><%= nearby_place.distance %> km</td>
+            <td>
+              <%= link_to_delete(nearby_place, { url: admin_vendor_nearby_place_url(@vendor, nearby_place), no_text: true }) if can? :destroy, nearby_place %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <small class="form-text text-muted">
+    <%= raw I18n.t('nearby_place.empty_info') %>
+  </small>
+<% end %>

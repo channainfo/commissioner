@@ -1,0 +1,18 @@
+<!-- insert_bottom "[data-hook='admin_option_type_form_fields']" -->
+
+<div class="col-12 col-md-6">
+  <% if @option_type.new_record? %>
+    <%= f.field_container :attr_type, class: ['form-group'] do %>
+      <%= f.label :attr_type, Spree.t(:attribute_type) %> <span class="required">*</span>
+      <%= f.select :attr_type, Spree::OptionType::ATTRIBUTE_TYPES, {}, :class => "fullwidth select2" %>
+      <%= f.error_message_on :attr_type %>
+    <% end %>
+  <% else %>
+    <%= f.field_container :attr_type, class: ['form-group'] do %>
+      <% attr_type_valid = f.object.attr_type.in?(Spree::OptionType::ATTRIBUTE_TYPES) %>
+      <%= f.label :attr_type, Spree.t(:attribute_type) %> <span class="required">*</span>
+      <%= f.select :attr_type, Spree::OptionType::ATTRIBUTE_TYPES, { }, { disabled: attr_type_valid ? true : false, class: "form-control select2" } %>
+      <%= f.error_message_on :attr_type %>
+    <% end %>
+  <% end %>
+</div>

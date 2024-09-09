@@ -1,0 +1,30 @@
+\#*
+*~
+.#*
+.DS_Store
+.idea
+.localeapp/locales
+.project
+.vscode
+coverage
+default
+tmp
+nbproject
+pkg
+*.sw?
+spec/dummy
+.rvmrc
+.sass-cache
+public/spree
+.ruby-gemset
+*.gem
+*/*.gem
+.byebug_history
+
+# Cache
+vendor/cache
+node_modules
+
+# VScode
+.vscode
+!.vscode/.settings.json

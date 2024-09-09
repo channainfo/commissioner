@@ -1,0 +1,17 @@
+<!-- insert_after "[data-hook='admin_store_form_fields']" -->
+
+<% if @store.persisted? %>
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5 class="card-title mb-0 h6">
+        <%= Spree.t(:term_and_condition_promotion).pluralize %>
+      </h5>
+    </div>
+    <div class="card-body">
+      <%= f.field_container :term_and_condition_promotion do %>
+        <%= f.text_area :term_and_condition_promotion, rows: "20", class: "form-control spree-rte" %>
+        <%= f.error_message_on :term_and_condition_promotion %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

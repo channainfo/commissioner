@@ -1,0 +1,10 @@
+<% content_for :page_title do %>
+  <%= link_to plural_resource_name(SpreeCmCommissioner::HomepageBanner), spree.admin_homepage_feed_homepage_banner_index_url %> /
+  <%= Spree.t(:new_homepage_banner) %>
+<% end %>
+<%= form_with model: @object, url: { action: 'create' }, html: { multipart: true } do |f| %>
+  <fieldset data-hook="new_photo">
+    <%= render partial: 'form', locals: { f: f } %>
+    <%= render partial: 'spree/admin/shared/new_resource_links' %>
+  </fieldset>
+<% end %>

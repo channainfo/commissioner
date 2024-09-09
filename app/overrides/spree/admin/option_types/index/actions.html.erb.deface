@@ -1,0 +1,6 @@
+<!-- insert_after "erb[silent]:contains('content_for :page_actions')" -->
+
+<%= button_link_to Spree.t(:edit_icons), 
+  admin_vectors_option_values_url, 
+  { icon: 'spree-icon.svg', id: 'admin-option-values-icons-index' } 
+%>

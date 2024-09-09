@@ -1,0 +1,66 @@
+  .hidden-when-print {
+    display: block;
+  }
+
+  .show-when-print {
+    display: none;
+  }
+
+  .card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    width: 100%;
+    height: auto;
+  }
+
+  .order-data {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .row-wrapper {
+    display: flex;
+    align-items: center;
+    grid-column: 1 / -1;
+    margin-bottom: 20px;
+  }
+
+  .cards-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
+    flex: 1;
+  }
+
+  @media print {
+
+    .hidden-when-print {
+      display: none !important;;
+    }
+
+    .show-when-print {
+      display: block !important;
+      }
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 18px;
+      flex: 1;
+    }
+
+    .print-section {
+      margin-top: -75px;
+    }
+
+    @page {
+      size: A4;
+      margin: 10mm;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      page-break-before: always;
+    }
+  }

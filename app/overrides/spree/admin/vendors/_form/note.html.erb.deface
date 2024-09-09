@@ -1,0 +1,11 @@
+<!-- insert_before "erb[loud]:contains('field_container :about_us')" -->
+
+<%= f.field_container :note do %>
+    <%= f.label :note %>
+    <%= f.text_area :note, class: 'form-control' %>
+<% end %>
+
+<%= f.field_container :code do %>
+    <%= f.label :code %>
+    <%= f.text_field :code, class: 'form-control' %>
+<% end %>

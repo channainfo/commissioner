@@ -1,0 +1,184 @@
+<% content_for :page_title do %>
+  <%= Spree.t('billing.balance_due_orders') %>
+<% end %>
+
+<% content_for :extra_head do %>
+  <%= stylesheet_link_tag 'spree_cm_commissioner/backend/invoice', media:'print,screen' %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= link_to Spree.t(:print_all), spree.print_all_invoices_billing_reports_path, method: :put, class: 'btn btn-success mb-3 print-all-invoices'%>
+<% end %>
+
+<div id="invoice-container" class="flex align-items-center w-100 mt-3 invoice-container"></div>
+
+<% content_for :sidebar do %>
+  <div data-hook="billing_report_index_search">
+    <%= search_form_for [:billing, @search], url: spree.balance_due_billing_reports_path do |f| %>
+      <div class="form-group">
+        <%= f.label :created_at_gteq, I18n.t(:issued_date, scope: 'activerecord.attributes.spree/order') %>
+        <%= f.date_field :created_at_gteq, class: 'form-control js-quick-search-target js-filterable start-datepicker', data: {behavior: 'datepicker', format: 'yyyy-mm-dd'}, placeholder: 'Select Date' %>
+      </div>
+      <div class="form-group">
+        <%= f.date_field :created_at_lteq, class: 'form-control js-quick-search-target js-filterable end-datepicker', data: {behavior: 'datepicker', format: 'yyyy-mm-dd'}, placeholder: 'Select Date' %>
+      </div>
+      <div class="form-group">
+        <%= f.label :invoice_invoice_issued_date_not_null, I18n.t(:show_invoices, scope: 'activerecord.attributes.spree/order') %>
+        <%= f.select :invoice_invoice_issued_date_not_null, options_for_select([['All', 'all'], ['Printed', true], ['Not Printed', false]]), { include_blank: false }, { class: 'select2-clear js-filterable' } %>
+      </div>
+      <div class="form-group">
+        <%= f.label :customer_phone_number_cont, I18n.t(:customer_phone_number, scope: 'activerecord.attributes.spree/order') %>
+        <%= f.text_field :customer_phone_number_cont, class: "form-control js-quick-search-target js-filterable" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :invoice_invoice_number_cont, I18n.t(:invoice_id, scope: 'activerecord.attributes.spree/order') %>
+        <%= f.text_field :invoice_invoice_number_cont, class: "form-control js-quick-search-target js-filterable" %>
+      </div>
+      <div class="form-actions">
+        <%= button Spree.t(:search), 'search.svg', nil, { class: 'btn-outline-primary' } %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<% unless @orders.empty? %>
+  <div class="table-responsive border rounded bg-whit mb-3">
+    <table class="table" id="listing_subscriptions">
+      <thead class="text-muted">
+        <tr data-hook="admin_subscriptions_index_headers">
+          <th><%= sort_link @search, :invoice_invoice_number, I18n.t(:number, scope: 'activerecord.attributes.spree/order') %></th>
+          <th><%= sort_link @search, :created_at, I18n.t(:issued_date, scope: 'activerecord.attributes.spree/order') %></th>
+          <th><%= I18n.t(:customer_name, scope: 'activerecord.attributes.spree/order') %></th>
+          <th><%= I18n.t(:phone_number, scope: 'activerecord.attributes.spree/order') %></th>
+          <th><%= I18n.t(:printing_date, scope: 'activerecord.attributes.spree/order') %></th>
+          <th><%= I18n.t(:payment_state, scope: 'activerecord.attributes.spree/order') %></th>
+          <th><%= sort_link @search, :total, I18n.t(:amount, scope: 'activerecord.attributes.spree/order') %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @orders.each do |order| %>
+          <tr id="<%= spree_dom_id order %>" data-hook="admin_subscriptions_index_rows">
+            <td><%= link_to order.invoice&.invoice_number, edit_billing_order_path(order) %></td>
+            <td><%= order.line_items[0].from_date.to_date %></td>
+            <td>
+              <% if order.customer.first_name.present? %>
+                <%= link_to order.customer.first_name, edit_billing_customer_path(order.customer) %>
+              <% else %>
+                <%= link_to order.customer.last_name, edit_billing_customer_path(order.customer) %>
+              <% end %>
+            </td>
+            <td><%= order.customer&.intel_phone_number %></td>
+            <td><%= order.invoice.invoice_issued_date&.to_date %></td>
+            <td class="no-wrap">
+              <% if order.payment_state %>
+                <%= link_to Spree.t("payment_states.#{order.payment_state}"),
+                  admin_order_payments_path(order),
+                  class: "badge badge-pill badge-#{order.payment_state}" %>
+              <% end %>
+            </td>
+            <td><%= order.display_total.to_html %></td>
+            <td class="actions">
+              <% if spree_current_user.permissions.exists?(entry: 'spree/billing/orders', action: 'edit') %>
+                <% if order.payments.any? %>
+                  <% payment = order.payments.last %>
+                  <span class="d-flex justify-content-center payment-action-buttons">
+                    <% payment.actions.each do |action| %>
+                      <% if action == 'credit' %>
+                        <%= link_to_with_icon('exit.svg', Spree.t(:refund), new_billing_order_payment_refund_path(order, payment), no_text: true, class: "btn btn-light btn-sm") if can?(:create, Spree::Refund) %>
+                      <% elsif action == 'capture' %>
+                        <%= link_to_with_icon("#{action}.svg", Spree.t(action), nil, no_text: true, data: { toggle: 'modal', target: "#capture-modal-#{order.id}" }, class: "btn btn-light btn-sm") %>
+                        <%= render partial: 'spree/billing/shared/pop_up_confirmation', locals: { action: action, order: order, payment: payment } %>
+                      <% elsif action == 'void' %>
+                        <%= link_to_with_icon("#{action}.svg", Spree.t(action), nil, no_text: true, data: { toggle: 'modal', target: "#void-modal-#{order.id}" }, class: "btn btn-light btn-sm") %>
+                        <%= render partial: 'spree/billing/shared/pop_up_confirmation', locals: { action: action, order: order, payment: payment } %>
+                      <% end %>
+                    <% end %>
+                  </span>
+                <% end %>
+              <% end %>
+            </td>
+            <td class="print-button">
+              <%= link_to Spree.t(:print), spree.print_invoice_date_billing_order_invoice_path(order), method: :put, class: 'btn btn-success mb-3 print-invoice', data: { order_id: order.id, invoice_url: billing_order_invoice_path(order)} if spree_current_user.permissions.exists?(entry: 'spree/billing/invoice', action: 'print_invoice_date') %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @orders } %>
+<% else %>
+  <div class="text-center no-objects-found m-5">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree::Order)) %>
+  </div>
+<% end %>
+
+<script>
+  $(document).ready(function() {
+    $('.print-all-invoices').click(
+      function() {
+        clearDiv();
+        getInvoices();
+        setTimeout(() => {
+          printInvoices();
+        }, timeout = 10000);
+        setTimeout(() => {
+          window.location.reload();
+        }, timeout = 10000);
+      }
+    );
+
+    $('.print-invoice').click(
+      function() {
+        clearDiv();
+        var invoiceUrl = $(this).data('invoice-url');
+        getInvoice(invoiceUrl);
+        setTimeout(() => {
+          printInvoices();
+        }, timeout = 3000);
+        setTimeout(() => {
+          window.location.reload();
+        }, timeout = 6000);
+      }
+    );
+
+    function getInvoice(invoiceUrl) {
+      $.ajax({
+        url: invoiceUrl,
+        method: 'GET',
+        dataType: 'html',
+        success: function(data) {
+          var printAreaContent = $(data).find('.invoice-content').html();
+          $('#invoice-container').append('<div class="invoice-content card p-5 invoice-content"><div style="page-break-after: always;">' + printAreaContent + '</div><div class="page-break"></div></div><br>');
+        },
+        error: function(xhr, status, error) {
+          console.error('AJAX request failed:', status, error);
+        }
+      });
+    }
+
+    function printInvoices() {
+      window.print();
+    }
+
+    function clearDiv() {
+      $('#invoice-container').empty();
+    }
+
+    function getInvoices () {
+      <% @orders.each do |order| %>
+        $.ajax({
+          url: '<%= billing_order_invoice_path(order) %>',
+          method: 'GET',
+          dataType: 'html',
+          success: function(data) {
+            var printAreaContent = $(data).find('.invoice-content').html();
+            $('#invoice-container').append('<div class="invoice-content card p-5 invoice-content"><div style="page-break-after: always;">' + printAreaContent + '</div><div class="page-break"></div></div><br>');
+          },
+          error: function(xhr, status, error) {
+            console.error('AJAX request failed:', status, error);
+          }
+        });
+      <% end %>
+    }
+  });
+</script>

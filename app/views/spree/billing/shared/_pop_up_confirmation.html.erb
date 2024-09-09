@@ -1,0 +1,66 @@
+<div id="capture-modal-<%= order.id %>" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalLabel"><%= I18n.t('spree.billing.capture_confirmation') %></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p><%= I18n.t('spree.billing.payment_amount_received') %> : <%= order.display_total %></p>
+      </div>
+      <div class="modal-footer d-flex justify-content-between">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= Spree.t(:cancel) %></button>
+        <%= link_to Spree.t(:confirm), billing_order_payment_path(order, payment, e: 'capture'), method: :put, class: 'btn btn-primary' %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="void-modal-<%= order.id %>" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalLabel"><%= I18n.t('spree.billing.void_confirmation') %></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p><%= Spree.t('billing.invoice') %> : <%= order.invoice.invoice_number %></p>
+        <%= form_with model: order, url: billing_order_path(order), id:"void-form", method: :put, remote: true do |f| %>
+          <div class="form-group">
+          <%= f.field_container :internal_note do %>
+            <%= f.label :internal_note, Spree.t(:reason) %>
+            <%= f.text_field :internal_note, class: 'form-control' %>
+          <% end %>
+          </div>
+        <% end %>
+      </div>
+      <div class="modal-footer  d-flex justify-content-between">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= Spree.t(:cancel) %></button>
+        <%= link_to Spree.t(:confirm), billing_order_payment_path(order, payment, e: 'void'), method: :put, onclick: "event.preventDefault(); submitVoidForm();", class: 'btn btn-primary' %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function submitVoidForm() {
+    var form = $("#void-form");
+
+    $.ajax({
+      url: form.attr("action"),
+      method: form.attr("method"),
+      data: form.serialize(),
+      success: function(response) {
+        console.log("Form submission successful:", response);
+        location.reload();
+      },
+      error: function(xhr, status, error) {
+        console.error("Form submission error:", error);
+      }
+    });
+  }
+</script>

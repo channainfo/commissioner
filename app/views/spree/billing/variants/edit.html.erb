@@ -1,0 +1,15 @@
+<%= render partial: 'spree/billing/shared/product_tabs', locals: {current: :variants} %>
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+<%= form_with model: @variant, url: { action: 'update' } do |f| %>
+  <div class="card mb-0">
+    <div class="card-header">
+      <h5 class="mb-0"><%= @variant.sku || @variant.options_text %></h5>
+    </div>
+    <div class="card-body" data-hook="admin_variant_edit_form">
+      <%= render partial: 'form', locals: { f: f } %>
+    </div>
+    <div data-hook="admin_customer_edit_form_button">
+      <%= render partial: 'spree/admin/shared/edit_resource_links', locals: { collection_url: spree.billing_product_variants_path } %>
+    </div>
+  </div>
+<% end %>

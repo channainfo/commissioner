@@ -1,0 +1,61 @@
+<div data-hook="admin_product_google_wallet_form_fields">
+  <div class="row">
+    <div class="col-12 col-md-6">
+      <div class="card mb-3">
+        <div class="card-header">
+          <h5 class="mb-0"><%= Spree.t(:basic_information) %></h5>
+        </div>
+        <div class="card-body">
+          <div class="col-12 my-1">
+            <%= f.label :review_status %>
+            <%= f.select :review_status,  SpreeCmCommissioner::GoogleWallet.review_statuses.keys.map { |k| [k.titleize, k] }, {}, :class => "fullwidth select2" %>
+          </div>
+          <div class="col-12 my-1 ">
+            <%= f.label :wallet_type %>
+             <%= f.text_field :wallet_type, required: true, class: 'form-control', disabled: true, value: @product.product_type  %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+     <% unless @object.new_record? %>
+      <div class="col-12 col-md-6">
+        <div class="card mb-3">
+          <div class="card-header">
+            <h5 class="mb-0"><%= Spree.t(:details_information) %></h5>
+          </div>
+          <div class="card-body">
+            <div data-hook class="form-group">
+             <% unless @object.new_record? %>
+                <%= preference_fields(@object, f) %>
+                <div class="d-flex">
+                  <%= render 'shared/asset_field',
+                    field: :logo,
+                    label: 'Logo',
+                    asset: @object.logo,
+                    remove_url: remove_logo_admin_product_hotel_google_wallet_path,
+                    form: f,
+                    classes: ['col-md-5 ml-3']
+                  %>
+
+                  <%= render 'shared/asset_field',
+                    field: :hero_image,
+                    label: 'Hero Image',
+                    asset: @object.hero_image,
+                    remove_url: remove_hero_image_admin_product_hotel_google_wallet_path,
+                    form:f,
+                    classes: ['col-md-5 ml-3']
+
+                    %>
+                </div>
+                <% if @object.respond_to?(:preferences) %>
+                  <div id="gateway-settings-warning" class="info warning"><%= Spree.t(:provider_settings_warning) %></div>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

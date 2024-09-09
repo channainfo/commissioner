@@ -1,0 +1,24 @@
+<% content_for :page_title do %>
+  <%= page_header_back_button spree.billing_products_path %>
+  <%= @product.name %>
+<% end %>
+<% content_for(:page_tabs) do %>
+  <%= content_tag :li, class: 'nav-item' do %>
+    <%= link_to_with_icon 'edit.svg',
+      Spree.t(:details),
+      edit_billing_product_url(@product),
+      class: "nav-link #{'active' if current == :details}" %>
+  <% end if can?(:admin, Spree::Image) && !@product.deleted? %>
+  <%= content_tag :li, class: 'nav-item' do %>
+    <%= link_to_with_icon 'adjust.svg',
+      Spree.t(:variants),
+      spree.billing_product_variants_url(@product),
+      class: "nav-link #{'active' if current == :variants}" %>
+  <% end if can?(:admin, Spree::ProductProperty) && !@product.deleted? %>
+  <%= content_tag :li, class: 'nav-item' do %>
+    <%= link_to_with_icon 'box-seam.svg',
+      Spree.t(:stock),
+      stock_billing_product_url(@product),
+      class: "nav-link #{'active' if current == :stock}" %>
+  <% end if can?(:admin, Spree::Digital) && !@product.deleted? %>
+<% end %>

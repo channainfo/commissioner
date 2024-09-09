@@ -1,0 +1,13 @@
+<% content_for :page_title do %>
+  <%= page_header_back_button spree.billing_users_path %>
+  <%= @user.email %>
+<% end %>
+
+<% content_for :page_tabs do %>
+  <li class="nav-item">
+    <%= link_to_with_icon 'person.svg',
+      Spree.t(:account),
+      spree.edit_billing_user_path(@user),
+      class: "nav-link #{'active' if current == :account}" %>
+  </li>
+<% end %>

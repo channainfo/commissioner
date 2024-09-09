@@ -1,0 +1,50 @@
+  <% content_for :table_filter do %>
+  <div data-hook="admin_customers_index_search">
+    <%= search_form_for [:events_guests, @search], url: spree.event_guests_path do |f| %>
+      <div class="row">
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :first_name_cont, Spree.t(:first_name) %>
+            <%= f.search_field :first_name_cont, class: 'form-control js-quick-search-target js-filterable', placeholder: Spree.t(:first_name) %>
+          </div>
+        </div>
+
+        <div class="date-range-filter col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :last_name_cont, Spree.t(:last_name) %>
+            <%= f.search_field :last_name_cont, class: "form-control js-filterable", placeholder: Spree.t(:last_name) %>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :gender_eq, Spree.t(:gender) %>
+            <%= f.select :gender_eq, options_for_select(SpreeCmCommissioner::Guest.genders.map { |k, v| [Spree.t("spree.genders.#{k}"), v] }), { include_blank: Spree.t('match_choices.none') }, class: "form-control js-filterable" %>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :occupation_id_eq, Spree.t(:occupation) %>
+            <%= f.select :occupation_id_eq,
+              options_from_collection_for_select(Spree::Taxon.where(kind: Spree::Taxon.kinds[:occupation]).order(:position), :id, :name),
+                { include_blank: Spree.t('match_choices.none') },
+                class: 'select2 form-control' %>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :id_card_card_type_eq, Spree.t(:id_card_type) %>
+            <%= f.select :id_card_card_type_eq, options_for_select(SpreeCmCommissioner::IdCard.card_types.map { |k, v| [Spree.t("spree.card_type.#{k}"), v] }), { include_blank: Spree.t('match_choices.none') }, class: "form-control js-filterable" %>
+          </div>
+        </div>
+      </div>
+      <div data-hook="admin_customers_index_search_buttons" class="form-actions">
+        <%= button Spree.t(:search), 'search.svg' %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

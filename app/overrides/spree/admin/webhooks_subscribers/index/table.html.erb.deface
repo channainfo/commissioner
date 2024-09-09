@@ -1,0 +1,45 @@
+<!-- replace ".table-responsive" -->
+
+<div class="table-responsive border rounded bg-white">
+  <table class="table">
+    <thead class="text-muted">
+    <tr>
+      <th><%= Spree.t('admin.url') %></th>
+      <th><%= Spree.t('name') %></th>
+      <% if defined?(Spree::Vendor) && can?(:manage, Spree::Vendor) && !current_spree_vendor %>
+        <th><%= Spree.t(:vendor) %></th>
+      <% end %>
+      <th><%= Spree.t('admin.active') %></th>
+      <th><%= Spree.t('admin.webhooks_subscribers.subscriptions') %></th>
+      <th><%= Spree.t('admin.webhooks_subscribers.time_of_last_event') %></th>
+      <th><%= Spree.t('admin.webhooks_subscribers.all_events') %></th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @webhooks_subscribers.each do |webhooks_subscriber| %>
+      <tr id="<%= spree_dom_id webhooks_subscriber %>">
+        <td><code><%= webhooks_subscriber.url %></code></td>
+        <td><%= webhooks_subscriber.name %></td>
+        <% if defined?(Spree::Vendor) && can?(:manage, Spree::Vendor) && !current_spree_vendor %>
+          <td>
+            <%= link_to webhooks_subscriber.vendor.name, spree.admin_vendor_path(webhooks_subscriber.vendor) if webhooks_subscriber.vendor.present? %>
+          </td>
+        <% end %>
+        <td><%= active_badge(webhooks_subscriber.active) %></td>
+        <td><%= webhooks_subscriber.subscriptions&.join(', ') %></td>
+        <td><%= webhooks_subscriber.events.order(:created_at).last&.created_at %></td>
+        <td><%= link_to Spree.t(:view), admin_webhooks_subscriber_path(webhooks_subscriber) %></td>
+        <td class="actions">
+        <span class="d-flex justify-content-end">
+          <%= link_to_with_icon 'list-check.svg', Spree.t(:orders), admin_webhooks_subscriber_orders_path(webhooks_subscriber), class: 'btn btn-light btn-sm', no_text: true %>
+          <%= link_to_with_icon 'activity.svg', Spree.t(:events), admin_webhooks_events_path({q: {subscriber_id_eq: webhooks_subscriber}}), class: 'btn btn-light btn-sm', no_text: true %>
+          <%= link_to_edit(webhooks_subscriber, no_text: true) if can? :edit, webhooks_subscriber %>
+          <%= link_to_delete(webhooks_subscriber, no_text: true) if can? :delete, webhooks_subscriber %>
+        </span>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

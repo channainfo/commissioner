@@ -1,0 +1,67 @@
+<%= render partial: 'spree/admin/shared/vendor_tabs', locals: { current: :vendor_authorized_users } %>
+
+<% content_for :sidebar do %>
+  <%= form_with model: @vendor, url: { action: 'update_telegram_chat' } do |f| %>
+    <fieldset data-hook="edit_vendor">
+      <div data-hook="admin_user_device_token_form_fields">
+        <%= f.field_container :preferred_telegram_chat_name do %>
+          <%= f.label :preferred_telegram_chat_name, Spree.t(:telegram_chat_name) %>
+          <%= f.text_field :preferred_telegram_chat_name, class: 'form-control' %>
+        <% end %>
+        <%= f.field_container :preferred_telegram_chat_type do %>
+          <%= f.label :preferred_telegram_chat_type, Spree.t(:telegram_chat_type) %>
+          <%= f.select :preferred_telegram_chat_type, SpreeCmCommissioner::VendorPreference::TELEGRAM_CHAT_TYPE, {}, :class => "fullwidth select2" %>
+        <% end %>
+        <%= f.field_container :preferred_telegram_chat_id do %>
+          <%= f.label :preferred_telegram_chat_id, Spree.t(:telegram_chat_id) %>
+          <%= f.text_field :preferred_telegram_chat_id, class: 'form-control', disabled: true %>
+        <% end %>
+        <small class="form-text text-muted">
+          <ul>
+            <% allow_extensions = SpreeCmCommissioner::VectorIcon::ACCEPTED_EXTENSIONS.to_sentence %>
+            <li><%= raw I18n.t("telegram_chat_bot.vendor_channel_group_info") %></li>
+            <li><%= raw I18n.t("telegram_chat_bot.only_for_authorized_user_info") %></li>
+          </ul>
+        </small>
+      </div>
+      <%= render partial: 'spree/admin/shared/edit_resource_links' %>
+    </fieldset>
+  <% end %>
+<% end %>
+
+<% if @users.any? %>
+  <div class="table-responsive border rounded bg-white mb-3">
+    <table class="table" id="listing_users" data-hook>
+      <thead class="text-muted">
+        <tr data-hook="admin_users_index_headers">
+          <th><%= Spree.t(:email) %></th>
+          <th><%= Spree.t(:phone_number) %></th>
+          <th><%= Spree.t(:first_name) %></th>
+          <th><%= Spree.t(:last_name) %></th>
+          <th><%= Spree.t(:telegram) %></th>
+          <th data-hook="admin_users_index_header_actions" class="actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr id="<%= spree_dom_id user %>" data-hook="admin_users_index_rows">
+            <td><%= user.email%></td>
+            <td><%= user.intel_phone_number %></td>
+            <td><%= user.first_name %></td>
+            <td><%= user.last_name %></td>
+            <td><small class="badge badge-active"><%= user.user_identity_providers.telegram.pluck(:sub).to_sentence.presence || 'No telegram' %></small class="badge-active"></td>
+            <td data-hook="admin_users_index_row_actions" class="actions">
+              <span class="d-flex justify-content-end">
+                <%= link_to_edit user, no_text: true if can?(:edit, user) %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="text-center no-objects-found m-5 mb-3">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree.user_class)) %>,
+  </div>
+<% end %>

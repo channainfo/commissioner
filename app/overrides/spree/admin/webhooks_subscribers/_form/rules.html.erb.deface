@@ -1,0 +1,54 @@
+<!-- insert_bottom "[data-hook='admin_webhooks_subscriber_form_fields']" -->
+
+<% if @webhooks_subscriber.persisted? %>
+<div class="mb-4">
+  <div class="mb-2 d-flex justify-content-between align-items-center">
+    <div>Rules</div>
+    <%= button_link_to Spree.t(:new), new_admin_webhooks_subscriber_rule_path(@webhooks_subscriber), class: "btn-light", icon: 'add.svg' %>
+  </div>
+
+  <% if @webhooks_subscriber.rules.any? %>
+  <table class="table border" id="admin_webhooks_subscriber_rules">
+    <thead class="text-muted">
+      <tr data-hook="admin_webhooks_subscriber_rules_index_headers">
+        <th><%= Spree.t(:id) %></th>
+        <th><%= Spree.t(:rule) %></th>
+        <th><%= Spree.t(:preferences) %></th>
+        <th><%= Spree.t(:supported_events) %></th>
+        <th><%= Spree.t(:created_at) %></th>
+        <th><%= Spree.t(:updated_at) %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @webhooks_subscriber.rules.each do |rule| %>
+        <tr id="<%= spree_dom_id rule %>" data-hook="admin_webhooks_subscriber_rules_index_rows">
+          <td><%= rule.id %></td>
+          <td><%= rule.class.name.demodulize %></td>
+          <td><%= rule.preferences %></td>
+          <td><%= rule.class::SUPPORTED_EVENTS.to_sentence %></td>
+          <td><%= rule.created_at %></td>
+          <td><%= rule.updated_at %></td>
+          <td data-hook="admin_webhooks_subscriber_rules_index_row_actions" class="actions">
+              <span class="d-flex justify-content-end">
+                <%= link_to_edit rule, url: edit_admin_webhooks_subscriber_rule_path(@webhooks_subscriber, rule), no_text: true if can?(:edit, rule) %>
+                <%= link_to_delete rule, url: admin_webhooks_subscriber_rule_path(@webhooks_subscriber, rule), no_text: true if can?(:delete, rule) %>
+              </span>
+            </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= f.field_container :match_policy, class: ['form-group mt-3'] do %>
+    <%= f.label :match_policy, Spree.t(:match_policy) %></span>
+    <%= f.select :match_policy, @object.class::MATCH_POLICIES, {}, :class => "fullwidth select2" %>
+    <%= f.error_message_on :match_policy %>
+  <% end %>
+
+  <% else %>
+    <small class="form-text text-muted">
+        <%= raw I18n.t('webhooks_subscriber_rules.empty_info') %>
+    </small>
+  <% end %>
+</div>
+<% end %>

@@ -1,0 +1,24 @@
+<% content_for :page_title do %>
+  <%= link_to Spree.t('telegram_bot'), spree.admin_telegram_bots_url %>
+<% end %>
+
+<div data-hook="admin_telegram_bots" class="card mb-3">
+  <div class="card-header">
+    <h5 class="card-title mb-0 h6">
+      <%= Spree.t('telegram_bot') %>
+    </h5>
+  </div>
+  <div class="card-body">
+    <div data-hook="admin_telegram_bots_edit_form_header">
+      <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+    </div>
+    <div data-hook="admin_telegram_bots_edit_form">
+        <%= form_with model: @object, url: { action: 'create' } do |f| %>
+        <%= render partial: 'form', locals: { f: f } %>
+        <div data-hook="admin_new_telegram_bot_new_form_buttons">
+          <%= render partial: 'spree/admin/shared/new_resource_links' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

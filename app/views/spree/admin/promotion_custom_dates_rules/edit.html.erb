@@ -1,0 +1,37 @@
+<% type_name = @promotion_rule.class.name.demodulize.underscore %>
+
+<% content_for :page_title do %>
+  <%= page_header_back_button edit_admin_promotion_url(@promotion_rule.promotion) %>
+  <%= link_to @promotion_rule.promotion.name, edit_admin_promotion_url(@promotion_rule.promotion) %> /
+  <%= Spree.t(type_name) %>
+<% end %>
+
+<%# empty side instead of none since on small screen, side bar is hidden and can only open from page actions %>
+<% content_for :page_actions do %>
+  <div></div>
+<% end %>
+
+<% content_for :sidebar do %>
+  <h5 class="mt-3 mb-3">Custom Dates</h5>
+  <%= render partial: 'new_custom_date_form' %>
+  <%= render partial: 'custom_dates' %>
+<% end %>
+
+<div class="c-annual-calendar-container">
+  <div class="c-annual-calendar">
+  <% (1..12).each do |month| %>
+    <%= month_calendar(start_date: Date.new(year, month, 1), attribute: :from_date, end_attribute: :to_date, events: @events) do |date, events| %>
+      <div class="c-annual-day" data-date="<%= date.strftime '%Y-%m-%d' %>">
+        <%= date.day %>
+      </div>
+    <% end %>
+  <% end %>
+  </div>
+</div>
+
+<script>
+  AnnualCalendarForm.initialize({
+    startDateFieldSelector: '#new_custom_date_start_date',
+    lengthFieldSelector: '#new_custom_date_length'
+  });
+</script>

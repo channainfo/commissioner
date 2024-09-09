@@ -1,0 +1,5 @@
+<!-- insert_after "#sidebarConfiguration" -->
+
+<ul class="nav nav-sidebar" id="sidebarCalendar">
+  <%= main_menu_tree Spree.t(:homepages), icon: "collection.svg", sub_menu: "homepage", url: "#sidebar-homepage" %>
+</ul>

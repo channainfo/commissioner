@@ -1,0 +1,68 @@
+<%#
+:products
+:empty_message
+%>
+
+<% if products.any? %>
+  <div class="table-responsive border rounded bg-white mb-3">
+    <table class="table" id="listing_products" data-hook>
+      <thead class="text-muted">
+        <tr data-hook="admin_products_index_headers">
+          <th scope="col" class="pl-5" colspan="2"><%=Spree.t(:name) %></th>
+          <th scope="col" class="text-center"><%= Spree.t('admin.kind') %></th>
+          <th scope="col" class="text-center"><%= Spree.t(:status) %></th>
+          <th scope="col" class="text-center">
+            <%= Spree.t(:price) %>
+          </th>
+          <th scope="col" class="text-center"><%= Spree.t(:total_count) %></th>
+          <th scope="col" class="text-center"><%= Spree.t(:revenue) %></th>
+          <th scope="col" class="text-center"><%= Spree.t(:created_at) %></th>
+          <th scope="col" class="text-center"><%= Spree.t(:updated_at) %></th>
+          <th scope="col" class="text-center" data-hook="admin_products_index_header_actions" class="actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% products.each do |product| %>
+          <% available_status = available_status(product) %>
+          <tr id="<%= spree_dom_id product %>" data-hook="admin_taxonomy_taxon_products_index_rows">
+             <td scope="row" class="image">
+              <%= link_to edit_admin_product_path(product) do %>
+                <%= small_image product %>
+              <% end %>
+            </td>
+            <td>
+              <%= link_to product.name, edit_admin_product_path(product) %>
+              <br />
+              <small><%= product.sku rescue '' %></small>
+            </td>
+            <td class="text-center">
+              <span class="badge badge-pill badge-light">
+                <% if product.digital? %>
+                  <%= Spree.t('admin.product_kinds.digital') %>
+                <% else %>
+                  <%= Spree.t('admin.product_kinds.physical') %>
+                <% end %>
+              </span>
+            </td>
+            <td class="status text-center"><%= active_badge(available_status == Spree.t('admin.product.active'), label: available_status) %></td>
+            <td class="text-center"><%= display_price(product) %></td>
+            <td class="text-center"><%= product.classifications.find_by(product_id: product.id)&.total_count %></td>
+            <td class="text-center"><%= Spree::Money.new(product.classifications.find_by(product_id: product.id)&.revenue) %></td>
+            <td class="text-center"><%= product.created_at %></td>
+            <td class="text-center"><%= product.updated_at %></td>
+            <td data-hook="admin_taxonomy_taxon_products_index_row_actions" class="actions">
+              <span class="d-flex justify-content-end">
+                <%= link_to_edit product, no_text: true, class: 'edit' if can?(:edit, product) %>
+                <%= link_to_delete product, no_text: true if can?(:delete, product) %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <small class="form-text text-muted">
+    <%= raw empty_message %>
+  </small>
+<% end %>

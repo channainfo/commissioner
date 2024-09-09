@@ -1,0 +1,51 @@
+<% content_for :page_title do %>
+  <%= link_to Spree.t(:taxonomies), spree.admin_taxonomies_url %> /
+
+  <%= link_to @taxonomy.root.name, spree.edit_admin_taxonomy_url(@taxonomy) %>
+  <% unless @taxon.root? %>
+  / <%= @taxon.name %>
+  <% end %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:add_new_guest_card_classes), new_admin_taxonomy_taxon_guest_card_class_path, class: "btn-success", icon: 'add.svg', id: 'new_admin_taxonomy_taxon_guest_card_class_link' %>
+<% end if can? :create, SpreeCmCommissioner::GuestCardClass %>
+
+<%= render partial: 'spree/admin/shared/taxon_tabs', locals: { current: :guest_card_classes } %>
+
+<% if @guest_card_classes.any? %>
+  <div class="table-responsive border rounded bg-white mb-3">
+    <table class="table" id="listing_guest_card_classes" data-hook>
+      <thead class="text-muted">
+        <tr data-hook="admin_taxonomy_taxon_guest_card_class_index_headers">
+          <th><%= Spree.t(:id) %></th>
+          <th><%= Spree.t(:name) %></th>
+          <th><%= Spree.t(:type) %></th>
+          <th><%= Spree.t(:created_at) %></th>
+          <th><%= Spree.t(:updated_at) %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @guest_card_classes.each do |guest_card_class| %>
+          <tr id="<%= spree_dom_id guest_card_class %>" data-hook="admin_taxonomy_taxon_guest_card_class_index_rows">
+            <td><%= guest_card_class.id %></td>
+            <td><%= guest_card_class.name %></td>
+            <td><%= guest_card_class.type&.demodulize %></td>
+            <td><%= guest_card_class.created_at %></td>
+            <td><%= guest_card_class.updated_at %></td>
+            <td data-hook="admin_taxonomy_taxon_guest_card_classes_index_row_actions" class="actions">
+              <span class="d-flex justify-content-end">
+                <%= link_to_edit guest_card_class, url: edit_admin_taxonomy_taxon_guest_card_class_path(id: guest_card_class.id), no_text: true if can?(:edit, :admin, guest_card_class) %>
+                <%= link_to_delete guest_card_class, url: admin_taxonomy_taxon_guest_card_class_path(id: guest_card_class.id), no_text: true if can?(:delete, guest_card_class) %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <small class="form-text text-muted">
+    <%= raw I18n.t('guest_card_classes.empty_info') %>
+  </small>
+<% end %>

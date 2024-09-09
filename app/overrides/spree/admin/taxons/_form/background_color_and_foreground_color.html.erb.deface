@@ -1,0 +1,33 @@
+<!-- insert_before "erb[loud]:contains('field_container :meta_title')" -->
+
+<div class="row">
+  <div class="col-md-6">
+    <%= f.label :preferred_background_color, Spree.t('background_color'), class: 'form-label' %>
+    <%= f.text_field :preferred_background_color, class: 'form-control color-picker', placeholder: '#FFFFFF', value: @object.preferred_background_color %>
+    <div class="color-preview" style="margin-top: 10px;">
+      <%= content_tag :div, nil, style: "background-color: #{@object.preferred_background_color}; width: 60px; height: 60px; border: 1px solid #ccc; box-sizing: border-box; display: block;" %>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <%= f.label :preferred_foreground_color, Spree.t('foreground_color'), class: 'form-label' %>
+    <%= f.text_field :preferred_foreground_color, class: 'form-control color-picker', placeholder: '#FFFFFF', value: @object.preferred_foreground_color %>
+    <div class="color-preview" style="margin-top: 10px;">
+      <%= content_tag :div, nil, style: "background-color: #{@object.preferred_foreground_color}; width: 60px; height: 60px; border: 1px solid #ccc; box-sizing: border-box; display: block;" %>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const colorPickers = document.querySelectorAll('.color-picker');
+
+    colorPickers.forEach(picker => {
+      const colorPreview = picker.nextElementSibling;
+
+      picker.addEventListener('input', function() {
+        colorPreview.querySelector('div').style.backgroundColor = picker.value;
+      });
+      colorPreview.querySelector('div').style.backgroundColor = picker.value;
+    });
+  });
+</script>

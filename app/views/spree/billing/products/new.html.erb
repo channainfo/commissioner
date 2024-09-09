@@ -1,0 +1,85 @@
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @product } %>
+<% content_for :page_title do %>
+  <%= page_header_back_button billing_products_path %>
+  <%= Spree.t(:new_product) %>
+<% end %>
+<div class="card">
+  <div class="card-body">
+    <%= form_with model: @object, url: { action: 'create' } do |f| %>
+      <fieldset data-hook="new_product">
+        <%= f.field_container :name do %>
+          <%= f.label :name, raw(Spree.t(:name) + required_span_tag) %>
+          <%= f.text_field :name, class: 'form-control title', required: :required %>
+          <%= f.error_message_on :name %>
+        <% end %>
+        <div data-hook="new_product_attrs" class="row">
+          <% unless @product.has_variants? %>
+            <div data-hook="new_product_sku" class="col-12 col-md-6">
+              <%= f.field_container :sku do %>
+                <%= f.label :sku, Spree.t(:sku) %>
+                <%= f.text_field :sku, size: 16, class: 'form-control' %>
+                <%= f.error_message_on :sku %>
+              <% end %>
+            </div>
+          <% end %>
+          <div data-hook="new_product_price" class="col-12 col-md-6">
+            <%= f.field_container :price do %>
+              <%= f.label :price, raw(Spree.t(:master_price) + required_span_tag) %>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><%= currency_symbol(current_currency) %></span>
+                </div>
+                <%= f.text_field :price, value: number_to_currency(@product.price, unit: ''), class: 'form-control', required: :required %>
+              </div>
+              <%= f.error_message_on :price %>
+            <% end %>
+          </div>
+          <% if current_spree_user.respond_to?(:has_spree_role?) && current_spree_user.has_spree_role?(:admin) %>
+            <div data-hook="new_product_vendor">
+              <%= f.hidden_field(:vendor_id,value: @vendors.first.id, class: ['form-group']) do %>
+                <%= f.label :vendor_id, Spree.t(:vendor) %>
+                <%= f.collection_select(:vendor_id, @vendors, :id, :name, { include_blank: false}, { class: 'select2' }) %>
+                <%= f.error_message_on :vendor %>
+              <% end %>
+            </div>
+          <% end %>
+          <div>
+            <%= f.hidden_field :status,value: 'active' %>
+          </div>
+          <div data-hook="billing_product_form_taxons" class="col-6">
+            <%= f.field_container :taxons do %>
+              <%= f.label :taxon_ids, Spree.t(:taxons) %>
+              <%= f.collection_select(:taxon_ids, @businesses, :id, :name, { include_blank: true }, { class: 'select2', multiple: true , :id => 'billing_product_taxon_ids' } ) %>
+              <%= f.error_message_on :taxon_ids %>
+            <% end %>
+          </div>
+          <% variant_kind_option_types = @product.variant_kind_option_types %>
+          <div data-hook="admin_product_form_variant_kind_option_types" class="col-6" >
+            <%= f.field_container :variant_kind_option_type_ids do %>
+              <%= f.label Spree.t(:option_types) %>
+              <%= f.select(:variant_kind_option_type_ids, options_for_select(Spree::OptionType.all.pluck(:name, :id), @selected_option_type_ids),{include_blank:false},{class: "select2", multiple:true}) %>
+            <% end %>
+          </div>
+          <div data-hook="new_product_shipping_category">
+            <%= f.hidden_field(:shipping_category_id, value: @shipping_categories.first.id) do%>
+              <%= f.label :shipping_category_id, raw(Spree.t(:shipping_categories) + required_span_tag) %>
+              <%= f.collection_select(:shipping_category_id, @shipping_categories, :id, :name, { class: 'select2 w-100', include_blank: true }) %>
+              <%= f.error_message_on :shipping_category_id %>
+            <% end %>
+          </div>
+        </div>
+        <div data-hook="new_product_subscribable" class="col-3">
+          <span>
+            <%= f.hidden_field :subscribable, value:true do %>
+              <%= f.label :subscribable do %>
+                <%= f.check_box :subscribable, checked: true %>
+                <%= Spree.t(:subscribable) %>
+              <% end %>
+            <% end %>
+          </span>
+        </div>
+        <%= render partial: 'spree/admin/shared/new_resource_links' %>
+      </fieldset>
+    <% end %>
+  </div>
+</div>

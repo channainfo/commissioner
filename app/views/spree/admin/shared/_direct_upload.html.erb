@@ -1,0 +1,92 @@
+<script>
+  async function uploadToS3(form) {
+    const csrfToken = form['authenticity_token'].value;
+    const fileInput = document.getElementById('file_input');
+    const progressBarContainer = document.getElementById('progress_bar_container');
+    const progressBar = document.getElementById('progress_bar');
+    const uuid = document.getElementById('uuid').value;
+    const config = document.getElementById('config').value;
+    const url = form.dataset.presignedUrl;
+    const file = fileInput.files[0];
+
+    if (!file) return alert('Please select a file.');
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken
+      },
+      body: JSON.stringify({
+        file_name: file.name,
+        uuid: uuid,
+        config: config,
+        content_type: file.type
+      })
+    });
+
+    const data = await response.json();
+    const presignedUrl = data.url;
+
+    const formData = new FormData();
+    for (const key in data.fields) {
+      formData.append(key, data.fields[key]);
+    }
+    formData.append('file', file);
+
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', presignedUrl, true);
+
+      progressBarContainer.style.display = 'block';
+
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const percentComplete = (event.loaded / event.total) * 100;
+          progressBar.value = percentComplete;
+        }
+      };
+
+      xhr.onload = () => {
+        if (xhr.status === 200 || xhr.status === 201) {
+          resolve();
+        } else {
+          reject(new Error('File upload failed.'));
+        }
+      };
+
+      xhr.onerror = () => {
+        reject(new Error('An error occurred while uploading the file.'));
+      };
+
+      xhr.send(formData);
+    });
+  }
+
+  function handleFileUploadToS3(formId) {
+    const form = document.getElementById(formId);
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      try {
+        await uploadToS3(form);
+        alert('File uploaded successfully.');
+
+        // Proceed with the form submission
+          form.submit();
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+    handleFileUploadToS3('form-presignable');
+    });
+  } else {
+    location.reload();
+  }
+
+</script>

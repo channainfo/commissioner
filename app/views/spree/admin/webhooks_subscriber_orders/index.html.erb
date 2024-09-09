@@ -1,0 +1,38 @@
+<% content_for :page_title do %>
+  <%= link_to Spree.t(:webhooks_subscriber_rules), collection_url %> /
+  <%= Spree.t(:order).pluralize %>
+<% end %>
+
+<% if @orders.any? %>
+<div class="table-responsive border rounded bg-white">
+  <table class="table" id="listing_subscriber_orders" data-hook>
+    <thead class="text-muted">
+      <tr data-hook="admin_webhooks_subscriber_orders_header">
+        <th><%= Spree.t(:state) %></th>
+        <th><%= Spree.t(:count) %></th>
+      </tr>
+    </thead>
+
+    <% states = @orders.pluck('DISTINCT state') %>
+    <tbody>
+      <% states.each do |state|%>
+        <% orders = @orders.where(state: state) %>
+        <tr>
+          <td><%= state %></td>
+          <td><%= orders.size %></td>
+          <td class="methods">
+            <span class="d-flex justify-content-end">
+              <%= link_to_with_icon "send.svg",
+                Spree.t(:queue),
+                queue_admin_webhooks_subscriber_orders_path(@webhooks_subscriber.id, state: state),
+                method: :put,
+                data: { confirm: Spree.t(:order_sure_want_to, event: state.humanize) },
+                class: "btn btn-light btn-sm" %>
+            </span>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<% end %>

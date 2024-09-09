@@ -1,0 +1,21 @@
+<% content_for :page_tabs do %>
+  <li class="nav-item">
+    <%= link_to Spree.t(:variant),
+        admin_vectors_option_values_path(kind: :variant),
+        class: "nav-link #{'active' if kind == "variant"}" 
+    %>
+  </li>
+  <li class="nav-item">
+    <%= link_to Spree.t(:product),
+        admin_vectors_option_values_path(kind: :product),
+        class: "nav-link #{'active' if kind == "product"}"
+    %>
+  </li>
+  <li class="nav-item">
+    <%= link_to Spree.t(:vendor),
+        admin_vectors_option_values_path(kind: :vendor),
+        class: "nav-link #{'active' if kind == "vendor"}"
+    %>
+  </li>
+  <br><br>
+<% end %>

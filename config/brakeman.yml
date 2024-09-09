@@ -1,0 +1,3 @@
+---
+:skip_files:
+  - app/queries/spree_cm_commissioner/accommodation_query.rb

@@ -1,0 +1,22 @@
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :google_wallet } %>
+
+<div class="my-2 mx-1">
+      <%= button_to Spree.t(:create), create_google_wallet_class_admin_product_hotel_google_wallet_path(@product, @object.id), method: :post, class: 'btn bg-success text-white my-1' %>
+      <%= button_to Spree.t(:update), update_google_wallet_class_admin_product_hotel_google_wallet_path(@product, @object), method: :patch, class: 'btn bg-success text-white my-1' %>
+      <small class="form-text text-muted">
+          <%= raw I18n.t('google_wallet.note') %>
+      </small>
+ </div>
+
+<div data-hook="admin_product_google_wallet_edit_form_header">
+  <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+
+<div data-hook="admin_product_google_wallet_edit_form">
+  <%= form_with model: @object, url: { action: 'update' } do |f| %>
+    <%= render partial: 'form', locals: { f: f  } %>
+    <div data-hook="admin_product_google_wallet_form_buttons">
+      <%= render partial: 'spree/admin/shared/edit_resource_links' %>
+    </div>
+
+  <% end %>
+</div>

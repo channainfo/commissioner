@@ -1,0 +1,13 @@
+<!-- insert_before "erb[loud]:contains('field_container :state')" -->
+
+<% vendor_kind_option_types = @vendor.vendor_kind_option_types %>
+
+<div data-hook="admin_vendor_form_vendor_kind_option_types">
+  <%= render 'shared/option_type_field',
+    label: Spree.t(:vendor_option_types),
+    select: :vendor_kind_option_type_ids,
+    option_types: vendor_kind_option_types,
+    kind: 'vendor',
+    f:f
+  %>
+</div>

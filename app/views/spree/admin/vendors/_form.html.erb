@@ -1,0 +1,55 @@
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @vendor } %>
+<div class="form-group">
+  <%= f.field_container :name do %>
+    <%= f.label :name %>
+    <%= f.text_field :name, class: 'form-control' %>
+  <% end %>
+  <%= f.field_container :about_us do %>
+    <%= f.label :about_us %>
+    <%= f.text_area :about_us, class: 'form-control' %>
+  <% end %>
+  <%= f.field_container :contact_us do %>
+    <%= f.label :contact_us %>
+    <%= f.text_area :contact_us, class: 'form-control' %>
+  <% end %>
+  <%= f.field_container :state do %>
+    <%= f.label :state %>
+    <%= f.select :state,
+      options_for_select(vendor_state_options, selected: @vendor.state),
+      {}, class: 'select2', required: :required %>
+  <% end %>
+  <%= f.field_container :taxons do %>
+    <%= f.label :taxon_ids, Spree.t(:taxons) %>
+    <% if can? :modify, Spree::Classification %>
+      <%= f.select :taxon_ids, options_from_collection_for_select(@vendor.taxons, :id, :pretty_name, @vendor.taxon_ids),
+                                { include_hidden: true },
+                                  multiple: true,
+                                  data: { autocomplete_url_value: 'taxons_api_v2',
+                                          autocomplete_return_attr_value: 'pretty_name',
+                                          autocomplete_multiple_value: true } %>
+    <% elsif @vendor.taxons.any? %>
+      <ul class="text_list">
+        <% @vendor.taxons.each do |taxon| %>
+          <li><%= taxon.name %></li>
+        <% end %>
+      </ul>
+    <% else %>
+      <div class="alert alert-info"><%= Spree.t(:no_resource_found, resource: :taxons) %></div>
+    <% end %>
+  <% end %>
+  <% if Spree.version.to_f >= 3.6 %>
+    <%= f.field_container :image do %>
+      <%= f.label :image %>
+      <%= f.file_field :image %>
+      <%= image_tag main_app.cdn_image_url(@vendor.image.url(:small)) if @vendor.image %>
+    <% end %>
+  <% end %>
+  <%= f.field_container :commission_rate do %>
+    <%= f.label :commission_rate %>
+    <%= f.number_field :commission_rate, step: '0.01', class: 'form-control' %>
+  <% end %>
+  <%= f.field_container :notification_email do%>
+    <%= f.label :notification_email %>
+    <%= f.email_field :notification_email, class: 'form-control' %>
+  <% end %>
+</div>

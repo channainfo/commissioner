@@ -1,0 +1,3 @@
+<!-- insert_bottom "[data-hook='admin_inside_taxonomy_form']" -->
+
+<%= render 'shared/kind_field', field: :kind, f: f %>

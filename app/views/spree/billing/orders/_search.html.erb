@@ -1,0 +1,62 @@
+<% content_for :table_filter do %>
+  <div data-hook="billing_orders_index_search">
+
+    <%= search_form_for [:billing, @search], url: spree.billing_orders_path do |f| %>
+    <div class="row">
+      <div class="col-12 col-lg-6">
+        <div class="form-group">
+          <%= f.label :invoice_invoice_number_cont, I18n.t(:invoice_id, scope: 'activerecord.attributes.spree/order') %>
+          <%= f.text_field :invoice_invoice_number_cont, class: "form-control js-quick-search-target js-filterable" %>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6">
+        <div class="form-group">
+          <%= f.label :customer_phone_number_cont, Spree.t(:phone_number) %>
+          <%= f.text_field :customer_phone_number_cont, class: "form-control js-filterable" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 col-lg-6">
+        <div class="form-group">
+          <%= f.label :customer_sequence_number_cont, I18n.t(:customer_id, scope: 'activerecord.attributes.spree/order') %>
+          <%= f.text_field :customer_sequence_number_cont, class: "form-control js-filterable" %>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6">
+        <div class="form-group">
+          <%= label_tag :month, Spree.t(:month) %>
+          <%= select_tag :month, options_for_select((1..12).map { |m| [Date::MONTHNAMES[m], "#{Time.current.year}-#{m.to_s.rjust(2, '0')}"] }, params[:month]),  include_blank: 'All', class: 'select2 form-control js-filterable' %>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+
+      <div class="col-12 col-lg-6">
+        <div class="form-group">
+          <%= f.label :customer_taxons_id_eq, I18n.t(:business, scope: 'spree.billing') %>
+          <%= f.collection_select(:customer_taxons_id_eq, @businesses, :id, :name, { include_blank: true }, { class: 'select2 form-control js-filterable' }) %>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6">
+        <div class="form-group">
+          <%= f.label :q_payment_state_eq, I18n.t(:status, scope: 'activerecord.attributes.spree/order') %>
+          <%= f.select :payment_state_eq, Spree::Order::PAYMENT_STATES.map {|s| [Spree.t("payment_states.#{s}"), s]}, { include_blank: true }, class: 'select2-clear js-filterable' %>
+        </div>
+      </div>
+    </div>
+
+    <div data-hook="billing_orders_index_search_buttons" class="form-actions">
+      <%= button Spree.t(:filter_results), 'search.svg' %>
+    </div>
+
+    <% end %>
+
+  </div>
+
+<% end %>

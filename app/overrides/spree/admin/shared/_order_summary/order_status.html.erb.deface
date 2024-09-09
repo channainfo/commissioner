@@ -1,0 +1,14 @@
+
+<!-- replace '#order_status' -->
+<div>
+  <span class="state badge badge-pill badge-<%= @order.state %> badge-pill text-capitalize" id="order_status">
+          <%= Spree.t(@order.state, scope: :order_state) %>
+  </span>
+  <%= link_to update_order_status_admin_order_path(@order),
+              class: 'btn btn-light btn-sm with-tip icon-link',
+              method: :put do %>
+    <%= svg_icon name: "arrow-repeat.svg", width: '13', height: '13' %>
+  <% end %>
+</div>
+
+

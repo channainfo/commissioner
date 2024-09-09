@@ -1,0 +1,44 @@
+<% content_for :page_title do %>
+  <%= I18n.t('spree.billing.roles') %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to I18n.t('spree.billing.new_role'), new_billing_role_path, class: "btn-success", icon: 'add.svg', id: 'billing_new_role_link' %>
+<% end if spree_current_user.permissions.exists?(entry: 'spree/billing/roles', action: 'create') %>
+
+<% if @roles.any? %>
+  <div class="table-responsive border rounded bg-white">
+    <table class="table">
+      <thead class="text-muted">
+        <tr data-hook="billing_roles_index_headers">
+          <th><%= I18n.t('spree.billing.roles') %></th>
+          <th><%= I18n.t('spree.billing.role_id') %></th>
+          <th class="actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @roles.each do |role| %>
+          <% unless role.name == 'super_admin' %>
+            <tr id="<%= spree_dom_id role %>" data-hook="billing_roles_index_rows">
+              <td><%= role.name %></td>
+              <td><%= role.id %></td>
+              <td class="actions">
+                <span class="d-flex justify-content-end">
+                  <% unless role.id == 1 %>
+                    <%= link_to_edit role, url: edit_billing_role_path(role), no_text: true if spree_current_user.permissions.exists?(entry: 'spree/billing/roles', action: 'edit') %>
+                    <%= link_to_delete role, url: billing_role_path(role), no_text: true if spree_current_user.permissions.exists?(entry: 'spree/billing/roles', action: 'destroy') %>
+                  <% end %>
+                </span>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="alert alert-warning">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree::Role)) %>,
+    <%= link_to(Spree.t(:add_one), new_object_url) if spree_current_user.permissions.exists?(entry: 'spree/billing/roles', action: 'create') %>!
+  </div>
+<% end %>

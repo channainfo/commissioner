@@ -1,0 +1,12 @@
+<!-- insert_bottom "[data-hook='admin_variant_form_additional_fields']" -->
+
+<div class="form-group">
+  <%= f.field_container :permanent_stock do %>
+    <%= f.label :permanent_stock, Spree.t(:permanent_stock) %>
+    <%= f.number_field :permanent_stock, class: 'form-control' %>
+    <small class="text-muted">
+      Permanent stock is no longer used and will be removed in future. All stock should be managed <%= link_to 'here', admin_product_stock_managements_url(f.object.product) %> instead.
+    </small>
+  <% end %>
+</div>
+

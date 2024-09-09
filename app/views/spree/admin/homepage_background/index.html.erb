@@ -1,0 +1,64 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:homepages) %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:new_homepage_background), new_admin_homepage_feed_homepage_background_path, { class: "btn-success", icon: 'add.svg', id: 'admin_new_homepage_background' } %>
+<% end %>
+
+<% if @collection.any? %>
+  <div class="table-responsive">
+    <table class="table sortable" data-hook="homepage_backgrounds_table"  data-sortable-link="<%= update_positions_admin_homepage_feed_homepage_background_index_url %>" >
+      <thead>
+        <tr data-hook="homepage_backgrounds_header">
+          <th colspan="3">
+            <%= Spree.t(:title) %>
+          </th>
+          <th><%= Spree.t(:app_image) %></th>
+          <th><%= Spree.t(:web_image) %></th>
+          <th><%= Spree.t(:segment) %></th>
+          <th><%= Spree.t(:active) %></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+      <% @collection.each do |homepage_background| %>
+        <tr id="<%= spree_dom_id homepage_background %>" data-hook="homepage_backgrounds_row">
+          <td colspan="3" class="move-handle">
+            <%= svg_icon name: "sort.svg", width: '18', height: '18' %>
+            <label class="ml-2 mr-2" ><%= homepage_background.title %></label>
+          </td>
+          <td>
+            <div class="admin-product-image-container small-img">
+              <%= image_tag (main_app.rails_blob_url(homepage_background.app_image.attachment)) if homepage_background&.app_image&.attachment %>
+            </div>
+          </td>
+          <td>
+            <div class="admin-product-image-container small-img">
+              <%= image_tag (main_app.rails_blob_url(homepage_background.web_image.attachment)) if homepage_background&.web_image&.attachment %>
+            </div>
+          </td>
+          <td>
+            <%= content_tag(:strong, class: badge_class_for_segment(homepage_background.segment)) do %>
+              <%= homepage_background.segment.to_s.capitalize %>
+            <% end %>
+          </td>
+          <td>
+            <%= active_badge(homepage_background.active?) %>
+          </td>
+          <td class="text-right">
+            <%= link_to_edit homepage_background, url: edit_admin_homepage_feed_homepage_background_url(homepage_background), no_text: true, class: 'edit' %>
+            <%= link_to_delete homepage_background, url: admin_homepage_feed_homepage_background_url(homepage_background), no_text: true %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+  <% else %>
+    <div class="alert alert-info alpha twelve columns no-objects-found">
+      <%= Spree.t(:no_resource_found, resource: plural_resource_name(SpreeCmCommissioner::HomepageBackground)) %>
+    </div>
+  <% end %>
+
+  <%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>

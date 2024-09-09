@@ -1,0 +1,41 @@
+<% content_for :page_title do %>
+  <% customer = @order.customer %>
+  <%= page_header_back_button spree.billing_orders_path %>
+  <%= link_to Spree.t(customer.first_name.present? ? customer.first_name : customer.last_name), edit_billing_customer_path(customer) %>
+  <%= "/" %>
+  <%= @order.invoice.invoice_number %>
+<% end %>
+<% content_for :page_tabs do %>
+  <% if spree_current_user.permissions.exists?(entry: 'spree/billing/orders', action: 'edit') %>
+    <li class="nav-item" data-hook='admin_order_tabs_edit_details'>
+      <%= link_to_with_icon 'edit.svg',
+        Spree.t(:edit),
+        edit_billing_order_url(@order),
+        class: "#{'active' if current == :edit} nav-link" %>
+    </li>
+  <% end %>
+  <% if spree_current_user.permissions.exists?(entry: 'spree/billing/payments', action: 'index') %>
+    <li class="nav-item" data-hook='billing_order_tabs_payments'>
+      <%= link_to_with_icon 'credit-card.svg',
+        Spree.t(:payments),
+        spree.billing_order_payments_url(@order),
+        class: "#{'active' if current == :payments} nav-link" %>
+    </li>
+  <% end %>
+  <% if spree_current_user.permissions.exists?(entry: 'spree/billing/adjustments', action: 'index') %>
+    <li class="nav-item" data-hook='billing_order_tabs_payments'>
+      <%= link_to_with_icon 'credit-card.svg',
+        Spree.t(:adjustment),
+        spree.billing_order_adjustments_url(@order),
+        class: "#{'active' if current == :adjustment} nav-link" %>
+    </li>
+  <% end %>
+  <% if spree_current_user.permissions.exists?(entry: 'spree/billing/invoice', action: 'show') %>
+    <li class="nav-item" data-hook='billing_order_tabs_payments'>
+      <%= link_to_with_icon 'printer.svg',
+        Spree.t(:invoice),
+        billing_order_invoice_path(@order),
+        class: "#{'active' if current == :invoice} nav-link" %>
+    </li>
+  <% end %>
+<% end %>

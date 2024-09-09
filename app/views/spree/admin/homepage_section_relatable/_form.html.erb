@@ -1,0 +1,52 @@
+<div class="row">
+  <div class="col-12">
+    <p class="font-weight-bold">Section Relatable</p>
+    <div class="card mb-3">
+      <div class="card-body">
+        <%= f.hidden_field :homepage_section_id %>
+        <%= f.field_container :relatable_type do %>
+          <%= f.label :relatable_type %>
+          <%= f.select :relatable_type, [['Vendor', 'Spree::Vendor'], ['Taxon', 'Spree::Taxon'], ['Product', 'Spree::Product']], {}, :class => "fullwidth select2" %>
+        <% end %>
+
+        <%= f.field_container :relatable_id do %>
+          <%= f.label :relatable_id %>
+          <%= f.select :relatable_id,
+            options_from_collection_for_select(f.object.relatable.present? ? [f.object.relatable] : [], :id, :name),
+              { include_hidden: true },
+              class: 'select2autocomplete',
+              data: { autocomplete_url_value: 'homepage_section_relatables_api_v2',
+                      autocomplete_return_attr_value: :name,
+                      autocomplete_min_input_value: 1,
+                      autocomplete_additional_url_params_value: "model_class=#{f.object.relatable_type}" } %>
+        <% end %>
+
+        <%= f.field_container :active do %>
+          <%= f.label :active %>
+          <%= f.check_box :active %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    const relatableTypeSelector = "#spree_cm_commissioner_homepage_section_relatable_relatable_type"
+    const relatableIdSelector = "#spree_cm_commissioner_homepage_section_relatable_relatable_id"
+
+    // initialize
+    updateRelatableIdOptions();
+    loadAutoCompleteParams();
+
+    $(relatableTypeSelector).on("change", function () {
+      updateRelatableIdOptions();
+      loadAutoCompleteParams();
+    });
+
+    function updateRelatableIdOptions() {
+      var selectedType = $(relatableTypeSelector).val();
+      $(relatableIdSelector).attr('data-autocomplete-additional-url-params-value', "model_class=" + selectedType);
+    }
+  });
+</script>

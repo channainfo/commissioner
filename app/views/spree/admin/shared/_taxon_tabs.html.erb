@@ -1,0 +1,37 @@
+<% content_for(:page_tabs) do %>
+  <%= content_tag :li, class: 'nav-item' do %>
+    <%= link_to_with_icon 'edit.svg',
+      Spree.t(:details),
+      edit_admin_taxonomy_taxon_url(@taxonomy.id, @taxon.id),
+      class: "nav-link #{'active' if current == :details}" %>
+  <% end if can?(:admin, Spree::Taxonomy) %>
+
+  <%= content_tag :li, class: 'nav-item' do %>
+    <%= link_to_with_icon 'store.svg',
+      Spree.t(:vendors),
+      admin_taxonomy_taxon_taxon_vendors_url(@taxonomy.id, @taxon.id),
+      class: "nav-link #{'active' if current == :vendors}" %>
+  <% end if can?(:admin,SpreeCmCommissioner::TaxonVendor)%>
+
+ <%= content_tag :li, class: 'nav-item' do %>
+    <%= link_to_with_icon 'inbox.svg',
+      Spree.t(:products),
+      admin_taxonomy_taxon_classifications_url(@taxonomy.id, @taxon.id),
+      class: "nav-link #{'active' if current == :products}" %>
+  <% end if can?(:admin, Spree::Classification)%>
+
+  <%= content_tag :li, class: 'nav-item' do %>
+    <%= link_to_with_icon 'user.svg',
+      Spree.t(:user_events),
+      # admin_taxonomy_taxon_user_taxons_url(@taxonomy, @taxon.id),
+      admin_user_events_path(params: {taxon_id: @taxon.id, taxonomy_id: @taxonomy}),
+      class: "nav-link #{'active' if current == :user_events}" %>
+  <% end if can?(:admin, SpreeCmCommissioner::UserTaxon) %>
+
+ <%= content_tag :li, class: 'nav-item' do %>
+    <%= link_to_with_icon 'store.svg',
+      Spree.t(:guest_card_classes),
+      admin_taxonomy_taxon_guest_card_classes_url(@taxonomy.id, @taxon.id),
+      class: "nav-link #{'active' if current == :guest_card_classes}" %>
+  <% end if can?(:admin,SpreeCmCommissioner::GuestCardClasses)%>
+<% end %>

@@ -1,0 +1,114 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:vectors) %>
+<% end %>
+
+<%= render partial: 'spree/admin/shared/vectors_option_type_tabs', locals: { kind: @kind } %>
+<%= render partial: 'spree/admin/shared/vectors_tabs', locals: { current: :option_values } %>
+
+<% unless @collection.empty? %>
+  <div class="table-responsive">
+    <table class="table">
+      <% @collection.each do |option_type| %>
+          <thead>
+            <tr>
+              <th colspan="3">
+                <%= link_to option_type.presentation, edit_admin_option_type_path(option_type) %>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody class="pb-3">
+            <% option_type.option_values.each_slice(3).each do |page| %>
+              <tr>
+                <% page.each do |value| %>
+                  <td style="cursor: pointer;" class="border-bottom option-value-toggler"
+                    data-id="<%= value.id %>"
+                    data-value-presentation="<%= value.presentation %>"
+                    data-vector-icon="<%= value.icon %>"
+                    data-toggle="modal" data-target="#vector-icons-modal">
+
+                    <div class="d-flex align-items-center justify-content-left" style="pointer-events: none;">
+                      <%= render_vector_icon value.display_icon %>
+                      <label class="ml-2 mr-2" ><%= value.presentation %></label>
+                    </div>
+                  </td>
+                <% end %>
+              </tr>
+            <% end %>
+            <tr><td colspan=3></td></tr>
+          </tbody>
+
+      <% end %>
+    </table>
+  </div>
+<% else %>
+  <small class="form-text text-muted">
+    <%= raw I18n.t('option_type.empty_info') %>
+  </small>
+<% end %>
+
+<div class="modal fade" id="vector-icons-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <%= form_for :option_value do |f| %>
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal-option-value-title">Icons</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body" data-hook="admin_product_form_vector_icons">
+          <%= f.field_container :icon, class: ['form-group'] do %>
+            <%= f.collection_select(:icon, @vector_icons, :path, :path, { include_blank: Spree.t('match_choices.none') }, { class: 'select2', 'data-dropdown-parent': '#vector-icons-modal' }) %>
+          <% end %>
+        </div>
+
+        <div class="modal-footer">
+          <input type="hidden" name="option-value-id" id="modal-option-value-id" value="0" />
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <%= button_to Spree.t('actions.update'),
+            admin_vectors_option_values_url,
+            method: :post,
+            params: {'kind': @kind},
+            class: 'btn btn-primary',
+            data: { disable_with: "#{ Spree.t(:saving) }..." }
+          %>
+        </div>
+
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+
+function setCurrentSelectedIcon(selectVectorIcon) {
+  var optionsContainer = document.getElementById("option_value_icon")
+  var selectedOptionContainer = document.getElementById("select2-option_value_icon-container")
+  var options = Array.from(optionsContainer.options).map((e) => { return e.value || e.innerHTML })
+
+  // # Set to index 0 for 'None' option
+  var index = Math.max(options.indexOf(selectVectorIcon), 0)
+
+  optionsContainer.selectedIndex = index
+  selectedOptionContainer.title = options[index]
+  selectedOptionContainer.innerHTML = options[index]
+}
+
+function setCurrentOptionValueToModal(id, presentation) {
+  document.getElementById("modal-option-value-id").value = id
+  document.getElementById("modal-option-value-title").innerHTML = presentation
+}
+
+document.body.addEventListener('click', function(e){
+  e = window.event ? event.srcElement: e.target;
+
+  var modalOpened = e.className && e.className.indexOf('option-value-toggler') != -1
+  if (modalOpened) {
+    setCurrentOptionValueToModal(e.dataset.id, e.dataset.valuePresentation)
+    setCurrentSelectedIcon(e.dataset.vectorIcon)
+  }
+});
+
+</script>

@@ -1,0 +1,23 @@
+<%= render partial: 'spree/billing/shared/customer_tabs', locals: { current: :account } %>
+
+
+<div data-hook="admin_user_edit_general_settings" class="card mb-3">
+  <div class="card-header">
+    <h5 class="card-title mb-0 h6">
+      <%= Spree.t(:general_settings) %>
+    </h5>
+  </div>
+  <div class="card-body">
+    <div data-hook="admin_user_edit_form_header">
+      <%= render partial: 'spree/admin/shared/error_messages', locals: { target:@object} %>
+    </div>
+    <div data-hook="admin_user_edit_form">
+      <%= form_with model: @object, url: { action: 'update' } do |f| %>
+        <%= render partial: 'form', locals: { f: f } %>
+        <div data-hook="admin_customer_edit_form_button">
+          <%= render partial: 'spree/admin/shared/edit_resource_links', locals: { collection_url: spree.billing_customers_path } %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

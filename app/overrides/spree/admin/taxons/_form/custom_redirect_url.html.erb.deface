@@ -1,0 +1,6 @@
+<!-- insert_after "erb[loud]:contains('field_container :permalink')" -->
+
+<%= f.field_container :custom_redirect_url do %>
+  <%= f.label :custom_redirect_url, Spree.t(:custom_redirect_url) %>
+  <%= f.text_field :custom_redirect_url, class: 'form-control', rows: 6 %>
+<% end %>

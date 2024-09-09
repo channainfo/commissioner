@@ -1,0 +1,8 @@
+<%= render partial: 'spree/admin/shared/order_tabs', locals: { current: :cart } %>
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @line_item } %>
+<%= form_with model: @line_item, url: { action: 'update' } do |f| %>
+  <%= render partial: 'form', locals: { f: f } %>
+  <div data-hook="admin_line_item_edit_form_button">
+    <%= render partial: 'spree/admin/shared/edit_resource_links', locals: { collection_url: cart_admin_order_path(@order) } %>
+  </div>
+<% end %>

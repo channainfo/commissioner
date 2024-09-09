@@ -1,0 +1,17 @@
+<!-- insert_bottom "[data-hook='admin_option_type_form_fields']" -->
+
+<div class="col-12 col-md-6">
+  <% if @option_type.new_record? %>
+    <%= f.field_container :kind, class: ['form-group'] do %>
+      <%= f.label :kind, Spree.t(:kind) %> <span class="required">*</span>
+      <%= f.select(:kind, Spree::OptionType.kinds.keys, {}, { class: 'select2-clear' }) %>
+    <% end %>
+  <% else %>
+    <%= f.field_container :kind do %>
+      <%= f.text_field :kind, disabled: true, class: "form-control" %>
+        <small class="form-text text-muted">
+          <%= raw I18n.t('option_type.kind_info') %>
+        </small>
+    <% end %>
+  <% end %>
+</div>

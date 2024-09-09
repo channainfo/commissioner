@@ -1,0 +1,8 @@
+<!-- insert_after "erb[silent]:contains('Spree::Digital')" -->
+
+<%= content_tag :li, class: 'nav-item' do %>
+  <%= link_to_with_icon 'card-heading.svg',
+    Spree.t(:places),
+    admin_product_product_places_path(@product, type: :venue),
+    class: "nav-link #{'active' if current == :product_places}" %>
+<% end %>

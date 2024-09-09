@@ -1,0 +1,103 @@
+<table class="purchase purchase-summary">
+  <tr>
+    <td valign="middle" colspan="2">
+      <p class="f-fallback purchase_total purchase_total--label">
+        <%= Spree.t('order_mailer.subtotal') %>
+      </p>
+    </td>
+    <td valign="middle">
+      <p class="f-fallback purchase_total">
+        <%= order.display_item_total %>
+      </p>
+    </td>
+  </tr>
+  <% if order.line_item_adjustments.exists? %>
+    <% if order.all_adjustments.promotion.eligible.exists? %>
+      <% order.all_adjustments.promotion.eligible.group_by(&:label).each do |label, adjustments| %>
+        <tr class="purchase-summary-item">
+          <td class="purchase_footer" valign="middle">
+            <p class="f-fallback purchase_total purchase_total--label">
+              <%= Spree.t(:promotion) %>
+            </p>
+          </td>
+          <td class="purchase_footer" valign="middle">
+            <p class="f-fallback purchase_total--name purchase_total--label">
+              <%= label %>
+            </p>
+          </td>
+          <td class="purchase_footer" valign="middle">
+            <p class="f-fallback purchase_total">
+              <%= Spree::Money.new(adjustments.sum(&:amount), currency: order.currency) %>
+            </p>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  <% end %>
+  <% order.shipments.group_by { |s| s.selected_shipping_rate&.name }.each do |name, shipments| %>
+    <tr class="purchase-summary-item">
+      <td class="purchase_footer" valign="middle">
+        <p class="f-fallback purchase_total purchase_total--label">
+          <%= Spree.t(:shipping) %>
+        </p>
+      </td>
+      <td class="purchase_footer" valign="middle">
+        <p class="f-fallback purchase_total--name purchase_total--label">
+          <%= name %>
+        </p>
+      </td>
+      <td class="purchase_footer" valign="middle">
+        <p class="f-fallback purchase_total">
+          <%= Spree::Money.new(shipments.sum(&:discounted_cost), currency: order.currency) %>
+        </p>
+      </td>
+    </tr>
+  <%end%>
+  <% if order.additional_tax_total != 0 %>
+    <tr class="purchase-summary-item">
+      <td class="purchase_footer" valign="middle" colspan="2">
+        <p class="f-fallback purchase_total purchase_total--label">
+          <%= Spree.t(:tax) %>
+        </p>
+      </td>
+      <td class="purchase_footer" valign="middle">
+        <p class="f-fallback purchase_total">
+          <%= order.display_additional_tax_total.to_html %>
+        </p>
+      </td>
+    </tr>
+  <% end %>
+
+  <% order.adjustments.eligible.each do |adjustment| %>
+    <% next if (adjustment.source_type == 'Spree::TaxRate') || (adjustment.amount == 0) %>
+    <tr>
+      <td class="purchase_footer" valign="middle">
+        <p class="f-fallback purchase_total purchase_total--label">
+          <%= Spree.t(:adjustments) %>
+        </p>
+      </td>
+      <td class="purchase_footer" valign="middle">
+        <p class="f-fallback purchase_total--name purchase_total--label">
+          <%= raw(adjustment.label) %>:
+        </p>
+      </td>
+      <td class="purchase_total-col">
+        <p class="f-fallback purchase_total">
+          <%= Spree::Money.new(adjustment.amount, currency: order.currency) %>
+        </p>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+    <td class="purchase_footer" colspan="2">
+      <p class="f-fallback purchase_total purchase_total--label">
+        <strong><%= I18n.t('mail.order_mailer.etotal') %></strong> (<%= I18n.t('mail.order_mailer.including_vat') %>)
+      </p>
+    </td>
+    <td class="purchase_total-col">
+        <p class="f-fallback purchase_total">
+          <strong><%= order.display_total %></strong>
+        </p>
+    </td>
+  </tr>
+</table>

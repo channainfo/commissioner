@@ -1,0 +1,385 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+km:
+  account_checker:
+    verify:
+      already_exist: "%{login} already exist"
+      not_exist: "%{login} not exist"
+
+  webhook_event: "Weebook Event"
+
+  event:
+    check_in:
+      success: "Guest check-in in successfully"
+    uncheck_in:
+      success: "Guest uncheck-in in successfully"
+
+  sms:
+    to:
+      blank: "recipient can not be blank"
+    body:
+      blank: "sms content can not be blank"
+
+      already_exist: "%{login} already exist"
+
+  pincode_creator:
+    invalid_phone_number: "លេខទូរសព្ទមិនត្រឹមត្រូវ"
+    invalid_email_address: "អ៊ីមែលមិនត្រឹមត្រូវ"
+
+  authenticator:
+    incorrect_login: "ពត៌មានមិនត្រឹមត្រូវ"
+    incorrect_password: "ពាក្យសម្ងាត់មិនត្រឹមត្រូវ"
+    invalid_or_missing_params: "ពត៌មានមិនត្រឹមត្រូវ ឬមិនគ្រប់គ្រង"
+
+  hello: "Hello world"
+
+  recaptcha:
+    request_failed: "Request failed"
+    invalid_code: "Invalid code"
+    score_not_qualify: "Score is not qualify"
+    action_not_matched: "Action is not matched"
+
+  taxon:
+    icon: Icon (Square)
+    category_icon: Category icon (Square)
+    app_banner: App Banner (16x9)
+    web_banner: Web banner (10x2)
+    home_banner: Home Banner (16x9)
+
+  taxon_vendor:
+    empty_info: "មិនមានព័ត៌មានអំពីអ្នកលក់ទេ"
+
+  telegram_bot:
+      empty_info: "No <b>Telegram Bot</b> found"
+
+  guest_card_classes:
+    empty_info: "មិនមានព័ត៌មានអំពីកាតភ្ញៀវទេ"
+    background_image: "រូបភាពផ្ទៃខាងក្រោយ"
+
+  user_update_contact:
+    phone_number_is_already_used: "លេខទូរស័ព្ធបានប្រើប្រាស់រួច"
+    email_is_already_used: "Email បានប្រើប្រាស់រួច"
+
+  calendar:
+    event:
+      empty_info: "No <b>Events</b> found."
+
+  option_type:
+    kind_info: "<b>បន្តាប់ពីកំណត់រួច</b> អ្នកមិនអាចកែប្រែបានទៀតទេ"
+    kind_validation: "Attribute can't be updated for %{option_type_name}"
+    empty_info: "រក <b>Option Type</b> មិនឃើញសម្រាប់ប្រភេទ"
+    time_format_info: "<b>សូម​ចំណាំ:</b>option value ត្រូវតែមានទម្រង់<b>%{time_format}</b> ជាមួយនឹងតម្លៃជាច្រើនត្រូវបំបែកដោយសញ្ញាក្បៀសដូច<b>%{time_format},%{time_format}</b>"
+
+  stock_location:
+    lat:
+      label: "Latitude"
+      hint: "បញ្ចូលនៅចន្លោះ 90 to -90"
+    lon:
+      label: "Longitude"
+      hint: "បញ្ចូលនៅចន្លោះ 180 to -180"
+    reference:
+      label: "Reference"
+
+  user_identity_provider:
+    not_found: "User identity provider for %{identity_type} not found in the system"
+
+  variant:
+    validation:
+      option_type_is_not_variant: "%{option_type_name} / %{option_value_name} មិនត្រូវជាមួយនឹងផលិតផល"
+      subscribed: "%{product_name} ជាសេវាកម្មប្រចាំខែ"
+      option_type_is_not_product: "%{option_type_name} / %{option_value_name} មិនត្រូវជាមួយនឹងផលិតផល"
+      out_of_stock: "%{variant_name} អស់ស្តុកហើយ"
+    product_kind_option_types:
+      empty_info: "<b>ចំណាំ:</b> កំណត់ប្រភេទសម្រាប់ផលិតផល. ដើម្បីកែប្រែ, សូមចូលទៅ <b>លម្អិត</b> tab > <b>ប្រភេទ</b>"
+
+  subscription:
+    validation:
+      out_of_range: "Subscription date is out of range."
+
+  vectors:
+    icons:
+      info_rules: 'Only allow <b>%{allow_extensions}</b> files. Icons are stored inside "images/" folder, eg. app/assets/images/backend-adjust.svg.'
+      total: "Total: %{total_in_page} / %{total_count} icons"
+
+  product:
+    validation:
+      not_active: "%{product_name} is not active"
+
+  photo:
+    empty_info: "រក <b>Photos</b> មិនឃើញទេ"
+
+  nearby_place:
+    empty_info: "រក <b>Nearby places</b> មិនឃើញទេ"
+
+  telegram_chat_bot:
+    vendor_channel_group_info: "This channel/group will be recieve order notifications"
+    only_for_authorized_user_info: "Only authorized users can approve/reject line items, make sure to input their telegram username"
+
+  vendor:
+    validation:
+      vendor_kind_option_types:
+        empty_info: "<b>Note:</b> កំណត់ប្រភេទសម្រាប់ក្រុមហ៊ុនជាមុនសិន. ដើម្បីកែប្រែ, ចូលទៅ <b>លម្អិត</b> tab > <b>ប្រភេទ</b>"
+      could_not_find_telegram_chat: "Could not find telegram channel, try remove Bot from Telegram channel and add again as admin."
+
+    service_calendars:
+      empty_info: "រក <b>ប្រតិទិនសេវាកម្ម</b> មិនឃើញទេ."
+      start_date: "ចាប់ពីថ្ងៃ"
+      end_date: "រហូតដល់ថ្ងៃ"
+      from_date: "ថ្ងើចាប់ផ្តើម"
+      to_date: "ថ្ងៃបញ្ចប់"
+      new_calendar: "ប្រតិទិនសេវាកម្មថ្មី"
+      operations_day: "ថ្ងៃបើកដំណើរការ"
+      exception_rules: "ករណីលើកលែង"
+
+  orders:
+    total: "សរុប: %{orders_count} វិក្កយបត្រ"
+
+  account_deletion:
+    title:
+      have_another_account: "ខ្ញុំមានគណនីផ្សេងទៀត"
+      too_many_notifications: "ខ្ញុំទទួលបានសារដំណឹងច្រើនពេក"
+      sth_broken: "មានមុខងារប្រើប្រាស់មិនបាន"
+      other: "ផ្សេងៗ"
+    reason_description:
+      sth_broken: "តើអ្នកអាចប្រាប់ពីមុខងារដែលមិនដំណើរការបានទេ? ក្រុមការងារនឹងមានដោះស្រាយនឹងពេលដែលយើងអាចកំណត់បញ្ហាបាន"
+      other: "តែអ្នកអាចប្រាប់ពីមូលហេតុដែលចង់លុបគណនីបានទេ? បើមានបញ្ហាធ្ងន់ធ្ងរណាមួយ ​ពួកយើងព្យាយាមដោះស្រាយឲ្យបានល្អបំផុត។"
+
+  user:
+    invalid_password: "Current password is not valid"
+
+  spree:
+    km: "ភាសារខ្មែរ"
+    date_of_birth: "ថ្ងៃខែឆ្នាំកំណើត"
+    kind: "ប្រភេទ"
+    vendor: "ក្រុមហ៊ុន"
+    total_price: "តម្លៃសរុប"
+    invoice: "វិក្កយបត្រ"
+    option_text: ""
+    none: "គ្មាន"
+    print: "បោះពុម្ព"
+    alert_request_to_vendor: "Alert request to vendor"
+    alerted_to_vendor: "Alerted to vendor Telegram"
+    accept_all: "Accept all"
+    sent: "Sent"
+    send_failed_or_method_not_support: "Send failed or method not support"
+    subscribe: "ប្រើសេវាកម្ម"
+    full_name: "ឈ្មោះពេញ"
+    address: "អាសយដ្ឋាន"
+    billing_address: "អាសយដ្ឋានទូទាត់"
+    shipping_address: "អាសយដ្ឋានប្រើ​ប្រាស់"
+    use_billing_address: "ប្រើប្រាស់អាសយដ្ឋានទូទាត់"
+    add_customer: "បញ្ចូលអតិថិជន"
+    lastname: "នាមត្រកូល"
+    firstname: "នាមខ្លួន"
+    gender: "ភេទ"
+    cashier: "អ្នកទទួលប្រាក់"
+    csv:
+      csv_generate: "The CSV file is being generated."
+      csv_progress: "The CSV file is in progress. Please wait a moment and try again."
+      csv_failed: "The CSV file failed to generate. Please export again."
+      csv_queued: "The CSV file is in the queue. Please wait and try again later"
+      csv_not_found: "The CSV file not found. Please export again."
+      csv_interrupted: "The CSV file is interrupted. Please generate again."
+      csv_unknown_status: "Something went wrong. Please try again."
+    new_homepage_banner: "បន្ថែមផ្ទាំងរូបភាពថ្មី"
+    intel_phone_number: "លេខទូរសព្ទ"
+    phone_number: "លេខទូរសព្ទ"
+    new_customer: "អតិថិជនថ្មី"
+    listing_price: "តម្លៃលក់"
+    length: "ប្រវែង"
+    preference: "Preference"
+    notification: "Notification"
+    notice_messages:
+      line_item_not_found: "Line item not found"
+    promotion_rule_types:
+      fixed_date:
+        name: "ថ្ងៃជាក់លាក់"
+        description: "Fixed Date"
+      weekend:
+        name: "ថ្ងៃចុងសប្តាហ៍"
+        description: "ថ្ងៃចុងសប្តាហ៍"
+      custom_dates:
+        name: "Custom Dates"
+        description: "Custom Dates"
+      vendors:
+        name: "Vendors"
+        description: "Vendors"
+      guest_occupations:
+        name: "Guest Occupations"
+        description: "Guest Occupations"
+      guest_age_group:
+        name: "Guest Age Group"
+        description: "Guest Age Group"
+    promotion_action_types:
+      create_date_specific_item_adjustments:
+        name: "Create date specific item adjustment"
+        description: "Create date specific item adjustment"
+      create_guest_item_adjustments:
+        name: "Create guest item adjustment"
+        description: "Create guest item adjustment"
+    term_and_condition_promotion: "Term And Condition Of Promotions"
+    telegram_bot: "Telegram Bot"
+    date_rule:
+      match_any: "Some line items must within selected date"
+      match_all: "All line items must within selected date"
+    weekend_rule:
+      choose_weekend: "Choose weekend"
+    vendors_rule:
+      label: "Vendors"
+      choose_vendors: "Choose vendors"
+      match_any: "Some line items must from selected vendor"
+      match_all: "All line items must from selected vendor"
+    guest_occupation_rule:
+      label: "Guest Occupation"
+      choose_guest_occupation: "Choose Guest occupations"
+      match_any: "Some line items must from selected occupations"
+      match_all: "All line items must from selected occupations"
+    guest_age_group_rule:
+      label: "Guest Age Group"
+      choose_guest_age_group: "Choose Guest Age Group"
+      match_any: "Some line items must from selected age group"
+      match_all: "All line items must from selected age group"
+    billing:
+      code: "code"
+      name: "name"
+      logo: "logo"
+      payment_qrcode: "Payment QRCode"
+      image: "image"
+      order_line_items: "Order Line Items"
+      new_role: "បង្កើតតួនាទីថ្មី"
+      role_id: "កូដតួនាទី"
+      settings: "ការកំណត់"
+      report: "របាយការណ៍"
+      paid: "បង់រួច"
+      balance_due: "មិនទាន់បង់"
+      penalty: "ពិន័យ"
+      add_penalty: "បន្ថែមពិន័យ"
+      active_subscribers: "ចំនួនអ្នកកំពុងប្រើ"
+      paid_orders: "វិក្កយបត្របង់រួច"
+      failed_orders: "វិក្កយបត្រលុប"
+      balance_due_orders: "វិក្កយបត្រមិនទាន់បង់"
+      overdue_orders: "វិក្កយបត្រហួសថ្ងៃបង់"
+      orders: "វិក្កយបត្រ"
+      customers: "អតិថិជន"
+      roles: "តួនាទី"
+      subscriptions: "ការប្រើប្រាស់"
+      active_subscription: "កំពុងប្រើប្រាស់"
+      overdue: "ហួសថ្ងៃបង់"
+      suspended: "បានផ្អាក"
+      users: "គណនីបុគ្គលិក"
+      day: "ថ្ងៃ"
+      products: "ទំនិញ"
+      vendor: "vendor"
+      payment_state:
+        paid: "បង់រួច"
+        balance_due: "មិនទាន់បង់"
+        overdue: "ហួសថ្ងៃបង់"
+        failed: "បរាជ័យ"
+        unknown: "មិនស្គាល់"
+    upsupported_payment: "មិនស្គាល់ការបង់ប្រាក់"
+    selected_item_not_available_on_date: "Selected item not available on %{date}"
+    auto_apply: "ដាក់ប្រើដោយស្វ័យប្រវត្តិ"
+    auto_apply_info: "Path & code will be removed"
+    device_tokens: "Device Tokens"
+    user_identity_providers: "Identity Providers"
+    new_user_identity_provider: "New Identity Providers"
+    admin:
+      display_on:
+        frontend_for_early_adopter: "Storefront for Early Adopter"
+    event:
+      check_in:
+        success: "Guest check-in in successfully"
+
+  activerecord:
+    attributes:
+      spree/order:
+        customer_id: "លេខកូដអតិថិជន"
+        to_date: "រហូតដល់ថ្ងៃ"
+        from_date: "ពីថ្ងៃ"
+        created_at: "បង្កើតនៅថ្ងៃ"
+        start_date: "ថ្ងៃចាប់ផ្តើម"
+        start_date_range: "ចន្លោះថ្ងៃចាប់ផ្តើម"
+        phone_number: "លេខទូរសព្ទ"
+        payable: "ត្រូវបង់"
+        invoice_id: "លេខកូដវិក្កយប័ត្រ"
+        status: "ស្ថានភាព"
+        invoice_due_date: "ថ្ងៃត្រូវបង់ប្រាក់"
+        type: "ប្រភេទ"
+        select_date: "ជ្រើសរើសថ្ងៃ"
+        taxon: "ប្រភេទ"
+      spree/report:
+        cashier: "អ្នកគិតលុយ"
+    errors:
+      models:
+        spree_cm_commissioner/service_calendar:
+          attributes:
+            exception_rules:
+              invalid_json: "Format មិនត្រឹមត្រូវ"
+
+  mail:
+    order_mailer:
+      booking_confirm: "Your booking is now confirmed!"
+      hello: "Hello %{full_name},"
+      thanks: "Thanks %{full_name},"
+      booking_event: "Your booking for %{event_name} is successfully complete!"
+      booking_reference: "For reference, your booking ID is %{order_number}."
+      booking_id: "Booking ID <b>%{order_number}<b>"
+      booking_summary: "Booking Summary"
+      check_in: "Check in:"
+      check_out: "Check out:"
+      issue_date: "Issued date %{datetime}"
+      your_booking: "Your Booking"
+      etotal: "Total"
+      including_vat: "Including VAT"
+      event_detail: "Event Details"
+      customer_info: "Customer Information"
+      bookmeplus_support: "BookMe+ Support"
+      info_notice: "Information Notice"
+      booking_details: "Booking Details"
+  invoice:
+    empty_info: "<b>វិក្កយប័ត្រ</b> មិនទាន់បានបង្កើតទេ"
+  device_token:
+    empty_info: "រក <b>Device_token</b> មិនឃើញទេ"
+  user_identity_providers:
+    empty_info: "រក <b>User identity providers</b> មិនឃើញទេ"
+  webhooks_subscriber_rules:
+    empty_info: "រក <b>Webhooks Subscriber Rules</b> មិនឃើញទេ"
+  notification:
+    send_specific_in_progress: "ផ្ញើសារជាក់លាក់កំពុងដំណើរការ"
+    send_all_in_progress: "ផ្ញើសារទាំងអស់កំពុងតែដំណើរការ"
+
+  pincode_sender:
+    sms:
+      body: "លេខកូដ %{code} គឺជា %{readable_type} របស់អ្នក"
+
+  pincode:
+    readable_type:
+      contact_update: "ធ្វើបច្ចុប្បន្នភាព ទំនាក់ទំនង"
+      login: "ចូលលេខកូដ"
+      reset_password: "កំណត់លេខកូដសំងាត់ឡើងវិញ"
+      registration_code: "លេខកូដចុះឈ្មោះ"
+      confirmation_code: "លេខកូដបញ្ជាក់"
+      update_user_login: "ធ្វើបច្ចុប្បន្នភាពលេខកូដអ្នកប្រើប្រាស់"
+      otp_code: "លេខកូដ OTP"
+
+  notifications:
+    spree_cm_commissioner:
+      order_complete_notification:
+        title: "💸 ការបញ្ជាទិញទទួលបានជោគជ័យ!"
+        message: "លេខបញ្ជាទិញរបស់អ្នកគឺ ​%{order_number}"
+      order_accepted_notification:
+        title: "បានយល់ព្រម!"
+        message: "សំណើរបស់អ្នកត្រូវបានបញ្ជាក់; សូមពិនិត្យមើលការធ្វើដំណើរនាពេលខាងមុខរបស់អ្នក"
+      order_rejected_notification:
+        title: "ត្រូវបានបដិសេធ!"
+        message: "សូមអធ្យាស្រ័យ! បន្ទប់ដែលអ្នកបានស្នើសុំកក់ជាមួយ [%{vendor_name}] មិនមាននៅកាលបរិច្ឆេទដែលអ្នកបានជ្រើសរើសទេ"
+      order_requested_notification:
+        title: "សំណេីរត្រូវបានផ្ញេីរ"
+        message: "[%{vendor_name}] កំពុងពិនិត្យមើលសំណើកក់របស់អ្នក"
+  spree_user:
+    invalid_password: "ពាក្យសង្ងាត់បច្ចុប្បន្នមិនត្រឹមត្រូវ"
+    cannot_delete_account: "អ្នកមិនអាចលុបគណនីនេះបានទេ ដោយសារអ្នកមានតួនាទីពិសេស"
+  kyc:
+    note: "<b>ចំណាំ:</b> ជ្រើសរើស KYC ដែលត្រូវការសម្រាប់ផលិតផលនេះ"
+    allowed_upload_later: "<b>អនុញ្ញាតឱ្យបញ្ជូលទិន្នន័យនៅពេលក្រោយ:</b> ធីកប្រអប់នេះ ប្រសិនបើអ្នកអនុញ្ញាតឱ្យបញ្ជូលទិន្នន័យនៅពេលក្រោយ"

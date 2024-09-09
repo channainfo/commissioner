@@ -1,0 +1,15 @@
+
+<% content_for :page_tabs do %>
+  <li class="nav-item">
+    <%= link_to_with_icon 'cart-plus.svg',
+      'New Order',
+      spree.admin_import_new_orders_path,
+      class: "nav-link #{'active' if current == :import_new_order}" %>
+  </li>
+  <li class="nav-item">
+    <%= link_to_with_icon 'cart-check.svg',
+      'Existing Order',
+      spree.admin_import_existing_orders_path,
+      class: "nav-link #{'active' if current == :import_existing_order}" %>
+  </li>
+<% end %>

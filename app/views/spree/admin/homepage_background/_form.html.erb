@@ -1,0 +1,31 @@
+<div class="form-group">
+  <%= f.field_container :title do %>
+    <%= f.label :title %>
+    <%= f.text_field :title, class: 'form-control' %>
+  <% end %>
+  <%= f.field_container :segment do %>
+    <%= f.label :segment %>
+    <% SpreeCmCommissioner::HomepageBackground.segments.keys.each do |segment| %>
+      <div class="radio" data-id="<%= segment.to_s %>">
+        <label data-hook="segment_field">
+          <%= f.radio_button :segment, segment, class: "segments_radios" %>
+          <%= segment.to_s.capitalize %>
+        </label>
+      </div>
+    <% end %>
+  <% end %>
+  <%= f.field_container :app_image do %>
+    <%= f.label :mobile_image %> <span>(750x270)</span>
+    <%= f.file_field :app_image %>
+    <%= image_tag main_app.cdn_image_url(@object.app_image.url(:small)) if @object.app_image %>
+  <% end %>
+  <%= f.field_container :web_image do %>
+    <%= f.label :web_image %> <span>(1440x400)</span>
+    <%= f.file_field :web_image %>
+    <%= image_tag main_app.cdn_image_url(@object.web_image.url(:small)) if @object.web_image %>
+  <% end %>
+  <%= f.field_container :active do %>
+    <%= f.label :active %>
+    <%= f.check_box :active %>
+  <% end %>
+</div>

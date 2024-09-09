@@ -1,0 +1,55 @@
+<% content_for :page_title do %>
+  <%= page_header_back_button spree.admin_import_new_orders_path %>
+  <%= @import.name %>
+<% end %>
+<%= render partial: 'spree/admin/shared/import_order_tabs', locals: { current: :import_new_order } %>
+
+<div class="row w-75">
+  <div class="col-md-12">
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="card-title mb-0">Import Details</h5>
+      </div>
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-sm-3">Name:</dt>
+          <dd class="col-sm-9"><%= @import.name %></dd>
+          <dt class="col-sm-3">Import Type:</dt>
+          <dd class="col-sm-9">
+            <span class="badge badge-secondary"><%= @import.import_type %></span>
+          </dd>
+          <dt class="col-sm-3">Started At:</dt>
+          <dd class="col-sm-9"><%= @import.started_at&.strftime('%A, %d %B %Y %H:%M:%S') %></dd>
+          <dt class="col-sm-3">Finished At:</dt>
+          <dd class="col-sm-9"><%= @import.finished_at&.strftime('%A, %d %B %Y %H:%M:%S') %></dd>
+          <dt class="col-sm-3">Status:</dt>
+          <dd class="col-sm-9">
+            <% case @import.status %>
+            <% when 'queue' %>
+              <span class="badge badge-primary"><%= @import.status %></span>
+            <% when 'progress' %>
+              <span class="badge badge-warning"><%= @import.status %></span>
+            <% when 'done' %>
+              <span class="badge badge-success"><%= @import.status %></span>
+            <% when 'failed' %>
+              <span class="badge badge-danger"><%= @import.status %></span>
+            <% else %>
+              <span class="badge badge-secondary"><%= @import.status %></span>
+            <% end %>
+          </dd>
+          <dt class="col-sm-3">Failed Orders:</dt>
+          <dd class="col-sm-9">
+            <% if @import.preferred_fail_orders.present? %>
+              <% failed_orders = @import.preferred_fail_orders.split(', ').map(&:strip) %>
+              <div class="d-flex flex-wrap">
+                <% failed_orders.each do |order| %>
+                  <span class="badge badge-danger m-1"><%= order %></span>
+                <% end %>
+              </div>
+            <% end %>
+          </dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,153 @@
+inherit_from:
+  - '.rubocop-rails.yml'
+
+require:
+  - rubocop-rails
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.2
+  TargetRailsVersion: 7.0
+  Exclude:
+    - '**/db/migrate/*'
+    - 'db/schema.rb'
+    - '**/Gemfile.lock'
+    - '**/Rakefile'
+    - '**/rails'
+    - '**/vendor/**/*'
+    - 'node_modules/**/*'
+    - 'bin/*'
+    - '**/spec/**/*'
+    - '**/test_helper/**/*'
+    - 'spree_cm_commissioner.gemspec'
+    - 'lib/spree_cm_commissioner/engine.rb'
+
+###########################################################
+###################### RuboCop ############################
+###########################################################
+
+# You can find all configuration options for rubocop here: https://docs.rubocop.org/rubocop/cops_bundler.html
+Naming/MemoizedInstanceVariableName:
+  Enabled: false
+
+###########################################################
+####################### Gemspec ###########################
+###########################################################
+
+Gemspec/DeprecatedAttributeAssignment:
+  Enabled: true
+
+###########################################################
+######################## Layout ###########################
+###########################################################
+
+Layout/ClassStructure:
+  ExpectedOrder:
+    - module_inclusion
+    - constants
+    - association
+    - public_attribute_macros
+    - public_delegate
+    - macros
+    - initializer
+    - public_class_methods
+    - public_methods
+    - protected_attribute_macros
+    - protected_methods
+    - private_attribute_macros
+    - private_delegate
+    - private_methods
+
+Layout/FirstArrayElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/LineLength:
+  Max: 150
+
+Layout/MultilineArrayBraceLayout:
+  EnforcedStyle: new_line
+
+Layout/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
+Layout/MultilineHashBraceLayout:
+  EnforcedStyle: new_line
+
+Layout/MultilineMethodCallBraceLayout:
+  EnforcedStyle: new_line
+
+Layout/MultilineMethodDefinitionBraceLayout:
+  EnforcedStyle: new_line
+
+Layout/SpaceInLambdaLiteral:
+  EnforcedStyle: require_space
+
+###########################################################
+######################## Lint #############################
+###########################################################
+
+Lint/AssignmentInCondition:
+  AllowSafeAssignment: false
+
+Lint/UnusedBlockArgument:
+  IgnoreEmptyBlocks: false
+
+Lint/UnusedMethodArgument:
+  IgnoreEmptyMethods: false
+
+Lint/NestedMethodDefinition:
+  Enabled: false
+
+###########################################################
+######################## Metric ###########################
+###########################################################
+
+Metrics/AbcSize:
+  Max: 45
+
+Metrics/BlockLength:
+  CountComments: false
+  Max: 50
+  Exclude:
+    - '**/*.rake'
+    - '**/config/routes.rb'
+
+Metrics/ClassLength:
+  CountAsOne: ['array', 'hash']
+  Max: 150
+
+Metrics/CyclomaticComplexity:
+  Max: 10
+
+Metrics/MethodLength:
+  CountAsOne: ['array', 'hash']
+  Max: 30
+
+Metrics/ModuleLength:
+  CountAsOne: ['array', 'hash']
+  Max: 250
+
+Metrics/PerceivedComplexity:
+  Max: 10
+
+###########################################################
+######################## Style ############################
+###########################################################
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/HashSyntax:
+  Enabled: false
+
+Style/ClassVars:
+  Enabled: false

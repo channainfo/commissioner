@@ -1,0 +1,17 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:homepages) %>
+<% end %>
+
+<div data-hook="admin_homepage_feed">
+  <%= form_with url: spree.admin_homepage_feed_path, method: :put do |f| %>
+    <%= render partial: 'form', locals: { f: f }%>
+
+    <div class='form-actions ml-3 mr-3' data-hook='buttons'>
+      <%= button Spree.t('actions.update'), 'save.svg', 'submit', { class: 'btn-success', data: { disable_with: "#{ Spree.t(:saving) }..." }} %>
+    </div>
+
+    <small class="form-text text-muted">
+      <%= "Previously updated at #{@config.cleared_cache_at}" %>
+    </small>
+  <% end %>
+</div>

@@ -1,0 +1,12 @@
+<%= render partial: 'spree/billing/shared/subscription_tabs', locals: { current: :account } %>
+<div data-hook="admin_user_new_form_header">
+  <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+</div>
+<div data-hook="admin_user_new_form">
+  <%= form_for @object, url: {action: "update"}  do |f|  %>
+    <%= render partial: 'form', locals: { f: f } %>
+    <div data-hook="admin_user_new_form_buttons">
+      <%= render partial: 'spree/admin/shared/edit_resource_links', locals:{target: :edit} %>
+    </div>
+  <% end %>
+</div>

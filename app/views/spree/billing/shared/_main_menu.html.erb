@@ -1,0 +1,73 @@
+<nav class="pb-3 pt-lg-3 px-1 h6">
+  <div class="text-right d-lg-none pl-3 py-2 border-bottom d-flex align-items-center">
+    <div class="d-flex flex-grow-1 text-primary"></div>
+    <button
+      id="sidebar-close"
+      class="btn btn-link d-flex"
+      type="button"
+      aria-expanded="false"
+      aria-label="Toggle navigation">
+      <%= svg_icon name: "cancel.svg", width: '20', height: '20', classes: 'p-0 m-0' %>
+    </button>
+  </div>
+  <% if spree_current_user.has_spree_role?('admin') %>
+    <ul class="nav nav-sidebar" id="sidebarReport">
+      <%= billing_main_menu_tree I18n.t('spree.billing.report'), icon: "pie-chart-fill.svg", sub_menu:"report", url: "#sidebar-report" %>
+    </ul>
+    <ul class="nav nav-sidebar" id="sidebarCustomer">
+      <%= tab :customers, label: I18n.t('spree.billing.customers.customers'), url: billing_customers_path, icon: 'people-fill.svg', selected: request.path.include?('customer')%>
+    </ul>
+    <ul class="nav nav-sidebar" id="sidebarOrder">
+      <%= tab :orders, label: I18n.t('spree.billing.orders'), url: billing_orders_path, icon: 'inbox-fill.svg',selected: request.path.include?('order') %>
+    </ul>
+    <ul class="nav nav-sidebar" id="sidebarBillingProduct">
+      <%= billing_main_menu_tree I18n.t('spree.billing.products'), icon: 'tag-fill.svg' , sub_menu:"product", url:"#sidebar-product" %>
+    </ul>
+    <ul class="nav nav-sidebar" id="sidebarBillingPlace">
+      <%= tab :places, label: I18n.t('spree.billing.places'), url: billing_places_path, icon: 'geo-alt-fill.svg',selected: request.path.include?('place') %>
+    </ul>
+    <ul class="nav nav-sidebar" id="sidebarBusinesses">
+      <%= tab :businesses, label: I18n.t('spree.billing.businesses'), url: billing_businesses_path, icon: 'building.svg',selected: request.path.include?('business') %>
+    </ul>
+    <ul class="nav nav-sidebar" id="sidebarSetting">
+      <%= billing_main_menu_tree I18n.t('spree.billing.settings'), icon: "gear-fill.svg", sub_menu:"setting", url: "#sidebar-setting" %>
+    </ul>
+  <% else %>
+    <% actions = ['index', 'paid', 'balance_due', 'failed_orders', 'overdue', 'active_subscribers'] %>
+    <% if actions.any? { |action| spree_current_user.permissions.exists?(entry: 'spree/billing/reports', action: action) } %>
+      <ul class="nav nav-sidebar" id="sidebarReport">
+        <%= billing_main_menu_tree I18n.t('spree.billing.report'), icon: "pie-chart-fill.svg", sub_menu:"report", url: "#sidebar-report" %>
+      </ul>
+    <% end %>
+    <% if spree_current_user.permissions.exists?(entry: 'spree/billing/customers') %>
+      <ul class="nav nav-sidebar" id="sidebarCustomer">
+        <%= tab :customers, label: I18n.t('spree.billing.customers.customers'), url: billing_customers_path, icon: 'people-fill.svg' %>
+      </ul>
+    <% end %>
+    <% if spree_current_user.permissions.exists?(entry: 'spree/billing/orders') %>
+      <ul class="nav nav-sidebar" id="sidebarOrder">
+        <%= tab :orders, label: I18n.t('spree.billing.orders'), url: billing_orders_path, icon: 'inbox-fill.svg' %>
+      </ul>
+    <% end %>
+    <% if spree_current_user.permissions.exists?(entry: ['spree/billing/products', 'spree/billing/option_types']) %>
+      <ul class="nav nav-sidebar" id="sidebarProducts">
+        <%= billing_main_menu_tree I18n.t('spree.billing.products'), icon: 'tag-fill.svg' , sub_menu:"product", url:"#sidebar-product" %>
+      </ul>
+    <% end %>
+    <% if spree_current_user.permissions.exists?(entry: 'spree/billing/places') %>
+      <ul class="nav nav-sidebar" id="sidebarPlaces">
+        <%= tab :places, url: billing_places_path, icon: 'geo-alt-fill.svg' %>
+      </ul>
+    <% end %>
+    <% if spree_current_user.permissions.exists?(entry: 'spree/billing/businesses') %>
+      <ul class="nav nav-sidebar" id="sidebarBusinesses">
+        <%= tab :businesses, url: billing_businesses_path, icon: 'building.svg' %>
+      </ul>
+    <% end %>
+    <% if spree_current_user.permissions.exists?(entry: ['spree/billing/roles', 'spree/billing/users', 'spree/billing/vendors']) %>
+      <ul class="nav nav-sidebar" id="sidebarSetting">
+        <%= billing_main_menu_tree I18n.t('spree.billing.settings'), icon: "gear-fill.svg", sub_menu:"setting", url: "#sidebar-setting" %>
+      </ul>
+    <% end %>
+  <% end %>
+</nav>

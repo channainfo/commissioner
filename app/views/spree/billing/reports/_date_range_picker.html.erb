@@ -1,0 +1,71 @@
+<%= form_with method: :get do |f| %>
+  <%= label_tag :use_custom_date_range, Spree.t('use_custom_date_range'), class: 'form-check-label' %>
+  <%= check_box_tag 'spree_cm_commissioner_report[use_custom_date_range]', '1', class: 'checkbox', id: 'spree_cm_commissioner_report_use_custom_date_range' %>
+
+  <div class="form-group date-range-filter">
+    <div class="date-range-filter">
+      <div class="input-group datePickerFrom mb-2"
+            data-wrap="true"
+            data-alt-format="<%= Spree.t(:fpr_human_friendly_date_format, scope: 'date_picker', default: 'M j, Y') %>">
+
+        <%= f.text_field :from_date,
+                          class: 'form-control',
+                          placeholder: Spree.t(:starting_from),
+                          value: params[:from_date].to_date,
+                          'data-input':'' %>
+
+        <%= render partial: 'spree/admin/shared/cal_close' %>
+      </div>
+
+      <div class="input-group datePickerTo"
+            data-wrap="true"
+            data-alt-format="<%= Spree.t(:fpr_human_friendly_date_format, scope: 'date_picker', default: 'M j, Y') %>"
+            data-min-date="<%= params[:from_date] %>">
+
+        <%= f.text_field :to_date,
+                          class: 'form-control',
+                          placeholder: Spree.t(:ending_at),
+                          value: params[:to_date].to_date,
+                          'data-input':'' %>
+
+        <%= render partial: 'spree/admin/shared/cal_close' %>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group period-range-filter">
+    <div class="form-group">
+      <%= f.label :period, Spree.t(:select_month), class: 'form-check-label' %>
+      <%= f.select :period,
+                  options_for_select([['January', 1],
+                                      ['February',  2],
+                                      ['March', 3],
+                                      ['April', 4],
+                                      ['May', 5],
+                                      ['June', 6],
+                                      ['July', 7],
+                                      ['August', 8],
+                                      ['September', 9],
+                                      ['October', 10],
+                                      ['November', 11],
+                                      ['December', 12]], selected: params[:period].present? ? params[:period] : Time.zone.today.month), { include_blank: true }, for: 'period-select', class: 'period-select form-control select2-clear js-filterable', id: 'period-select' %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :year, Spree.t(:select_year), class: 'form-check-label' %>
+      <%= f.select :year,
+                  options_for_select((Time.zone.today.year - 5..Time.zone.today.year + 5).to_a, selected: params[:year].present? ? params[:year] : Time.zone.today.year), { include_blank: true }, for: 'year-select', class: 'year-select form-control select2-clear js-filterable', id: 'year-select' %>
+    </div>
+  </div>
+
+  <div class="from-group payable-picker">
+    <div class="form-group">
+      <%= f.label :payments_payable_id_eq, I18n.t(:cashier, scope: 'activerecord.attributes.spree/report') %>
+      <%= f.select 'q[payments_payable_id_eq]', options_for_select(Spree::User.joins(:payments).all.uniq.map {|user| [user.full_name.presence || user.intel_phone_number.presence || user.email.presence, user.id]}, params.dig(:q, :payments_payable_id_eq)), { include_blank: true }, { class: 'payable-picker form-control select2-clear js-filterable' } %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= button Spree.t(:search), 'search.svg', nil, { class: 'btn-outline-primary' } %>
+  </div>
+<% end %>

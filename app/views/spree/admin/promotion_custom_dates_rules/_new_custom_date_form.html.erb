@@ -1,0 +1,8 @@
+<div data-hook="admin_promotion_rule_custom_date_update_form">
+  <%= form_for @promotion_rule, url: { action: "update" }  do |f|  %>
+    <%= render partial: 'form', locals: { f: f } %>
+    <div class="form-actions" data-hook="buttons">
+      <%= button Spree.t('actions.add'), 'add.svg', 'submit', {class: 'btn-success', data: { disable_with: "#{ Spree.t(:saving) }..." }} %>
+    </div>
+  <% end %>
+</div>

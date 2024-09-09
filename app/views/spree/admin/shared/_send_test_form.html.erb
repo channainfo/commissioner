@@ -1,0 +1,27 @@
+<div class="actions">
+  <%= link_to_with_icon 'bell.svg', '', 'Send Notification', no_text: true, class: 'btn btn-success fetch-users', data: { toggle: 'modal', target: "#sendTestModal#{notification.id}", notification_id: notification.id, endpoint: admin_customer_notification_notification_users_path(notification.id) } %>
+
+  <div class="modal fade" id="sendTestModal<%= notification.id %>" tabindex="-1" role="dialog" aria-labelledby="sendTestModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="sendTestModalLabel">Send Test Notification</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <%= form_with(url: admin_notification_sender_index_path(notification), method: :post, class: "send-test-form") do |f| %>
+            <%= f.hidden_field :notification_id, value: notification.id %>
+            <div class="form-group">
+              <%= f.label :user_ids, "Select Users", class: "text-md" %>
+              <%= f.select :user_ids, [], { }, { id: "select2-#{notification.id}", multiple: true, class: "select2 form-control", 'data-dropdown-parent' => "#sendTestModal#{notification.id}" } %>
+            </div>
+            <%= f.submit "Send", class: "btn btn-primary" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

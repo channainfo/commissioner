@@ -1,0 +1,8 @@
+<ul data-hook="billing_settings_sidebar_menu" class="collapse nav nav-pills nav-stacked" id="sidebar-product">
+  <% if spree_current_user.permissions.exists?(entry: 'spree/billing/products', action: 'index') %>
+    <%= tab :products, label: I18n.t('spree.billing.products'), url: billing_products_path,selected: request.path.include?('products')%>
+  <% end %>
+  <% if spree_current_user.permissions.exists?(entry: 'spree/billing/option_types', action: 'index') %>
+    <%= tab :option_typess, label: Spree.t('option_types'), url: billing_option_types_path,selected: request.path.include?('option_types')%>
+  <% end %>
+</ul>

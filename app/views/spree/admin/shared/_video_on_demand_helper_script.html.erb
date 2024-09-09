@@ -1,0 +1,98 @@
+<script>
+  function calculateQualityValue(params) {
+    const qualityBitFields = {
+      low: 0b1,
+      standard: 0b10,
+      medium: 0b100,
+      high: 0b1000
+    };
+
+    let qualityValue = 0;
+
+    for (let key in params) {
+      if (params[key]) {
+        qualityValue |= qualityBitFields[key];
+      }
+    }
+
+    return qualityValue;
+  }
+
+  function calculateProtocolValue(params) {
+    const protocolBitFields = {
+      p_hls: 0b1,
+      p_dash: 0b10,
+      p_file: 0b100,
+    };
+
+    let protocolValue = 0;
+
+    for (let key in params) {
+      if (params[key]) {
+        protocolValue |= protocolBitFields[key];
+      }
+    }
+
+    return protocolValue;
+  }
+
+  function calculateFrameRate(param) {
+    const frameRateEnum = {
+      FPS_TWEENTY_FOUR: 24,
+      FPS_THIRTY: 30,
+      FPS_SIXTY: 60
+    };
+
+    const frameRateMapping = {
+      'FPS_TWEENTY_FOUR': frameRateEnum.FPS_TWEENTY_FOUR,
+      'FPS_THIRTY': frameRateEnum.FPS_THIRTY,
+      'FPS_SIXTY': frameRateEnum.FPS_SIXTY
+    };
+
+    return frameRateMapping[param];
+  }
+
+  async function calculateConfig() {
+    const videoQualityCheckboxes = document.querySelectorAll('.video_quality_checkbox');
+    const videoProtocolCheckboxes = document.querySelectorAll('.video_protocol_checkbox');
+
+    let qualityParams = {};
+    let protocolParams = {};
+
+    videoQualityCheckboxes.forEach(checkbox => {
+      if (checkbox.checked) {
+        qualityParams[checkbox.id] = 1;
+      }
+    });
+
+    const qualityValue = calculateQualityValue(qualityParams);
+
+    videoProtocolCheckboxes.forEach(checkbox => {
+      if (checkbox.checked) {
+        protocolParams[checkbox.id] = 1;
+      }
+    });
+
+    const protocolValue = calculateProtocolValue(protocolParams);
+
+    const selectedFrameRate = document.querySelector('.frame_rates_radios:checked');
+    const frameRateValue = selectedFrameRate ? selectedFrameRate.value : '';
+    const frameRateEnumValue = calculateFrameRate(frameRateValue);
+
+    const configValue = `f${frameRateEnumValue}-p${protocolValue}-q${qualityValue}`;
+
+    document.getElementById('config').value = configValue;
+
+    return configValue;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('form-presignable');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const config = await calculateConfig();
+      console.log('Calculated Config:', config);
+    });
+  });
+</script>

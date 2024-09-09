@@ -1,0 +1,160 @@
+<% content_for :page_title do %>
+  <%= I18n.t('spree.billing.customers.customers') %>
+<% end %>
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:add_customer), new_billing_customer_path, class: "btn-success", icon: 'add.svg', id: 'admin_new_customer_link' %>
+<% end if spree_current_user.permissions.exists?(entry: 'spree/billing/customers', action: 'create') %>
+<% content_for :table_filter do %>
+  <div data-hook="admin_customers_index_search">
+    <%= search_form_for [:admin, @search], url: spree.billing_customers_path do |f| %>
+      <div class="row">
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :phone_number_cont, Spree.t(:phone_number) %>
+            <%= f.telephone_field :phone_number_cont, class: "form-control js-quick-search-target js-filterable" %>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <%= f.label :number_cont, Spree.t(:customer_number) %>
+          <div class="form-group input-group mb-3">
+            <%= f.text_field :number_cont, class: "form-control js-filterable" %>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :first_name_or_last_name_cont, Spree.t(:name) %>
+            <%= f.text_field :first_name_or_last_name_cont, class: 'form-control js-filterable' %>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :sequence_number_cont, Spree.t('billing.customer_id') %>
+            <%= f.text_field :sequence_number_cont, class: 'form-control js-filterable' %>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-lg-4">
+          <div class="form-group">
+            <%= f.label :place_id_eq, Spree.t('billing.place') %>
+            <%= f.collection_select(:place_id_eq, SpreeCmCommissioner::Place.all, :id, :name, { include_blank: true }, { class: "select2 form-control js-filterable" }) %>
+          </div>
+        </div>
+        <div class="col-12 col-lg-4">
+          <div class="form-group">
+            <%= f.label :taxons_id_eq, I18n.t(:business, scope: 'spree.billing') %>
+            <%= f.collection_select(:taxons_id_eq, @businesses, :id, :name, { include_blank: true }, { class: 'select2 form-control js-filterable' }) %>
+          </div>
+        </div>
+        <div class="col-12 col-lg-4">
+          <div class="form-group">
+            <%= f.label :status_eq, Spree.t(:status) %>
+            <%= f.select :status_eq, SpreeCmCommissioner::Customer.statuses.map { |key, value| [Spree.t(key), value] }, { include_blank: true }, { class: 'select2 form-control js-filterable' } %>
+          </div>
+        </div>
+      </div>
+      <div data-hook="admin_customers_index_search_buttons" class="form-actions">
+        <%= button Spree.t(:search), 'search.svg' %>
+      </div>
+    <% end %>
+    <%=  %>
+  </div>
+<% end %>
+<% if @customers.any? %>
+  <div class="table-responsive border rounded bg-white mb-3">
+    <table class="table" id="listing_customers" data-hook>
+      <thead class="text-muted">
+        <tr data-hook="admin_customers_index_headers">
+          <th>
+            <%= sort_link @search, :id, Spree.t(:id), {}, {title:"id_title"} %>
+          </th>
+          <th>
+            <%= sort_link @search, :full_name, Spree.t(:business_name), {}, {title: 'fullname_title'} %>
+          </th>
+          <th>
+            <%= sort_link @search, :phone_number, Spree.t(:phone_number), {}, {title: 'phone_number_title'} %>
+          </th>
+          <th>
+            <%= sort_link @search, :created_at, Spree.t(:created_at),{},{title:'created_at_title'} %>
+          </th>
+          <th>
+            <%= sort_link @search, :active_subscriptions_count, I18n.t("spree.billing.active_subscription"),{},{title:'active_subscriptions_count_title'} %>
+          </th>
+          <th>
+            <%=I18n.t("spree.billing.suspended") %>
+          </th>
+          <th>
+            <%= I18n.t("spree.billing.overdue") %>
+          </th>
+          <th>
+            <%= sort_link @search, :status, Spree.t("Status"), {}, {title: 'status_title'} %>
+          </th>
+          <th data-hook="admin_customers_index_header_actions" class="actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @customers.each do |customer| %>
+          <tr id="<%= spree_dom_id customer %>" data-hook="admin_customers_index_rows">
+            <td>
+              <%= link_to customer.customer_number, edit_billing_customer_path(customer) %>
+            </td>
+            <td>
+              <%= link_to customer.first_name, edit_billing_customer_path(customer) %>
+            </td>
+            <td>
+              <%= customer.phone_number %>
+            </td>
+            <td>
+              <%= customer.created_at.to_date %>
+            </td>
+            <td>
+              <% @badge_class = "badge-active" if customer.active_subscriptions_count > 0 %>
+              <% @badge_class = "badge-inactive" if customer.active_subscriptions_count == 0 %>
+              <%= content_tag(:strong, class: "badge #{@badge_class} ") do %>
+                <%= customer.active_subscriptions_count %>
+              <% end %>
+            </td>
+            <td>
+              <%= content_tag(:strong, class: "badge badge-danger ") do %>
+                <%= customer.suspended_subscriptions.count %>
+              <% end %>
+            </td>
+            <td>
+              <% if customer.overdue_subscriptions == 'none'  %>
+                <%= I18n.t('spree.none') %>
+              <% else %>
+                <%=link_to customer.overdue_subscriptions.number, edit_billing_order_path(customer.overdue_subscriptions)%>
+              <% end %>
+            </td>
+            <td>
+              <% if customer.active? %>
+                <%= content_tag(:strong, class: "badge badge-success") do %>
+                  <%= I18n.t('spree.active') %>
+                <% end %>
+              <% else %>
+                <%= content_tag(:strong, class: "badge badge-danger") do %>
+                  <%= I18n.t('spree.inactive') %>
+                <% end %>
+              <% end %>
+            </td>
+            <td data-hook="admin_customers_index_row_actions" class="actions">
+              <span class="d-flex justify-content-end">
+                <%= link_to_edit customer ,url: edit_billing_customer_path(customer) ,no_text: true if spree_current_user.permissions.exists?(entry: 'spree/billing/customers', action: 'edit') %>
+                <%= link_to_delete customer,url: billing_customer_path(customer), no_text: true if spree_current_user.permissions.exists?(entry: 'spree/billing/customers', action: ['destroy']) %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>
+<% end %>
+<% if @customers.empty? %>
+  <div class="text-center no-objects-found m-5">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(SpreeCmCommissioner::Customer)) %><% if spree_current_user.permissions.exists?(entry: 'spree/billing/customers', action: 'create') %>,
+      <%= link_to(Spree.t(:add_one), new_billing_customer_path) %>!<% end %>
+  </div>
+<% end %>

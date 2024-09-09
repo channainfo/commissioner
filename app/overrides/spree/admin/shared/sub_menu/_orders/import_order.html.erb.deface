@@ -1,0 +1,3 @@
+<!-- insert_bottom "[data-hook='admin_orders']" -->
+
+<%= tab :import_orders, selected: request.path.ends_with?('/import_new_orders'), url: admin_import_new_orders_path %>

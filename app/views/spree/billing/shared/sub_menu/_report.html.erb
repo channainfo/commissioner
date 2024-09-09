@@ -1,0 +1,20 @@
+<ul data-hook="billing_report_sidebar_menu" class="collapse nav nav-pills nav-stacked" id="sidebar-report">
+  <% if spree_current_user.permissions.exists?(entry: 'spree/billing/reports', action: 'paid') %>
+    <%= tab :paid_report, selected: request.path.ends_with?('/paid'), url: spree.paid_billing_reports_path, label: Spree.t('billing.payment_state.paid') %>
+  <% end %>
+  <% if spree_current_user.permissions.exists?(entry: 'spree/billing/reports', action: 'balance_due') %>
+    <%= tab :balance_due_report, selected: request.path.ends_with?('/balance_due'), url: spree.balance_due_billing_reports_path, label: Spree.t('billing.payment_state.balance_due') %>
+  <% end %>
+  <% if spree_current_user.permissions.exists?(entry: 'spree/billing/reports', action: 'overdue') %>
+    <%= tab :overdue_report, selected: request.path.ends_with?('/overdue'), url: spree.overdue_billing_reports_path, label: Spree.t('billing.payment_state.overdue') %>
+  <% end %>
+  <% if spree_current_user.permissions.exists?(entry: 'spree/billing/reports', action: 'failed_orders') %>
+    <%= tab :failed_orders, selected: request.path.ends_with?('/failed_orders'), url: spree.failed_orders_billing_reports_path, label: Spree.t('billing.payment_state.failed') %>
+  <% end %>
+  <% if spree_current_user.permissions.exists?(entry: 'spree/billing/reports', action:'active_subscribers') %>
+    <%= tab :active_subscribers_report, selected: request.path.ends_with?('/active_subscribers'), url: spree.active_subscribers_billing_reports_path, label: Spree.t('billing.active_subscribers') %>
+  <% end %>
+  <% if spree_current_user.permissions.exists?(entry: 'spree/billing/reports') %>
+    <%= tab :report, selected: request.path.ends_with?('/reports'), url: spree.billing_reports_path, label: Spree.t('billing.report') %>
+  <% end %>
+</ul>

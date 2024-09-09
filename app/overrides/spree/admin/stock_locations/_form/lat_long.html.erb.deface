@@ -1,0 +1,17 @@
+<!-- insert_before "[data-hook='stock_location_city']" -->
+<div class="form-group" data-hook="lat">
+  <%= f.label :lat, t("stock_location.lat.label") %>
+  <%= f.text_field :lat, class: 'form-control', placeholder: t("stock_location.lat.hint") %>
+</div>
+
+<div class="form-group" data-hook="lon">
+  <%= f.label :lon, t("stock_location.lon.label") %>
+  <%= f.text_field :lon, class: 'form-control', placeholder: t("stock_location.lon.hint") %>
+</div>
+
+<div class="form-group" data-hook="reference">
+  <%= f.label :reference, t("stock_location.reference.label") %>
+  <%= f.text_field :reference, class: 'form-control' %>
+</div>
+
+<%= render 'shared/map', lat: f.object.lat, lon: f.object.lon %>

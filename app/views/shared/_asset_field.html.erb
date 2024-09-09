@@ -1,0 +1,27 @@
+<%# :field, eg. :category_icon or :icon %>
+<%# :label, eg. 'Icon', Spree.t(:icon), I18n.t('icon.field') %>
+<%# :asset %>
+<%# :remove_url, optional %>
+<%# :classes, optional %>
+<%# :form %>
+<%# :required, optional, default: false %>
+
+<% @classes = ['rounded', 'border', 'p-3']  %>
+<% @classes = @classes + classes if defined?(classes) %>
+<% required = defined?(required) ? required : false %>
+<% required = false if asset.present? %>
+
+<%= form.field_container field, class: @classes do %>
+  <%= image_tag(main_app.rails_blob_url(asset.attachment),
+    class: 'rounded border mb-4 mw-100',
+    style: 'max-height: 100px') if asset.present? && asset.attachment.present? %>
+
+  <div data-hook="file" class="form-group">
+    <%= form.label field, label || Spree.t(field) %>
+    <%= form.file_field field, required: required %>
+  </div>
+
+  <% if asset.present? && defined?(remove_url) %>
+    <%= link_to Spree.t(:remove_image), remove_url, method: :delete %>
+  <% end %>
+<% end %>

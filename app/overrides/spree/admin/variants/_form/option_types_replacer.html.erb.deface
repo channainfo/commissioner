@@ -1,0 +1,3 @@
+<!-- insert_top "[data-hook='variants']" -->
+
+<%= render partial: 'spree/admin/variants/option_values', locals: { f: f } %>

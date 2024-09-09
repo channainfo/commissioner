@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        max-width: 600px;
+        color: #1c1b20;
+        font-family: Arial, sans-serif;
+      }
+      .pass {
+        background-color: white;
+        padding: 0 0 16px 0;
+      }
+      .banner {
+        width: 100%;
+        height: auto;
+      }
+      .details {
+        padding: 10px;
+      }
+      .details table {
+        width: 100%;
+        margin: 0px;
+      }
+      .details td {
+        font-size: 14px;
+        padding: 3px 0px;
+      }
+      .details td:nth-child(2) {
+        text-align: right;
+      }
+      .divider {
+        border-bottom: 1px solid #f2f2f2;
+        margin: 16px;
+      }
+      .qr-info-text {
+        font-size: 12px;
+        text-align: center;
+      }
+      .seat-number {
+        font-size: 14px;
+        font-weight: bold;
+        text-align: center;
+        margin: 4px 0px 6px 0px;
+      }
+      .qr-code {
+        text-align: center;
+      }
+      .qr-code img {
+        width: 108px;
+        height: 108px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="pass">
+      <!-- Banner -->
+      <img src="<%= banner_src %>" class="banner" alt="Event Banner" />
+
+      <!-- Event Details -->
+      <div class="details">
+        <table>
+          <tr>
+            <td>Date & Time</td>
+            <td><%= event_date %></td>
+          </tr>
+          <tr>
+            <td>Venue</td>
+            <td><%= venue %></td>
+          </tr>
+          <tr>
+            <td>Ticket Type</td>
+            <td><%= ticket_type %></td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Divider -->
+      <div class="divider"></div>
+
+      <!-- Ticket Info -->
+      <div class="qr-info-text">
+        This QR code is used for individual check-in
+      </div>
+      <div class="seat-number">No. <%= seat_number %></div>
+      <div class="qr-code"><img src="<%= guest_qr_src %>" alt="QR Code" /></div>
+    </div>
+  </body>
+</html>

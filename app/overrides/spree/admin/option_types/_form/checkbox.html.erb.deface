@@ -1,0 +1,23 @@
+<!-- insert_bottom "[data-hook='admin_option_type_form_fields']" -->
+
+<div class="col-12">
+  <div class="d-flex justify-content-start">
+    <span class="ml-2">
+      <%= f.field_container :promoted do %>
+        <%= f.label :promoted do %>
+          <%= f.check_box :promoted %>
+          <%= Spree.t(:promoted) %>
+        <% end %>
+      <% end %>
+    </span>
+    <span class="ml-2">
+      <%= f.field_container :hidden do %>
+        <%= f.label :hidden do %>
+          <%= f.check_box :hidden %>
+          <%= Spree.t(:hidden) %>
+        <% end %>
+      <% end %>
+    </span>
+  </div>
+</div>
+

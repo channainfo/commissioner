@@ -1,0 +1,92 @@
+@font-face {
+  font-family: "Tacteng";
+  src: url(asset-path("tacteng.ttf")) format('truetype');
+}
+@font-face {
+  font-family: "Moul-Regular";
+  src: url(asset-path("Moul-Regular.ttf")) format('truetype');
+}
+
+.moul {
+  font-family: 'Moul-Regular';
+  font-size: 16px;
+}
+.tacteng {
+  font-family: "Tacteng";
+  font-size: 35px;
+  margin: -15px 0 0 60px;
+}
+
+.serif {
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+}
+
+.invoice-content{
+  width: 1200px;
+  font-size: 13px;
+  margin: auto;
+}
+
+.border-black {
+  border-color: black !important;
+}
+
+.border-black th,
+.border-black td {
+    border-color: black !important;
+}
+
+.vendor-logo {
+  filter: grayscale(100%);
+}
+
+@media print {
+
+  body {
+    visibility: hidden;
+  }
+  .print-area * {
+    visibility: visible;
+  }
+  .invoice-content {
+    margin-top: -220px;
+  }
+
+  .page-break {
+    margin-top: 100px;
+  }
+
+  .header-content {
+    margin-top: 40px;
+  }
+
+  .moul {
+    font-family: 'Moul-Regular';
+    font-size: 20px;
+    line-height: 1.5;
+  }
+
+  .sub-header-size {
+    font-size: 18px;
+  }
+
+  .li-spacing {
+    line-height: 2;
+  }
+
+  .body-size {
+    font-size: 16px;
+  }
+
+  .footer-size {
+    font-size: 16px;
+  }
+
+  .footer-content {
+    position: fixed;
+    bottom: 0;
+    width: 92%;
+    padding-bottom: 30px;
+  }
+}

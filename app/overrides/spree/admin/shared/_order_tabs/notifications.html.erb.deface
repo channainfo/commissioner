@@ -1,0 +1,8 @@
+<!-- insert_after "erb[silent]:contains('Spree::CustomerReturn')" -->
+
+<li class="nav-item" data-hook='admin_order_tabs_notifications'>
+  <%= link_to_with_icon 'send-check-fill.svg',
+    Spree.t(:notification).pluralize,
+    notifications_admin_order_url(@order),
+    class: "#{'active' if current == :notifications} nav-link" %>
+</li>

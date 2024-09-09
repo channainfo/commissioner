@@ -1,0 +1,18 @@
+<!-- insert_after "erb[silent]:contains('Spree::Image')" -->
+
+  <% if @product.use_video_as_default %>
+    <% if (SpreeCmCommissioner::VideoOnDemand.where(variant_id: @product.master_id).to_a).any? %>
+      <%= link_to_with_icon 'collection-play.svg', Spree.t(:videos),
+      admin_product_video_on_demands_url(@product),
+      class: "nav-link #{'active' if current == :video_on_demand}" %>
+    <% else %>
+      <%= link_to_with_icon 'collection-play.svg', Spree.t(:videos),
+        admin_product_video_on_demands_url(@product),
+        class: "nav-link #{'active text-white' if current == :video_on_demand} #{'text-danger' unless current == :video_on_demand}" %>
+      <% end %>
+  <% else %>
+      <%= link_to_with_icon 'collection-play.svg', Spree.t(:videos),
+      admin_product_video_on_demands_url(@product),
+      class: "nav-link #{'active' if current == :video_on_demand}" %>
+  <% end %>
+

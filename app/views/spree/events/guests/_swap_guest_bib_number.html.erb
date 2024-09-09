@@ -1,0 +1,18 @@
+<div class="card mb-3">
+  <div class="card-body">
+  <h5 class="card-title"><%= Spree.t(:guest_bib_number) %></h5>
+    <% if @guest.bib_prefix.present? %>
+        <p class="card-text">Current Guest BIB Number: <span class='font-weight-bold'><%= @guest.formatted_bib_number %></span></p>
+        <div>
+          <%= form_with(url: swap_guest_bib_number_event_guest_path, method: :patch) do |f| %>
+            <%= f.label :bib_number, Spree.t(:swap_bib_number) %>
+            <%= f.select :target_guest_id, @filtered_guests.select { |guest| guest.bib_number.present? }.map { |guest| [guest.formatted_bib_number, guest.id] }, { include_blank: true }, class: 'form-control fullwidth select2' %>
+            <%= f.submit "Swap BIB", class: "btn btn-outline-primary mt-3" %>
+          <% end %>
+        </div>
+    <% else %>
+      <p class="card-text">Current Guest BIB Number: <span class='font-weight-bold'><%= Spree.t(:no_bib_number) %></span></p>
+      <%= button_link_to Spree.t('generate_bib_number'), generate_guest_bib_number_event_guest_path, method: :post, class: "btn btn-outline-primary", icon: 'add.svg' %>
+    <% end %>
+  </div>
+</div>

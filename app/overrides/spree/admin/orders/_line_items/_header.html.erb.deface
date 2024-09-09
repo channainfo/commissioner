@@ -1,0 +1,10 @@
+<!-- replace ".card-header" -->
+
+<div class="card-header d-flex justify-content-between align-items-center">
+  <h5 class="card-title mb-0 h6">
+    <%= Spree.t(:order_line_items) %>
+  </h5>
+  <div class="page-actions d-flex justify-content-center flex-wrap">
+    <%= event_links(@order, [:accept_all, :reject_all]) %>
+  </div>
+</div>

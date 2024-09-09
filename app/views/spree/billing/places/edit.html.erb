@@ -1,0 +1,12 @@
+<% content_for :page_title do %>
+  <%= @place.name %>
+<% end %>
+
+<div class="billing_order_edit_form">
+  <%= form_with model: @object, url: { action: 'update'} do |f| %>
+    <%= render partial: 'form', locals: {f: f} %>
+    <div data-hook="admin_order_edit_form_button">
+      <%= render partial: 'spree/admin/shared/edit_resource_links', locals: { collection_url: spree.billing_places_path } %>
+    </div>
+  <% end %>
+</div>

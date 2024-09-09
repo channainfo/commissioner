@@ -1,0 +1,14 @@
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :video_on_demand } %>
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+<%= form_with model: @object, url: { action: 'create' },
+id: "form-presignable",
+data: { presigned_url:  admin_s3_presigned_urls_path() } do |f| %>
+  <div class="card mb-3">
+    <div class="card-body">
+      <div data-hook="admin_variant_video_on_demand_new_form">
+        <%= render partial: 'form', locals: { f: f } %>
+        <%= render partial: 'spree/admin/shared/new_resource_links' %>
+      </div>
+    </div>
+  </div>
+<% end %>

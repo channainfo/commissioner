@@ -1,0 +1,18 @@
+<% today = Time.zone.today %>
+
+<div>
+  <div class="form-group">
+    <%= label_tag 'new_custom_date_title', 'Title' %>
+    <%= text_field_tag 'new_custom_date[title]', '', placeholder: 'Khmer New Year...', required: true, class: 'form-control' %>
+  </div>
+  <div class="d-flex">
+    <div class="form-group col-md-8 p-0 mr-3">
+      <%= label_tag 'new_custom_date_start_date', 'Start Date' %>
+      <%= date_field_tag 'new_custom_date[start_date]', Date.new(year, today.month, today.day), class: 'form-control bg-transparent' %>
+    </div>
+    <div class="form-group col-md-3 p-0">
+      <%= label_tag 'new_custom_date_length', 'Length' %>
+      <%= number_field_tag 'new_custom_date[length]', 1, min: 1, required: true, class: 'form-control' %>
+    </div>
+  </div>
+</div>

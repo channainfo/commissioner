@@ -1,0 +1,11 @@
+<% args = params.clone %>
+<div class="row index-pagination-row mt-4">
+  <div class="col-12 col-sm-9 text-center text-sm-left">
+    <%= paginate @guests, theme: 'admin-twitter-bootstrap-4' %>
+  </div>
+  <div class="col-12 col-sm-3 text-center text-sm-left">
+    <%= form_tag(per_page_dropdown_params(args), { method: :get, class: 'js-per-page-form form-inline justify-content-center justify-content-sm-end' }) do %>
+        <%= customer_per_page_dropdown %>
+      <% end %>
+  </div>
+</div>

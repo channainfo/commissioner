@@ -1,0 +1,241 @@
+ <%
+  @vendor = @invoice.order.line_items.first.vendor
+  @address =  @vendor.stock_locations.first&.address1
+  @location_code = @vendor.stock_locations.first&.reference
+  @title = 'VET WASTE KOH RONG CO., LTD.'
+  @title_translation = 'ក្រុមហ៊ុនវិរៈប៊ុនថាំ ប្រមូលសំរាមក្រុងកោះរ៉ុង'
+  @contact =  @vendor.contact_us
+  @email =  @vendor.notification_email
+  @note =  @vendor.note
+  @invoice_title = 'Solid Waste Collection Service Invoice'
+  @invoice_title_translation = 'វិក័្កយបត្រថ្លៃសេវាដឹកជញ្ជូនសំរាម'
+
+  @quantity = @subscription.quantity
+  @product = @invoice.order.line_items.first.variant.sku
+  @sum_total = 0
+  @invoice.order.line_items.each do |line_item|
+    @price = line_item.variant.price
+    @sum_total += line_item.variant.price * line_item.quantity
+  end
+  @total_price = @sum_total
+  @order.adjustments.eligible.each do |adjustment|
+    @total_price += adjustment.amount
+  end
+  @total_price = Spree::Money.new(@total_price, currency: @order.line_items.first.variant.currency).to_s
+  @total = @invoice.order.display_total
+  @from_date = @invoice.order.line_items.first.to_date.strftime("%B %Y")
+  @date = @invoice.date.strftime('%Y-%m-%d')
+  @due_date = @order.line_items[0].due_date&.to_date
+
+  @invoice_number = @invoice.invoice_number
+  @customer_number = @customer.customer_number
+  @customer_address = @customer.billing_address&.address1
+  if @current_vendor.payment_qrcode.present?
+    @qrcode = payment_qrcode_image(@current_vendor.payment_qrcode.attachment)
+    @account_name = @current_vendor.account_name
+    @account_number = @current_vendor.account_number
+  end
+  @customer_name = @customer.first_name.present? ? @customer.first_name : @customer.last_name
+  @customer_phone = @customer.phone_number
+  count = 1
+%>
+
+
+<div class="flex align-items-center w-100 mt-3">
+  <div class="invoice-content card p-5 invoice-content">
+    <div class="print-area">
+      <div class="header-content">
+        <div class="d-flex justify-content-center">
+          <div class="text-center moul">
+              <h4 class="ml-4" style="font-size: 125%;">ព្រះរាជាណាចក្រកម្ពុជា</h4>
+              <h4 class="ml-4" style="font-size: 125%;">ជាតិ​​ សាសនា ព្រះមហាក្សត្រ</h4>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="vendor-logo col-2">
+            <%= render partial: 'spree/billing/shared/vendor_logo', locals: { size: :small } %>
+          </div>
+          <div class="text-center flex-grow-1 col-8">
+            <h5 class="pt-0 moul"><%= @title_translation %></h5>
+            <h5 class="pt-0 serif"><%= @title %></h5>
+            <h5 class="pt-0 moul"><%= @invoice_title_translation %></h5>
+            <h5 class="pt-0 serif"><%= @invoice_title %></h5>
+          </div>
+          <div class="col-2">
+          </div>
+        </div>
+
+        <br>
+        <div class="d-flex justify-content-between">
+          <div>
+            <ul class="list-unstyled sub-header-size li-spacing">
+              <li>
+                <span> លេខអតិថិជន / Customer No : </span>
+                <%= @customer_number %>
+              </li>
+              <li>
+                <span>ឈ្មោះអតិថិជន / Customer Name :</span>
+                <%= @customer_name %>
+              </li>
+              <li>
+                <span>លេខទូរស័ព្ទអតិថិជន / Customer Phone Number :</span>
+                <%= @customer_phone %>
+              </li>
+              <li>
+                <div> អាសយដ្ធានអតិថិជន​ / Customer Address :</div>
+                <%= @customer_address %>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <ul class="list-unstyled sub-header-size li-spacing">
+              <li>
+                <span>លេខវិក្កយបត្រ​​ / Invoice No :</span>
+                <strong> <%= @invoice_number %> </strong>
+              </li>
+              <li>
+                <span>កាលបរិច្ចេទ / Invoice Date : </span>
+                <%= @date %>
+              </li>
+              <li>
+                <span> ថ្ងៃផុតកំណត់បង់ប្រាក់ / Invoice Due Date : </span>
+                <%= @due_date %>
+              </li>
+              <li>
+                <span>លេខកូខទីតាំង / Loc code : </span>
+                <%= @location_code %>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      <br>
+      <table class="table table-bordered border border-black mt-2 body-size">
+        <thead>
+          <tr>
+            <th scope="col">ល.រ​​​ / N</th>
+            <th scope="col">បរិយាយ / Description</th>
+            <th scope="col">ប្រចាំខែ / Month</th>
+            <th scope="col">ទឹកប្រាក់​ / Amount</th>
+            <th scope="col">ចំនួន / Quantity</th>
+            <th scope="col text-right">ទឹកប្រាក់​សរុប / Total Amount</th>
+          </tr>
+        </thead>
+        <tbody class="list-unstyled">
+          <% @invoice.order.line_items.each do |line_item| %>
+            <tr>
+              <th scope="row"><%= count %></th><% count += 1 %>
+              <td>
+                <ul class="list-unstyled">
+                  <li> <%= line_item.variant.sku %></li>
+                </ul>
+              </td>
+              <td>
+                <ul class="list-unstyled">
+                    <li> <%= line_item.month %></li>
+                </ul>
+              </td>
+              <td>
+                <ul class="list-unstyled">
+                  <li>
+                    <%= Spree::Money.new(line_item.variant.price, currency: @invoice.order.line_items.first.variant.currency).to_s %>
+                  </li>
+                </ul>
+              </td>
+              <td>
+                <ul class="list-unstyled">
+                  <li> <%= line_item.quantity %></li>
+                </ul>
+              </td>
+              <td>
+                <ul class="list-unstyled text-right">
+                  <li><%= Spree::Money.new(line_item.variant.price * line_item.quantity, currency: @invoice.order.line_items.first.variant.currency).to_s %></li>
+                </ul>
+              </td>
+            </tr>
+          <% end %>
+            <% @order.adjustments.eligible.each do |adjustment|  %>
+              <tr>
+                <th scope="row"><%= count %></th><% count += 1 %>
+                <td>
+                  <ul class="list-unstyled">
+                    <li> <%= adjustment.label %></li>
+                  </ul>
+                </td>
+                <td></td>
+                <td>
+                  <ul class="list-unstyled">
+                    <li>
+                    </li>
+                  </ul>
+                </td>
+                <td>
+                </td>
+                <td>
+                  <ul class="list-unstyled text-right">
+                    <li>
+                      <% if adjustment.amount.negative?  %>
+                        <%= adjustment.display_negative_amount %>
+                      <% else %>
+                        <%= adjustment.display_amount %>
+                      <% end %>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+
+        <div class="mt-2 body-size">
+          <div class="d-flex justify-content-between align-items-center pt-3 px-2 border border-black font-weight-bold text-black">
+                <p>ទឹកប្រាក់​ត្រូវទូទាត់​​ / Total Amount due</p>
+                <p>
+                  <%= @total_price %>
+                </p>
+          </div>
+          <div class="d-flex justify-content-between align-items-center pt-3 px-2 border border-black font-weight-bold text-black">
+                <p> អត្រាប្ដូរប្រាក់ / Exchange Rate 1$ = 4100៛</p>
+          </div>
+        </div>
+          <br>
+        <div class="d-flex align-items-start body-size">
+          <div class="p-0 col-8 list-unstyled">
+            <li><span>កំណត់ចំណាំសំខាន់ / Important Note :</span></li>
+            <li><%= @note %></li>
+          </div>
+          <div class="ml-auto  qrcode-container">
+            <%= @qrcode %>
+            <div class="list-unstyled text-center">
+              <li><span><%= @account_name %></span></li>
+              <li><span><%= @account_number %></span></li>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-content footer-size">
+        <div class="d-flex justify-content-between mt-4">
+          <div class="text=left">
+            <p>អ្នកទទួលប្រាក់​​ / Received By : ............................. </p>
+            <p>កាលបរិច្ចេទ / Date : ............................. </p>
+          </div>
+          <div class="text-right">
+            <p>ទឹកប្រាក់​បានបង់ / Paid Amount : ............................. </p>
+            <p>កាលបរិច្ចេទ / Date : .............................  </p>
+          </div>
+        </div>
+        <br>
+        <hr>
+        <div class="d-flex justify-content-center mt-4">
+          <div class="list-unstyled text-center">
+            <li> អាសយដ្ធាន / Address : ផ្លូវឯករាជ្យ ក្រុមទី៣ សង្កាត់២ ក្រុង ព្រះសីហនុ ខេត្តក្រោះសីហនុ  </li>
+            <li> St. Ek Reach, Krom Ti 3, Sangkat 2, Preah Sihanouk City, Sihanouk Ville. </li>
+            <li>ទំនាក់ទំនង / Contact : 099 766 593 / Telegram: 099 766 593 </li>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>

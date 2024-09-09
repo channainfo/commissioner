@@ -1,0 +1,7 @@
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :google_wallet } %>
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+
+<%= form_with model: @object, url: { action: 'create' } do |f| %>
+  <%= render partial: 'form', locals: { f: f } %>
+  <%= render partial: 'spree/admin/shared/new_resource_links' %>
+<% end %>

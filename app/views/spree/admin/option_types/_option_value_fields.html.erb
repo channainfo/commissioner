@@ -1,0 +1,43 @@
+<%# overrided %>
+
+<tr class="option_value fields" id="spree_<%= dom_id(f.object) %>" data-hook="option_value">
+  <td class="move-handle text-center">
+    <%= svg_icon name: "sort.svg", width: '18', height: '18' %>
+    <%= f.hidden_field :id %>
+  </td>
+
+  <% case @option_type.attr_type %>
+  <% when "float" %>
+    <td class="name"><%= f.number_field :name, step: :any, class: "form-control", required: true %></td>
+  <% when "integer" %>
+    <td class="name"><%= f.number_field :name, step: 1, class: "form-control", required: true %></td>
+  <% when "string" %>
+    <td class="name"><%= f.text_field :name, class: "form-control", required: true %></td>
+  <% when "boolean" %>
+    <td class="name"><%= f.select :name, [['Yes', '1'], ['No', '0']], { include_blank: true } , class: "form-control", required: true %></td>
+  <% when "array" %>
+    <td class="name"><%= render partial: 'array_field', locals: { f: f } %></td>
+  <% when "date" %>
+    <td class="name"><%= render partial: 'date_field', locals: { f: f } %></td>
+  <% when "time" %>
+    <td class="name w-25"><%= render partial: 'time_field', locals: { f: f } %></td>
+  <% when "coordinate" %>
+    <td class="name"><%= render partial: 'coordinate_field', locals: { f: f } %></td>
+  <% when "state_selection" %>
+    <td class="name">
+      <%= f.select :name, Spree::Country.default.states.map { |state| [state.name, state.id] }, { include_blank: true, required: true }, { class: 'form-control' } %>
+    </td>
+  <% when "payment_option" %>
+    <td class="name"><%= f.select :name, ['post-paid', 'pre-paid'], { include_blank: true } , class: "form-control fullwidth", required: true %></td>
+  <% when "delivery_option" %>
+    <td class="name"><%= f.select :name, [:delivery, :pickup], { include_blank: true } , class: "form-control fullwidth", required: true %></td>
+  <% end %>
+
+  <td class="presentation"><%= f.text_field :presentation, class: "form-control", required: true %></td>
+
+  <td class="actions">
+    <span class="d-flex justify-content-end">
+      <%= link_to_icon_remove_fields f %>
+    </span>
+  </td>
+</tr>

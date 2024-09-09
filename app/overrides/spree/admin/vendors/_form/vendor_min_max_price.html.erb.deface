@@ -1,0 +1,11 @@
+<!-- insert_before "erb[loud]:contains('field_container :state')" -->
+
+<%= f.field_container :min_price do %>
+  <%= f.label :min_price %>
+  <%= f.number_field :min_price, :class => "form-control" %>
+<% end %>
+
+<%= f.field_container :max_price do %>
+  <%= f.label :max_price %>
+  <%= f.number_field :max_price, :class => "form-control" %>
+<% end %>

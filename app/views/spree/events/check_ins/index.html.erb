@@ -1,0 +1,59 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:check_in_guests) %>
+<% end %>
+
+<% if @collection.any? %>
+<div class="table-responsive border rounded bg-white">
+  <table class="table" id="listing_products">
+    <thead class="text-muted">
+      <tr data-hook="admin_products_index_headers">
+        <th scope="col" class="text-left"><%= Spree.t(:full_name) %></th>
+        <th scope="col" class="text-left"><%= Spree.t(:verification_state) %></th>
+        <th scope="col" class="text-left"><%= Spree.t(:check_in_type) %></th>
+        <th scope="col" class="text-left"><%= Spree.t(:entry_type) %></th>
+        <th scope="col" class="text-left"><%= Spree.t(:check_in_method) %></th>
+        <th scope="col" class="text-left"><%= Spree.t(:check_in_by) %></th>
+        <th scope="col" class="text-left"><%= Spree.t(:confirmed_at) %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @collection.each do |check_in| %>
+        <tr data-hook="event_check_ins_index_rows">
+          <td class="text-left">
+            <%= check_in.guest.full_name %>
+          </td>
+          <td class="text-left">
+            <%= check_in.verification_state.titleize %>
+          </td>
+          <td class="text-left">
+            <%= content_tag(:strong, class: "badge #{badge_color_base_on_check_in_type(check_in.check_in_type)} font-weight-bold uppercase") do %>
+              <%= check_in.check_in_type.titleize %>
+            <% end %>
+          </td>
+          <td class="text-left">
+            <%= content_tag(:strong, class: "badge #{badge_color_base_on_entry_type(check_in.guest.entry_type)} font-weight-bold uppercase") do %>
+              <%= SpreeCmCommissioner::CheckIn.entry_types.key(check_in.guest.entry_type).titleize %>
+            <% end %>
+          </td>
+          <td class="text-left">
+            <%= content_tag(:strong, class: "badge #{badge_color_base_on_check_in_method(check_in.check_in_method)} font-weight-bold uppercase") do %>
+              <%= check_in.check_in_method.titleize %>
+            <% end %>
+          </td>
+          <td class="text-left">
+            <%= check_in.check_in_by.full_name %>
+          </td>
+          <td class="text-left">
+            <%= check_in.confirmed_at %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>
+<% else %>
+  <div class="text-left no-objects-found m-5">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(SpreeCmCommissioner::CheckIn)) %>
+  </div>
+<% end %>

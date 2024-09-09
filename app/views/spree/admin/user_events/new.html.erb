@@ -1,0 +1,5 @@
+<% if @taxon.present? && @taxonomy.present? %>
+  <%= render partial: 'new_user', locals: { user_events: @user_events, taxon: @taxon, taxonomy: @taxonomy } %>
+<% else %>
+  <%= render partial: 'new_event', locals: { user: @user } %>
+<% end %>

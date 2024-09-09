@@ -1,0 +1,48 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.telegram.org/botthis-is-bot-token/sendMessage
+    body:
+      encoding: UTF-8
+      string: chat_id=734348432&parse_mode=HTML&text=%3Cb%3EOrder+Summary%3C%2Fb%3E%0A%0AOrder+Number%3A%0A%3Ccode%3ER855191219%3C%2Fcode%3E%0A%0A%3Cb%3EProduct+17503%3C%2Fb%3E%0AQuantity%3A+1%0A%0A%3Cb%3E%F0%9F%99%8D+Customer+Info%3C%2Fb%3E%0AName%3A+John+Doe%0ATel%3A+%3Ccode%3E%3C%2Fcode%3E%0AEmail%3A+%3Ccode%3Ecyril%40hansenkuhn.ca%3C%2Fcode%3E%0A
+    headers:
+      User-Agent:
+      - HTTPClient/1.0 (2.8.3, ruby 3.2.0 (2022-12-25))
+      Accept:
+      - "*/*"
+      Date:
+      - Sat, 31 Aug 2024 06:37:49 GMT
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.18.0
+      Date:
+      - Sat, 31 Aug 2024 06:37:56 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '633'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Expose-Headers:
+      - Content-Length,Content-Type,Date,Server,Connection
+    body:
+      encoding: UTF-8
+      string: '{"ok":true,"result":{"message_id":4996,"from":{"id":6441690414,"is_bot":true,"first_name":"Contigo
+        Asia","username":"contigoasiabot"},"chat":{"id":734348432,"first_name":"Thea","last_name":"Choem","username":"theachoem","type":"private"},"date":1725086276,"text":"Order
+        Summary\n\nOrder Number:\nR855191219\n\nProduct 17503\nQuantity: 1\n\n\ud83d\ude4d
+        Customer Info\nName: John Doe\nTel: \nEmail: cyril@hansenkuhn.ca","entities":[{"offset":0,"length":13,"type":"bold"},{"offset":29,"length":10,"type":"code"},{"offset":41,"length":13,"type":"bold"},{"offset":68,"length":16,"type":"bold"},{"offset":113,"length":19,"type":"code"}]}}'
+  recorded_at: Sat, 31 Aug 2024 06:37:56 GMT
+recorded_with: VCR 6.2.0

@@ -1,0 +1,44 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:vectors) %>
+<% end %>
+<%= render partial: 'spree/admin/shared/vectors_tabs', locals: { current: :icons } %>
+<% content_for :page_tabs do %>
+  <% SpreeCmCommissioner::VectorIcon::TYPES.each do |path_prefix| %>
+    <li class="nav-item">
+      <% default_params = { path_prefix: path_prefix, extension: '', page: 1, per_page: params[:per_page], query: '' } %>
+      <% selected = params[:path_prefix] == path_prefix %>
+      <% overrided_params = selected ? default_params : params.merge(default_params).permit(default_params.keys) %>
+      <%= link_to path_prefix.humanize.upcase, overrided_params, class: "nav-link #{'active' if selected}" %>
+    </li>
+  <% end  %>
+<% end  %>
+<small class="form-text text-muted">
+  <ul>
+    <% allow_extensions = SpreeCmCommissioner::VectorIcon::ACCEPTED_EXTENSIONS.to_sentence %>
+    <li><%= raw I18n.t('vectors.icons.info_rules', allow_extensions: allow_extensions) %></li>
+    <li><%= raw I18n.t('vectors.icons.total', total_in_page: @collection.size, total_count: @collection.total_count) %></li>
+  </ul>
+</small>
+<div class="table-responsive">
+  <table class="table">
+    <tbody class="pb-3">
+      <% @collection.each_slice(4).each do |page| %>
+        <tr>
+          <% page.each do |vector_icon| %>
+            <td onclick="navigator.clipboard.writeText('<%= vector_icon.path %>');
+                    show_flash('success', '<%= vector_icon.path + ' copied' %>')">
+              <div class="d-flex align-items-center justify-content-left" >
+                <%= render_vector_icon vector_icon.path %>
+                <label class="ml-2 mr-2" ><%= vector_icon.icon_name %></label>
+              </div>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+      <tr>
+        <td colspan=3></td>
+      </tr>
+    </tbody>
+  </table>
+  <%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>
+</div>

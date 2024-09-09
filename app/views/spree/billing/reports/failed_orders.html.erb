@@ -1,0 +1,58 @@
+<% content_for :page_title do %>
+  <%= Spree.t('billing.voided_orders') %>
+<% end %>
+<% content_for :sidebar do %>
+  <div data-hook="billing_report_index_search">
+    <%= search_form_for [:billing, @search], url: spree.balance_due_billing_reports_path do |f| %>
+      <div class="form-group">
+        <%= f.label :line_items_from_date_gteq, I18n.t(:start_date_range, scope: 'activerecord.attributes.spree/order') %>
+        <%= f.date_field :line_items_from_date_gteq, class: 'form-control js-quick-search-target js-filterable datepicker', data: {behavior: 'datepicker', format: 'yyyy-mm-dd'}, placeholder: 'Select Date' %>
+      </div>
+      <div class="form-group">
+        <%= f.date_field :line_items_from_date_lteq, class: 'form-control js-quick-search-target js-filterable datepicker', data: {behavior: 'datepicker', format: 'yyyy-mm-dd'}, placeholder: 'Select Date' %>
+      </div>
+      <div class="form-actions">
+        <%= button Spree.t(:search), 'search.svg', nil, { class: 'btn-outline-primary' } %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+<% unless @orders.empty? %>
+  <div class="table-responsive border rounded bg-whit mb-3">
+    <table class="table" id="listing_subscriptions">
+      <thead class="text-muted">
+        <tr data-hook="admin_subscriptions_index_headers">
+          <th><%= sort_link @search, :invoice_invoice_number, I18n.t(:number, scope: 'activerecord.attributes.spree/order') %></th>
+          <th><%= sort_link @search, :start_date, I18n.t(:start_date, scope: 'activerecord.attributes.spree/order') %></th>
+          <th><%= sort_link @search, :created_at, I18n.t(:created_at, scope: 'activerecord.attributes.spree/order') %></th>
+          <th><%= I18n.t(:phone_number, scope: 'activerecord.attributes.spree/order') %></th>
+          <th><%= I18n.t(:payment_state, scope: 'activerecord.attributes.spree/order') %></th>
+          <th><%= sort_link @search, :total, I18n.t(:total, scope: 'activerecord.attributes.spree/order') %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @orders.each do |order| %>
+          <tr id="<%= spree_dom_id order %>" data-hook="admin_subscriptions_index_rows">
+            <td><%= link_to order.invoice&.invoice_number, edit_billing_order_path(order) %></td>
+            <td><%= order.line_items[0].from_date.to_date %></td>
+            <td><%= order.created_at.to_date %></td>
+            <td><%= order.customer&.phone_number %></td>
+            <td class="no-wrap">
+              <% if order.payment_state %>
+                <%= link_to I18n.t("spree.billing.payment_state.#{order.payment_state}"),
+                  admin_order_payments_path(order),
+                  class: "badge badge-pill badge-#{order.payment_state}" %>
+              <% end %>
+            </td>
+            <td><%= order.display_total.to_html %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @orders } %>
+<% else %>
+  <div class="text-center no-objects-found m-5">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree::Order)) %>
+  </div>
+<% end %>

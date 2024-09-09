@@ -1,0 +1,38 @@
+<!-- replace "[data-hook='admin_products_index_rows']" -->
+
+<tr <%== "style='color: red;'" if product.deleted? %> id="<%= spree_dom_id product %>" data-hook="admin_products_index_rows" class="<%= cycle('odd', 'even') %>">
+  <td scope="row" class="image">
+    <%= link_to edit_admin_product_path(product) do %>
+      <%= small_image product %>
+    <% end %>
+  </td>
+  <td>
+    <%= link_to product.name, edit_admin_product_path(product) %>
+    <br />
+    <small><%= product.sku rescue '' %></small>
+  </td>
+  <% if defined?(Spree::Vendor) && can?(:manage, Spree::Vendor) %>
+    <td class="text-center">
+      <%= link_to product.vendor.name, spree.edit_admin_vendor_path(product.vendor_id) if product.vendor.present? %>
+    </td>
+  <% end %>
+  <td class="text-center">
+    <span class="badge badge-pill badge-light">
+      <% if product.digital? %>
+        <%= Spree.t('admin.product_kinds.digital') %>
+      <% else %>
+        <%= Spree.t('admin.product_kinds.physical') %>
+      <% end %>
+    </span>
+  </td>
+  <td class="status text-center"><%= active_badge(available_status == Spree.t('admin.product.active'), label: available_status) %></td>
+  <td class="text-center"><%= display_price(product) %></td>
+
+  <td class="actions " data-hook="admin_products_index_row_actions">
+    <span class="d-flex justify-content-end">
+      <%= link_to_edit product, no_text: true, class: 'edit' if can?(:edit, product) && !product.deleted? %>
+      <%= link_to_clone product, no_text: true, class: 'clone' if can?(:clone, product) %>
+      <%= link_to_delete product, no_text: true if can?(:delete, product) && !product.deleted? %>
+    </span>
+  </td>
+</tr>

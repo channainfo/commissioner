@@ -1,0 +1,37 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="form-group row">
+          <% SpreeCmCommissioner::Guest.csv_importable_columns.each do |column| %>
+              <div class="col-12 col-lg-6">
+                <%= f.field_container column do %>
+                  <%= f.label column %>
+                  <%= f.text_field column, class: 'form-control', readonly: true %>
+                <% end %>
+              </div>
+          <% end %>
+
+          <div class="col-12 col-lg-6">
+            <%= f.label :id_card_card_type_eq, Spree.t(:card_type) %>
+            <%= f.text_field :id_card_card_type_eq, class: 'form-control', value: @guest.id_card&.try(:card_type)&.titleize, readonly: true %>
+          </div>
+
+          <div class="col-12 col-lg-6">
+            <%= f.field_container :entry_type do %>
+              <%= f.label :entry_type %>
+              <% SpreeCmCommissioner::CheckIn.entry_types.map do |k, v| %>
+                <div class="radio" data-id="<%= k.to_s %>">
+                  <label data-hook="entry_type_field">
+                    <%= f.radio_button :entry_type, v, class: "entry_types_radios" %>
+                    <%= k.to_s.capitalize %>
+                  </label>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

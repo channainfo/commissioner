@@ -1,0 +1,26 @@
+<!-- replace "[data-hook='admin_users_index_headers']" -->
+
+  <tr data-hook="admin_users_index_headers">
+    <th>
+      <%= sort_link @search, :email, Spree.t(:email), {}, {title: 'users_email_title'} %>
+    </th>
+    <th>
+      <%= sort_link @search, :first_name, Spree.t(:first_name), {}, {title: 'first_name_title'} %>
+    </th>
+    <th>
+      <%= sort_link @search, :last_name, Spree.t(:last_name), {}, {title: 'last_name_title'} %>
+    </th>
+    <th>
+      <%= sort_link @search, :gender, Spree.t(:gender), {}, {title: 'gender_title'} %>
+    </th>
+    <th>
+      <%= sort_link @search, :Roles, Spree.t(:roles), {}, {title: 'roles_title'} %>
+    </th>
+     <th>
+      <%= sort_link @search, :phone_number,  I18n.t('activerecord.attributes.spree/order.phone_number'), {}, {title: 'phone_number_title'} %>
+    </th>
+    <th>
+      <%= sort_link @search, :created_at, Spree.t(:create_at), {}, {title: 'create_at_title'} %>
+    </th>
+    <th data-hook="admin_users_index_header_actions" class="actions"></th>
+  </tr>

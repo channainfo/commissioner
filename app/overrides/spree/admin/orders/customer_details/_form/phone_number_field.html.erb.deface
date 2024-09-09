@@ -1,0 +1,9 @@
+<!-- insert_bottom "[data-hook='customer_fields']" -->
+  <div class="col-12 col-lg-8">
+    <%= f.label :phone_number, Spree.t(:phone_number) %>
+      <% if can? :edit, @order.user %>
+        <%= f.phone_field :phone_number, class: 'form-control' %>
+      <% else %>
+        <p><%= @order.user.try(:phone_number) || @order.phone_number %></p>
+    <% end %>
+  </div>

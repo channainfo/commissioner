@@ -1,0 +1,37 @@
+<%= render partial: 'spree/admin/shared/vendor_tabs', locals: {current: :nearby_places} %>
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+<%= render 'shared/map', lat: @vendor.lat, lon: @vendor.lon %>
+<div class="row">
+  <div class="col-9 col-md-10">
+    <div class="form-group">
+      <input placeholder="search by name" type="text" id="name" name="name" class="form-control" value="<%= @name %>">
+    </div>
+  </div>
+  <div class="col-3 col-md-2">
+    <button type="button" id="search" class="btn btn-primary">Search</button>
+  </div>
+</div>
+<% unless @nearby_places.empty? %>
+  <%= render partial: 'form' %>
+<% else %>
+  <small class="form-text text-muted">
+    <%= raw I18n.t('nearby_place.empty_info') %>
+  </small>
+<% end %>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('search').addEventListener('click', function() {
+      var nameInput = document.getElementById('name');
+      var nameValue = nameInput.value;
+
+      if (nameValue) {
+        var newUrl = window.location.origin + window.location.pathname +"?name="+ encodeURIComponent(nameValue)
+        window.location.href = newUrl;
+      }
+      else{
+        var url = window.location.origin + window.location.pathname
+        window.location.href = url;
+      }
+    });
+  });
+</script>

@@ -1,0 +1,8 @@
+{
+  "editor.tabSize": 2,
+  "files.trimTrailingWhitespace": true,
+  "editor.formatOnSave": true,
+  "[yaml]": {
+    "editor.defaultFormatter": "aaron-bond.better-comments"
+  },
+}

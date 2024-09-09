@@ -1,0 +1,49 @@
+<div class="table-responsive border rounded bg-white">
+  <table class="table border rounded" id='payments' data-order-id='<%= @order.number %>'>
+    <thead class="text-muted">
+      <tr data-hook="payments_header">
+        <th><%= Spree::Payment.human_attribute_name(:number) %></th>
+        <th><%= "#{Spree.t('date')}/#{Spree.t('time')}" %></th>
+        <th class="text-center"><%= Spree.t(:amount) %></th>
+        <th class="text-center"><%= Spree.t(:payment_method) %></th>
+        <th class="text-center"><%= Spree.t(:payment_state) %></th>
+        <th class="text-center"><%= Spree.t(:cashier) %></th>
+        <th class="actions text-center"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% payments.each do |payment| %>
+        <tr id="<%= dom_id(payment) %>" data-hook="payments_row" data-number="<%= payment.number %>" data-id="<%= payment.id %>">
+          <td><%= link_to payment.number, spree.billing_order_payment_path(@order, payment) %></td>
+          <td><%= pretty_time(payment.created_at) %></td>
+          <td class="amount text-center"><%= payment.display_amount %></td>
+          <td class="text-center"><%= payment_method_name(payment) %></td>
+          <td class="text-center">
+            <span type="button" class="with-tip badge badge-pill badge-<%= payment.state %>"
+              title='<%= payment.payable.is_a?(Spree::User) ? payment.payable.email : nil %>'>
+              <%= I18n.t("spree.billing.payment_state#{payment.state}", scope: :payment_states, default: payment.state.capitalize) %>
+            </span>
+          </td>
+          <td class="text-center"><%= payment.payable.is_a?(Spree::User) ? payment.payable.full_name : nil %></td>
+          <td class="actions">
+            <% if spree_current_user.permissions.exists?(entry: 'spree/billing/payments', action: 'edit') %>
+              <span class="d-flex justify-content-center payment-action-buttons">
+                <% payment.actions.each do |action| %>
+                  <% if action == 'credit' %>
+                    <%= link_to_with_icon('exit.svg', Spree.t(:refund), new_billing_order_payment_refund_path(@order, payment), no_text: true, class: "btn btn-light btn-sm") if can?(:create, Spree::Refund) %>
+                  <% elsif action == 'capture' %>
+                    <%= link_to_with_icon("#{action}.svg", Spree.t(action), nil, no_text: true, data: { toggle: 'modal', target: "#capture-modal-#{@order.id}" }, class: "btn btn-light btn-sm") %>
+                    <%= render partial: 'spree/billing/shared/pop_up_confirmation', locals: { action: action, order: @order, payment: payment } %>
+                  <% elsif action == 'void' %>
+                    <%= link_to_with_icon("#{action}.svg", Spree.t(action), nil, no_text: true, data: { toggle: 'modal', target: "#void-modal-#{@order.id}" }, class: "btn btn-light btn-sm") %>
+                    <%= render partial: 'spree/billing/shared/pop_up_confirmation', locals: { action: action, order: @order, payment: payment } %>
+                  <% end %>
+                <% end %>
+              </span>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

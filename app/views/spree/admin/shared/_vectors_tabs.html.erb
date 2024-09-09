@@ -1,0 +1,21 @@
+<% content_for :sidebar do %>
+  <ul class="nav flex-column nav-pills" data-hook="admin_icons_tabs">
+
+    <%= content_tag :li do %>
+      <%= link_to_with_icon 'edit.svg',
+        Spree.t(:icons),
+        admin_vectors_icons_url,
+        class: "nav-link #{'active' if current == :icons}" 
+      %>
+    <% end if can?(:admin, Spree::Vendor) %>
+
+    <%= content_tag :li do %>
+      <%= link_to_with_icon 'images.svg',
+        Spree.t(:for_option_values),
+        admin_vectors_option_values_url,
+        class: "nav-link #{'active' if current == :option_values}" 
+      %>
+    <% end if can?(:admin, SpreeCmCommissioner::VendorPhoto) %>
+
+  </ul>
+<% end %>

@@ -1,0 +1,86 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:guests) %>
+<% end %>
+
+<%= render partial: 'spree/events/shared/guest_tabs', locals: { current: :edit } %>
+
+<% content_for(:sidebar) do %>
+  <%= render partial: 'swap_guest_bib_number', locals: { guests: @filtered_guests } %>
+
+  <% if @guest.check_in.present? %>
+    <%= render partial: 'check_in_status' %>
+  <% else %>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title"><%= Spree.t(:check_in_status) %></h5>
+        <p class="card-text">Click button below to manually check_in guest</p>
+        <%= link_to 'Check In', check_in_event_guest_path, method: :post, class: 'btn btn-outline-primary' %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+
+<% content_for(:sidebar) do %>
+  <div class="card mt-3">
+    <div class="card-body">
+      <h5 class="card-title"><%= Spree.t(:send_email) %></h5>
+      <p class="card-text">Click button to manually send email to guest</p>
+      <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#emailModal">
+        Send Email
+      </button>
+    </div>
+  </div>
+<% end %>
+
+<%= form_with(model: @guest, url: { action: :update }) do |f| %>
+  <fieldset>
+    <%= render partial: 'form', locals: { f: f } %>
+    <%= render partial: 'spree/admin/shared/edit_resource_links' %>
+  </fieldset>
+<% end %>
+
+<!-- Send Email Modal -->
+<div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="emailModalLabel">Send Email</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Form for email input -->
+        <%= form_with(model: @guest, scope: :guest, url: send_email_event_guest_path(@guest), method: :post, id: "emailForm") do |form| %>
+          <div class="form-group">
+            <label for="emailInput">Email address</label>
+            <%= form.email_field :email, required: true, class: 'form-control', id: "emailInput", aria_describedby: "emailHelp", placeholder: "Enter email" %>
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+          </div>
+          <%= form.submit "Send", class: "btn btn-primary" %>
+        <% end %>
+        </div>
+    </div>
+  </div>
+</div>
+
+<!-- Verified Uncheck In Modal -->
+<div class="modal fade" id="uncheckInModal" tabindex="-1" role="dialog" aria-labelledby="uncheckInModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uncheckInModalLabel">Uncheck In Confirmation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to uncheck in?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <%= link_to 'Confirm', uncheck_in_event_guest_path, method: :post, class: 'btn btn-primary' %>
+      </div>
+    </div>
+  </div>
+</div>

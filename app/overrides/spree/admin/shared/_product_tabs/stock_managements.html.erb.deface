@@ -1,0 +1,6 @@
+<!-- replace 'erb[loud]:contains("current == :stock")' -->
+
+<%= link_to_with_icon 'box-seam.svg',
+  Spree.t(:stock_managements),
+  admin_product_stock_managements_url(@product),
+  class: "nav-link #{'active' if current == :stock_managements}" %>
