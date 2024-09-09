@@ -4,7 +4,7 @@ module SpreeCmCommissioner
       class GuestSerializer < BaseSerializer
         set_type :guest
 
-        attributes :first_name, :last_name, :dob, :gender, :qr_data, :event_id, :seat_number, :formatted_bib_number
+        attributes :first_name, :last_name, :dob, :gender, :qr_data, :event_id, :seat_number, :formatted_bib_number, :phone_number
 
         belongs_to :occupation, serializer: Spree::V2::Storefront::TaxonSerializer
 
