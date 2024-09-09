@@ -25,6 +25,7 @@ module Spree
       subtitle
       preferred_background_color
       preferred_foreground_color
+      show_event_status
     ]
 
     @@store_attributes += [
