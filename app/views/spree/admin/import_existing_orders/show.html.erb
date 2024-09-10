@@ -37,10 +37,10 @@
               <span class="badge badge-secondary"><%= @import.status %></span>
             <% end %>
           </dd>
-          <dt class="col-sm-3">Failed Orders:</dt>
+          <dt class="col-sm-3">Failed Row Numbers:</dt>
           <dd class="col-sm-9">
-            <% if @import.preferred_fail_orders.present? %>
-              <% failed_orders = @import.preferred_fail_orders.split(', ').map(&:strip) %>
+            <% if @import.preferred_fail_rows.present? %>
+              <% failed_orders = @import.preferred_fail_rows.split(', ').map(&:strip) %>
               <div class="d-flex flex-wrap">
                 <% failed_orders.each do |order| %>
                   <span class="badge badge-danger mx-1 mt-1"><%= order %></span>

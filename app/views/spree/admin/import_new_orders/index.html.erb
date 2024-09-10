@@ -21,7 +21,7 @@
         <th scope="col" class="text-left"><%= Spree.t(:import_type) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:name) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:status) %></th>
-        <th scope="col" class="text-center"><%= Spree.t(:fail_orders) %></th>
+        <th scope="col" class="text-center"><%= Spree.t(:fail_rows) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:started_at) %></th>
         <th scope="col" class="text-left"><%= Spree.t(:finished_at) %></th>
         <th scope="col" class="text-left">Action</th>
@@ -56,8 +56,8 @@
             <% end %>
           </td>
           <td class="text-center">
-            <% if import.preferred_fail_orders.present? %>
-              <% failed_orders = import.preferred_fail_orders.split(', ').map(&:strip) %>
+            <% if import.preferred_fail_rows.present? %>
+              <% failed_orders = import.preferred_fail_rows.split(', ').map(&:strip) %>
               <span class="badge badge-danger"><%= failed_orders.count %></span>
             <% end %>
           </td>
