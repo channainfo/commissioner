@@ -8,7 +8,7 @@
             data-wrap="true"
             data-alt-format="<%= Spree.t(:fpr_human_friendly_date_format, scope: 'date_picker', default: 'M j, Y') %>">
 
-        <%= f.text_field :from_date,
+        <%= f.date_field :from_date,
                           class: 'form-control',
                           placeholder: Spree.t(:starting_from),
                           value: params[:from_date].to_date,
@@ -22,7 +22,7 @@
             data-alt-format="<%= Spree.t(:fpr_human_friendly_date_format, scope: 'date_picker', default: 'M j, Y') %>"
             data-min-date="<%= params[:from_date] %>">
 
-        <%= f.text_field :to_date,
+        <%= f.date_field :to_date,
                           class: 'form-control',
                           placeholder: Spree.t(:ending_at),
                           value: params[:to_date].to_date,
@@ -48,13 +48,13 @@
                                       ['September', 9],
                                       ['October', 10],
                                       ['November', 11],
-                                      ['December', 12]], selected: params[:period].present? ? params[:period] : Time.zone.today.month), { include_blank: true }, for: 'period-select', class: 'period-select form-control select2-clear js-filterable', id: 'period-select' %>
+                                      ['December', 12]], selected: params[:period].presence || Time.zone.today.month), { include_blank: false }, for: 'period-select', class: 'period-select form-control select2-clear js-filterable', id: 'period-select' %>
     </div>
 
     <div class="form-group">
       <%= f.label :year, Spree.t(:select_year), class: 'form-check-label' %>
       <%= f.select :year,
-                  options_for_select((Time.zone.today.year - 5..Time.zone.today.year + 5).to_a, selected: params[:year].present? ? params[:year] : Time.zone.today.year), { include_blank: true }, for: 'year-select', class: 'year-select form-control select2-clear js-filterable', id: 'year-select' %>
+                  options_for_select((Time.zone.today.year.downto(Time.zone.today.year - 5)).to_a), { include_blank: false }, for: 'year-select', class: 'year-select form-control select2-clear js-filterable', id: 'year-select' %>
     </div>
   </div>
 
