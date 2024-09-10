@@ -10,7 +10,7 @@ module SpreeCmCommissioner
                    record_type: :address,
                    serializer: Spree::V2::Storefront::AddressSerializer
 
-        attributes :number, :state, :phone_number, :email, :qr_data
+        attributes :number, :state, :phone_number, :email, :qr_data, :item_count
       end
     end
   end

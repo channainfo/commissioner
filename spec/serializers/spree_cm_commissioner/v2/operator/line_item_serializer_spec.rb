@@ -35,7 +35,7 @@ RSpec.describe SpreeCmCommissioner::V2::Operator::LineItemSerializer, type: :ser
       )
 
       order = subject[:included].find { |item| item[:type] == :order }
-      expect(order[:attributes].keys).to contain_exactly(:email, :number, :phone_number, :state, :qr_data)
+      expect(order[:attributes].keys).to contain_exactly(:email, :number, :phone_number, :state, :qr_data, :item_count)
 
       guest = subject[:included].find { |item| item[:type] == :guest }
       expect(guest[:attributes].keys).to contain_exactly(:dob, :event_id, :first_name, :gender, :last_name, :qr_data, :seat_number, :formatted_bib_number, :phone_number)
