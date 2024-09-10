@@ -127,6 +127,7 @@ en:
     already_exist: "This place is already exist."
     created_successfully: "Place was successfully added to product."
     place_required: "Please select a place before creating the product place."
+    note: "<b>Note:</b> This venue is based on the stock location of the product's vendor."
 
   self_check_in:
     invalid_distance: "Invalid Check-in distance"

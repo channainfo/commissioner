@@ -8,6 +8,9 @@
 <% end %>
 
 <%= form_with model: @product_place, url: admin_product_product_places_path(@product), method: :post do |f| %>
+  <small class="form-text text-muted">
+      <%= raw I18n.t('product_place.note') %>
+  </small>
   <div data-hook="admin_product_form_product_place" style="display: flex; align-items: flex-start;">
     <div style="flex: 1; margin-right: 20px;">
       <div class="form-group">
