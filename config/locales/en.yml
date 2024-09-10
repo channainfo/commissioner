@@ -274,6 +274,7 @@ en:
       match_any: "Some line items must from selected age group"
       match_all: "All line items must from selected age group"
     billing:
+      penalty_rate: 'Penalty Rate in %'
       customer_id: "Customer ID"
       subscription:
         quantity_is_missing: "Quantity cannot be nil or zero."

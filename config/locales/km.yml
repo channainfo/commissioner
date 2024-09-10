@@ -241,6 +241,7 @@ km:
       match_any: "Some line items must from selected age group"
       match_all: "All line items must from selected age group"
     billing:
+      penalty_rate: 'ការផាកពិន័យគិតជាភាគរយ'
       code: "code"
       name: "name"
       logo: "logo"
