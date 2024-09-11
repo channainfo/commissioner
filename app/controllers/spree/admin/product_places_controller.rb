@@ -15,6 +15,10 @@ module Spree
         @product_place = SpreeCmCommissioner::ProductPlace.new(product_id: @product.id, checkinable_distance: 100)
       end
 
+      def edit
+        @product_place = SpreeCmCommissioner::ProductPlace.find(params[:id])
+      end
+
       def create
         @product_place = SpreeCmCommissioner::ProductPlace.new(permitted_resource_params)
         @product_place.product = parent
@@ -36,6 +40,18 @@ module Spree
         rescue ActiveRecord::RecordNotUnique
           flash[:error] = I18n.t('product_place.already_exist')
           render :new, status: :unprocessable_entity
+        end
+      end
+
+      def update
+        @product_place = SpreeCmCommissioner::ProductPlace.find(params[:id])
+
+        if @product_place.update(permitted_resource_params)
+          flash[:success] = I18n.t('product_place.updated_successfully')
+          redirect_to collection_url
+        else
+          flash[:error] = @product_place.errors.full_messages.join(', ')
+          render :edit
         end
       end
 

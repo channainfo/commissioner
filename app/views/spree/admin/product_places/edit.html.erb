@@ -1,0 +1,5 @@
+<!-- app/views/spree/admin/product_places/edit.html.erb -->
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :product_place } %>
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @product_place } %>
+
+<%= render partial: 'form', locals: { product_place: @product_place, product: @product, form_url: admin_product_product_place_path(@product, @product_place), form_method: :put } %>

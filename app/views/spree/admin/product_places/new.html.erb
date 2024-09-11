@@ -1,44 +1,5 @@
+<!-- app/views/spree/admin/product_places/new.html.erb -->
 <%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :product_place } %>
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @product_place } %>
 
-<% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:edit_icons),
-    admin_vectors_option_values_url,
-    { icon: 'spree-icon.svg', id: 'admin-option-values-icons-index' }
-  %>
-<% end %>
-
-<%= form_with model: @product_place, url: admin_product_product_places_path(@product), method: :post do |f| %>
-  <div data-hook="admin_product_form_product_place" style="display: flex; align-items: flex-start;">
-    <div style="flex: 1; margin-right: 20px;">
-      <div class="form-group">
-        <%= f.label :place_id, Spree.t(:place) %>
-        <%= f.collection_select :place_id, SpreeCmCommissioner::Place.all, :id, :name,
-              { include_blank: true },
-              { class: 'select2 fullwidth'} %>
-        <div class="form-group" style="margin-top: 5px;">
-          <%= link_to "Create New Venue", admin_vendor_nearby_places_url(@product.vendor), class: 'btn-link', style: 'text-decoration: underline; color: #007bff;' %>
-        </div>
-      </div>
-    </div>
-
-    <div style="flex: 1; margin-right: 20px;">
-      <div class="form-group">
-        <%= f.label :checkinable_distance, Spree.t(:checkinable_distance) %>
-        <%= f.number_field :checkinable_distance, class: 'form-control', value: @product_place.checkinable_distance || 100 %>
-      </div>
-    </div>
-
-    <div style="flex: 1;">
-      <div class="form-group">
-        <%= f.label :type, Spree.t(:type) %>
-        <%= f.select :type, options_for_select(SpreeCmCommissioner::ProductPlace.types.keys.map { |type| [type.humanize, type] }, @product_place.type),
-              { include_blank: true },
-              { class: 'select2 fullwidth' } %>
-      </div>
-    </div>
-  </div>
-
-  <div class='form-actions' data-hook='buttons'>
-    <%= button Spree.t('actions.create'), 'save.svg', 'submit', { class: 'btn-success', data: { disable_with: "#{Spree.t(:saving)}..." } } %>
-  </div>
-<% end %>
+<%= render partial: 'form', locals: { product_place: @product_place, product: @product, form_url: admin_product_product_places_path(@product), form_method: :patch } %>

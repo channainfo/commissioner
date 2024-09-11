@@ -54,6 +54,7 @@
               <%= product_place.checkinable_distance %> m
             </td>
             <td>
+              <%= link_to_edit(product_place, { url: edit_admin_product_product_place_url(@product, product_place), no_text: true }) if can? :edit, product_place %>
               <%= link_to_delete(product_place, { url: admin_product_product_place_url(@product, product_place), no_text: true }) if can? :destroy, product_place %>
             </td>
           </tr>
