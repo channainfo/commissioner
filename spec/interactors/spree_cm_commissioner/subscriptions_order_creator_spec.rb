@@ -1,16 +1,16 @@
 require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCreator do
-  let(:customer) { create(:cm_customer) }
-  let(:vendor) { create(:vendor, code: 'VET') }
+  let(:vendor) { create(:vendor, code: 'VET', preferences: {penalty_rate: '3'}) }
+  let(:customer) { create(:cm_customer, vendor: vendor) }
 
   let(:option_type) { create(:option_type, name: "due-date", attr_type: :integer) }
   let(:option_value) { create(:option_value, name: "15", presentation: "5 Days", option_type: option_type) }
 
   let(:product1) { create(:base_product, option_types: [option_type], subscribable: true, vendor: vendor) }
   let(:product2) { create(:base_product, option_types: [option_type], subscribable: true, vendor: vendor) }
-  let(:variant1) { create(:cm_base_variant, option_values: [option_value], price: 30, product: product1, total_inventory: 1) }
-  let(:variant2) { create(:cm_base_variant, option_values: [option_value], price: 30, product: product2, total_inventory: 1) }
+  let(:variant1) { create(:cm_base_variant, option_values: [option_value], price: 30, product: product1, total_inventory: 10) }
+  let(:variant2) { create(:cm_base_variant, option_values: [option_value], price: 30, product: product2, total_inventory: 10) }
 
   let(:stock_location) { create(:stock_location, vendor: vendor) }
   let(:stock_item1) { create(:stock_item, stock_location: stock_location, variant: variant1, count_on_hand: 10) }
@@ -111,6 +111,18 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCreator do
             described_class.call(customer: customer, today: today)
             expect(customer.orders.count).to eq 1
             expect(customer.last_invoice_date).to eq today
+        end
+      end
+      context "when customer haven't paid the last order" do
+        it 'add last invoice amount to the next invoice amount with 3% additional penalty' do
+          create :cm_subscription, customer: customer, quantity: 1, start_date: today - 2.month
+          order = create :order , user_id: customer.user.id, total: 30, item_total: 30, state: 'complete', completed_at: today - 1.month, payment_total: 20
+          penalty_rate_amount = customer.orders.last.outstanding_balance * vendor.penalty_rate.to_f / 100
+          customer.update!(last_invoice_date: today - 1.month)
+          described_class.call(customer: customer, today: today)
+          last_order = customer.orders.last
+          expect(customer.orders.count).to eq 2
+          expect(last_order.total).to eq last_order.item_total + order.outstanding_balance + penalty_rate_amount
         end
       end
     end

@@ -4,7 +4,7 @@ FactoryBot.define do
     customer { create(:cm_customer) }
 
     transient do
-      price { 10.0 }
+      price { 30.0 }
       month { 1 }
       due_date { 5 }
       payment_option { 'pre-paid' }
