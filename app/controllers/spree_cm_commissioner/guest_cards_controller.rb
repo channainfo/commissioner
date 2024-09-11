@@ -3,17 +3,21 @@ module SpreeCmCommissioner
     layout false
 
     def show
-      guest = SpreeCmCommissioner::Guest.find_by!(token: params[:id])
+      guest = SpreeCmCommissioner::Guest
+              .includes(line_item: { variant: :guest_card_classes })
+              .find_by!(token: params[:id])
 
       # Cache the response
-      cache_key = "#{guest.id}-#{guest.updated_at}-#{guest.line_item.variant.guest_card_classes.first.updated_at}"
+      cache_key = "#{guest.id}-#{guest.updated_at}-#{guest.line_item.variant.guest_card_classes.first!.updated_at}"
 
-      Rails.cache.fetch(cache_key, expires_in: 12.hours) do
-        render(
-          template: 'spree_cm_commissioner/guest_cards/show',
-          locals: guest_card_locals(guest)
-        )
+      locals = Rails.cache.fetch(cache_key, expires_in: 12.hours) do
+        guest_card_locals(guest)
       end
+
+      render(
+        template: 'spree_cm_commissioner/guest_cards/show',
+        locals: locals
+      )
     end
 
     # TODO: render in PNG when url is end with .jpg using 'imgkit'
@@ -65,7 +69,7 @@ module SpreeCmCommissioner
     end
 
     def venue(guest)
-      guest.line_item.product.venue.place.name || 'N/A'
+      guest.line_item.product.venue&.place&.name || 'N/A'
     end
 
     def seat_number(guest)
@@ -73,7 +77,7 @@ module SpreeCmCommissioner
     end
 
     def full_name(guest)
-      guest.first_name.present? || guest.last_name.present? ? "#{guest.first_name} #{guest.last_name}" : 'N/A'
+      guest.full_name || 'N/A'
     end
 
     def phone_number(guest)

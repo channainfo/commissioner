@@ -17,6 +17,7 @@ module SpreeCmCommissioner
     }, _prefix: true
 
     scope :complete, -> { joins(:line_item).merge(Spree::LineItem.complete) }
+    scope :complete_or_canceled, -> { joins(:line_item).merge(Spree::LineItem.complete_or_canceled) }
     scope :unassigned_event, -> { where(event_id: nil) }
     scope :none_bib, -> { where(bib_prefix: [nil, '']) }
 

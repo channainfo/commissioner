@@ -53,7 +53,7 @@ module SpreeCmCommissioner
     end
 
     def search_by_order_qr
-      order = Spree::Order.complete.search_by_qr_data!(params[:qr_data])
+      order = Spree::Order.complete_or_canceled.search_by_qr_data!(params[:qr_data])
       order.line_items
            .joins(:guests)
            .where(guests: { event_id: event_id })
@@ -61,7 +61,7 @@ module SpreeCmCommissioner
     end
 
     def search_by_line_item_qr
-      line_item_id = Spree::LineItem.complete.search_by_qr_data!(params[:qr_data])&.id
+      line_item_id = Spree::LineItem.complete_or_canceled.search_by_qr_data!(params[:qr_data])&.id
 
       Spree::LineItem
         .joins(:guests)
@@ -70,7 +70,7 @@ module SpreeCmCommissioner
     end
 
     def search_by_guest_qr
-      guest = SpreeCmCommissioner::Guest.complete.find_by!(token: params[:qr_data], event_id: event_id)
+      guest = SpreeCmCommissioner::Guest.complete_or_canceled.find_by!(token: params[:qr_data], event_id: event_id)
 
       Spree::LineItem.where(id: guest&.line_item_id)
     end
@@ -79,7 +79,7 @@ module SpreeCmCommissioner
       terms = params[:term].split.map { |term| "%#{term.downcase}%" }
 
       Spree::LineItem
-        .complete
+        .complete_or_canceled
         .joins(:guests)
         .where(guests: { event_id: event_id })
         .where(
@@ -98,7 +98,7 @@ module SpreeCmCommissioner
 
     def all_line_items
       Spree::LineItem
-        .complete
+        .complete_or_canceled
         .joins(:guests)
         .where(guests: { event_id: event_id })
         .distinct
