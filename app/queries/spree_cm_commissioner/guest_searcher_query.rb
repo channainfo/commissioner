@@ -23,7 +23,7 @@ module SpreeCmCommissioner
     private
 
     def search_by_guest_qr
-      SpreeCmCommissioner::Guest.complete.where(
+      SpreeCmCommissioner::Guest.complete_or_canceled.where(
         token: params[:qr_data],
         event_id: event_id
       )
@@ -33,7 +33,7 @@ module SpreeCmCommissioner
       terms = params[:term].split.map { |term| "%#{term.downcase}%" }
 
       SpreeCmCommissioner::Guest
-        .complete
+        .complete_or_canceled
         .joins(line_item: :order)
         .where(event_id: event_id)
         .where(

@@ -4,6 +4,8 @@ module SpreeCmCommissioner
 
     included do
       scope :complete, -> { joins(:order).merge(Spree::Order.complete.not_canceled) }
+      scope :complete_or_canceled, -> { joins(:order).merge(Spree::Order.complete_or_canceled) }
+
       scope :accepted, -> { joins(:order).merge(Spree::Order.accepted) }
       scope :paid, -> { joins(:order).merge(Spree::Order.paid) }
       scope :with_bib_prefix, -> { joins(:option_types).where(option_types: { name: 'bib-prefix' }) }
