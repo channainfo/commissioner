@@ -46,6 +46,10 @@ module SpreeCmCommissioner
 
         response.body
       end
+
+      def cleaned_value(value)
+        value.to_s.gsub(/\s+/, '')
+      end
     end
   end
 end

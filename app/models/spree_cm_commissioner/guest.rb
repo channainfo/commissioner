@@ -58,7 +58,7 @@ module SpreeCmCommissioner
       kyc_fields.all? { |field| allowed_checkout_for?(field) }
     end
 
-    def allowed_checkout_for?(field) # rubocop:disable Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
+    def allowed_checkout_for?(field) # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
       return first_name.present? && last_name.present? if field == :guest_name
       return gender.present? if field == :guest_gender
       return dob.present? if field == :guest_dob
@@ -71,6 +71,7 @@ module SpreeCmCommissioner
       return social_contact_platform.present? && social_contact.present? if field == :guest_social_contact
       return upload_later? || (id_card.present? && id_card.allowed_checkout?) if field == :guest_id_card
       return address.present? if field == :guest_address
+      return phone_number.present? if field == :guest_phone_number
 
       false
     end

@@ -101,6 +101,11 @@
               <%= f.label :emergency_contact, raw(Spree.t(:emergency_contact) + required_span_tag) %>
               <%= f.text_field :emergency_contact, class: 'form-control' %>
             <% end %>
+           <% when :guest_phone_number %>
+            <%= f.field_container :phone_number do %>
+              <%= f.label :phone_number, raw(Spree.t(:phone_number) + required_span_tag) %>
+              <%= f.text_field :phone_number, class: 'form-control' %>
+           <% end %>
           <% end %>
         <% end %>
       </div>

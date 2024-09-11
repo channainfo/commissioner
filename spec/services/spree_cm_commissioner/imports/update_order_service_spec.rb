@@ -6,10 +6,10 @@ RSpec.describe SpreeCmCommissioner::Imports::UpdateOrderService do
   let(:variant2) { create(:variant) }
   let(:variant3) { create(:variant) }
 
-  let(:guest1) { create(:guest) }
-  let(:guest2) { create(:guest) }
-  let(:guest3) { create(:guest) }
-  let(:guest4) { create(:guest) }
+  let(:guest1) { create(:guest, seat_number: 'A001') }
+  let(:guest2) { create(:guest, seat_number: 'A002') }
+  let(:guest3) { create(:guest, seat_number: 'A003') }
+  let(:guest4) { create(:guest ,seat_number: 'A004') }
 
   let(:line_item1) { create(:line_item , guests: [guest1]) }
   let(:line_item2) { create(:line_item , guests: [guest2]) }
@@ -23,11 +23,12 @@ RSpec.describe SpreeCmCommissioner::Imports::UpdateOrderService do
 
   let(:data) do
     CSV.generate do |csv|
-      csv << ['order_number',          'phone_number',  'first_name',   'last_name'  ]
-      csv << [existing_order1.number,   '012000001' ,    'Panha 1',      'Chom 1'   ]
-      csv << [existing_order2.number,   '012000002' ,    'Panha 2',      'Chom 2'   ]
-      csv << [existing_order3.number,   '012000003' ,    'Panha 3',      'Chom 3'   ]
-      csv << ['R0000001',               '012000004' ,    'Panha 5',      'Chom 5'   ]
+      csv << ['order_number',          'phone_number',  'first_name',   'last_name' , 'seat_number'          ]
+      csv << [existing_order1.number,   '012000001' ,    'Panha 1',      'Chom 1' ,    guest1.seat_number    ]
+      csv << [existing_order2.number,   '012000002' ,    'Panha 2',      'Chom 2' ,    guest2.seat_number    ]
+      csv << [existing_order3.number,   '012000003' ,    'Panha 3',      'Chom 3' ,    guest3.seat_number    ]
+      csv << [existing_order4.number,   '012000001' ,    'Panha 4',      'Chom 4' ,    guest4.seat_number    ]
+      csv << ['R0000001',               '012000004' ,    'Panha 5',      'Chom 5' ,    ''                    ]
     end
   end
 
@@ -57,10 +58,14 @@ RSpec.describe SpreeCmCommissioner::Imports::UpdateOrderService do
       expect(existing_order2.reload.line_items.first.guests.first.full_name).to eq 'Panha 2 Chom 2'
     end
 
+    it 'return record error when duplicate phone' do
+      subject.call
+      expect(import_order.reload.preferred_fail_rows).to include('5')  # row 5
+    end
 
     it 'return record error when have order not found' do
       subject.call
-      expect(import_order.reload.preferred_fail_rows).to include('5')  # row 5
+      expect(import_order.reload.preferred_fail_rows).to include('6')  # row 6
     end
 
     it "updates import status to done" do
