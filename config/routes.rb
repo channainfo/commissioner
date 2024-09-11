@@ -436,6 +436,7 @@ Spree::Core::Engine.add_routes do
           resource :homepage_background, controller: :homepage_background, only: [:show]
         end
 
+        resources :qr_urls, only: [:show]
         resources :guest_qrs, only: [:show]
         resources :guests, only: %i[create update show] do
           resources :id_cards
