@@ -46,7 +46,8 @@ module Spree
 
       def permitted_resource_params
         params.require(object_name).permit(:first_name, :last_name, :gender, :dob, :occupation_id,
-                                           :nationality_id, :age, :emergency_contact, :line_item_id, :seat_number
+                                           :nationality_id, :age, :emergency_contact, :line_item_id,
+                                           :seat_number, :phone_number
         )
       end
     end

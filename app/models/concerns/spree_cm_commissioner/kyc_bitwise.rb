@@ -14,12 +14,14 @@ module SpreeCmCommissioner
       guest_organization: 0b100000000,
       guest_expectation: 0b1000000000,
       guest_social_contact: 0b10000000000,
-      guest_address: 0b100000000000
+      guest_address: 0b100000000000,
+      guest_phone_number: 0b1000000000000
     }.freeze
 
     ORDERED_BIT_FIELDS = %i[
       guest_name
       guest_gender
+      guest_phone_number
       guest_dob
       guest_occupation
       guest_nationality

@@ -5,9 +5,12 @@ module SpreeCmCommissioner
         content = fetch_content
 
         CSV.parse(content, headers: true).each.with_index(2) do |row, index|
-          order_number = row['order_number']
-          guest_id = row['guest_id']
-          seat_number = row['seat_number']
+          order_number = cleaned_value(row['order_number'])
+          guest_id = cleaned_value(row['guest_id'])
+          seat_number = cleaned_value(row['seat_number'])
+          phone_number = cleaned_value(row['phone_number'])
+          first_name = row['first_name']
+          last_name = row['last_name']
 
           order = Spree::Order.find_by(number: order_number)
 
@@ -24,9 +27,9 @@ module SpreeCmCommissioner
           end
 
           unless guest.update(
-            phone_number: row['phone_number'],
-            first_name: row['first_name'],
-            last_name: row['last_name']
+            phone_number: phone_number,
+            first_name: first_name,
+            last_name: last_name
           )
             record_failure(index)
             next
