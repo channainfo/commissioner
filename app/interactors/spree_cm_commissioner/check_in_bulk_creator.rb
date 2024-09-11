@@ -30,9 +30,9 @@ module SpreeCmCommissioner
       context.fail!(message: :guest_id_must_not_blank) if check_in_attributes[:guest_id].blank?
 
       guest = guests[check_in_attributes[:guest_id]]
-      context.fail!(message: :guest_not_found) if guest.blank?
 
-      return guest.check_in if guest.check_in.present?
+      return context.fail!(message: :guest_not_found) if guest.blank?
+      return context.fail!(message: :already_check_in) if guest.check_in.present?
 
       check_in = SpreeCmCommissioner::CheckIn.new(
         guest: guest,
