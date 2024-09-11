@@ -9,13 +9,18 @@
         margin: 0;
         padding: 0;
         width: 100%;
-        max-width: 600px;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         color: #1c1b20;
         font-family: Arial, sans-serif;
       }
       .pass {
         background-color: white;
         padding: 0 0 16px 0;
+        max-width: 600px;
+        width: 100%;
       }
       .banner {
         width: 100%;
@@ -51,12 +56,14 @@
       }
       .qr-code {
         text-align: center;
+        margin-top: 20px;
       }
       .qr-code img {
         width: 108px;
         height: 108px;
       }
     </style>
+    <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
   </head>
   <body>
     <div class="pass">
@@ -78,6 +85,14 @@
             <td>Ticket Type</td>
             <td><%= ticket_type %></td>
           </tr>
+          <tr>
+            <td>Full Name</td>
+            <td><%= full_name %></td>
+          </tr>
+          <tr>
+            <td>Phone Number</td>
+            <td><%= phone_number %></td>
+          </tr>
         </table>
       </div>
 
@@ -89,7 +104,28 @@
         This QR code is used for individual check-in
       </div>
       <div class="seat-number">No. <%= seat_number %></div>
-      <div class="qr-code"><img src="<%= guest_qr_src %>" alt="QR Code" /></div>
+      <div id="canvas" class="qr-code"></div>
     </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        var qrCode = new QRCodeStyling({
+          width: 150,
+          height: 150,
+          data: "<%= guest_qr_data %>",
+          image: "<%= logo_src %>",
+          dotsOptions: {
+            color: "#000000",
+            type: "rounded"
+          },
+          imageOptions: {
+            crossOrigin: "anonymous",
+            hideBackgroundDots: true
+          }
+        });
+
+        qrCode.append(document.getElementById("canvas"));
+      });
+    </script>
   </body>
 </html>
