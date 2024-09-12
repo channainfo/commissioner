@@ -298,7 +298,9 @@ Spree::Core::Engine.add_routes do
           get :balance_due
           get :overdue
           get :active_subscribers
+          get :export
           put :print_all_invoices
+          get :export_orders
         end
       end
       resources :vendors do

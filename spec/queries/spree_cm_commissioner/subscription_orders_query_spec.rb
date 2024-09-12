@@ -16,7 +16,7 @@ RSpec.describe SpreeCmCommissioner::SubscriptionOrdersQuery do
       allow_any_instance_of(SpreeCmCommissioner::Subscription).to receive(:date_within_range).and_return(true)
     end
     it 'return 0 overdues when subscription not yet exceed due date' do
-      subscription_jan2.orders.each {|o| o.payments.each{|p| p.void! }}
+      subscription_jan2.orders.each {|o| o.payments.each{|p| p.pend! }} # pending = balance_due
 
       query = described_class.new(
         current_date: '2023-01-04'.to_date,
@@ -30,7 +30,7 @@ RSpec.describe SpreeCmCommissioner::SubscriptionOrdersQuery do
     end
 
     it 'return 0 overdues when due date == current date' do
-      subscription_jan2.orders.each {|o| o.payments.each{|p| p.void! }}
+      subscription_jan2.orders.each {|o| o.payments.each{|p| p.pend! }} # pending = balance_due
 
       query = described_class.new(
         current_date: '2023-01-07'.to_date,
@@ -46,7 +46,7 @@ RSpec.describe SpreeCmCommissioner::SubscriptionOrdersQuery do
     it 'return 1 overdues when due date < current date' do
       subscription_jan2
       SpreeCmCommissioner::SubscriptionsOrderCreator.call(customer: customer, today: today)
-      subscription_jan2.orders.each {|o| o.payments.each{|p| p.void! }}
+      subscription_jan2.orders.each {|o| o.payments.each{|p| p.pend! }} # pending = balance_due
       query = described_class.new(
         current_date: '2024-08-01'.to_date,
         vendor_id: customer.vendor.id,
@@ -67,6 +67,7 @@ RSpec.describe SpreeCmCommissioner::SubscriptionOrdersQuery do
         to_date: '2100-01-01',
         spree_current_user: spree_current_user
       )
+      expect(query.overdues.size).to eq 0
     end
   end
 end

@@ -65,6 +65,20 @@ module Spree
         end
       end
 
+      def export
+        @year = params[:year].presence || Time.zone.today.year
+
+        load_orders_by_month
+
+        return unless request.format == :csv
+
+        csv_data = SpreeCmCommissioner::Exports::ExportOrderCsvService.new(@orders[params[:month].to_i]).call
+
+        respond_to do |format|
+          format.csv { send_data csv_data, filename: "#{@year}_#{Date::MONTHNAMES[params[:month].to_i]}_Invoices.csv" }
+        end
+      end
+
       private
 
       def load_bussinesses
@@ -87,6 +101,26 @@ module Spree
         else
           @search = SpreeCmCommissioner::Customer.joins(:taxons).where('active_subscriptions_count > ?', 0)
                                                  .where(cm_customers: { place_id: spree_current_user.place_ids })
+        end
+      end
+
+      def load_orders_by_month
+        @search = orders_scope.where(payment_state: %w[paid balance_due failed])
+                              .joins(:invoice)
+                              .where('EXTRACT(YEAR FROM cm_invoices.date) = ?', @year)
+
+        @orders = {}
+        @total = {}
+        @paid = {}
+        @balance_due = {}
+        @voided = {}
+
+        (1..12).each do |month|
+          @orders[month] = @search.joins(:invoice).where('EXTRACT(MONTH FROM cm_invoices.date) = ?', month).ransack(params[:q]).result
+          @total[month] = Spree::Money.new(@orders[month].sum(:total)).to_s
+          @paid[month] = Spree::Money.new(@orders[month].where(payment_state: :paid).sum(:total)).to_s
+          @balance_due[month] = Spree::Money.new(@orders[month].where(payment_state: :balance_due).sum(:total)).to_s
+          @voided[month] = Spree::Money.new(@orders[month].where(payment_state: :failed).sum(:total)).to_s
         end
       end
 
@@ -167,7 +201,7 @@ module Spree
       end
 
       def permitted_report_attributes
-        %i[from_date to_date vendor_id type]
+        %i[from_date to_date vendor_id type month year]
       end
     end
   end

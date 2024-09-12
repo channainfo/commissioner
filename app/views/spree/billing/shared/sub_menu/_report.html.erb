@@ -17,4 +17,7 @@
   <% if spree_current_user.permissions.exists?(entry: 'spree/billing/reports') %>
     <%= tab :report, selected: request.path.ends_with?('/reports'), url: spree.billing_reports_path, label: Spree.t('billing.report') %>
   <% end %>
+  <% if spree_current_user.permissions.exists?(entry: 'spree/billing/reports', action:'export') %>
+    <%= tab :export_report, selected: request.path.ends_with?('/export'), url: spree.export_billing_reports_path, label: Spree.t('billing.export') %>
+  <% end %>
 </ul>

@@ -13,7 +13,7 @@ module SpreeCmCommissioner
     # when payment state != :paid &
     # order.line_item.to_date < now
     def overdues
-      @overdues ||= query_builder.where.not(payment_state: :paid)
+      @overdues ||= query_builder.where(payment_state: :balance_due)
                                  .where('line_items.due_date < ?', current_date)
     end
 
@@ -22,13 +22,15 @@ module SpreeCmCommissioner
         Spree::Order.subscription
                     .joins(:line_items)
                     .where(line_items: { vendor_id: vendor_id })
-                    .where(created_at: from_date..to_date)
+                    .joins(:invoice)
+                    .where(cm_invoices: { date: from_date..to_date })
       else
         Spree::Order.subscription
                     .joins(:line_items)
                     .joins(subscription: :customer)
                     .where(line_items: { vendor_id: vendor_id })
-                    .where(created_at: from_date..to_date)
+                    .joins(:invoice)
+                    .where(cm_invoices: { date: from_date..to_date })
                     .where(cm_customers: { place_id: spree_current_user.place_ids })
       end
     end

@@ -3,8 +3,10 @@ document.addEventListener("spree:load", function () {
     "#spree_cm_commissioner_report_use_custom_date_range"
   );
 
-  const dateRangeFilter = $(".date-range-filter");
-  const periodRangeFilter = $(".period-range-filter");
+  const dateRangeFilter = document.getElementById("report-date-range-filter");
+  const periodRangeFilter = document.getElementById(
+    "report-period-range-filter"
+  );
 
   const params = new URLSearchParams(window.location.search);
   const useCustomDateRangeParam = params.get(
@@ -14,21 +16,22 @@ document.addEventListener("spree:load", function () {
   // Check if the use_custom_date_range param is set to 1
   if (useCustomDateRangeParam === "1") {
     useCustomDateRange.prop("checked", true);
-    dateRangeFilter.show();
-    periodRangeFilter.hide();
+    dateRangeFilter.style.display = "block";
+    periodRangeFilter.style.display = "none";
   } else {
-    dateRangeFilter.hide();
-    periodRangeFilter.show();
+    useCustomDateRange.prop("checked", false);
+    dateRangeFilter.style.display = "none";
+    periodRangeFilter.style.display = "block";
   }
 
   // Toggle the date range filter on checkbox change
   useCustomDateRange.change(function () {
     if (this.checked) {
-      dateRangeFilter.show();
-      periodRangeFilter.hide();
+      dateRangeFilter.style.display = "block";
+      periodRangeFilter.style.display = "none";
     } else {
-      dateRangeFilter.hide();
-      periodRangeFilter.show();
+      dateRangeFilter.style.display = "none";
+      periodRangeFilter.style.display = "block";
     }
   });
 });

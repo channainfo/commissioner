@@ -2,8 +2,8 @@
   <%= label_tag :use_custom_date_range, Spree.t('use_custom_date_range'), class: 'form-check-label' %>
   <%= check_box_tag 'spree_cm_commissioner_report[use_custom_date_range]', '1', class: 'checkbox', id: 'spree_cm_commissioner_report_use_custom_date_range' %>
 
-  <div class="form-group date-range-filter">
-    <div class="date-range-filter">
+  <div class="form-group">
+    <div id="report-date-range-filter">
       <div class="input-group datePickerFrom mb-2"
             data-wrap="true"
             data-alt-format="<%= Spree.t(:fpr_human_friendly_date_format, scope: 'date_picker', default: 'M j, Y') %>">
@@ -33,7 +33,7 @@
     </div>
   </div>
 
-  <div class="form-group period-range-filter">
+  <div class="form-group" id="report-period-range-filter">
     <div class="form-group">
       <%= f.label :period, Spree.t(:select_month), class: 'form-check-label' %>
       <%= f.select :period,
