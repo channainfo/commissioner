@@ -318,12 +318,14 @@ en:
       vendor: "vendor"
       account_name: "Account Name"
       account_number: "Account Number"
+      total_amount: "Total Amount"
       payment_state:
         paid: "Paid"
         balance_due: "Balance Due"
         overdue: "Overdue"
         failed: "Voided"
         unknown: "Unknown"
+        credit_owed: "Credit Owed"
       exceeding_date_range: "Exceeding Date Range, Range must be less than 6 months"
       customers:
         re_create_order:
@@ -337,6 +339,7 @@ en:
          success: "Promotion deleted"
          fails: "Promotion Deletion Failed"
       service_start_date: "Service Start Date"
+      export: "Export"
     upsupported_payment: "Unsupported event"
     exceeded_available_quantity_on_date:
       zero: "Rooms are not available on %{date}"

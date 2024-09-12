@@ -1,0 +1,57 @@
+<% content_for :page_title do %>
+  <%= Spree.t('billing.export') + " - " + "#{@year} " + I18n.t('spree.billing.orders') %>
+<% end %>
+
+<div>
+  <%= form_with url: export_billing_reports_path, method: :get, local: true, class: "form-inline" do |f| %>
+    <div class="d-flex justify-content-between col-12">
+      <div class="d-flex justify-content-center row align-items-center">
+        <div class="col">
+          <%= f.label :year, Spree.t('billing.select_year') %>
+        </div>
+        <div class="col">
+          <%= f.select :year,
+                    options_for_select((Time.zone.today.year.downto(Time.zone.today.year - 5)).to_a, selected: params[:year].presence || Time.zone.today.year),
+                    { include_blank: false },
+                    { class: 'form-control select2-clear js-filterable', style: 'width: 300px;' } %>
+        </div>
+      </div>
+
+      <div>
+        <%= button Spree.t(:search), 'search.svg', nil, { class: 'btn-outline-primary' } %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<div class="table-responsive border rounded bg-white mb-3">
+  <table class="table table-bordered" id="listing_subscriptions">
+    <thead class="text-muted">
+      <tr data-hook="admin_subscriptions_index_headers">
+        <th class="text-center"><%= Spree.t('billing.month') %></th>
+        <th class="text-center"><%= Spree.t('billing.total_amount') %></th>
+        <th class="text-center"><%= Spree.t('billing.paid') %></th>
+        <th class="text-center"><%= Spree.t('billing.balance_due') %></th>
+        <th class="text-center"><%= Spree.t('billing.voided') %></th>
+        <th class="text-center"><%= Spree.t('billing.export') %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% (1..12).each do |month| %>
+        <tr>
+          <td class="text-center"><%= Date::MONTHNAMES[month] %></td>
+          <td class="text-center"><%= @total[month] %></td>
+          <td class="text-center"><%= @paid[month] %></td>
+          <td class="text-center"><%= @balance_due[month] %></td>
+          <td class="text-center"><%= @voided[month] %></td>
+          <td class="text-center">
+            <%= link_to_with_icon('download.svg', Spree.t('billing.export'),
+                        export_billing_reports_path(month: month, year: @year, format: :csv),
+                        class: 'btn btn-sm btn-success') %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
