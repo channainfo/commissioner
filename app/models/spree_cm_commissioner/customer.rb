@@ -2,6 +2,8 @@ module SpreeCmCommissioner
   class Customer < SpreeCmCommissioner::Base
     include SpreeCmCommissioner::PhoneNumberSanitizer
 
+    enum status: { :active => 0, :inactive => 1 }
+
     before_validation :generate_sequence_number, if: -> { sequence_number.nil? || place_id_changed? }
     before_validation :assign_number, if: -> { number.nil? }
     before_validation :clone_billing_address, if: :use_billing?
@@ -41,7 +43,7 @@ module SpreeCmCommissioner
     validate :billing_customer_attributes
 
     acts_as_paranoid
-    self.whitelisted_ransackable_attributes = %w[number phone_number first_name last_name sequence_number place_id active_subscriptions_count]
+    self.whitelisted_ransackable_attributes = %w[number phone_number first_name last_name sequence_number place_id active_subscriptions_count status]
     self.whitelisted_ransackable_associations = %w[taxons]
 
     accepts_nested_attributes_for :ship_address, :bill_address

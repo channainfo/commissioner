@@ -30,22 +30,28 @@
         </div>
         <div class="col-12 col-lg-6">
           <div class="form-group">
-            <%= f.label :taxons_id_eq, I18n.t(:business, scope: 'spree.billing') %>
-            <%= f.collection_select(:taxons_id_eq, @businesses, :id, :name, { include_blank: true }, { class: 'select2 form-control js-filterable' }) %>
+            <%= f.label :sequence_number_cont, Spree.t('billing.customer_id') %>
+            <%= f.text_field :sequence_number_cont, class: 'form-control js-filterable' %>
           </div>
         </div>
       </div>
       <div class="row">
-        <div class="col-12 col-lg-6">
+        <div class="col-12 col-lg-4">
           <div class="form-group">
             <%= f.label :place_id_eq, Spree.t('billing.place') %>
             <%= f.collection_select(:place_id_eq, SpreeCmCommissioner::Place.all, :id, :name, { include_blank: true }, { class: "select2 form-control js-filterable" }) %>
           </div>
         </div>
-        <div class="col-12 col-lg-6">
+        <div class="col-12 col-lg-4">
           <div class="form-group">
-            <%= f.label :sequence_number_cont, Spree.t('billing.customer_id') %>
-            <%= f.text_field :sequence_number_cont, class: 'form-control js-filterable' %>
+            <%= f.label :taxons_id_eq, I18n.t(:business, scope: 'spree.billing') %>
+            <%= f.collection_select(:taxons_id_eq, @businesses, :id, :name, { include_blank: true }, { class: 'select2 form-control js-filterable' }) %>
+          </div>
+        </div>
+        <div class="col-12 col-lg-4">
+          <div class="form-group">
+            <%= f.label :status_eq, Spree.t(:status) %>
+            <%= f.select :status_eq, SpreeCmCommissioner::Customer.statuses.map { |key, value| [Spree.t(key), value] }, { include_blank: true }, { class: 'select2 form-control js-filterable' } %>
           </div>
         </div>
       </div>
@@ -68,9 +74,6 @@
             <%= sort_link @search, :full_name, Spree.t(:business_name), {}, {title: 'fullname_title'} %>
           </th>
           <th>
-            <%= sort_link @search, :full_name, Spree.t(:full_name), {}, {title: 'fullname_title'} %>
-          </th>
-          <th>
             <%= sort_link @search, :phone_number, Spree.t(:phone_number), {}, {title: 'phone_number_title'} %>
           </th>
           <th>
@@ -85,6 +88,9 @@
           <th>
             <%= I18n.t("spree.billing.overdue") %>
           </th>
+          <th>
+            <%= sort_link @search, :status, Spree.t("Status"), {}, {title: 'status_title'} %>
+          </th>
           <th data-hook="admin_customers_index_header_actions" class="actions"></th>
         </tr>
       </thead>
@@ -96,9 +102,6 @@
             </td>
             <td>
               <%= link_to customer.first_name, edit_billing_customer_path(customer) %>
-            </td>
-            <td>
-              <%= link_to customer.last_name, edit_billing_customer_path(customer) %>
             </td>
             <td>
               <%= customer.phone_number %>
@@ -123,6 +126,17 @@
                 <%= I18n.t('spree.none') %>
               <% else %>
                 <%=link_to customer.overdue_subscriptions.number, edit_billing_order_path(customer.overdue_subscriptions)%>
+              <% end %>
+            </td>
+            <td>
+              <% if customer.active? %>
+                <%= content_tag(:strong, class: "badge badge-success") do %>
+                  <%= I18n.t('spree.active') %>
+                <% end %>
+              <% else %>
+                <%= content_tag(:strong, class: "badge badge-danger") do %>
+                  <%= I18n.t('spree.inactive') %>
+                <% end %>
               <% end %>
             </td>
             <td data-hook="admin_customers_index_row_actions" class="actions">
