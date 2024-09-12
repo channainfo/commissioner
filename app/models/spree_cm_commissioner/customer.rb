@@ -9,6 +9,8 @@ module SpreeCmCommissioner
     before_validation :clone_billing_address, if: :use_billing?
     before_validation :create_customer_user, if: -> { user_id.nil? }
 
+    after_update :handle_status_change, if: :saved_change_to_status?
+
     attr_accessor :use_billing
 
     belongs_to :vendor, class_name: 'Spree::Vendor'
@@ -131,6 +133,13 @@ module SpreeCmCommissioner
       )
 
       update(user_id: user.id)
+    end
+
+    def handle_status_change
+      return unless saved_change_to_status?
+      return unless status_previously_was == 'inactive' && active?
+
+      update(last_invoice_date: Time.zone.today)
     end
   end
 end

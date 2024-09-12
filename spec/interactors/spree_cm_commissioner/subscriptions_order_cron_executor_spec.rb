@@ -18,9 +18,9 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCronExecutor do
   let(:customer1) { create(:cm_customer, vendor: vendor, phone_number: "0962200288") }
   let(:customer2) { create(:cm_customer, vendor: vendor, phone_number: "0972200288") }
   let(:customer3) { create(:cm_customer, vendor: vendor, phone_number: "0982200288") }
+  let(:customer4) { create(:cm_customer, vendor: vendor, phone_number: "0992200288", status: :inactive) }
 
   before do
-    # allow_any_instance_of(SpreeCmCommissioner::Subscription).to receive(:date_within_range).and_return(true)
     allow_any_instance_of(SpreeCmCommissioner::Subscription).to receive(:date_within_range).and_return(true)
     today = Time.zone.today
     today.day < 15 ?  three_month_ago = (today - 3.month).change(day: 14) : three_month_ago = (today - 3.month).change(day: 15)
@@ -28,9 +28,11 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCronExecutor do
     SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: three_month_ago, customer: customer1, quantity: 1)
     SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: one_month_ago, customer: customer2, quantity: 1)
     SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: today, customer: customer3, quantity: 1)
+    SpreeCmCommissioner::Subscription.create!(variant: variant, start_date: three_month_ago, customer: customer4, quantity: 1)
 
     customer1.update(last_invoice_date: three_month_ago)
     customer2.update(last_invoice_date: one_month_ago)
+    customer4.update(last_invoice_date: three_month_ago)
   end
 
   describe ".call" do
@@ -44,6 +46,12 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCronExecutor do
       expect(customer1.last_invoice_date).to eq (Time.zone.now).to_date
       expect(customer2.last_invoice_date).to eq (Time.zone.now).to_date
       expect(customer3.last_invoice_date).to eq nil
+    end
+    context "when customer is not active" do
+      it 'doesn\'t create invoice for customer 4' do
+        described_class.call()
+        expect(customer4.orders.count).to eq 0
+      end
     end
   end
 end
