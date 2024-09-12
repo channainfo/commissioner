@@ -39,7 +39,11 @@ module SpreeCmCommissioner
     end
 
     def create_order(active_subscriptions)
-      context.new_order = customer.user.orders.create!(
+      if context.customer.orders.last.present? && context.customer.orders.last.outstanding_balance.positive?
+        context.last_order = context.customer.orders.last
+      end
+
+      context.new_order = customer.user.orders.create(
         subscription_id: active_subscriptions.first.id,
         phone_number: context.customer.phone_number,
         user_id: context.customer.user_id,
@@ -47,9 +51,23 @@ module SpreeCmCommissioner
       )
     end
 
+    def add_penalty_to_order
+      return if context.last_order.blank?
+
+      penalty_rate_amount = context.last_order.outstanding_balance * customer.vendor.penalty_rate.to_f / 100
+      Spree::Adjustment.create!(
+        adjustable: context.new_order,
+        order: context.new_order,
+        adjustable_type: 'Spree::Order',
+        amount: context.last_order.outstanding_balance + penalty_rate_amount,
+        label: customer.vendor.penalty_label || 'Penalty'
+      )
+    end
+
     def generate_invoice(last_invoice_date, month, active_subscriptions)
       create_order(active_subscriptions)
       add_subscription_variant_to_line_item(last_invoice_date, active_subscriptions, month)
+      add_penalty_to_order
       apply_promotion
       create_invoice
 
