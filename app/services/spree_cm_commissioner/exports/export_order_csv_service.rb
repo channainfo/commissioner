@@ -1,17 +1,24 @@
 module SpreeCmCommissioner
   module Exports
     class ExportOrderCsvService
-      attr_reader :orders
+      attr_reader :orders, :customer_place_id
 
-      def initialize(orders)
+      def initialize(orders, customer_place_id = nil)
         @orders = orders
+        @customer_place_id = customer_place_id
       end
 
       def call
         CSV.generate(headers: true) do |csv|
           csv << headers
 
-          @orders.find_each do |order|
+          filtered_orders = if @customer_place_id.present?
+                              @orders.joins(:customer).where(cm_customers: { place_id: @customer_place_id })
+                            else
+                              @orders
+                            end
+
+          filtered_orders.find_each do |order|
             csv << attributes(order)
           end
         end

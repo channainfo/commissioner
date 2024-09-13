@@ -340,6 +340,8 @@ en:
          fails: "Promotion Deletion Failed"
       service_start_date: "Service Start Date"
       export: "Export"
+      select_year: "Select Year"
+      select_place: "Select Place"
     upsupported_payment: "Unsupported event"
     exceeded_available_quantity_on_date:
       zero: "Rooms are not available on %{date}"
@@ -389,6 +391,7 @@ en:
         show_invoices: "Show Invoices"
       spree/report:
         cashier: "Cashier"
+        place: "Place"
     errors:
       models:
         spree_cm_commissioner/service_calendar:
