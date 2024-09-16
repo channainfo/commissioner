@@ -9,7 +9,9 @@ module SpreeCmCommissioner
       end
 
       def call
-        CSV.generate(headers: true) do |csv|
+        bom = "\uFEFF"
+
+        bom + CSV.generate(headers: true) do |csv|
           csv << headers
 
           filtered_orders = if @customer_place_id.present?
@@ -28,7 +30,7 @@ module SpreeCmCommissioner
 
       def headers
         ['Invoice Number', 'Invoice Issued Date', 'Invoice Printing Date', 'Subscription Date',
-         'Customer Name', 'Customer Register Date', 'Customer Number',
+         'Customer Name', 'Customer Register Date', 'Customer Number', 'Place Name',
          'Intel Phone Number', 'Sub Total', 'Discount', 'Payment State',
          'Grand Total', 'Payment Date', 'Receiver Name'
         ]
@@ -43,6 +45,7 @@ module SpreeCmCommissioner
           customer_name(order),
           customer_register_date(order),
           customer_number(order),
+          place_name(order),
           intel_phone_number(order),
           display_subtotal(order),
           display_discount(order),
@@ -78,7 +81,7 @@ module SpreeCmCommissioner
       end
 
       def intel_phone_number(order)
-        order.customer.try(:intel_phone_number).to_s
+        order.customer.try(:intel_phone_number).to_s.gsub('855', '855 ')
       end
 
       def display_subtotal(order)
@@ -119,6 +122,10 @@ module SpreeCmCommissioner
         else
           order.display_adjustment_total.to_s.gsub(',', ' ').gsub('.00', '').gsub('-', '').gsub('៛', '').to_s
         end
+      end
+
+      def place_name(order)
+        order.customer.place.name.to_s.gsub(',', ' ').gsub('&', 'and')
       end
     end
   end
