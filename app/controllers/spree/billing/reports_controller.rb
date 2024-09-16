@@ -72,7 +72,7 @@ module Spree
 
         return unless request.format == :csv
 
-        csv_data = SpreeCmCommissioner::Exports::ExportOrderCsvService.new(@orders[params[:month].to_i]).call
+        csv_data = SpreeCmCommissioner::Exports::ExportOrderCsvService.new(@orders[params[:month].to_i], params[:place_id]).call
 
         respond_to do |format|
           format.csv { send_data csv_data, filename: "#{@year}_#{Date::MONTHNAMES[params[:month].to_i]}_Invoices.csv" }
@@ -107,7 +107,7 @@ module Spree
       def load_orders_by_month
         @search = orders_scope.where(payment_state: %w[paid balance_due failed])
                               .joins(:invoice)
-                              .where('EXTRACT(YEAR FROM cm_invoices.date) = ?', @year)
+                              .where('EXTRACT(YEAR FROM cm_invoices.date) = ?', @year).ransack(params[:q]).result
 
         @orders = {}
         @total = {}

@@ -17,6 +17,15 @@
         </div>
       </div>
 
+      <div class="d-flex justify-content-center row align-items-center">
+        <div class="col">
+          <%= f.label :customer_place_id_eq, Spree.t('billing.select_place') %>
+        </div>
+        <div class="col">
+          <%= f.select 'q[customer_place_id_eq]', options_for_select(SpreeCmCommissioner::Place.where(id: spree_current_user.place_ids).map {|p| [p.name, p.id] }, params.dig(:q, :customer_place_id_eq)), { include_blank: true }, { class: 'form-control select2-clear js-filterable', style: 'width: 300px;' } %>
+        </div>
+      </div>
+
       <div>
         <%= button Spree.t(:search), 'search.svg', nil, { class: 'btn-outline-primary' } %>
       </div>
@@ -46,7 +55,7 @@
           <td class="text-center"><%= @voided[month] %></td>
           <td class="text-center">
             <%= link_to_with_icon('download.svg', Spree.t('billing.export'),
-                        export_billing_reports_path(month: month, year: @year, format: :csv),
+                        export_billing_reports_path(month: month, year: @year, place_id: params.dig(:q, :customer_place_id_eq), format: :csv),
                         class: 'btn btn-sm btn-success') %>
           </td>
         </tr>
