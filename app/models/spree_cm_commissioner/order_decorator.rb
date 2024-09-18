@@ -33,7 +33,7 @@ module SpreeCmCommissioner
       base.has_many :taxons, through: :products, class_name: 'Spree::Taxon'
       base.has_many :guests, through: :line_items, class_name: 'SpreeCmCommissioner::Guest'
 
-      base.delegate :customer, to: :subscription, allow_nil: true
+      base.delegate :customer, to: :user, allow_nil: true
 
       base.whitelisted_ransackable_associations |= %w[customer taxon payments invoice]
       base.whitelisted_ransackable_attributes |= %w[intel_phone_number phone_number email number]
