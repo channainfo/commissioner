@@ -34,6 +34,10 @@
         <%= f.label :invoice_invoice_number_cont, I18n.t(:invoice_id, scope: 'activerecord.attributes.spree/order') %>
         <%= f.text_field :invoice_invoice_number_cont, class: "form-control js-quick-search-target js-filterable" %>
       </div>
+      <div class="form-group">
+        <%= f.label :customer_place_id_eq, I18n.t(:place, scope: 'activerecord.attributes.spree/report') %>
+        <%= f.select :customer_place_id_eq, options_for_select(SpreeCmCommissioner::Place.where(id: spree_current_user.place_ids).map {|p| [p.name, p.id]}, selected: params.dig(:q, :customer_place_id_eq)), { include_blank: true }, { class: 'form-control select2-clear js-filterable' } %>
+      </div>
       <div class="form-actions">
         <%= button Spree.t(:search), 'search.svg', nil, { class: 'btn-outline-primary' } %>
       </div>

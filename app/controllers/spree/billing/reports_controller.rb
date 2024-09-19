@@ -75,7 +75,9 @@ module Spree
         csv_data = SpreeCmCommissioner::Exports::ExportOrderCsvService.new(@orders[params[:month].to_i], params[:place_id]).call
 
         respond_to do |format|
-          format.csv { send_data csv_data, filename: "#{@year}_#{Date::MONTHNAMES[params[:month].to_i]}_Invoices.csv" }
+          format.csv do
+            send_data csv_data, filename: "#{@year}_#{Date::MONTHNAMES[params[:month].to_i]}_Invoices.csv", type: 'text/csv; charset=utf-8'
+          end
         end
       end
 
@@ -116,7 +118,7 @@ module Spree
         @voided = {}
 
         (1..12).each do |month|
-          @orders[month] = @search.joins(:invoice).where('EXTRACT(MONTH FROM cm_invoices.date) = ?', month).ransack(params[:q]).result
+          @orders[month] = @search.joins(:invoice).where('EXTRACT(MONTH FROM cm_invoices.date) = ?', month)
           @total[month] = Spree::Money.new(@orders[month].sum(:total)).to_s
           @paid[month] = Spree::Money.new(@orders[month].where(payment_state: :paid).sum(:total)).to_s
           @balance_due[month] = Spree::Money.new(@orders[month].where(payment_state: :balance_due).sum(:total)).to_s
