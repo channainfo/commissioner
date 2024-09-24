@@ -163,6 +163,33 @@ Simply add this require statement to your spec_helper:
 require 'spree_cm_commissioner/factories'
 ```
 
+### Run test with Github action
+
+We are utilizing GitHub Actions workflows defined in .github/workflows/publish.yml.
+
+### Run test with docker
+
+Our project includes both a Dockerfile and a docker-compose.yml configuration. If you require more fine-grained control over your workflow, including environment setup and database services, use docker-compose to build the images and run them in one go. However, you can also configure docker-compose to run tests with your external database installation.
+
+> **Note**: By default, we use a local instance of PostgreSQL.
+
+To manually build and run the Docker image with an external database:
+
+```sh
+> docker build -t central-market-comissioner_web .
+> docker run -e DATABASE_URL=postgres://postgres:@192.168.1.136:5432/spree_cm_commissioner_spree_test -e RAILS_ENV=test -it central-market-comissioner_web bash
+> bundle exec rake
+```
+
+To build and run the project with docker-compose:
+
+```sh
+docker-compose build
+docker-compose up --build
+```
+
+This setup allows you to configure the environment and database services in a single step, making it easier to manage and run tests.
+
 ## Releasing
 
 ```sh
