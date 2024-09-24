@@ -1,0 +1,33 @@
+version: '3'
+services:
+  # db:
+  #   image: postgres:15
+  #   environment:
+  #     POSTGRES_HOST_AUTH_METHOD: trust
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_DB: test_db
+  #   volumes:
+  #     - db_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+
+  web:
+    # build: .
+    image: central-market-comissioner_web
+
+    command: bash -c "bundle exec rubocop && bundle exec rake && tail -f /dev/null"
+
+    volumes:
+      - .:/gem
+      - /gem/vendor/bundle
+
+    # depends_on:
+    #   - db
+    environment:
+      # DATABASE_URL: postgres://postgres:password@db:5432/test_db
+      DATABASE_URL: postgres://postgres:@192.168.1.136:5432/spree_cm_commissioner_spree_test
+      RAILS_ENV: test
+
+# volumes:
+#   db_data:
