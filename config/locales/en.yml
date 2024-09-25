@@ -171,6 +171,9 @@ en:
     invalid_password: "Invalid Password"
 
   spree:
+    currency:
+      dollar: "$"
+      riel: "៛"
     cancel: "Cancel"
     confirm: "Confirm"
     en: "English"
@@ -280,6 +283,8 @@ en:
       subscription:
         quantity_is_missing: "Quantity cannot be nil or zero."
       payment_amount_received: "Payment amount received"
+      amount_to_be_paid: "Amount to be paid"
+      amount_remaining: "Amount remaining"
       void_confirmation: "Void Confirmation"
       capture_confirmation: "Capture Confirmation"
       new_order: "New Order"

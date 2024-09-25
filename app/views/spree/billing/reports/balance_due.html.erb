@@ -80,7 +80,7 @@
                   class: "badge badge-pill badge-#{order.payment_state}" %>
               <% end %>
             </td>
-            <td><%= order.display_total.to_html %></td>
+            <td><%= order.display_outstanding_balance.to_html %></td>
             <td class="actions">
               <% if spree_current_user.permissions.exists?(entry: 'spree/billing/orders', action: 'edit') %>
                 <% if order.payments.any? %>

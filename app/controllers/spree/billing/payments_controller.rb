@@ -13,6 +13,7 @@ module Spree
 
       rescue_from Spree::Core::GatewayError, with: :handle_spree_core_gateway_error
       rescue_from SpreeCmCommissioner::PaymentSourceMissingError, with: :handle_payment_source_missing
+      rescue_from SpreeCmCommissioner::PaymentCreationError, with: :handle_payment_creation_error
 
       def set_current_user_instance
         @payment.current_user_instance = spree_current_user
@@ -46,13 +47,25 @@ module Spree
 
       def update
         check_payment_source
+        update_payment_amount
 
-        if @payment.send("#{params[:e]}!")
-          flash[:success] = Spree.t(:payment_updated)
-        else
+        unless @payment.save
+          flash[:error] = @payment.errors.full_messages.join('. ')
+          return redirect_to request.referer || spree.billing_order_payments_path(@order)
+        end
+
+        unless @payment.send("#{params[:e]}!")
           flash[:error] = Spree.t(:cannot_perform_operation)
           raise Spree::Core::GatewayError
         end
+
+        flash[:success] = Spree.t(:payment_updated)
+
+        return unless @order.outstanding_balance.positive?
+
+        @payment = @order.payments.build(amount: @order.outstanding_balance, payment_method: @order.collect_backend_payment_methods.first)
+
+        raise SpreeCmCommissioner::PaymentCreationError unless @payment.save
 
         redirect_to request.referer || spree.billing_order_payments_path(@order)
       end
@@ -92,6 +105,12 @@ module Spree
         redirect_to request.referer || spree.billing_order_payments_path(@order)
       end
 
+      def handle_payment_creation_error
+        flash[:error] = Spree.t(:payment_creation_error)
+
+        redirect_to request.referer || spree.billing_order_payments_path(@order)
+      end
+
       def order
         @order ||= Spree::Order.find_by!(number: params[:order_id])
       end
@@ -106,6 +125,21 @@ module Spree
 
       def collection_url(options = {})
         billing_order_payments_url(options)
+      end
+
+      private
+
+      # method to update payment amount based on the both type of currency
+      def update_payment_amount
+        total_amount = 0
+
+        if params[:en_currency].present? || params[:kh_currency].present?
+          en_currency = params[:en_currency].first.to_i
+          kh_currency = params[:kh_currency].first.to_i
+          total_amount = (en_currency * 4100) + kh_currency
+        end
+
+        @payment.amount = total_amount
       end
     end
   end
