@@ -35,6 +35,9 @@
     @account_name = @current_vendor.account_name
     @account_number = @current_vendor.account_number
   end
+  @current_order = @customer.orders.index(@invoice.order)
+  @previous_order = @customer.orders[@current_order - 1] if @current_order && @current_order > 0
+  @outstanding_amount = Spree::Money.new(@previous_order&.outstanding_balance, currency: @invoice.order.line_items.first.variant.currency).to_s
   @customer_name = @customer.first_name.present? ? @customer.first_name : @customer.last_name
   @customer_phone = @customer.phone_number
   count = 1
@@ -155,39 +158,47 @@
             </tr>
           <% end %>
             <% @order.adjustments.eligible.each do |adjustment|  %>
-              <tr>
-                <th scope="row"><%= count %></th><% count += 1 %>
-                <td>
-                  <ul class="list-unstyled">
-                    <li> <%= adjustment.label %></li>
-                  </ul>
-                </td>
-                <td></td>
-                <td>
-                  <ul class="list-unstyled">
-                    <li>
-                    </li>
-                  </ul>
-                </td>
-                <td>
-                </td>
-                <td>
-                  <ul class="list-unstyled text-right">
-                    <li>
-                      <% if adjustment.amount.negative?  %>
-                        <%= adjustment.display_negative_amount %>
-                      <% else %>
-                        <%= adjustment.display_amount %>
-                      <% end %>
-                    </li>
-                  </ul>
-                </td>
-              </tr>
+              <% unless adjustment.label == 'Penalty' %>
+                <tr>
+                  <th scope="row"><%= count %></th><% count += 1 %>
+                  <td>
+                    <ul class="list-unstyled">
+                      <li> <%= adjustment.label %></li>
+                    </ul>
+                  </td>
+                  <td></td>
+                  <td>
+                    <ul class="list-unstyled">
+                      <li>
+                      </li>
+                    </ul>
+                  </td>
+                  <td>
+                  </td>
+                  <td>
+                    <ul class="list-unstyled text-right">
+                      <li>
+                        <% if adjustment.amount.negative?  %>
+                          <%= adjustment.display_negative_amount %>
+                        <% else %>
+                          <%= adjustment.display_amount %>
+                        <% end %>
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+              <% end %>
             <% end %>
           </tbody>
         </table>
 
         <div class="mt-2 body-size">
+        <div class="d-flex justify-content-between align-items-center pt-3 px-2 border border-black font-weight-bold text-black">
+                <p>ទឹកប្រាក់សល់ពីខែមុន​​ / Amount Remaining From Last Month</p>
+                <p>
+                  <%= @outstanding_amount  %>
+                </p>
+          </div>
           <div class="d-flex justify-content-between align-items-center pt-3 px-2 border border-black font-weight-bold text-black">
                 <p>ទឹកប្រាក់​ត្រូវទូទាត់​​ / Total Amount due</p>
                 <p>
