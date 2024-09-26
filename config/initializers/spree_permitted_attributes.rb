@@ -25,7 +25,7 @@ module Spree
       subtitle
       preferred_background_color
       preferred_foreground_color
-      show_event_status
+      show_badge_status
     ]
 
     @@store_attributes += [
