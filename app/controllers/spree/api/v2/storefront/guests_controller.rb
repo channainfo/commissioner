@@ -13,17 +13,6 @@ module Spree
             model_class.all
           end
 
-          # show by guest token
-          def show
-            guest = model_class.find_by(token: params[:id])
-
-            if guest
-              render_serialized_payload { serialize_resource(guest) }
-            else
-              render_error_payload({ error: 'Guest not found' }, 404)
-            end
-          end
-
           # override
           def collection_serializer
             SpreeCmCommissioner::V2::Storefront::GuestSerializer
