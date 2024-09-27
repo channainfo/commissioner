@@ -71,6 +71,7 @@ module Spree
               :social_contact_platform,
               :age,
               :emergency_contact,
+              :phone_number,
               :address,
               :other_organization,
               :expectation,
