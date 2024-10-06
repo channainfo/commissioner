@@ -11,7 +11,6 @@ module SpreeCmCommissioner
     def load_invoice_number
       load_prefix
       load_invoices_count
-
       context.invoice_number = "#{context.prefix}-#{rjust_number(context.invoices_count)}"
     end
 

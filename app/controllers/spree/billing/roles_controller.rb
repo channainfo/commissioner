@@ -73,7 +73,8 @@ module Spree
           'spree/billing/adjustments' => %w[index create new edit show update destroy],
           'spree/billing/payments' => %w[index create new edit show update destroy],
           'spree/billing/invoice' => %w[index show print_invoice_date],
-          'spree/billing/addresses' => %w[index create new edit show update destroy]
+          'spree/billing/addresses' => %w[index create new edit show update destroy],
+          'spree/billing/store_credits' => %w[index create new edit show update destroy]
         }
       end
 

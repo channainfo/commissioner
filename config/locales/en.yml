@@ -190,6 +190,7 @@ en:
     send_failed_or_method_not_support: "Send failed or method not support"
     subscribe: "Use Service"
     full_name: "name"
+    store_credits: 'Credits'
     address: "Address"
     billing_address: "Billing Address"
     shipping_address: "Shipping Address"
@@ -274,6 +275,8 @@ en:
       match_any: "Some line items must from selected age group"
       match_all: "All line items must from selected age group"
     billing:
+      six_month_discount: '6 Months discount'
+      twelve_month_discount: "12 Months discount"
       penalty_rate: 'Penalty Rate in %'
       penalty_label: "Penalty Label"
       customer_id: "Customer ID"

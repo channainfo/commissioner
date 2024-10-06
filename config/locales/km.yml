@@ -165,6 +165,7 @@ km:
     send_failed_or_method_not_support: "Send failed or method not support"
     subscribe: "ប្រើសេវាកម្ម"
     full_name: "ឈ្មោះពេញ"
+    store_credits: 'Credits'
     address: "អាសយដ្ឋាន"
     billing_address: "អាសយដ្ឋានទូទាត់"
     shipping_address: "អាសយដ្ឋានប្រើ​ប្រាស់"
@@ -241,6 +242,8 @@ km:
       match_any: "Some line items must from selected age group"
       match_all: "All line items must from selected age group"
     billing:
+      six_month_discount: 'Six Month discount'
+      twelve_month_discount: "Twelve Month discount"
       penalty_rate: 'ការផាកពិន័យគិតជាភាគរយ'
       code: "code"
       name: "name"

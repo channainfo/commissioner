@@ -46,8 +46,7 @@ module SpreeCmCommissioner
       context.new_order = customer.user.orders.create(
         subscription_id: active_subscriptions.first.id,
         phone_number: context.customer.phone_number,
-        user_id: context.customer.user_id,
-        state: 'payment'
+        user_id: context.customer.user_id
       )
     end
 
@@ -69,10 +68,15 @@ module SpreeCmCommissioner
       add_subscription_variant_to_line_item(last_invoice_date, active_subscriptions, month)
       add_penalty_to_order
       apply_promotion
-      create_invoice
 
       context.new_order.create_default_payment_if_eligble
       context.new_order.reload
+      # capture payment if the payment source is store credit
+      if context.new_order.payments.last.source_type == 'Spree::StoreCredit'
+        context.new_order.payments.last.capture!
+        context.new_order.update(state: 'complete', payment_state: 'paid', completed_at: Time.zone.now)
+      end
+      create_invoice
     end
 
     def add_subscription_variant_to_line_item(last_invoice_date, active_subscriptions, month)
