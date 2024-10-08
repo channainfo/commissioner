@@ -426,6 +426,7 @@ Spree::Core::Engine.add_routes do
 
         resources :vendors do
           resources :nearby_places, only: %i[index]
+          resources :vendor_photos
         end
         resource :homepage_data, only: [:show]
         resources :homepage_sections, only: [:index]
