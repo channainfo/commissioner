@@ -11,7 +11,8 @@ module Spree
           base.has_one :web_banner, serializer: ::SpreeCmCommissioner::V2::Storefront::AssetSerializer
           base.has_one :home_banner, serializer: ::SpreeCmCommissioner::V2::Storefront::AssetSerializer
 
-          base.attributes :custom_redirect_url, :kind, :subtitle, :from_date, :to_date, :background_color, :foreground_color, :show_badge_status
+          base.attributes :custom_redirect_url, :kind, :subtitle, :from_date, :to_date,
+                          :background_color, :foreground_color, :show_badge_status, :vendor_id
         end
       end
     end
