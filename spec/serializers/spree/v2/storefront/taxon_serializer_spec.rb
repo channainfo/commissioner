@@ -47,7 +47,8 @@ RSpec.describe Spree::V2::Storefront::TaxonSerializer, type: :serializer do
         :to_date,
         :background_color,
         :foreground_color,
-        :show_badge_status
+        :show_badge_status,
+        :vendor_id
       )
     end
 
