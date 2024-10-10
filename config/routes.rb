@@ -313,6 +313,7 @@ Spree::Core::Engine.add_routes do
         resources :orders
         resources :subscriptions
         resources :addresses
+        resources :store_credits
       end
       resources :roles
       resources :users do

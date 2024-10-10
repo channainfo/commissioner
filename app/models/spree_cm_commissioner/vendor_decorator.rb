@@ -10,7 +10,7 @@ module SpreeCmCommissioner
 
       base.attr_accessor :service_availabilities
 
-      base.store :preferences, accessors: %i[account_name account_number penalty_rate penalty_label]
+      base.store :preferences, accessors: %i[account_name account_number penalty_rate penalty_label six_months_discount twelve_months_discount]
 
       base.before_save :generate_code, if: :code.nil?
 

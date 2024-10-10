@@ -1,0 +1,17 @@
+<%= render partial: 'spree/billing/shared/customer_tabs', locals: { current: :store_credits } %>
+
+<%= form_for @store_credit, url: spree.billing_customer_store_credits_path(@customer, @store_credit) do |f| %>
+  <div class="card">
+    <div class="card-header">
+      <%= Spree.t(:add_store_credit) %>
+    </div>
+    <div class="card-body">
+      <div class="field">
+        <%= label_tag :duration, Spree.t(:duration) %>
+        <%= select_tag :duration, options_for_select([['6 months', 6], ['12 months', 12]]), { class: 'form-control' } %>
+      </div>
+      <%= render partial: 'form', locals: { f: f } %>
+      <%= render partial: 'spree/admin/shared/new_resource_links', locals: { collection_url: spree.billing_customer_store_credits_path(@customer, @store_credit) } %>
+    </div>
+  </div>
+<% end %>

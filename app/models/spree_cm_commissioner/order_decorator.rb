@@ -137,16 +137,25 @@ module SpreeCmCommissioner
     def create_default_payment_if_eligble
       return unless subscription?
 
-      default_payment_method = Spree::PaymentMethod::Check.available_on_back_end.first_or_create! do |method|
-        method.name ||= 'Invoice'
-        method.stores = [Spree::Store.default] if method.stores.empty?
+      if covered_by_store_credit
+        payment_method = Spree::PaymentMethod::StoreCredit.available_on_back_end.first_or_create! do |method|
+          method.name ||= 'StoreCredit'
+          method.stores = [Spree::Store.default] if method.stores.empty?
+        end
+        source_id = user.store_credit_ids.last
+        source_type = 'Spree::StoreCredit'
+      else
+        payment_method = Spree::PaymentMethod::Check.available_on_back_end.first_or_create! do |method|
+          method.name ||= 'Invoice'
+          method.stores = [Spree::Store.default] if method.stores.empty?
+        end
       end
-
       payments.create!(
-        payment_method: default_payment_method,
-        amount: order_total_after_store_credit
+        payment_method: payment_method,
+        amount: total,
+        source_id: source_id,
+        source_type: source_type
       )
-
       Spree::Checkout::Advance.call(order: self)
     end
 

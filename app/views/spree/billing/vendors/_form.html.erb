@@ -58,6 +58,18 @@
         <%= f.label Spree.t('billing.penalty_rate') %>
         <%= f.text_field :penalty_rate, class: 'form-control' %>
       <% end %>
-    <div>
+    </div>
+    <div class='col-6'>
+      <%= f.field_container :preferences do %>
+        <%= f.label Spree.t('billing.six_month_discount') %>
+        <%= f.text_field :six_months_discount, class: 'form-control' %>
+      <% end %>
+    </div>
+    <div class='col-6'>
+      <%= f.field_container :preferences do %>
+        <%= f.label Spree.t('billing.twelve_month_discount') %>
+        <%= f.text_field :twelve_months_discount, class: 'form-control' %>
+      <% end %>
+    </div>
   </div>
 </div>

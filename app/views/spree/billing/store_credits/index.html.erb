@@ -1,0 +1,44 @@
+<%= render partial: 'spree/billing/shared/customer_tabs', locals: { current: :store_credits } %>
+<%= render partial: 'spree/billing/shared/customer_credit_form', locals:{store_credit: :store_credit} %>
+<% content_for :page_actions do %>
+  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#customerCredit" >
+    Add Credit
+  </button>
+<% end %>
+
+<% if @store_credits.any? %>
+<div class="table-responsive border rounded bg-white">
+  <table class="table">
+    <thead class="text-muted">
+      <th><%= Spree.t(:credited) %></th>
+      <th><%= Spree.t(:used) %></th>
+      <th><%= Spree.t(:category) %></th>
+      <th><%= Spree.t(:created_by) %></th>
+      <th><%= Spree.t(:issued_on) %></th>
+      <th data-hook="admin_store_credits_index_header_actions" class="actions"></th>
+    <thead class="text-muted">
+    <tbody>
+      <% @store_credits.each do |store_credit| %>
+        <tr>
+          <td><%= store_credit.display_amount.to_html %></td>
+          <td><%= store_credit.display_amount_used.to_html %></td>
+          <td><%= store_credit.category_name %></td>
+          <td><%= store_credit.created_by.first_name %></td>
+          <td><%= l store_credit.created_at.to_date %></td>
+          <td class="actions" data-hook="admin_store_credits_index_row_actions">
+            <span class="d-flex justify-content-end">
+              <% if store_credit.amount_used.zero? %>
+                <%= link_to_delete store_credit, no_text: true, url: spree.billing_customer_store_credit_path(@customer, store_credit) if can?(:destroy, store_credit) %>
+              <% end %>
+            </span>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<% else %>
+  <div class="text-center no-objects-found m-5">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree::StoreCredit)) %>
+  </div>
+<% end %>

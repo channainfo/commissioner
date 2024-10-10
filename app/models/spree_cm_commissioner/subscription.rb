@@ -49,8 +49,11 @@ module SpreeCmCommissioner
       variant.month
     end
 
+    def total_price
+      variant.price * quantity
+    end
+
     def display_total_price
-      total_price = variant.price * quantity
       Spree::Money.new(total_price.to_i, currency: variant.currency).to_s
     end
 

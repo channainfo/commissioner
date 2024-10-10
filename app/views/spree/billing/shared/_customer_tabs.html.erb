@@ -27,6 +27,14 @@
         class: "nav-link #{'active' if current == :orders}" %>
     </li>
   <% end %>
+  <% if spree_current_user.permissions.exists?(entry: 'spree/billing/store_credits', action: 'index') %>
+    <li class="nav-item">
+      <%= link_to_with_icon 'money.svg',
+        Spree.t(:store_credits),
+        spree.billing_customer_store_credits_path(@customer),
+        class: "nav-link #{'active' if current == :store_credits}" %>
+    </li>
+  <% end %>
   <% if spree_current_user.permissions.exists?(entry: 'spree/billing/addresses', action: 'index') %>
     <li class="nav-item">
       <%= link_to_with_icon 'pin-map.svg',
