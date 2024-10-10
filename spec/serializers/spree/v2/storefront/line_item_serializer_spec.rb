@@ -57,7 +57,8 @@ RSpec.describe Spree::V2::Storefront::LineItemSerializer, type: :serializer do
         :allowed_upload_later,
         :allow_anonymous_booking,
         :discontinue_on,
-        :high_demand
+        :high_demand,
+        :sufficient_stock
       )
 
       expect(subject[:data][:attributes][:qr_data]).to eq line_item.qr_data

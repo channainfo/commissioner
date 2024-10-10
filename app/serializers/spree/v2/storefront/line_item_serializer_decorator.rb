@@ -12,6 +12,7 @@ module Spree
           base.attribute :allowed_self_check_in, &:allowed_self_check_in?
           base.attribute :allowed_upload_later, &:allowed_upload_later?
           base.attribute :delivery_required, &:delivery_required?
+          base.attribute :sufficient_stock, &:sufficient_stock?
 
           base.has_one :vendor
 
