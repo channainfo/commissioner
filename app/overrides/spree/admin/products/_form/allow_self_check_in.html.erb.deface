@@ -1,4 +1,4 @@
-<!-- insert_after "[data-hook='admin_product_form_subscribable']" -->
+<!-- insert_after "[data-hook='admin_product_form_promotionable']" -->
 
 <div data-hook="admin_product_form_allow_self_check_in">
   <%= f.field_container :allow_self_check_in do %>
