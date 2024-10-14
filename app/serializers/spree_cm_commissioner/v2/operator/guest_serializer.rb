@@ -6,6 +6,8 @@ module SpreeCmCommissioner
 
         attributes :first_name, :last_name, :dob, :gender, :qr_data, :event_id, :seat_number, :formatted_bib_number, :phone_number
 
+        attribute :require_kyc_field, &:require_kyc_field?
+
         belongs_to :occupation, serializer: Spree::V2::Storefront::TaxonSerializer
 
         has_one :check_in, serializer: SpreeCmCommissioner::V2::Operator::CheckInSerializer

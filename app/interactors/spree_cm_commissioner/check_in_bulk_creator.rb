@@ -34,6 +34,8 @@ module SpreeCmCommissioner
       return context.fail!(message: :guest_not_found) if guest.blank?
       return context.fail!(message: :already_check_in) if guest.check_in.present?
 
+      update_guest_data(guest, check_in_attributes) if guest_data_present?(check_in_attributes)
+
       check_in = SpreeCmCommissioner::CheckIn.new(
         guest: guest,
         check_in_by: check_in_by,
@@ -52,6 +54,18 @@ module SpreeCmCommissioner
       end
 
       context.fail!(message: :invalid, errors: check_in.errors.full_messages)
+    end
+
+    def guest_data_present?(check_in_attributes)
+      check_in_attributes[:guest_attributes].present?
+    end
+
+    def update_guest_data(guest, check_in_attributes)
+      guest_data = check_in_attributes[:guest_attributes]
+
+      return if guest.update(guest_data)
+
+      context.fail!(message: :invalid_guest_data, errors: guest.errors.full_messages)
     end
   end
 end
