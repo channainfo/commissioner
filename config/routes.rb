@@ -479,6 +479,7 @@ Spree::Core::Engine.add_routes do
     end
 
     namespace :chatrace do
+      resources :orders, only: %i[create]
       resources :guests, only: %i[show update]
       resources :check_ins, only: [:create]
     end

@@ -34,6 +34,7 @@ module Spree
             last_name: guest.last_name,
             dob: guest.dob,
             gender: guest.gender,
+            age: guest.age,
             occupation: guest.occupation&.name || guest.other_occupation,
             entry_type: guest.entry_type,
             organization: guest.other_organization,
@@ -42,10 +43,12 @@ module Spree
             telegram_user_verified_at: guest.preferred_telegram_user_verified_at,
             order_number: order.number,
             order_email: order.email,
-            order_first_name: order.customer_address.firstname,
-            order_last_name: order.customer_address.lastname,
-            order_phone_number: order.intel_phone_number || order.customer_address.phone,
-            checked_in_at: guest.check_in&.confirmed_at
+            order_first_name: order.customer_address&.firstname,
+            order_last_name: order.customer_address&.lastname,
+            order_phone_number: order.intel_phone_number || order.customer_address&.phone,
+            checked_in_at: guest.check_in&.confirmed_at,
+            qr_data: guest.qr_data,
+            order_qr_data: order.qr_data
           }
         end
       end

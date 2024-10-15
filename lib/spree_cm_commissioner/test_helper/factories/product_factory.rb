@@ -116,5 +116,9 @@ FactoryBot.define do
         product.kyc = _evaluator.select_fields.map { |field| fields[field] }.sum
       end
     end
+
+    factory :cm_event_product do
+      taxons { [create(:cm_taxon_event_section, from_date: '2024-02-02'.to_date, to_date: '2024-03-03')] }
+    end
   end
 end

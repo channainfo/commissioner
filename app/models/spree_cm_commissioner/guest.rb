@@ -40,7 +40,6 @@ module SpreeCmCommissioner
     before_validation :set_event_id
     before_validation :assign_seat_number, if: -> { bib_number.present? }
 
-    validates :phone_number, uniqueness: { scope: :event_id }, allow_nil: true, if: -> { event_id.present? }
     validates :seat_number, uniqueness: { scope: :event_id }, allow_nil: true, if: -> { event_id.present? }
     validates :bib_index, uniqueness: true, allow_nil: true
 
@@ -51,6 +50,7 @@ module SpreeCmCommissioner
       %i[
         first_name last_name age dob gender other_occupation other_organization
         entry_type nationality_id other_organization expectation emergency_contact bib_number
+        preferred_telegram_user_id
       ]
     end
 
