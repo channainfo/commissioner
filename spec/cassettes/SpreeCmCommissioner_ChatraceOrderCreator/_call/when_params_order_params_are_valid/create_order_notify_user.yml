@@ -1,0 +1,45 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://app.chatgd.com/api/users/734348432/send/1728985704288
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      X-Access-Token:
+      - 1663219.TIr7mU295Hm0FIyD2hyxMSOed059Jrl4
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Faraday v1.10.3
+      Content-Length:
+      - '0'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.23.3
+      Date:
+      - Tue, 15 Oct 2024 10:56:16 GMT
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 google
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: "\n\n\n\n{\"success\":true}\n  "
+  recorded_at: Tue, 15 Oct 2024 10:56:16 GMT
+recorded_with: VCR 6.2.0
