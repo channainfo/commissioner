@@ -140,6 +140,10 @@ module SpreeCmCommissioner
       line_item.variant.bib_prefix.present?
     end
 
+    def bib_display_prefix?
+      line_item.variant.bib_display_prefix?
+    end
+
     def generate_bib
       return if bib_prefix.present?
       return unless bib_required?
@@ -167,7 +171,12 @@ module SpreeCmCommissioner
       return nil if bib_number.blank?
 
       filled_bib_number = bib_number.to_s.rjust(line_item.variant.bib_zerofill.to_i, '0')
-      "#{bib_prefix}#{filled_bib_number}"
+
+      if bib_display_prefix?
+        "#{bib_prefix}#{filled_bib_number}"
+      else
+        filled_bib_number
+      end
     end
   end
 end

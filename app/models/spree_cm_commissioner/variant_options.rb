@@ -121,6 +121,11 @@ module SpreeCmCommissioner
       @bib_zerofill ||= option_value_name_for(option_type_name: 'bib-zerofill')&.to_i || 3
     end
 
+    def bib_display_prefix?
+      @bib_display_prefix ||= option_value_name_for(option_type_name: 'bib-display-prefix')&.to_i || 1
+      @bib_display_prefix == 1
+    end
+
     def seat_number_positions
       @seat_number_positions ||= option_value_name_for(option_type_name: 'seat-number-positions')&.split(',')
     end

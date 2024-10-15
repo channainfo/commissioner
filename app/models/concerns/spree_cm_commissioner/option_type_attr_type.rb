@@ -38,6 +38,7 @@ module SpreeCmCommissioner
       'allowed-extra-kids' => 'integer',
       'bib-prefix' => 'string',
       'bib-zerofill' => 'integer',
+      'bib-display-prefix' => 'boolean',
       'seat-number-positions' => 'array'
     }.freeze
 
