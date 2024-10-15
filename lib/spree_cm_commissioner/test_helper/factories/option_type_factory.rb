@@ -129,6 +129,12 @@ FactoryBot.define do
       presentation { 'bib-zerofill' }
     end
 
+    trait :bib_display_prefix do
+      attr_type { :boolean }
+      name { 'bib-display-prefix' }
+      presentation { 'Should display bib prefix?' }
+    end
+
     trait :seat_number_positions do
       attr_type { :array }
       name { 'seat-number-positions' }

@@ -346,4 +346,34 @@ RSpec.describe SpreeCmCommissioner::Guest, type: :model do
       end
     end
   end
+
+  describe '#formatted_bib_number' do
+    let(:taxonomy) { create(:taxonomy, kind: :event) }
+    let(:event) { create(:taxon, name: 'Sai', taxonomy: taxonomy) }
+    let(:product_with_bib) { create(:cm_bib_number_product, product_type: :ecommerce, taxons: [event]) }
+    let(:variant) { product_with_bib.variants.first }
+
+    let(:order) { create(:order, completed_at: Date.current) }
+    let(:line_item) { create(:line_item, order: order, variant: variant) }
+    let(:guest) { create(:guest, line_item: line_item) }
+
+    let(:not_display_bib_prefix) { create(:cm_option_value, name: '0', option_type: create(:cm_option_type, :bib_display_prefix)) }
+    let(:display_bib_prefix) { create(:cm_option_value, name: '1', option_type: create(:cm_option_type, :bib_display_prefix)) }
+
+    it 'return bib number without prefix when bib_display_prefix is 0' do
+      guest.generate_bib!
+
+      variant.update(option_values: [not_display_bib_prefix])
+
+      expect(guest.formatted_bib_number).to eq "001"
+    end
+
+    it 'return bib number with prefix when bib_display_prefix is 1' do
+      guest.generate_bib!
+
+      variant.update(option_values: [display_bib_prefix])
+
+      expect(guest.formatted_bib_number).to eq "3KM001"
+    end
+  end
 end
