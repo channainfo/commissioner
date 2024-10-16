@@ -77,6 +77,41 @@ module SpreeCmCommissioner
       false
     end
 
+    def require_kyc_field? # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength
+      kyc_fields.any? do |field|
+        case field
+        when :guest_name
+          first_name.blank? || last_name.blank?
+        when :guest_gender
+          gender.blank?
+        when :guest_dob
+          dob.blank?
+        when :guest_age
+          age.blank?
+        when :guest_occupation
+          occupation.blank? && other_occupation.blank?
+        when :guest_nationality
+          nationality.blank?
+        when :guest_emergency_contact
+          emergency_contact.blank?
+        when :guest_organization
+          other_organization.blank?
+        when :guest_expectation
+          expectation.blank?
+        when :guest_social_contact
+          social_contact_platform.blank? || social_contact.blank?
+        when :guest_id_card
+          id_card.blank?
+        when :guest_address
+          address.blank?
+        when :guest_phone_number
+          phone_number.blank?
+        else
+          false
+        end
+      end
+    end
+
     def set_event_id
       self.event_id ||= line_item.associated_event&.id if line_item.present?
     end

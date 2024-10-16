@@ -26,6 +26,50 @@ RSpec.describe SpreeCmCommissioner::CheckInBulkCreator do
       { guest_id: guest_c.id }
     ] }
 
+    let(:check_ins) do
+      [
+        {
+          guest_id: guest_a.id,
+          confirmed_at: DateTime.current,
+          guest_attributes: {
+            first_name: 'John',
+            last_name: 'Doe',
+            age: 25,
+            gender: 'male',
+            phone_number: '0120000001'
+          }
+        },
+        {
+          guest_id: guest_b.id,
+          confirmed_at: DateTime.current,
+          guest_attributes: {
+            first_name: 'Jake',
+            last_name: 'Rose',
+            age: 30,
+            gender: 'female',
+            phone_number: '0120000002'
+          }
+        }
+      ]
+    end
+
+    it 'creates check_ins and update guest info' do
+      context = described_class.call(check_ins_attributes: check_ins)
+
+      expect(context.success?).to be true
+      expect(context.check_ins.size).to eq(check_ins.size)
+
+      expect(guest_a.reload.full_name).to eq 'John Doe'
+      expect(guest_a.reload.age).to eq 25
+      expect(guest_a.reload.gender).to eq 'male'
+      expect(guest_a.reload.phone_number).to eq '0120000001'
+
+      expect(guest_b.reload.full_name).to eq 'Jake Rose'
+      expect(guest_b.reload.age).to eq 30
+      expect(guest_b.reload.gender).to eq 'female'
+      expect(guest_b.reload.phone_number).to eq '0120000002'
+    end
+
     it 'should creates check_ins for each guest' do
       context = described_class.call(check_ins_attributes: guest_ids)
 
@@ -39,7 +83,6 @@ RSpec.describe SpreeCmCommissioner::CheckInBulkCreator do
         { guest_id: guest_b.id },
         { guest_id: guest_c.id }
       ]
-
       context = described_class.call(check_ins_attributes: multiple_guest_ids)
 
       expect(context.success?).to be true

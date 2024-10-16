@@ -15,6 +15,7 @@ module SpreeCmCommissioner
 
         attribute :allowed_checkout, &:allowed_checkout?
         attribute :allowed_upload_later, &:allowed_upload_later?
+        attribute :require_kyc_field, &:require_kyc_field?
 
         belongs_to :occupation, serializer: Spree::V2::Storefront::TaxonSerializer
         belongs_to :nationality, serializer: Spree::V2::Storefront::TaxonSerializer

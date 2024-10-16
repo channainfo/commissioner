@@ -11,7 +11,7 @@ module Spree
             check_ins = []
 
             if params[:check_ins].present?
-              check_ins = params[:check_ins].map { |check_in| check_in.permit(:guest_id, :confirmed_at).to_h }
+              check_ins = process_check_ins(params[:check_ins])
             elsif params[:guest_ids].present?
               check_ins = params[:guest_ids].map { |guest_id| { guest_id: guest_id } }
             end
@@ -33,6 +33,33 @@ module Spree
           end
 
           private
+
+          def process_check_ins(check_ins_params)
+            check_ins_params.map do |check_in|
+              check_in.permit(
+                :guest_id,
+                :confirmed_at,
+                guest_attributes: %i[
+                  first_name
+                  last_name
+                  dob
+                  gender
+                  occupation_id
+                  nationality_id
+                  other_occupation
+                  social_contact
+                  social_contact_platform
+                  age
+                  emergency_contact
+                  phone_number
+                  address
+                  other_organization
+                  expectation
+                  upload_later
+                ]
+              ).to_h
+            end
+          end
 
           def model_class
             SpreeCmCommissioner::CheckIn

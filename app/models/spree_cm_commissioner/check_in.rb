@@ -14,6 +14,8 @@ module SpreeCmCommissioner
     belongs_to :checkinable, polymorphic: true
     before_validation :set_entry_type, on: :create
 
+    accepts_nested_attributes_for :guest, allow_destroy: true
+
     def set_entry_type
       self.entry_type = guest.entry_type
     end
