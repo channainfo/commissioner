@@ -61,6 +61,10 @@
         width: 108px;
         height: 108px;
       }
+
+      .margin-element {
+        margin: 12px;
+      }
     </style>
     <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
   </head>
@@ -81,10 +85,6 @@
             <td><%= venue %></td>
           </tr>
           <tr>
-            <td>Ticket Type</td>
-            <td><%= ticket_type %></td>
-          </tr>
-          <tr>
             <td>Full Name</td>
             <td><%= full_name %></td>
           </tr>
@@ -92,18 +92,22 @@
             <td>Phone Number</td>
             <td><%= phone_number %></td>
           </tr>
+          <tr>
+            <td>Pass Type</td>
+            <td><%= ticket_type %></td>
+          </tr>
         </table>
       </div>
 
       <!-- Divider -->
-      <div class="divider"></div>
+      <div class="divider margin-element"></div>
 
       <!-- Ticket Info -->
-      <div class="qr-info-text">
+      <div class="qr-info-text margin-element">
         This QR code is used for individual check-in
       </div>
-      <div class="seat-number">No. <%= seat_number %></div>
-      <div id="canvas" class="qr-code"></div>
+      <div class="seat-number margin-element">No. <%= seat_number %></div>
+      <div id="canvas" class="qr-code margin-element"></div>
     </div>
 
     <script>
