@@ -4,27 +4,17 @@ module Spree
       module Storefront
         class IdCardsController < ::Spree::Api::V2::ResourceController
           def create
-            context = SpreeCmCommissioner::GuestIdCardManager.call(
-              card_type: id_card_params[:card_type],
-              front_image_url: id_card_params[:front_image_url],
-              back_image_url: id_card_params[:back_image_url],
-              guest_id: id_card_params[:guest_id]
-            )
+            context = id_card_manager_context
 
-            if context.success?
+            if context&.success?
               render_serialized_payload { serialize_resource(context.result) }
             else
-              render_error_payload(context.message)
+              render_error_payload(context&.message || 'Failed to create ID card')
             end
           end
 
           def update
-            context = SpreeCmCommissioner::GuestIdCardManager.call(
-              card_type: id_card_params[:card_type],
-              front_image_url: id_card_params[:front_image_url],
-              back_image_url: id_card_params[:back_image_url],
-              guest_id: id_card_params[:guest_id]
-            )
+            context = id_card_manager_context
 
             if context.success?
               render_serialized_payload { serialize_resource(context.result) }
@@ -46,7 +36,22 @@ module Spree
           private
 
           def id_card_params
-            params.permit(:card_type, :front_image_url, :back_image_url, :guest_id)
+            params.permit(:card_type, :front_image_url, :back_image_url, :guest_id, :template_guest_id)
+          end
+
+          def id_card_manager_context
+            options = {
+              card_type: id_card_params[:card_type],
+              front_image_url: id_card_params[:front_image_url],
+              back_image_url: id_card_params[:back_image_url]
+            }
+            if id_card_params[:guest_id].present?
+              id_card_options = options.merge(guestable_id: id_card_params[:guest_id])
+              SpreeCmCommissioner::GuestIdCardManager.call(**id_card_options)
+            elsif id_card_params[:template_guest_id].present?
+              id_card_options = options.merge(guestable_id: id_card_params[:template_guest_id])
+              SpreeCmCommissioner::TemplateGuestIdCardManager.call(**id_card_options)
+            end
           end
 
           def model_class
