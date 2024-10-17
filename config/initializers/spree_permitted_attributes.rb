@@ -26,6 +26,7 @@ module Spree
       preferred_background_color
       preferred_foreground_color
       show_badge_status
+      vendor_id
     ]
 
     @@store_attributes += [
