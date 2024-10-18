@@ -20,7 +20,8 @@ RSpec.describe SpreeCmCommissioner::V2::Operator::LineItemSerializer, type: :ser
         :quantity,
         :options_text,
         :qr_data,
-        :kyc_fields
+        :kyc_fields,
+        :available_social_contact_platforms
       )
 
       expect(subject[:data][:attributes][:name]).to eq line_item.name
@@ -39,7 +40,32 @@ RSpec.describe SpreeCmCommissioner::V2::Operator::LineItemSerializer, type: :ser
       expect(order[:attributes].keys).to contain_exactly(:email, :number, :phone_number, :state, :qr_data, :item_count)
 
       guest = subject[:included].find { |item| item[:type] == :guest }
-      expect(guest[:attributes].keys).to contain_exactly(:dob, :event_id, :first_name, :gender, :last_name, :qr_data, :seat_number, :formatted_bib_number, :phone_number, :require_kyc_field)
+      expect(guest[:attributes].keys).to contain_exactly(
+        :first_name,
+        :last_name,
+        :dob,
+        :gender,
+        :kyc_fields,
+        :other_occupation,
+        :created_at,
+        :updated_at,
+        :qr_data,
+        :social_contact_platform,
+        :social_contact,
+        :available_social_contact_platforms,
+        :age,
+        :emergency_contact,
+        :other_organization,
+        :expectation,
+        :upload_later,
+        :address,
+        :formatted_bib_number,
+        :phone_number,
+        :allowed_checkout,
+        :require_kyc_field,
+        :event_id,
+        :seat_number
+      )
     end
   end
 end
