@@ -31,7 +31,7 @@ module SpreeCmCommissioner
 
     belongs_to :event, class_name: 'Spree::Taxon'
 
-    has_one :id_card, class_name: 'SpreeCmCommissioner::IdCard', dependent: :destroy
+    has_one :id_card, as: :id_cardable, class_name: 'SpreeCmCommissioner::IdCard', dependent: :destroy
     has_one :check_in, class_name: 'SpreeCmCommissioner::CheckIn'
 
     preference :telegram_user_id, :string

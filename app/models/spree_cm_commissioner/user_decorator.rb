@@ -17,6 +17,7 @@ module SpreeCmCommissioner
       base.has_many :user_events, class_name: 'SpreeCmCommissioner::UserEvent'
       base.has_many :events, through: :user_events, class_name: 'Spree::Taxon', source: 'taxon'
       base.has_many :guests, class_name: 'SpreeCmCommissioner::Guest', dependent: :destroy
+      base.has_many :template_guests, class_name: 'SpreeCmCommissioner::TemplateGuest', dependent: :destroy
 
       base.has_many :wished_items, class_name: 'Spree::WishedItem', through: :wishlists
       base.has_many :promotions, through: :promotion_rules, class_name: 'Spree::Promotion'
