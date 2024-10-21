@@ -203,6 +203,10 @@ module SpreeCmCommissioner
       "#{number}-#{token}"
     end
 
+    def display_outstanding_balance
+      Spree::Money.new(outstanding_balance, currency: currency).to_s
+    end
+
     private
 
     # override :spree_api

@@ -8,12 +8,49 @@
         </button>
       </div>
       <div class="modal-body">
-        <p><%= I18n.t('spree.billing.payment_amount_received') %> : <%= order.display_total %></p>
-      </div>
-      <div class="modal-footer d-flex justify-content-between">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= Spree.t(:cancel) %></button>
-        <%= link_to Spree.t(:confirm), billing_order_payment_path(order, payment, e: 'capture'), method: :put, class: 'btn btn-primary' %>
-      </div>
+        <%= form_with model: payment, url: billing_order_payment_path(order, payment, e: 'capture'), method: :put do |f| %>
+          <div class="form-group d-flex justify-content-between">
+            <%= I18n.t('spree.billing.amount_to_be_paid') %>
+            <div class="row col-7 d-flex justify-content-between">
+              <%= I18n.t('spree.currency.riel') %>
+              <%= text_field :amount_to_be_paid, '', placeholder: order.outstanding_balance.to_s, class: 'form-control', style: 'width: 85%; margin-right: 5%;', disabled: true %>
+            </div>
+          </div>
+          <%= I18n.t('spree.billing.payment_amount_received') %><br><br>
+          <div class="d-flex justify-content-between">
+            <%= Spree.t(:dollar) %>
+            <div class="form-group row col-7 d-flex justify-content-between">
+              <%= I18n.t('spree.currency.dollar') %>
+              <%= text_field :en_currency, '', class: 'form-control', style: 'width: 85%; margin-right: 5%;', id: "#{payment.id}_en_currency" %>
+            </div>
+          </div>
+          <div class="form-group d-flex justify-content-between">
+            <%= Spree.t(:riel) %>
+            <div class="row col-7 d-flex justify-content-between">
+              <%= I18n.t('spree.currency.riel') %>
+              <%= text_field :kh_currency, '', class: 'form-control', style: 'width: 85%; margin-right: 5%;', id: "#{payment.id}_kh_currency" %>
+            </div>
+          </div>
+          <div class="form-group d-flex justify-content-between">
+            <%= Spree.t(:total) %>
+            <div class="row col-7 d-flex justify-content-between">
+              <%= I18n.t('spree.currency.riel') %>
+              <%= f.text_field :amount, class: 'form-control', style: 'width: 85%; margin-right: 5%;', id: "#{payment.id}_total", disabled: true %>
+            </div>
+          </div>
+          <div class="form-group d-flex justify-content-between">
+            <%= I18n.t('spree.billing.amount_remaining') %>
+            <div class="row col-7 d-flex justify-content-between">
+              <%= I18n.t('spree.currency.riel') %>
+              <%= text_field :amount, '', class: 'form-control', style: 'width: 85%; margin-right: 5%;', id: "#{payment.id}_amount_remaining", disabled: true %>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer d-flex justify-content-between">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= Spree.t(:cancel) %></button>
+          <%= f.submit Spree.t(:confirm), class: 'btn btn-primary' %>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
@@ -63,4 +100,29 @@
       }
     });
   }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    var paymentId = "<%= payment.id %>";
+    const enCurrencyField = document.getElementById(paymentId + '_en_currency');
+    const khCurrencyField = document.getElementById(paymentId + '_kh_currency');
+    const totalField = document.getElementById(paymentId + '_total');
+    const amountToBePaid = "<%= order.outstanding_balance %>";
+    const amountRemainingField = document.getElementById(paymentId + '_amount_remaining');
+
+    function updateTotal() {
+      const enCurrency = parseFloat(enCurrencyField.value) || 0;
+      const khCurrency = parseFloat(khCurrencyField.value) || 0;
+
+      const total = (enCurrency * 4100) + khCurrency;
+      const amountRemaining = amountToBePaid - total;
+
+      // Update the total field
+      totalField.value = total.toFixed(2);
+      amountRemainingField.value = amountRemaining.toFixed(2);
+    }
+
+    // Add event listeners to both currency fields
+    enCurrencyField.addEventListener('input', updateTotal);
+    khCurrencyField.addEventListener('input', updateTotal);
+  });
 </script>
