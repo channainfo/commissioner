@@ -26,7 +26,11 @@ module Spree
           def create
             spree_authorize! :update, spree_current_order, order_token
 
-            resource = scope.new(guest_params)
+            resource = if params[:template_guest_id].present?
+                         scope.new(merged_guest_params(template_guest))
+                       else
+                         scope.new(guest_params)
+                       end
 
             if resource.save
               render_serialized_payload(201) { serialize_resource(resource) }
@@ -38,10 +42,16 @@ module Spree
           def update
             spree_authorize! :update, spree_current_order, order_token
 
-            if resource.update(guest_params)
+            if params[:template_guest_id].present?
+              if resource.update(merged_guest_params(template_guest))
+                render_serialized_payload { serialize_resource(resource) }
+              else
+                render_error_payload(resource.errors, 400)
+              end
+            elsif resource.update(guest_params)
               render_serialized_payload { serialize_resource(resource) }
             else
-              render_error_payload(resource, 400)
+              render_error_payload(resource.errors, 400)
             end
           end
 
@@ -73,8 +83,18 @@ module Spree
               :address,
               :other_organization,
               :expectation,
-              :upload_later
+              :upload_later,
+              :template_guest_id
             )
+          end
+
+          def merged_guest_params(template_guest)
+            # Fetch guest params and merge template guest attributes (excluding certain fields)
+            guest_params.merge(template_guest.attributes.except('id', 'created_at', 'updated_at', 'is_default', 'deleted_at'))
+          end
+
+          def template_guest
+            SpreeCmCommissioner::TemplateGuest.find(params[:template_guest_id])
           end
         end
       end

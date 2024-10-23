@@ -12,7 +12,9 @@ module Spree
 
           # override
           def collection
-            spree_current_user.template_guests
+            scope = spree_current_user.template_guests
+            scope = scope.where(is_default: true) if params[:is_default].present?
+            scope
           end
 
           # override
