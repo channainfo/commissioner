@@ -130,6 +130,7 @@ en:
 
   self_check_in:
     invalid_distance: "Invalid Check-in distance"
+    invalid_line_item: "Invalid Taxon or Vendor"
 
   telegram_chat_bot:
     vendor_channel_group_info: "This channel/group will be recieve order notifications"
