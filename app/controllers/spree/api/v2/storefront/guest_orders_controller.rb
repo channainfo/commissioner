@@ -9,11 +9,31 @@ module Spree
           end
 
           def show
-            order = model_class.find_by(token: params[:id])
+            order = find_order
+
             render_serialized_payload { serialize_resource(order) }
           end
 
           private
+
+          def find_order
+            return guest_order if spree_current_user.blank?
+
+            claimable_order
+          end
+
+          def guest_order
+            model_class.find_by(token: params[:id])
+          end
+
+          def claimable_order
+            model_class.where(number: params[:id], user_id: nil)
+                       .where('intel_phone_number = ? OR email = ?',
+                              spree_current_user.intel_phone_number,
+                              spree_current_user.email
+                             )
+                       .first
+          end
 
           def apply_filters(orders)
             if params[:request_state].present?
