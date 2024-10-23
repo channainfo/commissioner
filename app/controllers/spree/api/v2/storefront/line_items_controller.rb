@@ -36,7 +36,7 @@ module Spree
             return Spree::LineItem.none if order_tokens.blank?
 
             Spree::LineItem.joins(:order)
-                           .where(spree_orders: { token: order_tokens, state: 'complete' })
+                           .where(spree_orders: { token: order_tokens, state: 'complete', user_id: nil })
                            .filter_by_event(event)
                            .page(params[:page])
                            .per(params[:per_page])
