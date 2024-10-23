@@ -31,7 +31,7 @@ module SpreeCmCommissioner
       def headers
         ['Invoice Number', 'Invoice Issued Date', 'Invoice Printing Date', 'Subscription Date',
          'Customer Name', 'Customer Register Date', 'Customer Number', 'Place Name',
-         'Intel Phone Number', 'Sub Total', 'Discount', 'Payment State',
+         'Intel Phone Number', 'Sub Total', 'Adjustment', 'Discount', 'Payment State',
          'Grand Total', 'Payment Date', 'Receiver Name'
         ]
       end
@@ -48,6 +48,7 @@ module SpreeCmCommissioner
           place_name(order),
           intel_phone_number(order),
           display_subtotal(order),
+          display_adjustment(order),
           display_discount(order),
           payment_state(order),
           display_total(order),
@@ -85,7 +86,7 @@ module SpreeCmCommissioner
       end
 
       def display_subtotal(order)
-        order.display_item_total.to_s.gsub(',', ' ').gsub('.00', '').gsub('៛', '')
+        order.display_item_total.to_s.gsub(',', '').gsub('.00', '').gsub('៛', '')
       end
 
       def payment_state(order)
@@ -93,7 +94,7 @@ module SpreeCmCommissioner
       end
 
       def display_total(order)
-        order.display_total.to_s.gsub(',', ' ').gsub('.00', '').gsub('៛', '')
+        order.display_total.to_s.gsub(',', '').gsub('.00', '').gsub('៛', '')
       end
 
       def payment_date(order)
@@ -117,11 +118,13 @@ module SpreeCmCommissioner
       end
 
       def display_discount(order)
-        if order.display_adjustment_total.to_s.include?('-')
-          "-#{order.display_adjustment_total.to_s.gsub(',', ' ').gsub('.00', '').gsub('-', '').gsub('៛', '')}"
-        else
-          order.display_adjustment_total.to_s.gsub(',', ' ').gsub('.00', '').gsub('-', '').gsub('៛', '').to_s
-        end
+        total_discount = order.adjustments.select { |adj| adj.amount.negative? }.sum(&:amount)
+        "-#{total_discount.abs.to_s.gsub(',', '').gsub('.00', '').gsub('៛', '')}"
+      end
+
+      def display_adjustment(order)
+        total_adjustment = order.adjustments.select { |adj| adj.amount.positive? }.sum(&:amount)
+        total_adjustment.to_s.gsub(',', '').gsub('.00', '').gsub('៛', '')
       end
 
       def place_name(order)
