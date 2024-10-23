@@ -20,6 +20,9 @@ public/spree
 *.gem
 */*.gem
 .byebug_history
+.array-text
+*-output.*
+*test*.csv
 
 # Cache
 vendor/cache
