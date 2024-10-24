@@ -15,9 +15,8 @@ RUN apt-get update -qq && apt-get install -y \
 RUN apt-get clean -qy \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-
-RUN bundle config --local deployment true && \
-  bundle config --local path "vendor/bundle"
+# bundle config unset deployment
+RUN bundle config --local path "vendor/bundle"
 
 RUN gem install bundler -v 2.4.5
 
@@ -26,7 +25,7 @@ WORKDIR /gem
 COPY Gemfile Gemfile.lock *.gemspec ./
 COPY lib/ ./lib/
 
-RUN bundle install --jobs 12 --retry 3
+RUN bundle install --jobs 12 --retry 3  --verbose
 
 COPY . .
 
