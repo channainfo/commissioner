@@ -16,7 +16,7 @@ services:
     # build: .
     image: central-market-comissioner_web
 
-    command: bash -c "bundle exec rubocop && bundle exec rake && tail -f /dev/null"
+    command: bash -c "bundle exec rubocop && tail -f /dev/null"
 
     volumes:
       - .:/gem
@@ -27,6 +27,7 @@ services:
     environment:
       # DATABASE_URL: postgres://postgres:password@db:5432/test_db
       DATABASE_URL: postgres://postgres:@192.168.1.136:5432/spree_cm_commissioner_spree_test
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
       RAILS_ENV: test
 
 # volumes:
