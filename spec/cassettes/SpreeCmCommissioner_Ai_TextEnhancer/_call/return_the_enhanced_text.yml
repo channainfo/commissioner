@@ -1,0 +1,109 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.openai.com/v1/chat/completions
+    body:
+      encoding: UTF-8
+      string: '{"model":"gpt-4","messages":[{"role":"system","content":"You are a
+        helpful assistant."},{"role":"user","content":"suggest: BookMe+ is where to
+        go in term event ticketing"}],"max_tokens":150}'
+    headers:
+      Content-Type:
+      - application/json
+      Authorization:
+      - "<AUTHORIZATION_TOKEN>"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 24 Oct 2024 04:06:41 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Access-Control-Expose-Headers:
+      - X-Request-ID
+      Openai-Organization:
+      - bookme-gdcx79
+      Openai-Processing-Ms:
+      - '4858'
+      Openai-Version:
+      - '2020-10-01'
+      X-Ratelimit-Limit-Requests:
+      - '10000'
+      X-Ratelimit-Limit-Tokens:
+      - '10000'
+      X-Ratelimit-Remaining-Requests:
+      - '9999'
+      X-Ratelimit-Remaining-Tokens:
+      - '9827'
+      X-Ratelimit-Reset-Requests:
+      - 8.64s
+      X-Ratelimit-Reset-Tokens:
+      - 1.038s
+      X-Request-Id:
+      - req_122d0e9215d013e7813c7f84d0acf4c4
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Cf-Cache-Status:
+      - DYNAMIC
+      Set-Cookie:
+      - __cf_bm=08p6ulOBldDB24Os2htECLfOoswSqVXpqcFbr8qTFjo-1729742801-1.0.1.1-0ADrEPMx.3voQdqvj_HOf7vZL_s1HSscZ_yzsvqU.C5Ewew3Z7S39LkgtdBplwWV9YM_PMArgcOCbaUtMyV3Uw;
+        path=/; expires=Thu, 24-Oct-24 04:36:41 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=7rGT8a8z7SaZCbnXKege13kpGsTHFZ756GqvpjYoRgo-1729742801095-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      X-Content-Type-Options:
+      - nosniff
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 8d77185afda3a974-SYD
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        {
+          "id": "chatcmpl-ALjPIihsoKKqNyk72gXGxKznBRMLS",
+          "object": "chat.completion",
+          "created": 1729742796,
+          "model": "gpt-4-0613",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "Sure, if you're seeking a platform for efficient event ticketing, you might want to consider BookMe+. This platform offers comprehensive solutions for ticketing needs of any scale, whether you're hosting a small local event or a massive concert. It's designed to make the process of selling and buying tickets as easy and seamless as possible. It offers features like real-time sales tracking, customer data management, and easy integrations with various promotional tools. But remember, it's always important to consider what specific features you need and compare different platforms before settling on one.",
+                "refusal": null
+              },
+              "logprobs": null,
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 31,
+            "completion_tokens": 112,
+            "total_tokens": 143,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            }
+          },
+          "system_fingerprint": null
+        }
+  recorded_at: Thu, 24 Oct 2024 04:06:41 GMT
+recorded_with: VCR 6.2.0

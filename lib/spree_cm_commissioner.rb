@@ -32,4 +32,9 @@ require 'font-awesome-sass'
 require 'rqrcode'
 require 'premailer/rails'
 
-require 'byebug' if Rails.env.development? || Rails.env.test?
+if Rails.env.development? || Rails.env.test?
+  require 'byebug'
+  require 'dotenv'
+
+  Dotenv::Railtie.load
+end

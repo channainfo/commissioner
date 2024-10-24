@@ -10,6 +10,8 @@ group :development do
 end
 
 group :development, :test do
+  gem 'dotenv-rails'
+
   # modify spree_dev_tools to stop using deprecated default_country_id
   gem 'spree_dev_tools', github: 'kimsrung/spree_dev_tools'
 
