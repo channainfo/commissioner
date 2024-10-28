@@ -1,0 +1,13 @@
+<main class="content" id="content" role="main">
+  <%= link_to "Back", admin_affiliate_banners_path, class: "btn btn-primary" %>
+  <div class="well" style="height:auto">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+      <h1 class="page-title">Add New Affiliate Banner</h1>
+      <%= form_with(model: @affiliate_banner, url: { action: 'create' }) do |f| %>
+        <%= render partial: 'form', locals:{f:f} %>
+      <%end%>
+      </div>
+    </div>
+  </div>
+</main>
