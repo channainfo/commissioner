@@ -38,14 +38,45 @@ module Spree
           def update
             spree_authorize! :update, spree_current_order, order_token
 
-            if resource.update(guest_params)
-              render_serialized_payload { serialize_resource(resource) }
+            if params[:template_guest_id].present?
+              template_guest = SpreeCmCommissioner::TemplateGuest.find(params[:template_guest_id])
+              update_with_template_guest(template_guest)
             else
-              render_error_payload(resource, 400)
+              update_without_template_guest
             end
           end
 
           private
+
+          def update_with_template_guest(template_guest)
+            if resource.update(merged_guest_params(template_guest))
+              if template_guest.id_card.present?
+                duplicate_id_card(template_guest)
+              else
+                render_serialized_payload { serialize_resource(resource) }
+              end
+            else
+              render_error_payload(resource.errors, 400)
+            end
+          end
+
+          def update_without_template_guest
+            if resource.update(guest_params)
+              render_serialized_payload { serialize_resource(resource) }
+            else
+              render_error_payload(resource.errors, 400)
+            end
+          end
+
+          def duplicate_id_card(template_guest)
+            result = SpreeCmCommissioner::IdCardDuplicator.call(guest: resource, template_guest: template_guest)
+
+            if result.success?
+              render_serialized_payload { serialize_resource(resource) }
+            else
+              render_error_payload(result.message, 400)
+            end
+          end
 
           # override
           def scope
@@ -73,8 +104,14 @@ module Spree
               :address,
               :other_organization,
               :expectation,
-              :upload_later
+              :upload_later,
+              :template_guest_id
             )
+          end
+
+          def merged_guest_params(template_guest)
+            # Fetch guest params and merge template guest attributes (excluding certain fields)
+            guest_params.merge(template_guest.attributes.except('id', 'created_at', 'updated_at', 'is_default', 'deleted_at'))
           end
         end
       end

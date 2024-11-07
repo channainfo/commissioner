@@ -3,9 +3,13 @@ module SpreeCmCommissioner
     class AddGuest
       prepend Spree::ServiceModule::Base
 
-      def call(order:, line_item:)
+      def call(order:, line_item:, guest_params: {})
         ApplicationRecord.transaction do
-          create_blank_guest(line_item)
+          if guest_params.empty?
+            create_blank_guest(line_item)
+          else
+            create_guest(line_item, guest_params)
+          end
           increase_quantity(line_item) if should_increase_quantity?(line_item)
           recalculate_cart(order, line_item)
 
@@ -14,6 +18,10 @@ module SpreeCmCommissioner
       end
 
       private
+
+      def create_guest(line_item, guest_params)
+        line_item.guests.new(guest_params).save(validate: false)
+      end
 
       def create_blank_guest(line_item)
         line_item.guests.new.save(validate: false)

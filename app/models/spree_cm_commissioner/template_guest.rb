@@ -17,7 +17,7 @@ module SpreeCmCommissioner
     def ensure_single_default
       return unless is_default && is_default_changed?
 
-      user.template_guests.where.not(id: id).find_each do |template_guest|
+      user.template_guests.with_deleted.where.not(id: id).find_each do |template_guest|
         template_guest.update!(is_default: false)
       end
     end

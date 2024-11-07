@@ -6,5 +6,6 @@ FactoryBot.define do
     gender { 1 }
     dob { '1986-03-28' }
     token { SecureRandom.hex(32) }
+    association :template_guest, factory: :template_guest
   end
 end

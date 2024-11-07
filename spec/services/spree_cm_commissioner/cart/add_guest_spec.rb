@@ -4,31 +4,35 @@ RSpec.describe SpreeCmCommissioner::Cart::AddGuest do
   let(:order) { create(:order) }
   let(:quantity) { 3 }
   let(:line_item) { create(:cm_kyc_line_item, quantity: quantity, order: order) }
-  let(:guest) { create(:guest, line_item: line_item) }
+  let(:guest_params) { { first_name: 'John', last_name: 'Doe'} }
 
   describe '.call' do
-    subject { described_class.call(order: order, line_item: line_item) }
+    subject { described_class.call(order: order, line_item: line_item, guest_params: guest_params) }
 
-    it 'should creates a blank guest then increases quantity when should_increase_quantity? true' do
-      allow_any_instance_of(described_class).to receive(:should_increase_quantity?).with(line_item).and_return(true)
+    it 'creates a guest with guest_params when guest_params are provided' do
+      expect {
+        subject
+      }.to change { line_item.guests.count }.by(1)
 
-      expect_any_instance_of(described_class).to receive(:create_blank_guest).with(line_item).and_call_original
-      expect_any_instance_of(described_class).to receive(:increase_quantity).with(line_item).and_call_original
-
-      expect(subject.success?).to be true
-      expect(line_item.guests.size).to eq 1
-      expect(line_item.quantity).to eq quantity + 1
+      created_guest = line_item.guests.last
+      expect(created_guest.first_name).to eq('John')
+      expect(created_guest.last_name).to eq('Doe')
     end
 
-    it 'should creates a blank guest & does not increases quantity when should_increase_quantity? false' do
+    it 'does not increase quantity if the total guests do not meet the required threshold' do
       allow_any_instance_of(described_class).to receive(:should_increase_quantity?).with(line_item).and_return(false)
-
-      expect_any_instance_of(described_class).to receive(:create_blank_guest).with(line_item).and_call_original
-      expect_any_instance_of(described_class).to_not receive(:increase_quantity)
 
       expect(subject.success?).to be true
       expect(line_item.guests.size).to eq 1
       expect(line_item.quantity).to eq quantity
+    end
+
+    it 'increases quantity when the total guests meet the required threshold' do
+      allow_any_instance_of(described_class).to receive(:should_increase_quantity?).with(line_item).and_return(true)
+
+      expect(subject.success?).to be true
+      expect(line_item.guests.size).to eq 1
+      expect(line_item.quantity).to eq quantity + 1
     end
   end
 
@@ -109,4 +113,3 @@ RSpec.describe SpreeCmCommissioner::Cart::AddGuest do
     end
   end
 end
-
