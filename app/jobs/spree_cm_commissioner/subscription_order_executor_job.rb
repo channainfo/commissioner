@@ -1,7 +1,9 @@
 module SpreeCmCommissioner
   class SubscriptionOrderExecutorJob < ApplicationJob
+    queue_as :default
+
     def perform
-      SubscriptionsOrderCronExecutor.call
+      SpreeCmCommissioner::SubscriptionsOrderCronExecutor.call
     end
   end
 end

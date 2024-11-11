@@ -42,7 +42,7 @@
             <%= I18n.t('spree.billing.amount_remaining') %>
             <div class="row col-7 d-flex justify-content-between">
               <%= I18n.t('spree.currency.riel') %>
-              <%= text_field :amount, '', class: 'form-control', style: 'width: 85%; margin-right: 5%;', id: "#{payment.id}_amount_remaining", disabled: true %>
+              <%= f.text_field :amount, class: 'form-control', style: 'width: 85%; margin-right: 5%;', id: "#{payment.id}_amount_remaining", disabled: true %>
             </div>
           </div>
         </div>
