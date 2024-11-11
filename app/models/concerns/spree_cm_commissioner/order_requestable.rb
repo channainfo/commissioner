@@ -17,8 +17,8 @@ module SpreeCmCommissioner
       # use after_update instead of after_transition
       # since it has usecase that order state is forced to update which not fire after_transition
 
-      after_update :notify_order_complete_app_notification_to_user, if: -> { payment_state_changed_to_paid? }
-      after_update :notify_order_complete_telegram_notification_to_user, if: -> { state_changed_to_complete? }
+      after_update :notify_order_complete_app_notification_to_user, if: -> { payment_state_changed_to_paid? && !subscription? }
+      after_update :notify_order_complete_telegram_notification_to_user, if: -> { state_changed_to_complete? && !subscription? }
       after_update :request, if: -> { state_changed_to_complete? && need_confirmation? }
       after_update :send_order_complete_telegram_alert_to_vendors, if: -> { state_changed_to_complete? && !need_confirmation? }
       after_update :send_order_complete_telegram_alert_to_store, if: -> { state_changed_to_complete? && !need_confirmation? }
