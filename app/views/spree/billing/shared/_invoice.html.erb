@@ -39,7 +39,7 @@
   @previous_order = @customer.orders[@current_order - 1] if @current_order && @current_order > 0
   @outstanding_amount = Spree::Money.new(@previous_order&.outstanding_balance, currency: @invoice.order.line_items.first.variant.currency).to_s
   if @customer.user.store_credits.present?
-    @current_credit = @customer.user.store_credits.last.amount.to_d - (@customer.user.store_credits.last.amount_used * @invoice.order.total).to_d
+    @current_credit = @customer.user.store_credits.last.amount.to_d - @customer.user.store_credits.last.amount_used.to_d
     @display_current_credit = Spree::Money.new(@current_credit, currency: @invoice.order.line_items.first.variant.currency).to_s
     @display_amount_due = if @current_credit >= @total_price
                             Spree::Money.new(0, currency: @invoice.order.line_items.first.variant.currency).to_s
