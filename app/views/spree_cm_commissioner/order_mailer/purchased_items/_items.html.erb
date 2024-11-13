@@ -1,19 +1,21 @@
 <table class="purchase order-info">
   <% line_items.each do |line_item| %>
     <tr>
-      <td class="purchase_image">
-        <%= link_to(image_tag(variant_image_url(line_item.variant)), custom_product_storefront_resource_url(line_item.product)) %>
+      <td class="purchase_image align-center-vertical">
+         <%= link_to(image_tag(variant_image_url(line_item.variant), style: "border-radius: 10px; width: 100%;"), custom_product_storefront_resource_url(line_item.product)) %>
       </td>
       <td class="purchase_item">
         <p><%= link_to raw(line_item.name), custom_product_storefront_resource_url(line_item.product) %></p>
-        <p><%= line_item.variant.options_text %></p>
+        <% if line_item.variant.options_text.present? %>
+          <div class="purchase-item-option-text"><%= line_item.variant.options_text %></div>
+        <% end %>
       </td>
-      <td class="align-right" width="10%">
+      <td class="align-right align-center-vertical" width="10%">
         <span>
           <%= line_item.quantity %>x
         </span>
       </td>
-      <td class="align-right" width="30%">
+      <td class="align-right align-center-vertical" width="20%">
         <div class="f-fallback purchase_item_price">
           <%= line_item.single_money %><br>
         </div>
