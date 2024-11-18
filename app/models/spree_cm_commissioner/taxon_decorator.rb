@@ -41,6 +41,8 @@ module SpreeCmCommissioner
       base.before_save :set_slug
 
       base.whitelisted_ransackable_attributes |= %w[kind]
+
+      base.enum purchasable_on: { both: 0, web: 1, app: 2 }
     end
 
     def background_color
