@@ -455,6 +455,8 @@ Spree::Core::Engine.add_routes do
         resources :self_check_in, only: %i[index create]
         resources :guest_orders, only: %i[index show]
         post :user_order_transfer, to: 'user_order_transfer#create'
+
+        resources :waiting_room_sessions
       end
 
       namespace :operator do
