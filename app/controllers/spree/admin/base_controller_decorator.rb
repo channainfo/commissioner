@@ -31,6 +31,29 @@ module Spree
         nil
       end
 
+      # POST
+      def invalidate_api_caches
+        if params[:model].present?
+          api_patterns_map = {
+            'SpreeCmCommissioner::HomepageSection' => '/api/v2/storefront/homepage/*',
+            'SpreeCmCommissioner::HomepageBackground' => '/api/v2/storefront/homepage/*',
+            'Spree::Menu' => '/api/v2/storefront/menus*'
+          }
+
+          api_patterns = api_patterns_map[params[:model]]
+
+          if api_patterns.is_a?(Array)
+            api_patterns.each { |pattern| SpreeCmCommissioner::InvalidateCacheRequestJob.perform_later(pattern) }
+          elsif api_patterns.is_a?(String)
+            SpreeCmCommissioner::InvalidateCacheRequestJob.perform_later(api_patterns)
+          end
+        elsif params[:api_pattern].present?
+          SpreeCmCommissioner::InvalidateCacheRequestJob.perform_later(params[:api_pattern])
+        end
+
+        redirect_back fallback_location: admin_root_path
+      end
+
       private
 
       def redirect_to_billing

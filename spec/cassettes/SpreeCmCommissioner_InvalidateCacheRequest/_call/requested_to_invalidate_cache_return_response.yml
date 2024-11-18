@@ -1,0 +1,51 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://cloudfront.amazonaws.com/2020-05-31/distribution/D12FAKEFAKE/invalidation
+    body:
+      encoding: UTF-8
+      string: <InvalidationBatch xmlns="http://cloudfront.amazonaws.com/doc/2020-05-31/"><Paths><Quantity>1</Quantity><Items><Path>/staging/422.html</Path></Items></Paths><CallerReference>1729834869</CallerReference></InvalidationBatch>
+    headers:
+      Accept-Encoding:
+      - ''
+      Content-Type:
+      - application/xml
+      User-Agent:
+      - aws-sdk-ruby3/3.209.1 ua/2.1 api/cloudfront#1.82.0 os/macos#23 md/arm64 lang/ruby#3.2.0
+        md/3.2.0 m/D
+      Host:
+      - cloudfront.amazonaws.com
+      X-Amz-Date:
+      - 20241025T054109Z
+      X-Amz-Content-Sha256:
+      - 4231c5527e8a773761d8806a1578ab2d799479bf369bd60e0f5a4af0f08afa9b
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AXXXXXXXXXXXXXXXY/20241025/us-east-1/cloudfront/aws4_request,
+        SignedHeaders=content-type;host;x-amz-content-sha256;x-amz-date, Signature=66b25acc5a915f366e1da91e6ab214dfe1eb55c183fb2196836d6df212c696eb
+      Content-Length:
+      - '222'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      X-Amzn-Requestid:
+      - 4dc45b65-cabf-4d0a-8253-7955e851cacd
+      Location:
+      - https://cloudfront.amazonaws.com/2020-05-31/distribution/D12FAKEFAKE/invalidation/I2PGO1F2LAWEKXXYAKMN0P38N1
+      Content-Type:
+      - text/xml
+      Content-Length:
+      - '384'
+      Date:
+      - Fri, 25 Oct 2024 05:41:10 GMT
+    body:
+      encoding: UTF-8
+      string: |-
+        <?xml version="1.0"?>
+        <Invalidation xmlns="http://cloudfront.amazonaws.com/doc/2020-05-31/"><Id>I2PGO1F2LAWEKXXYAKMN0P38N1</Id><Status>InProgress</Status><CreateTime>2024-10-25T05:41:11.383Z</CreateTime><InvalidationBatch><Paths><Quantity>1</Quantity><Items><Path>/staging/422.html</Path></Items></Paths><CallerReference>1729834869</CallerReference></InvalidationBatch></Invalidation>
+  recorded_at: Fri, 25 Oct 2024 05:41:11 GMT
+recorded_with: VCR 6.1.0
