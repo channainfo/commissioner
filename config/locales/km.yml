@@ -323,10 +323,10 @@ km:
 
   mail:
     order_mailer:
-      booking_confirm: "Your booking is now confirmed!"
+      booking_confirm: "Confirmed!"
       hello: "Hello %{full_name},"
       thanks: "Thanks %{full_name},"
-      booking_event: "Your booking for %{event_name} is successfully complete!"
+      booking_event: "Your booking for %{order_name} is successfully complete!"
       booking_reference: "For reference, your booking ID is %{order_number}."
       booking_id: "Booking ID <b>%{order_number}<b>"
       booking_summary: "Booking Summary"

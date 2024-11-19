@@ -6,7 +6,7 @@
       </p>
     </td>
     <td valign="middle">
-      <p class="f-fallback purchase_total">
+      <p class="f-fallback purchase_total align-right">
         <%= order.display_item_total %>
       </p>
     </td>
@@ -26,7 +26,7 @@
             </p>
           </td>
           <td class="purchase_footer" valign="middle">
-            <p class="f-fallback purchase_total">
+            <p class="f-fallback purchase_total align-right">
               <%= Spree::Money.new(adjustments.sum(&:amount), currency: order.currency) %>
             </p>
           </td>
@@ -47,7 +47,7 @@
         </p>
       </td>
       <td class="purchase_footer" valign="middle">
-        <p class="f-fallback purchase_total">
+        <p class="f-fallback purchase_total align-right">
           <%= Spree::Money.new(shipments.sum(&:discounted_cost), currency: order.currency) %>
         </p>
       </td>
@@ -61,7 +61,7 @@
         </p>
       </td>
       <td class="purchase_footer" valign="middle">
-        <p class="f-fallback purchase_total">
+        <p class="f-fallback purchase_total align-right">
           <%= order.display_additional_tax_total.to_html %>
         </p>
       </td>
@@ -81,7 +81,7 @@
           <%= raw(adjustment.label) %>:
         </p>
       </td>
-      <td class="purchase_total-col">
+      <td class="purchase_total-col align-right">
         <p class="f-fallback purchase_total">
           <%= Spree::Money.new(adjustment.amount, currency: order.currency) %>
         </p>
@@ -94,7 +94,7 @@
         <strong><%= I18n.t('mail.order_mailer.etotal') %></strong> (<%= I18n.t('mail.order_mailer.including_vat') %>)
       </p>
     </td>
-    <td class="purchase_total-col">
+    <td class="purchase_total-col align-right">
         <p class="f-fallback purchase_total">
           <strong><%= order.display_total %></strong>
         </p>

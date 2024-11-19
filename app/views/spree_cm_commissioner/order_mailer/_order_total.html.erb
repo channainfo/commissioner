@@ -1,0 +1,15 @@
+<div class="content-cell">
+  <div class="container">
+    <div class="flex two-columns">
+      <div class="two-columns-item_left">
+          <p class="two-columns_title_total">TOTAL</p>
+          <p class="two-columns_label"><%= order.display_total %></p>
+      </div>
+      <div class="two-columns-item_right">
+          <p class="two-columns_title_total">Booking ID: <b><%= order.number %></b> </p>
+          <p class="two-columns_title_total">Issued Date: <%= order.completed_at&.strftime("%d %B, %Y %T") %></p>
+    </div>
+  </div>
+</div>
+</div>
+<hr>

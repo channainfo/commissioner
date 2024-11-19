@@ -7,16 +7,12 @@
          <td>
             <div class="f-fallback">
                <%= render 'spree_cm_commissioner/order_mailer/greeting', order: @order%>
-               <% if @product_type == 'ecommerce' %>
-                  <%= render 'spree_cm_commissioner/order_mailer/your_booking', order: @order, show_booking_header: true%>
-                  <%= render 'spree_cm_commissioner/order_mailer/event/event_detail', line_items: @order.line_items %>
-               <% else %>
-                  <%= render 'spree_cm_commissioner/order_mailer/hotel/booking_detail', order: @order, line_items: @order.line_items%>
-                  <%= render 'spree_cm_commissioner/order_mailer/your_booking', order: @order, show_booking_header: false%>
-               <% end %>
-               <%= render 'spree_cm_commissioner/order_mailer/customer_info', order: @order%>
-               <%= render 'spree_cm_commissioner/order_mailer/info_notice', product_type: @product_type%>
-               <%= render 'spree_cm_commissioner/order_mailer/support_contact'%>
+               <div class="content">
+                  <%= render 'spree_cm_commissioner/order_mailer/order_total', order: @order %>
+                  <%= render 'spree_cm_commissioner/order_mailer/your_booking', order: @order, show_booking_header: true %>
+                  <%= render 'spree_cm_commissioner/order_mailer/customer_info', order: @order %>
+                  <%= render 'spree_cm_commissioner/order_mailer/support_contact'%>
+               </div>
             </div>
          </td>
       </tr>
