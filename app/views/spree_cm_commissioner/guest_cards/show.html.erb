@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
       body {
         margin: 0;
@@ -13,7 +14,7 @@
         justify-content: center;
         align-items: center;
         color: #1c1b20;
-        font-family: Arial, sans-serif;
+        font-family: 'Poppins', Arial, sans-serif;
       }
       .pass {
         background-color: white;
@@ -76,26 +77,36 @@
       <!-- Event Details -->
       <div class="details">
         <table>
-          <tr>
-            <td>Date & Time</td>
-            <td><%= event_date %></td>
-          </tr>
-          <tr>
-            <td>Venue</td>
-            <td><%= venue %></td>
-          </tr>
-          <tr>
-            <td>Full Name</td>
-            <td><%= full_name %></td>
-          </tr>
-          <tr>
-            <td>Phone Number</td>
-            <td><%= phone_number %></td>
-          </tr>
-          <tr>
-            <td>Pass Type</td>
-            <td><%= ticket_type %></td>
-          </tr>
+          <% if event_date.present? %>
+            <tr>
+              <td>Date & Time</td>
+              <td><%= event_date %></td>
+            </tr>
+          <% end %>
+          <% if venue.present? && venue != 'N/A' %>
+            <tr>
+              <td>Venue</td>
+              <td><%= venue %></td>
+            </tr>
+          <% end %>
+          <% if full_name.present? && full_name != 'N/A' %>
+            <tr>
+              <td>Full Name</td>
+              <td><%= full_name %></td>
+            </tr>
+          <% end %>
+          <% if phone_number.present? && phone_number != 'N/A' %>
+            <tr>
+              <td>Phone Number</td>
+              <td><%= phone_number %></td>
+            </tr>
+          <% end %>
+          <% if ticket_type.present? %>
+            <tr>
+              <td>Pass Type</td>
+              <td><%= ticket_type %></td>
+            </tr>
+          <% end %>
         </table>
       </div>
 
