@@ -1,7 +1,7 @@
 <div class="card">
   <div class="card-body d-flex justify-content-center align-items-center flex-column">
     <div>
-      <% qrcode = RQRCode::QRCode.new(guest.line_item.order.qr_data) %>
+      <% qrcode = RQRCode::QRCode.new(guest.qr_data) %>
       <% png = qrcode.as_png(
         bit_depth: 1,
         border_modules: 1,
@@ -16,7 +16,9 @@
     </div>
     <div class="order-data">
       <div><%= guest.line_item.order.number %></div>
-      <div class="small"> <%= guest.formatted_bib_number %> </div>
+      <div class="small">
+        <%= (guest.full_name.presence || guest.formatted_bib_number).to_s[0...15] %>
+      </div>
     </div>
   </div>
 </div>

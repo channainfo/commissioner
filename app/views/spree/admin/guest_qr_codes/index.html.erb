@@ -14,6 +14,9 @@
         <tr data-hook="admin_guests_index_headers">
           <th>No. </th>
           <th>Order Number</th>
+          <th>Name</th>
+          <th>Phone Number</th>
+          <th>Seat Number</th>
           <th>Bib Number</th>
           <th>Event</th>
           <th>Created At </th>
@@ -25,6 +28,9 @@
           <tr id="<%= spree_dom_id guest %>" data-hook="admin_guests_index_rows">
             <td ><%= @index_number + index %></td>
             <td><%= link_to guest.line_item.order.number, edit_admin_order_url(guest.line_item.order) %></td>
+            <td ><%= guest.full_name %></td>
+            <td ><%= guest.phone_number %></td>
+            <td ><%= guest.seat_number %></td>
             <td ><%= guest.formatted_bib_number %></td>
             <td ><%= guest.event&.name %></td>
             <td ><%= guest.created_at %></td>

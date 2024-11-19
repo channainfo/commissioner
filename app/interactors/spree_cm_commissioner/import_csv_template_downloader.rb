@@ -5,9 +5,11 @@ module SpreeCmCommissioner
     def call
       headers = case import_type
                 when 'new_order'
-                  %w[order_channel variant_sku email phone_number first_name last_name]
+                  initial_headers = %w[order_channel variant_sku email]
+                  initial_headers + SpreeCmCommissioner::Guest.csv_importable_columns.map(&:to_s)
                 when 'existing_order'
-                  %w[order_number phone_number first_name last_name]
+                  initial_headers = %w[order_number guest_id]
+                  initial_headers + SpreeCmCommissioner::Guest.csv_importable_columns.map(&:to_s)
                 else
                   raise ArgumentError, 'Invalid import type'
                 end

@@ -13,17 +13,16 @@ module SpreeCmCommissioner
 
         CSV.parse(content, headers: true).each.with_index(2) do |row, index|
           order_data = row.to_hash.symbolize_keys
-
           process_order(order_data, index)
         end
       end
 
       def process_order(order_data, index)
-        params = build_order_params(order_data)
-
-        order = create_order(params, index)
-
-        record_failure(index) if order && !complete_order(order)
+        ActiveRecord::Base.transaction do
+          params = build_order_params(order_data)
+          order = create_order(params, index)
+          record_failure(index) if order && !complete_order(order)
+        end
       rescue StandardError
         record_failure(index)
       end
@@ -40,9 +39,8 @@ module SpreeCmCommissioner
               quantity: 1,
               sku: order_data[:variant_sku],
               guests_attributes: [
-                first_name: order_data[:first_name],
-                last_name: order_data[:last_name],
-                phone_number: order_data[:phone_number]
+
+                order_data.slice(*SpreeCmCommissioner::Guest.csv_importable_columns)
               ]
             }
           ]
