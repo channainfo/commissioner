@@ -184,6 +184,7 @@ km:
       csv_interrupted: "The CSV file is interrupted. Please generate again."
       csv_unknown_status: "Something went wrong. Please try again."
     new_homepage_banner: "បន្ថែមផ្ទាំងរូបភាពថ្មី"
+    invalid_session_token: "Invalid session token"
     intel_phone_number: "លេខទូរសព្ទ"
     phone_number: "លេខទូរសព្ទ"
     new_customer: "អតិថិជនថ្មី"

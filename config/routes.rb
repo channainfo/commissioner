@@ -3,6 +3,14 @@ Spree::Core::Engine.add_routes do
   namespace :admin do
     post '/invalidate_api_caches', to: 'base#invalidate_api_caches'
 
+    resource :system, controller: :system do
+      collection do
+        post :force_pull
+        post :modify_multiplier
+        post :modify_max_thread_count
+      end
+    end
+
     resources :promotions do
       resources :custom_dates_rules, controller: :promotion_custom_dates_rules, only: %i[edit update] do
         member do
@@ -372,6 +380,8 @@ Spree::Core::Engine.add_routes do
       end
 
       namespace :storefront do
+        resources :waiting_room_sessions, only: :create
+
         resource :cart, controller: :cart, only: %i[show create destroy] do
           patch :restart_checkout_flow
         end

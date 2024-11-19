@@ -1,0 +1,52 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://ecs.ap-southeast-1.amazonaws.com/
+    body:
+      encoding: UTF-8
+      string: '{"cluster":"production-cm-web","launchType":"FARGATE"}'
+    headers:
+      Accept-Encoding:
+      - ''
+      Amz-Sdk-Invocation-Id:
+      - 93364359-a523-4894-8280-d5e84cf5ebc9
+      Content-Type:
+      - application/x-amz-json-1.1
+      X-Amz-Target:
+      - AmazonEC2ContainerServiceV20141113.ListTasks
+      User-Agent:
+      - aws-sdk-ruby3/3.196.1 ua/2.0 api/ecs#1.147.0 os/macos#23 md/arm64 lang/ruby#3.2.0
+        md/3.2.0 cfg/retry-mode#legacy
+      Host:
+      - ecs.ap-southeast-1.amazonaws.com
+      X-Amz-Date:
+      - 20241119T133613Z
+      X-Amz-Content-Sha256:
+      - 3cab7d2858b9deaec4534d74e168e53aeda79894ec435dd2da69a1ed3a206ad5
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AxxxZIxxxxxxxxxxxx5xxxPUxxPU41119/ap-southeast-1/ecs/aws4_request,
+        SignedHeaders=amz-sdk-invocation-id;content-type;host;x-amz-content-sha256;x-amz-date;x-amz-target,
+        Signature=e4c2e44d5e179ac9838a2f3d6eeeff91fb94f28a4922e9f815199a1c36d1c8b9
+      Content-Length:
+      - '54'
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Amzn-Requestid:
+      - 30d09591-f00c-46a4-9d86-323a3c97b665
+      Content-Type:
+      - application/x-amz-json-1.1
+      Content-Length:
+      - '504'
+      Date:
+      - Tue, 19 Nov 2024 13:36:13 GMT
+    body:
+      encoding: UTF-8
+      string: '{"taskArns":["arn:aws:ecs:ap-southeast-1:636758493619:task/production-cm-web/12640ba339c64b7bb4d463a92799815f","arn:aws:ecs:ap-southeast-1:636758493619:task/production-cm-web/4a571be9e5a44fc0875b0197288db3b3","arn:aws:ecs:ap-southeast-1:636758493619:task/production-cm-web/9ea7f8530e614aee899ed5bff489b6c8","arn:aws:ecs:ap-southeast-1:636758493619:task/production-cm-web/b8cd377ad58f480cb21633549c52d64a","arn:aws:ecs:ap-southeast-1:636758493619:task/production-cm-web/fddb2a41dc6f4938b1dec2ebd0c58354"]}'
+  recorded_at: Tue, 19 Nov 2024 13:36:13 GMT
+recorded_with: VCR 6.2.0
