@@ -50,7 +50,10 @@ RSpec.describe Spree::V2::Storefront::ProductSerializer, type: :serializer do
         :allowed_upload_later,
         :allow_anonymous_booking,
         :discontinue_on,
-        :use_video_as_default
+        :use_video_as_default,
+        :purchasable_on,
+        :purchasable_on_app,
+        :purchasable_on_web
       )
     end
 

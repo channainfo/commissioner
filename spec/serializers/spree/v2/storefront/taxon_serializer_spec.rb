@@ -47,7 +47,10 @@ RSpec.describe Spree::V2::Storefront::TaxonSerializer, type: :serializer do
         :to_date,
         :background_color,
         :foreground_color,
-        :show_badge_status
+        :show_badge_status,
+        :purchasable_on,
+        :purchasable_on_app,
+        :purchasable_on_web
       )
     end
 

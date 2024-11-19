@@ -11,7 +11,15 @@ module Spree
           base.has_one :default_state, serializer: :state
           base.has_one :venue, serializer: ::SpreeCmCommissioner::V2::Storefront::ProductPlaceSerializer
           base.attributes :need_confirmation, :product_type, :kyc, :allowed_upload_later, :allow_anonymous_booking, :use_video_as_default
-          base.attributes :reveal_description, :discontinue_on, :public_metadata
+          base.attributes :reveal_description, :discontinue_on, :public_metadata, :purchasable_on
+
+          base.attribute :purchasable_on_app do |product|
+            product.purchasable_on == 'app' || product.purchasable_on == 'both'
+          end
+
+          base.attribute :purchasable_on_web do |product|
+            product.purchasable_on == 'web' || product.purchasable_on == 'both'
+          end
         end
       end
     end

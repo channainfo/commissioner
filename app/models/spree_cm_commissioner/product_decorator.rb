@@ -58,6 +58,8 @@ module SpreeCmCommissioner
       base.whitelisted_ransackable_attributes = %w[description name slug discontinue_on status vendor_id]
 
       base.after_update :update_variants_vendor_id, if: :saved_change_to_vendor_id?
+
+      base.enum purchasable_on: { both: 0, web: 1, app: 2 }
     end
 
     def associated_event
