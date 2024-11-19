@@ -6,3 +6,4 @@
 //= require spree_cm_commissioner/address_hide_form
 //= require spree_cm_commissioner/annual_calendar_form
 //= require spree_cm_commissioner/report_hide_filter
+//= require spree_cm_commissioner/update_popup_confirmation
