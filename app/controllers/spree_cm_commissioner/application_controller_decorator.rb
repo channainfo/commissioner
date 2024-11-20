@@ -2,6 +2,7 @@ module SpreeCmCommissioner
   module ApplicationControllerDecorator
     def self.prepended(base)
       base.include SpreeCmCommissioner::ExceptionNotificable
+      base.include SpreeCmCommissioner::ContentCachable
     end
 
     # Annonymous block: https://www.rubydoc.info/gems/rubocop/RuboCop/Cop/Naming/BlockForwarding

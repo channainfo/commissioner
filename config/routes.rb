@@ -1,6 +1,8 @@
 Spree::Core::Engine.add_routes do
   # Add your extension routes here
   namespace :admin do
+    post '/invalidate_api_caches', to: 'base#invalidate_api_caches'
+
     resources :promotions do
       resources :custom_dates_rules, controller: :promotion_custom_dates_rules, only: %i[edit update] do
         member do
