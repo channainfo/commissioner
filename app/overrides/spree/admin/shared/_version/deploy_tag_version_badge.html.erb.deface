@@ -1,0 +1,7 @@
+<!-- insert_after "erb[loud]:contains('Spree.version')" -->
+
+<p class="spree-version ml-3">
+  <span class="badge badge-pill badge-primary">
+    <%= "#{ENV['TAG_DEPLOY']} - #{ENV['TOUCH_REDEPLOY']}" %>
+  </span>
+</p>
