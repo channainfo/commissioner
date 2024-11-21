@@ -2,12 +2,26 @@
   <% line_items.each do |line_item| %>
     <tr>
       <td class="purchase_image align-center-vertical">
-         <%= link_to(image_tag(variant_image_url(line_item.variant), style: "border-radius: 10px; width: 100%;"), custom_product_storefront_resource_url(line_item.product)) %>
+        <% if line_item.variant.present? && variant_image_url(line_item.variant).present? %>
+          <%= link_to(
+                image_tag(
+                  variant_image_url(line_item.variant),
+                  style: "border-radius: 10px; width: 100%;"),
+                custom_product_storefront_resource_url(line_item.product) || '#'
+              ) %>
+        <% end %>
       </td>
       <td class="purchase_item">
-        <p><%= link_to raw(line_item.name), custom_product_storefront_resource_url(line_item.product) %></p>
+        <% if line_item.name.present? %>
+          <p><%= link_to(
+                  raw(line_item.name),
+                  custom_product_storefront_resource_url(line_item.product) || '#'
+          ) %></p>
+        <% end %>
         <% if line_item.variant.options_text.present? %>
-          <div class="purchase-item-option-text"><%= line_item.variant.options_text %></div>
+          <div class="purchase-item-option-text">
+            <%= sanitize(line_item.variant.options_text) %>
+          </div>
         <% end %>
       </td>
       <td class="align-right align-center-vertical" width="10%">
@@ -23,7 +37,9 @@
           <%= line_item.display_amount %>
         </div>
       </td>
-    </tr>
-    <tr><td colspan="4"><hr></td></tr>
+  </tr>
+  <tr>
+    <td colspan="4"><hr></td>
+  </tr>
   <%end%>
 </table>
