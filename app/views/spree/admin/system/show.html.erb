@@ -1,0 +1,75 @@
+<% content_for :page_title do %>
+  <%= link_to Spree.t('system'), spree.admin_system_path %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:force_pull), force_pull_admin_system_path, method: :post, class: "btn btn-outline-primary" %>
+<% end %>
+
+<div class="table-responsive border rounded bg-white">
+  <table class="table" data-hook>
+    <thead class="text-muted">
+      <tr data-hook="admin_system_index_headers">
+        <th><%= Spree.t(:field_name) %></th>
+        <th><%= Spree.t(:current_value) %></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% items = [
+        {
+          field_name: :max_sessions,
+          value: @fetcher.max_sessions_count_with_min,
+        },
+        {
+          field_name: :active_sesions,
+          value: @active_sesions_count,
+        },
+        {
+          field_name: :server_running_count,
+          value: @fetcher.server_running_count,
+        },
+        {
+          field_name: :max_thread_count,
+          value: @fetcher.max_thread_count,
+          modify_path: modify_max_thread_count_admin_system_path
+        },
+        {
+          field_name: :multiplier,
+          value: @fetcher.multiplier,
+          value_suffix: "%",
+          modify_path: modify_multiplier_admin_system_path
+        },
+      ] %>
+
+      <% items.each do |item| %>
+        <tr data-hook="admin_system_index_rows">
+          <td>
+            <%= Spree.t(item[:field_name]) %>
+            <span class="badge text-lowercase"><%= item[:field_name] %></span>
+          </td>
+          <td>
+            <%= item[:value] %>
+            <%= item[:value_suffix] if item[:value_suffix].present? %>
+          </td>
+          <td>
+            <% if item[:modify_path].present? %>
+              <div style="width: 90px;">
+                <%= form_tag item[:modify_path], method: :post do %>
+                  <div class="input-group input-group-sm">
+                    <%= number_field_tag item[:field_name], 0, class: 'form-control text-center p-0' %>
+                    <div class="input-group-append">
+                      <%= button_tag(class: 'btn btn-outline-success pl-2 pr-1') do %>
+                        <%= svg_icon(name: 'arrow-left-right.svg', classes: "icon", width: 14, height: 14) %>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -212,6 +212,7 @@ en:
       csv_interrupted: "The CSV file is interrupted. Please generate again."
       csv_unknown_status: "Something went wrong. Please try again."
     new_homepage_banner: "Add New Banner"
+    invalid_session_token: "Invalid session token"
     intel_phone_number: "Intel Phone Number"
     phone_number: "Phone Number"
     new_customer: "New Customer"

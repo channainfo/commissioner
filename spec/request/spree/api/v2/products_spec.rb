@@ -1,7 +1,11 @@
 require 'spec_helper'
 
 describe 'API V2 Storefront Product Spec', type: :request do
-  describe 'products#show' do  
+  before do
+    ENV['WAITING_ROOM_DISABLED'] = 'yes'
+  end
+
+  describe 'products#show' do
     context 'for master option types' do
       let!(:product) { create(:cm_product_with_product_kind_option_types) }
       let!(:includes) { ["product_kind_option_types", "primary_variant", "primary_variant.option_values"] }
