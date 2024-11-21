@@ -7,9 +7,11 @@
           <div class="two-columns_icon"><%= image_tag "mailer/phone.png", class: "mail-icon"%></div>
           <div class="two-columns_text-container">
             <p class="two-columns_title">Contact</p>
-            <div class="two-columns_description">
-              <p class="two-columns_description"><%= link_to current_store.contact_phone, "tel:#{current_store.contact_phone}" %></p>
-            </div>
+            <% if current_store.contact_phone.present? %>
+              <p class="two-columns_description">
+                <%= link_to current_store.contact_phone, "tel:#{current_store.contact_phone}" %>
+              </p>
+            <% end %>
           </div>
         </div>
       </div>
@@ -19,7 +21,11 @@
           <div class="two-columns_icon"><%= image_tag "mailer/envelope.png", class: "mail-icon"%></div>
           <div class="two-columns_text-container">
             <p class="two-columns_title">Email</p>
-            <p class="two-columns_description"><%= link_to current_store.customer_support_email, "mailto:#{current_store.customer_support_email}" %></p>
+            <% if current_store.customer_support_email.present? %>
+              <p class="two-columns_description">
+                <%= link_to current_store.customer_support_email, "mailto:#{current_store.customer_support_email}" %>
+              </p>
+            <% end %>
           </div>
         </div>
       </div>
