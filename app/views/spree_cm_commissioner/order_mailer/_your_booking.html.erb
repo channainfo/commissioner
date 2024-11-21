@@ -1,9 +1,13 @@
 <div class="content-cell">
     <div class="container">
-      <h2 class="<%= show_booking_header ? 'mtb-24' : ''%>"><%= I18n.t('mail.order_mailer.your_booking')%></h2>
-      <p class="two-columns_title_total" style="margin-bottom: 18px;" >Payment Method: <b><%= order.payments.first.payment_method.name %></b></p>
+    <h2 class="<%= show_booking_header ? 'mtb-24' : ''%>"><%= I18n.t('mail.order_mailer.your_booking')%></h2>
+      <% if order.payments.present? && order.payments.last&.payment_method&.name.present? %>
+        <p class="two-columns_title_total" style="margin-bottom: 18px;">
+          Payment Method: <b><%= sanitize(order.payments.last.payment_method.name) %></b>
+        </p>
+      <% end %>
     </div>
-    <%= render 'spree_cm_commissioner/order_mailer/purchased_items/items', line_items: order.line_items%>
+    <%= render 'spree_cm_commissioner/order_mailer/purchased_items/items', line_items: order.line_items %>
     <%= render 'spree_cm_commissioner/order_mailer/purchased_items/summary', order: order%>
     <hr>
 </div>
