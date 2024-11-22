@@ -19,10 +19,8 @@ module SpreeCmCommissioner
     end
 
     def required_waiting_room_session?
-      apis = [
-        '/api/v2/storefront/products',
-        '/api/v2/storefront/taxons'
-      ]
+      # temporary disable
+      apis = []
 
       apis.any? { |prefix| request.path.start_with?(prefix) }
     end

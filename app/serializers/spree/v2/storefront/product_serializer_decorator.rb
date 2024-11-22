@@ -20,6 +20,26 @@ module Spree
           base.attribute :purchasable_on_web do |product|
             product.purchasable_on == 'web' || product.purchasable_on == 'both'
           end
+
+          base.attribute :purchasable do |product|
+            value = product.purchasable?
+            [true, false].include?(value) ? value : nil
+          end
+
+          base.attribute :in_stock do |product|
+            value = product.in_stock?
+            [true, false].include?(value) ? value : nil
+          end
+
+          base.attribute :backorderable do |product|
+            value = product.backorderable?
+            [true, false].include?(value) ? value : nil
+          end
+
+          base.attribute :available do |product|
+            value = product.available?
+            [true, false].include?(value) ? value : nil
+          end
         end
       end
     end
