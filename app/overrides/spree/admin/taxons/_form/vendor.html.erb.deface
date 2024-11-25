@@ -1,0 +1,13 @@
+<!--  insert_before "erb[loud]:contains('field_container :permalink')" -->
+
+<% if @taxon.depth == 1 %>
+  <div>
+    <%= f.field_container :vendor_id do %>
+      <%= label_tag :vendor_id, Spree.t(:vendors) %>
+      <%= f.select :vendor_id, Spree::Vendor.order(:name).pluck(:name, :id),
+                    { include_blank: true }, { class: 'select2-clear js-filterable' } %>
+      <%= f.error_message_on :vendor_id, class: 'error-message' %>
+    <% end %>
+  </div>
+<% end %>
+

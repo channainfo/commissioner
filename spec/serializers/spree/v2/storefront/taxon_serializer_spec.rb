@@ -50,7 +50,8 @@ RSpec.describe Spree::V2::Storefront::TaxonSerializer, type: :serializer do
         :show_badge_status,
         :purchasable_on,
         :purchasable_on_app,
-        :purchasable_on_web
+        :purchasable_on_web,
+        :vendor_id
       )
     end
 

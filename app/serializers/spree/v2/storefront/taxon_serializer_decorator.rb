@@ -13,7 +13,7 @@ module Spree
 
           base.attributes :custom_redirect_url, :kind, :subtitle, :from_date, :to_date,
                           :background_color, :foreground_color, :show_badge_status,
-                          :purchasable_on
+                          :purchasable_on, :vendor_id
 
           base.attribute :purchasable_on_app do |taxon|
             taxon.purchasable_on == 'app' || taxon.purchasable_on == 'both'
