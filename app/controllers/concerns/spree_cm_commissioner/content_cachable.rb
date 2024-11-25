@@ -7,14 +7,14 @@ module SpreeCmCommissioner
     end
 
     def max_age
-      ENV.fetch('CONTENT_CACHE_MAX_AGE', '7200')
+      ENV.fetch('CONTENT_CACHE_MAX_AGE', '180')
     end
 
     def set_cache_control_for_cdn
-      return unless request.get? || request.head?
-      return unless request.base_url == ENV['CONTENT_HOST_URL']
-
-      response.set_header('Cache-Control', "public, max-age=#{max_age}")
+      # max-age: browser cache, s-maxage: server cache
+      response.headers['Cache-Control'] = "public, max-age=0, s-maxage=#{max_age}"
+      response.headers['Pragma'] = 'no-cache' # For older HTTP/1.0 clients
+      response.headers['Expires'] = '0'
     end
   end
 end
