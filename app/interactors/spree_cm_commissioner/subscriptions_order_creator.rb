@@ -52,6 +52,7 @@ module SpreeCmCommissioner
 
     def add_penalty_to_order
       return if context.last_order.blank?
+      return if context.last_order.payment_state == 'failed'
 
       penalty_rate_amount = context.last_order.outstanding_balance * customer.vendor.penalty_rate.to_f / 100
       Spree::Adjustment.create!(
