@@ -61,6 +61,8 @@ module Spree
 
         flash[:success] = Spree.t(:payment_updated)
 
+        return if params[:e] == 'void_transaction'
+
         return unless @order.outstanding_balance.positive?
 
         @payment = @order.payments.build(amount: @order.outstanding_balance, payment_method: @order.collect_backend_payment_methods.first)
