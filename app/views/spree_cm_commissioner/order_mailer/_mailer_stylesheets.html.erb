@@ -22,7 +22,7 @@
   }
   .email-body_inner {
     background-color: transparent;
-    padding-top: 2.5rem;
+    padding-top: 1.5rem;
   }
   #confirm-email .content-cell {
     background: white;
@@ -54,7 +54,7 @@
     background-repeat: no-repeat;
     border-radius: 1.5625rem 1.5625rem 0 0;
     background: #653ed7;
-    background: url(<%= image_path("mailer/event-mailer-bg.png") %>),
+    background: url(<%= image_path("mailer/event-mailer-bg.png") %>) center center / cover,
                 linear-gradient(45deg, #653ed7, rgba(0, 0, 255, 0) 70.71%),
                 linear-gradient(225deg, #653ed7, rgba(0, 0, 255, 0) 70.71%),
                 linear-gradient(330deg, #35ace0, rgba(0, 0, 255, 0) 70.71%),
@@ -252,7 +252,8 @@
   .content {
     padding: 1.5rem;
     border-radius: 0 0 1.5625rem 1.5625rem;
-    border: 0.0625rem solid #dddfe2;  }
+    border: 0.0625rem solid #dddfe2;
+  }
   .purchase {
     width: 100%;
     border-collapse: collapse;
@@ -274,15 +275,9 @@
   .align-center-vertical {
     vertical-align: middle;
   }
-  @media (prefers-color-scheme: dark) {
-    #confirm-email .content-cell {
-      background-color: #333333;
-    }
-  }
   .mail-icon {
     width: 1.5rem;
     height: 1.5rem;
     margin: auto;
   }
-
 </style>
