@@ -1,4 +1,4 @@
-<div id="greeting-card">
+<div id="greeting-card" class="content-cell flex">
   <div>
     <%= image_tag "mailer/bookme-plus.png", class: "icon-bookme-plus"%>
     <div class="booking-confirm"><%= I18n.t('mail.order_mailer.booking_confirm')%></div>
@@ -7,4 +7,11 @@
       <%= I18n.t('mail.order_mailer.booking_event', order_number: order.number || 'NA') %>
     </div>
   </div>
+
+  <% if show_qr %>
+    <div class="qr-container">
+      <%= image_tag main_app.url_for("/i/#{order.qr_data}"), class: 'qr-code' %>
+      <p>Show your QR to enter</p>
+    </div>
+  <% end %>
 </div>
