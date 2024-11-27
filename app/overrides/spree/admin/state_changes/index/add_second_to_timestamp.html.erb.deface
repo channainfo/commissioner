@@ -1,0 +1,7 @@
+<!-- replace "td:contains('pretty_time(state_change.created_at)')" -->
+<td>
+  <%= state_change.created_at.strftime('%B %d, %Y %I:%M:%S %p') %>
+  <% if state_change.created_at != state_change.updated_at %>
+    <small><%= Spree::StateChange.human_attribute_name(:updated) %>: <%= state_change.updated_at.strftime('%B %d, %Y %I:%M:%S %p') %></small>
+  <% end %>
+</td>
