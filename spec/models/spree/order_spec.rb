@@ -441,4 +441,25 @@ RSpec.describe Spree::Order, type: :model do
       expect(order.reload.phone_number).to eq nil
     end
   end
+
+  describe '#ticket_seller_user?' do
+    context 'when user have ticket seller role' do
+      let(:role) { create(:role, name: 'ticket_seller') }
+      let(:user) { create(:user , phone_number: '012290564', spree_roles: [role]) }
+      let(:order) { create(:order, user: user) }
+
+      it 'return ticket_seller_user? true' do
+        expect(order.ticket_seller_user?).to be true
+      end
+    end
+
+    context 'when user have ticket seller role' do
+      let(:user) { create(:user , phone_number: '012290564', spree_roles: []) }
+      let(:order) { create(:order, user: user) }
+
+      it 'return ticket_seller_user? false' do
+        expect(order.ticket_seller_user?).to be false
+      end
+    end
+  end
 end
