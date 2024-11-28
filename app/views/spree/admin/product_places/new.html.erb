@@ -1,33 +1,38 @@
 <%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :product_place } %>
-
 <% content_for :page_actions do %>
   <%= button_link_to Spree.t(:edit_icons),
     admin_vectors_option_values_url,
     { icon: 'spree-icon.svg', id: 'admin-option-values-icons-index' }
   %>
 <% end %>
-
 <%= form_with model: @product_place, url: admin_product_product_places_path(@product), method: :post do |f| %>
   <div data-hook="admin_product_form_product_place" style="display: flex; align-items: flex-start;">
     <div style="flex: 1; margin-right: 20px;">
       <div class="form-group">
-        <%= f.label :place_id, Spree.t(:place) %>
-        <%= f.collection_select :place_id, SpreeCmCommissioner::Place.all, :id, :name,
-              { include_blank: true },
-              { class: 'select2 fullwidth'} %>
+        <%= f.field_container :base_64_content do %>
+          <%= f.label :base_64_content, Spree.t(:place) %>
+          <% if can? :modify, SpreeCmCommissioner::Place %>
+            <%= f.select :base_64_content, [],
+              { include_hidden: true },
+              class: 'select2autocomplete',
+              data: {
+                autocomplete_url_value: 'places_api_v2',
+                autocomplete_return_attr_value: :name,
+                autocomplete_custom_return_id_value: :base_64_content
+              } %>
+          <% end %>
+        <% end %>
         <div class="form-group" style="margin-top: 5px;">
           <%= link_to "Create New Venue", admin_vendor_nearby_places_url(@product.vendor), class: 'btn-link', style: 'text-decoration: underline; color: #007bff;' %>
         </div>
       </div>
     </div>
-
     <div style="flex: 1; margin-right: 20px;">
       <div class="form-group">
         <%= f.label :checkinable_distance, Spree.t(:checkinable_distance) %>
         <%= f.number_field :checkinable_distance, class: 'form-control', value: @product_place.checkinable_distance || 100 %>
       </div>
     </div>
-
     <div style="flex: 1;">
       <div class="form-group">
         <%= f.label :type, Spree.t(:type) %>
@@ -37,7 +42,6 @@
       </div>
     </div>
   </div>
-
   <div class='form-actions' data-hook='buttons'>
     <%= button Spree.t('actions.create'), 'save.svg', 'submit', { class: 'btn-success', data: { disable_with: "#{Spree.t(:saving)}..." } } %>
   </div>
