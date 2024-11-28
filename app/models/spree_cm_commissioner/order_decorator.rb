@@ -50,6 +50,12 @@ module SpreeCmCommissioner
       end
     end
 
+    def ticket_seller_user?
+      return false if user.nil?
+
+      user.has_spree_role?('ticket_seller')
+    end
+
     # override
     def after_resume
       super
