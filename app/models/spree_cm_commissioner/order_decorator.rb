@@ -17,6 +17,10 @@ module SpreeCmCommissioner
         )
       }
 
+      base.scope :filter_by_vendor, lambda { |vendor|
+        joins(:line_items).where(spree_line_items: { vendor_id: vendor }).distinct
+      }
+
       base.before_create :link_by_phone_number
       base.before_create :associate_customer
 
