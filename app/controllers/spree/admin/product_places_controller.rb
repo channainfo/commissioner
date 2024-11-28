@@ -3,86 +3,16 @@ module Spree
     class ProductPlacesController < Spree::Admin::ResourceController
       belongs_to 'spree/product', find_by: :slug
 
-      before_action :load_product
-      before_action :load_places
-      before_action :load_product_places, only: %i[edit update new]
+      before_action :load_place_to_product_place, only: [:create]
 
-      def index
-        @product_places = filter_product_places(params[:type])
-      end
+      create.fails :set_flash_error_message
 
-      def new
-        @product_place = SpreeCmCommissioner::ProductPlace.new(product_id: @product.id, checkinable_distance: 100)
-      end
-
-      def create
-        @product_place = SpreeCmCommissioner::ProductPlace.new(permitted_resource_params)
-        @product_place.product = parent
-
-        if @product_place.place_id.blank?
-          flash[:error] = I18n.t('product_place.place_required')
-          render :new, status: :unprocessable_entity
-          return
-        end
-
-        begin
-          if @product_place.save
-            flash[:success] = I18n.t('product_place.created_successfully')
-            redirect_to collection_url
-          else
-            flash[:error] = @product_place.errors.full_messages.join(', ')
-            render :new
-          end
-        rescue ActiveRecord::RecordNotUnique
-          flash[:error] = I18n.t('product_place.already_exist')
-          render :new, status: :unprocessable_entity
-        end
-      end
-
-      def destroy
-        @product_place = SpreeCmCommissioner::ProductPlace.find(params[:id])
-
-        if @product_place.destroy
-          flash[:success] = Spree.t('product_place.deleted_successfully')
-        else
-          flash[:error] = @product_place.errors.full_messages.join(', ')
-        end
-
-        redirect_to collection_url
-      end
-
-      def update_positions
-        params[:positions].each do |id, index|
-          product_place = SpreeCmCommissioner::ProductPlace.find(id)
-          product_place.update(position: index)
-        end
-      end
-
-      private
-
-      def filter_product_places(type)
-        if type.present?
-          parent.product_places.where(type: SpreeCmCommissioner::ProductPlace.types[type])
-        else
-          parent.product_places
-        end
-      end
-
-      def load_product
-        @product ||= Spree::Product.find_by(slug: params[:product_id])
-      end
-
-      def load_places
-        @places = parent.vendor.places
-      end
-
-      def load_product_places
-        @product_places = parent.product_places || []
-      end
-
-      # override
-      def load_resource
-        @object = parent.product_places
+      def collection
+        @collection ||= if params[:type].present?
+                          parent.product_places.where(type: params[:type])
+                        else
+                          parent.product_places
+                        end
       end
 
       # override
@@ -96,8 +26,39 @@ module Spree
       end
 
       # override
+      def object_name
+        'product_place'
+      end
+
+      # override
       def permitted_resource_params
-        params.require(:spree_cm_commissioner_product_place).permit(:place_id, :checkinable_distance, :type)
+        @permitted_resource_params ||= params[:spree_cm_commissioner_product_place].permit(:place_id, :checkinable_distance, :type, :base_64_content)
+      end
+
+      private
+
+      def load_place_to_product_place
+        place_base_64_content = permitted_resource_params.delete(:base_64_content)
+
+        if place_base_64_content.blank?
+          flash[:error] = I18n.t('product_place.place_required')
+          render :new, status: :unprocessable_entity
+          return
+        end
+
+        place_json = Base64.strict_decode64(place_base_64_content)
+        place_hash = JSON.parse(place_json)
+
+        @place = SpreeCmCommissioner::Place.where(reference: place_hash['reference']).first_or_initialize do |place|
+          place.assign_attributes(place_hash)
+        end
+
+        @place.save! if @place.changed?
+        @product_place.place = @place
+      end
+
+      def set_flash_error_message
+        flash[:error] = @product_place.errors.full_messages.join(', ')
       end
     end
   end
