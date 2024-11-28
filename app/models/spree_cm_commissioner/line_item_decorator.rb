@@ -19,7 +19,7 @@ module SpreeCmCommissioner
       base.validate :ensure_not_exceed_max_quantity_per_order, if: -> { variant&.max_quantity_per_order.present? }
 
       base.whitelisted_ransackable_associations |= %w[guests]
-      base.whitelisted_ransackable_attributes |= %w[number to_date from_date]
+      base.whitelisted_ransackable_attributes |= %w[number to_date from_date vendor_id]
 
       base.delegate :delivery_required?, :permanent_stock?, :high_demand,
                     to: :variant

@@ -1,0 +1,8 @@
+<!-- insert_before "[data-hook='admin_orders_index_search'] .row:nth-child(5) .col-12.col-lg-4:nth-child(3)" -->
+
+<div class="col-12 col-lg-4">
+  <div class="form-group">
+    <%= label_tag :q_line_items_vendor_id_eq, Spree.t(:vendor) %>
+    <%= f.select :line_items_vendor_id_eq, Spree::Vendor.pluck(:name, :id), { include_blank: true }, class: 'select2-clear js-filterable' %>
+  </div>
+</div>
