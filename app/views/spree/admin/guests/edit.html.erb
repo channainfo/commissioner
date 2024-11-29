@@ -1,7 +1,42 @@
 <% content_for :page_title do %>
-<%= link_to plural_resource_name(SpreeCmCommissioner::Guest), spree.admin_order_guests_url(@order) %> /
+  <%= link_to plural_resource_name(SpreeCmCommissioner::Guest), spree.admin_order_guests_url(@order) %> /
   <%= Spree.t(:guest_infomation) %>
 <% end %>
+
+<% content_for(:sidebar) do %>
+  <% if @object.check_in.present? %>
+    <%= render partial: 'check_in_status' %>
+  <% else %>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title"><%= Spree.t(:check_in_status) %></h5>
+        <p class="card-text">Click button below to manually check_in guest</p>
+        <%= link_to 'Check In', check_in_admin_order_guest_path(@order, @object), method: :post, class: 'btn btn-outline-primary' %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+
+<!-- Verified Uncheck In Modal -->
+<div class="modal fade" id="uncheckInModal" tabindex="-1" role="dialog" aria-labelledby="uncheckInModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uncheckInModalLabel">Uncheck In Confirmation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to uncheck in?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <%= link_to 'Confirm', uncheck_in_admin_order_guest_path, method: :post, class: 'btn btn-primary' %>
+      </div>
+    </div>
+  </div>
+</div>
 
 <%= form_with model: @object, url: { action: 'update' }, html: { multipart: true } do |f| %>
   <fieldset>

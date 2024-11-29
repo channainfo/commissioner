@@ -240,6 +240,10 @@ Spree::Core::Engine.add_routes do
           post :add_guest
           delete :remove_guest
         end
+        member do
+          post :check_in
+          post :uncheck_in
+        end
       end
     end
 

@@ -1,0 +1,50 @@
+<div class="card mb-3" id="order_tab_summary">
+  <div class="card-header">
+    <h3 class="card-title mb-0 h6"><%= Spree.t(:check_in_states) %></h3>
+  </div>
+  <% if @check_in.present? %>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <small><%= Spree.t(:verification_state) %></small>
+        <%= @check_in.verification_state || 'N/A' %>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <small><%= Spree.t(:check_in_type) %></small>
+        <%= content_tag(:strong, class: "badge #{badge_color_base_on_check_in_type(@check_in.check_in_type)} font-weight-bold uppercase") do %>
+          <%= @check_in.check_in_type&.titleize || 'N/A' %>
+        <% end %>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <small><%= Spree.t(:entry_type) %></small>
+        <%= content_tag(:strong, class: "badge #{badge_color_base_on_entry_type(@check_in.guest&.entry_type)} font-weight-bold uppercase") do %>
+          <%= SpreeCmCommissioner::CheckIn.entry_types.key(@check_in.guest&.entry_type)&.titleize || 'N/A' %>
+        <% end %>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <small><%= Spree.t(:check_in_method) %></small>
+        <%= content_tag(:strong, class: "badge #{badge_color_base_on_check_in_method(@check_in.check_in_method)} font-weight-bold uppercase") do %>
+          <%= @check_in.check_in_method || 'N/A' %>
+        <% end %>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <small><%= Spree.t(:check_in_by) %></small>
+        <%= @check_in.check_in_by&.full_name || 'N/A' %>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <small data-hook='admin_order_tab_date_completed_title'><%= Spree.t(:confirmed_at) %></small>
+        <span class="text-right small font-weight-bold" id='date_complete'>
+          <%= pretty_time(@check_in.confirmed_at) || 'N/A' %>
+        </span>
+      </li>
+    </ul>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-outline-danger m-3" data-toggle="modal" data-target="#uncheckInModal">
+      Uncheck In
+    </button>
+  <% else %>
+    <div class="alert alert-warning">
+      <%= Spree.t(:no_check_in_found) %>
+    </div>
+  <% end %>
+</div>
