@@ -5,6 +5,7 @@ module Spree
       helper SpreeCmCommissioner::Admin::GuestHelper
 
       before_action :load_order
+      before_action :load_guest, only: %i[check_in uncheck_in]
 
       def model_class
         SpreeCmCommissioner::Guest
@@ -42,13 +43,50 @@ module Spree
 
       def edit
         @kyc_fields = @object.line_item.kyc_fields
+        @check_in = @object.check_in
       end
+
+      def check_in
+        result = SpreeCmCommissioner::CheckInBulkCreator.call(
+          check_ins_attributes: [{ guest_id: @guest.id }],
+          check_in_by: spree_current_user
+        )
+
+        if result.success?
+          flash[:success] = "Guest #{@guest.full_name} has been checked in."
+        else
+          flash[:error] = result.message.to_s.titleize
+        end
+
+        redirect_to collection_url
+      end
+
+      def uncheck_in
+        result = SpreeCmCommissioner::CheckInDestroyer.call(
+          guest_ids: [@guest.id],
+          destroyed_by: spree_current_user
+        )
+
+        if result.success?
+          flash[:success] = "Guest #{@guest.full_name} has been unchecked."
+        else
+          flash[:error] = result.message.to_s.titleize
+        end
+
+        redirect_to collection_url
+      end
+
+      private
 
       def permitted_resource_params
         params.require(object_name).permit(:first_name, :last_name, :gender, :dob, :occupation_id,
                                            :nationality_id, :age, :emergency_contact, :line_item_id,
                                            :seat_number, :phone_number
         )
+      end
+
+      def load_guest
+        @guest = @order.guests.find(params[:id])
       end
     end
   end
