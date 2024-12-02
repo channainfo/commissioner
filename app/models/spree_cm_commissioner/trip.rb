@@ -15,7 +15,7 @@ module SpreeCmCommissioner
 
     has_many :trip_stops, class_name: 'SpreeCmCommissioner::TripStop', dependent: :destroy
 
-    after_create :create_trip_stops
+    after_commit :create_trip_stops
 
     accepts_nested_attributes_for :trip_stops, allow_destroy: true
 

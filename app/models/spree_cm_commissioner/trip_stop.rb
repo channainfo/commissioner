@@ -8,11 +8,22 @@ module SpreeCmCommissioner
     belongs_to :stop, class_name: 'Spree::Taxon'
 
     before_validation :set_stop_name
+    after_create :create_vendor_stop
 
     validates :stop_id, uniqueness: { scope: :trip_id }
 
     def set_stop_name
       self.stop_name = stop.name
+    end
+
+    def create_vendor_stop
+      vendor.vendor_stops.where(stop_id: stop_id, stop_type: stop_type).first_or_create
+    end
+
+    private
+
+    def vendor
+      Spree::Product.find(trip.product_id).vendor
     end
   end
 end
