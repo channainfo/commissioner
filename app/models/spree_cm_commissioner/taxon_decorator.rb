@@ -37,6 +37,8 @@ module SpreeCmCommissioner
       base.has_many :visible_classifications, -> { where(visible: true).order(:position) }, class_name: 'Spree::Classification'
       base.has_many :visible_products, through: :visible_classifications, class_name: 'Spree::Product', source: :product
 
+      base.belongs_to :vendor, class_name: 'Spree::Vendor'
+
       base.validates_associated :category_icon
       base.before_save :set_kind
       base.before_save :set_slug
