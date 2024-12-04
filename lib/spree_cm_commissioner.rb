@@ -11,6 +11,7 @@ require 'spree_cm_commissioner/passenger_option'
 require 'spree_cm_commissioner/payment_method_group'
 require 'spree_cm_commissioner/calendar_event'
 require 'spree_cm_commissioner/s3_url_generator'
+require 'spree_cm_commissioner/order_jwt_token'
 
 require 'google/cloud/recaptcha_enterprise'
 require 'searchkick'
