@@ -4,7 +4,6 @@ class SpreeCmCommissioner::OrdersController < Spree::BaseController
 
   def show
     @order = Spree::Order.search_by_qr_data!(params[:id])
-    @show_qr = true
     @product_type = @order.products.first&.product_type || 'accommodation'
 
     render :template => 'spree/order_mailer/confirm_email'
