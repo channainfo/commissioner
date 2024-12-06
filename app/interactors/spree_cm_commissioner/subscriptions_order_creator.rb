@@ -62,6 +62,15 @@ module SpreeCmCommissioner
         amount: context.last_order.outstanding_balance + penalty_rate_amount,
         label: customer.vendor.penalty_label || 'Penalty'
       )
+
+      void_previous_invoice
+    end
+
+    def void_previous_invoice
+      return if context.last_order.blank?
+
+      context.last_order.payments.last.void! if context.last_order.payments.last.present?
+      context.last_order.update(payment_state: 'failed')
     end
 
     def generate_invoice(last_invoice_date, month, active_subscriptions)

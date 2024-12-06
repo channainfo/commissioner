@@ -113,6 +113,16 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCreator do
           expect(customer.orders.count).to eq 2
           expect(last_order.total).to eq last_order.item_total + order.outstanding_balance + penalty_rate_amount
         end
+        it "void the last order payment" do
+          payment_method = create(:check_payment_method)
+          create :cm_subscription, customer: customer, quantity: 1, start_date: today - 2.month
+          order = create :order , user_id: customer.user.id, total: 30, item_total: 30, state: 'complete', completed_at: today - 1.month, payment_total: 20
+          order.payments.create!(amount: 20, payment_method: payment_method)
+          customer.update!(last_invoice_date: today - 1.month)
+          described_class.call(customer: customer, today: today)
+          expect(customer.orders.count).to eq 2
+          expect(customer.orders.first.payment_state).to eq 'failed'
+        end
       end
       context "when customer have store credit" do
         before do
