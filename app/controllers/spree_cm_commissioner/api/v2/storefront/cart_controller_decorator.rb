@@ -41,6 +41,22 @@ module SpreeCmCommissioner
 
             @spree_current_order ||= create_service.call(create_cart_params).value
           end
+
+          def add_item_queue
+            spree_authorize! :update, spree_current_order, order_token
+            spree_authorize! :show, @variant
+
+            AddItemJob.perform_later(
+              spree_current_order,
+              @variant,
+              add_item_params[:quantity],
+              add_item_params[:public_metadata],
+              add_item_params[:private_metadata],
+              add_item_params[:options]
+            )
+
+            render json: { message: 'Item added to queue' }, status: :ok
+          end
         end
       end
     end
