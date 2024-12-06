@@ -21,7 +21,7 @@ RSpec.describe Spree::Billing::ReportsController, type: :controller do
   describe 'overdue_report' do
     before do
       SpreeCmCommissioner::Subscription.all.each do |subscription|
-        subscription.orders.each {|o| o.payments.last.pend! }
+        subscription.orders.each {|o| o.payments.last.update(state: 'pending') }
       end
     end
 
@@ -49,7 +49,7 @@ RSpec.describe Spree::Billing::ReportsController, type: :controller do
   describe 'failed_report' do
     before do
       SpreeCmCommissioner::Subscription.all.each do |subscription|
-        subscription.orders.each {|o| o.payments.last.void! }
+        subscription.orders.each {|o| o.payments.last.update(state: 'void') }
       end
     end
 
