@@ -21,6 +21,11 @@ module Spree
               return
             end
 
+            unless invalid_line_item(params[:line_item_id], params[:event_id])
+              render_error_payload(I18n.t('self_check_in.invalid_line_item'), 400)
+              return
+            end
+
             context = create_check_in_records(params[:guest_ids])
 
             if context.success?
@@ -87,6 +92,16 @@ module Spree
             user_location_meters = user_location_km * 1000
 
             user_location_meters <= allowed_distance
+          end
+
+          def invalid_line_item(line_item_id, event_id)
+            line_item = Spree::LineItem.find(line_item_id)
+            taxon = Spree::Taxon.find(event_id)
+
+            vendor_match = taxon.vendors.exists?(id: line_item.product.vendor_id)
+            taxons_match = line_item.product.taxons.to_a.intersect?(taxon.self_and_descendants.to_a)
+
+            vendor_match && taxons_match
           end
         end
       end
