@@ -27,7 +27,8 @@ RSpec.describe Spree::V2::Storefront::VendorSerializer, type: :serializer do
         :max_price,
         :star_rating,
         :short_description,
-        :full_address
+        :full_address,
+        :state
       )
     end
 
