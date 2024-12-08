@@ -14,7 +14,6 @@ module Spree
 
       @current_store = @order.store
       @product_type = @order.products.first&.product_type || 'accommodation'
-      @show_qr = false
 
       subject = (resend ? "[#{Spree.t(:resend).upcase}] " : '')
       subject += "#{@current_store&.name} Booking Confirmation ##{@order.number}"
