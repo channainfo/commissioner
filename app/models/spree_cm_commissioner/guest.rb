@@ -48,9 +48,9 @@ module SpreeCmCommissioner
 
     def self.csv_importable_columns
       %i[
-        first_name last_name age dob gender other_occupation other_organization
+        first_name last_name phone_number age dob gender address other_occupation
         entry_type nationality_id other_organization expectation emergency_contact bib_number
-        preferred_telegram_user_id
+        preferred_telegram_user_id seat_number
       ]
     end
 

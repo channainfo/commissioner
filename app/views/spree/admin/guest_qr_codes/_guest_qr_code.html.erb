@@ -16,7 +16,9 @@
     </div>
     <div class="order-data">
       <div><%= guest.line_item.order.number %></div>
-      <div class="small"> <%= guest.formatted_bib_number %> </div>
+      <div class="small">
+        <%= (guest.full_name.presence || guest.formatted_bib_number).to_s[0...15] %>
+      </div>
     </div>
   </div>
 </div>
