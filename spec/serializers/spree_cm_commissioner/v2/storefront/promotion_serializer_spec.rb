@@ -16,7 +16,8 @@ RSpec.describe SpreeCmCommissioner::V2::Storefront::PromotionSerializer, type: :
         :name,
         :description,
         :match_policy,
-        :advertise
+        :advertise,
+        :expires_at,
       )
     end
 

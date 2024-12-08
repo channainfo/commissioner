@@ -2,7 +2,7 @@
 
 <%= f.field_container :auto_apply, class: ['checkbox'] do %>
   <%= f.label :auto_apply do %>
-    <%= f.check_box :auto_apply %>
+    <%= f.check_box :auto_apply, checked: f.object.code.nil? && f.object.path.nil? %>
     <%= Spree.t(:auto_apply) %>
     <small class="form-text text-muted">
       <%= raw Spree.t('auto_apply_info') %>
