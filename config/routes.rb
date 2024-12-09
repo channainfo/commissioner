@@ -485,6 +485,10 @@ Spree::Core::Engine.add_routes do
           resource :pie_chart_event_aggregators, only: %i[show]
         end
       end
+
+      namespace :organizer do
+        resources :event_submission
+      end
     end
 
     namespace :json_ld do
