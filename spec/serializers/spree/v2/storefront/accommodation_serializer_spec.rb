@@ -40,7 +40,8 @@ RSpec.describe Spree::V2::Storefront::AccommodationSerializer, type: :serializer
         :service_availabilities,
         :total_booking,
         :remaining,
-        :full_address
+        :full_address,
+        :state,
       )
     end
 
