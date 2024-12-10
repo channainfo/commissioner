@@ -391,6 +391,9 @@ Spree::Core::Engine.add_routes do
           patch :restart_checkout_flow
         end
 
+        resource :enqueue_cart, controller: :enqueue_cart, only: %i[create] do
+          post :add_item
+        end
         resources :wished_items
         resources :user_promotion
         resources :order_promotions
