@@ -20,7 +20,7 @@ module Spree
       end
     end
 
-    def custom_product_line_item_url(line_item, jwt_token, options = {})
+    def custom_product_line_item_url(line_item, options = {})
       if defined?(locale_param) && locale_param.present?
         options.merge!(locale: locale_param)
       end
@@ -31,10 +31,12 @@ module Spree
                    ''
                  end
 
-      order = Spree::Order.find(line_item.order_id)
-      return if order.number.blank? && jwt_token.blank?
+      line_item = Spree::LineItem.find(line_item.id)
+      jwt_token = SpreeCmCommissioner::LineItemJwtToken.encode(line_item)
 
-      "#{current_store.formatted_url + localize}/anonymous_orders/#{jwt_token}"
+      return if line_item.number.blank? && jwt_token.blank?
+
+      "#{current_store.formatted_url + localize}/anonymous_line_item/#{line_item.number}?token=#{jwt_token}"
     end
   end
 end

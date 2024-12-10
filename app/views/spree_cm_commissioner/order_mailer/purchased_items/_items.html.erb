@@ -23,7 +23,7 @@
             <%= sanitize(line_item.variant.options_text) %>
           </div>
         <% end %>
-        <div> <%= link_to 'View Details', custom_product_line_item_url(line_item, @jwt_token) %></div>
+        <div> <%= link_to 'View Details', custom_product_line_item_url(line_item) %></div>
       </td>
       <td class="align-right align-center-vertical" width="10%">
         <span>
