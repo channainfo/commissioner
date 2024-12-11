@@ -1,5 +1,3 @@
-require 'google/cloud/firestore'
-
 # TODO: alert when available_slots is negative.
 module SpreeCmCommissioner
   class WaitingGuestsCaller < BaseInteractor
@@ -22,11 +20,11 @@ module SpreeCmCommissioner
     # This query required index. create them in Firebase beforehand.
     # Client side must create waiting_guests document with :queued_at & :allow_to_enter_room_at to null to allow fillter & order.
     def fetch_long_waiting_guests(available_slots)
-      firestore.col('waiting_guests')
-               .where('allow_to_enter_room_at', '==', nil)
-               .order('queued_at')
-               .limit(available_slots)
-               .get.to_a
+      FirestoreClient.instance.col('waiting_guests')
+                     .where('allow_to_enter_room_at', '==', nil)
+                     .order('queued_at')
+                     .limit(available_slots)
+                     .get.to_a
     end
 
     # For alert waiting guests to enter room, we just update :allow_to_enter_room_at.
@@ -41,22 +39,14 @@ module SpreeCmCommissioner
 
     # When open app, app request to check whether room is full or not via Firebase instead of server to minimize server requests.
     def mark_as(full:, available_slots:)
-      firestore.col('waiting_rooms').doc('lobby').set({ full: full, available_slots: available_slots })
+      FirestoreClient.instance.col('waiting_rooms').doc('lobby').set({ full: full, available_slots: available_slots })
     end
 
     def fetch_max_sessions
-      fetcher = SpreeCmCommissioner::WaitingRoomSystemMetadataFetcher.new(firestore: firestore)
+      fetcher = SpreeCmCommissioner::WaitingRoomSystemMetadataFetcher.new
       fetcher.load_document_data
 
       fetcher.max_sessions_count_with_min
-    end
-
-    def firestore
-      @firestore ||= Google::Cloud::Firestore.new(project_id: service_account[:project_id], credentials: service_account)
-    end
-
-    def service_account
-      @service_account ||= Rails.application.credentials.cloud_firestore_service_account
     end
   end
 end
