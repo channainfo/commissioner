@@ -391,6 +391,10 @@ Spree::Core::Engine.add_routes do
           patch :restart_checkout_flow
         end
 
+        namespace :queue_cart do
+          resources :line_items, only: [:create]
+        end
+
         resources :wished_items
         resources :user_promotion
         resources :order_promotions
