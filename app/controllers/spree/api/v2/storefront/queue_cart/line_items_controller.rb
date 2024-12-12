@@ -22,6 +22,8 @@ module Spree
                 add_item_params[:options]
               )
 
+              return render_error_payload('Failed to enqueue the job') unless job
+
               result = SpreeCmCommissioner::EnqueueCart::AddItemStatusMarker.call(
                 order_number: spree_current_order.number,
                 job_id: job.job_id,
