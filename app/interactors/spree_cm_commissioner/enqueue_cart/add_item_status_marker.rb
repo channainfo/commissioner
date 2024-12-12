@@ -1,5 +1,3 @@
-require 'google/cloud/firestore'
-
 module SpreeCmCommissioner
   module EnqueueCart
     class AddItemStatusMarker < BaseInteractor
@@ -15,22 +13,15 @@ module SpreeCmCommissioner
         assign_firestore_context_attributes
       end
 
-      def firestore
-        @firestore ||= Google::Cloud::Firestore.new(project_id: service_account[:project_id], credentials: service_account)
-      end
-
-      def service_account
-        @service_account ||= Rails.application.credentials.cloud_firestore_service_account
-      end
-
       def update_cart_firestore_status
         data_to_set = build_data_to_set
 
-        firestore.col('queues')
-                 .doc('cart')
-                 .col(order_number)
-                 .doc(job_id)
-                 .set(data_to_set, merge: true)
+        FirestoreClient.instance
+                       .col('queues')
+                       .doc('cart')
+                       .col(order_number)
+                       .doc(job_id)
+                       .set(data_to_set, merge: true)
       end
 
       def build_data_to_set
@@ -43,7 +34,7 @@ module SpreeCmCommissioner
       end
 
       def firestore_object
-        firestore.col('queues').doc('cart').col(order_number).doc(job_id).get
+        FirestoreClient.instance.col('queues').doc('cart').col(order_number).doc(job_id).get
       end
 
       def firestore_status

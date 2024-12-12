@@ -1,5 +1,3 @@
-require 'google/cloud/firestore'
-
 module SpreeCmCommissioner
   class WaitingRoomSessionCreator < BaseInteractor
     delegate :remote_ip, :waiting_guest_firebase_doc_id, to: :context
@@ -17,7 +15,7 @@ module SpreeCmCommissioner
     end
 
     def full?
-      fetcher = SpreeCmCommissioner::WaitingRoomSystemMetadataFetcher.new(firestore: firestore)
+      fetcher = SpreeCmCommissioner::WaitingRoomSystemMetadataFetcher.new
       fetcher.load_document_data
 
       SpreeCmCommissioner::WaitingRoomSession.active.size >= fetcher.max_sessions_count_with_min
@@ -40,7 +38,7 @@ module SpreeCmCommissioner
     end
 
     def log_to_firebase
-      document = firestore.col('waiting_guests').doc(waiting_guest_firebase_doc_id)
+      document = FirestoreClient.instance.col('waiting_guests').doc(waiting_guest_firebase_doc_id)
 
       data = document.get.data.dup
       data[:entered_room_at] = Time.zone.now
@@ -55,14 +53,6 @@ module SpreeCmCommissioner
     def expired_at
       expired_duration = ENV['WAITING_ROOM_SESSION_EXPIRE_DURATION_IN_SECOND']&.presence&.to_i || (60 * 3)
       context.expired_at ||= expired_duration.seconds.from_now
-    end
-
-    def firestore
-      @firestore ||= Google::Cloud::Firestore.new(project_id: service_account[:project_id], credentials: service_account)
-    end
-
-    def service_account
-      Rails.application.credentials.cloud_firestore_service_account
     end
   end
 end

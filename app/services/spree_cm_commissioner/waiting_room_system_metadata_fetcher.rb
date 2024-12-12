@@ -1,12 +1,6 @@
-require 'google/cloud/firestore'
-
 module SpreeCmCommissioner
   class WaitingRoomSystemMetadataFetcher
     attr_reader :document_data
-
-    def initialize(firestore: nil)
-      @firestore = firestore if firestore.present?
-    end
 
     def load_document_data
       @document_data = document.get.data
@@ -40,15 +34,7 @@ module SpreeCmCommissioner
     end
 
     def document
-      @document ||= firestore.col('metadata').doc('system')
-    end
-
-    def firestore
-      @firestore ||= Google::Cloud::Firestore.new(project_id: service_account[:project_id], credentials: service_account)
-    end
-
-    def service_account
-      @service_account ||= Rails.application.credentials.cloud_firestore_service_account
+      @document ||= FirestoreClient.instance.col('metadata').doc('system')
     end
   end
 end
