@@ -149,6 +149,10 @@ km:
   user:
     invalid_password: "Current password is not valid"
 
+  currency:
+    dollar: "$"
+    riel: "៛"
+
   spree:
     km: "ភាសារខ្មែរ"
     date_of_birth: "ថ្ងៃខែឆ្នាំកំណើត"

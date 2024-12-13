@@ -12,7 +12,7 @@
           <div class="form-group d-flex justify-content-between">
             <%= I18n.t('spree.billing.amount_to_be_paid') %>
             <div class="row col-7 d-flex justify-content-between">
-              <%= I18n.t('spree.currency.riel') %>
+              <%= I18n.t('currency.riel') %>
               <%= text_field :amount_to_be_paid, '', placeholder: order.outstanding_balance.to_s, class: 'form-control', id: "#{payment.id}_amount_to_be_paid", style: 'width: 85%; margin-right: 5%;', disabled: true %>
             </div>
           </div>
@@ -20,28 +20,28 @@
           <div class="d-flex justify-content-between">
             <%= Spree.t(:dollar) %>
             <div id="payment-data" data-payment-id="<%= payment.id %>" class="form-group row col-7 d-flex justify-content-between">
-              <%= I18n.t('spree.currency.dollar') %>
+              <%= I18n.t('currency.dollar') %>
               <%= text_field :en_currency, '', class: 'form-control', style: 'width: 85%; margin-right: 5%;', id: "#{payment.id}_en_currency" %>
             </div>
           </div>
           <div class="form-group d-flex justify-content-between">
             <%= Spree.t(:riel) %>
             <div id="payment-data" data-payment-id="<%= payment.id %>" class="row col-7 d-flex justify-content-between">
-              <%= I18n.t('spree.currency.riel') %>
+              <%= I18n.t('currency.riel') %>
               <%= text_field :kh_currency, '', class: 'form-control', style: 'width: 85%; margin-right: 5%;', id: "#{payment.id}_kh_currency" %>
             </div>
           </div>
           <div class="form-group d-flex justify-content-between">
             <%= Spree.t(:total) %>
             <div class="row col-7 d-flex justify-content-between">
-              <%= I18n.t('spree.currency.riel') %>
+              <%= I18n.t('currency.riel') %>
               <%= f.text_field :amount, class: 'form-control', style: 'width: 85%; margin-right: 5%;', id: "#{payment.id}_total", disabled: true %>
             </div>
           </div>
           <div class="form-group d-flex justify-content-between">
             <%= I18n.t('spree.billing.amount_remaining') %>
             <div class="row col-7 d-flex justify-content-between">
-              <%= I18n.t('spree.currency.riel') %>
+              <%= I18n.t('currency.riel') %>
               <%= f.text_field :amount, class: 'form-control', style: 'width: 85%; margin-right: 5%;', id: "#{payment.id}_amount_remaining", disabled: true %>
             </div>
           </div>

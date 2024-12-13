@@ -172,10 +172,11 @@ en:
   user:
     invalid_password: "Invalid Password"
 
+  currency:
+    dollar: "$"
+    riel: "៛"
+
   spree:
-    currency:
-      dollar: "$"
-      riel: "៛"
     cancel: "Cancel"
     confirm: "Confirm"
     en: "English"
