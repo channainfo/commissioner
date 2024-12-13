@@ -2,6 +2,7 @@ module Spree
   module Admin
     class VariantGuestCardClassesController < Spree::Admin::ResourceController
       before_action :load_product
+      before_action :load_taxon, only: :index
       before_action :load_guest_card_classes, only: :index
 
       def create
@@ -33,7 +34,12 @@ module Spree
       end
 
       def load_guest_card_classes
-        @guest_card_classes = SpreeCmCommissioner::GuestCardClass.all
+        @guest_card_classes = @taxon ? @taxon.guest_card_classes : []
+      end
+
+      def load_taxon
+        @taxon = @product.taxons.first&.parent
+        @taxonomy = @taxon&.taxonomy
       end
 
       def model_class

@@ -103,6 +103,7 @@ km:
       total: "Total: %{total_in_page} / %{total_count} icons"
 
   product:
+    not_in_taxon: "ផលិតផលមិនទាន់បានដាក់ឱ្យប្រើប្រាស់! សូមដាក់ឱ្យប្រើប្រាស់ក្នុងព្រឹត្តិការណ៍ណាមួយ។"
     validation:
       not_active: "%{product_name} is not active"
 

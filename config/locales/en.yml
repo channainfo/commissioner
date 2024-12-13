@@ -113,6 +113,7 @@ en:
       total: "Total: %{total_in_page} / %{total_count} icons"
 
   product:
+    not_in_taxon: "This product isn't assigned to any taxon yet. Please add it to taxon first."
     validation:
       not_active: "%{product_name} is not active"
 
