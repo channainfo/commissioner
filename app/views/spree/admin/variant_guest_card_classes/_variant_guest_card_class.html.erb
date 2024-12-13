@@ -1,3 +1,9 @@
+<% if @taxonomy.blank? && @taxon.blank? %>
+  <div class="alert alert-info" role="alert">
+    <%= raw I18n.t('product.not_in_taxon') %>
+  </div>
+<% end %>
+
 <div class="table-responsive border rounded bg-white">
   <div id="variant_prices-table-wrapper">
     <table class="table">
