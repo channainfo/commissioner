@@ -70,7 +70,7 @@ module SpreeCmCommissioner
       return if context.last_order.blank?
 
       context.last_order.payments.last.void! if context.last_order.payments.last.present?
-      context.last_order.update(payment_state: 'failed')
+      context.last_order.update(payment_state: 'failed', internal_note: 'carried_forward')
     end
 
     def generate_invoice(last_invoice_date, month, active_subscriptions)
