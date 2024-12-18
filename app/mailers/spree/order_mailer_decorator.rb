@@ -18,8 +18,6 @@ module Spree
       subject = (resend ? "[#{Spree.t(:resend).upcase}] " : '')
       subject += "#{@current_store&.name} Booking Confirmation ##{@order.number}"
 
-      @jwt_token = SpreeCmCommissioner::OrderJwtToken.encode(@order)
-
       mail(to: @order.email, from: from_address, subject: subject, store_url: @current_store.url) do |format|
         format.html { render layout: 'spree_cm_commissioner/layouts/order_mailer' }
         format.text
