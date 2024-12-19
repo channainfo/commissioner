@@ -12,7 +12,8 @@ module Spree
           def create
             context = SpreeCmCommissioner::WaitingRoomSessionCreator.call(
               remote_ip: request.remote_ip,
-              waiting_guest_firebase_doc_id: params[:waiting_guest_firebase_doc_id]
+              waiting_guest_firebase_doc_id: params[:waiting_guest_firebase_doc_id],
+              page_path: params[:page_path]
             )
 
             if context.success?
