@@ -11,8 +11,19 @@ module Spree
       # @overrided
       def permitted_resource_params
         kyc_result = calculate_kyc_value(params[:product])
+        params.require(:product).permit(:allowed_upload_later, dynamic_kyc: %i[key label attype]).merge(kyc: kyc_result)
+      end
 
-        params.require(:product).permit(:allowed_upload_later).merge(kyc: kyc_result)
+      def remove_field
+        key = params[:key]
+
+        @product.dynamic_kyc.reject! { |field| field['key'] == key }
+
+        if @product.save
+          render json: { success: true }
+        else
+          render json: { success: false, errors: @product.errors.full_messages }, status: :unprocessable_entity
+        end
       end
 
       def flash_error

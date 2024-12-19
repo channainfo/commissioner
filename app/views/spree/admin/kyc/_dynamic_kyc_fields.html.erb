@@ -1,0 +1,14 @@
+<div class="d-flex align-items-center mb-2">
+
+  <input type="text" class="form-control mx-1 my-1" name="product[dynamic_kyc][][key]" value="<%= key %>" placeholder="Key">
+  <input type="text" class="form-control mx-1 my-1" name="product[dynamic_kyc][][label]" value="<%= label %>" placeholder="Label">
+  <select class="form-control mx-1 my-1" name="product[dynamic_kyc][][attype]">
+    <option value="string" <%= 'selected' if attype == 'string' %>>String</option>
+    <option value="integer" <%= 'selected' if attype == 'integer' %>>Integer</option>
+    <option value="float" <%= 'selected' if attype == 'float' %>>Float</option>
+    <option value="array" <%= 'selected' if attype == 'array' %>>Array</option>
+    <option value="datetime" <%= 'selected' if attype == 'datetime' %>>Datetime</option>
+    <option value="date" <%= 'selected' if attype == 'date' %>>Date</option>
+  </select>
+  <button type="button" class="btn btn-danger remove-field btn-sm">Remove</button>
+</div>

@@ -73,7 +73,8 @@ module Spree
               :address,
               :other_organization,
               :expectation,
-              :upload_later
+              :upload_later,
+              :dynamic_field
             )
           end
         end
