@@ -484,6 +484,7 @@ Spree::Core::Engine.add_routes do
         resource :check_in_bulks, only: %i[index create]
         resources :dashboard_crew_events, only: %i[index]
         resources :event_qrs, only: [:show]
+        resources :recalculate_tickets, only: [:create]
         resources :taxons, only: %i[show] do
           resource :event_ticket_aggregators, only: %i[show]
           resource :pie_chart_event_aggregators, only: %i[show]
