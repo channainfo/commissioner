@@ -2,8 +2,8 @@ module Spree
   module Api
     module V2
       module Storefront
-        class AnonymousLineItemController < Spree::Api::V2::BaseController
-          def show_anonymous_line_item
+        class AnonymousLineItemsController < Spree::Api::V2::BaseController
+          def show
             token = params[:token]
             line_item = line_item_jwt_token(token)
             if line_item
