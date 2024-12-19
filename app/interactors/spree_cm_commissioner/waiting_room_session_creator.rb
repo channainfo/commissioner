@@ -2,7 +2,7 @@ require 'google/cloud/firestore'
 
 module SpreeCmCommissioner
   class WaitingRoomSessionCreator < BaseInteractor
-    delegate :remote_ip, :waiting_guest_firebase_doc_id, to: :context
+    delegate :remote_ip, :waiting_guest_firebase_doc_id, :page_path, to: :context
 
     def call
       return context.fail!(message: 'must_provide_waiting_guest_firebase_doc_id') if waiting_guest_firebase_doc_id.blank?
@@ -34,7 +34,8 @@ module SpreeCmCommissioner
       context.room_session.assign_attributes(
         jwt_token: context.jwt_token,
         expired_at: expired_at,
-        remote_ip: remote_ip
+        remote_ip: remote_ip,
+        page_path: page_path
       )
       context.room_session.save!
     end
