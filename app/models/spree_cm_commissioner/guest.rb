@@ -180,23 +180,22 @@ module SpreeCmCommissioner
     end
 
     def generate_bib
-      return if bib_prefix.present?
-      return unless bib_required?
-      return if event_id.blank?
+      return if bib_prefix.present? || !bib_required? || event_id.blank?
 
-      self.bib_prefix = line_item.variant.bib_prefix
+      self.class.transaction do
+        rows = self.class.where(event_id: event_id, bib_prefix: line_item.variant.bib_prefix).lock
+        last_bib_number = rows.map(&:bib_number).max || 0
 
-      last_bib_number = event.guests
-                             .where(bib_prefix: bib_prefix)
-                             .maximum(:bib_number) || 0
+        self.bib_prefix = line_item.variant.bib_prefix
+        self.bib_number = last_bib_number + 1
+        self.bib_index = "#{event_id}-#{bib_prefix}-#{bib_number}"
 
-      self.bib_number = last_bib_number + 1
-      self.bib_index = "#{event_id}-#{bib_prefix}-#{bib_number}"
+        save!
+      end
     end
 
     def generate_bib!
       generate_bib
-      save!
     end
 
     # bib_number: 345, bib_prefix: 5KM, bib_zerofill: 5 => return 5KM00345
