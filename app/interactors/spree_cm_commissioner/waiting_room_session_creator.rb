@@ -13,7 +13,9 @@ module SpreeCmCommissioner
       assign_token_and_create_session_to_db
       log_to_firebase
 
-      call_other_waiting_guests
+      # commented because of following bug: https://github.com/channainfo/commissioner/issues/2185
+      # this job is already run every 1mn, disabling it still work.
+      # call_other_waiting_guests
     end
 
     def full?
