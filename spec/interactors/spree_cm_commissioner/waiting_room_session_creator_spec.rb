@@ -7,9 +7,14 @@ RSpec.describe SpreeCmCommissioner::WaitingRoomSessionCreator do
       allow_any_instance_of(described_class).to receive(:log_to_firebase)
       allow_any_instance_of(described_class).to receive(:full?).and_return(false)
 
-      context = described_class.call(remote_ip: '43.230.192.190', waiting_guest_firebase_doc_id: 'FYFFEj0O4QSpipNsHzRh')
+      # https://github.com/channainfo/commissioner/issues/2185
+      expect_any_instance_of(described_class).not_to receive(:call_other_waiting_guests)
+      expect(SpreeCmCommissioner::WaitingGuestsCallerJob).not_to receive(:perform_later)
+
+      context = described_class.call(remote_ip: '43.230.192.190', waiting_guest_firebase_doc_id: 'FYFFEj0O4QSpipNsHzRh', page_path: '/tickets/sai')
       expect(context.room_session.jwt_token.present?).to be true
       expect(context.room_session.jwt_token).to eq context.jwt_token
+      expect(context.room_session.page_path).to eq '/tickets/sai'
     end
   end
 end
