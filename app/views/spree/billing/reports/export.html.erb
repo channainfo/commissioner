@@ -39,6 +39,8 @@
       <tr data-hook="admin_subscriptions_index_headers">
         <th class="text-center"><%= Spree.t('billing.month') %></th>
         <th class="text-center"><%= Spree.t('billing.total_amount') %></th>
+        <th class="text-center"><%= Spree.t('billing.current_month_total') %></th>
+        <th class="text-center"><%= Spree.t('billing.previous_month_carried_forward') %></th>
         <th class="text-center"><%= Spree.t('billing.paid') %></th>
         <th class="text-center"><%= Spree.t('billing.balance_due') %></th>
         <th class="text-center"><%= Spree.t('billing.voided') %></th>
@@ -50,6 +52,8 @@
         <tr>
           <td class="text-center"><%= Date::MONTHNAMES[month] %></td>
           <td class="text-center"><%= @total[month] %></td>
+          <td class="text-center"><%= @current_month_total[month] %></td>
+          <td class="text-center"><%= @previous_month_carried_forward[month] %></td>
           <td class="text-center"><%= @paid[month] %></td>
           <td class="text-center"><%= @balance_due[month] %></td>
           <td class="text-center"><%= @voided[month] %></td>
