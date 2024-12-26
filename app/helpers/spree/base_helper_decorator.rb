@@ -36,7 +36,7 @@ module Spree
 
       return if line_item.number.blank? && jwt_token.blank?
 
-      "#{current_store.formatted_url + localize}/anonymous_line_item/#{line_item.number}?token=#{jwt_token}"
+      "#{current_store.formatted_url + localize}/a/#{line_item.number}?ak=#{jwt_token}"
     end
   end
 end
