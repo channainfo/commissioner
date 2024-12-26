@@ -14,7 +14,11 @@ module SpreeCmCommissioner
     end
 
     def auto_apply?
-      auto_apply.in?([true, 'true', '1'])
+      if auto_apply.present?
+        auto_apply.in?([true, 'true', '1'])
+      else
+        code.nil? && path.nil?
+      end
     end
 
     def date_eligible?(date)
