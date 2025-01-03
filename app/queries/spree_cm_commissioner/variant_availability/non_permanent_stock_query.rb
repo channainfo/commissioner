@@ -1,11 +1,12 @@
 module SpreeCmCommissioner
   module VariantAvailability
     class NonPermanentStockQuery
-      attr_reader :variant, :except_line_item_id
+      attr_reader :variant, :except_line_item_id, :error_message
 
       def initialize(variant:, except_line_item_id: nil)
         @variant = variant
         @except_line_item_id = except_line_item_id
+        @error_message = nil
       end
 
       def available?(quantity)
@@ -20,10 +21,21 @@ module SpreeCmCommissioner
 
         # there is a case when variant does not have any purchaces yet, it will return empty & always available true.
         # in this case, we check with stock items directly.
-        if reserve_variants.any?
-          reserve_variants.all? { |record| record.available_quantity >= quantity }
+
+        available_quantity = if reserve_variants.any?
+                               reserve_variants.sum(&:available_quantity)
+                             else
+                               variant.stock_items.sum(:count_on_hand)
+                             end
+
+        if available_quantity >= quantity
+          true
+        elsif available_quantity == 1
+          @error_message = I18n.t('variant_availability.item_available_instock')
+          false
         else
-          variant.stock_items.sum(:count_on_hand) >= quantity
+          @error_message = I18n.t('variant_availability.items_available_instock', available_quantity: available_quantity)
+          false
         end
       end
     end

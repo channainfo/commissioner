@@ -42,8 +42,13 @@ RSpec.describe SpreeCmCommissioner::VariantAvailability::NonPermanentStockQuery 
       it 'return availability when remaining 1' do
         expect(subject.available?(1)).to eq true
         expect(subject.available?(2)).to eq false
+        expect(subject.error_message).to eq 'Only 1 item available in stock.'
+
         expect(subject.available?(3)).to eq false
+        expect(subject.error_message).to eq 'Only 1 item available in stock.'
+
         expect(subject.available?(4)).to eq false
+        expect(subject.error_message).to eq 'Only 1 item available in stock.'
       end
     end
 
@@ -53,7 +58,11 @@ RSpec.describe SpreeCmCommissioner::VariantAvailability::NonPermanentStockQuery 
       it 'return availability base on quantity' do
         expect(subject.available?(5)).to eq true
         expect(subject.available?(6)).to eq false
+        expect(subject.error_message).to eq 'Only 5 items available in stock.'
+
         expect(subject.available?(8)).to eq false
+        expect(subject.error_message).to eq 'Only 5 items available in stock.'
+
       end
     end
   end

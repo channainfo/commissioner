@@ -13,6 +13,12 @@ module Spree
               spree_authorize! :update, spree_current_order, order_token
               spree_authorize! :show, @variant
 
+              availability_checker = SpreeCmCommissioner::Stock::AvailabilityChecker.new(@variant)
+
+              unless availability_checker.can_supply?(add_item_params[:quantity].to_i, add_item_params[:options])
+                return render_error_payload(availability_checker.error_message || I18n.t('variant_availability.items_out_of_stock'))
+              end
+
               job = SpreeCmCommissioner::EnqueueCart::AddItemJob.perform_later(
                 spree_current_order.id,
                 @variant.id,
