@@ -13,6 +13,7 @@ module Spree
           base.attribute :allowed_upload_later, &:allowed_upload_later?
           base.attribute :delivery_required, &:delivery_required?
           base.attribute :sufficient_stock, &:sufficient_stock?
+          base.attribute :require_custom_guest_fields, &:require_custom_guest_fields?
 
           base.has_one :vendor
 

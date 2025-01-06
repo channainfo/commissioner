@@ -14,6 +14,8 @@ module Spree
           base.attributes :need_confirmation, :product_type, :kyc, :kyc_fields, :allowed_upload_later, :allow_anonymous_booking, :use_video_as_default
           base.attributes :reveal_description, :discontinue_on, :public_metadata, :purchasable_on
 
+          base.attribute :require_custom_guest_fields, &:require_custom_guest_fields?
+
           base.attribute :purchasable_on_app do |product|
             product.purchasable_on == 'app' || product.purchasable_on == 'both'
           end

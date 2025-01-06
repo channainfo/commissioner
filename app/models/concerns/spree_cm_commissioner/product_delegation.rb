@@ -12,6 +12,7 @@ module SpreeCmCommissioner
                :associated_event,
                :allow_self_check_in,
                :allow_self_check_in?,
+               :require_custom_guest_fields?, :require_custom_guest_fields,
                to: :product
     end
   end

@@ -73,7 +73,10 @@ module Spree
               :address,
               :other_organization,
               :expectation,
-              :upload_later
+              :upload_later,
+              public_metadata: {
+                custom_guest_fields: %i[key label attype value]
+              }
             )
           end
         end
