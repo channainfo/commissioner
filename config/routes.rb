@@ -384,6 +384,10 @@ Spree::Core::Engine.add_routes do
         resources :places
       end
 
+      namespace :organizer do
+        resources :tickets
+      end
+
       namespace :storefront do
         resources :waiting_room_sessions, only: :create
 
