@@ -99,6 +99,7 @@ Spree::Core::Engine.add_routes do
         delete 'remove_metafield', to: 'metafields#remove_metafield'
         get 'edit_kyc', to: 'kyc#edit'
         put 'update_kyc', to: 'kyc#update'
+        delete 'remove_kyc_field', to: 'kyc#remove_kyc_field'
       end
 
       resources :variant_guest_card_classes

@@ -60,5 +60,13 @@ module SpreeCmCommissioner
       platforms = SpreeCmCommissioner::Guest.social_contact_platforms.keys
       platforms.sort_by { |platform| platform == 'other' ? 1 : 0 }
     end
+
+    def custom_guest_fields
+      public_metadata['custom_guest_fields'] || {}
+    end
+
+    def require_custom_guest_fields?
+      custom_guest_fields.any?
+    end
   end
 end

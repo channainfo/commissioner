@@ -490,6 +490,8 @@ en:
   kyc:
     note: "<b>Note:</b> Select Required KYC Field For this Product"
     allowed_upload_later: "<b>Allow upload later:</b> Check this box if you allow to upload later"
+  custom_kyc_field:
+    note: "<b>Note:</b> No Custom Guest info Field yet"
   video_on_demand:
     quality:
       low: "Low (320p)"

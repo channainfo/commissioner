@@ -1,0 +1,15 @@
+
+
+<div class="d-flex align-items-center my-2">
+  <input type="text" name="product[public_metadata][custom_guest_fields][][key]" value="<%= key %>" class="form-control mx-1" placeholder="Key" >
+  <input type="text" name="product[public_metadata][custom_guest_fields][][label]" value="<%= label %>" class="form-control mx-1" placeholder="Label" >
+  <select name="product[public_metadata][custom_guest_fields][][attype]" class="form-control mx-1 attype-select" >
+    <% Spree::Product::DYNAMIC_KYC_ATTRTYPES.each do |type| %>
+      <option value="<%= type %>" <%= 'selected' if attype == type.to_s %>><%= type.capitalize %></option>
+    <% end %>
+  </select>
+  <% if attype == 'selection' %>
+    <input type="text" name="product[public_metadata][custom_guest_fields][][options]" value="<%= options || '' %>" class="form-control mx-1 options-input" placeholder="Options (comma-separated)">
+  <% end %>
+    <button type="button" class="btn btn-danger mx-1 remove-field">Remove</button>
+</div>

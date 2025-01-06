@@ -5,8 +5,8 @@ module SpreeCmCommissioner
     delegate :kyc, to: :line_item, allow_nil: true
     delegate :allowed_upload_later?, to: :line_item, allow_nil: true
 
-    enum gender: { :other => 0, :male => 1, :female => 2 }
-    enum social_contact_platform: {
+    enum :gender, { :other => 0, :male => 1, :female => 2 }
+    enum :social_contact_platform, {
       :other => 0,
       :telegram => 1,
       :facebook => 2,
@@ -14,7 +14,7 @@ module SpreeCmCommissioner
       :whatsapp => 4,
       :line => 5,
       :viber => 6
-    }, _prefix: true
+    }, prefix: true
 
     scope :complete, -> { joins(:line_item).merge(Spree::LineItem.complete) }
     scope :complete_or_canceled, -> { joins(:line_item).merge(Spree::LineItem.complete_or_canceled) }
@@ -56,7 +56,13 @@ module SpreeCmCommissioner
 
     # no validation for each field as we allow user to save data to model partially.
     def allowed_checkout?
-      kyc_fields.all? { |field| allowed_checkout_for?(field) }
+      kyc_fields.all? { |field| allowed_checkout_for?(field) } && custom_guest_fields_data_present?
+    end
+
+    def custom_guest_fields_data_present?
+      return true if custom_guest_fields.empty?
+
+      custom_guest_fields.all? { |entry| entry['value'].present? }
     end
 
     def allowed_checkout_for?(field) # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity

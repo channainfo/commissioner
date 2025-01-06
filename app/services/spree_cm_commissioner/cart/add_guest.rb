@@ -16,7 +16,22 @@ module SpreeCmCommissioner
       private
 
       def create_blank_guest(line_item)
-        line_item.guests.new.save(validate: false)
+        guest = line_item.guests.new
+        guest.public_metadata = { 'custom_guest_fields' => initialize_guest_metadata(line_item) }
+        guest.save(validate: false)
+      end
+
+      def initialize_guest_metadata(line_item)
+        fields = product_custom_guest_info_fields(line_item)
+        return [] unless fields.is_a?(Array)
+
+        fields.map do |field|
+          field.merge('value' => '')
+        end
+      end
+
+      def product_custom_guest_info_fields(line_item)
+        line_item.product.public_metadata['custom_guest_fields']
       end
 
       def increase_quantity(line_item)

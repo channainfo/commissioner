@@ -1,0 +1,92 @@
+<div class="d-flex align-items-center justify-content-between">
+  <h5 class="mx-1">Custom Guest info Fields</h5>
+  <button type="button" id="add-custom-kyc-field" class="btn btn-primary mx-1">Add New Field</button>
+</div>
+
+<div id="custom-kyc-fields" class="my-2">
+  <div class="form-group">
+    <div class="d-flex flex-column">
+      <% if @product.custom_guest_fields&.empty? %>
+        <small class="form-text text-muted ml-1 my-2">
+          <%= raw I18n.t('custom_kyc_field.note') %>
+        </small>
+      <% else %>
+        <% @product.custom_guest_fields&.each_with_index do |item, index| %>
+          <%= render partial: 'custom_guest_fields', locals: { key: item['key'], label: item['label'], attype: item['attype'], options: item['options'], disabled: true } %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const $addFieldButton = document.getElementById('add-custom-kyc-field');
+    const $kycFieldsContainer = document.getElementById('custom-kyc-fields');
+    const $form = document.querySelector('form');
+    const fieldTemplate = `<%= j(render partial: 'custom_guest_fields', locals: { key: '', label: '', attype: '', options: '', disabled: false  }) %>`;
+
+    const getProductSlug = () => "<%= @product.slug %>";
+
+    const addField = () => {
+      $kycFieldsContainer.querySelector('.form-group .d-flex').insertAdjacentHTML('beforeend', fieldTemplate);
+    };
+
+    const removeField = (event) => {
+    if (event.target.classList.contains('remove-field')) {
+      const $fieldElement = event.target.closest('.d-flex');
+      const fieldKey = $fieldElement.querySelector('input[name*="[key]"]').value;
+
+      removeKycField(fieldKey)
+        .then(response => {
+          if (response.ok) {
+            $fieldElement.remove();
+          } else {
+            alert('Failed to remove the field');
+          }
+        });
+      }
+    };
+
+    const removeKycField = (fieldKey) => {
+      return fetch(`/admin/products/${getProductSlug()}/remove_kyc_field`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ key: fieldKey })
+      });
+    };
+
+      const toggleOptionsField = (event) => {
+      if (event.target.classList.contains('attype-select')) {
+        const $fieldElement = event.target.closest('.d-flex');
+        const attype = event.target.value;
+        const $optionsInput = $fieldElement.querySelector('.options-input');
+
+        if (attype === 'selection') {
+          if (!$optionsInput) {
+            const optionsInput = document.createElement('input');
+            optionsInput.type = 'text';
+            optionsInput.name = event.target.name.replace('[attype]', '[options]');
+            optionsInput.className = 'form-control mx-1 options-input';
+            optionsInput.placeholder = 'Options (comma-separated)';
+            $fieldElement.insertBefore(optionsInput, $fieldElement.querySelector('.remove-field'));
+          }
+        } else if ($optionsInput) {
+          $optionsInput.remove();
+        }
+      }
+    };
+
+
+    $addFieldButton.addEventListener('click', addField);
+    $kycFieldsContainer.addEventListener('click', removeField);
+    $kycFieldsContainer.addEventListener('change', toggleOptionsField);
+
+  });
+
+</script>

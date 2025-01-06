@@ -1,6 +1,8 @@
 # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
 module SpreeCmCommissioner
   module ProductDecorator
+    DYNAMIC_KYC_ATTRTYPES = %i[string integer float date time selection].freeze
+
     def self.prepended(base)
       base.include SpreeCmCommissioner::ProductType
       base.include SpreeCmCommissioner::KycBitwise
