@@ -42,7 +42,43 @@
       </div>
     </div>
   </div>
+  <%= render 'shared/map', lat: @product_place.place&.lat, lon: @product_place.place&.lon %>
   <div class='form-actions' data-hook='buttons'>
     <%= button Spree.t('actions.create'), 'save.svg', 'submit', { class: 'btn-success', data: { disable_with: "#{Spree.t(:saving)}..." } } %>
   </div>
 <% end %>
+
+<script>
+  $(document).ready(function() {
+    let map;
+    let marker;
+
+    function initMap() {
+      const mapElement = document.getElementById("map");
+      mapElement.style.height = "300px"
+      const defaultLat = parseFloat("<%= @default_lat %>");
+      const defaultLon = parseFloat("<%= @default_lon %>");
+
+      map = new google.maps.Map(mapElement, {
+        center: { lat: defaultLat, lng: defaultLon },
+        zoom: 18,
+      });
+
+      marker = new google.maps.Marker({
+        position: { lat: defaultLat, lng: defaultLon },
+        map: map,
+      });
+    }
+    initMap();
+
+    $(document).on('change', '.select2autocomplete', function () {
+      const selectedBase64Content = $(this).val();
+      const decodedContent = JSON.parse(atob(selectedBase64Content));
+      const { lat, lon} = decodedContent;
+
+      const newLatLng = new google.maps.LatLng(lat, lon);
+      map.setCenter(newLatLng);
+      marker.setPosition(newLatLng);
+    });
+  });
+</script>
