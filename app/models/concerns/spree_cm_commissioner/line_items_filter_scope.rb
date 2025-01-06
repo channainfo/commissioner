@@ -13,10 +13,13 @@ module SpreeCmCommissioner
       scope :filter_by_event, lambda { |event|
         case event
         when 'upcoming'
-          where.not(to_date: nil).where('to_date >= ?', Time.zone.now)
+          where.not(to_date: nil).where('to_date >= ?', Time.zone.now).joins(:order).where(spree_orders: { canceled_at: nil })
 
         when 'complete'
-          where.not(to_date: nil).where('to_date < ?', Time.zone.now)
+          where.not(to_date: nil).where('to_date < ?', Time.zone.now).joins(:order).where(spree_orders: { canceled_at: nil })
+
+        when 'canceled'
+          joins(:order).where.not(spree_orders: { canceled_at: nil })
 
         else
           none
@@ -24,9 +27,13 @@ module SpreeCmCommissioner
       }
 
       def event_status
-        return 'upcoming' if to_date.present? && to_date >= Time.zone.now
-
-        'complete' if to_date.present? && to_date < Time.zone.now
+        if order.canceled_at.present?
+          'canceled'
+        elsif to_date.present? && to_date < Time.zone.now
+          'complete'
+        elsif to_date.present? && to_date >= Time.zone.now
+          'upcoming'
+        end
       end
     end
   end
