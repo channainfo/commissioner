@@ -32,5 +32,6 @@ require 'dry-validation'
 require 'font-awesome-sass'
 require 'rqrcode'
 require 'premailer/rails'
+require 'cm_app_logger'
 
 require 'byebug' if Rails.env.development? || Rails.env.test?

@@ -5,9 +5,20 @@ module SpreeCmCommissioner
     delegate :remote_ip, :waiting_guest_firebase_doc_id, :page_path, to: :context
 
     def call
-      return context.fail!(message: 'must_provide_waiting_guest_firebase_doc_id') if waiting_guest_firebase_doc_id.blank?
-      return context.fail!(message: 'must_provide_remote_ip') if remote_ip.blank?
-      return context.fail!(message: 'sessions_reach_it_maximum') if full?
+      if waiting_guest_firebase_doc_id.blank?
+        CmAppLogger.log(label: 'Validation failed', data: 'waiting_guest_firebase_doc_id is blank')
+        return context.fail!(message: 'must_provide_waiting_guest_firebase_doc_id')
+      end
+
+      if remote_ip.blank?
+        CmAppLogger.log(label: 'Validation failed', data: 'remote_ip is blank')
+        return context.fail!(message: 'must_provide_remote_ip')
+      end
+
+      if full?
+        CmAppLogger.log(label: 'Validation failed', data: 'sessions have reached the maximum limit')
+        return context.fail!(message: 'sessions_reach_it_maximum')
+      end
 
       generate_jwt_token
       assign_token_and_create_session_to_db
@@ -22,7 +33,12 @@ module SpreeCmCommissioner
       fetcher = SpreeCmCommissioner::WaitingRoomSystemMetadataFetcher.new(firestore: firestore)
       fetcher.load_document_data
 
-      SpreeCmCommissioner::WaitingRoomSession.active.size >= fetcher.max_sessions_count_with_min
+      current_sessions = SpreeCmCommissioner::WaitingRoomSession.active.size
+      max_sessions = fetcher.max_sessions_count_with_min
+
+      CmAppLogger.log(label: 'Session Info', data: { current_sessions: current_sessions, max_sessions: max_sessions })
+
+      current_sessions >= max_sessions
     end
 
     def generate_jwt_token

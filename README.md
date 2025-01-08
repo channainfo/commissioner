@@ -286,6 +286,28 @@ end
 
 To use signed cookies with CloudFront, you'll need to set up your CloudFront distribution to require signed cookies and then generate and distribute the signed cookies to your users. Here’s how to do it using Terraform for infrastructure setup and Ruby for cookie generation.
 
+## Logging
+
+### Using `CmAppLogger.log`
+
+To ensure consistent logging format across the application, please use the `CmAppLogger.log` method instead of the default `Rails.logger`. This helps in maintaining a standardized log structure and makes it easier to parse and analyze logs.
+
+#### Example
+```
+Here is an example of how to use `CmAppLogger.log`:
+```
+
+```ruby
+label = 'Log Label'
+data = { key: 'value' }
+
+# Log with data
+CmAppLogger.log(label: label, data: data)
+
+# Log without data
+CmAppLogger.log(label: label)
+```
+
 ### Generating keypair
 
 Generate private key
