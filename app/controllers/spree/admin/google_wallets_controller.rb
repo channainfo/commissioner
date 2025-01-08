@@ -1,35 +1,18 @@
 module Spree
   module Admin
     class GoogleWalletsController < Spree::Admin::ResourceController
-      before_action :product
+      skip_before_action :load_resource
+      before_action :product, :object
+      update.before :clear_verify_status
 
-      # POST /google_wallets
-      def create
-        wallet = model_class.new(product_id: product.id, review_status: permitted_resource_params[:review_status])
-        if wallet.save
-          redirect_to edit_admin_product_google_wallet_path(product, wallet.id)
-        else
-          render :new
-        end
-      end
+      helper 'spree/admin/google_wallets'
 
-      # POST /google_wallets/:id/create_google_wallet_class
-      def create_google_wallet_class
-        service = object.class_creator.call
-        if service[:status] == '200'
-          redirect_to location_after_save, notice: I18n.t('google_wallet.google_wallet_class_created')
+      # POST /google_wallets/:id/verify_with_google
+      def verify_with_google
+        if object.preferred_response.blank?
+          create_google_wallet_class
         else
-          redirect_to location_after_save, alert: I18n.t('google_wallet.google_wallet_class_create_fail')
-        end
-      end
-
-      # PATCH /google_wallets/:id/update_google_wallet_class
-      def update_google_wallet_class
-        service = object.class_updater.call
-        if service[:status] == '200'
-          redirect_to location_after_save, notice: I18n.t('google_wallet.google_wallet_class_updated')
-        else
-          redirect_to location_after_save, alert: I18n.t('google_wallet.google_wallet_class_update_fail')
+          update_google_wallet_class
         end
       end
 
@@ -50,7 +33,15 @@ module Spree
       end
 
       def object
-        @object ||= product.google_wallet
+        @object ||= if new_actions.include?(action)
+                      model_class.new(product_id: product.id)
+                    elsif params[:id]
+                      product.google_wallet
+                    end
+      end
+
+      def clear_verify_status
+        permitted_resource_params[:preferred_verified_at] = nil
       end
 
       def object_name
@@ -59,6 +50,26 @@ module Spree
 
       def location_after_save
         edit_admin_product_google_wallet_path(product, object.id)
+      end
+
+      def create_google_wallet_class
+        service = object.class_creator.call
+        if service[:status] == '200'
+          object.verify_create!(service[:status])
+          redirect_to location_after_save, notice: I18n.t('google_wallet.google_wallet_class_created')
+        else
+          redirect_to location_after_save, alert: I18n.t('google_wallet.google_wallet_class_create_fail')
+        end
+      end
+
+      def update_google_wallet_class
+        service = object.class_updater.call
+        if service[:status] == '200'
+          object.verify!
+          redirect_to location_after_save, notice: I18n.t('google_wallet.google_wallet_class_updated')
+        else
+          redirect_to location_after_save, alert: I18n.t('google_wallet.google_wallet_class_update_fail')
+        end
       end
 
       # @overrided

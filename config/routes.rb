@@ -111,8 +111,7 @@ Spree::Core::Engine.add_routes do
 
       resources :google_wallets do
         member do
-          post  :create_google_wallet_class
-          patch :update_google_wallet_class
+          post :verify_with_google
           delete :remove_logo
           delete :remove_hero_image
         end

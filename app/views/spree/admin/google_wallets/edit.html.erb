@@ -1,22 +1,36 @@
 <%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :google_wallet } %>
 
-<div class="my-2 mx-1">
-      <%= button_to Spree.t(:create), create_google_wallet_class_admin_product_google_wallet_path(@product, @object.id), method: :post, class: 'btn bg-success text-white my-1' %>
-      <%= button_to Spree.t(:update), update_google_wallet_class_admin_product_google_wallet_path(@product, @object), method: :patch, class: 'btn bg-success text-white my-1' %>
-      <small class="form-text text-muted">
-          <%= raw I18n.t('google_wallet.note') %>
-      </small>
- </div>
+<div class="card card-body mb-3">
+    <div data-hook="active" class="form-group">
+        <strong><%= Spree.t(:verified) %></strong>
+        <%= active_badge(@object.verified?) %>
+    </div>
+
+    <% if @object.verified_at.present? %>
+    <div data-hook="verified-at" class="form-group">
+        <p><%= Spree.t(:verified_at) %>: <%= @object.verified_at %></p>
+    </div>
+    <% end %>
+
+    <%= button_to Spree.t('verify_with_google_wallet'),
+                  verify_with_google_admin_product_google_wallet_path(@product, @object),
+                  method: :post,
+                  class: 'btn btn-outline-primary my-1',
+                  disabled: @object.verified? %>
+
+    <small class="form-text text-muted">
+      <%= raw I18n.t('google_wallet.note') %>
+    </small>
+</div>
+
 
 <div data-hook="admin_product_google_wallet_edit_form_header">
   <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
-
-<div data-hook="admin_product_google_wallet_edit_form">
-  <%= form_with model: @object, url: { action: 'update' } do |f| %>
-    <%= render partial: 'form', locals: { f: f  } %>
-    <div data-hook="admin_product_google_wallet_form_buttons">
-      <%= render partial: 'spree/admin/shared/edit_resource_links' %>
-    </div>
-
-  <% end %>
+  <div data-hook="admin_product_google_wallet_edit_form">
+    <%= form_with model: @object, url: { action: 'update' } do |f| %>
+      <%= render partial: 'form', locals: { f: f  } %>
+      <div data-hook="admin_product_google_wallet_form_buttons">
+        <%= render partial: 'spree/admin/shared/edit_resource_links' %>
+      </div>
+    <% end %>
 </div>
