@@ -58,6 +58,7 @@ RSpec.describe Spree::V2::Storefront::LineItemSerializer, type: :serializer do
         :allow_anonymous_booking,
         :discontinue_on,
         :high_demand,
+        :jwt_token,
         :sufficient_stock
       )
 

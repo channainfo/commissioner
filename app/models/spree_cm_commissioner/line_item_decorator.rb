@@ -166,6 +166,11 @@ module SpreeCmCommissioner
       to_date.strftime('%B %Y')
     end
 
+    def jwt_token
+      payload = { order_number: order.number, line_item_id: id }
+      SpreeCmCommissioner::OrderJwtToken.encode(payload, order.token)
+    end
+
     private
 
     def ensure_not_exceed_max_quantity_per_order
