@@ -398,3 +398,6 @@ km:
     item_available_instock: ទំនិញក្នុងស្តុកមានតែ 1 ប៉ុណ្ណោះ
     items_available_instock:  ទំនិញក្នុងស្តុកមានតែ %{available_quantity} ប៉ុណ្ណោះ
     items_out_of_stock:  ទំនិញអស់ពីស្តុក
+
+  account_link:
+    failure: "បរាជ័យក្នុងការភ្ជាប់គណនី %{identity_type}: %{reason}"

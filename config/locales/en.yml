@@ -514,3 +514,6 @@ en:
     item_available_instock: Only 1 item available in stock.
     items_available_instock:  Only %{available_quantity} items available in stock.
     items_out_of_stock:  Item out of Stock.
+
+  account_link:
+    failure: "Failed to link your %{identity_type} account: %{reason}"
