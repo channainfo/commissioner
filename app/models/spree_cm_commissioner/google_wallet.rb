@@ -16,8 +16,6 @@ module SpreeCmCommissioner
       attachable.variant :large, resize_to_limit: [960, 480]
     end
 
-    validates :hero_image, presence: true, on: :update
-
     def class_creator
       raise NotImplementedError, 'class_creator must be implemented in subclasses'
     end

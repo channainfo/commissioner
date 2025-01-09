@@ -52,7 +52,7 @@ module SpreeCmCommissioner
       end
 
       def hero_image
-        rails_blob_url(@google_wallet_class.hero_image)
+        (product_image_url.presence || rails_blob_url(@google_wallet_class.hero_image))
       end
 
       def start_date
@@ -70,6 +70,10 @@ module SpreeCmCommissioner
 
       def vendor_logo_url
         @google_wallet_class.product.vendor.logo&.original_url
+      end
+
+      def product_image_url
+        @google_wallet_class.product.images.first&.original_url
       end
 
       def build_request_body

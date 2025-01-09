@@ -7,6 +7,8 @@ module SpreeCmCommissioner
     preference :start_date, :string
     preference :end_date, :string
     preference :background_color, :string
+    preference :response, :string
+    preference :verified_at, :string
 
     validates :preferred_issuer_name, presence: true, on: :update
     validates :preferred_event_name, presence: true, on: :update
@@ -22,11 +24,32 @@ module SpreeCmCommissioner
     def set_default_preferences
       self.preferred_issuer_name ||= product.vendor.name
       self.preferred_event_name ||= product.name
-      self.preferred_venue_name ||= product.vendor.stock_location.city
-      self.preferred_venue_address ||= product.vendor.stock_location.address1
+      self.preferred_venue_name ||= product.venue.place.name
+      self.preferred_venue_address ||= product.venue.place.vicinity
       self.preferred_start_date = event_start_date unless event_start_date.nil?
       self.preferred_end_date = event_end_date unless event_end_date.nil?
       self.preferred_background_color = '#000000'
+      self.preferred_response = nil
+      self.preferred_verified_at = nil
+    end
+
+    def verified?
+      preferred_verified_at.present? && preferred_response.present?
+    end
+
+    def verify_create!(response)
+      self.preferred_verified_at = DateTime.current
+      self.preferred_response = response if response.present?
+      save!
+    end
+
+    def verify!
+      self.preferred_verified_at = DateTime.current
+      save!
+    end
+
+    def verified_at
+      DateTime.parse(preferred_verified_at).strftime('%B %d, %Y %I:%M %p') if preferred_verified_at.present?
     end
 
     def event_start_date

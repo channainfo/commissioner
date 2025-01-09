@@ -32,7 +32,7 @@
                   <%= render 'shared/asset_field',
                     field: :logo,
                     label: 'Logo',
-                    asset: @object.logo,
+                    asset: @object.logo.blank? ? @product.vendor.logo :  @object.logo ,
                     remove_url: remove_logo_admin_product_google_wallet_url(@product.slug, @object),
                     form: f,
                     classes: ['col-md-5 ml-3']
@@ -41,12 +41,11 @@
                   <%= render 'shared/asset_field',
                     field: :hero_image,
                     label: 'Hero Image',
-                    asset: @object.hero_image,
-                    remove_url: remove_hero_image_admin_product_google_wallet_url( @product.slug, @object),
+                    asset: @object.hero_image.blank? ? @product.images.first : @object.hero_image,
+                    remove_url: remove_hero_image_admin_product_google_wallet_url(@product.slug, @object),
                     form:f,
                     classes: ['col-md-5 ml-3']
-
-                    %>
+                  %>
                 </div>
                 <% if @object.respond_to?(:preferences) %>
                   <div id="gateway-settings-warning" class="info warning"><%= Spree.t(:provider_settings_warning) %></div>
