@@ -1,5 +1,5 @@
 module SpreeCmCommissioner
-  class LineItemJwtToken
+  class OrderJwtToken
     extend JwtToken
   end
 end

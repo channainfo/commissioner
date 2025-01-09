@@ -478,6 +478,7 @@ Spree::Core::Engine.add_routes do
         resources :guest_orders, only: %i[index show]
         post :user_order_transfer, to: 'user_order_transfer#create'
         resources :anonymous_line_items, path: 'a', only: %i[show]
+        resources :anonymous_orders, path: 'o', only: %i[show]
       end
 
       namespace :operator do

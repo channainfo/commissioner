@@ -32,7 +32,9 @@ module Spree
                  end
 
       line_item = Spree::LineItem.find(line_item.id)
-      jwt_token = SpreeCmCommissioner::LineItemJwtToken.encode(line_item)
+      payload = { order_number: line_item.order.number, line_item_id: line_item.id }
+
+      jwt_token = SpreeCmCommissioner::LineItemJwtToken.encode(payload, line_item.order.token)
 
       return if line_item.number.blank? && jwt_token.blank?
 
