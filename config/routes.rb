@@ -384,6 +384,7 @@ Spree::Core::Engine.add_routes do
       end
 
       namespace :organizer do
+        resources :events
         resources :tickets
       end
 
