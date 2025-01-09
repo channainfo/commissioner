@@ -509,3 +509,8 @@ en:
     invalid_json_format: "Invalid JSON format for orders"
     success_message: "Importing guests..."
     error_message: "Error importing guests"
+
+  variant_availability:
+    item_available_instock: Only 1 item available in stock.
+    items_available_instock:  Only %{available_quantity} items available in stock.
+    items_out_of_stock:  Item out of Stock.

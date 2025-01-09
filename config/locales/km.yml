@@ -393,3 +393,8 @@ km:
   kyc:
     note: "<b>ចំណាំ:</b> ជ្រើសរើស KYC ដែលត្រូវការសម្រាប់ផលិតផលនេះ"
     allowed_upload_later: "<b>អនុញ្ញាតឱ្យបញ្ជូលទិន្នន័យនៅពេលក្រោយ:</b> ធីកប្រអប់នេះ ប្រសិនបើអ្នកអនុញ្ញាតឱ្យបញ្ជូលទិន្នន័យនៅពេលក្រោយ"
+
+  variant_availability:
+    item_available_instock: ទំនិញក្នុងស្តុកមានតែ 1 ប៉ុណ្ណោះ
+    items_available_instock:  ទំនិញក្នុងស្តុកមានតែ %{available_quantity} ប៉ុណ្ណោះ
+    items_out_of_stock:  ទំនិញអស់ពីស្តុក

@@ -1,10 +1,11 @@
 module SpreeCmCommissioner
   module Stock
     class AvailabilityChecker
-      attr_reader :variant
+      attr_reader :variant, :error_message
 
       def initialize(variant)
         @variant = variant
+        @error_message = nil
       end
 
       def can_supply?(quantity = 1, options = {})
@@ -25,10 +26,13 @@ module SpreeCmCommissioner
       end
 
       def variant_available?(quantity = 1, options = {})
-        SpreeCmCommissioner::VariantAvailability::NonPermanentStockQuery.new(
+        query = SpreeCmCommissioner::VariantAvailability::NonPermanentStockQuery.new(
           variant: variant,
           except_line_item_id: options[:except_line_item_id]
-        ).available?(quantity)
+        )
+        result = query.available?(quantity)
+        @error_message = query.error_message unless result
+        result
       end
 
       def permanent_stock_variant_available?(quantity = 1, options = {})
