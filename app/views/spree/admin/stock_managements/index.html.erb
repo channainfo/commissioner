@@ -19,7 +19,10 @@
       <% @variants.each do |variant| %>
         <tr id="<%= spree_dom_id variant %>" data-hook="admin_product_stock_management_index_rows">
           <td class="image text-center">
-            <%= small_image(variant) %>
+              <%= small_image(variant) %>
+              <div class="mt-4">
+                Reserved Stock: <%= @reserved_stocks[variant.id] || 0 %></strong>
+              </div>
           </td>
           <td>
             <%= variant.sku_and_options_text %>
