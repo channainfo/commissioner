@@ -151,3 +151,6 @@ Style/HashSyntax:
 
 Style/ClassVars:
   Enabled: false
+
+Naming/BlockForwarding:
+  EnforcedStyle: explicit

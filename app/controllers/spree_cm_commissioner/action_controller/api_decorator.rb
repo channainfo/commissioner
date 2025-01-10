@@ -7,8 +7,8 @@ module SpreeCmCommissioner
       end
 
       # Annonymous block: https://www.rubydoc.info/gems/rubocop/RuboCop/Cop/Naming/BlockForwarding
-      def set_writing_role(&)
-        ActiveRecord::Base.connected_to(role: :writing, &)
+      def set_writing_role(&block)
+        ActiveRecord::Base.connected_to(role: :writing, &block)
       end
     end
   end
