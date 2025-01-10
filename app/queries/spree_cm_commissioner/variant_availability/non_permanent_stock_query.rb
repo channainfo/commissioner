@@ -27,11 +27,13 @@ module SpreeCmCommissioner
                              else
                                variant.stock_items.sum(:count_on_hand)
                              end
-
         if available_quantity >= quantity
           true
         elsif available_quantity == 1
           @error_message = I18n.t('variant_availability.item_available_instock')
+          false
+        elsif available_quantity <= 0
+          @error_message = I18n.t('variant_availability.items_out_of_stock')
           false
         else
           @error_message = I18n.t('variant_availability.items_available_instock', available_quantity: available_quantity)
