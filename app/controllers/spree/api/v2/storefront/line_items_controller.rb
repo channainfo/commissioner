@@ -7,7 +7,7 @@ module Spree
             if spree_current_user.nil?
               line_items_by_order_tokens
             else
-              spree_current_user.line_items.complete.paid.filter_by_event(params[:event])
+              spree_current_user.line_items.filter_by_event(params[:event])
             end
           end
 

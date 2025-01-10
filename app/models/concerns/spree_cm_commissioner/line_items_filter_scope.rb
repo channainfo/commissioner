@@ -5,6 +5,7 @@ module SpreeCmCommissioner
     included do
       scope :complete, -> { joins(:order).merge(Spree::Order.complete.not_canceled) }
       scope :complete_or_canceled, -> { joins(:order).merge(Spree::Order.complete_or_canceled) }
+      scope :canceled, -> { joins(:order).where.not(spree_orders: { canceled_at: nil }) }
 
       scope :accepted, -> { joins(:order).merge(Spree::Order.accepted) }
       scope :paid, -> { joins(:order).merge(Spree::Order.paid) }
@@ -13,14 +14,15 @@ module SpreeCmCommissioner
       scope :filter_by_event, lambda { |event|
         case event
         when 'upcoming'
-          where.not(to_date: nil).where('to_date >= ?', Time.zone.now).joins(:order).where(spree_orders: { canceled_at: nil })
+          complete_or_canceled.paid.where.not(to_date: nil).where('to_date >= ?', Time.zone.now)
+                              .joins(:order).where(spree_orders: { canceled_at: nil })
 
         when 'complete'
-          where.not(to_date: nil).where('to_date < ?', Time.zone.now).joins(:order).where(spree_orders: { canceled_at: nil })
+          complete_or_canceled.paid.where.not(to_date: nil).where('to_date < ?', Time.zone.now)
+                              .joins(:order).where(spree_orders: { canceled_at: nil })
 
         when 'canceled'
-          joins(:order).where.not(spree_orders: { canceled_at: nil })
-
+          canceled
         else
           none
         end
