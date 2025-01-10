@@ -23,6 +23,8 @@ module SpreeCmCommissioner
     # Client side must create waiting_guests document with :queued_at & :allow_to_enter_room_at to null to allow fillter & order.
     def fetch_long_waiting_guests(available_slots)
       firestore.col('waiting_guests')
+               .doc(current_date)
+               .col('records')
                .where('allow_to_enter_room_at', '==', nil)
                .order('queued_at')
                .limit(available_slots)
@@ -37,6 +39,10 @@ module SpreeCmCommissioner
         data[:allow_to_enter_room_at] = Time.zone.now
         document.ref.update(data)
       end
+    end
+
+    def current_date
+      Time.zone.now.strftime('%Y-%m-%d')
     end
 
     # When open app, app request to check whether room is full or not via Firebase instead of server to minimize server requests.

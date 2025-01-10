@@ -43,10 +43,16 @@ module SpreeCmCommissioner
     end
 
     def log_to_firebase
-      document = firestore.col('waiting_guests').doc(waiting_guest_firebase_doc_id)
+      current_date = Time.zone.now.strftime('%Y-%m-%d')
+
+      document = firestore.col('waiting_guests')
+                          .doc(current_date)
+                          .col('records')
+                          .doc(waiting_guest_firebase_doc_id)
 
       data = document.get.data.dup
       data[:entered_room_at] = Time.zone.now
+      data[:page_path] = page_path
 
       document.update(data)
     end
