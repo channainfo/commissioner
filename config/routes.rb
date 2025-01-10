@@ -156,6 +156,7 @@ Spree::Core::Engine.add_routes do
     resources :taxonomies do
       resources :taxons do
         resources :taxon_vendors
+        resources :taxon_childrens
         resources :guest_card_classes do
           member do
             delete :remove_background_image

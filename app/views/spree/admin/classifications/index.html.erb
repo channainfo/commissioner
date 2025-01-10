@@ -2,6 +2,9 @@
   <%= link_to Spree.t(:taxonomies), spree.admin_taxonomies_url %> /
 
   <%= link_to @taxonomy.root.name, spree.edit_admin_taxonomy_url(@taxonomy) %>
+  <%if @taxon.depth !=1 %>
+      / <%= link_to @taxon.parent.name, spree.edit_admin_taxonomy_taxon_url(@taxonomy,@taxon.parent.id) %>
+    <%end%>
   <% unless @taxon.root? %>
    / <%= @taxon.name %>
    <% end %>
