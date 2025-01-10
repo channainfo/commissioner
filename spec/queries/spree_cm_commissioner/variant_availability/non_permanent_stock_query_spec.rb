@@ -65,5 +65,14 @@ RSpec.describe SpreeCmCommissioner::VariantAvailability::NonPermanentStockQuery 
 
       end
     end
+
+    context 'when there is no available quantity ' do
+      let(:available_quantity) { 0 }
+
+      it 'return Item out of Stock message' do
+        expect(subject.available?(2)).to eq false
+        expect(subject.error_message).to eq 'Item out of Stock.'
+      end
+    end
   end
 end
