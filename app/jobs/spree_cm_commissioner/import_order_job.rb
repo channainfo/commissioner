@@ -1,5 +1,5 @@
 module SpreeCmCommissioner
-  class ImportOrderJob < ApplicationJob
+  class ImportOrderJob < ApplicationUniqueJob
     def perform(import_order_id, import_by_user_id, import_type)
       if import_type == 'new_order'
         SpreeCmCommissioner::Imports::CreateOrderService.new(

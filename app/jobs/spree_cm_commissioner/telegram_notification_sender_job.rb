@@ -1,5 +1,5 @@
 module SpreeCmCommissioner
-  class TelegramNotificationSenderJob < ApplicationJob
+  class TelegramNotificationSenderJob < ApplicationUniqueJob
     def perform(options)
       return if options[:chat_id].nil?
 

@@ -1,5 +1,5 @@
 module SpreeCmCommissioner
-  class TelegramStartMessageSenderJob < ApplicationJob
+  class TelegramStartMessageSenderJob < ApplicationUniqueJob
     queue_as :telegram_bot
 
     # :chat_id, :telegram_bot_id

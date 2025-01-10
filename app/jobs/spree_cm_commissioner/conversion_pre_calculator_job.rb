@@ -1,5 +1,5 @@
 module SpreeCmCommissioner
-  class ConversionPreCalculatorJob < ApplicationJob
+  class ConversionPreCalculatorJob < ApplicationUniqueJob
     queue_as :default
 
     def perform(product_id)

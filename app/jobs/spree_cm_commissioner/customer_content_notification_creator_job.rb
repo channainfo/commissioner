@@ -1,5 +1,5 @@
 module SpreeCmCommissioner
-  class CustomerContentNotificationCreatorJob < ApplicationJob
+  class CustomerContentNotificationCreatorJob < ApplicationUniqueJob
     def perform(options)
       SpreeCmCommissioner::CustomerContentNotificationCreator.new(options).call
     end

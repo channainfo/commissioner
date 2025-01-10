@@ -1,5 +1,5 @@
 module SpreeCmCommissioner
-  class WebhookSubscriberOrdersSenderJob < ApplicationJob
+  class WebhookSubscriberOrdersSenderJob < ApplicationUniqueJob
     def perform(options)
       order_state = options[:order_state]
       webhooks_subscriber_id = options[:webhooks_subscriber_id]
