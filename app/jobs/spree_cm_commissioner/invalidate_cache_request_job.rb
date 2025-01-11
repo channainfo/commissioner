@@ -1,5 +1,5 @@
 module SpreeCmCommissioner
-  class InvalidateCacheRequestJob < ApplicationJob
+  class InvalidateCacheRequestJob < ApplicationUniqueJob
     def perform(pattern)
       SpreeCmCommissioner::InvalidateCacheRequest.call(pattern: pattern)
     end

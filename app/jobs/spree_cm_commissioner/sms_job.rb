@@ -1,4 +1,4 @@
 module SpreeCmCommissioner
-  class SmsJob < ApplicationJob
+  class SmsJob < ApplicationUniqueJob
   end
 end

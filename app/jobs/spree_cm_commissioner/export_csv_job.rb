@@ -1,5 +1,5 @@
 module SpreeCmCommissioner
-  class ExportCsvJob < ApplicationJob
+  class ExportCsvJob < ApplicationUniqueJob
     def perform(id)
       Exports::ExportGuestCsvService.new(id).call
     end

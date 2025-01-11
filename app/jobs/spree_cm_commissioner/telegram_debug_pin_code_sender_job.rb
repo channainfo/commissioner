@@ -1,5 +1,5 @@
 module SpreeCmCommissioner
-  class TelegramDebugPinCodeSenderJob < ApplicationJob
+  class TelegramDebugPinCodeSenderJob < ApplicationUniqueJob
     def perform(pin_code_id)
       pin_code = SpreeCmCommissioner::PinCode.find(pin_code_id)
 
