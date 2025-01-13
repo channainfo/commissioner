@@ -62,7 +62,26 @@ module SpreeCmCommissioner
       "#{display_sku} - #{display_price}"
     end
 
+    def reload_option_texts_cache = delete_cache_if_exist(option_texts_cache_key) && option_texts
+
+    def option_texts_cache_key
+      "variant-#{id}-option-texts"
+    end
+
+    def option_texts
+      Rails.cache.fetch(option_texts_cache_key) do
+        option_values.includes(:option_type).map do |value|
+          "#{value.option_type.presentation}: #{value.presentation}"
+        end.join(', ')
+      end
+    end
+
     private
+
+    def delete_cache_if_exist(cache_key)
+      Rails.cache.delete(cache_key)
+      true
+    end
 
     def update_vendor_price
       return unless vendor.present? && product&.product_type == vendor&.primary_product_type

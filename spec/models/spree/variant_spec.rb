@@ -202,4 +202,29 @@ RSpec.describe Spree::Variant, type: :model do
       end
     end
   end
+
+  describe '#option_texts' do
+    let(:option_type) { create(:option_type, presentation: 'Color') }
+    let(:option_value) { create(:option_value, presentation: 'Red', option_type: option_type) }
+    let(:product) { create(:product, option_types: [option_type]) }
+    let(:variant) { create(:variant, product: product, option_values: [option_value]) }
+
+    before(:each) do
+      Rails.cache.clear
+    end
+
+    it 'fetches the option texts from cache if available' do
+      variant.save!
+
+      Rails.cache.write(variant.option_texts_cache_key, 'Cached Option Texts')
+      expect(variant.option_texts).to eq 'Cached Option Texts'
+    end
+
+    it 'calculates and caches the option texts when not cached' do
+      variant.save!
+      variant.option_texts
+
+      expect(Rails.cache.read(variant.option_texts_cache_key)).to eq "Color: Red"
+    end
+  end
 end
