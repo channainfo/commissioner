@@ -462,4 +462,100 @@ RSpec.describe Spree::Order, type: :model do
       end
     end
   end
+
+  describe '#unstock_items' do
+
+    let!(:stock_location) { create(:cm_stock_location) }
+    let!(:variant) { create(:variant) }
+    let!(:stock_item) { create(:stock_item, variant: variant, stock_location: stock_location , count_on_hand: 40) }
+    let!(:line_item) { create(:line_item, variant: variant, quantity: 2) }
+    let!(:order) { create(:order, line_items: [line_item], state: 'payment') }
+
+    it 'not decrease stock_item if variant not available ' do
+      allow(variant).to receive(:available?).and_return(false)
+      order.unstock_items
+
+      old_stock_items_count = stock_item.count_on_hand
+      new_stock_items_count = stock_item.reload.count_on_hand
+
+      expect(new_stock_items_count).to eq old_stock_items_count
+    end
+
+    it 'not decrease stock_item if variant not track_inventory ' do
+      allow(variant).to receive(:should_track_inventory?).and_return(false)
+      order.unstock_items
+
+      old_stock_items_count = stock_item.count_on_hand
+      new_stock_items_count = stock_item.reload.count_on_hand
+
+      expect(new_stock_items_count).to eq old_stock_items_count
+    end
+
+    it 'not decrease stock_item if variant need_confirmation' do
+      allow(variant).to receive(:need_confirmation?).and_return(true)
+      order.unstock_items
+
+      old_stock_items_count = stock_item.count_on_hand
+      new_stock_items_count = stock_item.reload.count_on_hand
+
+      expect(new_stock_items_count).to eq old_stock_items_count
+    end
+
+    it 'decreases stock_item count_on_hand' do
+      order.unstock_items
+
+      old_stock_items_count = stock_item.count_on_hand
+      new_stock_items_count = stock_item.reload.count_on_hand
+
+      expect(new_stock_items_count).to eq old_stock_items_count - order.quantity
+    end
+  end
+
+  describe '#restock_items' do
+
+    let!(:stock_location) { create(:cm_stock_location) }
+    let!(:variant) { create(:variant) }
+    let!(:stock_item) { create(:stock_item, variant: variant, stock_location: stock_location , count_on_hand: 40) }
+    let!(:line_item) { create(:line_item, variant: variant, quantity: 2) }
+    let!(:order) { create(:order, line_items: [line_item], state: 'payment') }
+
+    it 'not increase stock_item if variant not available ' do
+      allow(variant).to receive(:available?).and_return(false)
+      order.restock_items
+
+      old_stock_items_count = stock_item.count_on_hand
+      new_stock_items_count = stock_item.reload.count_on_hand
+
+      expect(new_stock_items_count).to eq old_stock_items_count
+    end
+
+    it 'not increase stock_item if variant not track_inventory ' do
+      allow(variant).to receive(:should_track_inventory?).and_return(false)
+      order.restock_items
+
+      old_stock_items_count = stock_item.count_on_hand
+      new_stock_items_count = stock_item.reload.count_on_hand
+
+      expect(new_stock_items_count).to eq old_stock_items_count
+    end
+
+    it 'not increase stock_item if variant need_confirmation' do
+      allow(variant).to receive(:need_confirmation?).and_return(true)
+      order.restock_items
+
+      old_stock_items_count = stock_item.count_on_hand
+      new_stock_items_count = stock_item.reload.count_on_hand
+
+      expect(new_stock_items_count).to eq old_stock_items_count
+    end
+
+    it 'increase stock_item count_on_hand' do
+      order.restock_items
+
+      old_stock_items_count = stock_item.count_on_hand
+      new_stock_items_count = stock_item.reload.count_on_hand
+
+      expect(new_stock_items_count).to eq old_stock_items_count + order.quantity
+    end
+  end
 end

@@ -20,9 +20,6 @@
         <tr id="<%= spree_dom_id variant %>" data-hook="admin_product_stock_management_index_rows">
           <td class="image text-center">
               <%= small_image(variant) %>
-              <div class="mt-4">
-                Reserved Stock: <%= @reserved_stocks[variant.id] || 0 %></strong>
-              </div>
           </td>
           <td>
             <%= variant.sku_and_options_text %>
@@ -35,6 +32,11 @@
                 <% end %>
               </div>
             <% end if can?(:update, @product) && can?(:update, variant) %>
+            <div class="d-flex align-items-center">
+              <div><%= svg_icon name: "clipboard-check.svg", width: '14', height: '14' %></div>
+              <div class="mt-1 ml-1"><small class="">Reserved Stock: <%= @reserved_stocks[variant.id] || 0 %></small></div>
+            </div>
+
             <% if variant.permanent_stock? %>
               <div>
                 <span type="button" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="This product stock will renew every day">
