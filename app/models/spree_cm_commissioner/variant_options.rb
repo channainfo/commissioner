@@ -126,6 +126,11 @@ module SpreeCmCommissioner
       @bib_display_prefix == 1
     end
 
+    def bib_pre_generation_on_create?
+      @bib_pre_generation_on_create ||= option_value_name_for(option_type_name: 'bib-pre-generation-on-create')&.to_i || 0
+      @bib_pre_generation_on_create == 1
+    end
+
     def seat_number_positions
       @seat_number_positions ||= option_value_name_for(option_type_name: 'seat-number-positions')&.split(',')
     end

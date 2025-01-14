@@ -24,6 +24,7 @@ module SpreeCmCommissioner
                :bib_prefix,
                :bib_zerofill,
                :bib_display_prefix?,
+               :bib_pre_generation_on_create?,
                :seat_number_positions,
                :seat_number_layouts,
                to: :options
