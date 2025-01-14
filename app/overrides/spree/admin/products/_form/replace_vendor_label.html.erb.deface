@@ -5,12 +5,17 @@
     <%= f.field_container :vendor, class: ['form-group'] do %>
       <label class="d-flex">
         <span class="mr-2"><%= Spree.t(:vendor) %></span>
-        <%= link_to_with_icon 'arrow-right-circle.svg', Spree.t(' '), spree.edit_admin_vendor_path(@product.vendor_id), class: "d-flex align-items-center" do %>
-          <i class="bi bi-arrow-right-circle me-1"></i>
+        <% if @product.vendor_id.present? %>
+          <%= link_to_with_icon 'arrow-right-circle.svg', Spree.t(' '), spree.edit_admin_vendor_path(@product.vendor_id), class: "d-flex align-items-center" do %>
+            <i class="bi bi-arrow-right-circle me-1"></i>
+          <% end %>
+        <% else %>
+          <span class="text-muted"><%= Spree.t(:no_vendor_assigned) %></span>
         <% end %>
       </label>
-      <%= f.collection_select(:vendor_id,@vendors,:id,:name,{ include_blank: Spree.t('match_choices.none') },{ class: 'select2' }) %>
+      <%= f.collection_select(:vendor_id, @vendors, :id, :name, { include_blank: Spree.t('match_choices.none') }, { class: 'select2' }) %>
       <%= f.error_message_on :vendor %>
     <% end %>
   </div>
 <% end %>
+
