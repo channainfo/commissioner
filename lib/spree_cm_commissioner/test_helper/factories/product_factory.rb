@@ -90,18 +90,31 @@ FactoryBot.define do
       transient do
         variant1_bib_prefix { '3KM' }
         variant2_bib_prefix { '5KM' }
+        bib_pre_generation_on_create { false }
+      end
+
+      before(:create) do |product, evaluator|
+        if evaluator.bib_pre_generation_on_create
+          product.option_types << create(:cm_option_type, :bib_pre_generation_on_create)
+        end
       end
 
       after(:create) do |product, evaluator|
         option_value1 = create(:cm_option_value, presentation: evaluator.variant1_bib_prefix, name: evaluator.variant1_bib_prefix, option_type: product.option_types[0])
         option_value2 = create(:cm_option_value, presentation: evaluator.variant2_bib_prefix, name: evaluator.variant2_bib_prefix, option_type: product.option_types[0])
 
+        bib_pre_generation_option_value = if evaluator.bib_pre_generation_on_create
+          create(:cm_option_value, presentation: 'Yes', name: '1', option_type: product.option_types.find_by(name: 'bib-pre-generation-on-create'))
+        end
+
         variant1 = create(:variant, price: product.price, product: product)
         variant1.option_values = [option_value1]
+        variant1.option_values << bib_pre_generation_option_value if evaluator.bib_pre_generation_on_create
         variant1.save!
 
         variant2 = create(:variant, price: product.price, product: product)
         variant2.option_values = [option_value2]
+        variant2.option_values << bib_pre_generation_option_value if evaluator.bib_pre_generation_on_create
         variant2.save!
       end
     end

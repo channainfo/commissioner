@@ -40,6 +40,8 @@ module SpreeCmCommissioner
     before_validation :set_event_id
     before_validation :assign_seat_number, if: -> { bib_number.present? }
 
+    before_create :generate_bib, if: -> { variant.bib_pre_generation_on_create? }
+
     validates :seat_number, uniqueness: { scope: :event_id }, allow_nil: true, if: -> { event_id.present? }
     validates :bib_index, uniqueness: true, allow_nil: true
 

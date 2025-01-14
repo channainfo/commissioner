@@ -39,6 +39,7 @@ module SpreeCmCommissioner
       'bib-prefix' => 'string',
       'bib-zerofill' => 'integer',
       'bib-display-prefix' => 'boolean',
+      'bib-pre-generation-on-create' => 'boolean',
       'seat-number-positions' => 'array'
     }.freeze
 

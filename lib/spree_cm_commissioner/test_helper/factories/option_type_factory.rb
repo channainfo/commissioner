@@ -135,6 +135,12 @@ FactoryBot.define do
       presentation { 'Should display bib prefix?' }
     end
 
+    trait :bib_pre_generation_on_create do
+      attr_type { :boolean }
+      name { 'bib-pre-generation-on-create' }
+      presentation { 'Should pre generate bib on create' }
+    end
+
     trait :seat_number_positions do
       attr_type { :array }
       name { 'seat-number-positions' }

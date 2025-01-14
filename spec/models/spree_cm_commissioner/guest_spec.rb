@@ -98,6 +98,40 @@ RSpec.describe SpreeCmCommissioner::Guest, type: :model do
     end
   end
 
+  describe 'before create' do
+    let(:taxonomy) { create(:taxonomy, kind: :event) }
+    let(:event) { create(:taxon, name: 'BunPhum', taxonomy: taxonomy) }
+    let(:section_a) { create(:taxon, parent: event, taxonomy: taxonomy, name: 'Section A') }
+
+    describe '#generate_bib' do
+      context 'when variant does not set bib-pre-generation-on-create option value' do
+        let(:product_with_bib) { create(:cm_bib_number_product, taxons: [section_a]) }
+        let(:variant) { product_with_bib.variants.first }
+        let(:line_item) { create(:line_item, variant: variant) }
+
+        it 'does not generate bib' do
+          guest = create(:guest, line_item: line_item)
+
+          expect(variant.bib_pre_generation_on_create?).to be false
+          expect(guest.formatted_bib_number).to be nil
+        end
+      end
+
+      context 'when variant set "bib-pre-generation-on-create" to true' do
+        let(:product_with_bib) { create(:cm_bib_number_product, bib_pre_generation_on_create: true, taxons: [section_a]) }
+        let(:variant) { product_with_bib.variants.first }
+        let(:line_item) { create(:line_item, variant: variant) }
+
+        it 'generate bib on create (no need to wait until order complete)' do
+          guest = create(:guest, line_item: line_item)
+
+          expect(variant.bib_pre_generation_on_create?).to be true
+          expect(guest.formatted_bib_number).to eq '3KM001'
+        end
+      end
+    end
+  end
+
   describe '.complete' do
     let(:order1) { create(:order, completed_at: Date.current) }
     let(:order2) { create(:order, completed_at: nil) }
