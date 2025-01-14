@@ -68,14 +68,18 @@ RSpec.describe Spree::Orders::GenerateCommissions do
 
   describe '#call' do
     context 'generate commission is called multiple time' do
-      it 'raise error on second call' do
+      it 'return success true instead of raise error on second call' do
         first_run = described_class.new.call(order: order)
         expect(first_run.success?).to be true
 
-        # second run
-        expect{ described_class.new.call(order: order) }
-          .to raise_error(ActiveRecord::RecordInvalid)
-          .with_message("Validation failed: Vendor has already been taken")
+        second_run = described_class.new.call(order: order)
+        expect(second_run.success?).to be true
+
+        third_run = described_class.new.call(order: order)
+        expect(third_run.success?).to be true
+
+        fourth_run = described_class.new.call(order: order)
+        expect(fourth_run.success?).to be true
       end
     end
   end

@@ -4,6 +4,7 @@ module SpreeCmCommissioner
       # override
       def generate_order_commissions(order:)
         return failure(order) unless order.state == 'complete'
+        return success(order: order) if order.commissions.any?
 
         vendor_commissions = generate_commissions_group_by_vendor_ids(order)
         vendor_commissions.each do |vendor_id, amount|
