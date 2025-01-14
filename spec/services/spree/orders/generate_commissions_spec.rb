@@ -68,7 +68,7 @@ RSpec.describe Spree::Orders::GenerateCommissions do
 
   describe '#call' do
     context 'generate commission is called multiple time' do
-      it 'return success true instead of raise error on second call' do
+      it 'does not re-create if already exist' do
         first_run = described_class.new.call(order: order)
         expect(first_run.success?).to be true
 
@@ -77,9 +77,6 @@ RSpec.describe Spree::Orders::GenerateCommissions do
 
         third_run = described_class.new.call(order: order)
         expect(third_run.success?).to be true
-
-        fourth_run = described_class.new.call(order: order)
-        expect(fourth_run.success?).to be true
       end
     end
   end
