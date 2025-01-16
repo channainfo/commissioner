@@ -30,18 +30,16 @@ module SpreeCmCommissioner
       private
 
       def build_order_params(order_data)
+        guest_attributes = order_data.slice(*SpreeCmCommissioner::Guest.csv_importable_columns)
         {
           channel: construct_channel(order_data[:order_channel]),
           email: order_data[:email],
           phone_number: order_data[:phone_number],
           line_items_attributes: [
             {
-              quantity: 1,
+              quantity: order_data[:quantity].to_i,
               sku: order_data[:variant_sku],
-              guests_attributes: [
-
-                order_data.slice(*SpreeCmCommissioner::Guest.csv_importable_columns)
-              ]
+              guests_attributes: Array.new(order_data[:quantity].to_i, guest_attributes)
             }
           ]
         }
@@ -49,7 +47,6 @@ module SpreeCmCommissioner
 
       def create_order(params, index)
         order = Spree::Core::Importer::Order.import(import_by, params)
-
         unless order
           record_failure(index)
           return nil

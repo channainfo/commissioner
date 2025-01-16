@@ -20,12 +20,12 @@ RSpec.describe SpreeCmCommissioner::Imports::CreateOrderService do
 
   let(:new_orders_data) do
     CSV.generate do |csv|
-      csv << ['order_channel', 'variant_sku',       'email',         'phone_number',  'first_name',  'last_name']
-      csv << ['google_form',    variant1.sku,   'user1@gmail.com',     '012000001' ,   'Panha 1',      'Chom 1']
-      csv << ['google_form',    variant2.sku,   'user2@gmail.com',     '012000002',    'Panha 2' ,     'Chom 2']
-      csv << ['google_form',    variant3.sku,   'user3@gmail.com',     '012000003',    'Panha 3' ,     'Chom 3']
-      csv << ['google_form',    'invalid',     ' user4@gmail.com',     '012000004',    'Panha 4' ,     'Chom 4']
-      csv << ['google_form',    variant3.sku,         ''          ,         ''         'Panha 5' ,     'Chom 5']
+      csv << ['order_channel', 'variant_sku', 'quantity',       'email',         'phone_number',  'first_name',  'last_name']
+      csv << ['google_form',    variant1.sku,    2,        'user1@gmail.com',     '012000001' ,   'Panha 1',      'Chom 1']
+      csv << ['google_form',    variant2.sku,    2,        'user2@gmail.com',     '012000002',    'Panha 2' ,     'Chom 2']
+      csv << ['google_form',    variant3.sku,    2,        'user3@gmail.com',     '012000003',    'Panha 3' ,     'Chom 3']
+      csv << ['google_form',    'invalid',       1,        'user4@gmail.com',     '012000004',    'Panha 4' ,     'Chom 4']
+      csv << ['google_form',    variant3.sku,    1,               ''          ,         ''        'Panha 5' ,     'Chom 5']
     end
   end
 
@@ -60,6 +60,7 @@ RSpec.describe SpreeCmCommissioner::Imports::CreateOrderService do
       subject.import_orders
       orders = Spree::Order.complete.order(:id)
       expect(orders.count).to eq(3)
+      expect(orders.sum { |order| order.line_items.sum(:quantity) }).to eq(6)
 
       orders.each do |order|
         expect(order.payment_state).to eq('paid')
