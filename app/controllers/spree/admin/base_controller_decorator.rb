@@ -5,6 +5,15 @@ module Spree
         base.before_action :redirect_to_billing, if: -> { Spree::Store.default.code.include?('billing') }
       end
 
+      # override
+      # Default behavior is to return default store based on current URL.
+      # Our admin URL is not store URL, so we return default store instead.
+      def current_store
+        @current_store ||= Rails.cache.fetch("current_store_#{request.host}", expires_in: 1.hour) do
+          Spree::Store.where('url = ? OR url LIKE ?', request.host, "%#{request.host}%").first || Spree::Store.default
+        end
+      end
+
       # even db in read only mode, authorizor still need to run Warden callbacks which will write to db
       # this include update tracked fields such as sign_in_count, last_sign_in_at, etc.
       def authorize!(*args)
