@@ -34,23 +34,34 @@ module Spree
       # POST
       def invalidate_api_caches
         if params[:model].present?
-          api_patterns_map = {
-            'SpreeCmCommissioner::HomepageSection' => '/api/v2/storefront/homepage/*',
-            'SpreeCmCommissioner::HomepageBackground' => '/api/v2/storefront/homepage/*',
-            'Spree::Menu' => '/api/v2/storefront/menus*'
-          }
+          model = case params[:model]
+                  when 'SpreeCmCommissioner::HomepageSection'
+                    SpreeCmCommissioner::HomepageSection
+                  when 'SpreeCmCommissioner::HomepageBackground'
+                    SpreeCmCommissioner::HomepageBackground
+                  when 'Spree::Menu'
+                    Spree::Menu
+                  else
+                    flash[:error] = 'Invalid model provided' # rubocop:disable Rails/I18nLocaleTexts
+                    redirect_back fallback_location: admin_root_path and return
+                  end
 
-          api_patterns = api_patterns_map[params[:model]]
+          model.find_each(&:touch)
+          api_patterns_map = {
+            SpreeCmCommissioner::HomepageSection => '/api/v2/storefront/homepage/*',
+            SpreeCmCommissioner::HomepageBackground => '/api/v2/storefront/homepage/*',
+            Spree::Menu => '/api/v2/storefront/menus*'
+          }
+          api_patterns = api_patterns_map[model]
 
           if api_patterns.is_a?(Array)
             api_patterns.each { |pattern| SpreeCmCommissioner::InvalidateCacheRequestJob.perform_later(pattern) }
           elsif api_patterns.is_a?(String)
             SpreeCmCommissioner::InvalidateCacheRequestJob.perform_later(api_patterns)
+          elsif params[:api_pattern].present?
+            SpreeCmCommissioner::InvalidateCacheRequestJob.perform_later(params[:api_pattern])
           end
-        elsif params[:api_pattern].present?
-          SpreeCmCommissioner::InvalidateCacheRequestJob.perform_later(params[:api_pattern])
         end
-
         redirect_back fallback_location: admin_root_path
       end
 

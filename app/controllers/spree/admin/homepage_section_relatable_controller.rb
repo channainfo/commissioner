@@ -25,7 +25,7 @@ module Spree
       end
 
       def permitted_resource_params
-        params.require(object_name).permit(:homepage_section_id, :relatable_id, :relatable_type, :active)
+        params.require(object_name).permit(:homepage_section_id, :relatable_id, :relatable_type, :available_on, :discontinue_on)
       end
     end
   end
