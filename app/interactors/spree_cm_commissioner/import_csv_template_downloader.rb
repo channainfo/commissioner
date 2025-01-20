@@ -5,7 +5,7 @@ module SpreeCmCommissioner
     def call
       headers = case import_type
                 when 'new_order'
-                  initial_headers = %w[order_channel variant_sku email]
+                  initial_headers = %w[order_channel variant_sku quantity email]
                   initial_headers + SpreeCmCommissioner::Guest.csv_importable_columns.map(&:to_s)
                 when 'existing_order'
                   initial_headers = %w[order_number guest_id]
