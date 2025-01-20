@@ -14,12 +14,6 @@ module Spree
         @variants = [@product.master] if @variants.empty?
 
         @stock_locations = (@variants.flat_map(&:stock_locations) + @product.vendor.stock_locations).uniq
-
-        @reserved_stocks = Spree::LineItem
-                           .complete
-                           .where(variant_id: @variants.pluck(:id))
-                           .group('spree_line_items.variant_id')
-                           .sum(:quantity)
       end
 
       def model_class

@@ -8,6 +8,7 @@ module SpreeCmCommissioner
       state_machine.before_transition to: :complete, do: :request, if: :need_confirmation?
       state_machine.before_transition to: :complete, do: :generate_bib_number
 
+      state_machine.after_transition to: :complete, do: :clear_total_stock_items_cache
       state_machine.after_transition to: :complete, do: :precalculate_conversion
       state_machine.after_transition to: :complete, do: :notify_order_complete_app_notification_to_user, unless: :subscription?
       state_machine.after_transition to: :complete, do: :notify_order_complete_telegram_notification_to_user, unless: :subscription?
@@ -15,8 +16,10 @@ module SpreeCmCommissioner
       state_machine.after_transition to: :complete, do: :send_order_complete_telegram_alert_to_store, unless: :need_confirmation?
 
       state_machine.after_transition to: :resumed, do: :precalculate_conversion
+      state_machine.after_transition to: :resumed, do: :clear_total_stock_items_cache
 
       state_machine.after_transition to: :canceled, do: :precalculate_conversion
+      state_machine.after_transition to: :canceled, do: :clear_total_stock_items_cache
 
       scope :accepted, -> { where(request_state: 'accepted') }
 
@@ -64,6 +67,10 @@ module SpreeCmCommissioner
       line_items.each do |item|
         SpreeCmCommissioner::ConversionPreCalculatorJob.perform_later(item.product_id)
       end
+    end
+
+    def clear_total_stock_items_cache
+      variants.each(&:clear_total_stock_items_cache)
     end
 
     def generate_bib_number

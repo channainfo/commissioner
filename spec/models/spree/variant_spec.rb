@@ -202,4 +202,44 @@ RSpec.describe Spree::Variant, type: :model do
       end
     end
   end
+
+  describe '#available_quantity' do
+    let!(:variant) { build(:variant, product: product) }
+    let(:product) { create(:product, product_type: :ecommerce) }
+    let(:stock_location1) { create(:stock_location) }
+    let(:stock_location2) { create(:stock_location) }
+    let(:stock_item1) { create(:stock_item, variant: variant, stock_location: stock_location1) }
+    let(:stock_item2) { create(:stock_item, variant: variant, stock_location: stock_location2) }
+
+    before do
+      allow(variant).to receive(:stock_items).and_return([stock_item1, stock_item2])
+      allow(variant).to receive(:total_purchases).and_return(5)
+    end
+
+    context 'when inventory tracking is disabled' do
+      it 'returns BigDecimal::INFINITY' do
+        allow(variant).to receive(:should_track_inventory?).and_return(false)
+
+        expect(variant.available_quantity).to eq(BigDecimal::INFINITY)
+      end
+    end
+
+    context 'when inventory tracking is enabled' do
+      it 'returns total number of inventory if require delivery' do
+        allow(variant).to receive(:delivery_required?).and_return(true)
+        allow(variant).to receive(:should_track_inventory?).and_return(true)
+        total_items = stock_item1.count_on_hand + stock_item2.count_on_hand
+
+        expect(variant.available_quantity).to eq total_items
+      end
+
+      it 'returns remaining items if item not require delivery ' do
+        allow(variant).to receive(:delivery_required?).and_return(false)
+        allow(variant).to receive(:should_track_inventory?).and_return(true)
+        total_items = stock_item1.count_on_hand + stock_item2.count_on_hand
+
+        expect(variant.available_quantity).to eq (total_items - variant.total_purchases)
+      end
+    end
+  end
 end

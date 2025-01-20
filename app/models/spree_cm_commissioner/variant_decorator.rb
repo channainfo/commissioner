@@ -71,17 +71,37 @@ module SpreeCmCommissioner
       available_quantity.positive?
     end
 
-    private
-
     def total_purchases
-      Spree::LineItem.complete.where(variant_id: id).sum(:quantity).to_i
+      @total_purchases ||= Rails.cache.fetch(total_purchases_cache_key, version: cache_version) do
+        Spree::LineItem.complete.where(variant_id: id).sum(:quantity).to_i
+      end
     end
 
     def available_quantity
-      stock_count = stock_items.sum(&:count_on_hand)
-      return stock_count if delivery_required?
+      return BigDecimal::INFINITY unless should_track_inventory?
 
-      stock_count - total_purchases
+      Rails.cache.fetch(available_quantity_cache_key, version: cache_version) do
+        if delivery_required?
+          stock_items.sum(&:count_on_hand)
+        else
+          stock_items.sum(&:count_on_hand) - total_purchases
+        end
+      end
+    end
+
+    private
+
+    def available_quantity_cache_key
+      "variant-#{id}-available_quantity"
+    end
+
+    def total_purchases_cache_key
+      "variant-#{id}-total_purchases"
+    end
+
+    def clear_total_stock_items_cache
+      Rails.cache.delete(total_purchases_cache_key)
+      Rails.cache.delete(available_quantity_cache_key)
     end
 
     def update_vendor_price

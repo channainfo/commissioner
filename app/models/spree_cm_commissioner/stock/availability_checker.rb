@@ -14,10 +14,6 @@ module SpreeCmCommissioner
         return true if variant.backorderable?
         return true if variant.need_confirmation?
 
-        # when delivery required, shipment will dynamically add / remove unit from stock item.
-        # so we can directly check can_supply with stock items directly.
-        return variant.stock_items.sum(:count_on_hand) >= quantity if variant.delivery_required?
-
         if variant.permanent_stock?
           permanent_stock_variant_available?(quantity, options)
         else
