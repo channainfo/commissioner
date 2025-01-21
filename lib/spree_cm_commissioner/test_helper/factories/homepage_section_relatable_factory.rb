@@ -2,9 +2,10 @@ FactoryBot.define do
   factory :cm_homepage_section_relatable, class: SpreeCmCommissioner::HomepageSectionRelatable do
     homepage_section { create(:cm_homepage_section) }
     relatable { create(:taxon) }
-    active { true }
+    available_on { nil }
+    discontinue_on { nil }
 
-    # position is defaultly set by act_as_list
+   # position is defaultly set by act_as_list
     transient do
       position { nil }
     end
