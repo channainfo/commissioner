@@ -1,21 +1,25 @@
 module SpreeCmCommissioner
-  class NotificationReader < BaseInteractor
-    delegate :id, :user, to: :context
+  class NotificationReader < NotificationBaseReader
+    private
 
-    def call
-      read_specific_notification if id.present?
-      read_all_user_unread_notifications if user.present?
+    def validation!
+      context.fail!(message: 'Notification not found') if notification.nil?
     end
 
-    def read_specific_notification
-      notification = SpreeCmCommissioner::Notification.find_by(id: id)
-      return context.fail!(error_message: 'Notification not found') if notification.nil?
-
-      notification.mark_as_read! if notification.unread?
+    def mark_as_read!
+      notification.mark_as_read!
     end
 
-    def read_all_user_unread_notifications
-      user.notifications.unread_notifications.mark_as_read!
+    def decrement_user_unread_notification_count!
+      user.update!(unread_notification_count: user.unread_notification_count - 1)
+    end
+
+    def user
+      @user ||= notification.recipient
+    end
+
+    def notification
+      @notification ||= SpreeCmCommissioner::Notification.find_by(id: id)
     end
   end
 end
