@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'spree_multi_vendor', '>= 2.4.1'
   s.add_dependency 'spree_extension'
 
+  s.add_dependency 'activerecord-multi-tenant'
   s.add_dependency 'phonelib'
   s.add_dependency 'aws-sdk-ecs'
   s.add_dependency 'google-cloud-firestore'
