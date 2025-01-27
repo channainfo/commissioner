@@ -45,6 +45,7 @@ module SpreeCmCommissioner
       base.has_one  :stock_location, -> { where(active: true) }, class_name: 'Spree::StockLocation', dependent: :destroy
 
       base.belongs_to :default_state, class_name: 'Spree::State', inverse_of: :vendors
+      base.multi_tenant :tenant, class_name: 'SpreeCmCommissioner::Tenant'
 
       base.delegate :lat, :lon, to: :stock_location, allow_nil: true
 
