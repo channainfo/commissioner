@@ -19,7 +19,7 @@ RSpec.configure do |config|
   config.include DoorkeeperAuthHelper
   config.include ActiveSupport::Testing::TimeHelpers
   config.extend Spree::TestingSupport::AuthorizationHelpers::Request, type: :request
-
+  config.include ActiveJob::TestHelper
   # https://github.com/channainfo/commissioner/pull/316
   config.order = :random
   Kernel.srand config.seed
