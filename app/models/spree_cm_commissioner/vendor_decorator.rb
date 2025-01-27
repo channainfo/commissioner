@@ -96,6 +96,11 @@ module SpreeCmCommissioner
       #   }
       # end
 
+      # Override tenant immutability to allow clearing tenant_id
+      def tenant_id=(new_tenant_id)
+        self[:tenant_id] = new_tenant_id
+      end
+
       extend Spree::DisplayMoney
       money_methods :min_price, :max_price
 

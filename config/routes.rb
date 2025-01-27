@@ -261,6 +261,10 @@ Spree::Core::Engine.add_routes do
         end
       end
     end
+
+    resources :tenants do
+      resources :vendors, controller: :tenant_vendors
+    end
   end
 
   resources :events, controller: 'events/base' do

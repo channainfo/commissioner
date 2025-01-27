@@ -1,0 +1,25 @@
+<!-- Assign Vendor Modal -->
+<div class="modal fade" id="assignVendorModal" tabindex="-1" role="dialog" aria-labelledby="assignVendorModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="assignVendorModalLabel"><%= Spree.t(:assign_vendor) %></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <%= form_with url: admin_tenant_vendors_path(@tenant), method: :post, local: true do |form| %>
+          <div class="form-group">
+            <%= form.label :vendor_id, Spree.t(:select_vendor) %>
+            <%= form.collection_select :vendor_id, @available_vendors, :id, :name, { prompt: Spree.t(:choose_vendor) }, { class: 'select2 form-control', 'data-dropdown-parent': '#assignVendorModal' } %>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= Spree.t(:close) %></button>
+            <%= form.submit "Submit", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
