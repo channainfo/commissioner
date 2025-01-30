@@ -1,6 +1,8 @@
 module Spree
   module Billing
     class ReportsController < Spree::Billing::BaseController
+      include SpreeCmCommissioner::Billing::MonthlyOrdersHelper
+
       before_action -> { parse_date!(params[:from_date]) }, only: [:index]
       before_action -> { parse_date!(params[:to_date]) }, only: [:index]
 
@@ -67,8 +69,18 @@ module Spree
 
       def export
         @year = params[:year].presence || Time.zone.today.year
+        search = orders_scope.where(payment_state: %w[paid balance_due failed]).joins(:invoice)
+                             .where('EXTRACT(YEAR FROM cm_invoices.date) = ?', @year).ransack(params[:q]).result
 
-        load_orders_by_month
+        order_hashes = load_orders_by_month(search, @year)
+        @orders = order_hashes[:orders]
+
+        @total = order_hashes[:total]
+        @current_month_total = order_hashes[:current_month_total]
+        @previous_month_carried_forward = order_hashes[:previous_month_carried_forward]
+        @paid = order_hashes[:paid]
+        @balance_due = order_hashes[:balance_due]
+        @voided = order_hashes[:voided]
 
         return unless request.format == :csv
 
@@ -103,26 +115,6 @@ module Spree
         else
           @search = SpreeCmCommissioner::Customer.joins(:taxons).where('active_subscriptions_count > ?', 0)
                                                  .where(cm_customers: { place_id: spree_current_user.place_ids })
-        end
-      end
-
-      def load_orders_by_month
-        @search = orders_scope.where(payment_state: %w[paid balance_due failed])
-                              .joins(:invoice)
-                              .where('EXTRACT(YEAR FROM cm_invoices.date) = ?', @year).ransack(params[:q]).result
-
-        @orders = {}
-        @total = {}
-        @paid = {}
-        @balance_due = {}
-        @voided = {}
-
-        (1..12).each do |month|
-          @orders[month] = @search.joins(:invoice).where('EXTRACT(MONTH FROM cm_invoices.date) = ?', month)
-          @total[month] = Spree::Money.new(@orders[month].sum(:total)).to_s
-          @paid[month] = Spree::Money.new(@orders[month].where(payment_state: :paid).sum(:total)).to_s
-          @balance_due[month] = Spree::Money.new(@orders[month].where(payment_state: :balance_due).sum(:total)).to_s
-          @voided[month] = Spree::Money.new(@orders[month].where(payment_state: :failed).sum(:total)).to_s
         end
       end
 
