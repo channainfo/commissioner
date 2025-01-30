@@ -6,13 +6,16 @@ RSpec.describe SpreeCmCommissioner::HomepageSection, type: :model do
   end
 
   describe '#active' do
-    it 'should return active sections order by position' do
-      position_1 = create(:cm_homepage_section, position: 1, active: false)
-      position_3 = create(:cm_homepage_section, position: 3, active: true)
-      position_2 = create(:cm_homepage_section, position: 2, active: true)
-      position_4 = create(:cm_homepage_section, position: 4, active: true)
+    it 'should return active sections ordered by position if they have active relatables' do
 
-      expect(described_class.active.to_a).to eq [position_2, position_3, position_4]
+      position_1 = create(:cm_homepage_section, position: 1, active: true)
+      position_2 = create(:cm_homepage_section, position: 2, active: true)
+      position_3 = create(:cm_homepage_section, position: 3, active: true)
+
+      create(:cm_homepage_section_relatable, homepage_section: position_2, available_on: 1.day.ago, discontinue_on: 1.day.from_now)
+      create(:cm_homepage_section_relatable, homepage_section: position_3, available_on: nil, discontinue_on: nil)
+
+      expect(described_class.active.to_a).to eq [position_2, position_3]
     end
   end
 
