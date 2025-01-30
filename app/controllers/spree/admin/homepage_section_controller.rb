@@ -3,6 +3,8 @@ module Spree
     class HomepageSectionController < Spree::Admin::ResourceController
       helper SpreeCmCommissioner::Admin::HomepageSegmentHelper
 
+      before_action :load_tenants, only: [:index]
+
       def model_class
         SpreeCmCommissioner::HomepageSection
       end
@@ -40,6 +42,7 @@ module Spree
         @search = @collection.ransack(params[:q])
 
         @collection = @search.result
+                             .where(tenant_id: params[:tenant_id].presence || nil)
                              .page(params[:page])
                              .per(params[:per_page])
       end
@@ -48,7 +51,11 @@ module Spree
       def permitted_resource_params
         segment_value = helpers.calculate_segment_value(params[:spree_cm_commissioner_homepage_section])
 
-        params.require(:spree_cm_commissioner_homepage_section).permit(:title, :description, :active).merge(segment: segment_value)
+        params.require(:spree_cm_commissioner_homepage_section).permit(:title, :description, :active, :tenant_id).merge(segment: segment_value)
+      end
+
+      def load_tenants
+        @tenants ||= SpreeCmCommissioner::Tenant.order(:name)
       end
     end
   end

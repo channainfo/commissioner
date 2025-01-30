@@ -2,7 +2,7 @@ module Spree
   module Api
     module V2
       module Tenant
-        class VendorsController < ::Spree::Api::V2::Tenant::BaseController
+        class VendorsController < BaseController
           def index
             collection = scope.page(params[:page])
                               .per(params[:per_page])
@@ -21,9 +21,7 @@ module Spree
           end
 
           def scope
-            MultiTenant.with(@tenant) do
-              ::Spree::Vendor.active
-            end
+            ::Spree::Vendor.active
           end
 
           def resource_serializer

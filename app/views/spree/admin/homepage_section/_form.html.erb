@@ -23,6 +23,11 @@
             <%= f.label :description %>
             <%= f.text_area :description, class: 'form-control' %>
           <% end %>
+          <%= f.field_container :tenant_id, 'data-hook' => "oauth_application_tenant" do %>
+            <%= f.label :tenant_id, raw(Spree.t(:tenant) + ' (optional)') %>
+            <%= f.collection_select :tenant_id, SpreeCmCommissioner::Tenant.all, :id, :name, { include_blank: Spree.t(:optional) }, { class: 'form-control select2' } %>
+            <%= f.error_message_on :tenant_id %>
+          <% end %>
           <%= f.field_container :active do %>
             <%= f.label :active %>
             <%= f.check_box :active %>

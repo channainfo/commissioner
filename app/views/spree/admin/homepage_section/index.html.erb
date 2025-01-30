@@ -7,9 +7,11 @@
   <%= button_link_to Spree.t(:new_homepage_section), new_admin_homepage_feed_homepage_section_path, { class: "btn-success", icon: 'add.svg', id: 'admin_new_homepage_section' } %>
 <% end %>
 
+<%= render partial: 'tabs', locals: { tenants: @tenants, current: params[:tenant_id].presence || 'default' } %>
+
 <% if @collection.any? %>
   <div class="table-responsive">
-   <table class="table sortable" data-sortable-link="<%= update_positions_admin_homepage_feed_homepage_section_index_url %>" >
+    <table class="table sortable" data-sortable-link="<%= update_positions_admin_homepage_feed_homepage_section_index_url %>" >
       <thead>
         <tr data-hook="homepage_sections_header">
           <th colspan="3">
@@ -62,4 +64,4 @@
   </div>
 <% end %>
 
-  <%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>
+<%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>

@@ -1,0 +1,17 @@
+<% content_for :page_tabs do %>
+  <li class="nav-item">
+    <%= link_to_with_icon 'store.svg',
+      Spree.t(:default),
+      admin_homepage_feed_homepage_section_index_path(tenant_id: nil),
+      class: "nav-link #{'active' if current == 'default'}" %>
+  </li>
+
+  <% tenants.each do |tenant| %>
+    <li class="nav-item">
+      <%= link_to_with_icon 'store.svg',
+        tenant.name,
+        admin_homepage_feed_homepage_section_index_path(tenant_id: tenant.id),
+        class: "nav-link #{'active' if current.to_s == tenant.id.to_s}" %>
+    </li>
+  <% end %>
+<% end %>

@@ -391,8 +391,13 @@ Spree::Core::Engine.add_routes do
         resources :tickets
         resource :s3_signed_urls
       end
+
       namespace :tenant do
         resources :vendors
+
+        resources :homepage, only: [] do
+          resources :homepage_sections, only: [:index]
+        end
       end
 
       namespace :storefront do
