@@ -1,0 +1,24 @@
+<% content_for :page_title do %>
+  <%= link_to Spree.t('tenant'), spree.admin_tenants_url %> / <%= Spree.t('New') %>
+<% end %>
+
+<div data-hook="admin_tenants" class="card mb-3">
+  <div class="card-header">
+    <h5 class="card-title mb-0 h6">
+      <%= Spree.t('tenant') %>
+    </h5>
+  </div>
+  <div class="card-body">
+    <div data-hook="admin_tenants_edit_form_header">
+      <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+    </div>
+    <div data-hook="admin_tenants_edit_form">
+        <%= form_with model: @object, url: { action: 'create' } do |f| %>
+        <%= render partial: 'form', locals: { f: f } %>
+        <div data-hook="admin_new_tenant_new_form_buttons">
+          <%= render partial: 'spree/admin/shared/new_resource_links' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

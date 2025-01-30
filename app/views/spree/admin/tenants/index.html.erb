@@ -1,0 +1,69 @@
+<% content_for :page_title do %>
+  <%= link_to Spree.t('tenants'), spree.admin_tenants_path %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:new_tenant), new_admin_tenant_path, class: "btn-outline-primary", icon: 'add.svg' %>
+<% end if can? :create, SpreeCmCommissioner::Tenant %>
+
+<% content_for :table_filter do %>
+  <div data-hook="admin_tenants_index_search">
+    <%= search_form_for [:admin, @search], url: spree.admin_tenants_path do |f| %>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <%= label_tag :q_name_cont, Spree.t(:name) %>
+            <%= f.text_field :name_cont, tabindex: 1, class: "form-control js-quick-search-target" %>
+          </div>
+        </div>
+      </div>
+      <div data-hook="admin_tenants_index_search_buttons" class="form-actions">
+        <%= button Spree.t(:filter_results), 'search' %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<% if @collection.any? %>
+  <div class="table-responsive border rounded bg-white mb-3">
+    <table class="table" id="listing_tenants" data-hook>
+      <thead class="text-muted">
+        <tr data-hook="admin_user_tenants_index_headers">
+          <th><%= Spree.t(:name) %></th>
+          <th><%= Spree.t(:slug) %></th>
+          <th><%= Spree.t(:description) %></th>
+          <th><%= sort_link @search, :created_at, Spree.t(:created_at) %></th>
+          <th><%= Spree.t(:updated_at) %></th>
+          <th><%= Spree.t(:state) %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @collection.each do |tenant| %>
+          <tr id="<%= spree_dom_id tenant %>" data-hook="admin_tenants_index_rows">
+            <td><%= tenant.name %></td>
+            <td><%= tenant.slug %></td>
+            <td><%= tenant.description %></td>
+            <td><%= tenant.created_at %></td>
+            <td><%= tenant.updated_at %></td>
+            <td>
+              <span class="label label-<%= tenant.state.downcase %>"><%= tenant.state.humanize.downcase %></span>
+              <span class="icon icon-filter filterable js-add-filter" data-ransack-field="q_state_eq" data-ransack-value="<%= tenant.state %>"></span>
+            </td>
+            <td data-hook="admin_tenants_index_row_actions" class="actions">
+              <span class="d-flex justify-content-end">
+                <%= link_to_edit tenant, url: edit_admin_tenant_path(tenant.slug), no_text: true if can?(:edit, tenant) %>
+                <%= link_to_delete tenant, url: admin_tenant_path(tenant.id), no_text: true if can?(:delete, tenant) %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <% else %>
+  <div class="alert alert-info alpha twelve columns no-objects-found">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(SpreeCmCommissioner::Tenant)) %>
+  </div>
+<% end %>
+
+<%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>

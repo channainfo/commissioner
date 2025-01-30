@@ -1,0 +1,15 @@
+<% content_for :page_tabs do %>
+  <li class="nav-item">
+    <%= link_to_with_icon 'edit.svg',
+      Spree.t(:"admin.tenant.edit"),
+      spree.edit_admin_tenant_path(@object),
+      class: "nav-link #{'active' if current == :edit}" %>
+  </li>
+
+  <li class="nav-item">
+    <%= link_to_with_icon 'store.svg',
+      Spree.t(:"admin.tenant.vendors"),
+      spree.admin_tenant_vendors_path(@object),
+      class: "nav-link #{'active' if current == :vendors}" %>
+  </li>
+<% end %>
