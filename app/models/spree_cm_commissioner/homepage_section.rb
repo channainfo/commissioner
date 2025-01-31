@@ -9,10 +9,9 @@ module SpreeCmCommissioner
     has_many :homepage_section_relatables, -> { active }, inverse_of: :homepage_section, dependent: :destroy
 
     scope :active, lambda {
-      joins(:homepage_section_relatables)
-        .where(active: true)
-        .group('cm_homepage_sections.id')
-        .having('COUNT(cm_homepage_section_relatables.id) > 0')
+      where(active: true)
+        .joins(:homepage_section_relatables)
+        .distinct
         .order(:position)
     }
 
