@@ -16,7 +16,10 @@ module Spree
           end
 
           def collection
-            @collection ||= model_class.filter_by_segment(params[:homepage_id] || :general).active.order(position: :asc)
+            @collection ||= model_class.filter_by_segment(params[:homepage_id] || :general)
+                                       .active
+                                       .where(tenant_id: nil)
+                                       .order(position: :asc)
           end
         end
       end

@@ -7,6 +7,7 @@ module Spree
 
           set_current_tenant_through_filter
           before_action :require_tenant
+          around_action :set_tenant_context
 
           def require_tenant
             raise Doorkeeper::Errors::DoorkeeperError if doorkeeper_token&.application.nil?
@@ -18,6 +19,14 @@ module Spree
 
           def render_serialized_payload(status = 200)
             render json: yield, status: status, content_type: content_type
+          end
+
+          private
+
+          def set_tenant_context
+            MultiTenant.with(@tenant) do # rubocop:disable Style/ExplicitBlockArgument
+              yield
+            end
           end
         end
       end
