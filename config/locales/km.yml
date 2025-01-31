@@ -401,3 +401,8 @@ km:
 
   account_link:
     failure: "បរាជ័យក្នុងការភ្ជាប់គណនី %{identity_type}: %{reason}"
+  s3:
+    image:
+      upload:
+        fail: 'បានបរាជ័យក្នុងការទាញយករូបភាព'
+        not_found: 'រកមិនឃើញរូបភាព'

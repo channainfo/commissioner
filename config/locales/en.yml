@@ -517,3 +517,8 @@ en:
 
   account_link:
     failure: "Failed to link your %{identity_type} account: %{reason}"
+  s3:
+    image:
+      upload:
+        fail: 'Failed to fetch the image'
+        not_found: 'Image not found'

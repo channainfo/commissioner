@@ -388,7 +388,10 @@ Spree::Core::Engine.add_routes do
       end
 
       namespace :organizer do
-        resources :tickets
+        resources :tickets do
+          resources :ticket_images
+        end
+        resources :images
         resource :s3_signed_urls
       end
       namespace :tenant do
