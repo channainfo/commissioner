@@ -389,6 +389,7 @@ Spree::Core::Engine.add_routes do
       end
 
       namespace :organizer do
+        resources :events
         resources :tickets
         resource :s3_signed_urls
       end
