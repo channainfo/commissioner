@@ -1,0 +1,30 @@
+<% content_for :page_title do %>
+  <%= link_to Spree.t(:taxonomies), spree.admin_taxonomies_url %>/
+
+  <%= link_to @taxonomy.root.name, spree.edit_admin_taxonomy_url(@taxonomy) %>/
+  <% unless @taxon.root? %>
+   <%= @taxon.name %>
+   <% end %>
+<% end %>
+
+<%= render partial: 'spree/admin/shared/taxon_tabs', locals: { current: :sections } %>
+
+<div id="sortableTreeArea">
+  <div class="row">
+    <div class="col-12">
+      <% if @taxonomy.root.present? %>
+        <div class="card-body p-0 bg-light" data-controller="sortable-tree" data-sortable-tree-handle-value=".move-handle">
+          <div data-sortable-tree-parent-id-value="<%= @taxonomy.root.id %>">
+            <% if @taxonomy.root.children.present? %>
+              <%= build_sortable_tree(@taxonomy, @taxon) %>
+            <% else %>
+              <div class="text-center no-objects-found m-5">
+                <%= Spree.t('admin.taxonomies.no_taxons') %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
