@@ -508,6 +508,18 @@ Spree::Core::Engine.add_routes do
           resource :pie_chart_event_aggregators, only: %i[show]
         end
       end
+
+      namespace :billing do
+        resources :taxons, only: [:index]
+
+        resources :taxons, only: [] do
+          resources :taxonomies, only: [:index]
+        end
+
+        resources :taxonomies, only: [] do
+          resources :variants, only: %i[index show]
+        end
+      end
     end
 
     namespace :json_ld do

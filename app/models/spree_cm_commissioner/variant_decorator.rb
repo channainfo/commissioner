@@ -62,6 +62,12 @@ module SpreeCmCommissioner
       "#{display_sku} - #{display_price}"
     end
 
+    def as_json(options = {})
+      super(options).merge(
+        price: price
+      )
+    end
+
     private
 
     def update_vendor_price
