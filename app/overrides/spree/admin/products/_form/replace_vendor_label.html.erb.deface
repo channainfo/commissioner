@@ -13,9 +13,8 @@
           <span class="text-muted"><%= Spree.t(:no_vendor_assigned) %></span>
         <% end %>
       </label>
-      <%= f.collection_select(:vendor_id, @vendors, :id, :name, { include_blank: Spree.t('match_choices.none') }, { class: 'select2' }) %>
+      <%= f.collection_select(:vendor_id, Spree::Vendor.includes(:tenant).all, :id, :vendor_and_tenant_name, { include_blank: Spree.t('match_choices.none') }, { class: 'select2' }) %>
       <%= f.error_message_on :vendor %>
     <% end %>
   </div>
 <% end %>
-

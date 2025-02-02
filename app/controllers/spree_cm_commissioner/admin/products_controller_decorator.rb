@@ -4,6 +4,7 @@ module SpreeCmCommissioner
       def self.prepended(base)
         # spree update user sign_in_count
         base.around_action :set_writing_role, only: %i[index]
+        base.after_action :set_tenant_after_update
       end
 
       # Override
@@ -28,6 +29,15 @@ module SpreeCmCommissioner
         @collection
       end
 
+      def set_tenant_after_update
+        return unless @product&.vendor&.tenant_id
+
+        MultiTenant.enable_write_only_mode do
+          @product.tenant_id = @product.vendor.tenant_id
+          @product.save!
+        end
+      end
+
       # Override
       def product_includes
         [
@@ -36,6 +46,12 @@ module SpreeCmCommissioner
           { master: :images },
           :variants
         ]
+      end
+
+      protected
+
+      def find_resource
+        product_scope.with_deleted.includes(vendor: :tenant).friendly.find(params[:id])
       end
     end
   end

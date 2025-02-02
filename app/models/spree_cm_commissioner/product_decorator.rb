@@ -5,6 +5,7 @@ module SpreeCmCommissioner
       base.include SpreeCmCommissioner::ProductType
       base.include SpreeCmCommissioner::KycBitwise
       base.include SpreeCmCommissioner::Metafield
+      base.include SpreeCmCommissioner::TenantUpdatable
       base.include SpreeCmCommissioner::RouteType
 
       base.has_many :variant_kind_option_types, -> { where(kind: :variant).order(:position) },
@@ -65,6 +66,9 @@ module SpreeCmCommissioner
       base.enum purchasable_on: { both: 0, web: 1, app: 2 }
 
       base.accepts_nested_attributes_for :trip, allow_destroy: true
+
+      base.multi_tenant :tenant, class_name: 'SpreeCmCommissioner::Tenant'
+      base.before_save :set_tenant
     end
 
     def associated_event
@@ -72,6 +76,10 @@ module SpreeCmCommissioner
     end
 
     private
+
+    def set_tenant
+      self.tenant_id = vendor&.tenant_id
+    end
 
     def update_variants_vendor_id
       variants_including_master.find_each { |variant| variant.update!(vendor_id: vendor_id) }
