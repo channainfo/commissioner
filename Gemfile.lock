@@ -35,6 +35,7 @@ PATH
   remote: .
   specs:
     spree_cm_commissioner (0.0.1)
+      activerecord-multi-tenant
       activerecord_json_validator (~> 2.1, >= 2.1.3)
       aws-sdk-cloudfront
       aws-sdk-ecs
@@ -129,6 +130,8 @@ GEM
     activerecord (7.0.8)
       activemodel (= 7.0.8)
       activesupport (= 7.0.8)
+    activerecord-multi-tenant (2.4.0)
+      rails (>= 6)
     activerecord-typedstore (1.5.1)
       activerecord (>= 6.1)
     activerecord_json_validator (2.1.5)

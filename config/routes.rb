@@ -519,6 +519,9 @@ Spree::Core::Engine.add_routes do
         resources :taxonomies, only: [] do
           resources :variants, only: %i[index show]
         end
+
+        post 'login', to: 'auth#login'
+        post 'register', to: 'auth#register'
       end
     end
 
