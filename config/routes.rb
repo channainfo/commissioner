@@ -389,6 +389,8 @@ Spree::Core::Engine.add_routes do
       end
 
       namespace :organizer do
+        resources :option_types
+        resources :product_option_types
         resources :tickets do
           resources :ticket_images
         end
