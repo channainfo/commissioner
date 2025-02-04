@@ -102,6 +102,7 @@ Spree::Core::Engine.add_routes do
       end
 
       resources :variant_guest_card_classes
+      resource :post_link, only: %i[index update]
 
       resources :video_on_demands do
         collection do

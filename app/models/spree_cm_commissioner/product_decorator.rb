@@ -37,6 +37,9 @@ module SpreeCmCommissioner
 
       base.has_one :venue, -> { where(type: :venue) }, class_name: 'SpreeCmCommissioner::ProductPlace', dependent: :destroy
 
+      base.has_one :post_link, class_name: 'SpreeCmCommissioner::PostLink', dependent: :destroy
+      base.accepts_nested_attributes_for :post_link, update_only: true
+
       base.accepts_nested_attributes_for :product_places, allow_destroy: true
 
       base.scope :min_price, lambda { |vendor|
