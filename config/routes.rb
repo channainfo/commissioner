@@ -520,6 +520,10 @@ Spree::Core::Engine.add_routes do
           resources :variants, only: %i[index show]
         end
 
+        resources :customers do
+          get 'subscriptions', to: 'subscriptions#index'
+        end
+
         post 'login', to: 'auth#login'
         post 'register', to: 'auth#register'
       end

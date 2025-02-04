@@ -9,7 +9,15 @@ module Spree
           def register
             user = Spree::User.new(user_params)
             if user.save
-              render json: { message: 'User registered successfully', user: user }, status: :created
+
+              customer_params_with_user = customer_params.merge(user_id: user.id)
+              customer = SpreeCmCommissioner::Customer.create(customer_params_with_user)
+
+              render json: {
+                message: 'User registered successfully',
+                user: user.as_json(only: %i[id email phone_number]),
+                customer: customer.as_json(only: %i[id name email phone_number]) # Include relevant fields
+              }, status: :created
             else
               render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
             end
@@ -20,7 +28,17 @@ module Spree
             user = Spree::User.find_by(email: params[:email])
             if user&.valid_password?(params[:password])
               token = encode_jwt(user.id)
-              render json: { message: 'Login successful', token: token, user: user }, status: :ok
+
+              # Fetch the associated customer
+              customer = SpreeCmCommissioner::Customer.find_by(user_id: user.id)
+              customer_id = customer&.id
+
+              render json: {
+                message: 'Login successful',
+                token: token,
+                user: user.as_json(only: %i[id email]),
+                customer_id: customer_id
+              }, status: :ok
             else
               render json: { error: 'Invalid email or password' }, status: :unauthorized
             end
@@ -28,8 +46,12 @@ module Spree
 
           private
 
+          def customer_params
+            params.require(:customer).permit(:first_name, :last_name, :email, :phone_number, :place_id, :status, :vendor_id, taxon_ids: [])
+          end
+
           def user_params
-            params.require(:user).permit(:email, :password, :password_confirmation)
+            params.require(:user).permit(:email, :password, :password_confirmation, :phone_number)
           end
 
           def encode_jwt(user_id)
