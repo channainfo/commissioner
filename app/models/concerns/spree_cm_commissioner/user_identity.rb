@@ -10,11 +10,11 @@ module SpreeCmCommissioner
       validates :user_identity_providers, presence: true, if: -> (u) { u.require_login_identity_all_blank_for(:user_identity_providers) }
 
       validates :phone_number, presence: true, if: -> (u) { u.require_login_identity_all_blank_for(:phone_number) }
-      validates :phone_number, uniqueness: { allow_blank: true }
+      validates :phone_number, uniqueness: { scope: :tenant_id, allow_blank: true }
       validates :phone_number, format: { with: /^\d{8,12}$/, :multiline => true, allow_blank: true }
 
       validates :login, presence: true, if: -> (u) { u.require_login_identity_all_blank_for(:login) }
-      validates :login, uniqueness: { case_sensitive: false, allow_blank: true }
+      validates :login, uniqueness: { scope: :tenant_id, case_sensitive: false, allow_blank: true }
     end
 
     class_methods do

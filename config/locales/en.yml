@@ -30,6 +30,7 @@ en:
     incorrect_login: "Incorrect login"
     incorrect_password: "Incorrect password"
     invalid_or_missing_params: "Invalid or missing params"
+    invalid_client_credentials: "Invalid client credentials"
 
   hello: "Hello world"
 

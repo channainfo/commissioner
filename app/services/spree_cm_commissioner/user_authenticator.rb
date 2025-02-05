@@ -7,7 +7,21 @@ module SpreeCmCommissioner
       context = auth_context(params)
       raise exception(context.message) unless context.success?
 
-      context.user
+      user = context.user
+
+      # Check if user.tenant_id is nil first to keep our old logic work as usual
+      if user.tenant_id.nil?
+        return user
+      elsif params[:client_id].present? && params[:client_secret].present?
+        oauth_application = find_oauth_application(params)
+        raise exception(I18n.t('authenticator.invalid_client_credentials')) unless oauth_application
+
+        validate_tenant_match!(user, oauth_application)
+      else
+        raise exception(I18n.t('authenticator.invalid_or_missing_params'))
+      end
+
+      user
     end
 
     def self.auth_context(params)
@@ -34,6 +48,16 @@ module SpreeCmCommissioner
 
     def self.exception(message)
       Doorkeeper::Errors::DoorkeeperError.new(message)
+    end
+
+    def self.validate_tenant_match!(user, oauth_application)
+      return if user.tenant_id == oauth_application.tenant_id
+
+      raise ActiveRecord::RecordNotFound
+    end
+
+    def self.find_oauth_application(params)
+      Spree::OauthApplication.find_by(uid: params[:client_id], secret: params[:client_secret])
     end
   end
 end

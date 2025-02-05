@@ -26,6 +26,9 @@ module SpreeCmCommissioner
 
       base.has_secure_password :confirm_pin_code, validations: false
 
+      base.multi_tenant :tenant, class_name: 'SpreeCmCommissioner::Tenant'
+      base.scope :by_tenant, -> (tenant_id) { where(tenant_id: tenant_id) }
+
       base.whitelisted_ransackable_attributes = %w[email first_name last_name gender phone_number]
 
       base.before_save :update_otp_enabled

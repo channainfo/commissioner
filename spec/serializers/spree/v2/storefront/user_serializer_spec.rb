@@ -27,7 +27,8 @@ describe Spree::V2::Storefront::UserSerializer, type: :serializer do
         :otp_enabled,
         :otp_email,
         :otp_phone_number,
-        :confirm_pin_code_enabled
+        :confirm_pin_code_enabled,
+        :tenant_id
       )
     end
 

@@ -398,6 +398,10 @@ Spree::Core::Engine.add_routes do
 
       namespace :tenant do
         resources :vendors
+        resources :account_checker
+        resource :pin_code_checkers, only: [:update]
+        resource :user_registration_with_pin_codes, only: [:create]
+        resources :pin_code_generators, only: [:create]
         resource :account, controller: :account, only: %i[show update]
 
         resources :homepage, only: [] do
