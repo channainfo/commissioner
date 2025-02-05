@@ -521,6 +521,7 @@ Spree::Core::Engine.add_routes do
         end
 
         resources :customers do
+          resources :orders, only: %i[index show]
           get 'subscriptions', to: 'subscriptions#index'
         end
 
