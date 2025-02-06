@@ -510,9 +510,7 @@ Spree::Core::Engine.add_routes do
       end
 
       namespace :billing do
-        resources :taxons, only: [:index]
-
-        resources :taxons, only: [] do
+        resources :taxons, only: [:index] do
           resources :taxonomies, only: [:index]
         end
 
@@ -524,6 +522,8 @@ Spree::Core::Engine.add_routes do
           resources :orders, only: %i[index show]
           get 'subscriptions', to: 'subscriptions#index'
         end
+
+        resources :places, only: %i[index]
 
         post 'login', to: 'auth#login'
         post 'register', to: 'auth#register'
