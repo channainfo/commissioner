@@ -73,9 +73,9 @@ module SpreeCmCommissioner
       context.last_order.update(payment_state: 'failed', internal_note: 'carried_forward')
     end
 
-    def generate_invoice(last_invoice_date, month, active_subscriptions)
+    def generate_invoice(last_invoice_date, month, active_subscriptions, boundary_date)
       create_order(active_subscriptions)
-      add_subscription_variant_to_line_item(last_invoice_date, active_subscriptions, month)
+      add_subscription_variant_to_line_item(last_invoice_date, active_subscriptions, month, boundary_date)
       add_penalty_to_order
       apply_promotion
 

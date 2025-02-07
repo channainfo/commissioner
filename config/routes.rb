@@ -520,7 +520,7 @@ Spree::Core::Engine.add_routes do
 
         resources :customers do
           resources :orders, only: %i[index show]
-          get 'subscriptions', to: 'subscriptions#index'
+          resources :subscriptions, only: %i[index create]
         end
 
         resources :places, only: %i[index]

@@ -17,8 +17,9 @@ module Spree
             order = Spree::Order.find(params[:id])
             render json: { order: order.as_json(
               only: %i[id total], include: {
-                 line_items: { only: %i[quantity price], include: { variant: { only: :sku } } },
-                 adjustments: { only: %i[amount label] } }
+                line_items: { only: %i[quantity price], include: { variant: { only: :sku } } },
+                adjustments: { only: %i[amount label] }
+              }
             )
             }, status: :ok
           end
