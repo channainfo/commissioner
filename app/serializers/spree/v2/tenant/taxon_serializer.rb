@@ -10,10 +10,10 @@ module Spree
                    :background_color, :foreground_color, :show_badge_status,
                    :purchasable_on
 
-        has_one :category_icon, serializer: ::Spree::V2::Tenant::AssetSerializer
-        has_one :app_banner, serializer: ::Spree::V2::Tenant::AssetSerializer
-        has_one :web_banner, serializer: ::Spree::V2::Tenant::AssetSerializer
-        has_one :home_banner, serializer: ::Spree::V2::Tenant::AssetSerializer
+        has_one :category_icon, serializer: Spree::V2::Tenant::AssetSerializer
+        has_one :app_banner, serializer: Spree::V2::Tenant::AssetSerializer
+        has_one :web_banner, serializer: Spree::V2::Tenant::AssetSerializer
+        has_one :home_banner, serializer: Spree::V2::Tenant::AssetSerializer
 
         attribute :is_root, &:root?
 

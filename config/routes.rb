@@ -398,6 +398,7 @@ Spree::Core::Engine.add_routes do
 
       namespace :tenant do
         resources :vendors
+        resource :account, controller: :account, only: %i[show update]
 
         resources :homepage, only: [] do
           resources :homepage_sections, only: [:index]
