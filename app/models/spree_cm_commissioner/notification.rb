@@ -22,5 +22,18 @@ module SpreeCmCommissioner
 
     belongs_to :recipient, polymorphic: true
     belongs_to :notificable, polymorphic: true
+
+    after_create_commit :increment_user_unread_notification_count
+
+    private
+
+    def increment_user_unread_notification_count
+      recipient.update(unread_notification_count: recipient.unread_notification_count + 1)
+      consolidate_unread_count_async
+    end
+
+    def consolidate_unread_count_async
+      SpreeCmCommissioner::UserUnreadNotificationCountJob.perform_later(recipient_id)
+    end
   end
 end

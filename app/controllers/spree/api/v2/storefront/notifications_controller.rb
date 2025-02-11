@@ -38,7 +38,7 @@ module Spree
           end
 
           def mark_all_as_read
-            result = SpreeCmCommissioner::NotificationReader.call(user: spree_current_user)
+            result = SpreeCmCommissioner::AllNotificationReader.call(user: spree_current_user)
 
             return unless result.success?
 
