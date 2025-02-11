@@ -80,6 +80,17 @@ module SpreeCmCommissioner
       end
 
       # override
+      def resume
+        resumed = @order.resume
+        if resumed
+          flash[:success] = 'Order resumed' # rubocop:disable Rails/I18nLocaleTexts
+        else
+          flash[:error] = @order.errors.full_messages.to_sentence
+        end
+        redirect_back fallback_location: spree.edit_admin_order_url(@order)
+      end
+
+      # override
       def initialize_order_events
         @order_events = %w[alert_request_to_vendor approve cancel resume]
       end
