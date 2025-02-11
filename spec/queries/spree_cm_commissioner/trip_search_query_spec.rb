@@ -179,7 +179,7 @@ let!(:tomorrow) {today + 1.day}
 
   describe"#trips_info" do
     context "display table" do
-      let(:records) {described_class.new(origin_id: aeon2, destination_id: siem_reap, date: today)}
+      let(:records) {described_class.new(options:{origin_id: aeon2, destination_id: siem_reap, date: today})}
       it "return trips table" do
         result =  records.trips_info
         table = Terminal::Table.new :headings => ['Trip ID', 'Name', 'Vendor', 'Short Name',
@@ -198,7 +198,7 @@ let!(:tomorrow) {today + 1.day}
     end
 
     context "without vendor context" do
-      let(:result) {described_class.new(origin_id: phnom_penh, destination_id: siem_reap, date: today)}
+      let(:result) {described_class.new(options:{origin_id: phnom_penh, destination_id: siem_reap, date: today})}
       it "return all matching trip" do
         search_result = result.trips_info.to_a.sort_by(&:trip_id)
         expect(search_result.count).to eq(4)
@@ -208,7 +208,7 @@ let!(:tomorrow) {today + 1.day}
     end
 
     context "with vendor context" do
-      let(:result) {described_class.new(origin_id: phnom_penh, destination_id: siem_reap, date: today, vendor_id: vet_airbus.id)}
+      let(:result) {described_class.new(options:{origin_id: phnom_penh, destination_id: siem_reap, date: today, vendor_id: vet_airbus.id})}
       it "return only vet-airbus's trip " do
         search_result = result.trips_info.to_a.sort_by(&:trip_id)
         expect(search_result.count).to eq(2)
@@ -218,7 +218,7 @@ let!(:tomorrow) {today + 1.day}
     end
 
     context "no matching trip" do
-      let(:result) {described_class.new(origin_id: phnom_penh, destination_id: sihanoukville, date: today)}
+      let(:result) {described_class.new(options:{origin_id: phnom_penh, destination_id: sihanoukville, date: today})}
       it " return empty array" do
         search_result = result.trips_info.to_a
         expect(search_result.count).to eq(0)
@@ -228,7 +228,7 @@ let!(:tomorrow) {today + 1.day}
 
   describe"#call" do
     context "display table" do
-      let(:result) {described_class.new(origin_id: phnom_penh, destination_id: siem_reap, date: today)}
+      let(:result) {described_class.new(options:{origin_id: phnom_penh, destination_id: siem_reap, date: today})}
       it "return trips table" do
         search_result = result.call.sort_by(&:trip_id)
         table = Terminal::Table.new :headings => ['Trip ID', 'Name', 'Vendor', 'Short Name',
@@ -247,7 +247,7 @@ let!(:tomorrow) {today + 1.day}
     end
 
     context "return trip result for today" do
-      let(:result) {described_class.new(origin_id: phnom_penh, destination_id: siem_reap, date: today)}
+      let(:result) {described_class.new(options:{origin_id: phnom_penh, destination_id: siem_reap, date: today})}
       it "return trip result for today" do
         search_result = result.call.sort_by(&:trip_id)
         expect(search_result.count).to eq(4)
@@ -258,7 +258,7 @@ let!(:tomorrow) {today + 1.day}
       end
     end
     context "return trip result of SV-KR for tomorrow " do
-      let(:result) {described_class.new(origin_id: sihanoukville, destination_id: koh_rong, date: tomorrow)}
+      let(:result) {described_class.new(options:{origin_id: sihanoukville, destination_id: koh_rong, date: tomorrow})}
       it "return trip result for today" do
         search_result = result.call.sort_by(&:trip_id)
         expect(search_result.count).to eq(2)
@@ -267,7 +267,7 @@ let!(:tomorrow) {today + 1.day}
       end
     end
     context "return trip result for tomorrow" do
-      let(:result) {described_class.new(origin_id: phnom_penh, destination_id: siem_reap, date: tomorrow)}
+      let(:result) {described_class.new(options:{origin_id: phnom_penh, destination_id: siem_reap, date: tomorrow})}
       let!(:tmr_order1) {create(:transit_order, variant: vet_phnom_penh_siem_reap_1.master, seats: [arb_f1_seat,arb_f2_seat,arb_f4_seat], date: tomorrow)}
       let!(:tmr_order2) {create(:transit_order, variant: larryta_phnom_penh_siemreap_2.master, seats: [mvn_f3_seat,mvn_f4_seat], date: tomorrow)}
       it "return trip result for tomorrow" do
@@ -280,9 +280,9 @@ let!(:tomorrow) {today + 1.day}
       end
     end
     context "search for trip result using stop" do
-      let(:result1) {described_class.new(origin_id: aeon2, destination_id: siem_reap, date: tomorrow)}
-      let(:result2) {described_class.new(origin_id: phnom_penh, destination_id: angkor_wat, date: tomorrow)}
-      let(:result3) {described_class.new(origin_id: aeon2, destination_id: angkor_aquarium , date: tomorrow)}
+      let(:result1) {described_class.new(options:{origin_id: aeon2, destination_id: siem_reap, date: tomorrow})}
+      let(:result2) {described_class.new(options:{origin_id: phnom_penh, destination_id: angkor_wat, date: tomorrow})}
+      let(:result3) {described_class.new(options:{origin_id: aeon2, destination_id: angkor_aquarium , date: tomorrow})}
       it "only return trips that have boarding stop at aeon2" do
         search = result1.call.sort_by(&:trip_id)
         expect(search.count).to eq(3)

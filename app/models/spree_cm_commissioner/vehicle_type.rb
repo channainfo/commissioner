@@ -11,10 +11,8 @@ module SpreeCmCommissioner
     has_many :vehicles, class_name: 'SpreeCmCommissioner::Vehicle', dependent: :destroy
     belongs_to :vendor, class_name: 'Spree::Vendor'
 
-    validates :code, presence: true
-    validates :code, uniqueness: true
-    validates :name, presence: true
-    validates :name, uniqueness: true
+    validates :code, presence: true, uniqueness: { scope: :vendor_id }
+    validates :name, presence: true, uniqueness: { scope: :vendor_id }
     accepts_nested_attributes_for :vehicle_seats, allow_destroy: true
 
     state_machine :status, initial: :draft do
