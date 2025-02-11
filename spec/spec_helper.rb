@@ -8,6 +8,8 @@ require 'spree_multi_vendor/factories'
 require 'spree_cm_commissioner/factories'
 require 'interactor'
 
+DatabaseCleaner.allow_remote_database_url = true if Rails.env.test?
+
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].sort.each { |f| require f }

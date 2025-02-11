@@ -13,7 +13,7 @@ RSpec.describe SpreeCmCommissioner::OrderAcceptedStateUpdater do
 
         expect(order.request_state).to eq('accepted')
         expect(order.line_items.first.accepted_at).to_not eq nil
-        expect(order.line_items.first.accepted_by).to eq user
+        expect(order.line_items.first.accepter).to eq user
       end
 
       it 'fail if request state is not requested' do

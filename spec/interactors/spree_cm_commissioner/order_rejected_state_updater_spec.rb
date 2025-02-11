@@ -13,7 +13,7 @@ RSpec.describe SpreeCmCommissioner::OrderRejectedStateUpdater do
         expect(context.success?).to eq true
         expect(order.request_state).to eq('rejected')
         expect(order.line_items.first.rejected_at).to_not eq nil
-        expect(order.line_items.first.rejected_by).to eq user
+        expect(order.line_items.first.rejecter).to eq user
       end
 
       it 'fail if request state is not requested' do

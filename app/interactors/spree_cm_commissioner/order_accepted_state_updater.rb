@@ -18,7 +18,7 @@ module SpreeCmCommissioner
       order.line_items.each do |line_item|
         line_item.update(
           accepted_at: Time.current,
-          accepted_by: authorized_user
+          accepter: authorized_user
         )
       end
     end

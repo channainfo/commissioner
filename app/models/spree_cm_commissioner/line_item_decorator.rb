@@ -3,8 +3,8 @@ module SpreeCmCommissioner
     def self.prepended(base)
       base.include SpreeCmCommissioner::LineItemDurationable
       base.delegate :need_confirmation, to: :product
-      base.belongs_to :accepted_by, class_name: 'Spree::User', optional: true
-      base.belongs_to :rejected_by, class_name: 'Spree::User', optional: true
+      base.belongs_to :accepter, class_name: 'Spree::User', optional: true
+      base.belongs_to :rejecter, class_name: 'Spree::User', optional: true
       base.has_many :line_item_seats, class_name: 'SpreeCmCommissioner::LineItemSeat', dependent: :destroy
 
       base.accepts_nested_attributes_for :line_item_seats, allow_destroy: true
