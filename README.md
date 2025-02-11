@@ -199,6 +199,37 @@ bundle exec gem release
 
 For more options please see [gem-release REAMDE](https://github.com/svenfuchs/gem-release)
 
+## Troubleshooting Database Lock on Taxonomy Creation Errors
+### Issue Overview
+In development, this error can occur after creating a new database and restoring the database (e.g., from a staging environment). When this happens, attempts to create a new Taxonomy may fail due to a record lock.
+
+### Error Message
+In case you create in console manualy
+```
+/usr/local/bundle/gems/activerecord-7.0.8/lib/active_record/locking/pessimistic.rb:70:in `lock!': Locking a record with unpersisted changes is not supported. Use `save` to persist the changes, or `reload` to discard them explicitly. (RuntimeError)
+```
+In case you create from web-app
+```
+Locking a record with unpersisted changes is not supported. Use save to persist the changes, or reload to discard them explicitly.
+
+Extracted source (around line #70):
+
+if persisted?
+  if has_changes_to_save?
+    raise(<<-MSG.squish)
+      Locking a record with unpersisted changes is not supported. Use
+      `save` to persist the changes, or `reload` to discard them
+      explicitly.
+```
+
+### Workaround Solution
+1.  Open the Rails console: `rails console`
+2. Find an existing Taxonomy record: `taxonomy = Spree::Taxonomy.last`
+3. Update any attribute to release the lock. For example: `taxonomy.update(name: "#{taxonomy.name}1")`
+
+This action should unlock the record, allowing you to successfully create a new Taxonomy.
+
+
 ## Contributing
 
 If you'd like to contribute, please take a look at the
