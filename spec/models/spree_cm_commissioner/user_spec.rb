@@ -111,4 +111,39 @@ RSpec.describe Spree::User, type: :model do
       end
     end
   end
+
+  describe 'validations the same login or email with different tenant' do
+    let!(:tenant1) { create(:cm_tenant, id: 1) }
+    let!(:tenant2) { create(:cm_tenant, id: 2) }
+
+    context 'with the same phone number and login in different tenants' do
+      let!(:user1) { create(:cm_user, phone_number: '0123456789', login: 'user1', tenant_id: tenant1.id) }
+
+      it 'allows phone number with the same value for different tenants' do
+        user2 = build(:cm_user, phone_number: '0123456789', tenant_id: tenant2.id)
+        expect(user2).to be_valid
+      end
+
+      it 'allows login with the same value for different tenants' do
+        user2 = build(:cm_user, login: 'user1', tenant_id: tenant2.id)
+        expect(user2).to be_valid
+      end
+    end
+
+    context 'with the same phone number and login in the same tenant' do
+      let!(:user1) { create(:cm_user, phone_number: '0123456789', login: 'user1', tenant_id: tenant1.id) }
+
+      it 'does not allow phone number duplication within the same tenant' do
+        user2 = build(:cm_user, phone_number: '0123456789', tenant_id: tenant1.id)
+        expect(user2).to be_invalid
+        expect(user2.errors[:phone_number]).to include('has already been taken')
+      end
+
+      it 'does not allow login duplication within the same tenant' do
+        user2 = build(:cm_user, login: 'user1', tenant_id: tenant1.id)
+        expect(user2).to be_invalid
+        expect(user2.errors[:login]).to include('has already been taken')
+      end
+    end
+  end
 end

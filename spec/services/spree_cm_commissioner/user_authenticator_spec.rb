@@ -35,5 +35,24 @@ RSpec.describe SpreeCmCommissioner::UserAuthenticator do
 
       expect(flow_type).to eq 'telegram_web_app_auth'
     end
+
+    it 'returns [login_auth] when params contain username & password' do
+      flow_type = described_class.flow_type({ username: user.email, password: user.password })
+
+      expect(flow_type).to eq 'login_auth'
+    end
+
+    it 'returns [social_auth] when params contain id_token' do
+      flow_type = described_class.flow_type({ id_token: generate(:cm_id_token) })
+
+      expect(flow_type).to eq 'social_auth'
+    end
+
+    it 'raises error when params are invalid' do
+      expect { described_class.flow_type({}) }.to raise_error(
+                                                    Doorkeeper::Errors::DoorkeeperError,
+                                                    I18n.t('authenticator.invalid_or_missing_params')
+                                                  )
+    end
   end
 end
