@@ -1,7 +1,9 @@
 module SpreeCmCommissioner
   module TaxonDecorator
+    # rubocop:disable Metrics/MethodLength
     def self.prepended(base)
       base.include SpreeCmCommissioner::TaxonKind
+      base.include SpreeCmCommissioner::Transit::TaxonBitwise
 
       base.preference :background_color, :string
       base.preference :foreground_color, :string
@@ -47,6 +49,7 @@ module SpreeCmCommissioner
 
       base.enum purchasable_on: { both: 0, web: 1, app: 2 }
     end
+    # rubocop:enable Metrics/MethodLength
 
     def background_color
       preferred_background_color

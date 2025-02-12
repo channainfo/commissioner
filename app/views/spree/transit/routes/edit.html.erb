@@ -1,0 +1,13 @@
+<%= render partial: 'spree/transit/shared/route_tabs', locals: {current: :route} %>
+
+<div data-hook="admin_user_new_form_header">
+  <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+</div>
+<div data-hook="admin_user_new_form">
+  <%= form_with model: @object, url: { action: 'update' } do |f| %>
+    <%= render partial: 'form', locals: { f: f } %>
+    <div data-hook="admin_user_new_form_buttons">
+      <%= render partial: 'spree/admin/shared/edit_resource_links', locals: { collection_url: spree.transit_routes_path } %>
+    </div>
+  <% end %>
+</div>

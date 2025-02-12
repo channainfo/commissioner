@@ -18,11 +18,11 @@ module SpreeCmCommissioner
       after_save :update_variants_metadata, if: :saved_change_to_name?
 
       delegate :reserved_option?,
-               to: :option_type
+               to: :option_type, allow_nil: true
 
       SpreeCmCommissioner::OptionTypeAttrType::ATTRIBUTE_TYPES.each do |attr_type|
         define_method "attr_type_#{attr_type}?" do
-          option_type.send("attr_type_#{attr_type}?")
+          option_type&.send("attr_type_#{attr_type}?")
         end
       end
     end

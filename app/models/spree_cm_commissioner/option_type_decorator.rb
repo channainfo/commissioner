@@ -4,7 +4,7 @@ module SpreeCmCommissioner
       base.include SpreeCmCommissioner::ParameterizeName
       base.include SpreeCmCommissioner::OptionTypeAttrType
 
-      base.enum kind: %i[variant product vendor]
+      base.enum kind: %i[variant product vendor vehicle_type transit]
 
       base.validates :name, presence: true
 
@@ -14,6 +14,16 @@ module SpreeCmCommissioner
 
       base.scope :promoted, -> { where(promoted: true) }
       base.whitelisted_ransackable_attributes = %w[kind]
+
+      def base.amenities
+        Spree::OptionType.where(kind: 'vehicle_type', name: 'amenities', presentation: 'Amenities', attr_type: 'amenity').first_or_create
+      end
+
+      def base.vehicle
+        Spree::OptionType.where(presentation: 'vehicle', attr_type: 'vehicle_id', kind: 'variant',
+                                name: 'vehicle'
+        ).first_or_create
+      end
     end
 
     private

@@ -35,8 +35,17 @@ module SpreeCmCommissioner
       base.has_many :vendor_kind_option_values,
                     through: :option_value_vendors, source: :option_value
 
+      base.has_many :branches, class_name: 'SpreeCmCommissioner::Branch'
+      base.has_many :stops, class_name: 'SpreeCmCommissioner::Stop'
+
       base.has_many :places,
                     through: :nearby_places, source: :place, class_name: 'SpreeCmCommissioner::Place'
+
+      base.has_many :vendor_stops, class_name: 'SpreeCmCommissioner::VendorStop', dependent: :destroy
+      base.has_many :boarding_points, -> { where(cm_vendor_stops: { stop_type: 0 }) },
+                    through: :vendor_stops, source: :stop, class_name: 'Spree::Taxon'
+      base.has_many :drop_off_points, -> { where(cm_vendor_stops: { stop_type: 1 }) },
+                    through: :vendor_stops, source: :stop, class_name: 'Spree::Taxon'
 
       base.has_one  :logo, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorLogo'
       base.has_one  :payment_qrcode, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::VendorPaymentQrcode'
@@ -67,6 +76,9 @@ module SpreeCmCommissioner
       base.has_many :homepage_section_relatables,
                     class_name: 'SpreeCmCommissioner::HomepageSectionRelatable',
                     dependent: :destroy, inverse_of: :relatable
+
+      base.has_many :vehicle_types, class_name: 'SpreeCmCommissioner::VehicleType', dependent: :destroy
+      base.has_many :vehicles, through: :vehicle_types, class_name: 'SpreeCmCommissioner::Vehicle', dependent: :destroy
 
       base.validates :account_name, :account_number, presence: true, if: lambda {
                                                                            payment_qrcode.present? && Spree::Store.default.code.include?('billing')

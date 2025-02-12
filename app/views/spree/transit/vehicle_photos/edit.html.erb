@@ -1,0 +1,9 @@
+<%= render partial: 'spree/transit/shared/vehicle_tabs', locals: { current: :images } %>
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+
+<%= form_with model: @object, url: { action: 'update' }, html: { multipart: true } do |f| %>
+  <fieldset data-hook="new_photo">
+    <%= render partial: 'form', locals: { f: f } %>
+    <%= render partial: 'spree/admin/shared/new_resource_links' %>
+  </fieldset>
+<% end %>

@@ -1,0 +1,44 @@
+<div class="table-responsive border rounded bg-white">
+  <table class="table table-condensed">
+    <thead data-hook="option_header">
+      <tr>
+        <th>
+          <%= raw(t('vendor.service_calendars.from_date') + required_span_tag) %>
+        </th>
+        <th>
+          <%= raw(t('vendor.service_calendars.to_date') + required_span_tag) %>
+        </th>
+        <th class="actions"></th>
+      </tr>
+    </thead>
+    <tbody id="exceptionRules">
+      <% @exception_rules&.each_with_index do |exception_rule, index| %>
+        <%= f.fields_for 'exception_rules' do |exception_rule_fm|%>
+          <tr class="exception_rule fields" data-hook="exception_rule">
+            <td class="from_date">
+              <%= exception_rule_fm.date_field "#{[index]}[from]", class: 'form-control' %>
+            </td>
+            <td class="to_date">
+              <%= exception_rule_fm.date_field "#{[index]}[to]", class: 'form-control' %>
+            </td>
+            <td class="actions">
+              <span class="d-flex justify-content-end">
+                <%= link_to_icon_remove_fields f%>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="4">
+          <div id="new_add_exception_rule" class="d-flex" data-hook>
+            <%= button_link_to Spree.t(:add_exception_rule), "javascript:;" , { icon: 'add.svg' , :'data-target'=>
+              "tbody#exceptionRules", class: 'btn-success mx-auto spree_add_fields' } %>
+          </div>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>

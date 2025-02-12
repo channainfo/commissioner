@@ -1,0 +1,28 @@
+/* seats.css */
+
+.seat {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #ccc;
+  margin: 2px;
+  cursor: pointer;
+}
+
+.selected-seat {
+  // background-color: #f00;
+  border: 1px dotted grey;
+}
+
+.hidden-seat{
+  width: 35px;
+  display: inline-block;
+}
+
+.empty-seat{
+  border: 1px solid black;
+}
+
+.hidden-input{
+  visibility: hidden;
+}
