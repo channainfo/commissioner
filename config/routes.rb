@@ -403,6 +403,7 @@ Spree::Core::Engine.add_routes do
         resource :user_registration_with_pin_codes, only: [:create]
         resources :pin_code_generators, only: [:create]
         resource :account, controller: :account, only: %i[show update]
+        resources :user_device_tokens, only: %i[create destroy]
 
         resources :homepage, only: [] do
           resources :homepage_sections, only: [:index]
