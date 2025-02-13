@@ -17,8 +17,8 @@ module SpreeCmCommissioner
       ).first
 
       if user_identity_provider.present? && user_identity_provider.user.email.nil? && user_identity_provider.email.present?
-        user_identity_provider.user.email = user_identity_provider.email
-        user_identity_provider.user.save
+        user_identity_provider.user.email ||= user_identity_provider.email
+        user_identity_provider.user.save if user_identity_provider.user.email.present?
       end
 
       context.user = (user_identity_provider.user if user_identity_provider.present?)
