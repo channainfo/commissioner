@@ -63,6 +63,13 @@ module SpreeCmCommissioner
     def set_slug
       self.slug = permalink&.parameterize
     end
+
+    def products_option_type_names
+      Spree::OptionType.joins(products: :taxons)
+                       .where(spree_taxons: { id: child_ids })
+                       .pluck('spree_option_types.name')
+                       .uniq
+    end
   end
 end
 

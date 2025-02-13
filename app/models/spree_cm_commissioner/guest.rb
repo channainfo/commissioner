@@ -46,7 +46,7 @@ module SpreeCmCommissioner
     validates :bib_index, uniqueness: true, allow_nil: true
 
     self.whitelisted_ransackable_associations = %w[id_card event]
-    self.whitelisted_ransackable_attributes = %w[first_name last_name gender occupation_id card_type]
+    self.whitelisted_ransackable_attributes = %w[first_name last_name phone_number gender occupation_id card_type created_at]
 
     def self.csv_importable_columns
       %i[
