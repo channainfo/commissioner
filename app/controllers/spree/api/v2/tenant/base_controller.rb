@@ -2,7 +2,7 @@ module Spree
   module Api
     module V2
       module Tenant
-        class BaseController < ::Spree::Api::V2::BaseController
+        class BaseController < ::Spree::Api::V2::ResourceController
           include Spree::Api::V2::CollectionOptionsHelpers
 
           set_current_tenant_through_filter
