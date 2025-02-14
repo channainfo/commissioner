@@ -14,13 +14,13 @@ module DoorkeeperAuthHelper
     @oauth_application.update_column(:application_type, "third_party")
   end
 
-
   def create_resource_owner_token
     @oauth_application = create(:oauth_application)
     @oauth_resource_owner = create(:user)
     @oauth_access_token = create(:oauth_access_token,
                                  application: @oauth_application,
-                                 resource_owner_id: @oauth_resource_owner.id)
+                                 resource_owner: @oauth_resource_owner
+                                )
     @oauth_access_token
   end
 

@@ -14,6 +14,7 @@ require 'spree_cm_commissioner/s3_url_generator'
 require 'spree_cm_commissioner/jwt_token'
 require 'spree_cm_commissioner/line_item_jwt_token'
 require 'spree_cm_commissioner/order_jwt_token'
+require 'spree_cm_commissioner/user_jwt_token'
 
 require 'activerecord_multi_tenant'
 require 'google/cloud/recaptcha_enterprise'

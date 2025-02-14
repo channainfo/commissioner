@@ -37,4 +37,8 @@ FactoryBot.define do
   factory :cm_operator_user, parent: :cm_user do
     spree_roles { [Spree::Role.find_by(name: 'operator') || create(:role, name: 'operator')] }
   end
+
+  factory :cm_guest_user, parent: :cm_user do
+    guest  { true }
+  end
 end

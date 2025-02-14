@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'spree_backend', spree_opts
   s.add_dependency 'spree_multi_vendor', '>= 2.4.1'
   s.add_dependency 'spree_extension'
+  s.add_dependency 'devise-guests', '~> 0.8.3'
 
   s.add_dependency 'activerecord-multi-tenant'
   s.add_dependency 'phonelib'

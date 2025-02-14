@@ -420,6 +420,8 @@ Spree::Core::Engine.add_routes do
           patch :restart_checkout_flow
         end
 
+        resource :guest_cart_transfer, only: %i[update]
+
         namespace :queue_cart do
           resources :line_items, only: [:create]
         end
@@ -440,6 +442,8 @@ Spree::Core::Engine.add_routes do
         namespace :account do
           resource :preferred_payment_method, controller: :preferred_payment_method, only: %i[show update]
         end
+
+        resources :guest_users, only: [:create]
 
         resource :s3_signed_urls
         resources :google_wallet_object_tokens
