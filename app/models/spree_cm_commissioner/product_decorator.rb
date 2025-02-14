@@ -5,6 +5,7 @@ module SpreeCmCommissioner
       base.include SpreeCmCommissioner::ProductType
       base.include SpreeCmCommissioner::KycBitwise
       base.include SpreeCmCommissioner::Metafield
+      base.include SpreeCmCommissioner::RouteType
 
       base.has_many :variant_kind_option_types, -> { where(kind: :variant).order(:position) },
                     through: :product_option_types, source: :option_type
@@ -39,6 +40,8 @@ module SpreeCmCommissioner
 
       base.accepts_nested_attributes_for :product_places, allow_destroy: true
 
+      base.has_one :trip, class_name: 'SpreeCmCommissioner::Trip', dependent: :destroy
+
       base.scope :min_price, lambda { |vendor|
         joins(:prices_including_master)
           .where(vendor_id: vendor.id, product_type: vendor.primary_product_type)
@@ -55,11 +58,13 @@ module SpreeCmCommissioner
       base.validate :validate_event_taxons, if: -> { taxons.event.present? }
       base.validates :commission_rate, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }, allow_nil: true
 
-      base.whitelisted_ransackable_attributes = %w[description name slug discontinue_on status vendor_id]
+      base.whitelisted_ransackable_attributes = %w[description name slug discontinue_on status vendor_id short_name route_type]
 
       base.after_update :update_variants_vendor_id, if: :saved_change_to_vendor_id?
 
       base.enum purchasable_on: { both: 0, web: 1, app: 2 }
+
+      base.accepts_nested_attributes_for :trip, allow_destroy: true
     end
 
     def associated_event

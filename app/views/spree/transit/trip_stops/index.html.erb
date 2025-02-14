@@ -1,0 +1,36 @@
+<%= render partial: 'spree/transit/shared/route_tabs', locals: {current: :trip_stop} %>
+<div data-hook="admin_user_new_form_header">
+  <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+</div>
+<% if @trip_stops.any? %>
+  <div class="table-responsive border rounded bg-white">
+    <table class="table sortable" data-hook data-sortable-link="<%= update_sequences_transit_route_trip_trip_stops_url %>">
+      <thead class="text-muted">
+        <tr data-hook="option_header">
+          <th class="no-border handel-head"></th>
+          <th><%= Spree.t(:name) %></th>
+          <th><%= Spree.t(:stop_type) %></th>
+          <th><%= Spree.t(:sequence) %></th>
+          <th><%= Spree.t(:created_at) %></th>
+        </tr>
+      </thead>
+      <tbody id="sortVert">
+        <% @trip_stops.each do |stop| %>
+          <tr class="spree_stop <%= cycle('odd', 'even') %>" id="<%= spree_dom_id stop %>" data-hook="option_row">
+            <td class="move-handle text-center">
+              <%= svg_icon name: "grip-vertical.svg", width: '18', height: '18' %>
+            </td>
+            <td><%= stop.stop_name %></td>
+            <td> <%= stop.stop_type %></td>
+            <td> <%= stop.sequence %></td>
+            <td> <%= stop.created_at.to_date %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="alert alert-info" data-hook="no_trip_stop_found">
+    <%= Spree.t(:no_trip_stop_found) %>
+  </div>
+<% end %>

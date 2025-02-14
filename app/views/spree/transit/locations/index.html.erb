@@ -1,0 +1,49 @@
+<% content_for :page_title do %>
+  <%= I18n.t('spree.transit.locations') %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:add_location), new_transit_location_path, class: "btn-success", icon: 'add.svg', id: 'admin_new_customer_link' %>
+<% end %>
+
+<% render 'filter_form' %>
+<% if @locations.any? %>
+  <div class="table-responsive border rounded bg-white mb-3">
+    <table class="table" id="listing_customers" data-hook>
+      <thead class="text-muted">
+        <tr data-hook="admin_customers_index_headers">
+          <th>
+            <%= sort_link @search, :name, Spree.t(:name), {}, {title:"id_title"} %>
+          </th>
+          <th>
+            <%= sort_link @search, :abbr, Spree.t(:abbreviation), {}, {title: 'fullname_title'} %>
+          </th>
+          <th>
+            <%= Spree.t(:Country) %>
+          </th>
+          <th scope="col" class="text-center" data-hook="admin_products_index_header_actions" class="actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @locations.each do |location| %>
+          <tr data-hook="admin_customers_index_rows">
+            <td>
+              <%= location.name %>
+            </td>
+            <td>
+              <%= location.abbr %>
+            </td>
+            <td>
+              <%= location.country.name %>
+            </td>
+            <td class="actions " data-hook="admin_products_index_row_actions">
+              <span class="d-flex justify-content-end">
+                <%= link_to_edit location, url: edit_transit_location_path(location), no_text: true, class: 'edit' if can?(:edit, location) %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

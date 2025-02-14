@@ -1,17 +1,18 @@
 require_dependency 'spree_cm_commissioner'
 
 module SpreeCmCommissioner
-  class ServiceCalendar < ApplicationRecord
+  class ServiceCalendar < SpreeCmCommissioner::Base
     # exception_rules = [
     #   { 'from' => Date.parse('2023-1-01'), 'to'=> Date.parse('2023-1-31'), 'type' => 'exclusion', 'reason' => 'Company retreat' }
     # ]
     # inclusion: Service has been added for the specified date (default).
     # exclusion: Service has been removed for the specified date.
-
+    include SpreeCmCommissioner::ServiceCalendarType
     EXCEPTION_RULE_JSON_SCHEMA = Pathname.new("#{COMMISSIONER_ROOT}/config/schemas/service_calendar_exception_rule.json")
 
-    belongs_to :calendarable, polymorphic: true
+    belongs_to :calendarable, polymorphic: true, optional: false
     validates :exception_rules, json: { schema: EXCEPTION_RULE_JSON_SCHEMA }
+    self.whitelisted_ransackable_attributes = %w[name]
 
     ## Callbacks
     before_save :set_dates

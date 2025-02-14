@@ -2,9 +2,9 @@ require_dependency 'spree_cm_commissioner'
 
 module SpreeCmCommissioner
   class Place < ApplicationRecord
-    validates :reference, presence: true, unless: -> { Spree::Store.default.code.include?('billing') }
-    validates :lat, presence: true, unless: -> { Spree::Store.default.code.include?('billing') }
-    validates :lon, presence: true, unless: -> { Spree::Store.default.code.include?('billing') }
+    validates :reference, presence: true, if: :validate_reference?
+    validates :lat, presence: true, if: :validate_lat?
+    validates :lon, presence: true, if: :validate_lon?
     validates :name, presence: true, uniqueness: true, if: -> { Spree::Store.default.code.include?('billing') }
 
     has_many :nearby_places, class_name: 'SpreeCmCommissioner::VendorPlace', dependent: :destroy
@@ -16,6 +16,18 @@ module SpreeCmCommissioner
 
     def self.ransackable_attributes(auth_object = nil)
       super & %w[name code]
+    end
+
+    def validate_reference?
+      Spree::Store.default.code.exclude?('billing')
+    end
+
+    def validate_lat?
+      Spree::Store.default.code.exclude?('billing')
+    end
+
+    def validate_lon?
+      Spree::Store.default.code.exclude?('billing')
     end
   end
 end

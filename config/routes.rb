@@ -380,6 +380,53 @@ Spree::Core::Engine.add_routes do
     end
   end
 
+  namespace :transit do
+    namespace :vectors do
+      resources :icons, only: [:index]
+      resources :amenity_values, only: %i[index update] do
+        collection do
+          post :update
+        end
+      end
+    end
+
+    resources :reservations
+    resources :locations
+    resources :vendors do
+      resources :service_calendars, except: %i[update] do
+        member do
+          patch :update_status
+        end
+      end
+    end
+    resources :branches
+    resources :stops
+    resources :routes do
+      resources :trips do
+        resources :trip_stops do
+          post :update_sequences, on: :collection
+        end
+      end
+    end
+    resources :places
+    resource :amenity, only: %i[new create edit update]
+    post '/amenity/update_positions'
+    post '/amenity/update_values_positions'
+    resources :vehicle_types do
+      resources :vehicle_seats
+    end
+    resources :vehicles do
+      resources :vehicle_photos do
+        collection do
+          post :update_positions
+        end
+      end
+    end
+    root to: redirect('/transit/reservations')
+    post '/vehicle_types/vehicle_seats/load_seat', to: 'vehicle_seats#load_seat'
+    post '/vehicle_types/layer', to: 'vehicle_types#layer'
+  end
+
   namespace :api, defaults: { format: 'json' } do
     namespace :v2 do
       namespace :platform do

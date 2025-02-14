@@ -14,6 +14,12 @@ module SpreeCmCommissioner
       state_selection
       payment_option
       delivery_option
+      amenity
+      departure_time
+      duration
+      vehicle_id
+      origin
+      destination
     ].freeze
 
     RESERVED_OPTIONS = {

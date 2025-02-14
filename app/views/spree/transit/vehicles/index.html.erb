@@ -1,0 +1,57 @@
+<% content_for :page_title do %>
+  <%= I18n.t('spree.transit.vehicles') %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:add_vehicle), new_transit_vehicle_path, class: "btn-success", icon: 'add.svg', id: 'transit_new_vehicle_link' %>
+<% end %>
+
+<% render 'filter_form' %>
+
+<% if @vehicles.any? %>
+  <div class="table-responsive border rounded bg-white mb-3">
+    <table class="table" id="listing_vehicles" data-hook>
+      <thead class="text-muted">
+        <tr data-hook="transit_vehicle_index_headers">
+          <th><%= Spree.t('transit.primary_photo')%></th>
+          <th>
+            <%= sort_link @search, :code, Spree.t('transit.vehicle.code') %>
+          </th>
+          <th><%= Spree.t('transit.vehicle_type') %></th>
+          <th><%= Spree.t('transit.vehicle.license_plate') %></th>
+          <th><%= Spree.t("transit.vehicle.route_type") %></th>
+          <th scope="col" class="text-center" data-hook="transit_vehicles_index_header_actions" class="actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @vehicles.each do |vehicle| %>
+          <tr data-hook="transit_vehicle_index_rows">
+            <td>
+              <%= link_to spree.transit_vehicle_vehicle_photos_path(vehicle) do %>
+                <% if vehicle.primary_photo.present? %>
+                  <%= image_tag main_app.url_for(vehicle.primary_photo.attachment.variant(resize_to_fill: [60, 60])), :class => "rounded border" %>
+                <% else %>
+                  <div class="rounded border" style="width: 60px; height: 60px; padding: 5px"><%= Spree.t('transit.no_image') %></div>
+                <% end %>
+              <% end %>
+            </td>
+            <td><%= vehicle.code %></td>
+            <td><%= link_to vehicle.vehicle_type.name, edit_transit_vehicle_type_path(vehicle.vehicle_type) %></td>
+            <td><%= vehicle.license_plate %></td>
+            <td>
+            <% if vehicle.route_type.present? %>
+              <%= vehicle.route_type.capitalize %>
+            <% end %>
+            </td>
+            <td class="actions " data-hook="transit_vehicles_index_row_actions">
+              <span class="d-flex justify-content-end">
+                <%= link_to_edit vehicle, url: edit_transit_vehicle_path(vehicle), no_text: true, class: 'edit' if can?(:edit, vehicle) %>
+                <%= link_to_delete vehicle, url: transit_vehicle_path(vehicle), no_text: true if can?(:delete, vehicle) %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

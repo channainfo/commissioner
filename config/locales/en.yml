@@ -1,6 +1,5 @@
 # Sample localization file for English. Add more files in this directory for other locales.
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
-
 en:
   account_checker:
     verify:
@@ -11,13 +10,10 @@ en:
       blank: "recipient can not be blank"
     body:
       blank: "sms content can not be blank"
-
       already_exist: "%{login} already exist"
-
   pincode_creator:
     invalid_phone_number: "Invalid phone number"
     invalid_email_address: "Invalid email address"
-
   pincode_checker:
     error_type:
       not_found: "Verification Code not found!"
@@ -25,7 +21,6 @@ en:
       reached_max_attempt: "Verification Code already reach max attempt!"
       not_match: "Verification code is not valid"
       ok: "Verification code is valid"
-
   authenticator:
     incorrect_login: "Incorrect login"
     incorrect_password: "Incorrect password"
@@ -71,11 +66,9 @@ en:
   user_update_contact:
     phone_number_is_already_used: "Phone number is already used"
     email_is_already_used: "Email is already used"
-
   calendar:
     event:
       empty_info: "No <b>Events</b> found."
-
   option_type:
     kind_info: "<b>Once set</b>, it can't be updated."
     kind_validation: "Attribute can't be updated for %{option_type_name}"
@@ -91,7 +84,6 @@ en:
       hint: "Enter between 180 to -180"
     reference:
       label: "Reference"
-
   user_identity_provider:
     not_found: "User identity provider for %{identity_type} not found in the system"
 
@@ -107,20 +99,16 @@ en:
       out_of_stock: "%{variant_name} is out of stock"
     product_kind_option_types:
       empty_info: "<b>Note:</b> Set service option types to service first. To edit, go to <b>Details</b> tab > <b>Option Types</b>"
-
   vectors:
     icons:
       info_rules: 'Only allow <b>%{allow_extensions}</b> files. Icons are stored inside "images/" folder, eg. app/assets/images/backend-adjust.svg.'
       total: "Total: %{total_in_page} / %{total_count} icons"
-
   product:
     not_in_taxon: "This product isn't assigned to any taxon yet. Please add it to taxon first."
     validation:
       not_active: "%{product_name} is not active"
-
   photo:
     empty_info: "No <b>Photos</b> found."
-
   nearby_place:
     empty_info: "No <b>Nearby places</b> found."
 
@@ -153,7 +141,6 @@ en:
       new_calendar: "New Service calendar"
       operations_day: "Operations day"
       exception_rules: "Exception Rules"
-
   orders:
     total: "Total: %{orders_count} invoices"
     update_order_status:
@@ -169,7 +156,6 @@ en:
     reason_description:
       sth_broken: "Can you please share us what was not working? We will fix them as soon as possible as we spot them"
       other: "Can you please share us your account deletion reason. If something slipped through our fingers, we'd be so grateful to be aware and fix it."
-
   user:
     invalid_password: "Invalid Password"
 
@@ -180,6 +166,8 @@ en:
   spree:
     cancel: "Cancel"
     confirm: "Confirm"
+    logo: "Logo"
+    image: "Image"
     en: "English"
     date_of_birth: "Date of Birth"
     kind: "Kind"
@@ -228,6 +216,7 @@ en:
       line_item_not_found: "Line item not found"
       qrcode_removed: "QRCode removed"
       cannot_remove_qrcode: "Cannot remove QRCode"
+    name: "Name"
     promotion_rule_types:
       fixed_date:
         name: "Fixed Date"
@@ -362,6 +351,56 @@ en:
       other: "Only %{count} rooms available on %{date}"
     auto_apply: "Auto apply"
     auto_apply_info: "Path & code will be removed"
+    transit:
+      no_places: "'Places' taxonomy is missing"
+      new:
+        route: "New Route"
+        vehicle_type: "New Vehicle Type"
+      abbreviation: "Abbreviation"
+      reservations: "Reservations"
+      locations: "Locations"
+      location: "Location"
+      settings: "Setting"
+      vendor: "Vendor"
+      service_calendar:
+        title: "Sevice Calendar"
+        new: "New Sevice Calendar"
+      branch:
+        branches: "Branches"
+        address: "Address"
+        lat:
+          label: "Latitude"
+          hint: "Enter between -90 to 90"
+        lon:
+          label: "Longitude"
+          hint: "Enter between -180 to 180"
+        reference:
+          label: "Reference"
+      stops: "Stops"
+      routes: "Routes"
+
+      places:
+        places: "Places"
+        add_new_place: "Add a new place"
+
+      taxonomies:
+        edit_root_taxonomy: Edit %{name} Taxonomy
+        taxonomies: Taxonomies
+        taxons_belonging_to: "Taxons Belonging To %{taxonomy_name}"
+        submenu: Submenu
+        add_new_taxon: Add a new Taxon
+        no_taxons: "<b>%{taxonomy}</b> has no Taxons. Click the <b>Add a new Taxon</b> button, to begin adding Taxons."
+      vehicle_types: "Vehicle Types"
+      vehicle_type: "Vehicle Type"
+      vehicles: "Vehicles"
+      vehicle:
+        code: "Code"
+        license_plate: "License Plate"
+        route_type: "Route Type"
+      route_type: "Route Type"
+      select_route_type: "Select Route Type"
+      vehicle_type_name: "Vehicle Type Name"
+      vehicle_type_code: "Vehicle Type Code"
     device_tokens: "Device Tokens"
     user_identity_providers: "Identity Providers"
     new_user_identity_provider: "New Identity Providers"
@@ -453,11 +492,10 @@ en:
   guest_qr_code:
     label: "Print QR Codes"
     empty_info: "No <b>Guest Qr Code</b> found"
-
+    send_test_success: "Test Send Successfully"
   pincode_sender:
     sms:
       body: "%{code} is your %{readable_type}"
-
   pincode:
     readable_type:
       login: "login code"
@@ -484,7 +522,6 @@ en:
         message: "[%{vendor_name}] is reviewing your booking request."
   actions:
     login: "Login"
-
   spree_user:
     invalid_password: "Current password is not valid"
     cannot_delete_account: "You cannot delete this account because you own a special role"
@@ -523,3 +560,5 @@ en:
       upload:
         fail: 'Failed to fetch the image'
         not_found: 'Image not found'
+  amenity:
+    update_success: Option Type updated successfully.

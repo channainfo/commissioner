@@ -1,0 +1,128 @@
+<div data-hook="admin_inside_taxon_form">
+  <div class="row">
+    <div class="col-12 col-md-8">
+      <%= f.field_container :name do %>
+        <%= f.label :name, raw(Spree.t(:name) + required_span_tag) %>
+        <%= text_field :taxon, :name, class: 'form-control', required: true %>
+        <%= f.error_message_on :name, class: 'error-message' %>
+      <% end %>
+    </div>
+
+    <% if @taxon.root.present? %>
+      <div class="col-12 col-md-8">
+        <div class="d-block">
+          <%= f.label :data_type, raw(Spree.t(:data_type) + required_span_tag) %>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <%= f.field_container :stop, class: ['custom-control', 'custom-checkbox'] do %>
+            <%= f.check_box :stop, class: 'custom-control-input stop checkboxGroup', checked: f.object.persisted? && f.object.stop? %>
+            <%= f.label :stop, Spree.t(:stop), class: 'custom-control-label' %>
+            <%= f.error_message_on :stop %>
+          <% end %>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <%= f.field_container :station, class: ['custom-control', 'custom-checkbox'] do %>
+            <%= f.check_box :station, class: 'custom-control-input station checkboxGroup', checked: f.object.persisted? && f.object.station? %>
+            <%= f.label :station, Spree.t(:station), class: 'custom-control-label' %>
+            <%= f.error_message_on :station %>
+          <% end %>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <%= f.field_container :branch, class: ['custom-control', 'custom-checkbox'] do %>
+            <%= f.check_box :branch, class: 'custom-control-input branch checkboxGroup', checked: f.object.persisted? && f.object.branch? %>
+            <%= f.label :branch, Spree.t(:branch), class: 'custom-control-label' %>
+            <%= f.error_message_on :branch %>
+          <% end %>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <%= f.field_container :location, class: ['custom-control', 'custom-checkbox'] do %>
+            <%= f.check_box :location, class: 'custom-control-input location checkboxGroup', checked: f.object.persisted? && f.object.location? %>
+            <%= f.label :location, Spree.t(:location), class: 'custom-control-label' %>
+            <%= f.error_message_on :location %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="col-12 col-md-4">
+      <%= f.field_container :hide_from_nav, class: ['custom-control', 'custom-checkbox'] do %>
+        <%= f.check_box :hide_from_nav, class: 'custom-control-input' %>
+        <%= f.label :hide_from_nav, Spree.t(:hide_from_subcategories_nav), class: 'custom-control-label' %>
+        <%= f.error_message_on :hide_from_nav %>
+      <% end %>
+    </div>
+    <div class="col-12 col-md-8">
+      <% unless @taxon.new_record? %>
+        <%= f.field_container :permalink do %>
+          <%= label_tag :permalink_part, raw(Spree.t(:permalink) + required_span_tag) %>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                <%= [Spree::Config[:storefront_taxons_path] , @parent_permalink].join('/') %>
+              </span>
+            </div>
+            <%= text_field_tag :permalink_part, @permalink_part, class: 'form-control', required: true %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="col-12 col-md-4">
+      <% if @taxon.new_record? %>
+        <% disabled = false %>
+      <% else %>
+        <% disabled = @taxon.root? %>
+      <% end %>
+      <%= f.field_container :parent_id do %>
+        <%= f.label :parent_id, Spree.t('admin.navigation.nested_under') %>
+        <%= f.select :parent_id, nested_set_options(@place_taxonomy.taxons, @taxon) {|i| "#{'-' * i.level} #{i.name}" }, { include_blank: false }, { class: 'select2', disabled: disabled  } %>
+        <%= f.error_message_on :parent_id %>
+        <small class="form-text text-muted">
+          <%= Spree.t('admin.taxon.nested_under_info') %>
+        </small>
+      <% end %>
+    </div>
+  </div>
+  <% unless @taxon.new_record? %>
+    <div class="row">
+      <div class="col-12">
+        <hr>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-md-8">
+        <%= f.field_container :description do %>
+          <%= f.label :description, Spree.t(:description) %>
+          <%= f.text_area :description, class: "form-control #{'spree-rte' if taxon_wysiwyg_editor_enabled? }", rows: 14 %>
+        <% end %>
+      </div>
+      <div class="col-12 col-md-4">
+        <%= render 'assets_form', f: f %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <hr>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <%= f.field_container :meta_title do %>
+          <%= f.label :meta_title, Spree.t(:meta_title) %>
+          <%= f.text_field :meta_title, class: 'form-control', rows: 6 %>
+        <% end %>
+        <%= f.field_container :meta_description do %>
+          <%= f.label :meta_description, Spree.t(:meta_description) %>
+          <%= f.text_area :meta_description, class: 'form-control', rows: 6 %>
+        <% end %>
+        <%= f.field_container :meta_keywords do %>
+          <%= f.label :meta_keywords, Spree.t(:meta_keywords) %>
+          <%= f.text_field :meta_keywords, class: 'form-control', rows: 6 %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

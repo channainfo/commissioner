@@ -5,7 +5,7 @@ module SpreeCmCommissioner
   module ProductType
     extend ActiveSupport::Concern
 
-    PRODUCT_TYPES = %i[accommodation service ecommerce].freeze
+    PRODUCT_TYPES = %i[accommodation service ecommerce transit].freeze
 
     included do
       enum product_type: PRODUCT_TYPES if table_exists? && column_names.include?('product_type')

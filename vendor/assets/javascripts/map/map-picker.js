@@ -22,17 +22,17 @@ const MapPicker = {
   },
   registerEventHandler: function () {
     self = this;
-    $("#stock_location_lat").on("change", function () {
+    $("[id$='_lat']").on("change", function () {
       self.refreshMarker();
     });
-    $("#stock_location_lon").on("change", function () {
+    $("[id$='_lon']").on("change", function () {
       self.refreshMarker();
     });
   },
   refreshFields: function () {
     const position = this.marker.getPosition();
-    $("#stock_location_lat").val(position.lat);
-    $("#stock_location_lon").val(position.lng);
+    $("[id$='_lat']").val(position.lat);
+    $("[id$='_lon']").val(position.lng);
   },
   initMap: function () {
     this.map = new google.maps.Map(document.getElementById("map"), {
@@ -47,8 +47,8 @@ const MapPicker = {
     });
   },
   refreshMarker: function () {
-    const lat = $("#stock_location_lat").val();
-    const lon = $("#stock_location_lon").val();
+    const lat = $("[id$='_lat']").val();
+    const lon = $("[id$='_lon']").val();
     this.marker.setPosition(new google.maps.LatLng(lat, lon));
     this.map.setCenter(this.marker.getPosition());
   },

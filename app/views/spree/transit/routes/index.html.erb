@@ -1,0 +1,79 @@
+<% content_for :page_title do %>
+  <%= I18n.t('spree.transit.routes') %>
+<% end %>
+<% content_for :page_actions do %>
+  <%= button_link_to I18n.t('spree.transit.new.route'), new_transit_route_path, { class: "btn-success", icon: 'add.svg', id: 'admin_new_product' } %>
+<% end %>
+<% render 'filter_form' %>
+<% if @collection.any? %>
+  <div class="table-responsive border rounded bg-white mb-3">
+    <table class="table" id="listing_customers" data-hook>
+      <thead class="text-muted">
+        <tr data-hook="admin_customers_index_headers">
+          <th>
+            <%= Spree.t(:name)%>
+          </th>
+          <th>
+            <%= Spree.t(:short_name) %>
+          </th>
+          <th>
+            <%= Spree.t(:route_type) %>
+          </th>
+          <th>
+            <%= Spree.t(:departure_time) %>
+          </th>
+          <th>
+            <%= Spree.t(:duration) %>
+          </th>
+          <th>
+            <%= Spree.t(:price) %>
+          </th>
+          <th scope="col" class="text-center" data-hook="admin_products_index_header_actions" class="actions"></th>
+          <th scope="col" class="text-center" data-hook="admin_products_index_header_actions" class="actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @collection.includes(:trip).each do |route| %>
+          <tr data-hook="admin_customers_index_rows">
+            <td>
+              <%= link_to route.name, edit_transit_route_path(route) %>
+            </td>
+            <td>
+              <%= route.short_name %>
+            </td>
+            <td>
+              <% if route.route_type.present? %>
+                <%= route.route_type.capitalize  %>
+              <% end %>
+            </td>
+            <td>
+              <%= route.trip.departure_time.strftime('%H:%M') if route.trip.present? %>
+            </td>
+            <td>
+              <% duration = route.trip.duration_in_hms if route.trip.present?%>
+              <%= "#{duration[:hours]}hrs-#{duration[:minutes]}mns" if duration %>
+            </td>
+            <td>
+              <%= display_price(route) %>
+            </td>
+            <td class="actions " data-hook="admin_products_index_row_actions">
+              <span class="d-flex justify-content-end">
+                <% route_trip = (route.trip ? edit_transit_route_trip_path(route, route.trip) : new_transit_route_trip_path(route)) %>
+                <%= link_to_edit route, url: edit_transit_route_path(route.id), no_text: true, class: 'edit' if can?(:edit, route.id) && !route.deleted? %>
+                <%= link_to_with_icon 'location.svg', 'Edit Trip' ,route_trip, class:'edit btn btn-light', no_text: true %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="text-center no-objects-found m-5">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree::Product)) %>,
+    <%= link_to Spree.t(:add_one), new_object_url if can?(:create, Spree::Product) %>!
+  </div>
+<% end %>
+
+<%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>
+

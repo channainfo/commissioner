@@ -1,10 +1,14 @@
 module Spree
   module PermittedAttributes
     @@vendor_attributes << :logo
+
     @@line_item_attributes += %i[
       from_date
       to_date
+      line_item_seats_attributes
+      date
     ]
+
     @@user_attributes += %i[
       first_name
       last_name
@@ -17,6 +21,7 @@ module Spree
       confirm_pin_code_enabled
       confirm_pin_code
     ]
+
     @@taxon_attributes += %i[
       category_icon
       custom_redirect_url

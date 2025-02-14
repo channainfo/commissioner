@@ -1,0 +1,19 @@
+<% content_for :page_title do %>
+  <%= page_header_back_button spree.transit_vehicles_path %>
+  <%= I18n.t('spree.transit.vehicles') %>
+<% end %>
+
+<div data-hook="transit_vehicle_new_header">
+  <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+</div>
+
+<div data-hook="trasit_vehicle_new_form">
+  <%= form_with model: @object, url: { action: 'create' } do |f| %>
+    <fieldset data-hook="new_vehicle">
+      <%= render partial: 'form', locals: { f: f } %>
+      <div data-hook="transit_vehicle_new_buttons">
+        <%= render partial: 'spree/admin/shared/new_resource_links', locals: { collection_url: spree.transit_vehicles_path }   %>
+      </div>
+  <fieldset>
+  <% end %>
+</div>

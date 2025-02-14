@@ -1,0 +1,14 @@
+<% content_for :page_title do %>
+  <%= page_header_back_button spree.transit_vehicle_types_path %>
+  <%= I18n.t('spree.transit.vehicle_types') %>
+<% end %>
+<div data-hook="admin_user_new_form_header">
+  <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @object } %>
+</div>
+<div>
+  <%= form_with model: @object, url: { action: 'create' } do |f| %>
+    <%= render partial: 'form', locals: { f: f } %>
+    <div data-hook="admin_user_new_form_buttons">
+      <%= render partial: 'spree/admin/shared/new_resource_links', locals: { collection_url: spree.transit_vehicle_types_path } %>
+    </div>
+  <% end %>

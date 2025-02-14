@@ -4,7 +4,7 @@
   <% [nil, *Spree::OptionType.kinds.keys].each do |kind| %>
     <li class="nav-item">
       <%= link_to Spree.t("admin.option_types.#{kind.nil? ? 'all' : kind}"),
-                  params.merge({kind: kind}).permit!,
+                  url_for({kind: kind}),
                   class: "nav-link #{'active' if params[:kind] == kind}" %>
     </li>
   <% end %>

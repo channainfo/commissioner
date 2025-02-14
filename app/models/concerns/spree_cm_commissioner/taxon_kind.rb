@@ -3,7 +3,7 @@ module SpreeCmCommissioner
     extend ActiveSupport::Concern
 
     included do
-      enum kind: { category: 0, cms: 1, event: 2, occupation: 3, nationality: 4, organization: 5 }
+      enum kind: { category: 0, cms: 1, event: 2, occupation: 3, nationality: 4, organization: 5, transit: 6 }
     end
   end
 end

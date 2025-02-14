@@ -1,0 +1,30 @@
+<% content_for :table_filter do %>
+  <div data-hook="transit_locations_index_search">
+    <%= search_form_for [:transit, @search], method: :get, url: spree.transit_locations_path do |f| %>
+      <div class="row">
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :name_cont, I18n.t('spree.name') %>
+            <%= f.text_field :name_cont, placeholder: 'Location Name' , class: "form-control js-quick-search-target js-filterable" %>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :abbr_cont, I18n.t('spree.transit.abbreviation') %>
+            <%= f.text_field :abbr_cont, placeholder: 'Location Abbreviation' , class: "form-control js-quick-search-target js-filterable" %>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="form-group">
+            <%= f.label :country_id_eq, Spree.t(:country) %>
+            <%= f.select :country_id_eq, Spree::Country.joins(:states).distinct.map{|s| [s.name, s.id]}, { prompt: 'Select a Country' }, class: 'form-control select2 js-quick-search-target js-filterable'%>
+          </div>
+        </div>
+
+      </div>
+      <div data-hook="transit_locations_index_search_buttons" class="form-actions">
+        <%= button Spree.t(:search), 'search.svg' %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

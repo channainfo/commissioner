@@ -35,11 +35,13 @@ PATH
   remote: .
   specs:
     spree_cm_commissioner (0.0.1)
+      activerecord-multi-tenant
       activerecord_json_validator (~> 2.1, >= 2.1.3)
       aws-sdk-cloudfront
       aws-sdk-ecs
       aws-sdk-s3
       byebug
+      counter_culture (~> 3.2)
       dry-validation (~> 1.10)
       elasticsearch (~> 8.5)
       exception_notification
@@ -129,6 +131,8 @@ GEM
     activerecord (7.0.8)
       activemodel (= 7.0.8)
       activesupport (= 7.0.8)
+    activerecord-multi-tenant (2.4.0)
+      rails (>= 6)
     activerecord-typedstore (1.5.1)
       activerecord (>= 6.1)
     activerecord_json_validator (2.1.5)
@@ -241,6 +245,9 @@ GEM
     console (1.23.2)
       fiber-annotation
       fiber-local
+    counter_culture (3.5.2)
+      activerecord (>= 4.2)
+      activesupport (>= 4.2)
     crack (0.4.5)
       rexml
     crass (1.0.6)
