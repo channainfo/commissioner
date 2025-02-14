@@ -94,6 +94,10 @@ module SpreeCmCommissioner
       allow_self_check_in?
     end
 
+    def required_self_check_in_location?
+      required_self_check_in_location
+    end
+
     def amount_per_guest
       amount / quantity
     end

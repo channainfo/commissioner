@@ -9,6 +9,7 @@ module Spree
                           :completion_steps, :available_social_contact_platforms, :allow_anonymous_booking, :discontinue_on,
                           :high_demand, :jwt_token
 
+          base.attribute :required_self_check_in_location, &:required_self_check_in_location?
           base.attribute :allowed_self_check_in, &:allowed_self_check_in?
           base.attribute :allowed_upload_later, &:allowed_upload_later?
           base.attribute :delivery_required, &:delivery_required?

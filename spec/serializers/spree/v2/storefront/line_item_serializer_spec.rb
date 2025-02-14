@@ -54,6 +54,7 @@ RSpec.describe Spree::V2::Storefront::LineItemSerializer, type: :serializer do
         :number_of_guests,
         :completion_steps,
         :delivery_required,
+        :required_self_check_in_location,
         :allowed_self_check_in,
         :available_social_contact_platforms,
         :allowed_upload_later,

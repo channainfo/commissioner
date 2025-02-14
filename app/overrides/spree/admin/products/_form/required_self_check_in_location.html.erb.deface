@@ -1,0 +1,9 @@
+<!-- insert_after "[data-hook='admin_product_form_promotionable']" -->
+
+<div data-hook="admin_product_form_required_self_check_in_location">
+  <%= f.field_container :required_self_check_in_location do %>
+    <%= f.check_box :required_self_check_in_location %>
+    <%= f.label :required_self_check_in_location, Spree.t(:required_self_check_in_location) %>
+    <%= f.error_message_on :required_self_check_in_location %>
+  <% end %>
+</div>

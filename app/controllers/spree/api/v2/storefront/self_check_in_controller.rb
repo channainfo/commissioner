@@ -86,8 +86,10 @@ module Spree
           def within_allowed_distance(lat, lon, line_item_id)
             line_item = Spree::LineItem.find(line_item_id)
             place = line_item.product.venue.place
-            allowed_distance = line_item.product.venue.checkinable_distance
 
+            return true unless line_item.product.required_self_check_in_location
+
+            allowed_distance = line_item.product.venue.checkinable_distance
             user_location_km = Geocoder::Calculations.distance_between([lat, lon], [place.lat, place.lon], units: :km)
             user_location_meters = user_location_km * 1000
 
