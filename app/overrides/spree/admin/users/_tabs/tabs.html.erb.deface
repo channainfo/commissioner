@@ -46,7 +46,7 @@
   <li class="nav-item">
     <%= link_to_with_icon 'calendar-event.svg',
       Spree.t(:user_events),
-      admin_user_events_path,
+      admin_user_events_path(user_id: @user.id),
       class: "nav-link #{'active' if current == :user_events }" %>
   </li>
 <% end %>
