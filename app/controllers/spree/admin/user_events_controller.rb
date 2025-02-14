@@ -8,7 +8,7 @@ module Spree
         if params[:taxon_id].present?
           @user_events = @taxon.user_events
         else
-          @user = spree_current_user
+          @user = Spree::User.find(params[:user_id])
           @user_events = @user.user_events
         end
       end
