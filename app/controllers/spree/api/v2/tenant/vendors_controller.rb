@@ -21,7 +21,9 @@ module Spree
           end
 
           def scope
-            ::Spree::Vendor.active
+            MultiTenant.with(@tenant) do
+              ::Spree::Vendor.active
+            end
           end
 
           def resource_serializer
