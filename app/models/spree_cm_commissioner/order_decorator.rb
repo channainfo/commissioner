@@ -61,17 +61,31 @@ module SpreeCmCommissioner
     end
 
     # override
+    def finalize!
+      super
+      unstock_items
+    end
+
+    # override
     def after_resume
       super
-
+      unstock_items
       precalculate_conversion
     end
 
     # override
     def after_cancel
       super
-
+      restock_items
       precalculate_conversion
+    end
+
+    def unstock_items
+      line_items.each(&:unstock_item)
+    end
+
+    def restock_items
+      line_items.each(&:restock_item)
     end
 
     def precalculate_conversion

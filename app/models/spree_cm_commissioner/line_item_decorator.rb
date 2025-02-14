@@ -171,6 +171,14 @@ module SpreeCmCommissioner
       SpreeCmCommissioner::OrderJwtToken.encode(payload, order.token)
     end
 
+    def unstock_item
+      adjust_stock!(-quantity)
+    end
+
+    def restock_item
+      adjust_stock!(quantity)
+    end
+
     private
 
     def ensure_not_exceed_max_quantity_per_order
@@ -198,6 +206,19 @@ module SpreeCmCommissioner
       day = variant.due_date
 
       from_date + variant.month.month + day.days
+    end
+
+    def adjust_stock!(quantity)
+      return unless variant.available?
+      return unless variant.should_track_inventory?
+      return if variant.delivery_required?
+      return if variant.need_confirmation?
+
+      stock_item = variant.stock_items.first
+      return unless stock_item
+
+      new_count_on_hand = stock_item.count_on_hand + quantity
+      stock_item.update(count_on_hand: new_count_on_hand)
     end
   end
 end
