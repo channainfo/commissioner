@@ -10,6 +10,7 @@ module SpreeCmCommissioner
 
     def load_document_data
       @document_data = document.get.data
+      CmAppLogger.log(label: 'Metadata document loaded successfully', data: @document_data)
     end
 
     def max_sessions_count
@@ -22,12 +23,16 @@ module SpreeCmCommissioner
 
     def max_sessions_count_with_min
       @max_sessions_count_with_min ||= [max_sessions_count, min_session_count].max
+      CmAppLogger.log(label: 'Max sessions count with min calculated', data: @max_sessions_count_with_min)
+      @max_sessions_count_with_min
     end
 
     # firebase metadata
 
     def server_running_count
-      document_data[:server_running_count]&.to_i || ENV.fetch('WAITING_ROOM_SERVERS_COUNT', '2').to_i
+      count = document_data[:server_running_count]&.to_i || ENV.fetch('WAITING_ROOM_SERVERS_COUNT', '2').to_i
+      CmAppLogger.log(label: 'Server running count fetched', data: count)
+      count
     end
 
     def max_thread_count
