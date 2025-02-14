@@ -47,7 +47,9 @@ module Spree
           private
 
           def customer_params
-            params.require(:customer).permit(:first_name, :last_name, :email, :phone_number, :place_id, :status, :vendor_id, taxon_ids: [])
+            params.require(:customer).permit(:first_name, :last_name, :email, :gender, :dob, :phone_number, :place_id, :status, :vendor_id,
+                                             taxon_ids: []
+            )
           end
 
           def user_params
