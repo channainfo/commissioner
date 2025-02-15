@@ -55,6 +55,14 @@ module Spree
             end
           end
 
+          def destroy
+            subscription = SpreeCmCommissioner::Subscription.find_by(id: params[:id])
+            render json: { error: 'Subscription not found' }, status: :not_found and return if subscription.nil?
+
+            subscription.destroy
+            render json: { message: 'Subscription deleted successfully' }, status: :ok
+          end
+
           private
 
           def find_or_create_order(customer)
