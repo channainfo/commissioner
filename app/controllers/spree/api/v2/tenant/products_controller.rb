@@ -19,6 +19,10 @@ module Spree
             @resource ||= scope.find_by(slug: params[:id]) || scope.find(params[:id])
           end
 
+          def scope
+            model_class.where(tenant_id: MultiTenant.current_tenant_id)
+          end
+
           def collection_sorter
             Spree::Api::Dependencies.storefront_products_sorter.constantize
           end
