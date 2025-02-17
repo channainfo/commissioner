@@ -7,6 +7,7 @@ module SpreeCmCommissioner
       base.include SpreeCmCommissioner::ProductType
       base.include SpreeCmCommissioner::VendorPromotable
       base.include SpreeCmCommissioner::VendorPreference
+      base.include SpreeCmCommissioner::TenantUpdatable
 
       base.attr_accessor :service_availabilities
 
@@ -108,11 +109,6 @@ module SpreeCmCommissioner
       #   }
       # end
 
-      # Override tenant immutability to allow clearing tenant_id
-      def tenant_id=(new_tenant_id)
-        self[:tenant_id] = new_tenant_id
-      end
-
       extend Spree::DisplayMoney
       money_methods :min_price, :max_price
 
@@ -142,6 +138,11 @@ module SpreeCmCommissioner
 
       def base.search_fields
         [:name]
+      end
+
+      def vendor_and_tenant_name
+        tenant_name = tenant.present? ? " (#{tenant.name})" : ''
+        "#{name}#{tenant_name}"
       end
 
       def index_data
