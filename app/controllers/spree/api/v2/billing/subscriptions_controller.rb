@@ -56,8 +56,24 @@ module Spree
           end
 
           def destroy
+            customer = SpreeCmCommissioner::Customer.find_by(id: params[:customer_id])
             subscription = SpreeCmCommissioner::Subscription.find_by(id: params[:id])
             render json: { error: 'Subscription not found' }, status: :not_found and return if subscription.nil?
+
+            last_order = customer.orders.last
+
+            if subscription.id == last_order.subscription_id
+              if last_order.line_items.count > 1
+                render json: {
+                  error: 'Cannot delete the current subscription. Please delete the other subscriptions'
+                }, status: :unprocessable_entity
+              else
+                last_order.destroy
+                subscription.destroy
+                customer.update!(last_invoice_date: nil)
+                render json: { message: 'Subscription deleted successfully' }, status: :ok
+              end
+            end
 
             subscription.destroy
             render json: { message: 'Subscription deleted successfully' }, status: :ok

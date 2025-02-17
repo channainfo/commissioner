@@ -5,10 +5,9 @@ module Spree
         class OrdersController < Spree::Api::V2::BaseController
           def index
             customer = SpreeCmCommissioner::Customer.find_by(id: params[:customer_id])
-            subscriptions = SpreeCmCommissioner::Subscription.where(customer_id: customer.id)
-            orders = subscriptions.map(&:orders).flatten
+            orders = customer.orders
             render json: { orders: orders.as_json(
-              only: %i[id payment_state completed_at total], include: { invoice: { only: :invoice_number } }
+              only: %i[id payment_state completed_at total subscription_id], include: { invoice: { only: :invoice_number } }
             )
             }, status: :ok
           end
