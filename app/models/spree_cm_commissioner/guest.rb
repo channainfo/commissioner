@@ -26,6 +26,8 @@ module SpreeCmCommissioner
     belongs_to :user, class_name: 'Spree::User'
     belongs_to :occupation, class_name: 'Spree::Taxon'
     belongs_to :nationality, class_name: 'Spree::Taxon'
+    scope :checked_in, -> { joins(:check_in) }
+    scope :not_checked_in, -> { left_outer_joins(:check_in).where(cm_check_ins: { id: nil }) }
 
     has_many :state_changes, as: :stateful, class_name: 'Spree::StateChange'
 
@@ -46,7 +48,7 @@ module SpreeCmCommissioner
     validates :bib_index, uniqueness: true, allow_nil: true
 
     self.whitelisted_ransackable_associations = %w[id_card event]
-    self.whitelisted_ransackable_attributes = %w[first_name last_name phone_number gender occupation_id card_type created_at]
+    self.whitelisted_ransackable_attributes = %w[first_name last_name phone_number gender occupation_id card_type created_at check_in_status]
 
     def self.csv_importable_columns
       %i[
