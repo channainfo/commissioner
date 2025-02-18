@@ -1,6 +1,7 @@
 module SpreeCmCommissioner
   class HomepageSection < Base
     include SpreeCmCommissioner::HomepageSectionBitwise
+    include SpreeCmCommissioner::TenantUpdatable
 
     acts_as_list column: :position
 
@@ -18,9 +19,5 @@ module SpreeCmCommissioner
     }
 
     scope :filter_by_segment, -> (segment) { where('segment & ? > 0', BIT_SEGMENT[segment.to_sym]) }
-
-    def tenant_id=(new_tenant_id)
-      self[:tenant_id] = new_tenant_id
-    end
   end
 end

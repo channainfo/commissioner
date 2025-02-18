@@ -10,7 +10,7 @@ module SpreeCmCommissioner
       user = context.user
 
       # Check if user.tenant_id is nil first to keep our old logic work as usual
-      if user.tenant_id.nil?
+      if user.tenant_id.nil? && params[:client_id].blank? && params[:client_secret].blank?
         return user
       elsif params[:client_id].present? && params[:client_secret].present?
         oauth_application = find_oauth_application(params)
