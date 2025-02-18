@@ -28,6 +28,11 @@ module Spree
               yield
             end
           end
+
+          # override
+          def scope
+            raise 'scope should be implemented in a sub-class'
+          end
         end
       end
     end

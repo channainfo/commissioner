@@ -3,16 +3,14 @@ module Spree
     module V2
       module Tenant
         class HomepageSectionsController < BaseController
-          def index
-            collection = model_class.filter_by_segment(params[:homepage_id] || :general)
-                                    .active
-                                    .order(position: :asc)
-                                    .page(params[:page])
-                                    .per(params[:per_page])
+          def collection
+            @collection ||= scope.filter_by_segment(params[:homepage_id] || :general)
+                                 .active
+                                 .order(position: :asc)
+          end
 
-            render_serialized_payload do
-              serialize_collection(collection)
-            end
+          def scope
+            model_class.where(tenant_id: MultiTenant.current_tenant_id)
           end
 
           def model_class
