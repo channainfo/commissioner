@@ -52,6 +52,9 @@ module SpreeCmCommissioner
 
         find_by!(token: token)
       end
+
+      base.belongs_to :tenant, class_name: 'SpreeCmCommissioner::Tenant'
+      base.before_create :set_tenant_id
     end
 
     def ticket_seller_user?
@@ -259,6 +262,10 @@ module SpreeCmCommissioner
       return if allowed_prefixes.any? { |prefix| channel&.start_with?(prefix) }
 
       errors.add(:channel, "must start with one of the following: #{allowed_prefixes.join(', ')}")
+    end
+
+    def set_tenant_id
+      self.tenant_id = MultiTenant.current_tenant_id
     end
   end
 end
