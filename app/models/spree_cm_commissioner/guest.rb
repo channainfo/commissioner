@@ -26,8 +26,8 @@ module SpreeCmCommissioner
     belongs_to :user, class_name: 'Spree::User'
     belongs_to :occupation, class_name: 'Spree::Taxon'
     belongs_to :nationality, class_name: 'Spree::Taxon'
-    scope :checked_in, -> { joins(:check_in) }
-    scope :not_checked_in, -> { left_outer_joins(:check_in).where(cm_check_ins: { id: nil }) }
+    scope :checked_ins, -> { joins(:check_in) }
+    scope :no_show, -> { left_outer_joins(:check_in).where(cm_check_ins: { id: nil }) }
 
     has_many :state_changes, as: :stateful, class_name: 'Spree::StateChange'
 

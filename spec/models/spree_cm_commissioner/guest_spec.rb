@@ -410,4 +410,35 @@ RSpec.describe SpreeCmCommissioner::Guest, type: :model do
       expect(guest.formatted_bib_number).to eq "3KM001"
     end
   end
+
+  describe '#checked_in scope' do
+    let(:taxon) { create(:taxon) }
+
+    let!(:guest1) { create(:guest, event_id: taxon.id) }
+    let!(:guest2) { create(:guest, event_id: taxon.id) }
+    let!(:guest3) { create(:guest, event_id: taxon.id) }
+    let!(:guest4) { create(:guest, event_id: taxon.id) }
+
+    let!(:check_in1) { create(:cm_check_in, guest_id: guest1.id) }
+    let!(:check_in2) { create(:cm_check_in, guest_id: guest2.id) }
+
+    it 'returns the right count of checked-in guests' do
+      expect(taxon.guests.checked_ins.count).to eq(2)
+    end
+  end
+
+  describe '#not_show scope' do
+    let(:taxon) { create(:taxon) }
+
+    let!(:guest1) { create(:guest, event_id: taxon.id) }
+    let!(:guest2) { create(:guest, event_id: taxon.id) }
+    let!(:guest3) { create(:guest, event_id: taxon.id) }
+    let!(:guest4) { create(:guest, event_id: taxon.id) }
+
+    let!(:check_in1) { create(:cm_check_in, guest_id: guest1.id) }
+
+    it 'returns the right count of no show guests' do
+      expect(taxon.guests.no_show.count).to eq(3)
+    end
+  end
 end
