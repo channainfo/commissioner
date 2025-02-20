@@ -75,6 +75,10 @@ module SpreeCmCommissioner
       taxons.event.first&.parent
     end
 
+    def total_reserved_stock
+      line_items.complete.where(variant_id: variants.pluck(:id)).sum(:quantity)
+    end
+
     private
 
     def set_tenant
