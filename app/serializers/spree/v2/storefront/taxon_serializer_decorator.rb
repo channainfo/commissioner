@@ -15,6 +15,10 @@ module Spree
                           :background_color, :foreground_color, :show_badge_status,
                           :purchasable_on, :vendor_id
 
+          base.attribute :slug do |taxon|
+            taxon.vendor.slug if taxon.vendor.present?
+          end
+
           base.attribute :purchasable_on_app do |taxon|
             taxon.purchasable_on == 'app' || taxon.purchasable_on == 'both'
           end

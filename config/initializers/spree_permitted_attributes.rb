@@ -34,6 +34,7 @@ module Spree
       show_badge_status
       purchasable_on
       vendor_id
+      slug
     ]
 
     @@store_attributes += [

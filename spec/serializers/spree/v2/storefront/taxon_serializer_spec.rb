@@ -51,7 +51,8 @@ RSpec.describe Spree::V2::Storefront::TaxonSerializer, type: :serializer do
         :purchasable_on,
         :purchasable_on_app,
         :purchasable_on_web,
-        :vendor_id
+        :vendor_id,
+        :slug
       )
     end
 

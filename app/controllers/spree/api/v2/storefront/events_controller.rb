@@ -18,7 +18,7 @@ module Spree
 
           def events_query
             SpreeCmCommissioner::OrganizerProfileEventQuery.new(
-              vendor_id: params[:vendor_id],
+              vendor_identifier: params[:vendor_id] || params[:slug],
               section: params.fetch(:section, 'upcoming'),
               start_from_date: params[:start_from_date] || nil
             )
