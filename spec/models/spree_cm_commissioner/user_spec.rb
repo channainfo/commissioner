@@ -21,6 +21,37 @@ RSpec.describe Spree::User, type: :model do
     end
   end
 
+  describe 'validations' do
+    context 'email' do
+      let!(:tenant_1) { create(:cm_tenant) }
+      let!(:tenant_2) { create(:cm_tenant) }
+
+      it 'validates presence of email if all other login identity fields are blank' do
+        user = build(:cm_user, phone_number: nil, login: nil, user_identity_providers: [])
+        expect(user).to validate_presence_of(:email).with_message("can't be blank")
+      end
+
+      it 'validates uniqueness of email scoped to tenant_id' do
+        create(:cm_user, email: 'sokleng.houng@bookmebus.com', tenant_id: tenant_1.id)
+        user = build(:cm_user, email: 'sokleng.houng@bookmebus.com', tenant_id: tenant_1.id)
+        expect(user).to be_invalid
+        expect(user.errors[:email]).to include('has already been taken')
+      end
+
+      it 'allows the same email for different tenants' do
+        create(:cm_user, email: 'sokleng.houng@bookmebus.com', tenant_id: tenant_1.id)
+        user = build(:cm_user, email: 'sokleng.houng@bookmebus.com', tenant_id: tenant_2.id)
+        expect(user).to be_valid
+      end
+
+      it 'validates format of email' do
+        user = build(:cm_user, email: 'invalid_email')
+        expect(user).to be_invalid
+        expect(user.errors[:email]).to include('is invalid')
+      end
+    end
+  end
+
   describe '.find_user_by_login' do
     let!(:user) { create(:cm_user, password: 'correct-password', phone_number: "0123456789", email: "test@gmail.com") }
 
