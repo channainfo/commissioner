@@ -12,17 +12,17 @@
   <div class="card-body">
     <%= form_with model: @object, url: { action: 'create' } do |f| %>
       <%= f.hidden_field :taxon_id, value: @taxon.id %>
-      <div  class="form-group" data-hook="new_user">
-          <%= f.field_container :users do %>
-            <%= f.label :user_id, Spree.t(:users) %>
-            <%= f.select :user_id, options_from_collection_for_select([], :id, :email),
-                                      { include_hidden: true },
-                                        data: { autocomplete_url_value: 'users_api_v2',
-                                                autocomplete_return_attr_value: 'email',
-                                                autocomplete_search_query_value: 'email_i_cont',
-                                                minimum_input_length: 3 } %>
-            <%= f.error_message_on :user_id %>
-          <% end %>
+      <div class="form-group" data-hook="new_user">
+        <%= f.field_container :users do %>
+                  <%= f.label :user_id, "#{Spree.t(:users)} (Search by email or phone number)" %>
+                  <%= f.select :user_id, options_from_collection_for_select([], :id, :email),
+                                            { include_hidden: true },
+                                              data: { autocomplete_url_value: 'users_api_v2',
+                                                      autocomplete_return_attr_value: 'email_phone_number',
+                                                      autocomplete_search_query_value: 'email_or_phone_number_i_cont',
+                                                      minimum_input_length: 3 } %>
+                  <%= f.error_message_on :user_id %>
+                <% end %>
         </div>
       <fieldset data-hook="new_taxon_user">
         <%= render partial: 'spree/admin/shared/new_resource_links' %>
@@ -30,3 +30,4 @@
     <% end %>
   </div>
 </div>
+
