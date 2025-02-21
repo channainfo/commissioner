@@ -11,7 +11,11 @@ module Spree
         @product.variants.each do |variant|
           guest_card_class_id = variant_params[variant.id.to_s]
 
-          next if guest_card_class_id.blank?
+          if guest_card_class_id.blank?
+            variant_guest_card_class = model_class.find_by(variant_id: variant.id)
+            variant_guest_card_class&.destroy
+            next
+          end
 
           variant_guest_card_class = model_class.find_or_initialize_by(variant_id: variant.id)
           variant_guest_card_class.guest_card_class_id = guest_card_class_id
