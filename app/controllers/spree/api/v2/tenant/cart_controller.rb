@@ -7,9 +7,11 @@ module Spree
           include Spree::Api::V2::CouponCodesHelper
           include Spree::Api::V2::Storefront::MetadataControllerConcern
 
-          before_action :ensure_valid_metadata, only: %i[create]
-          before_action :ensure_order, except: %i[create]
           around_action :wrap_with_multitenant_without, except: %i[create]
+
+          before_action :ensure_valid_metadata, only: %i[create add_item]
+          before_action :ensure_order, except: %i[create]
+          before_action :load_variant, only: :add_item
 
           def show
             spree_authorize! :show, spree_current_order, order_token
@@ -32,6 +34,22 @@ module Spree
             order ||= create_service.call(create_cart_params).value
 
             render_serialized_payload(201) { serialize_resource(order) }
+          end
+
+          def add_item
+            spree_authorize! :update, spree_current_order, order_token
+            spree_authorize! :show, @variant
+
+            result = add_item_service.call(
+              order: spree_current_order,
+              variant: @variant,
+              quantity: add_item_params[:quantity],
+              public_metadata: add_item_params[:public_metadata],
+              private_metadata: add_item_params[:private_metadata],
+              options: add_item_params[:options]
+            )
+
+            render_order(result)
           end
 
           def destroy
@@ -71,6 +89,10 @@ module Spree
 
           def create_service
             Spree::Api::Dependencies.storefront_cart_create_service.constantize
+          end
+
+          def add_item_service
+            Spree::Api::Dependencies.storefront_cart_add_item_service.constantize
           end
 
           def destroy_cart_service
