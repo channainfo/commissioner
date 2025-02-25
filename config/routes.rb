@@ -462,9 +462,11 @@ Spree::Core::Engine.add_routes do
         resource :account_recovers, only: [:update]
 
         resource :cart, controller: :cart, only: %i[show create destroy] do
+          post   :add_item
           patch  :set_quantity
         end
         resource :cart_guests, only: %i[create destroy]
+        resources :guests, only: %i[create update show]
       end
 
       namespace :storefront do
