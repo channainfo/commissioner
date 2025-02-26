@@ -67,6 +67,10 @@ module SpreeCmCommissioner
       self.slug = permalink&.parameterize
     end
 
+    def event_slug
+      slug.sub(/^events-/, '')
+    end
+
     def products_option_type_names
       Spree::OptionType.joins(products: :taxons)
                        .where(spree_taxons: { id: child_ids })
