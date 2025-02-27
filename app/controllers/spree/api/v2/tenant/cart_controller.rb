@@ -10,8 +10,9 @@ module Spree
           around_action :wrap_with_multitenant_without, except: %i[create]
 
           before_action :ensure_valid_metadata, only: %i[create add_item]
-          before_action :ensure_order, except: %i[create]
+          before_action :ensure_order, except: %i[create associate]
           before_action :load_variant, only: :add_item
+          before_action :require_spree_current_user, only: :associate
 
           def show
             spree_authorize! :show, spree_current_order, order_token
@@ -77,6 +78,55 @@ module Spree
             render_order(result)
           end
 
+          def apply_coupon_code
+            spree_authorize! :update, spree_current_order, order_token
+
+            spree_current_order.coupon_code = params[:coupon_code]
+            result = coupon_handler.new(spree_current_order).apply
+
+            if result.error.blank?
+              render_serialized_payload { serialized_current_order }
+            else
+              render_error_payload(result.error)
+            end
+          end
+
+          def remove_coupon_code
+            spree_authorize! :update, spree_current_order, order_token
+
+            coupon_codes = select_coupon_codes
+
+            return render_error_payload(I18n.t('spree.api.v2.cart.no_coupon_code')) if coupon_codes.empty?
+
+            result_errors = coupon_codes.count > 1 ? select_errors(coupon_codes) : select_error(coupon_codes)
+
+            if result_errors.blank?
+              render_serialized_payload { serialized_current_order }
+            else
+              render_error_payload(result_errors)
+            end
+          end
+
+          def associate
+            guest_order_token = params[:guest_order_token]
+            guest_order = Spree::Api::Dependencies.storefront_current_order_finder.constantize.new.execute(
+              store: current_store,
+              user: nil,
+              token: guest_order_token,
+              currency: current_currency
+            )
+
+            spree_authorize! :update, guest_order, guest_order_token
+
+            result = associate_service.call(guest_order: guest_order, user: spree_current_user)
+
+            if result.success?
+              render_serialized_payload { serialize_resource(guest_order) }
+            else
+              render_error_payload(result.error)
+            end
+          end
+
           private
 
           def wrap_with_multitenant_without(&block)
@@ -101,6 +151,14 @@ module Spree
 
           def set_item_quantity_service
             Spree::Api::Dependencies.storefront_cart_set_item_quantity_service.constantize
+          end
+
+          def coupon_handler
+            Spree::Api::Dependencies.storefront_coupon_handler.constantize
+          end
+
+          def associate_service
+            Spree::Api::Dependencies.storefront_cart_associate_service.constantize
           end
 
           def line_item
