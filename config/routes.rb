@@ -471,6 +471,12 @@ Spree::Core::Engine.add_routes do
         end
         resource :cart_guests, only: %i[create destroy]
         resources :guests, only: %i[create update show]
+
+        resource :checkout, controller: :checkout, only: %i[update] do
+          patch  :next
+          patch  :advance
+          patch  :complete
+        end
       end
 
       namespace :storefront do
