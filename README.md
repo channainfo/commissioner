@@ -385,3 +385,47 @@ final Map<String, String> cookies;
 ### Adaptive bitrate player
 
 - <https://livepush.io/hls-player/index.html>
+
+## ActiveRecord Multi-Tenant
+
+### Getting the Current Tenant ID
+
+To retrieve the current tenant_id, you can use `MultiTenant.current_tenant_id`.
+
+### Defining Scope with MultiTenant
+
+To ensure queries are scoped by the current tenant, use `MultiTenant.with(@tenant)`:
+
+```ruby
+def scope
+  MultiTenant.with(@tenant) do
+    model_class.where(tenant_id: MultiTenant.current_tenant_id)
+  end
+end
+```
+
+This ensures that queries are filtered based on the current tenant, maintaining proper isolation of data across tenants.
+
+### Example: Getting `@tenant` with `MultiTenant`
+
+```ruby
+@tenant = current_tenant
+MultiTenant.with(@tenant) do
+  # Your tenant-specific code here
+  # Should scope model_class.where(tenant_id: MultiTenant.current_tenant_id)
+  # to make sure our data filter it with current Tenant
+end
+```
+
+### Wrapping Actions Without MultiTenant
+
+Use `around_action` to temporarily disable MultiTenant for specific actions:
+
+```ruby
+around_action :wrap_with_multitenant_without, except: %i[create]
+
+def wrap_with_multitenant_without(&block)
+  MultiTenant.without(&block)
+end
+```
+

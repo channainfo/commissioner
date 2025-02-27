@@ -21,7 +21,7 @@ module Spree
 
           def scope
             MultiTenant.with(@tenant) do
-              model_class
+              model_class.where(tenant_id: MultiTenant.current_tenant_id)
             end
           end
 
