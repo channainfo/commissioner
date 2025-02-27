@@ -406,3 +406,6 @@ km:
       upload:
         fail: 'បានបរាជ័យក្នុងការទាញយករូបភាព'
         not_found: 'រកមិនឃើញរូបភាព'
+  user_roles_assigner:
+    user_not_found: 'រកមិនឃើញអ្នកប្រើប្រាស់'
+    roles_empty: 'តួនាទីគឺទទេ'
