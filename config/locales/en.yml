@@ -562,3 +562,6 @@ en:
         not_found: 'Image not found'
   amenity:
     update_success: Option Type updated successfully.
+  user_roles_assigner:
+    user_not_found: 'User not found'
+    roles_empty: 'Roles are empty'
