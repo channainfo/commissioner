@@ -477,6 +477,8 @@ Spree::Core::Engine.add_routes do
           patch  :advance
           patch  :complete
         end
+
+        resources :user_account_linkages, only: %i[index create destroy]
       end
 
       namespace :storefront do
