@@ -16,11 +16,6 @@ module Spree
           def create
             validate_token!(params[:qr_data])
 
-            unless within_allowed_distance(params[:lat], params[:lon], params[:line_item_id])
-              render_error_payload(I18n.t('self_check_in.invalid_distance'), 400)
-              return
-            end
-
             unless invalid_line_item(params[:line_item_id], params[:event_id])
               render_error_payload(I18n.t('self_check_in.invalid_line_item'), 400)
               return
@@ -81,19 +76,6 @@ module Spree
           # override
           def collection_serializer
             SpreeCmCommissioner::V2::Operator::CheckInSerializer
-          end
-
-          def within_allowed_distance(lat, lon, line_item_id)
-            line_item = Spree::LineItem.find(line_item_id)
-            place = line_item.product.venue.place
-
-            return true unless line_item.product.required_self_check_in_location
-
-            allowed_distance = line_item.product.venue.checkinable_distance
-            user_location_km = Geocoder::Calculations.distance_between([lat, lon], [place.lat, place.lon], units: :km)
-            user_location_meters = user_location_km * 1000
-
-            user_location_meters <= allowed_distance
           end
 
           def invalid_line_item(line_item_id, event_id)
