@@ -77,6 +77,10 @@ module SpreeCmCommissioner
                        .pluck('spree_option_types.name')
                        .uniq
     end
+
+    def event_url
+      "https://#{Spree::Store.default.url}/t/#{permalink}"
+    end
   end
 end
 
