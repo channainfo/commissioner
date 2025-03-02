@@ -519,7 +519,10 @@ Spree::Core::Engine.add_routes do
         end
 
         resources :customers do
-          resources :orders, only: %i[index show]
+          resources :orders, only: %i[index show] do
+            put :complete, on: :member
+            get :checkout, to: 'payment_qr_code#checkout'
+          end
           resources :subscriptions, only: %i[index create destroy]
           resources :store_credits
         end

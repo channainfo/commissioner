@@ -73,10 +73,11 @@ module Spree
                 customer.update!(last_invoice_date: nil)
                 render json: { message: 'Subscription deleted successfully' }, status: :ok
               end
+            else
+              subscription.destroy
+              last_order.line_items.where(variant_id: subscription.variant_id).destroy_all
+              render json: { message: 'Subscription deleted successfully' }, status: :ok
             end
-
-            subscription.destroy
-            render json: { message: 'Subscription deleted successfully' }, status: :ok
           end
 
           private
@@ -97,6 +98,8 @@ module Spree
                   from_date: from_date,
                   to_date: to_date
                 )
+                last_order.update_totals
+                last_order.persist_totals
               rescue ActiveRecord::RecordInvalid => e
                 return { success: false, error: e.message }
               end

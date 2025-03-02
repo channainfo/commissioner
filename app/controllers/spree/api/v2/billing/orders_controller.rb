@@ -22,6 +22,16 @@ module Spree
             )
             }, status: :ok
           end
+
+          def complete
+            order = Spree::Order.find(params[:id])
+            if order.payment_state == 'balance_due'
+              order.update(payment_state: 'paid')
+              render json: { message: 'Order completed successfully', order: order.as_json(only: %i[id payment_state]) }, status: :ok
+            else
+              render json: { error: 'Order cannot be completed' }, status: :unprocessable_entity
+            end
+          end
         end
       end
     end
