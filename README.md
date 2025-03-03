@@ -28,6 +28,10 @@ bundle exec rails g spree_cm_commissioner:install
 
 If your server was running, restart it so that it can find the assets properly.
 
+## Bump a new version
+
+Update the semantic version number in `lib/spree_cm_commissioner/version.rb`, then create and push a new tag to GitHub. When the tag is pushed, the GitHub Actions workflow will automatically build the gem and publish it to RubyGems.
+
 ## Config
 
 ### Rake tasks
@@ -192,6 +196,25 @@ This setup allows you to configure the environment and database services in a si
 
 ## Releasing
 
+To release the gem:
+
+- 1: Bump new version in the file: lib/spree_cm_commissioner/version.rb, for example
+
+```ruby
+VERSION = '1.8.0-beta1'.freeze
+```
+
+to release `1.8.0-beta1`
+
+- 2: Tag a repo with the same version, for example
+
+```sh
+git tag 1.8.0-beta1
+```
+
+- 3: Push the tag to the repo and github action will build and push the gem to rubygem.org.
+- 4: Get the gem version to the project in cm-market-server.
+
 ```sh
 bundle exec gem bump -p -t
 bundle exec gem release
@@ -200,19 +223,25 @@ bundle exec gem release
 For more options please see [gem-release REAMDE](https://github.com/svenfuchs/gem-release)
 
 ## Troubleshooting Database Lock on Taxonomy Creation Errors
+
 ### Issue Overview
+
 In development, this error can occur after creating a new database and restoring the database (e.g., from a staging environment). When this happens, attempts to create a new Taxonomy may fail due to a record lock.
 
 ### Error Message
+
 In case you create in console manualy
-```
+
+```sh
 /usr/local/bundle/gems/activerecord-7.0.8/lib/active_record/locking/pessimistic.rb:70:in `lock!': Locking a record with unpersisted changes is not supported. Use `save` to persist the changes, or `reload` to discard them explicitly. (RuntimeError)
 ```
-In case you create from web-app
-```
-Locking a record with unpersisted changes is not supported. Use save to persist the changes, or reload to discard them explicitly.
 
-Extracted source (around line #70):
+In case you create from web-app
+
+```sh
+# Locking a record with unpersisted changes is not supported. Use save to persist the changes, or reload to discard them explicitly.
+
+# Extracted source (around line #70):
 
 if persisted?
   if has_changes_to_save?
@@ -223,12 +252,12 @@ if persisted?
 ```
 
 ### Workaround Solution
-1.  Open the Rails console: `rails console`
+
+1. Open the Rails console: `rails console`
 2. Find an existing Taxonomy record: `taxonomy = Spree::Taxonomy.last`
 3. Update any attribute to release the lock. For example: `taxonomy.update(name: "#{taxonomy.name}1")`
 
 This action should unlock the record, allowing you to successfully create a new Taxonomy.
-
 
 ## Contributing
 
@@ -428,4 +457,3 @@ def wrap_with_multitenant_without(&block)
   MultiTenant.without(&block)
 end
 ```
-

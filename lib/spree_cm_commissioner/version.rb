@@ -1,5 +1,5 @@
 module SpreeCmCommissioner
-  VERSION = '0.0.1'.freeze
+  VERSION = '1.8.0-beta1'.freeze
 
   module_function
 
