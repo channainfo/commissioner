@@ -3,23 +3,7 @@ module Spree
     module V2
       module Tenant
         class PinCodeGeneratorsController < BaseController
-          before_action :validate_recaptcha, only: [:create]
-
-          def validate_recaptcha
-            return unless ENV['RECAPTCHA_TOKEN_VALIDATOR_ENABLE'] == 'yes'
-
-            context = SpreeCmCommissioner::RecaptchaTokenValidator.call(
-              token: params[:recaptcha_token],
-              action: params[:recaptcha_action],
-              site_key: params[:recaptcah_site_key]
-            )
-
-            return if context.success?
-
-            render_error_payload(context.message, 400)
-          end
-
-          # :phone_number, :email, :type, :recaptcha_token, :recaptcha_action, :recaptcah_site_key
+          # :phone_number, :email, :type
           def create
             context = SpreeCmCommissioner::PinCodeGenerator.call(pin_code_attrs)
 
