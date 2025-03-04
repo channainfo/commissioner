@@ -2,8 +2,7 @@ module SpreeCmCommissioner
   module OrderDecorator
     def self.prepended(base) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
       base.include SpreeCmCommissioner::PhoneNumberSanitizer
-      base.include SpreeCmCommissioner::OrderBibNumberConcern
-      base.include SpreeCmCommissioner::OrderRequestable
+      base.include SpreeCmCommissioner::OrderStateMachine
 
       base.scope :subscription, -> { where.not(subscription_id: nil) }
       base.scope :paid, -> { where(payment_state: :paid) }
@@ -23,15 +22,18 @@ module SpreeCmCommissioner
 
       base.before_create :link_by_phone_number
       base.before_create :associate_customer
+      base.before_create :set_tenant_id
 
       base.validates :promo_total, base::MONEY_VALIDATION
       base.validate :validate_channel_prefix, if: :channel_changed?
-
       base.validates :phone_number, presence: true, if: :require_phone_number
-      base.has_one :invoice, dependent: :destroy, class_name: 'SpreeCmCommissioner::Invoice'
 
-      base.belongs_to :subscription, class_name: 'SpreeCmCommissioner::Subscription', optional: true
+      base.has_one :invoice, dependent: :destroy, class_name: 'SpreeCmCommissioner::Invoice'
       base.has_one :customer, class_name: 'SpreeCmCommissioner::Customer', through: :subscription
+
+      base.belongs_to :tenant, class_name: 'SpreeCmCommissioner::Tenant'
+      base.belongs_to :subscription, class_name: 'SpreeCmCommissioner::Subscription', optional: true
+
       base.has_many :taxons, class_name: 'Spree::Taxon', through: :customer
       base.has_many :vendors, through: :products, class_name: 'Spree::Vendor'
       base.has_many :taxons, through: :products, class_name: 'Spree::Taxon'
@@ -42,9 +44,6 @@ module SpreeCmCommissioner
       base.whitelisted_ransackable_associations |= %w[customer taxon payments invoice]
       base.whitelisted_ransackable_attributes |= %w[intel_phone_number phone_number email number]
 
-      base.after_update :precalculate_conversion, if: -> { state_changed_to_complete? }
-      base.after_update :precalculate_conversion, if: -> { state_changed_to_canceled? }
-
       def base.search_by_qr_data!(data)
         token = data.match(/^R\d{9,}-([A-Za-z0-9_\-]+)$/)&.captures
 
@@ -52,35 +51,12 @@ module SpreeCmCommissioner
 
         find_by!(token: token)
       end
-
-      base.belongs_to :tenant, class_name: 'SpreeCmCommissioner::Tenant'
-      base.before_create :set_tenant_id
     end
 
     def ticket_seller_user?
       return false if user.nil?
 
       user.has_spree_role?('ticket_seller')
-    end
-
-    # override
-    def after_resume
-      super
-
-      precalculate_conversion
-    end
-
-    # override
-    def after_cancel
-      super
-
-      precalculate_conversion
-    end
-
-    def precalculate_conversion
-      line_items.each do |item|
-        SpreeCmCommissioner::ConversionPreCalculatorJob.perform_later(item.product_id)
-      end
     end
 
     # override
@@ -96,22 +72,9 @@ module SpreeCmCommissioner
       store.payment_methods.available_on_frontend_for_early_adopter.select { |pm| pm.available_for_order?(self) }
     end
 
-    def state_changed_to_complete?
-      saved_change_to_state? && state == 'complete'
-    end
-
-    def state_changed_to_canceled?
-      saved_change_to_state? && state == 'canceled'
-    end
-
+    # override
     def delivery_required?
       line_items.any?(&:delivery_required?)
-    end
-
-    # overrided not to send email yet to user if order needs confirmation
-    # it will send after vendors accepted.
-    def confirmation_delivered?
-      confirmation_delivered || need_confirmation?
     end
 
     # overrided
@@ -240,6 +203,7 @@ module SpreeCmCommissioner
       require_contact
     end
 
+    # override
     def require_email
       require_contact
     end

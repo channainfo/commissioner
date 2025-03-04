@@ -1,10 +1,23 @@
 # Make sure to put this concern below other concern or methods that generating additional order info like guests, seat number, etc.
 # This will ensure that when each notification is sent with neccessary data.
 module SpreeCmCommissioner
-  module OrderRequestable
+  module OrderStateMachine
     extend ActiveSupport::Concern
 
     included do
+      state_machine.before_transition to: :complete, do: :request, if: :need_confirmation?
+      state_machine.before_transition to: :complete, do: :generate_bib_number
+
+      state_machine.after_transition to: :complete, do: :precalculate_conversion
+      state_machine.after_transition to: :complete, do: :notify_order_complete_app_notification_to_user, unless: :subscription?
+      state_machine.after_transition to: :complete, do: :notify_order_complete_telegram_notification_to_user, unless: :subscription?
+      state_machine.after_transition to: :complete, do: :send_order_complete_telegram_alert_to_vendors, unless: :need_confirmation?
+      state_machine.after_transition to: :complete, do: :send_order_complete_telegram_alert_to_store, unless: :need_confirmation?
+
+      state_machine.after_transition to: :resumed, do: :precalculate_conversion
+
+      state_machine.after_transition to: :canceled, do: :precalculate_conversion
+
       scope :accepted, -> { where(request_state: 'accepted') }
 
       scope :filter_by_request_state, lambda {
@@ -13,15 +26,6 @@ module SpreeCmCommissioner
           .where.not(payment_state: :paid)
           .order(created_at: :desc)
       }
-
-      # use after_update instead of after_transition
-      # since it has usecase that order state is forced to update which not fire after_transition
-
-      after_update :notify_order_complete_app_notification_to_user, if: -> { payment_state_changed_to_paid? && !subscription? }
-      after_update :notify_order_complete_telegram_notification_to_user, if: -> { state_changed_to_complete? && !subscription? }
-      after_update :request, if: -> { state_changed_to_complete? && need_confirmation? }
-      after_update :send_order_complete_telegram_alert_to_vendors, if: -> { state_changed_to_complete? && !need_confirmation? }
-      after_update :send_order_complete_telegram_alert_to_store, if: -> { state_changed_to_complete? && !need_confirmation? }
 
       state_machine :request_state, initial: nil, use_transactions: false do
         event :request do
@@ -42,6 +46,7 @@ module SpreeCmCommissioner
         event :reject do
           transition from: :requested, to: :rejected
         end
+
         after_transition to: :rejected, do: :send_order_rejected_app_notification_to_user
         after_transition to: :rejected, do: :send_order_rejected_telegram_alert_to_store
 
@@ -53,6 +58,29 @@ module SpreeCmCommissioner
           )
         end
       end
+    end
+
+    def precalculate_conversion
+      line_items.each do |item|
+        SpreeCmCommissioner::ConversionPreCalculatorJob.perform_later(item.product_id)
+      end
+    end
+
+    def generate_bib_number
+      line_items.find_each(&:generate_remaining_guests)
+
+      line_items.with_bib_prefix.each do |line_item|
+        line_item.guests.none_bib.each do |guest|
+          guest.generate_bib
+          next if guest.save
+
+          guest.errors.each do |msg|
+            errors.add(:guests, msg)
+          end
+        end
+      end
+
+      errors.empty?
     end
 
     def rejected_by(user)
@@ -76,6 +104,12 @@ module SpreeCmCommissioner
       end
     end
 
+    # overrided not to send email yet to user if order needs confirmation
+    # it will send after vendors accepted.
+    def confirmation_delivered?
+      confirmation_delivered || need_confirmation?
+    end
+
     # can_accepted? already use by ransack/visitor.rb
     def can_accept_all?
       approved? && requested?
@@ -95,10 +129,6 @@ module SpreeCmCommissioner
 
     def need_confirmation?
       line_items.any?(&:need_confirmation)
-    end
-
-    def payment_state_changed_to_paid?
-      saved_change_to_payment_state? && payment_state == 'paid'
     end
 
     def send_order_request_telegram_confirmation_alert_to_vendor; end
