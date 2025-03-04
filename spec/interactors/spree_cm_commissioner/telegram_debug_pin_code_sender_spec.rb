@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::TelegramDebugPinCodeSender do
+  let(:store) { create(:store, name: 'Test Store') }
+
   context 'email' do
     let(:pin_code) { create(:pin_code, :with_email) }
 
@@ -10,10 +12,14 @@ RSpec.describe SpreeCmCommissioner::TelegramDebugPinCodeSender do
       expect_any_instance_of(Telegram::Bot::Client).to receive(:send_message).with(
         chat_id: 'channel-id',
         parse_mode: 'HTML',
-        text: "<b>PIN CODE sent to #{pin_code.contact}</b>\n<code>#{pin_code.code}</code> is your login code",
+        text: <<~TEXT.chomp
+          <b>From: Test Store</b>
+          <b>PIN CODE sent to #{pin_code.contact}</b>
+          <code>#{pin_code.code}</code> is your login code
+        TEXT
       )
 
-      described_class.call(pin_code: pin_code)
+      described_class.call(pin_code: pin_code, name: store.name)
     end
   end
 
@@ -26,10 +32,14 @@ RSpec.describe SpreeCmCommissioner::TelegramDebugPinCodeSender do
       expect_any_instance_of(Telegram::Bot::Client).to receive(:send_message).with(
         chat_id: 'channel-id',
         parse_mode: 'HTML',
-        text: "<b>PIN CODE sent to #{pin_code.contact}</b>\n<code>#{pin_code.code}</code> is your login code",
+        text: <<~TEXT.chomp
+          <b>From: Test Store</b>
+          <b>PIN CODE sent to #{pin_code.contact}</b>
+          <code>#{pin_code.code}</code> is your login code
+        TEXT
       )
 
-      described_class.call(pin_code: pin_code)
+      described_class.call(pin_code: pin_code, name: store.name)
     end
   end
 end
