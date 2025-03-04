@@ -338,6 +338,40 @@ RSpec.describe Spree::Order, type: :model do
     end
   end
 
+  describe '#intel_phone_number' do
+    context 'when phone_number is 012290564' do
+      let!(:order) { create(:order, phone_number: '012290564', state: :address) }
+
+      it 'sets intel_phone_number to +85512290564' do
+        expect(order.intel_phone_number).to eq('+85512290564')
+      end
+    end
+
+    context 'when phone_number is +85512290564' do
+      let!(:order) { create(:order, phone_number: '+85512290564', state: :address) }
+
+      it 'sets intel_phone_number to +85512290564' do
+        expect(order.intel_phone_number).to eq('+85512290564')
+      end
+    end
+
+    context 'when phone_number is nil' do
+      let!(:order) { create(:order, phone_number: nil, state: :address) }
+
+      it 'does not set intel_phone_number' do
+        expect(order.intel_phone_number).to be_nil
+      end
+    end
+
+    context 'when phone_number is in an unexpected format' do
+      let!(:order) { create(:order, phone_number: '12345', state: :address) }
+
+      it 'does not set intel_phone_number' do
+        expect(order.intel_phone_number).to be_nil
+      end
+    end
+  end
+
   describe '#state_changes' do
     let!(:order) { create(:order, state: :address, request_state: :requested, state_changes: []) }
 
