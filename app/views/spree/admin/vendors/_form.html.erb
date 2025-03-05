@@ -48,6 +48,14 @@
     <%= f.label :commission_rate %>
     <%= f.number_field :commission_rate, step: '0.01', class: 'form-control' %>
   <% end %>
+  <%= f.field_container :meta_title do %>
+    <%= f.label :meta_title, Spree.t(:meta_title) %>
+    <%= f.text_field :meta_title, class: 'form-control', rows: 6 %>
+  <% end %>
+  <%= f.field_container :meta_description do %>
+    <%= f.label :meta_description, Spree.t(:meta_description) %>
+    <%= f.text_area :meta_description, class: 'form-control', rows: 6 %>
+  <% end %>
   <%= f.field_container :notification_email do%>
     <%= f.label :notification_email %>
     <%= f.email_field :notification_email, class: 'form-control' %>

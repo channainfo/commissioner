@@ -3,7 +3,7 @@ module Spree
     module Storefront
       module VendorSerializerDecorator
         def self.prepended(base)
-          base.attributes :min_price, :max_price, :star_rating, :short_description, :full_address, :state
+          base.attributes :min_price, :max_price, :star_rating, :short_description, :full_address, :state, :meta_title, :meta_description
 
           base.has_many :stock_locations
           base.has_many :variants, serializer: 'Spree::Variant'
