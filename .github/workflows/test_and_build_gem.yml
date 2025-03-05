@@ -1,0 +1,116 @@
+# https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-ruby
+name: Commissioner Gem
+
+on:
+  pull_request:
+    branches:
+      - develop
+  push:
+    tags:
+      - "*"
+jobs:
+  test_and_build_gem:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres:12
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_USER: myuser
+          POSTGRES_PASSWORD: mypassword
+          POSTGRES_DB: test_db
+
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v3
+
+      # - uses: borales/actions-yarn@v2.0.0
+      #   with:
+      #     cmd: install
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2.0"
+
+          # bundle-cache might cause problem when upgrading ruby. Disable it when upgrading to solve the problem.
+          # bundler-cache: true
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get -yqq install libpq-dev
+          gem install bundler
+          bundle install --jobs 4 --retry 3
+
+      - name: Quality
+        env:
+          DATABASE_URL: postgres://myuser:mypassword@localhost:5432/test_db
+        run: |
+          bundle exec rubocop
+
+      - name: Security
+        env:
+          DATABASE_URL: postgres://myuser:mypassword@localhost:5432/test_db
+        run: |
+          bundle exec brakeman
+
+      - name: Run test
+        env:
+          DATABASE_URL: postgres://myuser:mypassword@localhost:5432/test_db
+
+        if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'develop'
+        run: |
+          bundle exec rake
+
+      # 2405-build-and-publish-gem
+      # - name: Rename long migration files
+      #   env:
+      #     DATABASE_URL: postgres://myuser:mypassword@localhost:5432/test_db
+      #   # if: startsWith(github.ref, 'refs/tags/') # Only on tag pushes
+      #   if: github.ref == 'refs/heads/2405-build-and-publish-gem'
+
+      #   run: |
+      #     cd db/migrate
+      #     for file in *.rb; do
+      #       if [ ${#file} -gt 60 ]; then  # Adjust threshold if needed
+      #         # Extract timestamp (first 14 chars) and shorten the rest
+      #         timestamp=${file:0:14}
+      #         suffix=$(echo "$file" | sed 's/^[0-9]\{14\}_//' | sed 's/\.rb$//')
+      #         short_suffix=$(echo "$suffix" | cut -c1-40) # Limit suffix to 40 chars
+      #         new_name="${timestamp}_${short_suffix}.rb"
+      #         mv "$file" "$new_name"
+      #         echo "Renamed $file to $new_name"
+      #       fi
+      #     done
+
+      # Build the gem
+      - name: Build gem
+        env:
+          DATABASE_URL: postgres://myuser:mypassword@localhost:5432/test_db
+
+        # if: startsWith(github.ref, 'refs/tags/') # Only on tag pushes
+        if: |
+          startsWith(github.ref, 'refs/tags/')
+        run: |
+          gem build *.gemspec
+
+      # Publish the gem
+      - name: Publish gem
+        env:
+          DATABASE_URL: postgres://myuser:mypassword@localhost:5432/test_db
+
+        # if: startsWith(github.ref, 'refs/tags/') # Only on tag pushes
+        # (github.event_name == 'push' && github.ref == 'refs/heads/2405-build-and-publish-gem')
+        if: |
+          startsWith(github.ref, 'refs/tags/')
+        run: |
+          mkdir -p ~/.gem
+          echo ":rubygems_api_key: ${{ secrets.RUBYGEMS_API_KEY }}" > ~/.gem/credentials
+          chmod 0600 ~/.gem/credentials
+          gem push *.gem
