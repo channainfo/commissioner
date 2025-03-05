@@ -1,6 +1,6 @@
 # SpreeCmCommissioner
 
-![Commission gem build status](https://github.com/channainfo/commissioner/actions/workflows/publish.yml/badge.svg?branch= "Build status")
+![Commission gem build status](https://github.com/channainfo/commissioner/actions/workflows/test_and_build_gem.yml/badge.svg?branch= "Build status")
 
 An application platform built on top of Spree commerce for modeling any bussiness applications.
 
@@ -198,29 +198,23 @@ This setup allows you to configure the environment and database services in a si
 
 To release the gem:
 
-- 1: Bump new version in the file: lib/spree_cm_commissioner/version.rb, for example
+1; Bump new version in the file: lib/spree_cm_commissioner/version.rb, for example
 
-```ruby
-VERSION = '1.8.0-beta1'.freeze
-```
+  ```ruby
+  VERSION = '1.8.0-beta1'.freeze
+  ```
 
 to release `1.8.0-beta1`
 
-- 2: Tag a repo with the same version, for example
+2; Tag a repo with the same version, for example
 
-```sh
-git tag 1.8.0-beta1
-```
+  ```sh
+  git tag 1.8.0-beta1
+  ```
 
-- 3: Push the tag to the repo and github action will build and push the gem to rubygem.org.
-- 4: Get the gem version to the project in cm-market-server.
+3; Push the tag to the repo and github action will build and push the gem to rubygem.org.
 
-```sh
-bundle exec gem bump -p -t
-bundle exec gem release
-```
-
-For more options please see [gem-release REAMDE](https://github.com/svenfuchs/gem-release)
+4; Get the gem version to the project in cm-market-server.
 
 ## Troubleshooting Database Lock on Taxonomy Creation Errors
 
