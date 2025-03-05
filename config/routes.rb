@@ -446,6 +446,7 @@ Spree::Core::Engine.add_routes do
       namespace :tenant do
         resources :vendors
         resources :products
+        resources :taxons, only: %i[index show], id: /.+/
 
         resources :account_checker
         resource :pin_code_checkers, only: [:update]
