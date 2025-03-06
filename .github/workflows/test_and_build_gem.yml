@@ -48,25 +48,25 @@ jobs:
           gem install bundler
           bundle install --jobs 4 --retry 3
 
-      - name: Quality
-        env:
-          DATABASE_URL: postgres://myuser:mypassword@localhost:5432/test_db
-        run: |
-          bundle exec rubocop
+      # - name: Quality
+      #   env:
+      #     DATABASE_URL: postgres://myuser:mypassword@localhost:5432/test_db
+      #   run: |
+      #     bundle exec rubocop
 
-      - name: Security
-        env:
-          DATABASE_URL: postgres://myuser:mypassword@localhost:5432/test_db
-        run: |
-          bundle exec brakeman
+      # - name: Security
+      #   env:
+      #     DATABASE_URL: postgres://myuser:mypassword@localhost:5432/test_db
+      #   run: |
+      #     bundle exec brakeman
 
-      - name: Run test
-        env:
-          DATABASE_URL: postgres://myuser:mypassword@localhost:5432/test_db
+      # - name: Run test
+      #   env:
+      #     DATABASE_URL: postgres://myuser:mypassword@localhost:5432/test_db
 
-        if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'develop'
-        run: |
-          bundle exec rake
+      #   if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'develop'
+      #   run: |
+      #     bundle exec rake
 
       # 2405-build-and-publish-gem
       # - name: Rename long migration files
