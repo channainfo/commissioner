@@ -42,6 +42,8 @@ RSpec.describe Spree::V2::Storefront::AccommodationSerializer, type: :serializer
         :remaining,
         :full_address,
         :state,
+        :meta_title,
+        :meta_description
       )
     end
 
