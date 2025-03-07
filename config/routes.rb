@@ -479,6 +479,16 @@ Spree::Core::Engine.add_routes do
           patch  :complete
         end
 
+        resources :customer_notifications, only: [:show]
+        resources :notifications do
+          collection do
+            patch :mark_all_as_read
+          end
+          member do
+            patch :mark_as_read
+          end
+        end
+
         resources :user_account_linkages, only: %i[index create destroy]
       end
 

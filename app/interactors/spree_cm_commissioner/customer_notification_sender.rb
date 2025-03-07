@@ -55,15 +55,20 @@ module SpreeCmCommissioner
     end
 
     def end_users
+      users_scope = Spree.user_class.where(tenant_id: customer_notification.tenant_id)
+
       if customer_notification.notification_taxons.exists?
         taxon_ids = customer_notification.notification_taxons.pluck(:taxon_id)
-        SpreeCmCommissioner::UsersByEventFetcherQuery
-          .new(taxon_ids)
-          .call
-          .end_users_push_notificable
+        users_scope = SpreeCmCommissioner::UsersByEventFetcherQuery
+                      .new(taxon_ids)
+                      .call
+                      .end_users_push_notificable
+                      .where(tenant_id: customer_notification.tenant_id)
       else
-        Spree.user_class.end_users_push_notificable
+        users_scope = users_scope.end_users_push_notificable
       end
+
+      users_scope
     end
   end
 end
