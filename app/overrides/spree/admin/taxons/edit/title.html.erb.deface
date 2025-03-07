@@ -1,6 +1,8 @@
 <!-- replace "erb[silent]:contains('unless @taxon.root?')" closing_selector "erb[silent]:contains('end')" -->
 
-    <%if @taxon.depth !=1 %>
-  / <%= link_to @taxon.parent.name, spree.edit_admin_taxonomy_taxon_url(@taxonomy,@taxon.parent.id) %>
+    <%if @taxon.depth !=1 && @taxon.parent.present? %>
+  / <%= link_to @taxon.parent.name, spree.edit_admin_taxonomy_taxon_url(@taxonomy,@taxon.parent.id)   %>
     <%end%>
+  <% unless @taxon.root? %>
   / <%= @taxon.name %>
+  <% end %>
