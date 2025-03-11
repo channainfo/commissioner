@@ -5,7 +5,6 @@ module SpreeCmCommissioner
     def initialize(variant_id:, service_type:)
       @variant_id = variant_id
       @service_type = service_type
-      @redis = Redis.new
     end
 
     def book_inventory(start_date, end_date, quantity)
@@ -45,8 +44,8 @@ module SpreeCmCommissioner
 
     def decrease_quantity_inventory_in_redis(keys, quantity)
       results = []
-      byebug
-      RedisConnection.pool.with do|redis|
+
+      SpreeCmCommissioner.redis_pool.with do |redis|
         redis.pipelined do |pipeline|
           results = keys.map { |key| pipeline.decrby(key, quantity) }
         end

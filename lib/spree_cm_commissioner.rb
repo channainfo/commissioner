@@ -41,3 +41,40 @@ require 'cm_app_logger'
 require 'counter_culture'
 
 require 'byebug' if Rails.env.development? || Rails.env.test?
+
+module SpreeCmCommissioner
+  class << self
+    attr_accessor :redis_pool
+
+    def redis_pool
+      @redis_pool ||= default_redis_pool
+    end
+
+    # Allow overriding the pool
+    def redis_pool=(custom_redis_pool)
+      @redis_pool = custom_redis_pool
+    end
+
+    # Reset pool for testing or reinitialization
+    def reset_redis_pool
+      @redis_pool = nil
+    end
+
+    private
+
+    def default_redis_pool
+      pool_size = ENV['MY_GEM_REDIS_POOL_SIZE']&.to_i || DEFAULT_POOL_SIZE
+      timeout = ENV['MY_GEM_REDIS_TIMEOUT']&.to_i || DEFAULT_TIMEOUT
+      redis_url = ENV['MY_GEM_REDIS_URL'] || DEFAULT_REDIS_URL
+
+      ConnectionPool.new(size: pool_size, timeout: timeout) do
+        Redis.new(url: redis_url, timeout: timeout)
+      end
+    end
+
+  end
+
+  def self.configure
+    yield self
+  end
+end
