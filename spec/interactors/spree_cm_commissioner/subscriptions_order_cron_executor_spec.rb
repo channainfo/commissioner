@@ -21,8 +21,6 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCronExecutor do
   let(:customer4) { create(:cm_customer, vendor: vendor, phone_number: "0992200288", status: :inactive) }
 
   before do
-    allow(variant).to receive(:in_stock?).and_return(true)
-    
     allow_any_instance_of(SpreeCmCommissioner::Subscription).to receive(:date_within_range).and_return(true)
     today = Time.zone.today
     today.day < 15 ?  three_month_ago = (today - 3.month).change(day: 14) : three_month_ago = (today - 3.month).change(day: 15)
