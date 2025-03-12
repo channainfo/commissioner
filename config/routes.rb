@@ -480,6 +480,8 @@ Spree::Core::Engine.add_routes do
         end
 
         resources :user_account_linkages, only: %i[index create destroy]
+        resource :s3_signed_urls
+        resource :profile_images, only: %i[update destroy]
       end
 
       namespace :storefront do
