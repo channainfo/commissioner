@@ -3,6 +3,7 @@ module SpreeCmCommissioner
     belongs_to :taxon, class_name: 'Spree::Taxon'
     belongs_to :inviter, class_name: 'Spree::User'
     has_many :invite_user_events, class_name: 'SpreeCmCommissioner::InviteUserEvent', dependent: :destroy
+    scope :active, -> { where('expires_at > ?', Time.current) }
 
     after_create :set_expiration
 
