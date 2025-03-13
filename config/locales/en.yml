@@ -565,3 +565,10 @@ en:
   user_roles_assigner:
     user_not_found: 'User not found'
     roles_empty: 'Roles are empty'
+  invite:
+    url_not_found: 'Invite link not found or have been expired'
+    accept_fail: 'Failed to accept invite'
+    url_expired: 'Invitation link is expired'
+    already_invited: 'Failed: User already invited to event'
+    update_fail: 'Failed: to Update invite user'
+

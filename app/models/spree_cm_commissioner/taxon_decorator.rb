@@ -48,6 +48,8 @@ module SpreeCmCommissioner
       base.whitelisted_ransackable_attributes |= %w[kind]
 
       base.enum purchasable_on: { both: 0, web: 1, app: 2 }
+      base.has_many :crew_invites, class_name: 'SpreeCmCommissioner::CrewInvite', dependent: :destroy
+      base.has_many :invite_user_events, through: :user_events, class_name: 'SpreeCmCommissioner::InviteUserEvent'
     end
     # rubocop:enable Metrics/MethodLength
 

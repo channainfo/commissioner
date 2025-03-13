@@ -441,6 +441,7 @@ Spree::Core::Engine.add_routes do
         end
         resources :images
         resource :s3_signed_urls
+        resources :invites
       end
 
       namespace :tenant do
