@@ -8,7 +8,7 @@ module SpreeCmCommissioner
 
       def book_inventory(start_date, end_date, quantity)
         # Todo: need validation for quantity, start_date, and end_date
-        booking_query.book_inventory(start_date, end_date, quantity)
+        booking_query.book_inventory!(start_date, end_date, quantity)
       end
 
       private

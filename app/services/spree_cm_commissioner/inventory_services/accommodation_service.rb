@@ -15,7 +15,6 @@ module SpreeCmCommissioner
       # The search result: should display King room is available or not?
 
       # Guest should check if room available?, why check num_guests?
-
       # Assume: guest 1 => room1
 
       def fetch_inventory(check_in, check_out, num_guests)
@@ -24,7 +23,6 @@ module SpreeCmCommissioner
         inventory = fetch_available_inventory(check_in, check_out)
 
         # Todo: not quite sure for this logic
-
         return nil unless inventory.size == (check_in..check_out.prev_day).count &&
                           inventory.all? { |i| i.max_capacity >= num_guests && i.quantity_available > 0 }
         inventory.map(&:quantity_available).min # Minimum available over range

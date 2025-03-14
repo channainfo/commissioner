@@ -1,12 +1,9 @@
-require 'redis'
-
 module SpreeCmCommissioner
   class InventoryQuery
     def fetch_available_inventory(variant_id, start_date = nil, end_date = nil, service_type)
       scope = build_scope(variant_id, start_date, end_date, service_type)
       inventory_rows = scope.to_a
       return [] if inventory_rows.empty?
-
       cached_counts = fetch_cached_counts(inventory_rows)
       build_inventory_results(inventory_rows, cached_counts)
     end
@@ -25,13 +22,12 @@ module SpreeCmCommissioner
       scope
     end
 
-    def redis
-      @redis ||= Redis.new
-    end
-
     def fetch_cached_counts(inventory_rows)
       keys = inventory_rows.map { |row| "inventory:#{row.id}" }
-      redis.mget(*keys)
+
+      SpreeCmCommissioner.redis_pool.with do |redis|
+        redis.mget(*keys)
+      end
     end
 
     def build_inventory_results(inventory_rows, cached_counts)
@@ -42,7 +38,7 @@ module SpreeCmCommissioner
     end
 
     def determine_quantity_available(row, cached_count)
-      if cached_count.nil?
+      if cached_count.nil? || row.quantity_available != cached_count.to_i
         cache_inventory(row)
         row.quantity_available
       else
@@ -53,7 +49,10 @@ module SpreeCmCommissioner
     def cache_inventory(row)
       key = "inventory:#{row.id}"
       expiration_in = calculate_expiration_in_second(row.inventory_date)
-      redis.set(key, row.quantity_available, ex: expiration_in)
+
+      SpreeCmCommissioner.redis_pool.with do |redis|
+        redis.set(key, row.quantity_available, ex: expiration_in)
+      end
     end
 
     def calculate_expiration_in_second(inventory_date)

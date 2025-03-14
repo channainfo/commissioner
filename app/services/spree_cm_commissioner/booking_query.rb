@@ -1,5 +1,3 @@
-require 'redis'
-
 module SpreeCmCommissioner
   class BookingQuery
     def initialize(variant_id:, service_type:)
@@ -7,62 +5,76 @@ module SpreeCmCommissioner
       @service_type = service_type
     end
 
-    def book_inventory(start_date, end_date, quantity)
-      inventory_ids = find_inventory_ids(start_date, end_date)
-      keys = build_inventory_keys(inventory_ids)
+    def book_inventory!(start_date, end_date, quantity)
+      inventory_ids = fetch_available_inventory(start_date, end_date)
+      inventory_keys = generate_inventory_keys(inventory_ids)
 
-      if update_inventory_counts_in_redis(keys, quantity)
-        enqueue_sync_inventory_unit(inventory_ids, quantity)
+      if reserve_inventory(inventory_keys, quantity)
+        schedule_sync_inventory(inventory_ids, quantity)
         true
       else
-        raise "Not enough inventory"
+        raise StandardError, "Not enough inventory available"
       end
     end
 
     private
 
-    attr_reader :redis, :service_type, :variant_id
+    attr_reader :variant_id, :service_type
 
-    def build_inventory_keys(inventory_ids)
-      inventory_ids.map { |id| "inventory:#{id}" }
-    end
-
-    def find_inventory_ids(start_date, end_date)
+    def fetch_available_inventory(start_date, end_date)
       scope = InventoryUnit.for_service(service_type).where(variant_id: variant_id)
       scope = scope.where(inventory_date: start_date..end_date.prev_day) if start_date && end_date
-      scope = scope.where(inventory_date: nil) if service_type == 'event'
+      scope = scope.where(inventory_date: nil) if service_type == InventoryUnit::SERVICE_TYPE_EVENT
       scope.pluck(:id)
     end
 
-    def update_inventory_counts_in_redis(keys, quantity)
-      results = decrease_quantity_inventory_in_redis(keys, quantity)
-      success = results.all? { |count| count >= 0 }
-
-      rollback_inventory_updates(keys, quantity) unless success
-      success
+    def generate_inventory_keys(inventory_ids)
+      inventory_ids.map { |id| "inventory:#{id}" }
     end
 
-    def decrease_quantity_inventory_in_redis(keys, quantity)
-      results = []
-
+    def reserve_inventory(keys, quantity)
       SpreeCmCommissioner.redis_pool.with do |redis|
-        redis.pipelined do |pipeline|
-          results = keys.map { |key| pipeline.decrby(key, quantity) }
-        end
-      end
-
-      results.map { |r| r.value }
-    end
-
-    def rollback_inventory_updates(keys, quantity)
-      RedisConnection.pool.with do|redis|
-        redis.pipelined do |pipeline|
-          keys.each { |key| pipeline.incrby(key, quantity) }
-        end
+        redis_transaction_result(redis, keys, quantity).positive?
       end
     end
 
-    def enqueue_sync_inventory_unit(inventory_ids, quantity)
+    def redis_transaction_result(redis, keys, quantity)
+      redis.eval(
+        inventory_update_script,
+        keys: keys,
+        argv: [quantity]
+      )
+    end
+
+    def inventory_update_script
+      <<~LUA
+        local keys = KEYS
+        local qty = tonumber(ARGV[1])
+        local original_counts = {}
+        local new_counts = {}
+
+        -- Capture original counts and attempt decrement
+        for i, key in ipairs(keys) do
+          original_counts[i] = redis.call('GET', key) or 0
+          new_counts[i] = redis.call('DECRBY', key, qty)
+        end
+
+        -- Validate all new counts are non-negative
+        for i, count in ipairs(new_counts) do
+          if tonumber(count) < 0 then
+            -- Rollback transaction if any count goes negative
+            for j, key in ipairs(keys) do
+              redis.call('SET', key, original_counts[j])
+            end
+            return 0
+          end
+        end
+
+        return 1
+      LUA
+    end
+
+    def schedule_sync_inventory(inventory_ids, quantity)
       SyncInventoryJob.perform_later(inventory_ids, quantity)
     end
   end
