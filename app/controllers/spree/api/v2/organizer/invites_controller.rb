@@ -17,7 +17,7 @@ module Spree
             if context.success?
               render_serialized_payload { serialize_resource(context.invite) }
             else
-              render_error_payload({ message: context.message || I18n.t('invite.accept_fail') })
+              render_error_payload(context.message || I18n.t('invite.accept_fail'))
             end
           end
 
