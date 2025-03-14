@@ -46,7 +46,12 @@ module SpreeCmCommissioner
       'bib-zerofill' => 'integer',
       'bib-display-prefix' => 'boolean',
       'bib-pre-generation-on-create' => 'boolean',
-      'seat-number-positions' => 'array'
+      'seat-number-positions' => 'array',
+      'origin' => 'origin',
+      'destination' => 'destination',
+      'departure-time' => 'time',
+      'vehicle' => 'vehicle_id',
+      'allow-seat-selection' => 'boolean'
     }.freeze
 
     included do

@@ -147,6 +147,36 @@ FactoryBot.define do
       presentation { 'seat-number-positions' }
     end
 
+    trait :origin do
+      attr_type { :origin }
+      name { 'origin' }
+      presentation { 'origin' }
+    end
+
+    trait :destination do
+      attr_type { :destination }
+      name { 'destination' }
+      presentation { 'destination' }
+    end
+
+    trait :departure_time do
+      attr_type { :time }
+      name { 'departure-time' }
+      presentation { 'departure-time' }
+    end
+
+    trait :vehicle do
+      attr_type { :vehicle_id }
+      name { 'vehicle' }
+      presentation { 'vehicle' }
+    end
+
+    trait :allow_seat_selection do
+      attr_type { :boolean }
+      name { 'allow-seat-selection' }
+      presentation { 'allow-seat-selection' }
+    end
+
     initialize_with { Spree::OptionType.where(name: name).first_or_initialize }
   end
 end
