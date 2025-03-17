@@ -3,7 +3,7 @@ module SpreeCmCommissioner
     private
 
     def abilities_to_register
-      super << SpreeCmCommissioner::CheckInAbility
+      super.reject { |ability| ability == Spree::VendorAbility } << SpreeCmCommissioner::CheckInAbility
     end
 
     def current_ability
