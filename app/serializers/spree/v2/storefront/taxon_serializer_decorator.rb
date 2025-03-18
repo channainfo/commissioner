@@ -22,6 +22,8 @@ module Spree
           base.attribute :purchasable_on_web do |taxon|
             taxon.purchasable_on == 'web' || taxon.purchasable_on == 'both'
           end
+
+          base.cache_options store: nil
         end
       end
     end
