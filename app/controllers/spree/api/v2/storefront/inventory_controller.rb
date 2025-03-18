@@ -23,8 +23,7 @@ module Spree
                       else
                         render_error("Invalid service_type", 400) and return
                       end
-
-            render json: results
+            render json: Spree::V2::Storefront::InventorySerializer.new(results).serializable_hash
           end
 
           private
