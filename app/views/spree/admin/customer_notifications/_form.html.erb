@@ -74,5 +74,13 @@
         <%= f.error_message_on :taxon_ids %>
       </div>
     </div>
+
+    <div class="col-lg-12 col-sm-12">
+      <div class="form-group">
+      <%= f.label :tenant_id, raw(Spree.t(:tenant) + ' (optional)') %>
+      <%= f.collection_select :tenant_id, SpreeCmCommissioner::Tenant.all, :id, :name, { prompt: Spree.t(:select_tenant) }, { class: 'form-control select2' } %>
+      <%= f.error_message_on :tenant_id %>
+      </div>
+    </div>
   </div>
 </div>
