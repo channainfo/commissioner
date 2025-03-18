@@ -73,6 +73,19 @@ module SpreeCmCommissioner
       available_quantity.positive?
     end
 
+    # TODO: refactor and double check for logic
+    # For inventory_unit quantity_available, and max_capacity
+    def inventory_unit_stock
+      case product_type
+      when 'event', 'ecommerce', 'accommodation'
+        { quantity_available: stock_items.sum(:count_on_hand), max_capacity: 0 }
+      when 'bus', 'transit'
+        { quantity_available: product.trip.vehicle.number_of_seats, max_capacity: 0 }
+      else
+        {}
+      end
+    end
+
     private
 
     def total_purchases

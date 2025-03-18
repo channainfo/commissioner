@@ -23,9 +23,12 @@ module SpreeCmCommissioner
         inventory = fetch_available_inventory(check_in, check_out)
 
         # Todo: not quite sure for this logic
+        # I want to book 2 days, I have 3 people, the hotel tell me that, day1 has 5 room, but day 2 has 2 room,
+        # So if day 2 has 2 room, I won't book it.
         return nil unless inventory.size == (check_in..check_out.prev_day).count &&
                           inventory.all? { |i| i.max_capacity >= num_guests && i.quantity_available > 0 }
-        inventory.map(&:quantity_available).min # Minimum available over range
+
+        inventory.min_by { |i| i[:quantity_available] } # Minimum available over range
       end
 
       private

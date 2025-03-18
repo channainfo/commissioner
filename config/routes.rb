@@ -483,6 +483,10 @@ Spree::Core::Engine.add_routes do
       end
 
       namespace :storefront do
+        resources :inventory do
+          post :book, on: :collection
+        end
+
         resources :waiting_room_sessions, only: :create
 
         resource :cart, controller: :cart, only: %i[show create destroy] do
