@@ -33,6 +33,7 @@ module Spree
       preferred_foreground_color
       show_badge_status
       purchasable_on
+      available_on
       vendor_id
     ]
 

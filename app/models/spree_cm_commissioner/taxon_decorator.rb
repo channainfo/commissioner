@@ -28,6 +28,7 @@ module SpreeCmCommissioner
       base.has_one :web_banner, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::TaxonWebBanner'
       base.has_one :app_banner, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::TaxonAppBanner'
       base.has_one :home_banner, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::TaxonHomeBanner'
+      base.has_one :video_banner, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::TaxonVideoBanner'
 
       # Update children association to work with nested set (lft, rgt)
       base.has_many :children, -> { order(:lft) }, class_name: 'Spree::Taxon', foreign_key: :parent_id, dependent: :destroy

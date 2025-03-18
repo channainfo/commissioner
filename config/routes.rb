@@ -173,6 +173,7 @@ Spree::Core::Engine.add_routes do
           delete :remove_app_banner
           delete :remove_web_banner
           delete :remove_home_banner
+          delete :remove_video_banner
         end
       end
     end

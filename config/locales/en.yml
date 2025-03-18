@@ -41,6 +41,8 @@ en:
     app_banner: App Banner (16x9)
     web_banner: Web banner (10x2)
     home_banner: Home Banner (16x9)
+    video_banner: Video Banner (9x16)
+    video_banner_require_size: Maximum size 10MB
     note: "<b>Note:</b> Subtitle is used for country code in Nationality Taxon"
 
   taxon_vendor:
