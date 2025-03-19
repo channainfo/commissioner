@@ -5,48 +5,64 @@ module Spree
       module Storefront
         class InventoryController < ::Spree::Api::V2::ResourceController
           before_action :find_product, only: [:index, :book]
+          before_action :find_variant, only: :book
 
           # Query available inventory
           def index
-            variants = @product.variants
-            results = case service_type
-                      when "event"
-                        variants.map { |v| fetch_event_inventory(v.id) }
-                      when "bus"
-                        trip_date = Date.parse(params[:trip_date])
-                        variants.map { |v| fetch_bus_inventory(v.id, trip_date) }
-                      when "accommodation"
-                        check_in = Date.parse(params[:check_in])
-                        check_out = Date.parse(params[:check_out])
-                        num_guests = params[:num_guests].to_i
-                        variants.map { |v| fetch_accommodation_inventory(v.id, check_in, check_out, num_guests) }.compact
-                      else
-                        render_error("Invalid service_type", 400) and return
-                      end
-            render json: Spree::V2::Storefront::InventorySerializer.new(results).serializable_hash
+            context = SpreeCmCommissioner::InventoryFetcher.call(
+              variants: @product.variants,
+              params: fetching_param,
+              service_type: service_type
+            )
+
+            if context.success?
+              render json: Spree::V2::Storefront::InventorySerializer.new(context.results).serializable_hash
+            else
+              render_error(context.message, 400)
+            end
+          end
+
+          # Book inventory
+          def book
+            context = SpreeCmCommissioner::BookingHandler.call(
+              variant_id: @variant.id,
+              params: booking_param,
+              service_type: service_type
+            )
+
+            if context.success?
+              # TODO: Add to cart (simplified; integrate with Spree::Order as needed)
+              # cart_service = Spree::CartService.new(order: current_order)
+              # cart_service.add(variant.id, quantity, booking_params(service_type))
+              # render json: { message: "Booking successful", order_id: current_order.id }, status: :created
+              render json: { message: "Booking successful" }, status: :created
+            else
+              render_error(context.message, 422)
+            end
           end
 
           private
 
           # Inventory query
-          def fetch_event_inventory(variant_id)
-            SpreeCmCommissioner::InventoryServices::EventService.new(variant_id).fetch_inventory
+          def fetching_param
+            params.permit(:trip_date, :check_in, :check_out, :num_guests)
           end
 
-          def fetch_bus_inventory(variant_id, trip_date)
-            SpreeCmCommissioner::InventoryServices::BusService.new(variant_id).fetch_inventory(trip_date)
-          end
-
-          def fetch_accommodation_inventory(variant_id, check_in, check_out, num_guests)
-            SpreeCmCommissioner::InventoryServices::AccommodationService.new(variant_id).fetch_inventory(check_in, check_out, num_guests)
+          # Booking query
+          def booking_param
+            params.permit(:trip_date, :check_in, :check_out, :quanity)
           end
 
           def service_type
-            @service_type ||= @product.service_type
+            params[:service_type]
           end
 
           def find_product
             @product = Spree::Product.find_by!(id: params[:product_id])
+          end
+
+          def find_variant
+            @variant = @product.variants.find(params[:variant_id])
           end
 
           def render_error(message, status)

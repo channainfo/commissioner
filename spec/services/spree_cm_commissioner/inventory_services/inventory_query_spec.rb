@@ -1,7 +1,7 @@
 require "spec_helper"
 
 module SpreeCmCommissioner
-  RSpec.describe InventoryQuery, type: :model do
+  RSpec.describe InventoryServices::InventoryQuery, type: :model do
     let(:variant) { create(:cm_variant) }
     let(:variant_id) { variant.id }
     let(:start_date) { Date.today.beginning_of_month }
