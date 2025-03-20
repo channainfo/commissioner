@@ -16,37 +16,34 @@ module SpreeCmCommissioner
 
       # Guest should check if room available?, why check num_guests?
       # Assume: guest 1 => room1
-
+      # TODO: this method may be removed when scaling concept testing is finished
       def fetch_inventory(check_in, check_out, num_guests)
         return nil unless valid_dates?(check_in, check_out)
 
-        inventory = fetch_available_inventory(check_in, check_out)
+        inventories = fetch_available_inventory(check_in, check_out)
+        day_count = (check_in..check_out.prev_day).count
 
-        # Todo: not quite sure for this logic
-        # I want to book 2 days, I have 3 people, the hotel tell me that, day1 has 5 room, but day 2 has 2 room,
-        # So if day 2 has 2 room, I won't book it.
-        return nil unless inventory.size == (check_in..check_out.prev_day).count &&
-                          inventory.all? { |i| i.max_capacity >= num_guests && i.quantity_available > 0 }
-
-        inventory.min_by { |i| i[:quantity_available] } # Minimum available over range
+        available_inventory(@variant_id, inventories, day_count, num_guests)
       end
 
       def with_available_inventory(check_in, check_out, num_guests)
         return [] unless valid_dates?(check_in, check_out)
 
         inventories = fetch_available_inventory(check_in, check_out)
-
         day_count = (check_in..check_out.prev_day).count
+
         variant_ids = inventories.pluck(:variant_id).uniq
-        result = variant_ids.map{ |variant_id| check_matching_inventory(variant_id, inventories, day_count, num_guests)}
+        result = variant_ids.map{ |variant_id| available_inventory(variant_id, inventories, day_count, num_guests)}
         result.compact
       end
 
       private
 
-      def check_matching_inventory(variant_id, inventories, day_count, num_guests)
+      def available_inventory(variant_id, inventories, day_count, num_guests)
         inventory = inventories.select { |item| item.variant_id == variant_id }
 
+        # I want to book 2 days, I have 3 people, the hotel tell me that, day1 has 5 room, but day2 has 2 room,
+        # So if day 2 has 2 room, I won't book it.
         return nil unless inventory.size == day_count &&
                           inventory.all? { |i| i.max_capacity >= num_guests && i.quantity_available > 0 }
 

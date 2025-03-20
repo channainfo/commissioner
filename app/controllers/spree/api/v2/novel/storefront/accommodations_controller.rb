@@ -48,11 +48,11 @@ module Spree
             end
 
             def collection_finder
-              SpreeCmCommissioner::AccommodationUnitSearch
+              SpreeCmCommissioner::AccommodationSearcher
             end
 
             def resource_finder
-              SpreeCmCommissioner::AccommodationUnitSearch
+              SpreeCmCommissioner::AccommodationSearcher
             end
 
             def required_schema

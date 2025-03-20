@@ -1,7 +1,7 @@
 # rubocop:disable Style/MissingRespondToMissing
 
 module SpreeCmCommissioner
-  class AccommodationUnitSearch < BaseInteractor
+  class AccommodationSearcher < BaseInteractor
     delegate :params, to: :context
     before :prepare_params
     before :check_is_detail
@@ -25,14 +25,6 @@ module SpreeCmCommissioner
     end
 
     protected
-
-    def where_query
-      where_query = {
-        active: true
-      }
-      where_query[:presentation] = province_id.to_s if province_id
-      where_query
-    end
 
     def check_is_detail
       context.properties[:vendor_id] = nil
