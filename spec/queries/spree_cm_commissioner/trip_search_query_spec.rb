@@ -7,15 +7,15 @@ RSpec.describe SpreeCmCommissioner::TripSearchQuery do
   let!(:buva_sea) {create(:vendor, name:'Buva Sea', code:"BS")}
 
   #location
-  let!(:phnom_penh) { create(:transit_place, name: 'Phnom Penh', data_type:8) }
-  let!(:siem_reap) { create(:transit_place, name: 'Siem Reap', data_type:8) }
-  let!(:sihanoukville) { create(:transit_place, name: 'Sihanoukville', data_type:8) }
-  let!(:koh_rong) {create(:transit_place, name: 'Koh Rong', data_type:8)}
-  let!(:aeon2) {create(:transit_place, name: 'Aeon Mall 2', data_type:1)}
-  let!(:aeon1) {create(:transit_place, name: 'Aeon Mall 1', data_type:1)}
-  let!(:phsar_kandal) {create(:transit_place, name: 'Phsar Kandal', data_type:1)}
-  let!(:angkor_aquarium) {create(:transit_place, name: 'Angkor Aquarium', data_type:1)}
-  let!(:angkor_wat) {create(:transit_place, name: 'Angkor Wat', data_type:1)}
+  let!(:phnom_penh) { create(:cm_place, name: 'Phnom Penh') }
+  let!(:siem_reap) { create(:cm_place, name: 'Siem Reap') }
+  let!(:sihanoukville) { create(:cm_place, name: 'Sihanoukville') }
+  let!(:koh_rong) {create(:cm_place, name: 'Koh Rong')}
+  let!(:aeon2) {create(:cm_place, name: 'Aeon Mall 2')}
+  let!(:aeon1) {create(:cm_place, name: 'Aeon Mall 1')}
+  let!(:phsar_kandal) {create(:cm_place, name: 'Phsar Kandal')}
+  let!(:angkor_aquarium) {create(:cm_place, name: 'Angkor Aquarium')}
+  let!(:angkor_wat) {create(:cm_place, name: 'Angkor Wat')}
 
   #Vehicle Type
   let!(:airbus) {create(:vehicle_type,

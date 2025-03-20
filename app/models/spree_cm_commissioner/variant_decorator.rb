@@ -21,6 +21,7 @@ module SpreeCmCommissioner
       base.has_many :variant_guest_card_class, class_name: 'SpreeCmCommissioner::VariantGuestCardClass'
       base.has_many :guest_card_classes, class_name: 'SpreeCmCommissioner::GuestCardClass', through: :variant_guest_card_class
 
+      base.has_many :trip_stops, class_name: 'SpreeCmCommissioner::TripStop', dependent: :destroy, foreign_key: :trip_id
       base.scope :subscribable, -> { active.joins(:product).where(product: { subscribable: true, status: :active }) }
 
       base.accepts_nested_attributes_for :option_values
