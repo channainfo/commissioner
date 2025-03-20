@@ -31,7 +31,27 @@ module SpreeCmCommissioner
         inventory.min_by { |i| i[:quantity_available] } # Minimum available over range
       end
 
+      def with_available_inventory(check_in, check_out, num_guests)
+        return [] unless valid_dates?(check_in, check_out)
+
+        inventories = fetch_available_inventory(check_in, check_out)
+
+        day_count = (check_in..check_out.prev_day).count
+        variant_ids = inventories.pluck(:variant_id).uniq
+        result = variant_ids.map{ |variant_id| check_matching_inventory(variant_id, inventories, day_count, num_guests)}
+        result.compact
+      end
+
       private
+
+      def check_matching_inventory(variant_id, inventories, day_count, num_guests)
+        inventory = inventories.select { |item| item.variant_id == variant_id }
+
+        return nil unless inventory.size == day_count &&
+                          inventory.all? { |i| i.max_capacity >= num_guests && i.quantity_available > 0 }
+
+        inventory.min_by { |i| i[:quantity_available] }
+      end
 
       def valid_dates?(check_in, check_out)
         return false if check_in.blank? || check_out.blank?

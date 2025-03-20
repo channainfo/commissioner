@@ -2,8 +2,8 @@ module SpreeCmCommissioner
   module InventoryServices
     class InventoryQuery
       def fetch_available_inventory(variant_id, start_date = nil, end_date = nil, service_type)
-        scope = build_scope(variant_id, start_date, end_date, service_type)
-        inventory_rows = scope.to_a
+        inventory_rows = build_scope(variant_id, start_date, end_date, service_type).to_a
+
         return [] if inventory_rows.empty?
         cached_counts = fetch_cached_counts(inventory_rows)
         build_inventory_results(inventory_rows, cached_counts)
@@ -12,7 +12,8 @@ module SpreeCmCommissioner
       private
 
       def build_scope(variant_id, start_date, end_date, service_type)
-        scope = InventoryUnit.for_service(service_type).where(variant_id: variant_id)
+        scope = InventoryUnit.for_service(service_type)
+        scope = scope.where(variant_id: variant_id) if variant_id.present?
 
         if start_date && end_date
           scope = scope.where(inventory_date: start_date..end_date.prev_day)

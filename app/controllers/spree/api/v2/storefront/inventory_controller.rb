@@ -16,13 +16,14 @@ module Spree
             )
 
             if context.success?
-              render json: Spree::V2::Storefront::InventorySerializer.new(context.results).serializable_hash
+              render json: Spree::V2::Storefront::InventorySerializer.new(context.results || []).serializable_hash
             else
               render_error(context.message, 400)
             end
           end
 
           # Book inventory
+          # Create add to cart, update inventory_unit
           def book
             context = SpreeCmCommissioner::BookingHandler.call(
               variant_id: @variant.id,
