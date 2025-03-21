@@ -45,7 +45,8 @@ module SpreeCmCommissioner
         # I want to book 2 days, I have 3 people, the hotel tell me that, day1 has 5 room, but day2 has 2 room,
         # So if day 2 has 2 room, I won't book it.
         return nil unless inventory.size == day_count &&
-                          inventory.all? { |i| i.max_capacity >= num_guests && i.quantity_available > 0 }
+                          inventory.all? { |i| i.max_capacity >= num_guests && i.quantity_available >= num_guests }
+                          # inventory.all? { |i| i.max_capacity >= num_guests && i.quantity_available > 0 }
 
         inventory.min_by { |i| i[:quantity_available] }
       end

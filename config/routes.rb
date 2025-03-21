@@ -482,6 +482,12 @@ Spree::Core::Engine.add_routes do
         resources :user_account_linkages, only: %i[index create destroy]
       end
 
+      namespace :novel do
+        namespace :storefront do
+          resources :accommodations, only: %i[index show]
+        end
+      end
+
       namespace :storefront do
         resources :inventory do
           post :book, on: :collection

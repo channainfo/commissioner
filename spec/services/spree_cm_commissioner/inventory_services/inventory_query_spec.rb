@@ -67,6 +67,16 @@ module SpreeCmCommissioner
 
     describe 'private methods' do
       context '#build_scope' do
+        context 'variant_id is nil' do
+          it "returns result without query variant_id" do
+            inventory_unit
+
+            scope = service.send(:build_scope, nil, start_date, end_date, service_type)
+            expect(scope.to_a.length).to eq(1)
+            expect(scope.to_a).to eq(InventoryUnit.where(inventory_date: start_date..end_date.prev_day).to_a)
+          end
+        end
+
         it 'returns the correct scope when date range is provided' do
           inventory_unit
           scope = service.send(:build_scope, variant_id, start_date, end_date, service_type)

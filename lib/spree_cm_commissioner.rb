@@ -46,6 +46,10 @@ module SpreeCmCommissioner
   class << self
     attr_accessor :redis_pool
 
+    DEFAULT_POOL_SIZE = 5
+    DEFAULT_TIMEOUT = 5
+    DEFAULT_REDIS_URL = 'redis://localhost:6379/12'
+
     def redis_pool
       @redis_pool ||= default_redis_pool
     end
