@@ -5,10 +5,10 @@ RSpec.describe SpreeCmCommissioner::TripSeatLayoutQuery do
   let!(:vet) {create(:vendor, name: 'Vet', code:"VET")}
   let!(:buva_sea) {create(:vendor, name:'Buva Sea', code:"BS")}
   #location
-  let!(:phnom_penh) { create(:transit_place, name: 'Phnom Penh', data_type:4) }
-  let!(:siem_reap) { create(:transit_place, name: 'Siem Reap', data_type:4) }
-  let!(:sihanoukville) { create(:transit_place, name: 'Sihanoukville', data_type:4) }
-  let!(:koh_rong) {create(:transit_place, name: 'Koh Rong', data_type:4)}
+  let!(:phnom_penh) { create(:cm_place, name: 'Phnom Penh') }
+  let!(:siem_reap) { create(:cm_place, name: 'Siem Reap') }
+  let!(:sihanoukville) { create(:cm_place, name: 'Sihanoukville') }
+  let!(:koh_rong) {create(:cm_place, name: 'Koh Rong')}
 
   #Vehicle Type
   let!(:airbus) {create(:vehicle_type,

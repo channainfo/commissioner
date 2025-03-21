@@ -2,10 +2,10 @@ require_dependency 'spree_cm_commissioner'
 module SpreeCmCommissioner
   class TripStop < SpreeCmCommissioner::Base
     acts_as_list column: :sequence, scope: :trip_id
-    enum stop_type: { boarding: 0, drop_off: 1 }
+    enum :stop_type, { boarding: 0, drop_off: 1 }
 
-    belongs_to :trip, class_name: 'SpreeCmCommissioner::Trip'
-    belongs_to :stop, class_name: 'Spree::Taxon'
+    belongs_to :trip, class_name: 'Spree::Variant'
+    belongs_to :stop, class_name: 'SpreeCmCommissioner::Place'
 
     before_validation :set_stop_name
     after_create :create_vendor_stop
