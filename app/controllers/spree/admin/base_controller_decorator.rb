@@ -32,7 +32,7 @@ module Spree
       end
 
       # POST
-      def invalidate_api_caches
+      def invalidate_api_caches # rubocop:disable Metrics/CyclomaticComplexity
         if params[:model].present?
           model = case params[:model]
                   when 'SpreeCmCommissioner::HomepageSection'
@@ -41,6 +41,10 @@ module Spree
                     SpreeCmCommissioner::HomepageBackground
                   when 'Spree::Menu'
                     Spree::Menu
+                  when 'Spree::Taxon'
+                    Spree::Taxon
+                  when 'Spree::Product'
+                    Spree::Product
                   else
                     flash[:error] = 'Invalid model provided' # rubocop:disable Rails/I18nLocaleTexts
                     redirect_back fallback_location: admin_root_path and return
@@ -50,7 +54,9 @@ module Spree
           api_patterns_map = {
             SpreeCmCommissioner::HomepageSection => '/api/v2/storefront/homepage/*',
             SpreeCmCommissioner::HomepageBackground => '/api/v2/storefront/homepage/*',
-            Spree::Menu => '/api/v2/storefront/menus*'
+            Spree::Menu => '/api/v2/storefront/menus*',
+            Spree::Taxon => '/api/v2/storefront/taxons*',
+            Spree::Product => '/api/v2/storefront/products*'
           }
           api_patterns = api_patterns_map[model]
 
