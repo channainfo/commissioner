@@ -41,3 +41,52 @@ require 'cm_app_logger'
 require 'counter_culture'
 
 require 'byebug' if Rails.env.development? || Rails.env.test?
+
+# Provides a connection pool for Redis operations in SpreeCmCommissioner.
+# Usage example:
+#   SpreeCmCommissioner.redis_pool.with do |redis|
+#     redis.set('key', 'value')
+#     redis.get('key')
+#   end
+#
+# The pool can be configured via environment variables:
+# - REDIS_POOL_SIZE: Number of connections (default: 5)
+# - REDIS_TIMEOUT: Timeout in seconds (default: 5)
+# - REDIS_URL: Redis connection URL (default: 'redis://localhost:6379/12')
+
+module SpreeCmCommissioner
+  class << self
+    attr_accessor :redis_pool
+
+    def redis_pool
+      @redis_pool ||= default_redis_pool
+    end
+
+    # Allows overriding the default Redis connection pool with a custom one
+    def redis_pool=(custom_redis_pool)
+      @redis_pool = custom_redis_pool
+    end
+
+    # Resets the Redis pool, useful for testing or reinitialization
+    def reset_redis_pool
+      @redis_pool = nil
+    end
+
+    private
+
+    def default_redis_pool
+      pool_size = ENV.fetch('REDIS_POOL_SIZE', '5').to_i
+      timeout = ENV.fetch('REDIS_TIMEOUT', '5').to_i
+      redis_url = ENV.fetch('REDIS_URL', 'redis://localhost:6379/12')
+
+      ConnectionPool.new(size: pool_size, timeout: timeout) do
+        Redis.new(url: redis_url, timeout: timeout)
+      end
+    end
+  end
+
+  # Provides a configuration block for customizing SpreeCmCommissioner settings
+  def self.configure
+    yield self
+  end
+end
