@@ -172,8 +172,11 @@ module SpreeCmCommissioner
       end
     end
 
-    # override
+    # Overwrite line_item.rb:112 for before_transition to: :complete, do: :ensure_line_items_are_in_stock
+    # Add log: if this method still use it or not
+    # We expect it is not to be called
     def sufficient_stock?
+      Rails.logger.warn '********* sufficient_stock? should not be called. If seeing this message, need to fix it ********'
       return transit_sufficient_stock? if variant.product.product_type == 'transit'
 
       SpreeCmCommissioner::Stock::LineItemAvailabilityChecker.new(self).can_supply?(quantity)
@@ -186,6 +189,27 @@ module SpreeCmCommissioner
     def jwt_token
       payload = { order_number: order.number, line_item_id: id }
       SpreeCmCommissioner::OrderJwtToken.encode(payload, order.token)
+    end
+
+    def inventory_params
+      inventory_items.map do |inventory_item|
+        { inventory_key: "inventory:#{inventory_item.id}", quantity: quantity }
+      end
+    end
+
+    def inventory_items
+      scope = variant.inventory_items # product_type event don't filter date
+      if variant.product_type == SpreeCmCommissioner::InventoryItem::PRODUCT_TYPE_ACCOMMODATION
+        scope = scope.select do |item|
+          (from_date.to_date..to_date.prev_day.to_date).cover?(item.inventory_date)
+        end
+      end
+      if variant.product_type == SpreeCmCommissioner::InventoryItem::PRODUCT_TYPE_BUS
+        scope = scope.select do |item|
+          item.inventory_date == from_date.to_date
+        end
+      end
+      scope
     end
 
     private

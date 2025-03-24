@@ -4,7 +4,7 @@ module SpreeCmCommissioner
 
     attr_reader :variant_ids, :trip_date
 
-    def initialize(variant_ids: [], trip_date:)
+    def initialize(trip_date:, variant_ids: [])
       @variant_ids = variant_ids
       @trip_date = trip_date
     end

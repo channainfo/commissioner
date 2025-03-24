@@ -31,7 +31,7 @@ module Spree
               serializer_params,
               params[:sort]&.strip,
               params[:page]&.to_s&.strip,
-              params[:per_page]&.to_s&.strip,
+              params[:per_page]&.to_s&.strip
             ].flatten.join('-')
 
             Digest::MD5.hexdigest(cache_key_parts)
@@ -63,10 +63,10 @@ module Spree
               product_type: product_type
             )
 
-            unless @context.success?
-              render_error(@context.message, :unprocessable_entity)
-              return # This stops the action chain
-            end
+            return if @context.success?
+
+            render_error(@context.message, :unprocessable_entity)
+            return # This stops the action chain
           end
 
           def product_type
