@@ -201,6 +201,14 @@ module SpreeCmCommissioner
 
     private
 
+    def unstock_inventory_in_redis!
+      SpreeCmCommissioner::RedisStock::InventoryUpdater.new(line_item_ids).unstock!
+    end
+
+    def restock_inventory_in_redis!
+      SpreeCmCommissioner::RedisStock::InventoryUpdater.new(line_item_ids).restock!
+    end
+
     # override :spree_api
     def webhook_payload_body
       resource_serializer.new(
