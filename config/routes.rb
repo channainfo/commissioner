@@ -483,6 +483,12 @@ Spree::Core::Engine.add_routes do
       end
 
       namespace :storefront do
+        namespace :novel do
+          resources :accommodations, only: %i[index show] do
+            resources :variants, only: %i[index show]
+          end
+        end
+
         resources :inventory_item
 
         resources :waiting_room_sessions, only: :create

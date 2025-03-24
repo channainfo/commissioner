@@ -15,6 +15,27 @@ FactoryBot.define do
       product = create(:product, vendor: create(:active_vendor, stock_locations: stock_locations))
       product
     end
+
+    transient do
+      number_of_adults { nil }
+      number_of_kids { nil }
+    end
+
+    after(:create) do |variant, evaluator|
+      if evaluator.number_of_adults.present?
+        number_of_adults= create(:cm_option_type, :number_of_adults)
+        variant.product.option_types << number_of_adults
+        variant.option_values << create(:cm_option_value, presentation: evaluator.number_of_adults, name: evaluator.number_of_adults, option_type: number_of_adults)
+      end
+
+      if evaluator.number_of_kids.present?
+        number_of_kids= create(:cm_option_type, :number_of_kids)
+        variant.product.option_types << number_of_kids
+        variant.option_values << create(:cm_option_value, presentation: evaluator.number_of_kids, name: evaluator.number_of_kids, option_type: number_of_kids)
+      end
+
+      variant.save!
+    end
   end
 
   factory :trip, class: Spree::Variant do

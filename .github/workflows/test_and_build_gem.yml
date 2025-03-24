@@ -5,6 +5,7 @@ on:
   pull_request:
     branches:
       - develop
+      - milestone-77-scalable-design
   push:
     tags:
       - "*"
