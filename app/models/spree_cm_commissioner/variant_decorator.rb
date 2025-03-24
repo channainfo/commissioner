@@ -21,6 +21,8 @@ module SpreeCmCommissioner
       base.has_many :variant_guest_card_class, class_name: 'SpreeCmCommissioner::VariantGuestCardClass'
       base.has_many :guest_card_classes, class_name: 'SpreeCmCommissioner::GuestCardClass', through: :variant_guest_card_class
 
+      base.has_many :inventory_units, class_name: 'SpreeCmCommissioner::InventoryUnit'
+
       base.scope :subscribable, -> { active.joins(:product).where(product: { subscribable: true, status: :active }) }
 
       base.accepts_nested_attributes_for :option_values
@@ -69,6 +71,19 @@ module SpreeCmCommissioner
     # override
     def in_stock?
       available_quantity.positive?
+    end
+
+    # TODO: refactor and double check for logic
+    # For inventory_unit quantity_available, and max_capacity
+    def inventory_unit_stock
+      case product_type
+      when 'event', 'ecommerce', 'accommodation'
+        { quantity_available: stock_items.sum(:count_on_hand), max_capacity: 0 }
+      when 'bus', 'transit'
+        { quantity_available: product.trip.vehicle.number_of_seats, max_capacity: 0 }
+      else
+        {}
+      end
     end
 
     private

@@ -41,7 +41,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'searchkick', '~> 5.1'
   s.add_dependency 'twilio-ruby', '~> 5.48.0'
   s.add_dependency 'dry-validation', '~> 1.10'
-  s.add_dependency 'byebug'
   s.add_dependency 'font-awesome-sass', '~> 6.4.0'
   s.add_dependency 'noticed', '~> 1.6'
   s.add_dependency 'aws-sdk-s3'
@@ -54,6 +53,15 @@ Gem::Specification.new do |s|
   s.add_dependency "rqrcode", "~> 2.0"
   s.add_dependency "premailer-rails"
   s.add_dependency 'counter_culture', '~> 3.2'
+
+  # Redis
+  s.add_dependency 'redis'
+  s.add_dependency 'redis-rails'
+  s.add_dependency 'connection_pool'
+
+  # TODO: move as add_development_dependency
+  s.add_dependency 'byebug'
+
   s.add_development_dependency 'pg'
   s.add_development_dependency 'spree_dev_tools'
   s.metadata['rubygems_mfa_required'] = 'true'
