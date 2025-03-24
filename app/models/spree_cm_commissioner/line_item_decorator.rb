@@ -172,11 +172,10 @@ module SpreeCmCommissioner
       end
     end
 
-    # override
+    # override:
+    # Currently, this method may not call yet
     def sufficient_stock?
-      return transit_sufficient_stock? if variant.product.product_type == 'transit'
-
-      SpreeCmCommissioner::Stock::LineItemAvailabilityChecker.new(self).can_supply?(quantity)
+      SpreeCmCommissioner::RedisStock::InventoryChecker.new([self]).can_supply_all?
     end
 
     def month

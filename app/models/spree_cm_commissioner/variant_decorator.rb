@@ -23,6 +23,7 @@ module SpreeCmCommissioner
       base.has_many :guest_card_classes, class_name: 'SpreeCmCommissioner::GuestCardClass', through: :variant_guest_card_class
 
       base.has_many :inventory_items, class_name: 'SpreeCmCommissioner::InventoryItem'
+      base.has_many :active_inventory_items, -> { active }, class_name: 'SpreeCmCommissioner::InventoryItem'
 
       base.scope :subscribable, -> { active.joins(:product).where(product: { subscribable: true, status: :active }) }
       base.scope :with_permanent_stock, -> { joins(:product).where(product: { product_type: base::PERMANENT_STOCK_PRODUCT_TYPES }) }

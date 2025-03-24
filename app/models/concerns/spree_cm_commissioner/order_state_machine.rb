@@ -16,7 +16,21 @@ module SpreeCmCommissioner
 
       state_machine.after_transition to: :resumed, do: :precalculate_conversion
 
+      # TODO: should test when resumed on order having booking date < Time.now
+      state_machine.after_transition to: :resumed, do: :unstock_inventory_in_redis!
+
       state_machine.after_transition to: :canceled, do: :precalculate_conversion
+      state_machine.after_transition to: :canceled, do: :restock_inventory_in_redis!
+
+      # after transition to :complete, finalize! has been called
+      # we call unstock_inventory_in_redis! in the finalize! method
+      # So if unstock not success, then the state should be rollback
+      # So Spree::Checkout::Complete will get failure and rollback payment in vPago
+      state_machine.around_transition to: :complete do |transition, block|
+        ActiveRecord::Base.transaction do
+          block.call # Executes the transition, including state change and callbacks
+        end
+      end
 
       scope :accepted, -> { where(request_state: 'accepted') }
 

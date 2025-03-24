@@ -33,5 +33,11 @@ module SpreeCmCommissioner
         save!
       end
     end
+
+    def redis_expired_in
+      expired_in = 31_536_000 # 1 year for normal stock
+      expired_in = Time.parse(inventory_date.to_s).end_of_day.to_i - Time.zone.now.to_i if inventory_date.present?
+      [expired_in, 0].max
+    end
   end
 end

@@ -192,7 +192,37 @@ module SpreeCmCommissioner
       Spree::Money.new(outstanding_balance, currency: currency).to_s
     end
 
+    # Finalizes an in progress order after checkout is complete.
+    # Called after transition to complete state when payments will have been processed
+    # Overwrite
+    # Add desription on how it works, and ask him to demo
+    def finalize!
+      unstock_inventory_in_redis!
+      super
+    end
+
+    # Overwrite order.rb for before order transition complete
+    def ensure_line_items_are_in_stock
+      return true if sufficient_stock_lines?
+
+      restart_checkout_flow
+      errors.add(:base, Spree.t(:insufficient_stock_lines_present))
+      false
+    end
+
     private
+
+    def sufficient_stock_lines?
+      SpreeCmCommissioner::RedisStock::InventoryChecker.new(line_item_ids).can_supply_all?
+    end
+
+    def unstock_inventory_in_redis!
+      SpreeCmCommissioner::RedisStock::InventoryUpdater.new(line_item_ids).unstock!
+    end
+
+    def restock_inventory_in_redis!
+      SpreeCmCommissioner::RedisStock::InventoryUpdater.new(line_item_ids).restock!
+    end
 
     # override :spree_api
     def webhook_payload_body
