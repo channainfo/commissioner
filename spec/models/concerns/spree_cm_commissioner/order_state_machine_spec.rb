@@ -199,4 +199,120 @@ RSpec.describe SpreeCmCommissioner::OrderStateMachine do
       end
     end
   end
+
+  describe '#around_transition to: :complete' do
+    let(:order) { create(:order_with_line_items, line_items_count: 2) }
+    let(:line_item_ids) { order.line_items.pluck(:id) }
+    let(:inventory_updater) { instance_double(SpreeCmCommissioner::RedisStock::InventoryUpdater) }
+
+    before do
+      # Mock Redis stock updater
+      allow(SpreeCmCommissioner::RedisStock::InventoryUpdater).to receive(:new).with(line_item_ids).and_return(inventory_updater)
+    end
+
+    context 'when sufficient stock is available' do
+      before do
+        allow(order).to receive(:ensure_line_items_are_in_stock).and_return(true)
+        allow(inventory_updater).to receive(:unstock!)
+
+        allow(order).to receive(:finalize!)
+        allow(order).to receive(:delivery_required?).and_return(false)
+        allow(order).to receive(:payment_required?).and_return(false)
+        allow(order).to receive(:confirmation_required?).and_return(false)
+      end
+
+      it 'unstocks inventory in Redis and completes the order' do
+        order.next
+        expect(inventory_updater).to receive(:unstock!).once
+
+        order.next
+        expect(order).to have_received(:finalize!)
+        expect(order.state).to eq 'complete'
+      end
+    end
+
+    context 'when sufficient stock is available, and an error occurs during unstock in redis' do
+      before do
+        allow(order).to receive(:ensure_line_items_are_in_stock).and_return(true)
+        allow(inventory_updater).to receive(:unstock!).and_raise(SpreeCmCommissioner::RedisStock::InventoryUpdater::UnableToUnstock)
+
+        allow(order).to receive(:finalize!)
+        allow(order).to receive(:delivery_required?).and_return(false)
+        allow(order).to receive(:payment_required?).and_return(false)
+        allow(order).to receive(:confirmation_required?).and_return(false)
+      end
+
+      it 'does not unstock inventory' do
+        order.next
+
+        expect{ order.next }.to raise_error(SpreeCmCommissioner::RedisStock::InventoryUpdater::UnableToUnstock)
+        expect(order).not_to have_received(:finalize!)
+        expect(order.reload.state).not_to eq 'complete'
+      end
+    end
+  end
+
+  describe '#after_transition to: :cancel' do
+    let(:order) { create(:completed_order_with_totals) }
+    let(:line_item_ids) { order.line_items.pluck(:id) }
+    let(:inventory_updater) { instance_double(SpreeCmCommissioner::RedisStock::InventoryUpdater) }
+
+    before do
+      allow(SpreeCmCommissioner::RedisStock::InventoryUpdater).to receive(:new).with(line_item_ids).and_return(inventory_updater)
+      allow(order).to receive(:delivery_required?).and_return(false)
+      allow(order).to receive(:payment_required?).and_return(false)
+      allow(order).to receive(:confirmation_required?).and_return(false)
+    end
+
+    it 'restocks inventory in Redis' do
+      expect(inventory_updater).to receive(:restock!).once
+      order.cancel
+      expect(order.state).to eq 'canceled'
+    end
+  end
+
+  describe '#after_transition to: :resume' do
+    let(:order) { create(:completed_order_with_totals) }
+    let(:line_item_ids) { order.line_items.pluck(:id) }
+    let(:inventory_updater) { SpreeCmCommissioner::RedisStock::InventoryUpdater.new(line_item_ids) }
+
+    context 'when sufficient stock is available' do
+      before do
+        allow(SpreeCmCommissioner::RedisStock::InventoryUpdater).to receive(:new).with(line_item_ids).and_return(inventory_updater)
+        allow(inventory_updater).to receive(:restock!)
+        allow(inventory_updater).to receive(:unstock!)
+        allow(order).to receive(:ensure_line_items_are_in_stock).and_return(true)
+        allow(order).to receive(:delivery_required?).and_return(false)
+        allow(order).to receive(:payment_required?).and_return(false)
+        allow(order).to receive(:confirmation_required?).and_return(false)
+      end
+
+      it 'unstocks inventory in Redis' do
+        order.cancel
+
+        expect(inventory_updater).to receive(:unstock!).once
+        order.resume
+
+        expect(order.completed?).to eq(true)
+      end
+    end
+
+    context 'when sufficient stock is available, and an error occurs during unstock in redis' do
+      before do
+        allow(order).to receive(:unstock_inventory_in_redis!).and_raise(SpreeCmCommissioner::RedisStock::InventoryUpdater::UnableToUnstock)
+
+        allow(order).to receive(:ensure_line_items_are_in_stock).and_return(true)
+        allow(order).to receive(:delivery_required?).and_return(false)
+        allow(order).to receive(:payment_required?).and_return(false)
+        allow(order).to receive(:confirmation_required?).and_return(false)
+      end
+
+      it 'does not unstock inventory and add log' do
+        order.cancel
+
+        expect{order.resume}.to raise_error(SpreeCmCommissioner::RedisStock::InventoryUpdater::UnableToUnstock)
+        expect(order.reload.state).not_to eq 'resumed'
+      end
+    end
+  end
 end
