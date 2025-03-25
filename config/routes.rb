@@ -479,6 +479,7 @@ Spree::Core::Engine.add_routes do
           patch  :next
           patch  :advance
           patch  :complete
+          post   :create_payment
         end
 
         resources :customer_notifications, only: [:show]
@@ -492,6 +493,7 @@ Spree::Core::Engine.add_routes do
         end
 
         resources :user_account_linkages, only: %i[index create destroy]
+        resources :cart_payment_method_groups, only: %i[index]
         resource :s3_signed_urls
         resource :profile_images, only: %i[update destroy]
         resources :line_items, only: %i[index show]

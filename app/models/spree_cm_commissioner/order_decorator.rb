@@ -31,7 +31,7 @@ module SpreeCmCommissioner
       base.has_one :invoice, dependent: :destroy, class_name: 'SpreeCmCommissioner::Invoice'
       base.has_one :customer, class_name: 'SpreeCmCommissioner::Customer', through: :subscription
 
-      base.belongs_to :tenant, class_name: 'SpreeCmCommissioner::Tenant'
+      base.belongs_to :tenant, class_name: 'SpreeCmCommissioner::Tenant', optional: true
       base.belongs_to :subscription, class_name: 'SpreeCmCommissioner::Subscription', optional: true
 
       base.has_many :taxons, class_name: 'Spree::Taxon', through: :customer

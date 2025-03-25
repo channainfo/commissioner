@@ -3,7 +3,11 @@ module SpreeCmCommissioner
     extend FriendlyId
     friendly_id :name, use: :history
 
-    has_many :vendors, class_name: 'Spree::Vendor'
+    has_many :vendors, class_name: 'Spree::Vendor', inverse_of: :tenant
+    has_many :orders, class_name: 'Spree::Order', inverse_of: :tenant
+    has_many :tenant_payment_methods, class_name: 'Spree::PaymentMethod',
+                                      through: :vendors,
+                                      source: :payment_methods
 
     enum state: { enabled: 0, disabled: 1 }
 
