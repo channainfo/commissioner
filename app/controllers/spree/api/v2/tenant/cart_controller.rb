@@ -53,6 +53,17 @@ module Spree
             render_order(result)
           end
 
+          def remove_line_item
+            spree_authorize! :update, spree_current_order, order_token
+
+            remove_line_item_service.call(
+              order: spree_current_order,
+              line_item: line_item
+            )
+
+            render_serialized_payload { serialized_current_order }
+          end
+
           def destroy
             spree_authorize! :update, spree_current_order, order_token
 
@@ -143,6 +154,10 @@ module Spree
 
           def add_item_service
             Spree::Api::Dependencies.storefront_cart_add_item_service.constantize
+          end
+
+          def remove_line_item_service
+            Spree::Api::Dependencies.storefront_cart_remove_line_item_service.constantize
           end
 
           def destroy_cart_service
