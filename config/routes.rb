@@ -577,6 +577,7 @@ Spree::Core::Engine.add_routes do
           resources :homepage_sections, only: [:index]
           resource :homepage_background, controller: :homepage_background, only: [:show]
         end
+        resources :active_homepage_events, only: [:index]
 
         resources :qr_urls, only: [:show]
         resources :guest_qrs, only: [:show]

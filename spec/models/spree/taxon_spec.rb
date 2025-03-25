@@ -92,4 +92,28 @@ RSpec.describe Spree::Taxon, type: :model do
       end
     end
   end
+
+  describe 'active_homepage_events' do
+    let(:taxonomy) { create(:taxonomy, kind: 'event') }
+    let!(:active_homepage_section) { create(:cm_homepage_section, active: true) }
+    let!(:inactive_homepage_section) { create(:cm_homepage_section, active: false) }
+    let!(:event) { create(:taxon, taxonomy: taxonomy, kind: :event) }
+    let!(:inactive_event) { create(:taxon, taxonomy: taxonomy, kind: :event) }
+    let!(:unrelated_event) { create(:taxon, taxonomy: taxonomy, kind: :event) }
+
+    before do
+      create(:cm_homepage_section_relatable, homepage_section: active_homepage_section, relatable: event)
+      create(:cm_homepage_section_relatable, homepage_section: inactive_homepage_section, relatable: inactive_event)
+    end
+
+    it 'includes only taxons associated with active homepage sections' do
+      expect(Spree::Taxon.active_homepage_events).to include(event)
+      expect(Spree::Taxon.active_homepage_events).not_to include(inactive_event)
+    end
+
+    it 'excludes taxons without homepage_section_relatables' do
+      expect(Spree::Taxon.active_homepage_events).to include(event)
+      expect(Spree::Taxon.active_homepage_events).not_to include(unrelated_event)
+    end
+  end
 end
