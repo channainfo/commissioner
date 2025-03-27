@@ -34,6 +34,7 @@ module Spree
       show_badge_status
       purchasable_on
       available_on
+      hide_video_banner
       vendor_id
     ]
 
