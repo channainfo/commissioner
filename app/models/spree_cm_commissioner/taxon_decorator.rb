@@ -1,7 +1,7 @@
 module SpreeCmCommissioner
   module TaxonDecorator
     # rubocop:disable Metrics/MethodLength
-    def self.prepended(base)
+    def self.prepended(base) # rubocop:disable Metrics/AbcSize
       base.include SpreeCmCommissioner::TaxonKind
       base.include SpreeCmCommissioner::Transit::TaxonBitwise
 
@@ -54,6 +54,16 @@ module SpreeCmCommissioner
       base.has_many :invite_user_events, through: :user_events, class_name: 'SpreeCmCommissioner::InviteUserEvent'
 
       base.has_many :line_items, through: :products
+
+      def base.active_homepage_events
+        joins(:homepage_section_relatables)
+          .joins("INNER JOIN spree_taxons taxon ON taxon.id = cm_homepage_section_relatables.relatable_id
+                  AND cm_homepage_section_relatables.relatable_type = 'Spree::Taxon'"
+                )
+          .joins('INNER JOIN cm_homepage_sections ON cm_homepage_section_relatables.homepage_section_id = cm_homepage_sections.id')
+          .where(cm_homepage_sections: { tenant_id: nil, active: true })
+          .where(kind: :event)
+      end
     end
     # rubocop:enable Metrics/MethodLength
 
