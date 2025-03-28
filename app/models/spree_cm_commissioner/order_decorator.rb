@@ -38,6 +38,7 @@ module SpreeCmCommissioner
       base.has_many :vendors, through: :products, class_name: 'Spree::Vendor'
       base.has_many :taxons, through: :products, class_name: 'Spree::Taxon'
       base.has_many :guests, through: :line_items, class_name: 'SpreeCmCommissioner::Guest'
+      base.has_many :guest_card_classes, class_name: 'SpreeCmCommissioner::GuestCardClass', through: :variants
 
       base.delegate :customer, to: :user, allow_nil: true
 

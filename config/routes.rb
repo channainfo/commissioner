@@ -463,6 +463,9 @@ Spree::Core::Engine.add_routes do
         resource :account, controller: :account, only: %i[show update]
         resource :account_deletions, only: %i[destroy]
         resource :account_recovers, only: [:update]
+        namespace :account do
+          resources :orders, controller: :orders, only: %i[index show]
+        end
 
         resource :cart, controller: :cart, only: %i[show create destroy] do
           post   :add_item
@@ -498,6 +501,7 @@ Spree::Core::Engine.add_routes do
         resource :s3_signed_urls
         resource :profile_images, only: %i[update destroy]
         resources :line_items, only: %i[index show]
+        resources :guest_card_classes
       end
 
       namespace :storefront do
