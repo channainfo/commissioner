@@ -143,6 +143,44 @@ RSpec.describe Spree::User, type: :model do
     end
   end
 
+
+  describe '#email_phone_number' do
+    let(:user) { Spree::User.new }
+
+    context 'when both email and phone_number are present' do
+      before do
+        user.email = 'user@example.com'
+        user.phone_number = '123-456-7890'
+      end
+
+      it 'returns email and phone number separated by a comma' do
+        expect(user.email_phone_number).to eq('user@example.com, 123-456-7890')
+      end
+    end
+
+    context 'when only email is present' do
+      before { user.email = 'user@example.com' }
+
+      it 'returns the email' do
+        expect(user.email_phone_number).to eq('user@example.com')
+      end
+    end
+
+    context 'when only phone_number is present' do
+      before { user.phone_number = '123-456-7890' }
+
+      it 'returns the phone number' do
+        expect(user.email_phone_number).to eq('123-456-7890')
+      end
+    end
+
+    context 'when neither email nor phone_number is present' do
+      it 'returns nil' do
+        expect(user.email_phone_number).to be_nil
+      end
+    end
+  end
+
   describe 'validations the same login or email with different tenant' do
     let!(:tenant1) { create(:cm_tenant, id: 1) }
     let!(:tenant2) { create(:cm_tenant, id: 2) }

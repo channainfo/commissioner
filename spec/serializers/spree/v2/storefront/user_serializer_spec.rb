@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Spree::V2::Storefront::UserSerializer, type: :serializer do
   describe '#serializable_hash' do
-    let(:user) { create(:user) }
+    let(:user) { create(:user, email: 'test@example.com', phone_number: '123456789') }
 
     subject {
       described_class.new(user, include: [

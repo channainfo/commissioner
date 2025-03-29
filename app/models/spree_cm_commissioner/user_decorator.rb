@@ -55,6 +55,16 @@ module SpreeCmCommissioner
       base.has_many :places, through: :user_places, class_name: 'SpreeCmCommissioner::Place'
     end
 
+    def email_phone_number
+      if email.present? && phone_number.present?
+        "#{email}, #{phone_number}"
+      elsif email.present?
+        email
+      elsif phone_number.present?
+        phone_number
+      end
+    end
+
     def super_admin?
       has_spree_role?('super_admin')
     end
