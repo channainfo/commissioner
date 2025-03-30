@@ -1,0 +1,27 @@
+<div class="table-responsive border rounded bg-white mb-4">
+  <table class="table " id="listing_products">
+    <thead class="text-muted">
+      <tr data-hook="admin_products_index_headers">
+        <th><%= sort_link @search,:name, Spree.t(:name), { default_order: "asc" } %></th>
+        <th class="col-2">Vendor</th>
+        <th><%= sort_link @search,:from_date, Spree.t(:from_date), { default_order: "asc" } %></th>
+        <th><%= sort_link @search,:to_date, Spree.t(:to_date), { default_order: "asc" } %></th>
+        <th class="col-1 text-center" data-hook="admin_event_header_actions">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @taxons.each do |taxon| %>
+        <tr>
+          <td class="col-4 align-middle"><%= taxon.name %></td>
+          <td class="col-2 align-middle"><%= taxon.vendor.name if taxon.vendor.present? %></td>
+          <td class="col-2 align-middle"><%= taxon.from_date %></td>
+          <td class="col-2 align-middle"><%= taxon.to_date %></td>
+          <td class="col-1 align-middle text-center" data-hook="admin_products_index_row_actions">
+            <%= link_to_edit taxon.id, url: edit_admin_taxonomy_taxon_url(taxon.taxonomy.id, taxon.id), no_text: true if can?(:edit, taxon) %>
+            <%= link_to_delete taxon.id, url: admin_taxonomy_taxon_url(taxon.taxonomy.id, taxon.id), no_text: true if can?(:delete, taxon) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

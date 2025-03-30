@@ -1,0 +1,15 @@
+<%= content_for :page_title do %>
+   <%= Spree.t(:Events) %>
+<% end %>
+
+<%= content_for :page_actions do %>
+  <%= button_link_to Spree.t(:new_event), new_admin_taxonomy_taxon_path(@taxonomy.id) , class: "btn btn-success", icon: 'add.svg', id: 'admin_new_taxonomy_link' %>
+<% end %>
+
+<%= render 'tab' %>
+
+<%= render 'search_form' %>
+
+<%= render 'table' %>
+
+<%= paginate @taxons, theme: 'admin-twitter-bootstrap-4', params: {taxon_id: params[:taxon_id] } %>
