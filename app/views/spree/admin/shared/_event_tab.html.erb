@@ -1,0 +1,13 @@
+<% content_for(:page_tabs) do %>
+
+<% content_for(:page_tabs) do %>
+  <%= content_tag :li, class: 'nav-item' do %>
+    <%= link_to Spree.t('admin.product.all'),
+                admin_events_path,
+                class: "nav-link #{current_page?(admin_events_path) ? 'active' : ''}" %>
+  <% end %>
+<% end %>
+
+<% end %>
+
+
