@@ -55,6 +55,15 @@ module SpreeCmCommissioner
       base.has_many :places, through: :user_places, class_name: 'SpreeCmCommissioner::Place'
     end
 
+    def permissions_for_vendor(vendor_id)
+      permissions.joins(role_permissions: :role).where(spree_roles: { vendor_id: vendor_id })
+    end
+
+    # override
+    def has_spree_role?(role_name) # rubocop:disable Naming/PredicateName
+      spree_roles.non_vendor.exists?(name: role_name)
+    end
+
     def super_admin?
       has_spree_role?('super_admin')
     end
