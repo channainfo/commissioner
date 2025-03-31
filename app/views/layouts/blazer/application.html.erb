@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= blazer_title ? blazer_title : "Blazer" %></title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <meta charset="utf-8" />
+    <%= favicon_link_tag "blazer/favicon.png" %>
+    <% if defined?(Propshaft::Railtie) %>
+      <%= stylesheet_link_tag "blazer/bootstrap-propshaft", "blazer/bootstrap", "blazer/selectize", "blazer/github", "blazer/daterangepicker", "blazer/application" %>
+      <%= javascript_include_tag "blazer/jquery", "blazer/rails-ujs", "blazer/stupidtable", "blazer/stupidtable-custom-settings", "blazer/jquery.stickytableheaders", "blazer/selectize", "blazer/highlight.min", "blazer/moment", "blazer/moment-timezone-with-data", "blazer/daterangepicker", "blazer/chart.umd", "blazer/chartjs-adapter-date-fns.bundle", "blazer/chartkick", "blazer/mapkick.bundle", "blazer/ace/ace", "blazer/ace/ext-language_tools", "blazer/ace/theme-twilight", "blazer/ace/mode-sql", "blazer/ace/snippets/text", "blazer/ace/snippets/sql", "blazer/Sortable", "blazer/bootstrap", "blazer/vue.global.prod", "blazer/routes", "blazer/queries", "blazer/fuzzysearch", "blazer/application" %>
+    <% else %>
+      <%= stylesheet_link_tag "blazer/application" %>
+      <%= javascript_include_tag "blazer/application" %>
+    <% end %>
+    <script>
+      <%= blazer_js_var "rootPath", root_path %>
+    </script>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+    <% if params[:embed].present? %>
+      <div>
+        <%= yield %>
+      </div>
+    <% else %>
+      <div class="container">
+        <%= yield %>
+      </div>
+    <% end %>
+  </body>
+</html>

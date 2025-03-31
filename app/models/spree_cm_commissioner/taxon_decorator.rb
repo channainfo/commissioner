@@ -54,6 +54,8 @@ module SpreeCmCommissioner
       base.has_many :invite_user_events, through: :user_events, class_name: 'SpreeCmCommissioner::InviteUserEvent'
 
       base.has_many :line_items, through: :products
+      base.has_many :event_blazer_queries, class_name: 'SpreeCmCommissioner::TaxonBlazerQuery'
+      base.has_many :blazer_queries, through: :event_blazer_queries, class_name: 'Blazer::Query'
 
       def base.active_homepage_events
         joins(:homepage_section_relatables)
