@@ -267,6 +267,7 @@ Spree::Core::Engine.add_routes do
     resources :tenants do
       resources :vendors, controller: :tenant_vendors
     end
+    resources :event_blazer_queries
   end
 
   resources :events, controller: 'events/base' do

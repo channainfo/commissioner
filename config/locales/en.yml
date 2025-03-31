@@ -573,4 +573,7 @@ en:
     url_expired: 'Invitation link is expired'
     already_invited: 'Failed: User already invited to event'
     update_fail: 'Failed: to Update invite user'
+  event_blazer_queries:
+    success: 'Event saved Successfully'
+    fail: 'Event already saved'
 

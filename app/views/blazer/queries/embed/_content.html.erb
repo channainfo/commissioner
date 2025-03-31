@@ -1,0 +1,85 @@
+<div class="topbar">
+  <div class="row" style="padding-top: 13px; margin: 0;">
+    <div class="col-sm-9"></div>
+    <div class="col-sm-3 text-right">
+      <%= render partial: 'blazer/queries/embed/download_button' %>
+    </div>
+  </div>
+</div>
+<div style="margin-bottom: 10px;"></div>
+
+<% if @success %>
+  <div id="results" style="font-family: 'Poppins', sans-serif;"></div>
+    <p class="text-muted">Loading...</p>
+  </div>
+
+  <script>
+    function showRun(data) {
+      $("#results").html(data)
+      $("#results table").stupidtable(stupidtableCustomSettings).stickyTableHeaders({fixedOffset: 60})
+    }
+
+    function showError(message) {
+      $("#results").addClass("query-error").html(message)
+    }
+
+    <%= blazer_js_var "data", @run_data %>
+
+    runQuery(data, showRun, showError)
+  </script>
+<% end %>
+
+
+<% theme = cookies[:theme] %>
+<%
+  colors = {
+    'dark' => { background: '#1a1f26', text: '#fff', table_background: 'oklch(25.33% 0.016 252.42)', border: '#2f353d' },
+    'light' => { background: '#f7f9fa', text: '#000', table_background: '#fff', border: '#E5E7EB' }
+  }
+  theme_colors = colors[theme] || colors['light']
+%>
+
+<style>
+  .topbar {
+    background-color: <%= theme_colors[:background] %>;
+  }
+
+  #results table {
+    background-color: <%= theme_colors[:table_background] %>;
+    color: <%= theme_colors[:text] %>;
+    border: none;
+  }
+
+  #results table th,
+  #results table td {
+    font-size: 16px;
+    padding: 15px;
+    border-bottom: 1px solid <%= theme_colors[:border] %>;
+  }
+
+  #results table th {
+    font-weight: 700;
+    background-color: <%= theme_colors[:table_background] %>;
+  }
+
+  #results table td {
+    font-size: 14px;
+  }
+
+  .download-btn {
+    background-color: <%= theme_colors[:table_background] %>;
+    border: 1px solid <%= theme_colors[:border] %>;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .download-btn svg {
+    width: 15px;
+    height: 15px;
+    fill: <%= theme_colors[:text] %>;
+  }
+</style>
