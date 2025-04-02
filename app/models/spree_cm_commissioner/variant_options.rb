@@ -166,5 +166,19 @@ module SpreeCmCommissioner
         Time.zone.parse(time) if time.present?
       end
     end
+
+    def arrival_time
+      @arrival_time ||= departure_time + total_duration_in_minutes.minutes
+    end
+
+    def total_duration_in_minutes
+      total_duration_in_minutes = 0
+
+      total_duration_in_minutes += duration_in_hours * 60 if duration_in_hours.present?
+      total_duration_in_minutes += duration_in_minutes if duration_in_minutes.present?
+      total_duration_in_minutes += duration_in_seconds / 60 if duration_in_seconds.present?
+
+      total_duration_in_minutes
+    end
   end
 end
