@@ -12,10 +12,10 @@ module SpreeCmCommissioner
 
       def add_migrations
         gems = %i[
+          blazer
           spree_multi_vendor
           spree_cm_commissioner
         ]
-
         gems.each do |gem|
           run "bundle exec rake railties:install:migrations FROM=#{gem}"
         end
