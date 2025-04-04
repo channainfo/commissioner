@@ -10,10 +10,16 @@ module SpreeCmCommissioner
 
       base.accepts_nested_attributes_for :role_permissions, allow_destroy: true
 
-      base._validators.reject! { |key, _| key == :name }
-      base._validate_callbacks.each { |c| c.filter.attributes.delete(:name) if c.filter.respond_to?(:attributes) }
+      base.before_validation :generate_unique_name, if: -> { vendor_id.present? }
 
-      base.validates :name, uniqueness: { scope: :vendor_id, allow_blank: true }
+      base.validates :presentation, uniqueness: { scope: :vendor_id }, presence: true, if: -> { vendor_id.present? }
+    end
+
+    def generate_unique_name
+      return if name.present?
+      return if presentation.blank?
+
+      self.name = "#{vendor.slug}-#{presentation.downcase.parameterize(separator: '-')}"
     end
   end
 end
