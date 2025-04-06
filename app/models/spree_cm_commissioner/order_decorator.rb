@@ -7,6 +7,10 @@ module SpreeCmCommissioner
       base.scope :subscription, -> { where.not(subscription_id: nil) }
       base.scope :paid, -> { where(payment_state: :paid) }
       base.scope :complete_or_canceled, -> { complete.or(where(state: 'canceled')) }
+      base.scope :payment, -> { incomplete.where(state: 'payment') }
+      base.scope :archived, -> { where.not(archived_at: nil) }
+      base.scope :not_archived, -> { where(archived_at: nil) }
+      base.scope :without_user, -> { where(user_id: nil) }
 
       base.scope :filter_by_match_user_contact, lambda { |user|
         complete.where(
@@ -99,6 +103,10 @@ module SpreeCmCommissioner
       changes = slice(:user_id, :email, :phone_number, :created_by_id, :bill_address_id, :ship_address_id)
 
       self.class.unscoped.where(id: self).update_all(changes) # rubocop:disable Rails/SkipsModelValidations
+    end
+
+    def archive
+      update(archived_at: Time.current)
     end
 
     # overrided

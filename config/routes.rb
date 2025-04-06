@@ -518,6 +518,13 @@ Spree::Core::Engine.add_routes do
 
         resources :wished_items
         resources :user_promotion
+
+        resources :order_histories, only: %i[index] do
+          member do
+            patch :archive
+          end
+        end
+
         resources :order_promotions
         resources :guest_card_classes
 
