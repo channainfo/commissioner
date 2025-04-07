@@ -4,9 +4,7 @@ module SpreeCmCommissioner
       module Storefront
         module CheckoutControllerDecorator
           def self.prepended(base)
-            # spree_vpago gem update payment state in #payment_redirect
-            # GET /payment_redirect
-            base.around_action :set_writing_role, only: %i[payment_redirect]
+            base.include SpreeCmCommissioner::OrderConcern
           end
         end
       end
