@@ -1,5 +1,10 @@
 Spree::Core::Engine.add_routes do
   # Add your extension routes here
+
+  authenticate :spree_user, -> (user) { user.admin? || user.organizer? } do
+    mount Blazer::Engine, at: 'admin/bi_reports'
+  end
+
   namespace :admin do
     post '/invalidate_api_caches', to: 'base#invalidate_api_caches'
 
