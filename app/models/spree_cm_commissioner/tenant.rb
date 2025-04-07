@@ -13,6 +13,10 @@ module SpreeCmCommissioner
 
     before_validation :generate_slug, if: -> { slug.blank? && name.present? }
 
+    def active_vendor
+      vendors.where(state: :active).first
+    end
+
     private
 
     def generate_slug

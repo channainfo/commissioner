@@ -15,7 +15,10 @@ module  SpreeCmCommissioner
     private
 
     def send_sms
+      from = context.tenant || Spree::Store.default
+
       options = {
+        from: from,
         to: context.pin_code.contact,
         body: I18n.t('pincode_sender.sms.body', code: context.pin_code.code, readable_type: context.pin_code.readable_type)
       }
@@ -24,13 +27,22 @@ module  SpreeCmCommissioner
     end
 
     def send_email
-      SpreeCmCommissioner::PinCodeMailer.send_pin_code(context.pin_code.id, context.pin_code.readable_type).deliver_later
+      SpreeCmCommissioner::PinCodeMailer.send_pin_code(
+        context.pin_code.id,
+        context.pin_code.readable_type,
+        context.tenant
+      ).deliver_later
     end
 
     def send_telegram_debug_pin_code
       return unless ENV['PIN_CODE_DEBUG_NOTIFIY_TELEGRAM_ENABLE'] == 'yes'
 
-      SpreeCmCommissioner::TelegramDebugPinCodeSenderJob.perform_later(context.pin_code.id)
+      options = {
+        pin_code_id: context.pin_code.id,
+        tenant_id: context.tenant&.id
+      }
+
+      SpreeCmCommissioner::TelegramDebugPinCodeSenderJob.perform_later(options)
     end
   end
 end

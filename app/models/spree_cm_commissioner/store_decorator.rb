@@ -5,6 +5,7 @@ module SpreeCmCommissioner
 
       base.has_one :default_notification_image, class_name: 'SpreeCmCommissioner::FeatureImage', dependent: :destroy, as: :viewable
       base.accepts_nested_attributes_for :default_notification_image, reject_if: :all_blank
+      base.multi_tenant :tenant, class_name: 'SpreeCmCommissioner::Tenant'
     end
   end
 end
