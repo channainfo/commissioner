@@ -5,7 +5,7 @@ RSpec.describe Spree::Order, type: :model do
     it 'return expected associations' do
       expect(described_class.whitelisted_ransackable_associations).to match_array([
         "shipments", "user", "created_by", "approver", "canceler", "promotions", "bill_address", "ship_address",
-        "line_items", "store", "customer", "taxon", "payments", "invoice"
+        "line_items", "store", "customer", "taxon", "payments", "invoice" , "guests"
       ])
     end
   end

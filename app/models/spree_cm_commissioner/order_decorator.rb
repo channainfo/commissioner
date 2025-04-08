@@ -46,7 +46,7 @@ module SpreeCmCommissioner
 
       base.delegate :customer, to: :user, allow_nil: true
 
-      base.whitelisted_ransackable_associations |= %w[customer taxon payments invoice]
+      base.whitelisted_ransackable_associations |= %w[customer taxon payments guests invoice]
       base.whitelisted_ransackable_attributes |= %w[intel_phone_number phone_number email number state]
 
       def base.search_by_qr_data!(data)
