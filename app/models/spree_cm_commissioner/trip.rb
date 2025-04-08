@@ -4,6 +4,7 @@ module SpreeCmCommissioner
     attr_accessor :hours, :minutes, :seconds
 
     before_validation :convert_duration_to_seconds
+    belongs_to :variant, class_name: 'Spree::Variant'
 
     belongs_to :route, class_name: 'Spree::Product'
     belongs_to :vehicle, class_name: 'SpreeCmCommissioner::Vehicle'
@@ -37,6 +38,12 @@ module SpreeCmCommissioner
       minutes = (duration % 3600) / 60
       seconds = duration % 60
       { hours: hours, minutes: minutes, seconds: seconds }
+    end
+
+    def arrival_time
+      return nil if departure_time.nil? || duration.nil?
+
+      departure_time + duration.seconds
     end
 
     private

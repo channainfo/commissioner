@@ -38,6 +38,7 @@ RSpec.describe SpreeCmCommissioner::TripStop, type: :model do
   let!(:aeon1_option_value) { create(:cm_option_value, presentation: aeon1.name, name: aeon1.id, option_type: origin_option_type) }
   let!(:angkor_wat_option_value) { create(:cm_option_value, presentation: angkor_wat.name, name: angkor_wat.id, option_type: origin_option_type) }
   let!(:departure_time_option_value) { create(:cm_option_value, presentation: '10:00', name: '10:00', option_type: departure_time_option_type) }
+  let!(:duration_in_hours_option_value) { create(:cm_option_value, presentation: '5', name: '5', option_type: duration_in_hours_option_type) }
   let!(:vehicle_option_value) { create(:cm_option_value, presentation: bus1.code, name: bus1.id, option_type: vehicle_option_type) }
 
   # Routes
@@ -45,8 +46,8 @@ RSpec.describe SpreeCmCommissioner::TripStop, type: :model do
   let!(:vet_phnom_penh_sihanoukville) { create(:route, name: 'VET Airbus Phnom Penh Sihanoukville 10:00', short_name: "PP-SV-10:00-6", vendor: vet_airbus) }
 
   before do
-    vet_phnom_penh_siem_reap.option_types = [origin_option_type, destination_option_type, departure_time_option_type, vehicle_option_type]
-    vet_phnom_penh_sihanoukville.option_types = [origin_option_type, destination_option_type, departure_time_option_type, vehicle_option_type]
+    vet_phnom_penh_siem_reap.option_types = [origin_option_type, destination_option_type, departure_time_option_type, duration_in_hours_option_type, vehicle_option_type]
+    vet_phnom_penh_sihanoukville.option_types = [origin_option_type, destination_option_type, departure_time_option_type, duration_in_hours_option_type, vehicle_option_type]
   end
 
   describe '#create_vendor_stop' do
@@ -54,10 +55,9 @@ RSpec.describe SpreeCmCommissioner::TripStop, type: :model do
       it "should create vendor stop with trip's origin and destination for vet_airbus" do
         trip = Spree::Variant.create!(
           product_id: vet_phnom_penh_siem_reap.id,
-          option_values: [phnom_penh_option_value, siem_reap_option_value, departure_time_option_value, vehicle_option_value]
+          option_values: [phnom_penh_option_value, siem_reap_option_value, departure_time_option_value,
+                          vehicle_option_value, duration_in_hours_option_value]
         )
-        trip.trip_stops.create(stop_id: phnom_penh.id, stop_type: 'boarding')
-        trip.trip_stops.create(stop_id: siem_reap.id, stop_type: 'drop_off')
         trip.save!
         vendor = vet_airbus
         expect(vendor.boarding_points.count).to eq(1)
@@ -68,20 +68,16 @@ RSpec.describe SpreeCmCommissioner::TripStop, type: :model do
         expect(larryta.drop_off_points.count).to eq(0)
       end
       it "should not create duplicate vendor stop for PhnomPenh for vet_airbus" do
-        trip1 = Spree::Variant.create!(
+        Spree::Variant.create!(
           product_id: vet_phnom_penh_siem_reap.id,
-          option_values: [phnom_penh_option_value, siem_reap_option_value, departure_time_option_value, vehicle_option_value]
+          option_values: [phnom_penh_option_value, siem_reap_option_value, departure_time_option_value,
+                          vehicle_option_value,duration_in_hours_option_value]
         )
-        trip2 = Spree::Variant.create!(
+        Spree::Variant.create!(
           product_id: vet_phnom_penh_siem_reap.id,
-          option_values: [phnom_penh_option_value, sihanoukville_option_value, departure_time_option_value, vehicle_option_value]
+          option_values: [phnom_penh_option_value, sihanoukville_option_value, departure_time_option_value,
+                          vehicle_option_value, duration_in_hours_option_value]
         )
-        trip1.trip_stops.create(stop_id: phnom_penh.id, stop_type: 'boarding')
-        trip1.trip_stops.create(stop_id: siem_reap.id, stop_type: 'drop_off')
-
-        trip2.trip_stops.create(stop_id: phnom_penh.id, stop_type: 'boarding')
-        trip2.trip_stops.create(stop_id: sihanoukville.id, stop_type: 'drop_off')
-
         vendor = vet_airbus
         expect(vendor.boarding_points.count).to eq(1)
         expect(vendor.drop_off_points.count).to eq(2)
@@ -95,11 +91,9 @@ RSpec.describe SpreeCmCommissioner::TripStop, type: :model do
       before do
         trip = Spree::Variant.create!(
           product_id: vet_phnom_penh_siem_reap.id,
-          option_values: [phnom_penh_option_value, siem_reap_option_value, departure_time_option_value, vehicle_option_value]
-        )
-        trip.trip_stops.create(stop_id: phnom_penh.id, stop_type: 'boarding')
-        trip.trip_stops.create(stop_id: siem_reap.id, stop_type: 'drop_off')
-
+          option_values: [phnom_penh_option_value, siem_reap_option_value, departure_time_option_value,
+                          vehicle_option_value, duration_in_hours_option_value]
+          )
         SpreeCmCommissioner::TripStop.create(trip_id: trip.id, stop_id: aeon1.id, stop_type: 'boarding')
         SpreeCmCommissioner::TripStop.create(trip_id: trip.id, stop_id: angkor_wat.id, stop_type: 'drop_off')
       end
@@ -115,10 +109,9 @@ RSpec.describe SpreeCmCommissioner::TripStop, type: :model do
       it "should not create duplicate vendor stop for aeon1 for vet_airbus" do
         trip2 = Spree::Variant.create!(
           product_id: vet_phnom_penh_siem_reap.id,
-          option_values: [phnom_penh_option_value, sihanoukville_option_value, departure_time_option_value, vehicle_option_value]
-        )
-        trip2.trip_stops.create(stop_id: phnom_penh.id, stop_type: 'boarding')
-        trip2.trip_stops.create(stop_id: sihanoukville.id, stop_type: 'drop_off')
+          option_values: [phnom_penh_option_value, sihanoukville_option_value, departure_time_option_value,
+                          vehicle_option_value, duration_in_hours_option_value]
+          )
         SpreeCmCommissioner::TripStop.create(trip_id: trip2.id, stop_id: aeon1.id, stop_type: 'boarding')
         vendor = vet_airbus
         expect(vendor.boarding_points.count).to eq(2)

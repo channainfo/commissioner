@@ -1,7 +1,5 @@
 module SpreeCmCommissioner
   class TripConnection < ApplicationRecord
-    attr_accessor :hours, :minutes
-
     belongs_to :from_trip, class_name: 'Spree::Variant'
     belongs_to :to_trip, class_name: 'Spree::Variant'
 
@@ -13,11 +11,18 @@ module SpreeCmCommissioner
     def calculate_connection_time_minutes
       return if from_trip.nil? || to_trip.nil?
 
-      connection_time_in_minutes = (to_trip.options.departure_time - from_trip.options.arrival_time) / 60
+      arrival_seconds   = from_trip.trip.arrival_time.seconds_since_midnight
+      departure_seconds = to_trip.trip.departure_time.seconds_since_midnight
+
+      layover_seconds = departure_seconds - arrival_seconds
+      layover_seconds += 86_400 if layover_seconds.negative?
+
+      connection_time_in_minutes = layover_seconds / 60
+
       if connection_time_in_minutes.between?(0, 180)
-        self.connection_time_minutes = connection_time_in_minutes
+        self.connection_time_minutes = connection_time_in_minutes.to_i
       else
-        errors.add(:base, 'Connection time should be between 0 and 180 minutes')
+        errors.add(:base, 'Connection time must be less than 3 hours')
       end
     end
 
