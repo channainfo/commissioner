@@ -6,7 +6,6 @@ module Spree
           class LineItemsController < CartController
             before_action :ensure_order, only: :create
             before_action :load_variant, only: :create
-            before_action :ensure_cart_exist, only: :create
 
             # override
             def create
