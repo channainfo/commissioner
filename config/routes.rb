@@ -483,7 +483,9 @@ Spree::Core::Engine.add_routes do
           patch  :associate
         end
         resource :cart_guests, only: %i[create destroy]
-        resources :guests, only: %i[create update show]
+        resources :guests, only: %i[create update show] do
+          resources :id_cards, only: %i[create update destroy]
+        end
 
         resource :checkout, controller: :checkout, only: %i[update] do
           patch  :next
