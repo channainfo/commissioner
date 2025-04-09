@@ -2,20 +2,18 @@ module Spree
   module Admin
     class UserEventsController < Spree::Admin::ResourceController
       before_action :load_parents, if: -> { params[:taxon_id].present? }
+      before_action :load_user, if: -> { params[:user_id].present? }
 
       # override
       def index
         if params[:taxon_id].present?
           @user_events = @taxon.user_events
-        else
-          @user = Spree::User.find(params[:user_id])
+        elsif params[:user_id].present?
           @user_events = @user.user_events
+        else
+          flash[:error] = 'Invalid taxon or user' # rubocop:disable Rails/I18nLocaleTexts
+          redirect_back(fallback_location: collection_url)
         end
-      end
-
-      # override
-      def new
-        @user = spree_current_user
       end
 
       # override
@@ -31,6 +29,10 @@ module Spree
       end
 
       private
+
+      def load_user
+        @user = Spree::User.find(params[:user_id])
+      end
 
       def load_parents
         @taxon = Spree::Taxon.find(params[:taxon_id])
