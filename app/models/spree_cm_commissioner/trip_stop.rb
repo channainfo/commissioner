@@ -13,11 +13,11 @@ module SpreeCmCommissioner
     validates :stop_id, uniqueness: { scope: :trip_id }
 
     def set_stop_name
-      self.stop_name = stop.name
+      self.stop_name = stop.name if stop.present?
     end
 
     def create_vendor_stop
-      vendor.vendor_stops.where(stop_id: stop_id, stop_type: stop_type).first_or_create
+      vendor.vendor_stops.where(stop_id: stop_id, stop_type: stop_type).first_or_create if trip.present?
     end
 
     private
