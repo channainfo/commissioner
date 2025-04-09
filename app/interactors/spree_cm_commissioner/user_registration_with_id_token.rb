@@ -6,7 +6,7 @@ module SpreeCmCommissioner
 
       if firebase_context.success?
         ActiveRecord::Base.transaction do
-          register_user!(firebase_context.provider[:name])
+          register_user!(firebase_context.provider[:name], firebase_context.provider[:email])
           link_user_account!(firebase_context.provider)
         end
       else
@@ -14,8 +14,8 @@ module SpreeCmCommissioner
       end
     end
 
-    def register_user!(name)
-      user = Spree.user_class.new(password: SecureRandom.base64(16), **name_attributes(name))
+    def register_user!(name, email)
+      user = Spree.user_class.new(password: SecureRandom.base64(16), email: email, **name_attributes(name))
       if user.save(validate: false)
         context.user = user
       else
