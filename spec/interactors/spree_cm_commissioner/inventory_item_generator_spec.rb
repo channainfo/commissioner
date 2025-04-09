@@ -1,12 +1,11 @@
-# spec/spree_cm_commissioner/inventory_item_generator_spec.rb
 require 'spec_helper'
 
 module SpreeCmCommissioner
   RSpec.describe InventoryItemGenerator, type: :interactor do
     describe '#call' do
-      let(:variant_event) { create(:variant, product: create(:product, product_type: 'event')) }
-      let(:variant_bus) { create(:variant, product: create(:product, product_type: 'bus')) }
-      let(:variant_accommodation) { create(:variant, product: create(:product, product_type: 'accommodation')) }
+      let(:variant_event) { create(:product, product_type: 'event').master }
+      let(:variant_bus) { create(:product, product_type: 'bus').master }
+      let(:variant_accommodation) { create(:product, product_type: 'accommodation').master }
       let(:stock) { { quantity_available: 10, max_capacity: 20 } }
 
       before do
@@ -70,9 +69,10 @@ module SpreeCmCommissioner
     end
 
     describe '#create_inventory_item' do
-      let(:variant) { create(:variant, product: create(:product, product_type: 'event')) }
+      let(:variant) { create(:product, product_type: 'event').master }
       let(:inventory_date) { Date.today }
       let(:stock) { { quantity_available: 10, max_capacity: 0 } }
+      let(:inventory_item) { instance_double(InventoryItem, id: 1, quantity_available: 10, inventory_date: inventory_date) }
 
       before do
         allow(variant).to receive(:inventory_item_stock).and_return(stock)
@@ -86,6 +86,8 @@ module SpreeCmCommissioner
         end
 
         it 'creates a new inventory item with correct attributes' do
+          allow(subject).to receive(:cache_inventory_in_redis)
+
           expect(InventoryItem).to receive(:create!).with(
             variant_id: variant.id,
             inventory_date: inventory_date,
@@ -94,6 +96,13 @@ module SpreeCmCommissioner
             product_type: variant.product_type
           )
 
+          subject.send(:create_inventory_item, variant, inventory_date)
+        end
+
+        it 'caches the inventory in Redis after creation' do
+          allow(InventoryItem).to receive(:create!).and_return(inventory_item)
+
+          expect(subject).to receive(:cache_inventory_in_redis).with(inventory_item)
           subject.send(:create_inventory_item, variant, inventory_date)
         end
       end
@@ -111,5 +120,85 @@ module SpreeCmCommissioner
         end
       end
     end
+
+    describe '#cache_inventory_in_redis' do
+      let(:inventory_item) { instance_double(InventoryItem, id: 1, quantity_available: 15, inventory_date: inventory_date) }
+      let(:redis) { double('Redis') }
+      let(:redis_pool) { double('redis_pool') }
+      let(:subject) { described_class.new(Interactor::Context.new) }
+      let(:current_time) { Time.parse('2025-03-31 12:00:00 UTC') }
+
+      before do
+        allow(SpreeCmCommissioner).to receive(:redis_pool).and_return(redis_pool)
+        allow(redis_pool).to receive(:with).and_yield(redis)
+        allow(Time).to receive(:now).and_return(current_time)
+      end
+
+      context 'with a specific inventory date' do
+        let(:inventory_date) { Date.parse('2025-04-15') }
+
+        it 'sets the quantity_available in Redis with correct key and calculated expiration' do
+          expected_expiration = (Time.parse('2025-04-15 23:59:59 UTC').to_i - current_time.to_i)
+
+          expect(redis).to receive(:set).with(
+            'inventory:1',
+            15,
+            ex: expected_expiration
+          )
+
+          subject.send(:cache_inventory_in_redis, inventory_item)
+        end
+      end
+
+      context 'with nil inventory date (event inventory)' do
+        let(:inventory_date) { nil }
+
+        it 'sets the quantity_available with a one-year expiration' do
+          expect(redis).to receive(:set).with(
+            'inventory:1',
+            15,
+            ex: 31_536_000
+          )
+
+          subject.send(:cache_inventory_in_redis, inventory_item)
+        end
+      end
+
+      context 'when Redis operation fails' do
+        let(:inventory_date) { Date.tomorrow }
+
+        before do
+          allow(redis).to receive(:set).and_raise(Redis::CannotConnectError)
+        end
+
+        it 'raises the Redis error' do
+          expect {
+            subject.send(:cache_inventory_in_redis, inventory_item)
+          }.to raise_error(Redis::CannotConnectError)
+        end
+      end
+
+      context 'with different quantity_available values' do
+        let(:inventory_date) { Date.tomorrow }
+        let(:inventory_item) { instance_double(InventoryItem, id: 1, quantity_available: quantity, inventory_date: inventory_date) }
+
+        [0, 100, -1].each do |test_quantity|
+          context "when quantity_available is #{test_quantity}" do
+            let(:quantity) { test_quantity }
+
+            it 'caches the specific quantity value' do
+              expect(redis).to receive(:set).with(
+                'inventory:1',
+                test_quantity,
+                ex: anything
+              )
+              subject.send(:cache_inventory_in_redis, inventory_item)
+            end
+          end
+        end
+      end
+    end
   end
 end
+
+#

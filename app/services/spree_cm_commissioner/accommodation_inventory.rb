@@ -19,8 +19,10 @@ module SpreeCmCommissioner
         # I want to book 2 days, I have 3 people, the hotel tell me that, day1 has 5 room, but day2 has 2 room,
         # So if day 2 has 2 room, I may hesitate to book it. And the search result still show for user to see the option.
         inventories.min_by(&:quantity_available) if inventories.size == day_count &&
-                                                    inventories.all? { |i| i.max_capacity >= num_guests &&
-                                                                           i.quantity_available > 0 }
+          inventories.all? do |i|
+            i.max_capacity >= num_guests &&
+              i.quantity_available.positive?
+          end
       end
     end
 
@@ -38,7 +40,7 @@ module SpreeCmCommissioner
       return false if check_in.blank? || check_out.blank?
       return false unless check_in.is_a?(Date) && check_out.is_a?(Date)
       return false if check_out <= check_in # Check-out must be after check-in
-      return false if check_in < Date.today # Prevent past dates
+      return false if check_in < Time.zone.today # Prevent past dates
 
       true
     end

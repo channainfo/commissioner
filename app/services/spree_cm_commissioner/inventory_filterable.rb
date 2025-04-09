@@ -4,6 +4,7 @@ module SpreeCmCommissioner
       inventory_rows = build_scope(variant_ids, start_date, end_date, product_type).to_a
 
       return [] if inventory_rows.empty?
+
       cached_counts = fetch_cached_counts(inventory_rows)
       build_inventory_results(inventory_rows, cached_counts)
     end
@@ -60,7 +61,8 @@ module SpreeCmCommissioner
       # 1 year for events
       return 31_536_000 if inventory_date.blank?
 
-      3600 # 1 hour
+      expiration_in_seconds = Time.parse(inventory_date.to_s).end_of_day.to_i - Time.now.to_i
+      [expiration_in_seconds, 0].max
     end
 
     def build_open_struct(row, quantity_available)
