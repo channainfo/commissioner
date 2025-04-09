@@ -7,7 +7,7 @@ describe 'Spree Oauth Spec', type: :request do
     let(:user) { build(:cm_user) }
 
     it 'successfully log user in with email' do
-      allow(Spree.user_class).to receive(:find_user_by_login).with(user.email).and_return(user)
+      allow(Spree.user_class).to receive(:find_user_by_login).with(user.email, nil).and_return(user)
 
       post "/spree_oauth/token", params: {
         "grant_type": "password",
@@ -25,7 +25,7 @@ describe 'Spree Oauth Spec', type: :request do
     end
 
     it 'successfully log user in with phone_number' do
-      allow(Spree.user_class).to receive(:find_user_by_login).with(user.phone_number).and_return(user)
+      allow(Spree.user_class).to receive(:find_user_by_login).with(user.phone_number, nil).and_return(user)
 
       post "/spree_oauth/token", params: {
         "grant_type": "password",
@@ -43,7 +43,7 @@ describe 'Spree Oauth Spec', type: :request do
     end
 
     it 'successfully log user in with login' do
-      allow(Spree.user_class).to receive(:find_user_by_login).with(user.login).and_return(user)
+      allow(Spree.user_class).to receive(:find_user_by_login).with(user.login, nil).and_return(user)
 
       post "/spree_oauth/token", params: {
         "grant_type": "password",
@@ -61,7 +61,7 @@ describe 'Spree Oauth Spec', type: :request do
     end
 
     it 'return error on incorrect password' do
-      allow(Spree.user_class).to receive(:find_user_by_login).with(user.login).and_return(user)
+      allow(Spree.user_class).to receive(:find_user_by_login).with(user.login, nil).and_return(user)
 
       post "/spree_oauth/token", params: {
         "grant_type": "password",

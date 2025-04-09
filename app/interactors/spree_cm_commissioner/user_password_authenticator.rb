@@ -1,13 +1,15 @@
 module SpreeCmCommissioner
   class UserPasswordAuthenticator < BaseInteractor
-    delegate :login, :password, to: :context
+    delegate :login, :password, :tenant_id, to: :context
 
     def call
-      context.user = Spree.user_class.find_user_by_login(login)
+      context.user = Spree.user_class.find_user_by_login(login, tenant_id)
       context.fail!(message: I18n.t('authenticator.incorrect_login')) if context.user.nil?
+
       if spree_confirmable? && active_for_authentication? && !validate_password(user)
         context.fail!(message: I18n.t('authenticator.incorrect_password'))
       end
+
       context.fail!(message: I18n.t('authenticator.incorrect_password')) unless validate_password(context.user)
       context.fail!(message: 'account_temporarily_deleted') if context.user.soft_deleted?
     end
