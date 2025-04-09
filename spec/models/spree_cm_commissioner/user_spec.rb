@@ -56,31 +56,31 @@ RSpec.describe Spree::User, type: :model do
     let!(:user) { create(:cm_user, password: 'correct-password', phone_number: "0123456789", email: "test@gmail.com") }
 
     it 'return user by uppercase email' do
-      expect(described_class.find_user_by_login(user.email.upcase)).to eq user
+      expect(described_class.find_user_by_login(user.email.upcase, nil)).to eq user
     end
 
     it 'return user by randomcase email' do
-      expect(described_class.find_user_by_login('tESt@gmail.com')).to eq user
+      expect(described_class.find_user_by_login('tESt@gmail.com', nil)).to eq user
     end
 
     it 'return user by phone_number' do
-      expect(described_class.find_user_by_login('0123456789')).to eq user
+      expect(described_class.find_user_by_login('0123456789', nil)).to eq user
     end
 
     it 'return user by intel_phone_number with space' do
-      expect(described_class.find_user_by_login('+855 123456789')).to eq user
+      expect(described_class.find_user_by_login('+855 123456789', nil)).to eq user
     end
 
     it 'return user by intel_phone_number' do
-      expect(described_class.find_user_by_login('+855123456789')).to eq user
+      expect(described_class.find_user_by_login('+855123456789', nil)).to eq user
     end
 
     it 'return user by login' do
-      expect(described_class.find_user_by_login(user.login)).to eq user
+      expect(described_class.find_user_by_login(user.login, nil)).to eq user
     end
 
     it 'return nil when can not find login' do
-      expect(described_class.find_user_by_login('invalid')).to eq nil
+      expect(described_class.find_user_by_login('invalid', nil)).to eq nil
     end
   end
 
