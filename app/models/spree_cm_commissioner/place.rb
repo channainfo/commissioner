@@ -13,6 +13,10 @@ module SpreeCmCommissioner
 
     has_many :product_places, class_name: 'SpreeCmCommissioner::ProductPlace', dependent: :destroy
     has_many :products, through: :product_places
+    has_many :children, class_name: 'SpreeCmCommissioner::Place', foreign_key: :parent_id, dependent: :destroy
+    belongs_to :parent, class_name: 'SpreeCmCommissioner::Place', optional: true
+
+    has_many :vendor_stops, class_name: 'SpreeCmCommissioner::VendorStop', dependent: :destroy
 
     def self.ransackable_attributes(auth_object = nil)
       super & %w[name code]

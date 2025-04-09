@@ -19,7 +19,7 @@ module Spree
             render_error_payload(context.message, 400)
           end
 
-          # :phone_number, :email, :type, :recaptcha_token, :recaptcha_action, :recaptcah_site_key
+          # :phone_number, :email, :type, :tenant
           def create
             context = SpreeCmCommissioner::PinCodeGenerator.call(pin_code_attrs)
 
@@ -40,8 +40,10 @@ module Spree
             SpreeCmCommissioner::V2::Storefront::PinCodeSerializer
           end
 
+          private
+
           def pin_code_attrs
-            params.slice(:phone_number, :email, :type)
+            params.slice(:phone_number, :email, :type).merge(tenant: @tenant)
           end
         end
       end

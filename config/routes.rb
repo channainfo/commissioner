@@ -1,5 +1,10 @@
 Spree::Core::Engine.add_routes do
   # Add your extension routes here
+
+  authenticate :spree_user, -> (user) { user.admin? || user.organizer? } do
+    mount Blazer::Engine, at: 'admin/bi_reports'
+  end
+
   namespace :admin do
     post '/invalidate_api_caches', to: 'base#invalidate_api_caches'
 
@@ -173,6 +178,7 @@ Spree::Core::Engine.add_routes do
           delete :remove_app_banner
           delete :remove_web_banner
           delete :remove_home_banner
+          delete :remove_video_banner
         end
       end
     end
@@ -266,6 +272,7 @@ Spree::Core::Engine.add_routes do
     resources :tenants do
       resources :vendors, controller: :tenant_vendors
     end
+    resources :event_blazer_queries
   end
 
   resources :events, controller: 'events/base' do
@@ -441,6 +448,7 @@ Spree::Core::Engine.add_routes do
         end
         resources :images
         resource :s3_signed_urls
+        resources :invites
       end
 
       namespace :tenant do
@@ -461,9 +469,13 @@ Spree::Core::Engine.add_routes do
         resource :account, controller: :account, only: %i[show update]
         resource :account_deletions, only: %i[destroy]
         resource :account_recovers, only: [:update]
+        namespace :account do
+          resources :orders, controller: :orders, only: %i[index show]
+        end
 
         resource :cart, controller: :cart, only: %i[show create destroy] do
           post   :add_item
+          delete 'remove_line_item/:line_item_id', to: 'cart#remove_line_item', as: :cart_remove_line_item
           patch  :set_quantity
           patch  :apply_coupon_code
           delete 'remove_coupon_code/:coupon_code', to: 'cart#remove_coupon_code', as: :cart_remove_coupon_code
@@ -471,15 +483,34 @@ Spree::Core::Engine.add_routes do
           patch  :associate
         end
         resource :cart_guests, only: %i[create destroy]
-        resources :guests, only: %i[create update show]
+        resources :guests, only: %i[create update show] do
+          resources :id_cards, only: %i[create update destroy]
+        end
 
         resource :checkout, controller: :checkout, only: %i[update] do
           patch  :next
           patch  :advance
           patch  :complete
+          post   :create_payment
+        end
+
+        resources :customer_notifications, only: [:show]
+        resources :notifications do
+          collection do
+            patch :mark_all_as_read
+          end
+          member do
+            patch :mark_as_read
+          end
         end
 
         resources :user_account_linkages, only: %i[index create destroy]
+        resources :cart_payment_method_groups, only: %i[index]
+        resource :s3_signed_urls
+        resource :profile_images, only: %i[update destroy]
+        resources :line_items, only: %i[index show]
+        resources :guest_card_classes
+        resources :tickets, only: :index
       end
 
       namespace :storefront do
@@ -497,6 +528,13 @@ Spree::Core::Engine.add_routes do
 
         resources :wished_items
         resources :user_promotion
+
+        resources :order_histories, only: %i[index] do
+          member do
+            patch :archive
+          end
+        end
+
         resources :order_promotions
         resources :guest_card_classes
 
@@ -561,6 +599,7 @@ Spree::Core::Engine.add_routes do
           resources :homepage_sections, only: [:index]
           resource :homepage_background, controller: :homepage_background, only: [:show]
         end
+        resources :active_homepage_events, only: [:index]
 
         resources :qr_urls, only: [:show]
         resources :guest_qrs, only: [:show]

@@ -1,0 +1,12 @@
+<!-- override base_mailer_header.html.erb -->
+<tr>
+  <td class="email-masthead">
+    <%= link_to @sender_name, class: 'template-label' do %>
+      <% if @logo_path.present? %>
+        <%= image_tag @logo_path, class: 'logo', alt: @sender_name, title: @sender_name %>
+      <% else %>
+        <%= @sender_name %>
+      <% end %>
+    <% end %>
+  </td>
+</tr>

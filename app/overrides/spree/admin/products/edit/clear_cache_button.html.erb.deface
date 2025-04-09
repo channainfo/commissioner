@@ -1,0 +1,3 @@
+<!-- insert_after "erb[silent]:contains('content_for :page_actions')" -->
+
+<%= button_link_to Spree.t(:clear_cache), admin_invalidate_api_caches_path(model: Spree::Product.name),method: :post, class: "btn btn-outline-primary" %>

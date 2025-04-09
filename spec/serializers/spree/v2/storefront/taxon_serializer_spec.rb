@@ -51,7 +51,9 @@ RSpec.describe Spree::V2::Storefront::TaxonSerializer, type: :serializer do
         :purchasable_on,
         :purchasable_on_app,
         :purchasable_on_web,
-        :vendor_id
+        :vendor_id,
+        :available_on,
+        :hide_video_banner
       )
     end
 
@@ -65,6 +67,7 @@ RSpec.describe Spree::V2::Storefront::TaxonSerializer, type: :serializer do
         :app_banner,
         :web_banner,
         :home_banner,
+        :video_banner,
         :vendors,
         :visible_products,
       )

@@ -10,7 +10,7 @@ module SpreeCmCommissioner
     end
 
     def events
-      taxons = Spree::Taxon.includes(:vendor).where(vendor_id: vendor_id)
+      taxons = Spree::Taxon.includes(:vendor).where(vendor_id: vendor_id, depth: 1)
 
       case section
       when 'upcoming'

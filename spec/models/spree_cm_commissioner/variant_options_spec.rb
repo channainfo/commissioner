@@ -305,4 +305,52 @@ RSpec.describe SpreeCmCommissioner::VariantOptions do
       end
     end
   end
+
+  describe "#origin" do
+    context "when variant has origin option value" do
+      let(:place) { create(:cm_place, name: 'Phnom Penh') }
+      let(:option_type) { create(:cm_option_type, :origin) }
+      let(:option_value) { create(:cm_option_value, name: place.id, option_type: option_type) }
+
+      it 'return origin in integer' do
+        expect(subject.origin).to eq place.id
+      end
+    end
+  end
+
+  describe "#destination" do
+    context "when variant has destination option value" do
+      let(:place) { create(:cm_place, name: 'Siem Reap') }
+      let(:option_type) { create(:cm_option_type, :destination) }
+      let(:option_value) { create(:cm_option_value, name: place.id, option_type: option_type) }
+
+      it 'return destination in integer' do
+        expect(subject.destination).to eq place.id
+      end
+    end
+  end
+
+  describe "#departure_time" do
+    context "when variant has departure-time option value" do
+      let(:option_type) { create(:cm_option_type, :departure_time) }
+      let(:option_value) { create(:cm_option_value, name: '12:00:00', option_type: option_type) }
+
+      it 'return departure_time in string' do
+        expect(subject.departure_time).to eq Time.zone.parse('12:00:00')
+      end
+    end
+  end
+
+  describe "#vehicle" do
+    context "when variant has vehicle option value" do
+      let(:vehicle_type) { create(:vehicle_type, code: '1234', route_type: 'automobile') }
+      let(:car) { create(:vehicle, code: 'vehicle_1', license_plate: '1234', vehicle_type: vehicle_type) }
+      let(:option_type) { create(:cm_option_type, :vehicle) }
+      let(:option_value) { create(:cm_option_value, name: car.id, option_type: option_type) }
+
+      it 'return vehicle in integer' do
+        expect(subject.vehicle).to eq car.id
+      end
+    end
+  end
 end

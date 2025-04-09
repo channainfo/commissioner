@@ -46,6 +46,8 @@ km:
     app_banner: App Banner (16x9)
     web_banner: Web banner (10x2)
     home_banner: Home Banner (16x9)
+    video_banner: Video Banner (9x16)
+    video_banner_require_size: Maximum size 10MB
 
   taxon_vendor:
     empty_info: "មិនមានព័ត៌មានអំពីអ្នកលក់ទេ"
@@ -409,3 +411,14 @@ km:
   user_roles_assigner:
     user_not_found: 'រកមិនឃើញអ្នកប្រើប្រាស់'
     roles_empty: 'តួនាទីគឺទទេ'
+
+  invite:
+    url_not_found: 'រកមិនឃើញតំណអញ្ជើញ ឬផុតកំណត់ហើយ'
+    accept_fail: 'បរាជ័យក្នុងការទទួលយកការអញ្ជើញ'
+    url_expired: 'តំណ​អញ្ជើញ​បាន​ផុត​កំណត់'
+    already_invited: 'បរាជ័យ៖ អ្នកប្រើប្រាស់បានអញ្ជើញចូលរួមព្រឹត្តិការណ៍រួចហើយ'
+    update_fail: 'បរាជ័យ៖ ធ្វើបច្ចុប្បន្នភាពអ្នកប្រើប្រាស់អញ្ជើញ'
+
+  event_blazer_queries:
+    success: 'បានរក្សាទុកព្រឹត្តិការណ៍ដោយជោគជ័យ'
+    fail: 'បានរក្សាទុកព្រឹត្តិការណ៍រួចហើយs'

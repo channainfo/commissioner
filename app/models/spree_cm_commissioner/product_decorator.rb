@@ -75,6 +75,10 @@ module SpreeCmCommissioner
       taxons.event.first&.parent
     end
 
+    def ticket_url
+      "#{Spree::Store.default.formatted_url}/tickets/#{slug}"
+    end
+
     private
 
     def set_tenant

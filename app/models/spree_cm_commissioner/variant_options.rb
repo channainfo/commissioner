@@ -143,5 +143,42 @@ module SpreeCmCommissioner
     def number_of_guests
       number_of_adults + number_of_kids
     end
+
+    def origin
+      @origin ||= option_value_name_for(option_type_name: 'origin')&.to_i
+    end
+
+    def destination
+      @destination ||= option_value_name_for(option_type_name: 'destination')&.to_i
+    end
+
+    def vehicle
+      @vehicle ||= option_value_name_for(option_type_name: 'vehicle')&.to_i
+    end
+
+    def allow_seat_selection
+      @allow_seat_selection ||= option_value_name_for(option_type_name: 'allow-seat-selection')&.to_i
+    end
+
+    def departure_time
+      @departure_time ||= begin
+        time = option_value_name_for(option_type_name: 'departure-time')
+        Time.zone.parse(time) if time.present?
+      end
+    end
+
+    def arrival_time
+      @arrival_time ||= departure_time + total_duration_in_minutes.minutes
+    end
+
+    def total_duration_in_minutes
+      total_duration_in_minutes = 0
+
+      total_duration_in_minutes += duration_in_hours * 60 if duration_in_hours.present?
+      total_duration_in_minutes += duration_in_minutes if duration_in_minutes.present?
+      total_duration_in_minutes += duration_in_seconds / 60 if duration_in_seconds.present?
+
+      total_duration_in_minutes
+    end
   end
 end

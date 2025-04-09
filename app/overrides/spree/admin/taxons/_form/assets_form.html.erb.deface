@@ -47,5 +47,24 @@
     form:f,
     classes: ['col-md-5 ml-3']
   %>
+
+  <%= f.field_container :video_banner, direct_upload: true, class: ['col-md-5 ml-3 rounded border p-3'] do %>
+    <% if @taxon.video_banner&.attachment.present? %>
+      <video class="rounded border mb-4 mw-150" style="max-height: 200px" controls>
+        <source src="<%= main_app.rails_blob_url(@taxon.video_banner.attachment) %>" type="<%= @taxon.video_banner.attachment.content_type %>">
+        Your browser does not support the video tag.
+      </video>
+    <% end %>
+
+    <div data-hook="file" class="mb-3" >
+      <%= f.label :video_banner, I18n.t('taxon.video_banner') %>
+      <%= f.label :video_banner, I18n.t('taxon.video_banner_require_size') %>
+      <%= f.file_field :video_banner, required: false, accept: "video/*" %>
+    </div>
+
+    <% if @taxon.video_banner.present? && defined?(remove_video_banner_admin_taxonomy_taxon_url) %>
+      <%= link_to Spree.t(:remove_video), remove_video_banner_admin_taxonomy_taxon_url, method: :delete %>
+    <% end %>
+  <% end %>
 </div>
 

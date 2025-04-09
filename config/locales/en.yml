@@ -41,6 +41,8 @@ en:
     app_banner: App Banner (16x9)
     web_banner: Web banner (10x2)
     home_banner: Home Banner (16x9)
+    video_banner: Video Banner (9x16)
+    video_banner_require_size: Maximum size 10MB
     note: "<b>Note:</b> Subtitle is used for country code in Nationality Taxon"
 
   taxon_vendor:
@@ -565,3 +567,13 @@ en:
   user_roles_assigner:
     user_not_found: 'User not found'
     roles_empty: 'Roles are empty'
+  invite:
+    url_not_found: 'Invite link not found or have been expired'
+    accept_fail: 'Failed to accept invite'
+    url_expired: 'Invitation link is expired'
+    already_invited: 'Failed: User already invited to event'
+    update_fail: 'Failed: to Update invite user'
+  event_blazer_queries:
+    success: 'Event saved Successfully'
+    fail: 'Event already saved'
+

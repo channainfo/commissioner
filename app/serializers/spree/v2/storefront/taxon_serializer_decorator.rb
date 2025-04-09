@@ -10,10 +10,11 @@ module Spree
           base.has_one :app_banner, serializer: ::SpreeCmCommissioner::V2::Storefront::AssetSerializer
           base.has_one :web_banner, serializer: ::SpreeCmCommissioner::V2::Storefront::AssetSerializer
           base.has_one :home_banner, serializer: ::SpreeCmCommissioner::V2::Storefront::AssetSerializer
+          base.has_one :video_banner, serializer: ::SpreeCmCommissioner::V2::Storefront::VideoSerializer
 
           base.attributes :custom_redirect_url, :kind, :subtitle, :from_date, :to_date,
                           :background_color, :foreground_color, :show_badge_status,
-                          :purchasable_on, :vendor_id
+                          :purchasable_on, :vendor_id, :available_on, :hide_video_banner
 
           base.attribute :purchasable_on_app do |taxon|
             taxon.purchasable_on == 'app' || taxon.purchasable_on == 'both'
@@ -22,6 +23,8 @@ module Spree
           base.attribute :purchasable_on_web do |taxon|
             taxon.purchasable_on == 'web' || taxon.purchasable_on == 'both'
           end
+
+          base.cache_options store: nil
         end
       end
     end

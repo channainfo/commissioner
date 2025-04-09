@@ -1,12 +1,13 @@
 module SpreeCmCommissioner
   module TaxonDecorator
     # rubocop:disable Metrics/MethodLength
-    def self.prepended(base)
+    def self.prepended(base) # rubocop:disable Metrics/AbcSize
       base.include SpreeCmCommissioner::TaxonKind
       base.include SpreeCmCommissioner::Transit::TaxonBitwise
 
       base.preference :background_color, :string
       base.preference :foreground_color, :string
+      base.preference :reports, :array, default: []
 
       base.has_many :taxon_vendors, class_name: 'SpreeCmCommissioner::TaxonVendor'
       base.has_many :vendors, through: :taxon_vendors
@@ -28,6 +29,7 @@ module SpreeCmCommissioner
       base.has_one :web_banner, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::TaxonWebBanner'
       base.has_one :app_banner, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::TaxonAppBanner'
       base.has_one :home_banner, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::TaxonHomeBanner'
+      base.has_one :video_banner, as: :viewable, dependent: :destroy, class_name: 'SpreeCmCommissioner::TaxonVideoBanner'
 
       # Update children association to work with nested set (lft, rgt)
       base.has_many :children, -> { order(:lft) }, class_name: 'Spree::Taxon', foreign_key: :parent_id, dependent: :destroy
@@ -48,6 +50,22 @@ module SpreeCmCommissioner
       base.whitelisted_ransackable_attributes |= %w[kind]
 
       base.enum purchasable_on: { both: 0, web: 1, app: 2 }
+      base.has_many :crew_invites, class_name: 'SpreeCmCommissioner::CrewInvite', dependent: :destroy
+      base.has_many :invite_user_events, through: :user_events, class_name: 'SpreeCmCommissioner::InviteUserEvent'
+
+      base.has_many :line_items, through: :products
+      base.has_many :event_blazer_queries, class_name: 'SpreeCmCommissioner::TaxonBlazerQuery'
+      base.has_many :blazer_queries, through: :event_blazer_queries, class_name: 'Blazer::Query'
+
+      def base.active_homepage_events
+        joins(:homepage_section_relatables)
+          .joins("INNER JOIN spree_taxons taxon ON taxon.id = cm_homepage_section_relatables.relatable_id
+                  AND cm_homepage_section_relatables.relatable_type = 'Spree::Taxon'"
+                )
+          .joins('INNER JOIN cm_homepage_sections ON cm_homepage_section_relatables.homepage_section_id = cm_homepage_sections.id')
+          .where(cm_homepage_sections: { tenant_id: nil, active: true })
+          .where(kind: :event)
+      end
     end
     # rubocop:enable Metrics/MethodLength
 

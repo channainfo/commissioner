@@ -3,7 +3,7 @@ module Spree
     module V2
       module Tenant
         class PinCodeGeneratorsController < BaseController
-          # :phone_number, :email, :type
+          # :phone_number, :email, :type, :tenant
           def create
             context = SpreeCmCommissioner::PinCodeGenerator.call(pin_code_attrs)
 
@@ -24,8 +24,10 @@ module Spree
             SpreeCmCommissioner::V2::Storefront::PinCodeSerializer
           end
 
+          private
+
           def pin_code_attrs
-            params.slice(:phone_number, :email, :type)
+            params.slice(:phone_number, :email, :type).merge(tenant: @tenant)
           end
         end
       end

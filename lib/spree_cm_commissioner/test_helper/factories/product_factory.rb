@@ -50,6 +50,15 @@ FactoryBot.define do
         trip.permanent_stock = 10
         trip.stock_items = [create(:stock_item, variant: trip, stock_location: route.vendor.stock_locations.first)]
         trip.stock_items.first.adjust_count_on_hand(10)
+
+        # option types
+        route.option_types << create(:cm_option_type, :origin)
+        route.option_types << create(:cm_option_type, :destination)
+        route.option_types << create(:cm_option_type, :departure_time)
+        route.option_types << create(:cm_option_type, :duration_in_hours)
+        route.option_types << create(:cm_option_type, :duration_in_minutes)
+        route.option_types << create(:cm_option_type, :allow_seat_selection)
+        route.option_types << create(:cm_option_type, :vehicle)
       end
     end
 

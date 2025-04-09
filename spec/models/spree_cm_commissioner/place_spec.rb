@@ -7,6 +7,8 @@ RSpec.describe SpreeCmCommissioner::Place, type: :model do
 
     it { should have_many(:product_places).class_name('SpreeCmCommissioner::ProductPlace').dependent(:destroy) }
     it { should have_many(:products).through(:product_places) }
+    it { should have_many(:children).class_name('SpreeCmCommissioner::Place').with_foreign_key(:parent_id).dependent(:destroy) }
+    it { should belong_to(:parent).class_name('SpreeCmCommissioner::Place').optional }
   end
 
   describe 'validation' do

@@ -1,13 +1,19 @@
 module SpreeCmCommissioner
   class PinCodeMailer < Spree::BaseMailer
-    def send_pin_code(pin_code_id, action)
+    include SpreeCmCommissioner::PinCodeSenderHelper
+
+    def send_pin_code(pin_code_id, action, tenant)
       @pin_code = SpreeCmCommissioner::PinCode.find(pin_code_id)
+
+      @sender_name = sender_name(tenant)
+      @sender_email = sender_email(tenant)
+      @logo_path = logo_url(tenant)
 
       return unless @pin_code.email?
 
-      subject = "#{Spree::Store.default.name} #{action.titlecase}"
+      subject = "#{@sender_name} #{action.titlecase}"
 
-      mail(from: from_address, to: @pin_code.contact, subject: subject)
+      mail(from: @sender_email, to: @pin_code.contact, subject: subject)
     end
   end
 end

@@ -7,6 +7,10 @@ module SpreeCmCommissioner
       base.scope :subscription, -> { where.not(subscription_id: nil) }
       base.scope :paid, -> { where(payment_state: :paid) }
       base.scope :complete_or_canceled, -> { complete.or(where(state: 'canceled')) }
+      base.scope :payment, -> { incomplete.where(state: 'payment') }
+      base.scope :archived, -> { where.not(archived_at: nil) }
+      base.scope :not_archived, -> { where(archived_at: nil) }
+      base.scope :without_user, -> { where(user_id: nil) }
 
       base.scope :filter_by_match_user_contact, lambda { |user|
         complete.where(
@@ -31,18 +35,19 @@ module SpreeCmCommissioner
       base.has_one :invoice, dependent: :destroy, class_name: 'SpreeCmCommissioner::Invoice'
       base.has_one :customer, class_name: 'SpreeCmCommissioner::Customer', through: :subscription
 
-      base.belongs_to :tenant, class_name: 'SpreeCmCommissioner::Tenant'
+      base.belongs_to :tenant, class_name: 'SpreeCmCommissioner::Tenant', optional: true
       base.belongs_to :subscription, class_name: 'SpreeCmCommissioner::Subscription', optional: true
 
       base.has_many :taxons, class_name: 'Spree::Taxon', through: :customer
       base.has_many :vendors, through: :products, class_name: 'Spree::Vendor'
       base.has_many :taxons, through: :products, class_name: 'Spree::Taxon'
       base.has_many :guests, through: :line_items, class_name: 'SpreeCmCommissioner::Guest'
+      base.has_many :guest_card_classes, class_name: 'SpreeCmCommissioner::GuestCardClass', through: :variants
 
       base.delegate :customer, to: :user, allow_nil: true
 
-      base.whitelisted_ransackable_associations |= %w[customer taxon payments invoice]
-      base.whitelisted_ransackable_attributes |= %w[intel_phone_number phone_number email number]
+      base.whitelisted_ransackable_associations |= %w[customer taxon payments guests invoice]
+      base.whitelisted_ransackable_attributes |= %w[intel_phone_number phone_number email number state]
 
       def base.search_by_qr_data!(data)
         token = data.match(/^R\d{9,}-([A-Za-z0-9_\-]+)$/)&.captures
@@ -98,6 +103,10 @@ module SpreeCmCommissioner
       changes = slice(:user_id, :email, :phone_number, :created_by_id, :bill_address_id, :ship_address_id)
 
       self.class.unscoped.where(id: self).update_all(changes) # rubocop:disable Rails/SkipsModelValidations
+    end
+
+    def mark_as_archive
+      update(archived_at: Time.current)
     end
 
     # overrided

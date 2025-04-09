@@ -7,6 +7,7 @@ require 'spree_dev_tools/rspec/spec_helper'
 require 'spree_multi_vendor/factories'
 require 'spree_cm_commissioner/factories'
 require 'interactor'
+require 'blazer'
 
 DatabaseCleaner.allow_remote_database_url = true if Rails.env.test?
 

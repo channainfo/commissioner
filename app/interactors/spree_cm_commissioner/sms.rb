@@ -40,7 +40,7 @@ module  SpreeCmCommissioner
     end
 
     def sms_options
-      opts = { to: context.to, body: context.body }
+      opts = { from: context.from, to: context.to, body: context.body }
       opts[:to] = sanitize(opts[:to]) if opts[:to].present?
       opts[:from] = from_number
       opts

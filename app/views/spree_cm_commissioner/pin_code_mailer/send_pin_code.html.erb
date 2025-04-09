@@ -3,7 +3,7 @@
     <tr>
       <td>
         <h4>Hello, </h4>
-        <p>Welcome to <%= Spree::Store.default.name %> </p>
+        <p>Welcome to <%= @sender_name %> </p>
         <p>Please use the following code:</p>
         <h5 style="font-size: 22px;padding: 0 10px;"><%= @pin_code.code %></h5>
         <p>to verify your account.</p>
@@ -11,7 +11,7 @@
         <br>
         <p>
           Regards,<br>
-          The <%= Spree::Store.default.name  %> team
+          The <%= @sender_name %> team
         </p>
       </td>
     </tr>

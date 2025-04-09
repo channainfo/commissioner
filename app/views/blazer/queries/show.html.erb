@@ -1,0 +1,12 @@
+<% if params[:embed].present? %>
+<%= render partial: "blazer/queries/embed/content" %>
+<% else %>
+  <%= render partial: "content" %>
+<% end %>
+
+<script>
+  var code = $("#code code");
+  if (code.text().length < 10000) {
+    hljs.highlightElement(code.get(0));
+  }
+</script>

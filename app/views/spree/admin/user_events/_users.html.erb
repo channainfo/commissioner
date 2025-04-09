@@ -2,7 +2,7 @@
   <%= link_to Spree.t(:taxonomies), spree.admin_taxonomies_url %> /
 
   <%= link_to @taxonomy.root.name, spree.edit_admin_taxonomy_url(@taxonomy) %>
-  <%if @taxon.depth !=1 %>
+  <%if @taxon.depth !=1 && @taxon.parent.present? %>
       / <%= link_to @taxon.parent.name, spree.edit_admin_taxonomy_taxon_url(@taxonomy,@taxon.parent.id) %>
     <%end%>
   <% unless @taxon.root? %>
@@ -30,12 +30,17 @@
       </thead>
       <tbody>
         <% @user_events.each do |user_event| %>
-          <% user = user_event.user %>
-          <tr id="<%= spree_dom_id user %>" data-hook="admin_taxonomy_taxon_user_events_index_rows">
-            <td><%= user.id %></td>
-            <td class='user_email'><%= link_to user.email, edit_admin_user_url(user) %></td>
-            <td><%= user.created_at %></td>
-            <td><%= user.updated_at %></td>
+          <tr id="<%= spree_dom_id user_event %>" data-hook="admin_taxonomy_taxon_user_events_index_rows">
+            <td><%= user_event.id %></td>
+            <td class='user_email'>
+              <% if user_event.user.present? %>
+                <%= link_to user_event.user.email, edit_admin_user_url(user_event.user) %>
+              <% else %>
+                 <span class="text-danger">User is deleted</span>
+              <% end %>
+            </td>
+            <td><%= user_event.created_at %></td>
+            <td><%= user_event.updated_at %></td>
             <td data-hook="admin_taxonomy_taxon_user_events_index_row_actions" class="actions">
               <span class="d-flex justify-content-end">
                 <%= link_to_delete user_event, url: admin_user_event_path(user_event.id), no_text: true if can?(:delete, user_event) %>

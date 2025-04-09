@@ -47,6 +47,16 @@ module Spree
             render_order(result)
           end
 
+          def create_payment
+            result = create_payment_service.call(order: spree_current_order, params: params)
+
+            if result.success?
+              render_serialized_payload(201) { serialize_resource(spree_current_order.reload) }
+            else
+              render_error_payload(result.error)
+            end
+          end
+
           private
 
           def wrap_with_multitenant_without(&block)
@@ -71,6 +81,10 @@ module Spree
 
           def update_service
             Spree::Api::Dependencies.storefront_checkout_update_service.constantize
+          end
+
+          def create_payment_service
+            Vpago::Payments::FindOrCreate
           end
         end
       end

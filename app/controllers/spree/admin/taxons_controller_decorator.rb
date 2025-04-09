@@ -21,6 +21,10 @@ module Spree
         remove_asset(@taxon.home_banner)
       end
 
+      def remove_video_banner
+        remove_asset(@taxon.video_banner)
+      end
+
       private
 
       def remove_asset(asset)
@@ -38,6 +42,7 @@ module Spree
         @taxon.build_app_banner(attachment: permitted_resource_params.delete(:app_banner)) if permitted_resource_params[:app_banner]
         @taxon.build_web_banner(attachment: permitted_resource_params.delete(:web_banner)) if permitted_resource_params[:web_banner]
         @taxon.build_home_banner(attachment: permitted_resource_params.delete(:home_banner)) if permitted_resource_params[:home_banner]
+        @taxon.build_video_banner(attachment: permitted_resource_params.delete(:video_banner)) if permitted_resource_params[:video_banner]
       end
     end
   end

@@ -1,6 +1,6 @@
 module SpreeCmCommissioner
   class TelegramDebugPinCodeSender < BaseInteractor
-    delegate :pin_code, to: :context
+    delegate :pin_code, :name, to: :context
 
     def call
       telegram_client.send_message(
@@ -13,6 +13,7 @@ module SpreeCmCommissioner
     def body
       text = []
 
+      text << "<b>From: #{name}</b>"
       text << "<b>PIN CODE sent to #{pin_code.contact}</b>"
       text << "<code>#{pin_code.code}</code> is your #{pin_code.readable_type}"
 

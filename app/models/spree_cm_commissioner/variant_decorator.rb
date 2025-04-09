@@ -24,8 +24,10 @@ module SpreeCmCommissioner
       base.has_many :inventory_items, class_name: 'SpreeCmCommissioner::InventoryItem'
 
       base.scope :subscribable, -> { active.joins(:product).where(product: { subscribable: true, status: :active }) }
-
+      base.has_one :trip,
+                   class_name: 'SpreeCmCommissioner::Trip'
       base.accepts_nested_attributes_for :option_values
+      base.after_commit :sync_trip, if: -> { product.product_type == 'transit' }
     end
 
     def delivery_required?
@@ -122,6 +124,22 @@ module SpreeCmCommissioner
           errors.add(:attr_type, message)
         end
       end
+    end
+
+    def sync_trip
+      return unless product.product_type == 'transit'
+
+      trip = SpreeCmCommissioner::Trip.find_or_initialize_by(variant_id: id)
+
+      trip.assign_attributes(
+        product_id: product_id,
+        origin_id: options.origin,
+        destination_id: options.destination,
+        departure_time: options.departure_time,
+        duration: options.total_duration_in_seconds,
+        vehicle_id: options.vehicle
+      )
+      trip.save
     end
   end
 end

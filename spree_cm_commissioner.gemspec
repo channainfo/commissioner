@@ -28,7 +28,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'spree_backend', spree_opts
   s.add_dependency 'spree_multi_vendor', '>= 2.4.1'
   s.add_dependency 'spree_extension'
-
   s.add_dependency 'activerecord-multi-tenant'
   s.add_dependency 'phonelib'
   s.add_dependency 'aws-sdk-ecs'
@@ -61,5 +60,6 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'pg'
   s.add_development_dependency 'spree_dev_tools'
+  s.add_dependency 'blazer', '~> 3.0.4'
   s.metadata['rubygems_mfa_required'] = 'true'
 end
