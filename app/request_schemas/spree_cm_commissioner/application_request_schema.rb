@@ -11,7 +11,7 @@ module SpreeCmCommissioner
     end
 
     def error_message
-      errors.map{|error| "#{error.path.join(', ')}: #{error.text}"}.to_sentence
+      errors.map { |error| "#{error.path.join(', ')}: #{error.text}" }.to_sentence
     end
 
     private

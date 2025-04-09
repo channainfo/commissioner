@@ -42,18 +42,17 @@ require 'counter_culture'
 
 require 'byebug' if Rails.env.development? || Rails.env.test?
 
+# TODO: remove disabling rubocop
 module SpreeCmCommissioner
   class << self
     attr_accessor :redis_pool
 
-    def redis_pool
+    def redis_pool # rubocop:disable Lint/DuplicateMethods
       @redis_pool ||= default_redis_pool
     end
 
     # Allows overriding the default Redis connection pool with a custom one
-    def redis_pool=(custom_redis_pool)
-      @redis_pool = custom_redis_pool
-    end
+    attr_writer :redis_pool # rubocop:disable Lint/DuplicateMethods
 
     # Resets the Redis pool, useful for testing or reinitialization
     def reset_redis_pool

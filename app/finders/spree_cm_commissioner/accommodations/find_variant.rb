@@ -11,11 +11,13 @@ module SpreeCmCommissioner
       end
 
       def execute
-        Spree::Variant.joins(:inventory_items)
+        Spree::Variant
+          .joins(:inventory_items)
           .where(vendor_id: vendor_id)
           .where(inventory_items: { inventory_date: date_range_excluding_checkout })
           .where('CAST(public_metadata->\'cm_options\'->>\'number-of-adults\' AS INTEGER) +
-                  CAST(public_metadata->\'cm_options\'->>\'number-of-kids\' AS INTEGER) >= ?', number_of_guests)
+                  CAST(public_metadata->\'cm_options\'->>\'number-of-kids\' AS INTEGER) >= ?', number_of_guests
+          )
           .where('inventory_items.quantity_available > 0')
           .distinct
       end

@@ -17,7 +17,7 @@ module SpreeCmCommissioner
     validates :quantity_available, numericality: { greater_than_or_equal_to: 0 }
     validates :max_capacity, numericality: { greater_than_or_equal_to: 0 } # Originally inventory of each variant.
     validates :inventory_date, presence: true, unless: -> { product_type == PRODUCT_TYPE_EVENT }
-    validates :variant_id, uniqueness: { scope: :inventory_date, message: ->(object, data) { "The variant is taken on #{object.inventory_date}" } }
+    validates :variant_id, uniqueness: { scope: :inventory_date, message: -> (object, _data) { "The variant is taken on #{object.inventory_date}" } }
 
     # Scope
     scope :for_product, -> (type) { where(product_type: type) }

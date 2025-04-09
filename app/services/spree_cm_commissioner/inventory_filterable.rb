@@ -1,9 +1,10 @@
 module SpreeCmCommissioner
   module InventoryFilterable
-    def fetch_inventory_items(variant_ids, start_date = nil, end_date = nil, product_type)
+    def fetch_inventory_items(variant_ids, start_date, end_date, product_type)
       inventory_rows = build_scope(variant_ids, start_date, end_date, product_type).to_a
 
       return [] if inventory_rows.empty?
+
       cached_counts = fetch_cached_counts(inventory_rows)
       build_inventory_results(inventory_rows, cached_counts)
     end

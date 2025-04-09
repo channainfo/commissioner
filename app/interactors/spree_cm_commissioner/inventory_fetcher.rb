@@ -15,11 +15,17 @@ module SpreeCmCommissioner
     end
 
     def inventory_service
-      if product_type == SpreeCmCommissioner::InventoryItem::PRODUCT_TYPE_ACCOMMODATION
-        SpreeCmCommissioner::AccommodationInventory.new(variant_ids: variant_ids, check_in: Date.parse(params[:check_in]), check_out: Date.parse(params[:check_out]), num_guests: params[:num_guests].to_i)
-      elsif product_type == SpreeCmCommissioner::InventoryItem::PRODUCT_TYPE_BUS
+      case product_type
+      when SpreeCmCommissioner::InventoryItem::PRODUCT_TYPE_ACCOMMODATION
+        SpreeCmCommissioner::AccommodationInventory.new(
+          variant_ids: variant_ids,
+          check_in: Date.parse(params[:check_in]),
+          check_out: Date.parse(params[:check_out]),
+          num_guests: params[:num_guests].to_i
+        )
+      when SpreeCmCommissioner::InventoryItem::PRODUCT_TYPE_BUS
         SpreeCmCommissioner::BusInventory.new(variant_ids: variant_ids, trip_date: Date.parse(params[:trip_date]))
-      elsif product_type == SpreeCmCommissioner::InventoryItem::PRODUCT_TYPE_EVENT
+      when SpreeCmCommissioner::InventoryItem::PRODUCT_TYPE_EVENT
         SpreeCmCommissioner::EventInventory.new(variant_ids: variant_ids)
       end
     end
@@ -27,6 +33,7 @@ module SpreeCmCommissioner
     def validate_params!
       return context.fail!(message: 'Variant IDs are required') if variant_ids.blank?
       return context.fail!(message: 'Product type is required') if product_type.blank?
+
       context.fail!(message: "Missing required parameters for product type '#{product_type}'") if invalid_fetching_params?
     end
 

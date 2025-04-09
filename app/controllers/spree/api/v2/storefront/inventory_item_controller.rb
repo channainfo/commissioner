@@ -15,7 +15,7 @@ module Spree
           end
 
           # Overwrite cache key
-          def collection_cache_key(collection)
+          def collection_cache_key(collection) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
             ids = collection.to_a.collect(&:variant_id)
             cache_key_parts = [
               self.class.to_s,
@@ -31,7 +31,7 @@ module Spree
               serializer_params,
               params[:sort]&.strip,
               params[:page]&.to_s&.strip,
-              params[:per_page]&.to_s&.strip,
+              params[:per_page]&.to_s&.strip
             ].flatten.join('-')
 
             Digest::MD5.hexdigest(cache_key_parts)
@@ -63,10 +63,7 @@ module Spree
               product_type: product_type
             )
 
-            unless @context.success?
-              render_error(@context.message, :unprocessable_entity)
-              return # This stops the action chain
-            end
+            render_error(@context.message, :unprocessable_entity) unless @context.success?
           end
 
           def product_type

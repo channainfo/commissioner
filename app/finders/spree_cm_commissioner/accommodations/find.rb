@@ -11,11 +11,12 @@ module SpreeCmCommissioner
       end
 
       def execute
-        collection = scope
+        scope
           .where(default_state_id: state_id)
           .where(inventory_items: { inventory_date: date_range_excluding_checkout })
           .where('CAST(spree_variants.public_metadata->\'cm_options\'->>\'number-of-adults\' AS INTEGER) +
-                  CAST(spree_variants.public_metadata->\'cm_options\'->>\'number-of-kids\' AS INTEGER) >= ?', number_of_guests)
+                  CAST(spree_variants.public_metadata->\'cm_options\'->>\'number-of-kids\' AS INTEGER) >= ?', number_of_guests
+          )
           .where('inventory_items.quantity_available > 0')
           .distinct
       end
@@ -25,7 +26,7 @@ module SpreeCmCommissioner
       def scope
         Spree::Vendor
           .joins(variants: :inventory_items)
-          .where(primary_product_type: :accommodation, state: :active )
+          .where(primary_product_type: :accommodation, state: :active)
       end
 
       # Why? check_out date is not considered to be charged
