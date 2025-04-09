@@ -4,6 +4,7 @@ module SpreeCmCommissioner
 
     included do
       before_save :set_options_to_public_metadata
+      before_save :set_guest_options
 
       delegate :location,
                :reminder_in_hours,
@@ -15,12 +16,9 @@ module SpreeCmCommissioner
                :max_quantity_per_order,
                :due_date,
                :month,
-               :number_of_adults,
-               :number_of_kids,
                :kids_age_max,
                :allowed_extra_adults,
                :allowed_extra_kids,
-               :number_of_guests,
                :bib_prefix,
                :bib_zerofill,
                :bib_display_prefix?,
@@ -84,6 +82,16 @@ module SpreeCmCommissioner
 
     def post_paid?
       options.payment_option == 'post-paid'
+    end
+
+    # can consider as customers.
+    def number_of_guests
+      number_of_adults + number_of_kids
+    end
+
+    def set_guest_options
+      self.number_of_adults = options.number_of_adults
+      self.number_of_kids = options.number_of_kids
     end
 
     # save optins to public_metadata so we don't have to query option types & option values when needed them.
