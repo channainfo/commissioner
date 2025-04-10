@@ -5,11 +5,27 @@ module Spree
         module Account
           module OrdersControllerDecorator
             def collection
-              if params[:request_state].present?
-                spree_current_user.orders.filter_by_request_state
+              if spree_current_user.present?
+                if params[:request_state].present?
+                  spree_current_user.orders.filter_by_request_state
+                else
+                  collection_finder.new(user: spree_current_user, store: current_store, state: params.delete(:state)).execute
+                end
               else
-                collection_finder.new(user: spree_current_user, store: current_store, state: params.delete(:state)).execute
+                Spree::Order.where(token: params[:id])
               end
+            end
+
+            def resource
+              resource = if spree_current_user.present?
+                           resource_finder.new(user: spree_current_user, number: params[:id], store: current_store).execute.take
+                         else
+                           Spree::Order.find_by(token: params[:id])
+                         end
+
+              raise ActiveRecord::RecordNotFound if resource.nil?
+
+              resource
             end
 
             def collection_finder
