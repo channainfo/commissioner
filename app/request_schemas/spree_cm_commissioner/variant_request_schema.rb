@@ -1,9 +1,8 @@
 module SpreeCmCommissioner
-  class AccommodationRequestSchema < ApplicationRequestSchema
+  class VariantRequestSchema < ApplicationRequestSchema
     params do
       required(:from_date).value(:date)
       required(:to_date).value(:date)
-      required(:state_id).value(:integer)
       required(:number_of_adults).value(:integer)
       required(:number_of_kids).value(:integer)
     end
