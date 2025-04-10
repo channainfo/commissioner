@@ -1,0 +1,3 @@
+<!-- insert_bottom "[data-hook='product_property']" -->
+
+<%= tab :tenants, match_path: '/tenants', label: 'Tenants' if can? :manage, SpreeCmCommissioner::Tenant %>

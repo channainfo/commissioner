@@ -97,6 +97,8 @@ Spree::Core::Engine.add_routes do
 
     resources :metafields, only: :update
 
+    resources :events
+
     resources :products do
       member do
         get 'edit_metafields', to: 'metafields#edit'

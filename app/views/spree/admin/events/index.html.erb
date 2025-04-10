@@ -1,0 +1,45 @@
+<div class="table-responsive border rounded bg-white">
+  <table class="table" id="listing_products">
+    <thead class="text-muted">
+      <tr data-hook="admin_products_index_headers">
+        <th scope="col" class="pl-5" colspan="1">Name</th>
+        <th scope="col" class="pl-5" colspan="2">Vendor</th>
+        <th scope="col" class="pl-5" colspan="2">Edit</th>
+        <th scope="col" class="pl-5" colspan="2">Edit</th>
+        <th scope="col" class="pl-5" colspan="2">Edit</th>
+        <% if defined?(Spree::Vendor) && spree_current_user.permissions.exists?(entry: 'spree/billing/vendors', action: 'edit') %>
+          <th scope="col" class="text-center">Vendor</th>
+        <% end %>
+        <th scope="col" class="text-center" data-hook="admin_products_index_header_actions" class="actions"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @events.each do |event| %>
+        <tr>
+          <td scope="row" class="image">
+            <%= event.name %>
+          </td>
+          <td class="text-center">
+            <%= event.available_on %>
+          </td>
+          <td class="text-center">
+            ok
+          </td>
+          <td class="text-center">
+            ok
+          </td>
+          <td class="actions" data-hook="admin_products_index_row_actions">
+  <span class="d-flex justify-content-end">
+    <button class="btn btn-sm btn-outline-primary mr-2" title="Edit">
+      <i class="fa fa-edit"></i>
+    </button>
+    <button class="btn btn-sm btn-outline-danger" title="Delete">
+      <i class="fa fa-trash"></i>
+    </button>
+  </span>
+</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,3 @@
+<!-- insert_bottom "[data-hook='admin_product_sub_tabs']" -->
+
+<%= tab :events, label: 'Events', url: admin_events_path, match_path: '/events' %>
