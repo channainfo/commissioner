@@ -90,6 +90,21 @@ describe 'Spree Oauth Spec', type: :request do
 
   # :password, but for id token
   context 'grant_type: password' do
+
+    before do
+      service_account = { project_id: 'bookmeplus' }
+      fake_credentials = double('Firebase::Admin::Credentials',
+        project_id: service_account[:project_id],
+        service_account: service_account
+      )
+      stub_const('Firebase::Admin::Credentials', Class.new)
+
+      allow(Firebase::Admin::Credentials).to receive(:from_json).and_return(fake_credentials)
+      allow_any_instance_of(SpreeCmCommissioner::FirebaseIdTokenProvider)
+        .to receive(:get_user_email)
+        .and_return('bookmeplus@gmail.com')
+    end
+
     it 'successfully log to existing user in' do
       existing_user = create(:cm_user_id_token)
 
