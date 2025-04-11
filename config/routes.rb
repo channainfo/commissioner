@@ -511,6 +511,9 @@ Spree::Core::Engine.add_routes do
         resources :line_items, only: %i[index show]
         resources :guest_card_classes
         resources :tickets, only: :index
+
+        resource :reset_passwords, only: [:update]
+        resource :change_passwords, only: [:update]
       end
 
       namespace :storefront do
