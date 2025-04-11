@@ -87,4 +87,26 @@ RSpec.describe Spree::Product, type: :model do
       end
     end
   end
+
+  describe '#pre_inventory_days' do
+    it 'returns 365 for accommodation' do
+      product = create(:product, product_type: :accommodation)
+      expect(product.pre_inventory_days).to eq(365)
+    end
+
+    it 'returns 90 for transit' do
+      product = create(:product, product_type: :transit)
+      expect(product.pre_inventory_days).to eq(90)
+    end
+
+    it 'returns 30 for service' do
+      product = create(:product, product_type: :service)
+      expect(product.pre_inventory_days).to eq(30)
+    end
+
+    it 'returns nil for none of above product_type' do
+      product = create(:product, product_type: :ecommerce)
+      expect(product.pre_inventory_days).to be_nil
+    end
+  end
 end
