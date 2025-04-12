@@ -26,6 +26,11 @@ module SpreeCmCommissioner
                    class_name: 'SpreeCmCommissioner::Trip'
       base.accepts_nested_attributes_for :option_values
       base.after_commit :sync_trip, if: -> { product.product_type == 'transit' }
+
+      base.belongs_to :vendor, class_name: 'Spree::Vendor'
+      base.has_many :vendor_payment_methods, class_name: 'Spree::PaymentMethod',
+                                             through: :vendor,
+                                             source: :payment_methods
     end
 
     def delivery_required?

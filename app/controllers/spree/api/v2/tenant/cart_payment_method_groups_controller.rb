@@ -3,6 +3,7 @@ module Spree
     module V2
       module Tenant
         class CartPaymentMethodGroupsController < BaseController
+          around_action :wrap_with_multitenant_without
           include Spree::Api::V2::Storefront::OrderConcern
 
           before_action :ensure_order
@@ -25,6 +26,12 @@ module Spree
           # override
           def collection_serializer
             Spree::V2::Tenant::PaymentMethodGroupSerializer
+          end
+
+          private
+
+          def wrap_with_multitenant_without(&block)
+            MultiTenant.without(&block)
           end
         end
       end

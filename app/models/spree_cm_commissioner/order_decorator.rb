@@ -49,6 +49,10 @@ module SpreeCmCommissioner
       base.whitelisted_ransackable_associations |= %w[customer taxon payments guests invoice]
       base.whitelisted_ransackable_attributes |= %w[intel_phone_number phone_number email number state]
 
+      base.has_many :vendor_payment_methods, -> { unscope(:order).distinct },
+                    class_name: 'Spree::PaymentMethod',
+                    through: :line_items
+
       def base.search_by_qr_data!(data)
         token = data.match(/^R\d{9,}-([A-Za-z0-9_\-]+)$/)&.captures
 
@@ -190,6 +194,23 @@ module SpreeCmCommissioner
 
     def display_outstanding_balance
       Spree::Money.new(outstanding_balance, currency: currency).to_s
+    end
+
+    # override
+    def available_payment_methods(store = nil)
+      payment_methods = if respond_to?(:tenant) && tenant.present?
+                          tenant.tenant_payment_methods
+                        elsif vendor_payment_methods.any?
+                          vendor_payment_methods
+                        else
+                          collect_payment_methods(store)
+                        end
+
+      @available_payment_methods ||= if required_payway_payout?
+                                       payment_methods.select(&:type_payway_v2?)
+                                     else
+                                       payment_methods
+                                     end
     end
 
     private

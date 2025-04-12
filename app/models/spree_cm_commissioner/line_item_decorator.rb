@@ -35,6 +35,9 @@ module SpreeCmCommissioner
       base.accepts_nested_attributes_for :guests, allow_destroy: true
       base.accepts_nested_attributes_for :line_item_seats, allow_destroy: true
 
+      base.has_one :vendor, through: :variant
+      base.has_many :vendor_payment_methods, class_name: 'Spree::PaymentMethod', through: :variant
+
       def base.json_api_columns
         json_api_columns = column_names.reject { |c| c.match(/_id$|id|preferences|(.*)password|(.*)token|(.*)api_key/) }
         json_api_columns << :options_text
