@@ -1,0 +1,17 @@
+<div>
+  <% events.each do |event| %>
+    <div>
+      <h6><%= event.options[:inventory_item].variant.options_text %></h6>
+      <ul class="list-group mt-1">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Max capacity
+          <span class="badge badge-primary badge-pill"><%= event.options[:inventory_item].max_capacity %></span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Quantity available
+          <span class="badge badge-primary badge-pill"><%= event.options[:inventory_item].quantity_available %></span>
+        </li>
+      </ul>
+    </div>
+  <% end %>
+</div>
