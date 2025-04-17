@@ -82,6 +82,29 @@ RSpec.describe Spree::Variant, type: :model do
     it { is_expected.to have_many(:guest_card_classes).through(:variant_guest_card_class).class_name('SpreeCmCommissioner::GuestCardClass') }
   end
 
+  describe 'scopes' do
+    let!(:permanent_variant) { create(:variant, product: create(:product, product_type: 'service')) }
+    let!(:non_permanent_variant) { create(:variant, product: create(:product, product_type: 'ecommerce')) }
+
+    describe '.with_permanent_stock' do
+      it 'returns only variants with permanent product types' do
+        result = described_class.with_permanent_stock
+
+        expect(result).to include(permanent_variant)
+        expect(result).not_to include(non_permanent_variant)
+      end
+    end
+
+    describe '.with_non_permanent_stock' do
+      it 'returns only variants with non-permanent product types' do
+        result = described_class.with_non_permanent_stock
+
+        expect(result).to include(non_permanent_variant)
+        expect(result).not_to include(permanent_variant)
+      end
+    end
+  end
+
   describe 'callbacks' do
     context '#after_commit' do
       let(:vendor) { create(:active_vendor, name: 'Angkor Hotel', min_price: 10, max_price: 30) }
@@ -199,6 +222,67 @@ RSpec.describe Spree::Variant, type: :model do
     context 'when both variant, product are not discontinued' do
       it 'return false' do
         expect(variant.discontinued?).to be false
+      end
+    end
+  end
+
+  describe '#default_inventory_item_exist?' do
+    let(:variant) { create(:variant) }
+
+    context 'when there is an inventory item with nil inventory_date' do
+      before { create(:cm_inventory_item, product_type: :ecommerce, variant: variant, inventory_date: nil) }
+      it { expect(variant.default_inventory_item_exist?).to be true }
+    end
+
+    context 'when there is no inventory item with nil inventory_date' do
+      it { expect(variant.default_inventory_item_exist?).to be false }
+    end
+  end
+
+  describe '#create_default_non_permanent_inventory_item!' do
+    let(:variant) { create(:variant) }
+
+    before do
+      allow(variant).to receive(:should_track_inventory?).and_return(true)
+      allow(variant).to receive(:total_on_hand).and_return(20)
+      allow(variant).to receive(:product_type).and_return('ecommerce')
+    end
+
+    context 'when default inventory item already exists' do
+      before { create(:cm_inventory_item, product_type: :ecommerce, variant: variant, inventory_date: nil) }
+
+      it 'does not create a new inventory item' do
+        expect { variant.create_default_non_permanent_inventory_item! }.not_to change(variant.inventory_items, :count)
+      end
+    end
+
+    context 'when it does not track inventory' do
+      before { allow(variant).to receive(:should_track_inventory?).and_return(false) }
+
+      it 'does not create an inventory item' do
+        expect { variant.create_default_non_permanent_inventory_item! }.not_to change(variant.inventory_items, :count)
+      end
+    end
+
+    context 'when all conditions pass and no default inventory item exists' do
+      it 'creates a default inventory item with variant.total_on_hand' do
+        expect { variant.create_default_non_permanent_inventory_item! }.to change(variant.inventory_items, :count).by(1)
+
+        item = variant.inventory_items.last
+
+        expect(item.quantity_available).to eq(20)
+        expect(item.max_capacity).to eq(20)
+        expect(item.product_type).to eq('ecommerce')
+      end
+    end
+
+    context 'when custom quantity and max capacity are passed' do
+      it 'uses the provided values instead of variant.total_on_hand' do
+        variant.create_default_non_permanent_inventory_item!(quantity_available: 5, max_capacity: 10)
+        item = variant.inventory_items.last
+
+        expect(item.quantity_available).to eq(5)
+        expect(item.max_capacity).to eq(10)
       end
     end
   end

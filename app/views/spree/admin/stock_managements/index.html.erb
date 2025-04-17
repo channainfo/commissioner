@@ -19,10 +19,7 @@
       <% @variants.each do |variant| %>
         <tr id="<%= spree_dom_id variant %>" data-hook="admin_product_stock_management_index_rows">
           <td class="image text-center">
-              <%= small_image(variant) %>
-              <div class="mt-4">
-                Reserved Stock: <%= @reserved_stocks[variant.id] || 0 %></strong>
-              </div>
+            <%= small_image(variant) %>
           </td>
           <td>
             <%= variant.sku_and_options_text %>
@@ -35,13 +32,36 @@
                 <% end %>
               </div>
             <% end if can?(:update, @product) && can?(:update, variant) %>
+
+            <% if defined?(@reserved_stocks) %>
+              <div>
+                <span type="button" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="This product stock will renew every day">
+                  <%= svg_icon name: "cart-check.svg", width: '14', height: '14' %>
+                </span>
+                <%= label_tag "reserved_stock#{variant.id}", "Reserved Stock: #{@reserved_stocks[variant.id] || 0}", class: "m-0" %>
+              </div>
+            <% end %>
+
             <% if variant.permanent_stock? %>
               <div>
                 <span type="button" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="This product stock will renew every day">
                     <%= svg_icon name: "info-circle-fill.svg", width: '14', height: '14' %>
                 </span>
-                <%= label_tag "permanent_stock_#{ variant.id }", Spree.t(:permanent_stock) %>
+                <%= label_tag "permanent_stock_#{ variant.id }", Spree.t(:permanent_stock), class: "m-0" %>
               </div>
+            <% end %>
+
+            <% if defined?(@inventory_items) %>
+              <% @inventory_items[variant.id]&.each do |inventory_item| %>
+                <div>
+                  <%= svg_icon name: "handbag.svg", width: '14', height: '14' %>
+                  <%= label_tag "max_capacity_#{ inventory_item.id }", "Max capacity: #{inventory_item.max_capacity}", class: "m-0" %>
+                </div>
+                <div>
+                  <%= svg_icon name: "approve.svg", width: '14', height: '14' %>
+                  <%= label_tag "quantity_available_#{ inventory_item.id }", "Quantity available: #{inventory_item.quantity_available}", class: "m-0" %>
+                </div>
+              <% end %>
             <% end %>
           </td>
 
@@ -53,3 +73,9 @@
     </tbody>
   </table>
 </div>
+
+<%= turbo_frame_tag "calendar", src: calendar_admin_product_stock_managements_path(year: params[:year]) do %>
+  <div class="spinner-border mt-2" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+<% end if @product.permanent_stock? %>

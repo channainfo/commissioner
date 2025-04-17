@@ -1,0 +1,32 @@
+<%= turbo_frame_tag "calendar" do %>
+  <%= form_with url: admin_product_stock_managements_path, method: :get, class: "mt-4" do %>
+    <%= select_year(params[:year]&.to_i || @year, { start_year: 2025, end_year: @year + 3 }, { name: "year", onchange: "this.form.submit()" }) %>
+  <% end %>
+
+  <div class="c-annual-calendar-container mt-2">
+    <div class="c-annual-calendar">
+      <% (1..12).each do |month| %>
+        <%= month_calendar(start_date: Date.new(@year, month, 1), attribute: :from_date, end_attribute: :to_date, events: @events) do |date, events| %>
+          <div class="c-annual-day"
+            data-date="<%= date.strftime '%Y-%m-%d' %>"
+            type="button"
+            tabindex="0"
+            data-toggle="popover"
+            data-trigger="hover"
+            data-placement="right"
+            data-html="true"
+            data-content="<%= raw render_escape_html partial: "events_popover", locals: { events: events } if events.any? %>">
+            <%= date.day %>
+            <ul class="p-0 m-0 list-unstyled">
+              <% events.each do |event| %>
+              <li class="badge badge-warning">
+                <%= event.options[:inventory_item].quantity_available %>
+              </li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

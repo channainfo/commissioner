@@ -137,7 +137,11 @@ Spree::Core::Engine.add_routes do
         end
       end
 
-      resources :stock_managements
+      resources :stock_managements do
+        collection do
+          get :calendar
+        end
+      end
 
       resources :product_completion_steps do
         collection do
