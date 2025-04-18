@@ -5,6 +5,7 @@ module SpreeCmCommissioner
 
     validate :both_trip_cannot_be_the_same
     before_validation :calculate_connection_time_minutes
+    validates :from_trip_id, uniqueness: { scope: :to_trip_id }
 
     private
 
