@@ -35,6 +35,9 @@ module SpreeCmCommissioner
       when 'telegram_web_app_auth'
         options = { telegram_init_data: params[:telegram_init_data], telegram_bot_username: params[:tg_bot] }
         SpreeCmCommissioner::UserTelegramWebAppAuthenticator.call(options)
+      when 'vattanac_bank_web_app_auth'
+        options = { session_id: params[:session_id] }
+        SpreeCmCommissioner::UserVattanacBankWebAppAuthenticator.call(options)
       end
     end
 
@@ -42,6 +45,7 @@ module SpreeCmCommissioner
       return 'login_auth' if params.key?(:username) && params.key?(:password)
       return 'social_auth' if params.key?(:id_token)
       return 'telegram_web_app_auth' if params.key?(:telegram_init_data) && params.key?(:tg_bot)
+      return 'vattanac_bank_web_app_auth' if params.key?(:session_id)
 
       raise exception(I18n.t('authenticator.invalid_or_missing_params'))
     end
