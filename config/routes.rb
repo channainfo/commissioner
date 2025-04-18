@@ -519,7 +519,7 @@ Spree::Core::Engine.add_routes do
 
       namespace :storefront do
         resources :waiting_room_sessions, only: :create
-
+        resources :vattanac_banks, only: %i[create]
         resource :cart, controller: :cart, only: %i[show create destroy] do
           patch :restart_checkout_flow
         end
