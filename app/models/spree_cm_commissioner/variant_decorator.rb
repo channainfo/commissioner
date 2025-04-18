@@ -1,6 +1,7 @@
 module SpreeCmCommissioner
   module VariantDecorator
     def self.prepended(base)
+      base.include SpreeCmCommissioner::ProductType
       base.include SpreeCmCommissioner::ProductDelegation
       base.include SpreeCmCommissioner::VariantOptionsConcern
 
@@ -24,6 +25,9 @@ module SpreeCmCommissioner
       base.has_many :inventory_items, class_name: 'SpreeCmCommissioner::InventoryItem'
 
       base.scope :subscribable, -> { active.joins(:product).where(product: { subscribable: true, status: :active }) }
+      base.scope :with_permanent_stock, -> { joins(:product).where(product: { product_type: base::PERMANENT_STOCK_PRODUCT_TYPES }) }
+      base.scope :with_non_permanent_stock, -> { joins(:product).where.not(product: { product_type: base::PERMANENT_STOCK_PRODUCT_TYPES }) }
+
       base.has_one :trip,
                    class_name: 'SpreeCmCommissioner::Trip'
       base.accepts_nested_attributes_for :option_values
@@ -41,10 +45,6 @@ module SpreeCmCommissioner
     # override
     def discontinued?
       super || product.discontinued?
-    end
-
-    def permanent_stock?
-      accommodation?
     end
 
     def event
@@ -73,18 +73,6 @@ module SpreeCmCommissioner
     # override
     def in_stock?
       available_quantity.positive?
-    end
-
-    # TODO: handle logic for inventory_item quantity_available, and max_capacity in a new issue
-    def inventory_item_stock
-      case product_type
-      when 'event', 'ecommerce', 'accommodation'
-        { quantity_available: stock_items.sum(:count_on_hand), max_capacity: 0 }
-      when 'bus', 'transit'
-        { quantity_available: product.trip.vehicle.number_of_seats, max_capacity: 0 }
-      else
-        {}
-      end
     end
 
     private

@@ -34,7 +34,7 @@ RSpec.describe SpreeCmCommissioner::InventoryItem, type: :model do
   # Scopes
   describe '.for_product' do
     let!(:accommodation_inventory_item) { create(:cm_inventory_item, product_type: 'accommodation') }
-    let!(:event_inventory_item) { create(:cm_inventory_item,  product_type: 'event') }
+    let!(:event_inventory_item) { create(:cm_inventory_item,  product_type: 'ecommerce') }
 
     it 'returns inventory units for the given service type' do
       expect(SpreeCmCommissioner::InventoryItem.for_product('accommodation')).to include(accommodation_inventory_item)

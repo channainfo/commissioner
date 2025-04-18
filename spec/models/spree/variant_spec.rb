@@ -82,6 +82,29 @@ RSpec.describe Spree::Variant, type: :model do
     it { is_expected.to have_many(:guest_card_classes).through(:variant_guest_card_class).class_name('SpreeCmCommissioner::GuestCardClass') }
   end
 
+  describe 'scopes' do
+    let!(:permanent_variant) { create(:variant, product: create(:product, product_type: 'service')) }
+    let!(:non_permanent_variant) { create(:variant, product: create(:product, product_type: 'ecommerce')) }
+
+    describe '.with_permanent_stock' do
+      it 'returns only variants with permanent product types' do
+        result = described_class.with_permanent_stock
+
+        expect(result).to include(permanent_variant)
+        expect(result).not_to include(non_permanent_variant)
+      end
+    end
+
+    describe '.with_non_permanent_stock' do
+      it 'returns only variants with non-permanent product types' do
+        result = described_class.with_non_permanent_stock
+
+        expect(result).to include(non_permanent_variant)
+        expect(result).not_to include(permanent_variant)
+      end
+    end
+  end
+
   describe 'callbacks' do
     context '#after_commit' do
       let(:vendor) { create(:active_vendor, name: 'Angkor Hotel', min_price: 10, max_price: 30) }
@@ -168,7 +191,7 @@ RSpec.describe Spree::Variant, type: :model do
       let(:product) { create(:product, product_type: :service) }
       subject { build(:variant, product: product, digitals: []) }
 
-      it 'returns false event variant is not digital' do
+      it 'returns false ecommerce variant is not digital' do
         expect(subject.ecommerce?).to be false
         expect(subject.digital?).to be false
         expect(subject.non_digital_ecommerce?).to be false
@@ -199,6 +222,43 @@ RSpec.describe Spree::Variant, type: :model do
     context 'when both variant, product are not discontinued' do
       it 'return false' do
         expect(variant.discontinued?).to be false
+      end
+    end
+  end
+
+  describe '#pre_inventory_days' do
+    let(:product) { build(:product, product_type: product_type) }
+    let(:variant) { build(:variant, product: product) }
+
+    context 'when product_type is transit' do
+      let(:product_type) { 'transit' }
+
+      it 'returns 90' do
+        expect(variant.pre_inventory_days).to eq(90)
+      end
+    end
+
+    context 'when product_type is service' do
+      let(:product_type) { 'service' }
+
+      it 'returns 365' do
+        expect(variant.pre_inventory_days).to eq(30)
+      end
+    end
+
+    context 'when product_type is accommodation' do
+      let(:product_type) { 'accommodation' }
+
+      it 'returns 365' do
+        expect(variant.pre_inventory_days).to eq(365)
+      end
+    end
+
+    context 'when product_type is ecommerce' do
+      let(:product_type) { 'ecommerce' }
+
+      it 'returns nil' do
+        expect(variant.pre_inventory_days).to be_nil
       end
     end
   end
