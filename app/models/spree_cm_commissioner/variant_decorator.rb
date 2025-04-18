@@ -51,21 +51,6 @@ module SpreeCmCommissioner
       taxons.event.first
     end
 
-    def default_inventory_item_exist?
-      inventory_items.exists?(inventory_date: nil)
-    end
-
-    def create_default_non_permanent_inventory_item!(quantity_available: nil, max_capacity: nil)
-      return unless should_track_inventory?
-      return if default_inventory_item_exist?
-
-      inventory_items.create!(
-        product_type: product_type,
-        quantity_available: quantity_available || total_on_hand,
-        max_capacity: max_capacity || total_on_hand
-      )
-    end
-
     # override
     def options_text
       @options_text ||= Spree::Variants::VisableOptionsPresenter.new(self).to_sentence

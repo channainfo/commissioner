@@ -191,7 +191,7 @@ RSpec.describe Spree::Variant, type: :model do
       let(:product) { create(:product, product_type: :service) }
       subject { build(:variant, product: product, digitals: []) }
 
-      it 'returns false event variant is not digital' do
+      it 'returns false ecommerce variant is not digital' do
         expect(subject.ecommerce?).to be false
         expect(subject.digital?).to be false
         expect(subject.non_digital_ecommerce?).to be false
@@ -226,63 +226,39 @@ RSpec.describe Spree::Variant, type: :model do
     end
   end
 
-  describe '#default_inventory_item_exist?' do
-    let(:variant) { create(:variant) }
+  describe '#pre_inventory_days' do
+    let(:product) { build(:product, product_type: product_type) }
+    let(:variant) { build(:variant, product: product) }
 
-    context 'when there is an inventory item with nil inventory_date' do
-      before { create(:cm_inventory_item, product_type: :ecommerce, variant: variant, inventory_date: nil) }
-      it { expect(variant.default_inventory_item_exist?).to be true }
-    end
+    context 'when product_type is transit' do
+      let(:product_type) { 'transit' }
 
-    context 'when there is no inventory item with nil inventory_date' do
-      it { expect(variant.default_inventory_item_exist?).to be false }
-    end
-  end
-
-  describe '#create_default_non_permanent_inventory_item!' do
-    let(:variant) { create(:variant) }
-
-    before do
-      allow(variant).to receive(:should_track_inventory?).and_return(true)
-      allow(variant).to receive(:total_on_hand).and_return(20)
-      allow(variant).to receive(:product_type).and_return('ecommerce')
-    end
-
-    context 'when default inventory item already exists' do
-      before { create(:cm_inventory_item, product_type: :ecommerce, variant: variant, inventory_date: nil) }
-
-      it 'does not create a new inventory item' do
-        expect { variant.create_default_non_permanent_inventory_item! }.not_to change(variant.inventory_items, :count)
+      it 'returns 90' do
+        expect(variant.pre_inventory_days).to eq(90)
       end
     end
 
-    context 'when it does not track inventory' do
-      before { allow(variant).to receive(:should_track_inventory?).and_return(false) }
+    context 'when product_type is service' do
+      let(:product_type) { 'service' }
 
-      it 'does not create an inventory item' do
-        expect { variant.create_default_non_permanent_inventory_item! }.not_to change(variant.inventory_items, :count)
+      it 'returns 365' do
+        expect(variant.pre_inventory_days).to eq(30)
       end
     end
 
-    context 'when all conditions pass and no default inventory item exists' do
-      it 'creates a default inventory item with variant.total_on_hand' do
-        expect { variant.create_default_non_permanent_inventory_item! }.to change(variant.inventory_items, :count).by(1)
+    context 'when product_type is accommodation' do
+      let(:product_type) { 'accommodation' }
 
-        item = variant.inventory_items.last
-
-        expect(item.quantity_available).to eq(20)
-        expect(item.max_capacity).to eq(20)
-        expect(item.product_type).to eq('ecommerce')
+      it 'returns 365' do
+        expect(variant.pre_inventory_days).to eq(365)
       end
     end
 
-    context 'when custom quantity and max capacity are passed' do
-      it 'uses the provided values instead of variant.total_on_hand' do
-        variant.create_default_non_permanent_inventory_item!(quantity_available: 5, max_capacity: 10)
-        item = variant.inventory_items.last
+    context 'when product_type is ecommerce' do
+      let(:product_type) { 'ecommerce' }
 
-        expect(item.quantity_available).to eq(5)
-        expect(item.max_capacity).to eq(10)
+      it 'returns nil' do
+        expect(variant.pre_inventory_days).to be_nil
       end
     end
   end

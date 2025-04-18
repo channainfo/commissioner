@@ -24,14 +24,5 @@ module SpreeCmCommissioner
     # Scope
     scope :for_product, -> (type) { where(product_type: type) }
     scope :active, -> { where(inventory_date: nil).or(where('inventory_date >= ?', Time.zone.today)) }
-
-    def adjust_quantity!(quantity)
-      with_lock do
-        self.max_capacity = max_capacity + quantity
-        self.quantity_available = quantity_available + quantity
-
-        save!
-      end
-    end
   end
 end
