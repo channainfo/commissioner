@@ -1,6 +1,7 @@
 module SpreeCmCommissioner
   module VariantDecorator
     def self.prepended(base)
+      base.include SpreeCmCommissioner::ProductType
       base.include SpreeCmCommissioner::ProductDelegation
       base.include SpreeCmCommissioner::VariantOptionsConcern
 
@@ -24,6 +25,9 @@ module SpreeCmCommissioner
       base.has_many :inventory_items, class_name: 'SpreeCmCommissioner::InventoryItem'
 
       base.scope :subscribable, -> { active.joins(:product).where(product: { subscribable: true, status: :active }) }
+      base.scope :with_permanent_stock, -> { joins(:product).where(product: { product_type: base::PERMANENT_STOCK_PRODUCT_TYPES }) }
+      base.scope :with_non_permanent_stock, -> { joins(:product).where.not(product: { product_type: base::PERMANENT_STOCK_PRODUCT_TYPES }) }
+
       base.has_one :trip,
                    class_name: 'SpreeCmCommissioner::Trip'
       base.accepts_nested_attributes_for :option_values
@@ -43,12 +47,23 @@ module SpreeCmCommissioner
       super || product.discontinued?
     end
 
-    def permanent_stock?
-      accommodation? || transit?
-    end
-
     def event
       taxons.event.first
+    end
+
+    def default_inventory_item_exist?
+      inventory_items.exists?(inventory_date: nil)
+    end
+
+    def create_default_non_permanent_inventory_item!(quantity_available: nil, max_capacity: nil)
+      return unless should_track_inventory?
+      return if default_inventory_item_exist?
+
+      inventory_items.create!(
+        product_type: product_type,
+        quantity_available: quantity_available || total_on_hand,
+        max_capacity: max_capacity || total_on_hand
+      )
     end
 
     # override
@@ -73,17 +88,6 @@ module SpreeCmCommissioner
     # override
     def in_stock?
       available_quantity.positive?
-    end
-
-    def pre_inventory_days
-      case product_type
-      when 'transit'
-        90
-      when 'accommodation'
-        365
-      else
-        nil
-      end
     end
 
     private
