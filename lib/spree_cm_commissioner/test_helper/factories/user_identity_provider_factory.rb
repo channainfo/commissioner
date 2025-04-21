@@ -8,5 +8,9 @@ FactoryBot.define do
     trait :telegram do
       identity_type { SpreeCmCommissioner::UserIdentityProvider.identity_types[:telegram] }
     end
+
+    trait :vattanac_bank do
+      identity_type { SpreeCmCommissioner::UserIdentityProvider.identity_types[:vattanac_bank] }
+    end
   end
 end
