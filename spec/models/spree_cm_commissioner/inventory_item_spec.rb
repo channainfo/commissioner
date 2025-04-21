@@ -34,11 +34,63 @@ RSpec.describe SpreeCmCommissioner::InventoryItem, type: :model do
   # Scopes
   describe '.for_product' do
     let!(:accommodation_inventory_item) { create(:cm_inventory_item, product_type: 'accommodation') }
-    let!(:event_inventory_item) { create(:cm_inventory_item,  product_type: 'event') }
+    let!(:event_inventory_item) { create(:cm_inventory_item,  product_type: 'ecommerce') }
 
     it 'returns inventory units for the given service type' do
       expect(SpreeCmCommissioner::InventoryItem.for_product('accommodation')).to include(accommodation_inventory_item)
       expect(SpreeCmCommissioner::InventoryItem.for_product('accommodation')).not_to include(event_inventory_item)
+    end
+  end
+
+  describe '.active' do
+    let!(:variant) { create(:variant) }
+    let!(:past_inventory) { described_class.create!(product_type: :transit, inventory_date: 2.days.ago, variant: variant) }
+    let!(:today_inventory) { described_class.create!(product_type: :transit, inventory_date: Time.zone.today, variant: variant) }
+    let!(:future_inventory) { described_class.create!(product_type: :transit, inventory_date: 2.days.from_now, variant: variant) }
+    let!(:normal_inventory) { described_class.create!(product_type: :ecommerce, inventory_date: nil, variant: variant) }
+
+    it 'includes items with nil or future/today inventory_date' do
+      result = described_class.active
+      expect(result).to include(normal_inventory, today_inventory, future_inventory)
+      expect(result).not_to include(past_inventory)
+    end
+  end
+
+  describe '#adjust_quantity!' do
+    let(:inventory_item) do
+      described_class.create!(
+        variant: create(:variant),
+        product_type: :ecommerce,
+        max_capacity: 10,
+        quantity_available: 5,
+        inventory_date: nil
+      )
+    end
+
+    context 'when increasing quantity' do
+      it 'adds to max_capacity and quantity_available' do
+        expect {
+          inventory_item.adjust_quantity!(3)
+        }.to change { inventory_item.reload.max_capacity }.by(3)
+         .and change { inventory_item.reload.quantity_available }.by(3)
+      end
+    end
+
+    context 'when decreasing quantity' do
+      it 'subtracts from max_capacity and quantity_available' do
+        expect {
+          inventory_item.adjust_quantity!(-2)
+        }.to change { inventory_item.reload.max_capacity }.by(-2)
+         .and change { inventory_item.reload.quantity_available }.by(-2)
+      end
+    end
+
+    context 'when resulting quantity would be negative' do
+      it 'raises an error due to validation' do
+        expect {
+          inventory_item.adjust_quantity!(-6)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
     end
   end
 end

@@ -2,7 +2,7 @@ module SpreeCmCommissioner
   class CalendarEvent
     attr_reader :from_date, :to_date, :title, :options
 
-    def initialize(from_date:, to_date:, title:, options:)
+    def initialize(from_date:, to_date:, title: nil, options: nil)
       @from_date = from_date
       @to_date = to_date
       @title = title
@@ -20,6 +20,16 @@ module SpreeCmCommissioner
             classes: ['bg-primary'],
             order: order
           }
+        )
+      end
+    end
+
+    def self.from_inventory_items(inventory_items)
+      inventory_items.map do |item|
+        CalendarEvent.new(
+          from_date: item.inventory_date,
+          to_date: item.inventory_date,
+          options: { inventory_item: item }
         )
       end
     end

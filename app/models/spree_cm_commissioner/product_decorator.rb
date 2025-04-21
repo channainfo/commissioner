@@ -33,6 +33,7 @@ module SpreeCmCommissioner
       base.has_one :google_wallet, class_name: 'SpreeCmCommissioner::GoogleWallet', dependent: :destroy
 
       base.has_many :complete_line_items, through: :classifications, source: :line_items
+      base.has_many :inventory_items, through: :variants
 
       base.has_many :product_places, class_name: 'SpreeCmCommissioner::ProductPlace', dependent: :destroy
       base.has_many :places, through: :product_places

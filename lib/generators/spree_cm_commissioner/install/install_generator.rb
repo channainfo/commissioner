@@ -40,8 +40,8 @@ module SpreeCmCommissioner
                          after: %r{//= require spree/backend}, verbose: true
 
         # For NPM support
-        template 'app/javascript/spree_cm_commissioner/utilities.js'
-        inject_into_file 'app/javascript/spree-dashboard.js', "\nimport \"./spree_cm_commissioner/utilities.js\"",
+        template 'app/javascript/spree_dashboard/spree_cm_commissioner/utilities.js'
+        inject_into_file 'app/javascript/spree_dashboard/spree-dashboard.js', "\nimport \"./spree_cm_commissioner/utilities.js\"",
                          after: %r{import "@spree/dashboard"}, verbose: true
       end
 
