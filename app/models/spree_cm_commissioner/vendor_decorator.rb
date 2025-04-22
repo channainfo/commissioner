@@ -177,6 +177,10 @@ module SpreeCmCommissioner
     def generate_code
       self.code = (code.presence || name[0, 3].upcase)
     end
+
+    def organizer_url
+      "#{Spree::Store.default.formatted_url}/organizers/#{slug}"
+    end
   end
 end
 
