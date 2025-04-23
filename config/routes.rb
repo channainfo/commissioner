@@ -554,6 +554,7 @@ Spree::Core::Engine.add_routes do
 
         resource :s3_signed_urls
         resources :google_wallet_object_tokens
+        resources :google_pays
         resources :provinces, only: %i[index]
         resources :user_deletion_reasons, only: [:index]
         resource :profile_images, only: [:update]
