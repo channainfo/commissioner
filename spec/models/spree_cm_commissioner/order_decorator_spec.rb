@@ -3,6 +3,7 @@ require 'spec_helper'
 RSpec.describe SpreeCmCommissioner::OrderDecorator, type: :model do
   let(:order) { create(:order_with_line_items, line_items_count: 2) }
   let(:line_items) { order.line_items }
+  let(:line_item_ids) { line_items.map(&:id) }
   let(:inventory_checker) { instance_double(SpreeCmCommissioner::RedisStock::InventoryChecker) }
   let(:inventory_updater) { instance_double(SpreeCmCommissioner::RedisStock::InventoryUpdater) }
 
@@ -10,7 +11,7 @@ RSpec.describe SpreeCmCommissioner::OrderDecorator, type: :model do
     let(:inventory_updater) { instance_double(SpreeCmCommissioner::RedisStock::InventoryUpdater) }
 
     before do
-      allow(SpreeCmCommissioner::RedisStock::InventoryUpdater).to receive(:new).with(order.line_items).and_return(inventory_updater)
+      allow(SpreeCmCommissioner::RedisStock::InventoryUpdater).to receive(:new).with(line_item_ids).and_return(inventory_updater)
       allow(inventory_updater).to receive(:unstock!)
     end
 
@@ -50,7 +51,7 @@ RSpec.describe SpreeCmCommissioner::OrderDecorator, type: :model do
 
   describe '#sufficient_stock_lines?' do
     before do
-      allow(SpreeCmCommissioner::RedisStock::InventoryChecker).to receive(:new).with(line_items).and_return(inventory_checker)
+      allow(SpreeCmCommissioner::RedisStock::InventoryChecker).to receive(:new).with(line_item_ids).and_return(inventory_checker)
     end
 
     it 'calls InventoryChecker#can_supply_all?' do
@@ -61,7 +62,7 @@ RSpec.describe SpreeCmCommissioner::OrderDecorator, type: :model do
 
   describe '#unstock_inventory_in_redis!' do
     before do
-      allow(SpreeCmCommissioner::RedisStock::InventoryUpdater).to receive(:new).with(line_items).and_return(inventory_updater)
+      allow(SpreeCmCommissioner::RedisStock::InventoryUpdater).to receive(:new).with(line_item_ids).and_return(inventory_updater)
     end
 
     it 'calls InventoryUpdater#unstock!' do
@@ -72,7 +73,7 @@ RSpec.describe SpreeCmCommissioner::OrderDecorator, type: :model do
 
   describe '#restock_inventory_in_redis!' do
     before do
-      allow(SpreeCmCommissioner::RedisStock::InventoryUpdater).to receive(:new).with(line_items).and_return(inventory_updater)
+      allow(SpreeCmCommissioner::RedisStock::InventoryUpdater).to receive(:new).with(line_item_ids).and_return(inventory_updater)
     end
 
     it 'calls InventoryUpdater#restock!' do
