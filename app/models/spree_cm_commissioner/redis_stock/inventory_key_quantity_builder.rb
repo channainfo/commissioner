@@ -5,8 +5,7 @@ module SpreeCmCommissioner
 
       def initialize(line_item_ids)
         @line_items = Spree::LineItem.where(id: line_item_ids)
-                                     .includes(variant: [:product, :active_inventory_items])
-
+                                     .includes(variant: %i[product active_inventory_items])
       end
 
       # Result: [{inventory_key: "inventory:1", purchase_quantity: 2, quantity_available: 5, inventory_item_id: 1},
@@ -36,7 +35,7 @@ module SpreeCmCommissioner
           redis.set(key, inventory_item.quantity_available, ex: inventory_item.redis_expired_in)
         end
 
-        return inventory_item.quantity_available
+        inventory_item.quantity_available
       end
 
       # TODO: still want to improve this as it fetches all active inventory items

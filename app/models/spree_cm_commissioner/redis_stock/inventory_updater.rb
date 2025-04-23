@@ -13,7 +13,7 @@ module SpreeCmCommissioner
 
         raise UnableToUnstock, Spree.t(:insufficient_stock_lines_present) unless unstock(keys, quantities)
 
-        schedule_sync_inventory(inventory_ids, quantities.map { |quantity| -quantity })
+        schedule_sync_inventory(inventory_ids, quantities.map(&:-@))
       end
 
       def restock!
