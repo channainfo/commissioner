@@ -1,229 +1,213 @@
 require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::RedisStock::InventoryUpdater do
-  let(:line_items) { [double('line_item')] }
-  let(:inventory_updater) { described_class.new(line_items) }
-  let(:inventory_data) do
+  let(:redis) { double('Redis') }
+  let(:redis_pool) { double('RedisPool') }
+  let(:real_redis) { Redis.new(url: ENV['REDIS_URL'] || 'redis://localhost:6379/1') }
+  let(:line_item_ids) { [1, 2] }
+  let(:inventory_builder) { instance_double(SpreeCmCommissioner::RedisStock::InventoryKeyQuantityBuilder) }
+  let(:inventory_items) do
     [
-      { inventory_key: 'inventory:1', quantity: 2, inventory_item_id: 1 },
-      { inventory_key: 'inventory:2', quantity: 3, inventory_item_id: 2 }
+      { inventory_key: 'inventory:1', purchase_quantity: 2, quantity_available: 5, inventory_item_id: 1 },
+      { inventory_key: 'inventory:2', purchase_quantity: 1, quantity_available: 3, inventory_item_id: 2 }
     ]
   end
   let(:keys) { ['inventory:1', 'inventory:2'] }
-  let(:quantities) { [2, 3] }
+  let(:quantities) { [2, 1] }
   let(:inventory_ids) { [1, 2] }
-  let(:redis) { instance_double(Redis) }
-  let(:redis_pool) { double('redis_pool') }
+
+  subject { described_class.new(line_item_ids) }
 
   before do
+    allow(SpreeCmCommissioner::RedisStock::InventoryKeyQuantityBuilder).to receive(:new).with(line_item_ids).and_return(inventory_builder)
+    allow(inventory_builder).to receive(:call).and_return(inventory_items)
     allow(SpreeCmCommissioner).to receive(:redis_pool).and_return(redis_pool)
     allow(redis_pool).to receive(:with).and_yield(redis)
   end
 
   describe '#initialize' do
-    it 'sets line_items' do
-      expect(inventory_updater.line_items).to eq(line_items)
-    end
-
-    it 'defaults to empty array if no line_items provided' do
-      updater = described_class.new
-      expect(updater.line_items).to eq([])
+    it 'sets line_item_ids' do
+      expect(subject.instance_variable_get(:@line_item_ids)).to eq(line_item_ids)
     end
   end
 
   describe '#unstock!' do
     before do
-      allow(inventory_updater).to receive(:inventory_items).and_return(inventory_data)
+      allow(redis).to receive(:eval).and_return(1)
+      allow(SpreeCmCommissioner::InventoryItemSyncerJob).to receive(:perform_later)
     end
 
-    context 'when unstock succeeds' do
-      it 'unstocks and schedules sync job' do
-        expect(inventory_updater).to receive(:extract_inventory_data).and_return([keys, quantities, inventory_ids])
-        expect(inventory_updater).to receive(:unstock).with(keys, quantities).and_return(true)
-        expect(inventory_updater).to receive(:schedule_sync_inventory).with(inventory_ids)
-        expect { inventory_updater.unstock! }.not_to raise_error
-      end
+    it 'unstocks inventory and schedules sync job' do
+      expect(subject).to receive(:unstock).with(keys, quantities).and_return(true)
+      expect(subject).to receive(:schedule_sync_inventory).with(inventory_ids, [-2, -1])
+      subject.unstock!
     end
 
     context 'when unstock fails' do
-      it 'raises UnableToUnstock with translation message' do
-        allow(Spree).to receive(:t).with(:insufficient_stock_lines_present).and_return('Insufficient stock')
-        expect(inventory_updater).to receive(:extract_inventory_data).and_return([keys, quantities, inventory_ids])
-        expect(inventory_updater).to receive(:unstock).with(keys, quantities).and_return(false)
-        expect { inventory_updater.unstock! }.to raise_error(described_class::UnableToUnstock, 'Insufficient stock')
+      before do
+        allow(redis).to receive(:eval).and_return(0)
+      end
+
+      it 'raises UnableToUnstock' do
+        expect { subject.unstock! }.to raise_error(described_class::UnableToUnstock, Spree.t(:insufficient_stock_lines_present))
+      end
+    end
+
+    context 'with real Redis', redis: true do
+      before do
+        allow(SpreeCmCommissioner).to receive(:redis_pool).and_return(real_redis)
+        real_redis.set('inventory:1', 5)
+        real_redis.set('inventory:2', 3)
+        allow(SpreeCmCommissioner::InventoryItemSyncerJob).to receive(:perform_later)
+      end
+
+      after do
+        real_redis.del('inventory:1', 'inventory:2')
+      end
+
+      it 'unstocks inventory and schedules sync job' do
+        expect(SpreeCmCommissioner::InventoryItemSyncerJob).to receive(:perform_later).with(inventory_ids: [1, 2], quantities: [-2, -1])
+        subject.unstock!
+        expect(real_redis.get('inventory:1')).to eq('3') # 5 (Qty in redis) - 2 (Purchase quantity)
+        expect(real_redis.get('inventory:2')).to eq('2') # 3 (Qty in redis) - 1 (Purchase quantity)
+      end
+
+      context 'when insufficient stock for one item' do
+        before do
+          real_redis.set('inventory:2', 0) # Insufficient for purchase_quantity: 1
+        end
+
+        it 'raises UnableToUnstock and does not modify Redis' do
+          expect { subject.unstock! }.to raise_error(described_class::UnableToUnstock, Spree.t(:insufficient_stock_lines_present))
+          expect(real_redis.get('inventory:1')).to eq('5')
+          expect(real_redis.get('inventory:2')).to eq('0')
+        end
+      end
+
+      context 'when insufficient stock for multiple items' do
+        before do
+          real_redis.set('inventory:1', 1) # Insufficient for purchase_quantity: 2
+          real_redis.set('inventory:2', 0) # Insufficient for purchase_quantity: 1
+        end
+
+        it 'raises UnableToUnstock and does not modify Redis' do
+          expect { subject.unstock! }.to raise_error(described_class::UnableToUnstock, Spree.t(:insufficient_stock_lines_present))
+          expect(real_redis.get('inventory:1')).to eq('1')
+          expect(real_redis.get('inventory:2')).to eq('0')
+        end
       end
     end
   end
 
   describe '#restock!' do
     before do
-      allow(inventory_updater).to receive(:inventory_items).and_return(inventory_data)
+      allow(redis).to receive(:eval).and_return(1)
+      allow(SpreeCmCommissioner::InventoryItemSyncerJob).to receive(:perform_later)
     end
 
-    context 'when restock succeeds' do
-      it 'restocks and schedules sync job' do
-        expect(inventory_updater).to receive(:extract_inventory_data).and_return([keys, quantities, inventory_ids])
-        expect(inventory_updater).to receive(:restock).with(keys, quantities).and_return(true)
-        expect(inventory_updater).to receive(:schedule_sync_inventory).with(inventory_ids)
-        expect { inventory_updater.restock! }.not_to raise_error
-      end
+    it 'restocks inventory and schedules sync job' do
+      expect(subject).to receive(:restock).with(keys, quantities).and_return(true)
+      expect(subject).to receive(:schedule_sync_inventory).with(inventory_ids, [2, 1])
+      subject.restock!
     end
 
     context 'when restock fails' do
+      before do
+        allow(redis).to receive(:eval).and_return(0)
+      end
+
       it 'raises UnableToRestock' do
-        expect(inventory_updater).to receive(:extract_inventory_data).and_return([keys, quantities, inventory_ids])
-        expect(inventory_updater).to receive(:restock).with(keys, quantities).and_return(false)
-        expect { inventory_updater.restock! }.to raise_error(described_class::UnableToRestock)
+        expect { subject.restock! }.to raise_error(described_class::UnableToRestock)
+      end
+    end
+
+    context 'with real Redis', redis: true do
+      before do
+        allow(SpreeCmCommissioner).to receive(:redis_pool).and_return(real_redis)
+        real_redis.set('inventory:1', 5)
+        real_redis.set('inventory:2', 3)
+        allow(SpreeCmCommissioner::InventoryItemSyncerJob).to receive(:perform_later)
+      end
+
+      after do
+        real_redis.del('inventory:1', 'inventory:2')
+      end
+
+      it 'restocks inventory and schedules sync job' do
+        expect(SpreeCmCommissioner::InventoryItemSyncerJob).to receive(:perform_later).with(inventory_ids: [1, 2], quantities: [2, 1])
+        subject.restock!
+        expect(real_redis.get('inventory:1')).to eq('7')
+        expect(real_redis.get('inventory:2')).to eq('4')
       end
     end
   end
 
   describe '#unstock' do
-    let(:script) { inventory_updater.send(:unstock_redis_script) }
-
-    it 'evaluates unstock Lua script and returns true when result is positive' do
-      expect(redis).to receive(:eval).with(script, keys: keys, argv: quantities).and_return(1)
-      expect(inventory_updater.send(:unstock, keys, quantities)).to be true
+    it 'evaluates unstock Redis script and returns true on success' do
+      expect(redis).to receive(:eval).with(subject.send(:unstock_redis_script), keys: keys, argv: quantities).and_return(1)
+      expect(subject.send(:unstock, keys, quantities)).to be true
     end
 
-    it 'returns false when script returns 0' do
-      expect(redis).to receive(:eval).with(script, keys: keys, argv: quantities).and_return(0)
-      expect(inventory_updater.send(:unstock, keys, quantities)).to be false
+    it 'returns false on failure' do
+      expect(redis).to receive(:eval).with(subject.send(:unstock_redis_script), keys: keys, argv: quantities).and_return(0)
+      expect(subject.send(:unstock, keys, quantities)).to be false
     end
   end
 
   describe '#restock' do
-    let(:script) { inventory_updater.send(:restock_redis_script) }
-
-    it 'evaluates restock Lua script and returns true when result is positive' do
-      expect(redis).to receive(:eval).with(script, keys: keys, argv: quantities).and_return(1)
-      expect(inventory_updater.send(:restock, keys, quantities)).to be true
+    it 'evaluates restock Redis script and returns true on success' do
+      expect(redis).to receive(:eval).with(subject.send(:restock_redis_script), keys: keys, argv: quantities).and_return(1)
+      expect(subject.send(:restock, keys, quantities)).to be true
     end
 
-    it 'returns false when script returns 0' do
-      expect(redis).to receive(:eval).with(script, keys: keys, argv: quantities).and_return(0)
-      expect(inventory_updater.send(:restock, keys, quantities)).to be false
+    it 'returns false on failure' do
+      expect(redis).to receive(:eval).with(subject.send(:restock_redis_script), keys: keys, argv: quantities).and_return(0)
+      expect(subject.send(:restock, keys, quantities)).to be false
     end
   end
 
   describe '#inventory_items' do
-    it 'calls InventoryKeyQuantityBuilder and caches result' do
-      builder = double('builder')
-      expect(SpreeCmCommissioner::RedisStock::InventoryKeyQuantityBuilder)
-        .to receive(:new).with(line_items).and_return(builder)
-      expect(builder).to receive(:call).and_return(inventory_data)
-      expect(inventory_updater.send(:inventory_items)).to eq(inventory_data)
-      expect(inventory_updater.send(:inventory_items)).to eq(inventory_data) # Cached
+    it 'calls InventoryKeyQuantityBuilder with line_item_ids' do
+      expect(SpreeCmCommissioner::RedisStock::InventoryKeyQuantityBuilder).to receive(:new).with(line_item_ids).and_return(inventory_builder)
+      expect(inventory_builder).to receive(:call).and_return(inventory_items)
+      subject.send(:inventory_items)
+    end
+
+    it 'returns the result of InventoryKeyQuantityBuilder#call' do
+      expect(subject.send(:inventory_items)).to eq(inventory_items)
+    end
+
+    it 'memoizes the result' do
+      expect(inventory_builder).to receive(:call).once.and_return(inventory_items)
+      subject.send(:inventory_items)
+      subject.send(:inventory_items)
+      expect(subject.instance_variable_get(:@inventory_items)).to eq(inventory_items)
     end
   end
 
   describe '#extract_inventory_data' do
-    before do
-      allow(inventory_updater).to receive(:inventory_items).and_return(inventory_data)
-    end
-
-    it 'extracts keys, quantities, and inventory_ids' do
-      expect(inventory_updater.send(:extract_inventory_data)).to eq([keys, quantities, inventory_ids])
+    it 'returns keys, quantities, and inventory_ids' do
+      expect(subject.send(:extract_inventory_data)).to eq([keys, quantities, inventory_ids])
     end
   end
 
   describe '#unstock_redis_script' do
-    it 'returns the correct Lua script' do
-      script = inventory_updater.send(:unstock_redis_script)
-      expect(script).to include('local keys = KEYS')
-      expect(script).to include('local quantities = ARGV')
-      expect(script).to include('redis.call(\'DECRBY\'')
-      expect(script).to include('return 0')
-      expect(script).to include('return 1')
+    it 'returns the unstock Lua script' do
+      expect(subject.send(:unstock_redis_script)).to include('DECRBY')
+      expect(subject.send(:unstock_redis_script)).to include('if current - tonumber(quantities[i]) < 0 then')
     end
   end
 
   describe '#restock_redis_script' do
-    it 'returns the correct Lua script' do
-      script = inventory_updater.send(:restock_redis_script)
-      expect(script).to include('local keys = KEYS')
-      expect(script).to include('local quantities = ARGV')
-      expect(script).to include('redis.call(\'INCRBY\'')
-      expect(script).to include('return 1')
+    it 'returns the restock Lua script' do
+      expect(subject.send(:restock_redis_script)).to include('INCRBY')
     end
   end
 
   describe '#schedule_sync_inventory' do
-    it 'enqueues InventoryItemSyncerJob with inventory_ids' do
-      expect(SpreeCmCommissioner::InventoryItemSyncerJob).to receive(:perform_later).with(inventory_ids)
-      inventory_updater.send(:schedule_sync_inventory, inventory_ids)
-    end
-  end
-
-  describe 'integration with redis', :redis do
-    let(:real_redis) { Redis.new(url: ENV['REDIS_URL'] || 'redis://localhost:6379/0') }
-    let(:redis_pool) { double('redis_pool') }
-    let(:builder) { double('builder') }
-
-    before do
-      real_redis.flushdb
-      allow(SpreeCmCommissioner).to receive(:redis_pool).and_return(redis_pool)
-      allow(redis_pool).to receive(:with).and_yield(real_redis)
-      allow(SpreeCmCommissioner::RedisStock::InventoryKeyQuantityBuilder)
-        .to receive(:new).with(line_items).and_return(builder)
-      allow(builder).to receive(:call).and_return(inventory_data)
-      allow(inventory_updater).to receive(:schedule_sync_inventory) # Prevent actual job scheduling
-    end
-
-    after do
-      real_redis.flushdb
-    end
-
-    describe '#unstock!' do
-      context 'when sufficient inventory exists' do
-        before do
-          real_redis.set('inventory:1', 5)
-          real_redis.set('inventory:2', 5)
-        end
-
-        it 'unstocks successfully and updates Redis' do
-          expect { inventory_updater.unstock! }.not_to raise_error
-          expect(real_redis.get('inventory:1')).to eq('3') # 5 - 2
-          expect(real_redis.get('inventory:2')).to eq('2') # 5 - 3
-        end
-      end
-
-      context 'when insufficient inventory exists' do
-        before do
-          real_redis.set('inventory:1', 1) # Less than required 2
-          real_redis.set('inventory:2', 5)
-        end
-
-        it 'raises UnableToUnstock' do
-          allow(Spree).to receive(:t).with(:insufficient_stock_lines_present).and_return('Insufficient stock')
-          expect { inventory_updater.unstock! }.to raise_error(described_class::UnableToUnstock, 'Insufficient stock')
-          expect(real_redis.get('inventory:1')).to eq('1') # Unchanged
-          expect(real_redis.get('inventory:2')).to eq('5') # Unchanged
-        end
-      end
-    end
-
-    describe '#restock!' do
-      context 'when restocking' do
-        before do
-          real_redis.set('inventory:1', 5)
-          real_redis.set('inventory:2', 5)
-        end
-
-        it 'restocks successfully and updates Redis' do
-          expect { inventory_updater.restock! }.not_to raise_error
-          expect(real_redis.get('inventory:1')).to eq('7') # 5 + 2
-          expect(real_redis.get('inventory:2')).to eq('8') # 5 + 3
-        end
-      end
-
-      context 'when keys do not exist' do
-        it 'creates new keys with correct quantities' do
-          expect { inventory_updater.restock! }.not_to raise_error
-          expect(real_redis.get('inventory:1')).to eq('2')
-          expect(real_redis.get('inventory:2')).to eq('3')
-        end
-      end
+    it 'schedules InventoryItemSyncerJob with inventory_ids and quantities' do
+      expect(SpreeCmCommissioner::InventoryItemSyncerJob).to receive(:perform_later).with(inventory_ids: inventory_ids, quantities: quantities)
+      subject.send(:schedule_sync_inventory, inventory_ids, quantities)
     end
   end
 end

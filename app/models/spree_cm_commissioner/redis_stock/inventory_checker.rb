@@ -6,6 +6,8 @@ module SpreeCmCommissioner
       end
 
       def can_supply_all?
+        return false if inventory_items.empty? || @line_item_ids.blank?
+
         inventory_items.all? do |inventory_item|
           inventory_item[:quantity_available] >= inventory_item[:purchase_quantity]
         end
@@ -14,7 +16,7 @@ module SpreeCmCommissioner
       private
 
       def inventory_items
-        SpreeCmCommissioner::RedisStock::InventoryKeyQuantityBuilder.new(@line_item_ids).call
+        @inventory_items ||= SpreeCmCommissioner::RedisStock::InventoryKeyQuantityBuilder.new(@line_item_ids).call
       end
     end
   end

@@ -35,6 +35,8 @@ module SpreeCmCommissioner
         SpreeCmCommissioner.redis_pool.with do |redis|
           redis.set(key, inventory_item.quantity_available, ex: inventory_item.redis_expired_in)
         end
+
+        return inventory_item.quantity_available
       end
 
       # TODO: still want to improve this as it fetches all active inventory items
