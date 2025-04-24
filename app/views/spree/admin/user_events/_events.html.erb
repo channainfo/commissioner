@@ -1,5 +1,5 @@
 <% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:add_new_events), new_admin_user_event_path, class: "btn-success", icon: 'add.svg', id: 'admin_new_operator_link' %>
+  <%= button_link_to Spree.t(:add_new_events), new_admin_user_event_path(user_id: @user.id), class: "btn-success", icon: 'add.svg', id: 'admin_new_operator_link' %>
 <% end %>
 
 <%= render partial: 'spree/admin/users/tabs', locals: { current: :user_events } %>

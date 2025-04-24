@@ -110,11 +110,12 @@ RSpec.describe SpreeCmCommissioner::UserRegistrationWithIdToken do
       provider = {
         identity_type: 'google',
         sub: 'helloworldthisissub',
-        name: 'BookMe Plus'
+        name: 'BookMe Plus',
+        email: 'bookmeplus@gmail.com'
       }
 
       subject = described_class.new(id_token: id_token)
-      user = subject.register_user!(provider[:name])
+      user = subject.register_user!(provider[:name],provider[:email])
       response = subject.link_user_account!(provider)
 
       expect(response['user_id']).to match(user.id)

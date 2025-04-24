@@ -85,8 +85,9 @@ module SpreeCmCommissioner
       return nil if claim.nil?
 
       provider_name = claim['firebase']['sign_in_provider']
+      user_id = claim['user_id']
       sub = claim['firebase']['identities'][provider_name].first
-      email = claim['email']
+      email = claim['email'] || get_user_email(user_id)
       name = claim['name']
 
       {
@@ -95,6 +96,16 @@ module SpreeCmCommissioner
         name: name,
         email: email
       }
+    end
+
+    def get_user_email(user_id)
+      return nil if user_id.blank?
+
+      firebase_context = FirebaseEmailFetcher.call(user_id: user_id)
+
+      return unless firebase_context.success?
+
+      firebase_context.email
     end
 
     delegate :id_token, to: :context

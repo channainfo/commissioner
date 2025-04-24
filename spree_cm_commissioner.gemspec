@@ -33,6 +33,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'aws-sdk-ecs'
   s.add_dependency 'google-cloud-firestore'
   s.add_dependency 'google-cloud-recaptcha_enterprise'
+  s.add_dependency 'firebase-admin-sdk', '~> 0.3.1'
   s.add_dependency 'jwt', '>= 2.5.0'
   s.add_dependency 'elasticsearch', '~> 8.5'
   s.add_dependency 'interactor', '~> 3.1'

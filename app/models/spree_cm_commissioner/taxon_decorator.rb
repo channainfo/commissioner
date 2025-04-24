@@ -7,7 +7,6 @@ module SpreeCmCommissioner
 
       base.preference :background_color, :string
       base.preference :foreground_color, :string
-      base.preference :reports, :array, default: []
 
       base.has_many :taxon_vendors, class_name: 'SpreeCmCommissioner::TaxonVendor'
       base.has_many :vendors, through: :taxon_vendors

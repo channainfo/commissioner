@@ -1,6 +1,6 @@
 module SpreeCmCommissioner
   class UserIdentityProvider < Base
-    enum identity_type: { :google => 0, :apple => 1, :facebook => 2, :telegram => 3 }
+    enum identity_type: { :google => 0, :apple => 1, :facebook => 2, :telegram => 3, :vattanac_bank => 4 }
 
     belongs_to :user, class_name: Spree.user_class.to_s, optional: false
 

@@ -78,6 +78,9 @@ RSpec.describe SpreeCmCommissioner::FirebaseIdTokenProvider, :vcr do
     it 'success return the provider object' do
       subject = SpreeCmCommissioner::FirebaseIdTokenProvider.new(id_token: id_token)
       allow(subject).to receive(:decode_id_token).and_return(claim)
+      allow_any_instance_of(SpreeCmCommissioner::FirebaseEmailFetcher).to receive(:call).and_return(
+        double(success?: true, email: 'bookmeplus@gmail.com')
+      )
 
       response = subject.call
 

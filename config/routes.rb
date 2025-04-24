@@ -515,6 +515,10 @@ Spree::Core::Engine.add_routes do
         resources :line_items, only: %i[index show]
         resources :guest_card_classes
         resources :tickets, only: :index
+
+        resource :reset_passwords, only: [:update]
+        resource :change_passwords, only: [:update]
+        resource :user_contacts, only: [:update]
       end
 
       namespace :storefront do
@@ -527,7 +531,7 @@ Spree::Core::Engine.add_routes do
         resources :inventory_item
 
         resources :waiting_room_sessions, only: :create
-
+        resources :vattanac_banks, only: %i[create]
         resource :cart, controller: :cart, only: %i[show create destroy] do
           patch :restart_checkout_flow
         end
