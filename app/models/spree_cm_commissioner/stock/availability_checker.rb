@@ -25,23 +25,23 @@ module SpreeCmCommissioner
         end
       end
 
-      def variant_available?(quantity = 1, options = {})
-        query = SpreeCmCommissioner::VariantAvailability::NonPermanentStockQuery.new(
-          variant: variant,
-          except_line_item_id: options[:except_line_item_id]
-        )
-        result = query.available?(quantity)
-        @error_message = query.error_message unless result
-        result
+      def variant_available?(quantity = 1, _options = {})
+        inventory_items = SpreeCmCommissioner::RedisStock::InventoryKeyQuantityBuilder.new(variant_id: variant_id).call
+        inventory_items.all? do |inventory_item|
+          inventory_item[:quantity_available] >= quantity
+        end
       end
 
       def permanent_stock_variant_available?(quantity = 1, options = {})
-        SpreeCmCommissioner::VariantAvailability::PermanentStockQuery.new(
-          variant: variant,
+        inventory_items = SpreeCmCommissioner::RedisStock::InventoryKeyQuantityBuilder.new(
+          variant_id: variant.id,
           from_date: options[:from_date].to_date,
-          to_date: options[:to_date].to_date,
-          except_line_item_id: options[:except_line_item_id]
-        ).available?(quantity)
+          to_date: options[:to_date].to_date
+        ).call
+
+        inventory_items.all? do |inventory_item|
+          inventory_item[:quantity_available] >= quantity
+        end
       end
     end
   end

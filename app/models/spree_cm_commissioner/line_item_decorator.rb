@@ -175,7 +175,7 @@ module SpreeCmCommissioner
     # override:
     # Currently, this method may not call yet
     def sufficient_stock?
-      SpreeCmCommissioner::RedisStock::InventoryChecker.new([self]).can_supply_all?
+      SpreeCmCommissioner::Stock::LineItemAvailabilityChecker.new(self).can_supply?(quantity)
     end
 
     def month
