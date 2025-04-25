@@ -5,7 +5,7 @@ module SpreeCmCommissioner
     def send_crew_invite_email(invite_user_event_id)
       @invite_user_event = SpreeCmCommissioner::InviteUserEvent.find(invite_user_event_id)
 
-      subject = Spree::Store.default.name.to_s
+      subject = I18n.t('mail.crew_invite_mailer.subject', event_name: @invite_user_event.invite.taxon.name)
 
       mail(from: from_address, to: @invite_user_event.email, subject: subject)
     end

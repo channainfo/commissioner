@@ -480,6 +480,9 @@ en:
       bookmeplus_support: "BookMe+ Support"
       info_notice: "Information Notice"
       booking_details: "Booking Details"
+    crew_invite_mailer:
+      subject: "You're Invited to Join the Check-In Crew for %{event_name}!"
+
   invoice:
     empty_info: "<b>Invoice</b> not create yet"
   device_token:
