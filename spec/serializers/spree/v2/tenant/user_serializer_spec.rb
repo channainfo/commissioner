@@ -18,6 +18,7 @@ describe Spree::V2::Tenant::UserSerializer, type: :serializer do
         :first_name,
         :last_name,
         :gender,
+        :dob,
         :public_metadata,
         :store_credits,
         :completed_orders,
