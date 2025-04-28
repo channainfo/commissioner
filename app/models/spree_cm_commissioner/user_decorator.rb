@@ -1,7 +1,7 @@
 # rubocop:disable Metrics/MethodLength
 module SpreeCmCommissioner
   module UserDecorator
-    def self.prepended(base)
+    def self.prepended(base) # rubocop:disable Metrics/AbcSize
       base.include SpreeCmCommissioner::UserNotification
       base.include SpreeCmCommissioner::UserIdentity
       base.include SpreeCmCommissioner::UserPreference
@@ -17,6 +17,10 @@ module SpreeCmCommissioner
       base.has_many :user_events, class_name: 'SpreeCmCommissioner::UserEvent'
       base.has_many :events, through: :user_events, class_name: 'Spree::Taxon', source: 'taxon'
       base.has_many :guests, class_name: 'SpreeCmCommissioner::Guest', dependent: :destroy
+
+      base.has_many :google_user_identity_providers,
+                    -> { where(identity_type: :google) },
+                    class_name: 'SpreeCmCommissioner::UserIdentityProvider'
 
       base.has_many :wished_items, class_name: 'Spree::WishedItem', through: :wishlists
       base.has_many :promotions, through: :promotion_rules, class_name: 'Spree::Promotion'
