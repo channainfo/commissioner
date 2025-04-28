@@ -16,6 +16,7 @@ Spree::Core::Engine.add_routes do
       end
     end
 
+    resources :events
     resources :promotions do
       resources :custom_dates_rules, controller: :promotion_custom_dates_rules, only: %i[edit update] do
         member do
