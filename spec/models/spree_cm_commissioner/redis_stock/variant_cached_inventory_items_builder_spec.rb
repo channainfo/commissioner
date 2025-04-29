@@ -1,0 +1,36 @@
+require 'spec_helper'
+
+RSpec.describe SpreeCmCommissioner::RedisStock::VariantCachedInventoryItemsBuilder do
+  let(:product) { create(:cm_product, product_type: :accommodation) }
+  let(:variant) { create(:cm_variant, product: product, total_inventory: 10) }
+
+  # generate inventory items for 3 days
+  before do
+    allow_any_instance_of(Spree::Variant).to receive(:pre_inventory_days).and_return(3)
+    SpreeCmCommissioner::Stock::PermanentInventoryItemsGenerator.call(variant_ids: [variant.id])
+  end
+
+  describe '#call' do
+    let(:inventory_items) { variant.inventory_items }
+
+    before do
+      SpreeCmCommissioner.redis_pool.with do |redis|
+        redis.mapped_mset({
+          "inventory:#{inventory_items[0].id}": 2,
+          "inventory:#{inventory_items[1].id}": 5,
+          "inventory:#{inventory_items[2].id}": 7,
+        })
+      end
+    end
+
+    it 'return inventory keys of variant.inventory_items base on checkin/checkout date' do
+      result = described_class.new(variant_id: variant.id, from_date: Time.zone.tomorrow, to_date: Time.zone.today + 4).call # +4 because it exclude checkout date
+
+      expect(result.map(&:to_h)).to eq([
+        {:inventory_key => "inventory:#{inventory_items[0].id}", active: true, :quantity_available => 2, :inventory_item_id => inventory_items[0].id, :variant_id => variant.id},
+        {:inventory_key => "inventory:#{inventory_items[1].id}", active: true, :quantity_available => 5, :inventory_item_id => inventory_items[1].id, :variant_id => variant.id},
+        {:inventory_key => "inventory:#{inventory_items[2].id}", active: true, :quantity_available => 7, :inventory_item_id => inventory_items[2].id, :variant_id => variant.id},
+      ])
+    end
+  end
+end

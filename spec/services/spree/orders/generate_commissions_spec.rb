@@ -9,10 +9,15 @@ RSpec.describe Spree::Orders::GenerateCommissions do
   let(:product_b1) { create(:product_in_stock, vendor: vendor_b) }
   let(:product_b2) { create(:product_in_stock, vendor: vendor_b) }
 
-  let(:line_item_a1) { create(:line_item, product: product_a1, price: 100) }
-  let(:line_item_a2) { create(:line_item, product: product_a2, price: 100) }
-  let(:line_item_b1) { create(:line_item, product: product_b1, price: 100) }
-  let(:line_item_b2) { create(:line_item, product: product_b2, price: 100) }
+  let(:variant_a1) { create(:cm_variant, product: product_a1) }
+  let(:variant_a2) { create(:cm_variant, product: product_a2) }
+  let(:variant_b1) { create(:cm_variant, product: product_b1) }
+  let(:variant_b2) { create(:cm_variant, product: product_b2) }
+
+  let(:line_item_a1) { create(:line_item, variant: variant_a1, price: 100) }
+  let(:line_item_a2) { create(:line_item, variant: variant_a2, price: 100) }
+  let(:line_item_b1) { create(:line_item, variant: variant_b1, price: 100) }
+  let(:line_item_b2) { create(:line_item, variant: variant_b2, price: 100) }
 
   let(:order) { create(:order, state: :complete, line_items: [line_item_a1, line_item_a2, line_item_b1, line_item_b2])}
 

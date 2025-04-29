@@ -9,6 +9,7 @@ module SpreeCmCommissioner
       base.has_one :google_wallet, class_name: 'SpreeCmCommissioner::GoogleWallet', through: :product
 
       base.has_many :option_types, through: :product
+      base.has_many :inventory_items, through: :variant
       base.has_many :taxons, class_name: 'Spree::Taxon', through: :product
       base.has_many :guests, class_name: 'SpreeCmCommissioner::Guest', dependent: :destroy
       base.has_many :pending_guests, pending_guests_query, class_name: 'SpreeCmCommissioner::Guest', dependent: :destroy
