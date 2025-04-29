@@ -1,0 +1,8 @@
+<!-- insert_bottom "[data-hook='admin_prototype_form_fields']" -->
+
+<div id='icon'>
+  <%= f.field_container :icon do %>
+    <%= f.label :preferred_icon, Spree.t(:icon_name) %> <%= link_to Spree.t(:icons), spree.admin_vectors_icons_url %>
+    <%= f.select :preferred_icon, @icons.map(&:path), { include_blank: Spree.t(:None) }, { class: "select2" } %>
+  <% end %>
+</div>
