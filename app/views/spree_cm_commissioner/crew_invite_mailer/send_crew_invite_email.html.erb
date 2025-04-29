@@ -5,13 +5,15 @@
         <div class="bar-large"></div>
         <div class="main-content">
             <div class="content">
-              <div><%= image_tag "mailer/bookme-plus_light.svg", class: "logo" %></div>
+              <div>
+                <%= image_tag(main_app.rails_blob_url(Spree::StoreLogo.first.attachment), style: "width: 120px; height: 120px;") %>
+              </div>
               <div class="heading-1">
                 Become a part of the <br> event <strong> <%= @invite_user_event.invite.taxon.name %> </strong>
               </div>
               <div class="bar-thin"></div>
               <div class="heading-2">
-                <%= @invite_user_event.invite.inviter.full_name.presence || @invite_user_event.inviter.email %> invites you to join the <br>
+                <%= @invite_user_event.inviter.full_name.presence || @invite_user_event.inviter.email %> invites you to join the <br>
                 <span class="title-bold">Check-in Crew</span> for the event <br>
                 <%= @invite_user_event.invite.taxon.name %>
               </div>
@@ -20,8 +22,13 @@
                   Get Started
                 </a>
               </div>
+
               <div class="heading-3">
-                Please note that this invitation will expire<br>
+                Use this email <%= @invite_user_event.email %> to log in or <br>create an account on BookMe+ Platform
+              </div>
+
+              <div class="heading-3">
+                This invitation will expire<br>
                 in <%= ((@invite_user_event.invite.expires_at - Time.current) / 1.hour).round %> hours.
               </div>
             </div>
