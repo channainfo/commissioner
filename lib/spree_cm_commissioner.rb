@@ -19,6 +19,7 @@ require 'spree_cm_commissioner/user_session_jwt_token'
 require 'spree_cm_commissioner/trip_result'
 require 'spree_cm_commissioner/trip_query_result'
 require 'spree_cm_commissioner/trip_seat_layout_result'
+require 'spree_cm_commissioner/cached_inventory_item'
 
 require 'activerecord_multi_tenant'
 require 'google/cloud/recaptcha_enterprise'
@@ -47,15 +48,11 @@ require 'byebug' if Rails.env.development? || Rails.env.test?
 
 module SpreeCmCommissioner
   class << self
-    attr_accessor :redis_pool
+    # Allows overriding the default Redis connection pool with a custom one
+    attr_writer :redis_pool
 
     def redis_pool
       @redis_pool ||= default_redis_pool
-    end
-
-    # Allows overriding the default Redis connection pool with a custom one
-    def redis_pool=(custom_redis_pool)
-      @redis_pool = custom_redis_pool
     end
 
     # Resets the Redis pool, useful for testing or reinitialization

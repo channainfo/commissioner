@@ -87,22 +87,11 @@ module SpreeCmCommissioner
     end
 
     # override
-    def in_stock?
-      available_quantity.positive?
+    def in_stock?(options = {})
+      SpreeCmCommissioner::Stock::AvailabilityChecker.new(self, options).can_supply?
     end
 
     private
-
-    def total_purchases
-      Spree::LineItem.complete.where(variant_id: id).sum(:quantity).to_i
-    end
-
-    def available_quantity
-      stock_count = stock_items.sum(&:count_on_hand)
-      return stock_count if delivery_required?
-
-      stock_count - total_purchases
-    end
 
     def update_vendor_price
       return unless vendor.present? && product&.product_type == vendor&.primary_product_type

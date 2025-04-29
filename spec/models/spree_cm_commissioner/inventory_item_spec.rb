@@ -56,6 +56,32 @@ RSpec.describe SpreeCmCommissioner::InventoryItem, type: :model do
     end
   end
 
+  describe '#active?' do
+    let(:record) { described_class.new(inventory_date: inventory_date) }
+
+    subject { record.active? }
+
+    context 'when inventory_date is nil' do
+      let(:inventory_date) { nil }
+      it { expect(subject).to be true }
+    end
+
+    context 'when inventory_date is today' do
+      let(:inventory_date) { Time.zone.today }
+      it { expect(subject).to be true }
+    end
+
+    context 'when inventory_date is in the future' do
+      let(:inventory_date) { Time.zone.today + 1.day }
+      it { expect(subject).to be true }
+    end
+
+    context 'when inventory_date is in the past' do
+      let(:inventory_date) { Time.zone.today - 1.day }
+      it { expect(subject).to be false }
+    end
+  end
+
   describe '#adjust_quantity!' do
     let(:inventory_item) do
       described_class.create!(
