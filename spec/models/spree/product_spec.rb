@@ -17,6 +17,24 @@ RSpec.describe Spree::Product, type: :model do
 
   describe 'validations' do
     it { should validate_numericality_of(:commission_rate).is_greater_than_or_equal_to(0).is_less_than_or_equal_to(100).allow_nil }
+
+    context 'when discontinue_on is before available_on' do
+      it 'adds an error on discontinue_on' do
+        product = build(:product, available_on: Date.today, discontinue_on: Date.yesterday)
+        product.valid?
+
+        expect(product.errors[:discontinue_on]).to include('must be after the available on date')
+      end
+    end
+
+    context 'when discontinue_on is after available_on' do
+      it 'is valid' do
+        product = build(:product, available_on: Date.today, discontinue_on: Date.tomorrow)
+        product.valid?
+
+        expect(product.errors[:discontinue_on]).to be_empty
+      end
+    end
   end
 
   describe 'callback: after_update' do

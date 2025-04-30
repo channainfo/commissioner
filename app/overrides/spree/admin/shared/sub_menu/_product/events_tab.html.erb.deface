@@ -1,0 +1,3 @@
+<!-- insert_bottom "[data-hook='admin_product_sub_tabs']" -->
+
+<%= tab :events, match_path: '/events', label: 'Events' if can? :manage, Spree::Taxon %>

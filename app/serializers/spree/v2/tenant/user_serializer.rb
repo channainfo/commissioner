@@ -2,7 +2,7 @@ module Spree
   module V2
     module Tenant
       class UserSerializer < BaseSerializer
-        attributes :email, :first_name, :last_name, :gender,
+        attributes :email, :first_name, :last_name, :gender, :dob,
                    :public_metadata, :completed_orders,
                    :phone_number, :intel_phone_number, :country_code,
                    :otp_enabled, :otp_email, :otp_phone_number,

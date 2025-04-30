@@ -58,6 +58,9 @@ module SpreeCmCommissioner
       base.scope :subscribable, -> { where(subscribable: 1) }
 
       base.validate :validate_event_taxons, if: -> { taxons.event.present? }
+
+      base.validate :validate_product_date, if: -> { available_on.present? && discontinue_on.present? }
+
       base.validates :commission_rate, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }, allow_nil: true
 
       base.whitelisted_ransackable_attributes = %w[description name slug discontinue_on status vendor_id short_name route_type]
@@ -93,6 +96,12 @@ module SpreeCmCommissioner
     def validate_event_taxons
       errors.add(:taxons, 'Event Taxon can\'t not be more than 1') if taxons.event.size > 1
       errors.add(:taxons, 'Must add event date to taxon') if taxons.event.first.from_date.nil? || taxons.event.first.to_date.nil?
+    end
+
+    def validate_product_date
+      return unless discontinue_on < available_on
+
+      errors.add(:discontinue_on, 'must be after the available on date')
     end
   end
 end

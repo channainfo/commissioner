@@ -46,7 +46,8 @@ module SpreeCmCommissioner
       base.before_save :set_kind
       base.before_save :set_slug
 
-      base.whitelisted_ransackable_attributes |= %w[kind]
+      base.whitelisted_ransackable_associations |= %w[vendor]
+      base.whitelisted_ransackable_attributes |= %w[kind from_date to_date]
 
       base.enum purchasable_on: { both: 0, web: 1, app: 2 }
       base.has_many :crew_invites, class_name: 'SpreeCmCommissioner::CrewInvite', dependent: :destroy

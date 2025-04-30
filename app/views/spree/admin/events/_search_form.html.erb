@@ -1,0 +1,61 @@
+<% content_for :table_filter do %>
+  <%= search_form_for [:admin, @search], url: admin_events_path do |f| %>
+    <div class="row">
+
+      <div class="date-range-filter col-12 col-lg-8">
+        <div class="form-group">
+          <%= label_tag :q_from_date_gt, Spree.t(:date_range) %>
+          <div class="row pb-0">
+            <div class="col-12 col-md-6 mb-3 mb-md-0">
+              <div class="input-group datePickerFrom"
+                   data-wrap="true"
+                   data-alt-format="<%= Spree.t(:fpr_human_friendly_date_format, scope: 'date_picker', default: 'M j, Y') %>"
+                   data-max-date="<%= params[:q][:from_date_lt] %>">
+                <%= f.text_field :from_date_gt,
+                  class: 'form-control js-filterable',
+                    value: params[:q][:from_date_gt],
+                    placeholder: Spree.t(:starting_from),
+                    'data-input':'' %>
+                <%= render partial: 'spree/admin/shared/cal_close' %>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 mt-3 mt-md-0">
+              <div class="input-group datePickerTo"
+                   data-wrap="true"
+                   data-alt-format="<%= Spree.t(:fpr_human_friendly_date_format, scope: 'date_picker', default: 'M j, Y') %>"
+                   data-min-date="<%= params[:q][:from_date_gt] %>">
+
+                <%= f.text_field :from_date_lt,
+                  class: 'form-control js-filterable',
+                    value: params[:q][:from_date_lt],
+                    placeholder: Spree.t(:ending_at),
+                    'data-input':'' %>
+                <%= render partial: 'spree/admin/shared/cal_close' %>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-group">
+          <%= label_tag :q_name_cont, "Event Name" %>
+          <%= f.text_field :name_cont, class: "form-control js-quick-search-target js-filterable" %>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-group">
+          <%= label_tag :q_vendor_name_cont, "Vendor" %>
+          <%= f.text_field :vendor_name_cont, class: "form-control js-quick-search-target js-filterable" %>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="form-actions">
+      <%= button Spree.t(:filter_results), 'search' %>
+      <%= link_to Spree.t(:clear_filters), admin_events_path(q: {}), class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+<% end %>
