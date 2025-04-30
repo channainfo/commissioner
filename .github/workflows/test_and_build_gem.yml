@@ -5,7 +5,6 @@ on:
   pull_request:
     branches:
       - develop
-      - 2591-clean-up-milestone
   push:
     tags:
       - "*"
@@ -134,12 +133,14 @@ jobs:
           bundle install --jobs 4 --retry 3
 
       - name: Quality
+        if: github.event_name == 'pull_request'
         env:
           DATABASE_URL: postgres://myuser:mypassword@localhost:5432/test_db
         run: |
           bundle exec rubocop
 
       - name: Security
+        if: github.event_name == 'pull_request'
         env:
           DATABASE_URL: postgres://myuser:mypassword@localhost:5432/test_db
         run: |
