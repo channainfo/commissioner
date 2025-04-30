@@ -8,12 +8,13 @@ module SpreeCmCommissioner
     IV_LENGTH = 12
     TAG_LENGTH = 16
 
-    def self.encrypt(plaintext, key)
+    def self.encrypt(plaintext, base64_key)
+      key = Base64.decode64(base64_key)
       validate_key!(key)
 
       cipher = OpenSSL::Cipher.new(ALGORITHM)
       cipher.encrypt
-      cipher.key = key.b[0, KEY_LENGTH]
+      cipher.key = key[0, KEY_LENGTH]
       iv = cipher.random_iv
       cipher.iv = iv
 
@@ -24,7 +25,8 @@ module SpreeCmCommissioner
       Base64.strict_encode64(combined)
     end
 
-    def self.decrypt(encrypted_text, key)
+    def self.decrypt(encrypted_text, base64_key)
+      key = Base64.decode64(base64_key)
       validate_key!(key)
 
       combined = Base64.decode64(encrypted_text)
@@ -34,7 +36,7 @@ module SpreeCmCommissioner
 
       cipher = OpenSSL::Cipher.new(ALGORITHM)
       cipher.decrypt
-      cipher.key = key.b[0, KEY_LENGTH]
+      cipher.key = key[0, KEY_LENGTH]
       cipher.iv = iv
       cipher.auth_tag = tag
 
