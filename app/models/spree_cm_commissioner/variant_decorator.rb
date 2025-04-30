@@ -24,6 +24,7 @@ module SpreeCmCommissioner
       base.scope :subscribable, -> { active.joins(:product).where(product: { subscribable: true, status: :active }) }
       base.has_one :trip,
                    class_name: 'SpreeCmCommissioner::Trip'
+      base.has_many :trip_stops, class_name: 'SpreeCmCommissioner::TripStop', dependent: :destroy, foreign_key: :trip_id
       base.accepts_nested_attributes_for :option_values
       base.has_many :trip_stops, class_name: 'SpreeCmCommissioner::TripStop', foreign_key: :trip_id, dependent: :destroy
       base.after_commit :sync_trip, if: -> { product.product_type == 'transit' }
