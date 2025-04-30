@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Spree::Api::V2::Storefront::Novel::Accommodations::VariantsController, type: :request do
+RSpec.describe Spree::Api::V2::Storefront::Accommodations::VariantsController, type: :request do
   let(:state) { create(:state, id: 1) }
   let(:vendor) do
     create(:cm_vendor,

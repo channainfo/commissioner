@@ -86,7 +86,9 @@ module SpreeCmCommissioner
         CmAppLogger.log(label: 'order_state_machine_after_unstock', data: { order_id: id, state: state })
       end
     rescue StandardError => e
-      CmAppLogger.log(label: 'order_state_machine', data: { order_id: id, error: e.message, type: e.class.name, backtrace: e.backtrace.first(5).join("\n") })
+      CmAppLogger.log(label: 'order_state_machine',
+                      data: { order_id: id, error: e.message, type: e.class.name, backtrace: e.backtrace.first(5).join("\n") }
+                     )
       raise e
     end
 

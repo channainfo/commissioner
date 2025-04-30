@@ -2,16 +2,6 @@ module SpreeCmCommissioner
   class InventoryItem < ApplicationRecord
     include SpreeCmCommissioner::ProductType
 
-    # Constant (deprecated -> we should use [ProductType] instead)
-    PRODUCT_TYPE_ACCOMMODATION = 'accommodation'.freeze
-    PRODUCT_TYPE_EVENT = 'event'.freeze
-    PRODUCT_TYPE_BUS = 'bus'.freeze
-    PRODUCT_TYPES = [
-      PRODUCT_TYPE_ACCOMMODATION,
-      PRODUCT_TYPE_EVENT,
-      PRODUCT_TYPE_BUS
-    ].freeze
-
     # Association
     belongs_to :variant, class_name: 'Spree::Variant'
 
