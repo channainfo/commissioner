@@ -25,7 +25,9 @@ module SpreeCmCommissioner
       base.has_one :trip,
                    class_name: 'SpreeCmCommissioner::Trip'
       base.accepts_nested_attributes_for :option_values
+      base.has_many :trip_stops, class_name: 'SpreeCmCommissioner::TripStop', foreign_key: :trip_id, dependent: :destroy
       base.after_commit :sync_trip, if: -> { product.product_type == 'transit' }
+      base.accepts_nested_attributes_for :trip_stops, allow_destroy: true
     end
 
     def delivery_required?
