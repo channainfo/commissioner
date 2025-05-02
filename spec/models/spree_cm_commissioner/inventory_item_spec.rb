@@ -31,7 +31,8 @@ RSpec.describe SpreeCmCommissioner::InventoryItem, type: :model do
     let!(:past_inventory) { described_class.create!(product_type: :transit, inventory_date: 2.days.ago, variant: variant) }
     let!(:today_inventory) { described_class.create!(product_type: :transit, inventory_date: Time.zone.today, variant: variant) }
     let!(:future_inventory) { described_class.create!(product_type: :transit, inventory_date: 2.days.from_now, variant: variant) }
-    let!(:normal_inventory) { described_class.create!(product_type: :ecommerce, inventory_date: nil, variant: variant) }
+    let!(:variant2) { create(:cm_variant) }
+    let!(:normal_inventory) { variant2.inventory_items.last }
 
     it 'includes items with nil or future/today inventory_date' do
       result = described_class.active
@@ -67,14 +68,11 @@ RSpec.describe SpreeCmCommissioner::InventoryItem, type: :model do
   end
 
   describe '#adjust_quantity!' do
+    let(:variant) { create(:cm_variant) }
     let(:inventory_item) do
-      described_class.create!(
-        variant: create(:cm_variant, pregenerate_inventory_items: false),
-        product_type: :ecommerce,
-        max_capacity: 10,
-        quantity_available: 5,
-        inventory_date: nil
-      )
+      item = variant.inventory_items.first
+      item.update!(product_type: :ecommerce, max_capacity: 10, quantity_available: 5)
+      item
     end
 
     context 'when increasing quantity' do
@@ -96,10 +94,76 @@ RSpec.describe SpreeCmCommissioner::InventoryItem, type: :model do
     end
 
     context 'when resulting quantity would be negative' do
-      it 'raises an error due to validation' do
+      it 'does not allow negative max_capacity' do
         expect {
-          inventory_item.adjust_quantity!(-6)
-        }.to raise_error(ActiveRecord::RecordInvalid)
+          inventory_item.adjust_quantity!(-11)
+        }.to change { inventory_item.max_capacity }.from(10).to(0)
+         .and change { inventory_item.quantity_available }.from(5).to(0)
+      end
+    end
+
+    it 'calls adjust_quantity_in_redis with the provided quantity' do
+      expect(inventory_item).to receive(:adjust_quantity_in_redis).with(10)
+      inventory_item.adjust_quantity!(10)
+    end
+  end
+
+  describe '#adjust_quantity_in_redis' do
+    let(:redis) { Redis.new(url: ENV['REDIS_URL'] || 'redis://localhost:6379/0') }
+    let(:redis_pool) { double('RedisPool') }
+    let(:inventory_item) { create(:cm_inventory_item) }
+
+    before do
+      allow(SpreeCmCommissioner).to receive(:redis_pool).and_return(redis_pool)
+      allow(redis_pool).to receive(:with).and_yield(redis)
+    end
+
+    context 'with real Redis', redis: true do
+      let(:key) { "inventory:#{inventory_item.id}" }
+
+      before do
+        # Ensure SpreeCmCommissioner.redis_pool uses the real Redis instance
+        allow(redis_pool).to receive(:with).and_yield(redis)
+        # Clean up Redis before each test
+        redis.del(key)
+      end
+
+      after do
+        # Clean up Redis after each test
+        redis.del(key)
+      end
+
+      context 'when redis key exists' do
+        before do
+          # Set an initial value in Redis
+          redis.set(key, 50)
+        end
+
+        it 'increments the quantity in Redis' do
+          expect {
+            inventory_item.adjust_quantity_in_redis(10)
+          }.to change { redis.get(key).to_i }.from(50).to(60)
+        end
+
+        it 'decreases the quantity in Redis' do
+          expect {
+            inventory_item.adjust_quantity_in_redis(-10)
+          }.to change { redis.get(key).to_i }.from(50).to(40)
+        end
+
+        it 'does not allow negative values when quantity is 0' do
+          redis.set(key, 3)
+          expect {
+            inventory_item.adjust_quantity_in_redis(-10)
+          }.to change { redis.get(key).to_i }.from(3).to(0)
+        end
+      end
+
+      context 'when redis key does not exist' do
+        it 'does not create or increment the key' do
+          inventory_item.adjust_quantity_in_redis(10)
+          expect(redis.get(key)).to be_nil
+        end
       end
     end
   end

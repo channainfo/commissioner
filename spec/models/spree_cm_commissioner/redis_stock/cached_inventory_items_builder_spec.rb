@@ -2,16 +2,10 @@ require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::RedisStock::CachedInventoryItemsBuilder do
   let(:product) { create(:cm_product, product_type: :accommodation) }
-  let(:variant) { create(:cm_variant, product: product, total_inventory: 10) }
-
-  # generate inventory items for 3 days
-  before do
-    allow_any_instance_of(Spree::Variant).to receive(:pre_inventory_days).and_return(3)
-    SpreeCmCommissioner::Stock::PermanentInventoryItemsGenerator.call(variant_ids: [variant.id])
-  end
+  let(:variant) { create(:cm_variant, product: product, total_inventory: 10, pregenerate_inventory_items: true, pre_inventory_days: 3) }
 
   describe '#call' do
-    let(:inventory_items) { variant.inventory_items }
+    let(:inventory_items) { variant.reload.inventory_items }
 
     context 'when key already exist in redis' do
       before do
@@ -36,18 +30,7 @@ RSpec.describe SpreeCmCommissioner::RedisStock::CachedInventoryItemsBuilder do
     end
 
     context 'when does not exist in redis yet' do
-      before do
-        SpreeCmCommissioner.redis_pool.with do |redis|
-          keys = redis.keys('inventory:*')
-          keys.each { |key| redis.del(key) } if keys.any?
-        end
-      end
-
       it 'return quantity_available from db & set cache to redis' do
-        # redis return all nil
-        result = SpreeCmCommissioner.redis_pool.with { |redis| redis.mget(["inventory:#{inventory_items[0].id}", "inventory:#{inventory_items[1].id}", "inventory:#{inventory_items[2].id}"]) }
-        expect(result).to eq([nil, nil, nil])
-
         result = described_class.new(inventory_items).call
 
         # quantity_available is from db
