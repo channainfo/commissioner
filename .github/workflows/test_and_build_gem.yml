@@ -15,6 +15,7 @@ jobs:
     steps:
       - name: Check PR title format
         uses: actions/github-script@v7
+        if: github.event_name == 'pull_request'
         with:
           script: |
             const title = context.payload.pull_request.title.trim();
@@ -32,6 +33,7 @@ jobs:
             }
       - name: Check commit messages format
         uses: actions/github-script@v7
+        if: github.event_name == 'pull_request'
         with:
           script: |
             const pr = context.payload.pull_request;
@@ -63,6 +65,7 @@ jobs:
             }
       - name: Check for unresolved review threads
         uses: actions/github-script@v7
+        if: github.event_name == 'pull_request'
         with:
           script: |
             const pr = context.payload.pull_request;
