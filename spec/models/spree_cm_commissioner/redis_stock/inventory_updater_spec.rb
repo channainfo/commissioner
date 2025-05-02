@@ -149,13 +149,6 @@ RSpec.describe SpreeCmCommissioner::RedisStock::InventoryUpdater do
       end
     end
 
-    # Clean up Redis keys
-    after do
-      SpreeCmCommissioner.redis_pool.with do |redis|
-        redis.del('inventory:1', 'inventory:2')
-      end
-    end
-
     # unstock with real redis
     describe '#unstock' do
       context 'when final stock >= 0' do

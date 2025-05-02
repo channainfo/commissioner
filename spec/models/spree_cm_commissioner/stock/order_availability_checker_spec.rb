@@ -6,11 +6,6 @@ RSpec.describe SpreeCmCommissioner::Stock::OrderAvailabilityChecker do
 
   before do
     variant.create_default_non_permanent_inventory_item!
-
-    SpreeCmCommissioner.redis_pool.with do |redis|
-      keys = redis.keys('inventory:*')
-      keys.each { |key| redis.del(key) } if keys.any?
-    end
   end
 
   describe '#can_supply_all?' do

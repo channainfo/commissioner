@@ -4,8 +4,8 @@ RSpec.describe SpreeCmCommissioner::Stock::PermanentInventoryItemsGenerator do
   let!(:permanent_product) { create(:cm_product, product_type: :accommodation) }
   let!(:non_permanent_product) { create(:cm_product, product_type: :ecommerce) }
 
-  let!(:permanent_variant) { create(:cm_base_variant, is_master: false, product: permanent_product, total_inventory: 5) }
-  let!(:non_permanent_variant) { create(:cm_base_variant, is_master: false, product: non_permanent_product, total_inventory: 10) }
+  let!(:permanent_variant) { create(:cm_base_variant, is_master: false, product: permanent_product, total_inventory: 5, pregenerate_inventory_items: false) }
+  let!(:non_permanent_variant) { create(:cm_base_variant, is_master: false, product: non_permanent_product, total_inventory: 10, pregenerate_inventory_items: false) }
 
   let(:pre_inventory_days) { 3 }
 
@@ -15,8 +15,8 @@ RSpec.describe SpreeCmCommissioner::Stock::PermanentInventoryItemsGenerator do
 
   describe '.call' do
     it 'generate 3 inventory_items = 3 days for permanent_stock variant only' do
-      expect { described_class.call }.to change { permanent_variant.inventory_items.count }.by(pre_inventory_days)
-      expect(non_permanent_variant.inventory_items.count).to eq(1)
+      expect { described_class.call }.to change { permanent_variant.reload.inventory_items.count }.by(pre_inventory_days)
+      expect(non_permanent_variant.inventory_items.count).to eq(0)
 
       expect(permanent_variant.inventory_items.pluck(:quantity_available).sort).to eq [5, 5, 5]
       expect(permanent_variant.inventory_items.pluck(:max_capacity).sort).to eq [5, 5, 5]
@@ -35,7 +35,7 @@ RSpec.describe SpreeCmCommissioner::Stock::PermanentInventoryItemsGenerator do
 
       expect {
         described_class.call
-      }.to change { permanent_variant.inventory_items.count }.by(pre_inventory_days - 1)
+      }.to change { permanent_variant.reload.inventory_items.count }.by(pre_inventory_days - 1)
 
       expect(permanent_variant.inventory_items.pluck(:quantity_available).sort).to eq [3, 5, 5]
       expect(permanent_variant.inventory_items.pluck(:max_capacity).sort).to eq [3, 5, 5]
@@ -43,19 +43,19 @@ RSpec.describe SpreeCmCommissioner::Stock::PermanentInventoryItemsGenerator do
     end
 
     it 'generate for variant in :variant_ids if provided' do
-      permanent_variant2 = create(:cm_base_variant, is_master: false, product: permanent_product, total_inventory: 5)
+      permanent_variant2 = create(:cm_base_variant, is_master: false, product: permanent_product, total_inventory: 5, pregenerate_inventory_items: false)
 
       expect {
         described_class.call(variant_ids: [permanent_variant2.id])
       }.to change { permanent_variant2.inventory_items.count }.by(pre_inventory_days)
 
-      expect(non_permanent_variant.inventory_items.count).to eq(1)
+      expect(non_permanent_variant.inventory_items.count).to eq(0)
       expect(permanent_variant.inventory_items.count).to eq(0)
     end
 
     it 'run generation in 2 batch when variants is more than :variants_per_batch' do
-      permanent_variant2 = create(:cm_base_variant, is_master: false, product: permanent_product, total_inventory: 5)
-      permanent_variant3 = create(:cm_base_variant, is_master: false, product: permanent_product, total_inventory: 5)
+      permanent_variant2 = create(:cm_base_variant, is_master: false, product: permanent_product, total_inventory: 5, pregenerate_inventory_items: false)
+      permanent_variant3 = create(:cm_base_variant, is_master: false, product: permanent_product, total_inventory: 5, pregenerate_inventory_items: false)
 
       allow_any_instance_of(described_class).to receive(:variants_per_batch).and_return(2)
       expect_any_instance_of(described_class).to receive(:generate_inventory_items_for_batch).twice.and_call_original
