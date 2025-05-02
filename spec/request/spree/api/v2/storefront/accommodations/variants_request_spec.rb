@@ -128,7 +128,7 @@ RSpec.describe Spree::Api::V2::Storefront::Accommodations::VariantsController, t
           state: :active
         )
       end
-      let(:product) { create(:product, vendor: other_vendor, product_type: 'accommodation') }
+      let(:product) { create(:cm_product, vendor: other_vendor, product_type: 'accommodation') }
       let(:invalid_variant) { create(:cm_variant, number_of_adults: 2, number_of_kids: 2, vendor: other_vendor, product: product) }
 
       before do

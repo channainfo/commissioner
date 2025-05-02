@@ -2,6 +2,7 @@ require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner do
   before { described_class.reset_redis_pool }
+  after { described_class.reset_redis_pool }
 
   describe '.redis_pool' do
     it 'returns a ConnectionPool instance' do

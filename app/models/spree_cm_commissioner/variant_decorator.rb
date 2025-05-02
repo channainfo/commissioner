@@ -4,7 +4,6 @@ module SpreeCmCommissioner
       base.include SpreeCmCommissioner::ProductType
       base.include SpreeCmCommissioner::ProductDelegation
       base.include SpreeCmCommissioner::VariantOptionsConcern
-
       base.after_commit :update_vendor_price
       base.validate     :validate_option_types
       base.before_save -> { self.track_inventory = false }, if: :subscribable?
@@ -25,13 +24,16 @@ module SpreeCmCommissioner
       base.has_many :inventory_items, class_name: 'SpreeCmCommissioner::InventoryItem'
 
       base.scope :subscribable, -> { active.joins(:product).where(product: { subscribable: true, status: :active }) }
-      base.scope :with_permanent_stock, -> { joins(:product).where(product: { product_type: base::PERMANENT_STOCK_PRODUCT_TYPES }) }
-      base.scope :with_non_permanent_stock, -> { joins(:product).where.not(product: { product_type: base::PERMANENT_STOCK_PRODUCT_TYPES }) }
+      base.scope :with_permanent_stock, -> { where(product_type: base::PERMANENT_STOCK_PRODUCT_TYPES) }
+      base.scope :with_non_permanent_stock, -> { where.not(product_type: base::PERMANENT_STOCK_PRODUCT_TYPES) }
 
       base.has_one :trip,
                    class_name: 'SpreeCmCommissioner::Trip'
       base.accepts_nested_attributes_for :option_values
-      base.after_commit :sync_trip, if: -> { product.product_type == 'transit' }
+
+      base.before_save -> { self.product_type = product.product_type }, if: -> { product_type.nil? }
+
+      base.after_commit :sync_trip, if: :transit?
     end
 
     def delivery_required?
@@ -82,10 +84,6 @@ module SpreeCmCommissioner
       "#{display_sku} - #{display_price}"
     end
 
-    def transit?
-      product.product_type == 'transit'
-    end
-
     # override
     def in_stock?(options = {})
       SpreeCmCommissioner::Stock::AvailabilityChecker.new(self, options).can_supply?
@@ -94,7 +92,7 @@ module SpreeCmCommissioner
     private
 
     def update_vendor_price
-      return unless vendor.present? && product&.product_type == vendor&.primary_product_type
+      return unless vendor.present? && product_type == vendor&.primary_product_type
 
       vendor.update(min_price: price) if price < vendor.min_price
       vendor.update(max_price: price) if price > vendor.max_price
@@ -120,7 +118,7 @@ module SpreeCmCommissioner
     end
 
     def sync_trip
-      return unless product.product_type == 'transit'
+      return unless transit?
 
       trip = SpreeCmCommissioner::Trip.find_or_initialize_by(variant_id: id)
 

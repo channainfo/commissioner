@@ -8,12 +8,13 @@ module SpreeCmCommissioner
     # Validation
     validates :quantity_available, numericality: { greater_than_or_equal_to: 0 }
     validates :max_capacity, numericality: { greater_than_or_equal_to: 0 } # Originally inventory of each variant.
-    validates :inventory_date, presence: true, if: -> { permanent_stock? }
+    validates :inventory_date, presence: true, if: :permanent_stock?
     validates :variant_id, uniqueness: { scope: :inventory_date, message: -> (object, _data) { "The variant is taken on #{object.inventory_date}" } }
 
     # Scope
-    scope :for_product, -> (type) { where(product_type: type) }
     scope :active, -> { where(inventory_date: nil).or(where('inventory_date >= ?', Time.zone.today)) }
+
+    before_save -> { self.product_type = variant.product_type }, if: -> { product_type.nil? }
 
     def adjust_quantity!(quantity)
       with_lock do

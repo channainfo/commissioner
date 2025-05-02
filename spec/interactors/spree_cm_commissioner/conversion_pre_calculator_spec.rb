@@ -5,7 +5,7 @@ RSpec.describe SpreeCmCommissioner::ConversionPreCalculator do
   let(:event) { create(:taxon, name: 'BunPhum', taxonomy: taxonomy) }
   let(:section) { create(:taxon, parent: event, taxonomy: taxonomy, name: 'Section A') }
 
-  let(:product) { create(:product, product_type: :ecommerce) }
+  let(:product) { create(:cm_product, product_type: :ecommerce) }
   let(:guest) { create(:guest, first_name: 'Ean', last_name: 'Eii', event_id: nil) }
 
   let(:product_section) { create(:cm_product_taxon, product: product, taxon: section) }
@@ -97,15 +97,15 @@ RSpec.describe SpreeCmCommissioner::ConversionPreCalculator do
       let(:bib_prefix_5km) { create(:cm_option_value, name: '5KM', option_type: bib_prefix) }
       let(:bib_prefix_7km) { create(:cm_option_value, name: '7KM', option_type: bib_prefix) }
 
-      let(:product_without_bib) { create(:product, option_types: []) }
-      let(:product_with_5km_bib) { create(:product, option_types: [bib_prefix]) }
-      let(:product_with_7km_bib) { create(:product, option_types: [bib_prefix]) }
-      let(:product_with_5km_bib_from_different_section) { create(:product, option_types: [bib_prefix]) }
+      let(:product_without_bib) { create(:cm_product, option_types: []) }
+      let(:product_with_5km_bib) { create(:cm_product, option_types: [bib_prefix]) }
+      let(:product_with_7km_bib) { create(:cm_product, option_types: [bib_prefix]) }
+      let(:product_with_5km_bib_from_different_section) { create(:cm_product, option_types: [bib_prefix]) }
 
-      let(:variant_without_bib) { create(:variant, product: product_without_bib) }
-      let(:variant_with_5km_bib) { create(:variant, option_values: [bib_prefix_5km], product: product_with_5km_bib) }
-      let(:variant_with_7km_bib) { create(:variant, option_values: [bib_prefix_7km], product: product_with_7km_bib) }
-      let(:variant_with_5km_bib_from_different_section) { create(:variant, option_values: [bib_prefix_5km], product: product_with_5km_bib_from_different_section) }
+      let(:variant_without_bib) { create(:cm_variant, product: product_without_bib) }
+      let(:variant_with_5km_bib) { create(:cm_variant, option_values: [bib_prefix_5km], product: product_with_5km_bib) }
+      let(:variant_with_7km_bib) { create(:cm_variant, option_values: [bib_prefix_7km], product: product_with_7km_bib) }
+      let(:variant_with_5km_bib_from_different_section) { create(:cm_variant, option_values: [bib_prefix_5km], product: product_with_5km_bib_from_different_section) }
 
       let(:line_item1) { create(:line_item, variant: variant_without_bib, order: order) }
       let(:line_item2) { create(:line_item, variant: variant_with_5km_bib, order: order) }

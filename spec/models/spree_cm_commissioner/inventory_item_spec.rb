@@ -1,11 +1,6 @@
 require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::InventoryItem, type: :model do
-  # Constants
-  it 'defines the correct service types' do
-    expect(SpreeCmCommissioner::InventoryItem::PRODUCT_TYPES).to eq(['accommodation', 'event', 'bus'])
-  end
-
   # Associations
   it { should belong_to(:variant).class_name('Spree::Variant') }
 
@@ -23,7 +18,7 @@ RSpec.describe SpreeCmCommissioner::InventoryItem, type: :model do
   end
 
   it 'validates uniqueness of variant_id scoped to inventory_date' do
-    variant = create(:variant)
+    variant = create(:cm_variant)
     create(:cm_inventory_item, variant_id: variant.id, inventory_date: '2025-03-06')
 
     subject = build(:cm_inventory_item, variant_id: variant.id, inventory_date: '2025-03-06')
@@ -31,19 +26,8 @@ RSpec.describe SpreeCmCommissioner::InventoryItem, type: :model do
     expect(subject.errors[:variant_id]).to include('The variant is taken on 2025-03-06')
   end
 
-  # Scopes
-  describe '.for_product' do
-    let!(:accommodation_inventory_item) { create(:cm_inventory_item, product_type: 'accommodation') }
-    let!(:event_inventory_item) { create(:cm_inventory_item,  product_type: 'ecommerce') }
-
-    it 'returns inventory units for the given service type' do
-      expect(SpreeCmCommissioner::InventoryItem.for_product('accommodation')).to include(accommodation_inventory_item)
-      expect(SpreeCmCommissioner::InventoryItem.for_product('accommodation')).not_to include(event_inventory_item)
-    end
-  end
-
   describe '.active' do
-    let!(:variant) { create(:variant) }
+    let!(:variant) { create(:cm_variant, pregenerate_inventory_items: false) }
     let!(:past_inventory) { described_class.create!(product_type: :transit, inventory_date: 2.days.ago, variant: variant) }
     let!(:today_inventory) { described_class.create!(product_type: :transit, inventory_date: Time.zone.today, variant: variant) }
     let!(:future_inventory) { described_class.create!(product_type: :transit, inventory_date: 2.days.from_now, variant: variant) }
@@ -85,7 +69,7 @@ RSpec.describe SpreeCmCommissioner::InventoryItem, type: :model do
   describe '#adjust_quantity!' do
     let(:inventory_item) do
       described_class.create!(
-        variant: create(:variant),
+        variant: create(:cm_variant, pregenerate_inventory_items: false),
         product_type: :ecommerce,
         max_capacity: 10,
         quantity_available: 5,

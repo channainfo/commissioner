@@ -20,8 +20,8 @@ RSpec.describe SpreeCmCommissioner::Guest, type: :model do
       context 'when assigning seat numbers' do
         let(:option_type) { create(:cm_option_type, :seat_number_positions) }
         let(:option_value) { create(:option_value, name: 'P39,P41,P43,P45,P47', option_type: option_type) }
-        let(:product) { create(:product, option_types: [option_type]) }
-        let(:variant) { create(:variant, product: product, option_values: [option_value]) }
+        let(:product) { create(:cm_product, option_types: [option_type]) }
+        let(:variant) { create(:cm_variant, product: product, option_values: [option_value]) }
         let(:line_item1) { create(:line_item, variant: variant, quantity: 1) }
         let(:line_item2) { create(:line_item, variant: variant, quantity: 1) }
         let(:event_id) { 111 }
@@ -39,7 +39,7 @@ RSpec.describe SpreeCmCommissioner::Guest, type: :model do
       end
 
       context 'when guest variant does not have :seat_number_positions option value' do
-        let(:variant) { create(:variant) }
+        let(:variant) { create(:cm_variant) }
         let(:line_item) { create(:line_item, variant: variant, quantity: 2) }
 
         it 'assign seat number = nil' do
@@ -51,8 +51,8 @@ RSpec.describe SpreeCmCommissioner::Guest, type: :model do
       context 'when guest has bib_number & :seat_number_positions option type' do
         let(:option_type) { create(:cm_option_type, :seat_number_positions) }
         let(:option_value) { create(:option_value, name: 'P39,P41,P43,P45,P47', option_type: option_type)}
-        let(:product) { create(:product, option_types: [option_type]) }
-        let(:variant) { create(:variant, option_values: [option_value]) }
+        let(:product) { create(:cm_product, option_types: [option_type]) }
+        let(:variant) { create(:cm_variant, option_values: [option_value]) }
         let(:line_item) { create(:line_item, variant: variant, quantity: 2) }
 
         context 'when bib invalid (exceed positions range or negative value)' do
@@ -151,7 +151,7 @@ RSpec.describe SpreeCmCommissioner::Guest, type: :model do
     let(:taxonomy) { create(:taxonomy, kind: :event) }
     let(:event) { create(:taxon, name: 'BunPhum', taxonomy: taxonomy) }
     let(:section) { create(:taxon, parent: event, taxonomy: taxonomy, name: 'Section A') }
-    let(:product) { create(:product, product_type: :ecommerce, taxons: [section]) }
+    let(:product) { create(:cm_product, product_type: :ecommerce, taxons: [section]) }
     let(:line_item) { create(:line_item, product: product) }
 
     let!(:guest_with_event_id) { create(:guest, line_item: line_item) }

@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :cm_inventory_item, class: SpreeCmCommissioner::InventoryItem do
-    variant { create(:variant) }
+    variant { create(:cm_variant) }
     max_capacity { 10 }
     quantity_available { 10 }
     product_type { 'accommodation' }

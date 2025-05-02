@@ -159,10 +159,10 @@ RSpec.describe Spree::Vendor, type: :model do
   describe '#update' do
     let(:phnom_penh) { create(:state, name: 'Phnom Penh') }
     let(:siem_reap) { create(:state, name: 'Siem Reap') }
-    let!(:vendor) { create(:vendor, total_inventory: 0, default_state_id: phnom_penh.id)  }
+    let!(:vendor) { create(:vendor, total_inventory: 0, default_state_id: phnom_penh.id, primary_product_type: :accommodation)  }
     let!(:stock_location) { vendor.stock_locations.first }
-    let!(:product1) { create(:product, vendor: vendor)}
-    let!(:product2) { create(:product, vendor: vendor)}
+    let!(:product1) { create(:cm_product, vendor: vendor, product_type: :accommodation)}
+    let!(:product2) { create(:cm_product, vendor: vendor, product_type: :accommodation)}
     let!(:variant1) { create(:cm_base_variant, product: product1, total_inventory: 5, price: 20)}
     let!(:variant2) { create(:cm_base_variant, product: product2, total_inventory: 5, price: 30)}
 
@@ -183,8 +183,8 @@ RSpec.describe Spree::Vendor, type: :model do
       end
 
       it 'should update min and max price the same value when min price 0' do
-        vendor = create(:vendor, min_price: 0, max_price: 0)
-        product = create(:base_product, vendor: vendor, price: 40)
+        vendor = create(:vendor, min_price: 0, max_price: 0, primary_product_type: :accommodation)
+        product = create(:cm_base_product, vendor: vendor, price: 40, product_type: :accommodation)
 
         vendor.update_min_max_price
 
@@ -193,9 +193,9 @@ RSpec.describe Spree::Vendor, type: :model do
       end
 
       it 'should update min and max price to 0' do
-        vendor = create(:vendor, min_price: 0, max_price: 0)
-        product1 = create(:base_product, vendor: vendor, price: 0)
-        product2 = create(:base_product, vendor: vendor, price: 0)
+        vendor = create(:vendor, min_price: 0, max_price: 0, primary_product_type: :accommodation)
+        product1 = create(:cm_base_product, vendor: vendor, price: 0, product_type: :accommodation)
+        product2 = create(:cm_base_product, vendor: vendor, price: 0, product_type: :accommodation)
 
         vendor.update_min_max_price
 

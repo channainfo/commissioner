@@ -31,7 +31,7 @@ RSpec.describe SpreeCmCommissioner::RedisStock::InventoryUpdater do
   before do
     allow(Spree::LineItem).to receive(:where).with(id: line_item_ids).and_return(line_items)
     allow(SpreeCmCommissioner::RedisStock::LineItemsCachedInventoryItemsBuilder)
-      .to receive(:new).with(line_item_ids).and_return(double(call: { 1 => cached_inventory_items }))
+      .to receive(:new).with(line_item_ids: line_item_ids).and_return(double(call: { 1 => cached_inventory_items }))
     allow(SpreeCmCommissioner).to receive(:redis_pool).and_return(redis_pool)
     allow(redis_pool).to receive(:with).and_yield(redis)
   end

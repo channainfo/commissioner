@@ -62,7 +62,7 @@ module SpreeCmCommissioner
       end
 
       def variants
-        scope = Spree::Variant.active.with_permanent_stock.where(is_master: false).includes(:product)
+        scope = Spree::Variant.active.with_permanent_stock.where(is_master: false)
         scope = scope.where(id: variant_ids) if variant_ids.present?
         scope
       end
