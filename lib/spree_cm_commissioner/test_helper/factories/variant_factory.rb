@@ -7,12 +7,22 @@ FactoryBot.define do
       total_inventory { 10 }
       backorderable { false }
       pregenerate_inventory_items { true }
+      pre_inventory_days { nil } # optional for permanent only
     end
 
     after :create do |variant, evaluator|
       variant.stock_items.first.adjust_count_on_hand(evaluator.total_inventory)
       variant.stock_items.update_all(backorderable: evaluator.backorderable)
-      variant.create_default_non_permanent_inventory_item! if !variant.permanent_stock? && evaluator.pregenerate_inventory_items
+
+      # stock_items is created then enqueue create inventory items job
+      # but we want to create inventory items directly in this factory without waiting for job
+      if evaluator.pregenerate_inventory_items
+        if variant.permanent_stock?
+          SpreeCmCommissioner::Stock::PermanentInventoryItemsGenerator.call(variant_ids: [variant.id], pre_inventory_days: evaluator.pre_inventory_days || 3)
+        else
+          variant.create_default_non_permanent_inventory_item! unless variant.default_inventory_item_exist?
+        end
+      end
     end
   end
 

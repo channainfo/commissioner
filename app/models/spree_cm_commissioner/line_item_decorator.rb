@@ -239,6 +239,8 @@ module SpreeCmCommissioner
     end
 
     def validate_seats_reservation
+      return if reservation_trip.blank?
+
       if reservation_trip.allow_seat_selection && !selected_seats_available?
         errors.add(:base, :some_seats_are_booked, message: 'Some seats are already booked')
       elsif !reservation_trip.allow_seat_selection && !seat_quantity_available?(reservation_trip)
