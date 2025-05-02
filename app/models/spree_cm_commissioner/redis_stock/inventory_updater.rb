@@ -52,7 +52,8 @@ module SpreeCmCommissioner
 
       # Return: [CachedInventoryItem(...), CachedInventoryItem(...)]
       def cached_inventory_items
-        @cached_inventory_items ||= SpreeCmCommissioner::RedisStock::LineItemsCachedInventoryItemsBuilder.new(line_item_ids: @line_item_ids).call.values.flatten
+        @cached_inventory_items ||= SpreeCmCommissioner::RedisStock::LineItemsCachedInventoryItemsBuilder.new(line_item_ids: @line_item_ids)
+                                                                                                         .call.values.flatten
       end
 
       def extract_inventory_data
