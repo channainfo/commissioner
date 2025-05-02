@@ -19,6 +19,23 @@ module Spree
         load_inventories unless @product.permanent_stock?
       end
 
+      def create
+        result = SpreeCmCommissioner::Stock::StockMovementCreator.call(
+          variant_id: params[:variant_id],
+          stock_location_id: params[:stock_location_id],
+          current_store: current_store,
+          stock_movement_params: stock_movement_params
+        )
+
+        if result.success?
+          flash[:success] = flash_message_for(result.stock_movement, :successfully_created)
+        else
+          flash[:error] = result.message
+        end
+
+        redirect_back fallback_location: admin_product_stock_managements_path(@product)
+      end
+
       def calendar
         @year = params[:year].present? ? params[:year].to_i : Time.zone.today.year
 
@@ -58,6 +75,10 @@ module Spree
 
       def model_class
         Spree::StockItem
+      end
+
+      def stock_movement_params
+        params.require(:stock_movement).permit(permitted_stock_movement_attributes)
       end
     end
   end

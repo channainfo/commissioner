@@ -17,9 +17,11 @@
           </td>
           <td class="text-center d-flex flex-column align-items-center justify-content-center">
             <div style="width: 90px;">
-              <%= form_tag admin_stock_items_path(variant_id: variant.id, stock_location_id: stock_location.id), method: :post do %>
+              <%= form_tag admin_product_stock_managements_path(product_id: params[:product_id], variant_id: variant.id, stock_location_id: stock_location.id), method: :post do %>
                 <div class="input-group input-group-sm">
                   <%= number_field_tag 'stock_movement[quantity]', 0, class: 'form-control text-center p-0' %>
+                  <%= hidden_field_tag 'stock_movement[originator_id]', spree_current_user.id %>
+                  <%= hidden_field_tag 'stock_movement[originator_type]', spree_current_user.class.name %>
                   <div class="input-group-append">
                     <%= button_tag(class: 'btn btn-outline-success pl-2 pr-1') do %>
                       <%= svg_icon(name: 'arrow-left-right.svg', classes: "icon", width: 14, height: 14) %>
