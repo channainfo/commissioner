@@ -5,6 +5,10 @@ module SpreeCmCommissioner
 
       def variants_per_batch = 1000
 
+      def pre_inventory_days_for(variant)
+        context.pre_inventory_days || variant.pre_inventory_days
+      end
+
       def call
         variants.in_batches(of: variants_per_batch) do |batch|
           generate_inventory_items_for_batch(batch)
@@ -31,7 +35,7 @@ module SpreeCmCommissioner
 
       def inventory_dates_for(variant)
         start_date = Time.zone.tomorrow
-        end_date = Time.zone.today + variant.pre_inventory_days
+        end_date = Time.zone.today + pre_inventory_days_for(variant)
 
         (start_date..end_date)
       end

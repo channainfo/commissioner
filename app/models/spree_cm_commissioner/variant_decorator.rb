@@ -1,6 +1,6 @@
 module SpreeCmCommissioner
   module VariantDecorator
-    def self.prepended(base)
+    def self.prepended(base) # rubocop:disable Metrics/AbcSize
       base.include SpreeCmCommissioner::ProductType
       base.include SpreeCmCommissioner::ProductDelegation
       base.include SpreeCmCommissioner::VariantOptionsConcern

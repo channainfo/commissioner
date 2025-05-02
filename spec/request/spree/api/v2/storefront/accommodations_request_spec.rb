@@ -80,7 +80,7 @@ RSpec.describe Spree::Api::V2::Storefront::AccommodationsController, type: :requ
         )
       end
       let(:product) { create(:cm_product, vendor: vendor, product_type: 'accommodation') }
-      let(:variant2) { create(:cm_variant, number_of_adults: 2, number_of_kids: 2, vendor: vendor2, product: product) }
+      let(:variant2) { create(:cm_variant, number_of_adults: 2, number_of_kids: 2, vendor: vendor2, product: product, pregenerate_inventory_items: false) }
 
       before do
         (from_date..to_date.prev_day).each do |date|

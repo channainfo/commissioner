@@ -2,17 +2,11 @@ require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::RedisStock::LineItemsCachedInventoryItemsBuilder do
   let(:product) { create(:cm_product, product_type: :accommodation) }
-  let(:variant) { create(:cm_variant, product: product, total_inventory: 10) }
-
-  # generate inventory items for 3 days
-  before do
-    allow_any_instance_of(Spree::Variant).to receive(:pre_inventory_days).and_return(3)
-    SpreeCmCommissioner::Stock::PermanentInventoryItemsGenerator.call(variant_ids: [variant.id])
-  end
+  let(:variant) { create(:cm_variant, product: product, total_inventory: 10, pregenerate_inventory_items: true, pre_inventory_days: 3) }
 
   describe '#call' do
     let(:line_item) { create(:line_item, variant: variant, quantity: 1, from_date: Time.zone.tomorrow, to_date: Time.zone.tomorrow + 3) }
-    let(:inventory_items) { variant.inventory_items }
+    let(:inventory_items) { variant.reload.inventory_items }
 
     before do
       SpreeCmCommissioner.redis_pool.with do |redis|

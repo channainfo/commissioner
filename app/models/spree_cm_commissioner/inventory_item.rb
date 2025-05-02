@@ -16,12 +16,30 @@ module SpreeCmCommissioner
 
     before_save -> { self.product_type = variant.product_type }, if: -> { product_type.nil? }
 
+    # This method is only used when admin update stock
     def adjust_quantity!(quantity)
       with_lock do
         self.max_capacity = max_capacity + quantity
         self.quantity_available = quantity_available + quantity
-
         save!
+
+        # When user has been searched or booked a product, it has cached the quantity in redis,
+        # So we need to update redis cache if inventory key has been created in redis
+        adjust_quantity_in_redis(quantity)
+      end
+    end
+
+    def adjust_quantity_in_redis(quantity)
+      SpreeCmCommissioner.redis_pool.with do |redis|
+        cached_quantity_available = redis.get("inventory:#{id}")
+        # ignore if redis doesn't exist
+        return if cached_quantity_available.nil? # rubocop:disable Lint/NonLocalExitFromIterator
+
+        if quantity.positive?
+          redis.incrby("inventory:#{id}", quantity)
+        else
+          redis.decrby("inventory:#{id}", quantity.abs)
+        end
       end
     end
 
