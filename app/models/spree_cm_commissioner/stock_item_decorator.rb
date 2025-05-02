@@ -20,7 +20,10 @@ module SpreeCmCommissioner
 
     # When admin delete stock item, it will deduct stock from inventory item
     def adjust_inventory_items_async
-      SpreeCmCommissioner::Stock::InventoryItemsAdjusterJob.perform_later(variant_id: variant_id, quantity: -count_on_hand)
+      params = { variant_id: variant.id, quantity: -count_on_hand }
+      CmAppLogger.log(label: "#{self.class.name}:after_destroy#adjust_inventory_items_async", data: params) do
+        SpreeCmCommissioner::Stock::InventoryItemsAdjusterJob.perform_later(**params)
+      end
     end
   end
 end

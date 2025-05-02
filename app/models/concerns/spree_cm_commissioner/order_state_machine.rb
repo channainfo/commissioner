@@ -78,16 +78,16 @@ module SpreeCmCommissioner
         # and neither the `finalize!` method nor any notifications will be triggered.
         # The payment will be reversed in vPago gem, and `Spree::Checkout::Complete` will be called, which checks `order.reload.complete?`.
         # This is critical because if the order state is complete, the payment will be marked as paid.
-        CmAppLogger.log(label: 'order_state_machine_before_unstock', data: { order_id: id, state: state })
-        unstock_inventory_in_redis!
+        CmAppLogger.log(label: 'order_state_machine_unstock', data: { order_id: id, state: state }) do
+          unstock_inventory_in_redis!
+        end
         # We rollback only order state, and we keep payment state as it is.
         # We implement payment in vPago gem, and it will be reversed in the gem.
         # Some bank has api for refund, but some don't have the api to refund yet. So we keep the payment state as it is and refund manually.
-        CmAppLogger.log(label: 'order_state_machine_after_unstock', data: { order_id: id, state: state })
       end
     rescue StandardError => e
       CmAppLogger.log(label: 'order_state_machine',
-                      data: { order_id: id, error: e.message, type: e.class.name, backtrace: e.backtrace.first(5).join("\n") }
+                      data: { order_id: id, error: e.message, type: e.class.name, backtrace: e.backtrace&.first(5)&.join("\n") }
                      )
       raise e
     end
