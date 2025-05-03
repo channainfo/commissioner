@@ -10,5 +10,15 @@ FactoryBot.define do
     address_components    { FFaker::Address.street_address }
     lat                   { FFaker::Geolocation.lat }
     lon                   { FFaker::Geolocation.lng }
+    trait :with_parent do
+      association :parent, factory: :cm_place
+    end
+    transient do
+      children_count { 0 }
+    end
+
+    after(:create) do |place, evaluator|
+      create_list(:cm_place, evaluator.children_count, parent: place)
+    end
   end
 end

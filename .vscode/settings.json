@@ -3,6 +3,6 @@
   "files.trimTrailingWhitespace": true,
   "editor.formatOnSave": true,
   "[yaml]": {
-    "editor.defaultFormatter": "aaron-bond.better-comments"
+    "editor.defaultFormatter": "redhat.vscode-yaml"
   },
 }
