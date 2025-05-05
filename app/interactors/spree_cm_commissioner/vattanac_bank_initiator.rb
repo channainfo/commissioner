@@ -25,10 +25,8 @@ module SpreeCmCommissioner
     end
 
     def verify_signature
-      public_key = ENV['VATTANAC_PUBLIC_KEY'].presence || Rails.application.credentials.vattanac.public_key
-
       rsa_service = SpreeCmCommissioner::RsaService.new(
-        public_key: public_key
+        public_key: vattanac_public_key
       )
 
       return if rsa_service.verify(context.encrypted_data, context.signature)
@@ -37,8 +35,6 @@ module SpreeCmCommissioner
     end
 
     def decrypt_payload
-      aes_key = ENV['VATTANAC_AES_SECRET_KEY'].presence || Rails.application.credentials.vattanac.aes_secret_key
-
       context.fail!(message: 'Invalid AES key length', status: :unprocessable_entity) unless aes_key
 
       begin
@@ -57,7 +53,7 @@ module SpreeCmCommissioner
       user_data = context.user_data
 
       identity = SpreeCmCommissioner::UserIdentityProvider.vattanac_bank
-                                                          .find_or_initialize_by(sub: user_data['id'])
+                                                          .find_or_initialize_by(sub: user_data['phoneNum'])
 
       if identity.persisted?
         context.user = identity.user
@@ -82,7 +78,7 @@ module SpreeCmCommissioner
       identity = context.identity
 
       identity.name = full_name
-
+      identity.email = user_data['email']
       context.user = Spree::User.new(
         first_name: user_data['firstName'],
         last_name: user_data['lastName'],
@@ -99,18 +95,41 @@ module SpreeCmCommissioner
 
     def construct_data
       user = context.user
-      context.data = {
+
+      raw_data = {
         sessionId: session_id,
         name: user.full_name,
         phone: user.phone_number,
         email: user.email,
         webUrl: "#{Spree::Store.default.formatted_url}/vattanac_bank_web_app?session_id=#{session_id}"
       }
+
+      json_data = raw_data.to_json
+
+      encrypted_data = SpreeCmCommissioner::AesEncryptionService.encrypt(json_data, aes_key)
+
+      rsa_service = SpreeCmCommissioner::RsaService.new(private_key: bookmeplus_private_key)
+
+      signed_data = rsa_service.sign(encrypted_data)
+
+      context.data = signed_data
     end
 
     def session_id
       payload = { user_id: context.user.id }
       SpreeCmCommissioner::UserSessionJwtToken.encode(payload, context.user.reload.secure_token)
+    end
+
+    def aes_key
+      ENV['VATTANAC_AES_SECRET_KEY'].presence || Rails.application.credentials.vattanac.aes_secret_key
+    end
+
+    def bookmeplus_private_key
+      ENV['BOOKMEPLUS_PRIVATE_KEY'].presence || Rails.application.credentials.bookmeplus.private_key
+    end
+
+    def vattanac_public_key
+      ENV['VATTANAC_PUBLIC_KEY'].presence || Rails.application.credentials.vattanac.public_key
     end
   end
 end
