@@ -1,20 +1,23 @@
 FactoryBot.define do
   factory :cm_base_variant, parent: :base_variant do
     is_master { false }
+    product { create(:cm_product) }
 
     transient do
       total_inventory { 10 }
       backorderable { false }
+      pregenerate_inventory_items { true }
     end
 
     after :create do |variant, evaluator|
       variant.stock_items.first.adjust_count_on_hand(evaluator.total_inventory)
       variant.stock_items.update_all(backorderable: evaluator.backorderable)
+      variant.create_default_non_permanent_inventory_item! if !variant.permanent_stock? && evaluator.pregenerate_inventory_items
     end
   end
 
   factory :cm_variant, parent: :cm_base_variant do
-    product { create(:product) }
+    product { create(:cm_product) }
 
     transient do
       number_of_adults { nil }

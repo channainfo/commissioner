@@ -4,10 +4,10 @@ RSpec.describe Spree::Orders::GenerateCommissions do
   let(:vendor_a) { create(:vendor, commission_rate: 10) }
   let(:vendor_b) { create(:vendor, commission_rate: 15) }
 
-  let(:product_a1) { create(:product_in_stock, vendor: vendor_a) }
-  let(:product_a2) { create(:product_in_stock, vendor: vendor_a) }
-  let(:product_b1) { create(:product_in_stock, vendor: vendor_b) }
-  let(:product_b2) { create(:product_in_stock, vendor: vendor_b) }
+  let(:product_a1) { create(:cm_product_in_stock, vendor: vendor_a, product_type: :ecommerce) }
+  let(:product_a2) { create(:cm_product_in_stock, vendor: vendor_a, product_type: :ecommerce) }
+  let(:product_b1) { create(:cm_product_in_stock, vendor: vendor_b, product_type: :ecommerce) }
+  let(:product_b2) { create(:cm_product_in_stock, vendor: vendor_b, product_type: :ecommerce) }
 
   let(:variant_a1) { create(:cm_variant, product: product_a1) }
   let(:variant_a2) { create(:cm_variant, product: product_a2) }

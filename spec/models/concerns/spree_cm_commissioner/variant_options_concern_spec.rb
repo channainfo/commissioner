@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
   let(:option_values) { [option_value] }
-  let(:variant) { create(:variant, option_values: option_values) }
+  let(:variant) { create(:cm_variant, option_values: option_values) }
 
   context 'callback :before_save' do
     let(:option_type1) { create(:cm_option_type, name: 'color') }
@@ -11,7 +11,7 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
     let(:option_value1) { create(:cm_option_value, name: 'red', option_type: option_type1) }
     let(:option_value2) { create(:cm_option_value, name: '256GB', option_type: option_type2) }
 
-    let(:variant) { build(:variant, option_values: [option_value1, option_value2]) }
+    let(:variant) { build(:cm_variant, option_values: [option_value1, option_value2]) }
 
     describe '#set_options_to_public_metadata' do
       it 'save latest option values to public_metadata[:cm_options]' do
@@ -32,7 +32,7 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
     let(:option_value1) { create(:cm_option_value, name: 'red', option_type: option_type1) }
     let(:option_value2) { create(:cm_option_value, name: '256GB', option_type: option_type2) }
 
-    let(:variant) { create(:variant, option_values: [option_value1, option_value2]) }
+    let(:variant) { create(:cm_variant, option_values: [option_value1, option_value2]) }
 
     context 'when options already saved in public_metadata' do
       it 'read option value from options_in_hash' do
@@ -82,8 +82,8 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
     let(:option_type2) { create(:cm_option_type, :start_time) }
     let(:option_value2) { create(:cm_option_value, name: '03:00:00', option_type: option_type2) }
 
-    let(:product) { create(:product, option_types: [option_type1, option_type2]) }
-    let(:variant) { create(:variant, product: product, option_values: [option_value1, option_value2]) }
+    let(:product) { create(:cm_product, option_types: [option_type1, option_type2]) }
+    let(:variant) { create(:cm_variant, product: product, option_values: [option_value1, option_value2]) }
 
     before do
       # just to make sure it not find option value via db.
@@ -102,8 +102,8 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
     let(:option_type2) { create(:cm_option_type, :end_time) }
     let(:option_value2) { create(:cm_option_value, name: '05:00:00', option_type: option_type2) }
 
-    let(:product) { create(:product, option_types: [option_type1, option_type2]) }
-    let(:variant) { create(:variant, product: product, option_values: [option_value1, option_value2]) }
+    let(:product) { create(:cm_product, option_types: [option_type1, option_type2]) }
+    let(:variant) { create(:cm_variant, product: product, option_values: [option_value1, option_value2]) }
 
     before do
       # just to make sure it not find option value via db.
@@ -127,8 +127,8 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
     end
 
     context 'when variant has event & [start_date] option value' do
-      let(:product) { create(:product, option_types: [option_type], taxons: [section]) }
-      let(:variant) { create(:variant, product: product, option_values: [option_value]) }
+      let(:product) { create(:cm_product, option_types: [option_type], taxons: [section]) }
+      let(:variant) { create(:cm_variant, product: product, option_values: [option_value]) }
 
       it 'return start_date of option value' do
         expect(variant.event.from_date).to eq '2024-02-02'.to_date
@@ -139,8 +139,8 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
     end
 
     context 'when variant has event & no [start_date] option value' do
-      let(:product) { create(:product, taxons: [section]) }
-      let(:variant) { create(:variant, product: product) }
+      let(:product) { create(:cm_product, taxons: [section]) }
+      let(:variant) { create(:cm_variant, product: product) }
 
       it 'return start_date of event' do
         expect(variant.event.from_date).to eq '2024-02-02'.to_date
@@ -151,8 +151,8 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
     end
 
     context 'when variant has no event & no [start_date] option value' do
-      let(:product) { create(:product) }
-      let(:variant) { create(:variant, product: product) }
+      let(:product) { create(:cm_product) }
+      let(:variant) { create(:cm_variant, product: product) }
 
       it 'return null' do
         expect(variant.event&.from_date).to eq nil
@@ -180,8 +180,8 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
       let(:thirdty_minutes) { create(:cm_option_value, name: '30', option_type: duration_in_minutes) }
       let(:sixty_seconds) { create(:cm_option_value, name: '60', option_type: duration_in_seconds) }
 
-      let(:product) { create(:product, taxons: [section], option_types: [duration_in_hours, duration_in_minutes, duration_in_seconds]) }
-      let(:variant) { create(:variant, product: product, option_values: [two_hours, thirdty_minutes, sixty_seconds]) }
+      let(:product) { create(:cm_product, taxons: [section], option_types: [duration_in_hours, duration_in_minutes, duration_in_seconds]) }
+      let(:variant) { create(:cm_variant, product: product, option_values: [two_hours, thirdty_minutes, sixty_seconds]) }
 
       it 'end date combine of start_date + durations' do
         expect(variant.end_date).to eq '2024-02-02'.to_date + 2.hours + 30.minutes + 60.seconds
@@ -194,8 +194,8 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
       let(:option_value) { create(:cm_option_value, name: '2024-01-01', option_type: option_type) }
 
       context 'when variant has event & [end_date] option value' do
-        let(:product) { create(:product, option_types: [option_type], taxons: [section]) }
-        let(:variant) { create(:variant, product: product, option_values: [option_value]) }
+        let(:product) { create(:cm_product, option_types: [option_type], taxons: [section]) }
+        let(:variant) { create(:cm_variant, product: product, option_values: [option_value]) }
 
         it 'return end_date of option value' do
           expect(variant.event.to_date).to eq '2024-03-03'.to_date
@@ -206,8 +206,8 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
       end
 
       context 'when variant has event & no [end_date] option value' do
-        let(:product) { create(:product, taxons: [section]) }
-        let(:variant) { create(:variant, product: product) }
+        let(:product) { create(:cm_product, taxons: [section]) }
+        let(:variant) { create(:cm_variant, product: product) }
 
         it 'return end_date of event' do
           expect(variant.event.to_date).to eq '2024-03-03'.to_date
@@ -218,8 +218,8 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
       end
 
       context 'when variant has no event & no [end_date] option value' do
-        let(:product) { create(:product) }
-        let(:variant) { create(:variant, product: product) }
+        let(:product) { create(:cm_product) }
+        let(:variant) { create(:cm_variant, product: product) }
 
         it 'return null' do
           expect(variant.event&.from_date).to eq nil
@@ -242,8 +242,8 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
     end
 
     context 'when variant has event & [start_time] option value' do
-      let(:product) { create(:product, option_types: [option_type], taxons: [section]) }
-      let(:variant) { create(:variant, product: product, option_values: [option_value]) }
+      let(:product) { create(:cm_product, option_types: [option_type], taxons: [section]) }
+      let(:variant) { create(:cm_variant, product: product, option_values: [option_value]) }
 
       it 'return start_time of option value' do
         expect(variant.event.from_date).to eq Time.zone.parse('2024-02-02 13:00:00')
@@ -254,8 +254,8 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
     end
 
     context 'when variant has event & no [start_time] option value' do
-      let(:product) { create(:product, taxons: [section]) }
-      let(:variant) { create(:variant, product: product) }
+      let(:product) { create(:cm_product, taxons: [section]) }
+      let(:variant) { create(:cm_variant, product: product) }
 
       it 'return start_time of event instead' do
         expect(variant.event.from_date).to eq Time.zone.parse('2024-02-02 13:00:00')
@@ -266,8 +266,8 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
     end
 
     context 'when variant has no event & no [start_time] option value' do
-      let(:product) { create(:product) }
-      let(:variant) { create(:variant, product: product) }
+      let(:product) { create(:cm_product) }
+      let(:variant) { create(:cm_variant, product: product) }
 
       it 'return null' do
         expect(variant.event&.from_date).to eq nil
@@ -295,8 +295,8 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
       let(:thirdty_minutes) { create(:cm_option_value, name: '30', option_type: duration_in_minutes) }
       let(:sixty_seconds) { create(:cm_option_value, name: '60', option_type: duration_in_seconds) }
 
-      let(:product) { create(:product, taxons: [section], option_types: [duration_in_hours, duration_in_minutes, duration_in_seconds]) }
-      let(:variant) { create(:variant, product: product, option_values: [two_hours, thirdty_minutes, sixty_seconds]) }
+      let(:product) { create(:cm_product, taxons: [section], option_types: [duration_in_hours, duration_in_minutes, duration_in_seconds]) }
+      let(:variant) { create(:cm_variant, product: product, option_values: [two_hours, thirdty_minutes, sixty_seconds]) }
 
       it 'end date combine of from_date + durations' do
         expect(variant.end_time.strftime('%H:%M:%S')).to eq('05:31:00')
@@ -309,8 +309,8 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
       let(:option_value) { create(:cm_option_value, name: '03:00:00', option_type: option_type) }
 
       context 'when variant has event & [end_time] option value' do
-        let(:product) { create(:product, option_types: [option_type], taxons: [section]) }
-        let(:variant) { create(:variant, product: product, option_values: [option_value]) }
+        let(:product) { create(:cm_product, option_types: [option_type], taxons: [section]) }
+        let(:variant) { create(:cm_variant, product: product, option_values: [option_value]) }
 
         it 'return end_time of option value' do
           expect(variant.event.to_date).to eq Time.zone.parse('2024-03-03 17:00:00')
@@ -321,8 +321,8 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
       end
 
       context 'when variant has event & no [end_time] option value' do
-        let(:product) { create(:product, taxons: [section]) }
-        let(:variant) { create(:variant, product: product) }
+        let(:product) { create(:cm_product, taxons: [section]) }
+        let(:variant) { create(:cm_variant, product: product) }
 
         it 'return end_time of event instead' do
           expect(variant.event.to_date).to eq Time.zone.parse('2024-03-03 17:00:00')
@@ -333,8 +333,8 @@ RSpec.describe SpreeCmCommissioner::VariantOptionsConcern do
       end
 
       context 'when variant has no event & no [end_time] option value' do
-        let(:product) { create(:product) }
-        let(:variant) { create(:variant, product: product) }
+        let(:product) { create(:cm_product) }
+        let(:variant) { create(:cm_variant, product: product) }
 
         it 'return null' do
           expect(variant.event&.from_date).to eq nil

@@ -159,8 +159,8 @@ RSpec.describe Spree::Order, type: :model do
   end
 
   describe '#delivery_required?' do
-    let(:product1) { create(:product, name: 'Product 1') }
-    let(:product2) { create(:product, name: 'Product 2') }
+    let(:product1) { create(:cm_product, name: 'Product 1') }
+    let(:product2) { create(:cm_product, name: 'Product 2') }
 
     let(:line_item1) { create(:line_item, variant: product1.master) }
     let(:line_item2) { create(:line_item, variant: product2.master) }

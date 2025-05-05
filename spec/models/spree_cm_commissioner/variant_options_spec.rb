@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::VariantOptions do
   let(:option_values) { [option_value] }
-  let(:variant) { create(:variant, option_values: option_values) }
+  let(:variant) { create(:cm_variant, option_values: option_values) }
 
   subject { described_class.new(variant) }
 
@@ -114,8 +114,8 @@ RSpec.describe SpreeCmCommissioner::VariantOptions do
       let(:option_value2) { create(:cm_option_value, name: 'pickup', option_type: option_type) }
 
       it 'return delivery_option in string' do
-        variant1 = create(:variant, option_values: [option_value1])
-        variant2 = create(:variant, option_values: [option_value2])
+        variant1 = create(:cm_variant, option_values: [option_value1])
+        variant2 = create(:cm_variant, option_values: [option_value2])
 
         subject1 = described_class.new(variant1)
         subject2 = described_class.new(variant2)

@@ -12,8 +12,8 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCronExecutor do
 
   let(:vendor) { create(:vendor) }
 
-  let(:product) { create(:base_product, option_types: [option_type_month, option_type_day, option_type_payment], subscribable: true, vendor: vendor) }
-  let(:variant) { create(:base_variant, option_values: [option_value_month, option_value_day, option_value_payment], price: 30, product: product) }
+  let(:product) { create(:cm_base_product, option_types: [option_type_month, option_type_day, option_type_payment], subscribable: true, vendor: vendor) }
+  let(:variant) { create(:cm_base_variant, option_values: [option_value_month, option_value_day, option_value_payment], price: 30, product: product) }
 
   let(:customer1) { create(:cm_customer, vendor: vendor, phone_number: "0962200288") }
   let(:customer2) { create(:cm_customer, vendor: vendor, phone_number: "0972200288") }
@@ -22,7 +22,7 @@ RSpec.describe SpreeCmCommissioner::SubscriptionsOrderCronExecutor do
 
   before do
     allow(variant).to receive(:in_stock?).and_return(true)
-    
+
     allow_any_instance_of(SpreeCmCommissioner::Subscription).to receive(:date_within_range).and_return(true)
     today = Time.zone.today
     today.day < 15 ?  three_month_ago = (today - 3.month).change(day: 14) : three_month_ago = (today - 3.month).change(day: 15)

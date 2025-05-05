@@ -79,7 +79,7 @@ RSpec.describe Spree::Api::V2::Storefront::AccommodationsController, type: :requ
           max_price: 150
         )
       end
-      let(:product) { create(:product, vendor: vendor, product_type: 'accommodation') }
+      let(:product) { create(:cm_product, vendor: vendor, product_type: 'accommodation') }
       let(:variant2) { create(:cm_variant, number_of_adults: 2, number_of_kids: 2, vendor: vendor2, product: product) }
 
       before do

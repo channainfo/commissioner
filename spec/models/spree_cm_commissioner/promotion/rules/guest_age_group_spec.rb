@@ -3,7 +3,7 @@ require 'timecop'
 
 RSpec.describe SpreeCmCommissioner::Promotion::Rules::GuestAgeGroup do
   describe '#eligible?' do
-    let(:product) { create(:product, name: "TedTalk Adult Ticket", kyc: 1 ) }
+    let(:product) { create(:cm_product, name: "TedTalk Adult Ticket", kyc: 1 ) }
     let(:taxonomy) { create(:taxonomy, kind: :occupation) }
 
     let(:young_adult_guest1) { create(:guest ,dob: 21.years.ago) }

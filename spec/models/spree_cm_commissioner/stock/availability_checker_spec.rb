@@ -5,8 +5,8 @@ RSpec.describe SpreeCmCommissioner::Stock::AvailabilityChecker do
     context 'basic conditions' do
       context 'when variant.available? is false' do
         it 'return can_supply? false' do
-          discontinued_variant = create(:variant, discontinue_on: Time.current)
-          inactive_variant = create(:variant, product: create(:product, status: :archived))
+          discontinued_variant = create(:cm_variant, discontinue_on: Time.current)
+          inactive_variant = create(:cm_variant, product: create(:cm_product, status: :archived))
 
           subject_1 = described_class.new(discontinued_variant)
           subject_2 = described_class.new(inactive_variant)
@@ -20,7 +20,7 @@ RSpec.describe SpreeCmCommissioner::Stock::AvailabilityChecker do
       end
 
       context 'when variant.should_track_inventory? is false' do
-        let(:variant) { create(:variant, track_inventory: false) }
+        let(:variant) { create(:cm_variant, track_inventory: false) }
         subject { described_class.new(variant) }
 
         it 'return can_supply? true' do
@@ -30,20 +30,21 @@ RSpec.describe SpreeCmCommissioner::Stock::AvailabilityChecker do
       end
 
       context 'when variant.backorderable? is true' do
-        let(:variant) { create(:variant) }
-        let(:stock_item) { create(:stock_item, backorderable: true, variant: variant) }
+        let(:variant) { create(:cm_variant) }
 
         subject { described_class.new(variant) }
 
         it 'return can_supply? true' do
+          variant.stock_items.update_all(backorderable: true)
+
           expect(variant.backorderable?).to be true
           expect(subject.can_supply?).to be true
         end
       end
 
       context 'when variant.need_confirmation? is true' do
-        let(:product) { create(:product, need_confirmation: true) }
-        let(:variant) { create(:variant, product: product) }
+        let(:product) { create(:cm_product, need_confirmation: true) }
+        let(:variant) { create(:cm_variant, product: product) }
 
         subject { described_class.new(variant) }
 
@@ -55,7 +56,7 @@ RSpec.describe SpreeCmCommissioner::Stock::AvailabilityChecker do
     end
 
     context 'check with redis after passed basic conditions above' do
-      let(:variant) { create(:variant, track_inventory: true, discontinue_on: nil) }
+      let(:variant) { create(:cm_variant, track_inventory: true, discontinue_on: nil) }
       subject { described_class.new(variant) }
 
       let(:cached_inventory_klass) { SpreeCmCommissioner::CachedInventoryItem }
@@ -88,8 +89,8 @@ RSpec.describe SpreeCmCommissioner::Stock::AvailabilityChecker do
     let(:options) { { from_date: Time.zone.today, to_date: Time.zone.tomorrow } }
 
     context 'when variant has permanent_stock (accomodation, transit, ...)' do
-      let(:product) { create(:product, product_type: :accommodation) }
-      let(:variant) { create(:variant, product: product) }
+      let(:product) { create(:cm_product, product_type: :accommodation) }
+      let(:variant) { create(:cm_variant, product: product) }
 
       subject { described_class.new(variant, options) }
 
@@ -106,8 +107,8 @@ RSpec.describe SpreeCmCommissioner::Stock::AvailabilityChecker do
     end
 
     context 'when variant has normal stock (ecommerce, ...)' do
-      let(:product) { create(:product, product_type: :ecommerce) }
-      let(:variant) { create(:variant, product: product) }
+      let(:product) { create(:cm_product, product_type: :ecommerce) }
+      let(:variant) { create(:cm_variant, product: product) }
 
       subject { described_class.new(variant, options) }
 

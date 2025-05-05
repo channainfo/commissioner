@@ -5,7 +5,7 @@ RSpec.describe SpreeCmCommissioner::CheckInDestroyer do
     let(:taxonomy) { create(:taxonomy, kind: :event) }
     let(:event) { create(:taxon, name: 'BunPhum', taxonomy: taxonomy) }
     let(:section_a) { create(:taxon, parent: event, taxonomy: taxonomy, name: 'Section A') }
-    let(:product_a) { create(:product, product_type: :ecommerce, taxons: [section_a]) }
+    let(:product_a) { create(:cm_product, product_type: :ecommerce, taxons: [section_a]) }
     let(:line_item_a) { create(:line_item, product: product_a) }
     let(:guest_a) { create(:guest, first_name: 'Guest A', last_name: 'A', line_item: line_item_a) }
 

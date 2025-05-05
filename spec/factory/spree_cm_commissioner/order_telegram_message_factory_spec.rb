@@ -11,7 +11,7 @@ RSpec.describe SpreeCmCommissioner::OrderTelegramMessageFactory do
   describe '#body' do
     context 'for all vendor' do
       let(:vendor) { create(:vendor, name: "Sai") }
-      let(:product) { create(:product_with_option_types, name: "5km Running Ticket", vendor: vendor, product_type: :ecommerce) }
+      let(:product) { create(:cm_product_with_option_types, name: "5km Running Ticket", vendor: vendor, product_type: :ecommerce) }
       let(:variant) { create(:cm_variant, total_inventory: 1, product: product) }
       let(:line_item) { build(:line_item, variant: variant, quantity: 1, from_date: date('2023-01-11'), to_date: date('2023-01-12')) }
       let(:order) { create(:order, line_items: [line_item]) }
@@ -27,8 +27,8 @@ RSpec.describe SpreeCmCommissioner::OrderTelegramMessageFactory do
       let(:vendor1) { create(:vendor, name: "Sai") }
       let(:vendor2) { create(:vendor, name: "Sai 2") }
 
-      let(:product1) { create(:product_with_option_types, name: "5km Running Ticket", vendor: vendor1, product_type: :ecommerce) }
-      let(:product2) { create(:product_with_option_types, name: "10km Running Ticket", vendor: vendor2, product_type: :ecommerce) }
+      let(:product1) { create(:cm_product_with_option_types, name: "5km Running Ticket", vendor: vendor1, product_type: :ecommerce) }
+      let(:product2) { create(:cm_product_with_option_types, name: "10km Running Ticket", vendor: vendor2, product_type: :ecommerce) }
 
       let(:variant1) { create(:cm_variant, total_inventory: 1, product: product1) }
       let(:variant2) { create(:cm_variant, total_inventory: 1, product: product2) }
@@ -47,7 +47,7 @@ RSpec.describe SpreeCmCommissioner::OrderTelegramMessageFactory do
 
     context 'line item with same from date & to date' do
       let(:vendor) { create(:vendor, name: "Sai") }
-      let(:product) { create(:product_with_option_types, name: "5km Running Ticket", vendor: vendor, product_type: :ecommerce) }
+      let(:product) { create(:cm_product_with_option_types, name: "5km Running Ticket", vendor: vendor, product_type: :ecommerce) }
       let(:variant) { create(:cm_variant, total_inventory: 1, product: product) }
       let(:line_item) { build(:line_item, variant: variant, from_date: date('2023-01-11'), to_date: date('2023-01-11')) }
       let(:order) { create(:order, line_items: [line_item]) }
@@ -72,7 +72,7 @@ RSpec.describe SpreeCmCommissioner::OrderTelegramMessageFactory do
 
   describe '#message' do
     let(:vendor) { create(:vendor, name: "Sai") }
-    let(:product) { create(:product_with_option_types, name: "5km Running Ticket", vendor: vendor, product_type: :ecommerce) }
+    let(:product) { create(:cm_product_with_option_types, name: "5km Running Ticket", vendor: vendor, product_type: :ecommerce) }
     let(:variant) { create(:cm_variant, total_inventory: 1, product: product) }
     let(:line_item) { build(:line_item, variant: variant, from_date: date('2023-01-11'), to_date: date('2023-01-12')) }
     let(:order) { create(:order, line_items: [line_item], phone_number: "012345678") }

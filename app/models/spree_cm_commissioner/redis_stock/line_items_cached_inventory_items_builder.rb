@@ -25,17 +25,11 @@ module SpreeCmCommissioner
       end
 
       def inventory_items
-        @inventory_items ||= line_items.flat_map do |line_item|
-          # TODO: N+1, we could fix but have a product_type in line item
-          # then include inventory_items in line item directly #2581
-          scope = line_item.inventory_items
-          scope = scope.where(inventory_date: line_item.date_range) if line_item.permanent_stock?
-          scope
-        end
+        @inventory_items ||= line_items.flat_map(&:inventory_items)
       end
 
       def line_items
-        @line_items ||= Spree::LineItem.where(id: line_item_ids).includes(variant: %i[product])
+        @line_items ||= Spree::LineItem.where(id: line_item_ids).includes(:inventory_items)
       end
     end
   end

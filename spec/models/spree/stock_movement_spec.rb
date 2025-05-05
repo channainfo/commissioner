@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe Spree::StockMovement, type: :model do
-  let(:variant) { create(:variant) }
+  let(:variant) { create(:cm_variant) }
   let(:stock_item) { create(:stock_item, variant: variant) }
   let(:stock_movement) { build(:stock_movement, stock_item: stock_item, quantity: 5) }
 
