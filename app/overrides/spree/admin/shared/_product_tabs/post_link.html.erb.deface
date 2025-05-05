@@ -1,0 +1,9 @@
+<!-- insert_after "erb[silent]:contains('Spree::Digital')" -->
+
+ <%= content_tag :li, class: 'nav-item' do %>
+    <%= link_to_with_icon 'box-seam.svg',
+      Spree.t(:post_link),
+      admin_product_post_link_url(@product),
+      class: "nav-link #{'active' if current == :post_link}" %>
+ <% end %>
+

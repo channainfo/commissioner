@@ -1,0 +1,29 @@
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: :post_link } %>
+
+<%= form_with model: @post_link, url: admin_product_post_link_path(@product), method: :patch, local: true do |f| %>
+  <div class="card">
+    <div class="card-header">
+      <h5>Post Link Details</h5>
+    </div>
+    <div class="card-body">
+      <div class="form-group">
+        <%= f.label :title, "Title" %>
+        <%= f.text_field :title, class: "form-control", placeholder: "Enter title" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :description, "Description" %>
+        <%= f.text_area :description, class: "form-control", placeholder: "Enter description" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :url, "URL" %>
+        <%= f.text_field :url, class: "form-control", placeholder: "Enter URL" %>
+      </div>
+    </div>
+
+    <div class="card-footer text-right">
+      <%= f.submit "Save", class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>
