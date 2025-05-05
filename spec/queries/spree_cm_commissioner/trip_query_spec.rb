@@ -60,10 +60,6 @@ RSpec.describe SpreeCmCommissioner::TripQuery do
                                     duration_h_option_value1,
                                     duration_mn_option_value1,
                                     bus1_option_value
-                                  ],
-                                  trip_stops_attributes: [
-                                    { stop_id: siem_reap.id, stop_type: "boarding" },
-                                    { stop_id: phnom_penh.id, stop_type: "drop_off" }
                                   ]
                                 )
                               end
@@ -75,9 +71,6 @@ RSpec.describe SpreeCmCommissioner::TripQuery do
                                 departure_time_option_value2,
                                 duration_h_option_value2,
                                 bus2_option_value
-                              ], trip_stops_attributes: [
-                                { stop_id: phnom_penh.id, stop_type: "boarding" },
-                                { stop_id: ho_chi_minh.id, stop_type: "drop_off" }
                               ]) }
 
     context 'when direct trips are available' do
@@ -87,9 +80,6 @@ RSpec.describe SpreeCmCommissioner::TripQuery do
                                     departure_time_option_value2,
                                     duration_h_option_value2,
                                     bus2_option_value,
-                                  ], trip_stops_attributes: [
-                                    { stop_id: siem_reap.id, stop_type: "boarding" },
-                                    { stop_id: ho_chi_minh.id, stop_type: "drop_off" }
                                   ]) }
       let(:direct_trips) { [direct_trip_variant] }
       let(:connected_trips) { [] }
@@ -162,9 +152,6 @@ RSpec.describe SpreeCmCommissioner::TripQuery do
                                     departure_time_option_value2,
                                     duration_h_option_value2,
                                     bus2_option_value
-                                  ], trip_stops_attributes: [
-                                    { stop_id: siem_reap.id, stop_type: "boarding" },
-                                    { stop_id: ho_chi_minh.id, stop_type: "drop_off" }
                                   ]) }
       let!(:connection)      { create(:trip_connection, from_trip: first_leg_variant, to_trip: second_leg_variant) }
       let!(:direct_trips)    { [direct_trip_variant] }
@@ -192,10 +179,7 @@ RSpec.describe SpreeCmCommissioner::TripQuery do
                                                                 departure_time_option_value2,
                                                                 duration_h_option_value2,
                                                                 bus2_option_value
-                                                                ], trip_stops_attributes: [
-                                                                  { stop_id: siem_reap.id, stop_type: "boarding" },
-                                                                  { stop_id: ho_chi_minh.id, stop_type: "drop_off" }
-    ])
+                                                                ])
       direct_trips = result.direct_trips
       expect(direct_trips).not_to be_empty
       expect(direct_trips.first).to be_a(SpreeCmCommissioner::TripResult)
@@ -212,9 +196,6 @@ RSpec.describe SpreeCmCommissioner::TripQuery do
                                 duration_h_option_value1,
                                 duration_mn_option_value1,
                                 bus1_option_value
-                              ], trip_stops_attributes: [
-                                { stop_id: siem_reap.id, stop_type: "boarding" },
-                                { stop_id: phnom_penh.id, stop_type: "drop_off" }
                               ]) }
 
     let!(:second_leg_variant) { vet_phnom_penh_ho_chi_minh.variants.create!(option_values: [
@@ -223,9 +204,6 @@ RSpec.describe SpreeCmCommissioner::TripQuery do
                                 departure_time_option_value2,
                                 duration_h_option_value2,
                                 bus2_option_value
-                              ], trip_stops_attributes: [
-                                { stop_id: phnom_penh.id, stop_type: "boarding" },
-                                { stop_id: ho_chi_minh.id, stop_type: "drop_off" }
                               ]) }
     it 'returns the connected trips from the database' do
       create(:trip_connection, from_trip: first_leg_variant, to_trip: second_leg_variant)
