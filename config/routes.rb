@@ -523,12 +523,6 @@ Spree::Core::Engine.add_routes do
       end
 
       namespace :storefront do
-        namespace :novel do
-          resources :accommodations, only: %i[index show] do
-            resources :variants, only: %i[index show], module: :accommodations
-          end
-        end
-
         resources :inventory_item
 
         resources :waiting_room_sessions, only: :create
@@ -556,7 +550,10 @@ Spree::Core::Engine.add_routes do
         resource :cart_guests, only: %i[create destroy]
         resources :cart_payment_method_groups, only: %i[index]
 
-        resources :accommodations, only: %i[index show]
+        resources :accommodations, only: %i[index show] do
+          resources :variants, only: %i[index show], module: :accommodations
+        end
+
         resources :line_items, only: %i[index show]
         resources :account_checker
         resource :account_recovers, only: [:update]
