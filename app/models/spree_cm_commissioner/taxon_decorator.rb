@@ -4,7 +4,7 @@ module SpreeCmCommissioner
     def self.prepended(base) # rubocop:disable Metrics/AbcSize
       base.include SpreeCmCommissioner::TaxonKind
       base.include SpreeCmCommissioner::Transit::TaxonBitwise
-
+      base.before_save :reload_parent_if_needed
       base.preference :background_color, :string
       base.preference :foreground_color, :string
 
@@ -109,6 +109,10 @@ module SpreeCmCommissioner
 
     def event_url
       "https://#{Spree::Store.default.url}/t/#{permalink}"
+    end
+
+    def reload_parent_if_needed
+      parent.reload if parent&.changed?
     end
   end
 end
