@@ -19,9 +19,12 @@
             <%= date.day %>
             <ul class="p-0 m-0 list-unstyled">
               <% events.each do |event| %>
-              <li class="badge badge-warning">
-                <%= event.options[:inventory_item].quantity_available %>
-              </li>
+                <% inventory_item = event.options[:inventory_item] %>
+                <% synced = inventory_item.quantity_available == @cached_inventory_items[inventory_item.id].quantity_available %>
+
+                <li class="badge <%= synced ? "badge-warning" : "badge-danger" %>">
+                  <%= inventory_item.quantity_available %>
+                </li>
               <% end %>
             </ul>
           </div>

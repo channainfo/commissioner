@@ -60,6 +60,15 @@
                 <div>
                   <%= svg_icon name: "approve.svg", width: '14', height: '14' %>
                   <%= label_tag "quantity_available_#{ inventory_item.id }", "Quantity available: #{inventory_item.quantity_available}", class: "m-0" %>
+
+                  <% synced = inventory_item.quantity_available == @cached_inventory_items[inventory_item.id].quantity_available %>
+                  <span type="button" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="<%= inventory_item_message(inventory_item, @cached_inventory_items[inventory_item.id]) %>">
+                    <% if synced %>
+                      <%= svg_icon name: "cloud-check.svg", width: '14', height: '14', classes: 'text-success' %>
+                    <% else %>
+                      <%= svg_icon name: "cloud-slash.svg", width: '14', height: '14', classes: 'text-danger' %>
+                    <% end %>
+                  </span>
                 </div>
               <% end %>
             <% end %>
