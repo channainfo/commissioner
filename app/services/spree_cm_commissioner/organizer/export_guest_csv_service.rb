@@ -48,6 +48,8 @@ module SpreeCmCommissioner
       end
 
       def fetch_option_value(guest, option_type_name)
+        return guest.formatted_bib_number if option_type_name == 'bib-prefix'
+
         guest.line_item&.variant&.find_option_value_name_for(option_type_name: option_type_name)
       end
 
