@@ -34,8 +34,20 @@ module SpreeCmCommissioner
 
       private
 
+      # only unstock or restock when variants is available, track inventory, not backorderable & not need_confirmation.
+      # otherwise, we can ignore them.
       def line_items
-        @line_items ||= Spree::LineItem.where(id: @line_item_ids)
+        return @line_items if defined?(@line_items)
+
+        @line_items = Spree::LineItem.where(id: @line_item_ids).includes(variant: :stock_items)
+        @line_items = @line_items.map do |line_item|
+          next unless line_item.variant.available?
+          next unless line_item.variant.should_track_inventory?
+          next if line_item.variant.backorderable?
+          next if line_item.variant.need_confirmation?
+
+          line_item
+        end.compact
       end
 
       def unstock(keys, quantities)
@@ -52,7 +64,7 @@ module SpreeCmCommissioner
 
       # Return: [CachedInventoryItem(...), CachedInventoryItem(...)]
       def cached_inventory_items
-        @cached_inventory_items ||= SpreeCmCommissioner::RedisStock::LineItemsCachedInventoryItemsBuilder.new(line_item_ids: @line_item_ids)
+        @cached_inventory_items ||= SpreeCmCommissioner::RedisStock::LineItemsCachedInventoryItemsBuilder.new(line_item_ids: line_items.pluck(:id))
                                                                                                          .call.values.flatten
       end
 
