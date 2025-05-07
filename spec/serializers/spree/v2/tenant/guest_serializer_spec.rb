@@ -44,7 +44,8 @@ RSpec.describe Spree::V2::Tenant::GuestSerializer, type: :serializer do
     it 'returns exact guest associations' do
       expect(subject[:data][:relationships].keys).to contain_exactly(
         :occupation,
-        :nationality
+        :nationality,
+        :id_card
       )
     end
   end

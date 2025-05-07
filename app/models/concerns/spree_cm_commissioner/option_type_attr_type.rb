@@ -20,6 +20,7 @@ module SpreeCmCommissioner
       vehicle_id
       origin
       destination
+      place_id
     ].freeze
 
     RESERVED_OPTIONS = {
@@ -47,8 +48,8 @@ module SpreeCmCommissioner
       'bib-display-prefix' => 'boolean',
       'bib-pre-generation-on-create' => 'boolean',
       'seat-number-positions' => 'array',
-      'origin' => 'origin',
-      'destination' => 'destination',
+      'origin' => 'place_id',
+      'destination' => 'place_id',
       'departure-time' => 'time',
       'vehicle' => 'vehicle_id',
       'allow-seat-selection' => 'boolean'

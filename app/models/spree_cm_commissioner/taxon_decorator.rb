@@ -57,6 +57,9 @@ module SpreeCmCommissioner
       base.has_many :event_blazer_queries, class_name: 'SpreeCmCommissioner::TaxonBlazerQuery'
       base.has_many :blazer_queries, through: :event_blazer_queries, class_name: 'Blazer::Query'
 
+      base.has_many :taxon_option_types, class_name: 'SpreeCmCommissioner::TaxonOptionType'
+      base.has_many :taxon_option_values, class_name: 'SpreeCmCommissioner::TaxonOptionValue'
+
       def base.active_homepage_events
         joins(:homepage_section_relatables)
           .joins("INNER JOIN spree_taxons taxon ON taxon.id = cm_homepage_section_relatables.relatable_id
@@ -94,6 +97,14 @@ module SpreeCmCommissioner
                        .where(spree_taxons: { id: child_ids })
                        .pluck('spree_option_types.name')
                        .uniq
+    end
+
+    def selected_option_types
+      taxon_option_types.pluck(:option_type_id)
+    end
+
+    def selected_option_values
+      taxon_option_values.pluck(:option_value_id)
     end
 
     def event_url

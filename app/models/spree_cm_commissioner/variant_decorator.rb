@@ -29,11 +29,21 @@ module SpreeCmCommissioner
 
       base.has_one :trip,
                    class_name: 'SpreeCmCommissioner::Trip'
+      base.has_many :trip_stops, class_name: 'SpreeCmCommissioner::TripStop', dependent: :destroy, foreign_key: :trip_id
       base.accepts_nested_attributes_for :option_values
 
       base.before_save -> { self.product_type = product.product_type }, if: -> { product_type.nil? }
 
       base.after_commit :sync_trip, if: :transit?
+      base.accepts_nested_attributes_for :trip_stops, allow_destroy: true
+      base.after_commit :create_trip_stops, if: :transit?
+    end
+
+    def create_trip_stops
+      return if is_master?
+
+      trip_stops.find_or_create_by(stop_type: :boarding, stop_id: options.origin)
+      trip_stops.find_or_create_by(stop_type: :drop_off, stop_id: options.destination)
     end
 
     def delivery_required?

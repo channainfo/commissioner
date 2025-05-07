@@ -10,6 +10,7 @@ RSpec.describe SpreeCmCommissioner::TripQuery do
 
   # Creating Places
   let!(:phnom_penh)   { create(:cm_place, name: 'Phnom Penh') }
+  let!(:angkor)     { create(:cm_place, name: 'Angkor') }
   let!(:siem_reap)    { create(:cm_place, name: 'Siem Reap') }
   let!(:ho_chi_minh)  { create(:cm_place, name: 'Ho Chi Minh') }
 
@@ -51,14 +52,18 @@ RSpec.describe SpreeCmCommissioner::TripQuery do
 
   describe '.call' do
     # Creating Trip Variants
-    let!(:first_leg_variant)  { vet_siem_reap_phnom_penh.variants.create!(option_values: [
-                                siem_reap_option_value,
-                                phnom_penh_destination_option_value,
-                                departure_time_option_value1,
-                                duration_h_option_value1,
-                                duration_mn_option_value1,
-                                bus1_option_value
-                              ]) }
+    let!(:first_leg_variant) do vet_siem_reap_phnom_penh.variants.create!(
+                                  option_values: [
+                                    siem_reap_option_value,
+                                    phnom_penh_destination_option_value,
+                                    departure_time_option_value1,
+                                    duration_h_option_value1,
+                                    duration_mn_option_value1,
+                                    bus1_option_value
+                                  ]
+                                )
+                              end
+
 
     let!(:second_leg_variant) { vet_phnom_penh_ho_chi_minh.variants.create!(option_values: [
                                 phnom_penh_origin_option_value,
@@ -74,7 +79,7 @@ RSpec.describe SpreeCmCommissioner::TripQuery do
                                     ho_chi_minh_option_value,
                                     departure_time_option_value2,
                                     duration_h_option_value2,
-                                    bus2_option_value
+                                    bus2_option_value,
                                   ]) }
       let(:direct_trips) { [direct_trip_variant] }
       let(:connected_trips) { [] }

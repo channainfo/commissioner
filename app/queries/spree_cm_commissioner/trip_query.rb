@@ -34,11 +34,11 @@ module SpreeCmCommissioner
                         trips.vehicle_id AS vehicle_id'
                       )
                .joins('INNER JOIN cm_trips AS trips ON trips.variant_id = spree_variants.id')
-               .joins('INNER JOIN cm_trip_stops AS boarding ON boarding.trip_id = trips.id AND boarding.stop_type = 0')
-               .joins('INNER JOIN cm_trip_stops AS drop_off ON drop_off.trip_id = trips.id AND drop_off.stop_type = 1')
+               .joins('INNER JOIN cm_trip_stops AS boarding ON boarding.trip_id = spree_variants.id AND boarding.stop_type = 0')
+               .joins('INNER JOIN cm_trip_stops AS drop_off ON drop_off.trip_id = spree_variants.id AND drop_off.stop_type = 1')
                .joins('INNER JOIN spree_vendors AS vendors ON vendors.id = spree_variants.vendor_id')
                .joins('INNER JOIN spree_products AS routes ON routes.id = spree_variants.product_id')
-               .where('trips.origin_id = ? AND trips.destination_id = ?', origin_id, destination_id)
+               .where('boarding.stop_id = ? AND drop_off.stop_id = ?', origin_id, destination_id)
 
       result.map do |trip|
         trip_result_options = {
@@ -69,9 +69,9 @@ module SpreeCmCommissioner
                  INNER JOIN spree_products AS routes2 ON routes2.id = variant2.product_id
                  INNER JOIN cm_trips AS trip1 ON trip1.variant_id = cm_trip_connections.from_trip_id
                  INNER JOIN cm_trips AS trip2 ON trip2.variant_id = cm_trip_connections.to_trip_id
-                 INNER JOIN cm_places trip1_origin ON trip1_origin.id = trip1.origin_id
-                 INNER JOIN cm_places trip2_origin ON trip2_origin.id = trip2.origin_id
-                 INNER JOIN cm_places trip2_destination ON trip2_destination.id = trip2.destination_id
+                 INNER JOIN cm_trip_stops trip1_origin ON trip1_origin.trip_id = variant1.id AND trip1_origin.stop_type = 0
+                 INNER JOIN cm_trip_stops trip2_origin ON trip2_origin.trip_id = variant2.id AND trip2_origin.stop_type = 0
+                 INNER JOIN cm_trip_stops trip2_destination ON trip2_destination.trip_id = variant2.id AND trip2_destination.stop_type = 1
                  INNER JOIN spree_vendors AS vendor1 ON vendor1.id = variant1.vendor_id
                  INNER JOIN spree_vendors AS vendor2 ON vendor2.id = variant2.vendor_id'
                      )
@@ -93,12 +93,12 @@ module SpreeCmCommissioner
                         trip2.vehicle_id AS trip2_vehicle,
                         routes2.short_name AS route2_short_name,
                         routes2.name AS route2_name,
-                        trip1_origin.name AS trip1_origin,
-                        trip2_origin.name AS trip2_origin,
-                        trip2_destination.name AS trip2_destination,
+                        trip1_origin.stop_name AS trip1_origin,
+                        trip2_origin.stop_name AS trip2_origin,
+                        trip2_destination.stop_name AS trip2_destination,
                         vendor2.name AS trip2_vendor_name'
-                      )
-               .where('trip1_origin.id = ? AND trip2_destination.id = ?', origin_id, destination_id)
+                      ).where('trip1_origin.stop_id = ? AND trip2_destination.stop_id = ?', origin_id, destination_id
+                      ).uniq
 
       return [] if result.blank?
 
