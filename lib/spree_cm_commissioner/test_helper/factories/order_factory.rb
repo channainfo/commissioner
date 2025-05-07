@@ -18,21 +18,33 @@ FactoryBot.define do
     end
 
     after(:create) do |order, evaluator|
+      stock_location = evaluator.variant.stock_items.first&.stock_location || create(:stock_location)
+      stock_item = Spree::StockItem.find_or_create_by(variant: evaluator.variant)
+      stock_item.adjust_count_on_hand(20)
+
       if evaluator.quantity.nil? && evaluator.seats.present?
-        @line_item_seats_attributes =  evaluator.seats.map do |seat|
-          {seat_id: seat.id, date: evaluator.date, variant_id: evaluator.variant.id}
+        line_item_seats_attributes = evaluator.seats.map do |seat|
+          { seat_id: seat.id, date: evaluator.date, variant_id: evaluator.variant.id }
         end
-        create(:line_item, order: order, variant: evaluator.variant, date: evaluator.date, line_item_seats_attributes: @line_item_seats_attributes)
-        order.line_items.reload
+
+        create(:line_item,
+          order: order,
+          variant: evaluator.variant,
+          date: evaluator.date,
+          quantity: evaluator.seats.size,
+          line_item_seats_attributes: line_item_seats_attributes
+        )
       else
-        create(:line_item, order: order, variant: evaluator.variant, date: evaluator.date, quantity: evaluator.quantity)
+        create(:line_item,
+          order: order,
+          variant: evaluator.variant,
+          date: evaluator.date,
+          quantity: evaluator.quantity || 1
+        )
       end
 
-      stock_location = order.line_items&.first&.variant&.stock_items&.first&.stock_location || create(:stock_location)
       create(:shipment, order: order, cost: evaluator.shipment_cost, stock_location: stock_location)
-      order.shipments.reload
-
-      order.update_with_updater!
+      order.reload.update_with_updater!
     end
   end
 end
