@@ -7,6 +7,7 @@ RSpec.describe Spree::Product, type: :model do
     it { should have_many(:variant_kind_option_types).through(:product_option_types) }
     it { should have_many(:product_kind_option_types).through(:product_option_types) }
     it { should have_many(:promoted_option_types).through(:product_option_types) }
+    it { should have_many(:inventory_items).through(:variants) }
   end
 
   describe 'attributes' do
@@ -34,17 +35,44 @@ RSpec.describe Spree::Product, type: :model do
         expect(product.errors[:discontinue_on]).to be_empty
       end
     end
+
+    describe '#product_type_unchanged' do
+      context 'when product already have :product_type' do
+        let(:product) { create(:cm_product, product_type: :ecommerce) }
+
+        it 'does not allow product_type to be changed on update' do
+          product.product_type = :transit
+
+          expect(product).not_to be_valid
+          expect(product.errors[:product_type]).to include('cannot be changed once set')
+        end
+
+        it 'allows saving when product_type is unchanged' do
+          product.name = 'New name'
+          expect(product).to be_valid
+        end
+      end
+
+      context 'when product have product_type nil' do
+        let(:product) { create(:cm_product, product_type: nil) }
+
+        it 'does not add an error when product_type is changed' do
+          product.product_type = :ecommerce
+          expect(product).to be_valid
+        end
+      end
+    end
   end
 
   describe 'callback: after_update' do
     describe '#update_variants_vendor_id' do
-      let(:variant1) { build(:variant) }
-      let(:variant2) { build(:variant) }
+      let(:variant1) { build(:cm_variant) }
+      let(:variant2) { build(:cm_variant) }
 
       let!(:vendor1) { create(:vendor) }
       let!(:vendor2) { create(:vendor) }
 
-      let!(:product) { create(:product, variants: [variant1, variant2], vendor: vendor1) }
+      let!(:product) { create(:cm_product, variants: [variant1, variant2], vendor: vendor1) }
 
       it 'update variants including master to new vendor' do
         expect(variant1.vendor_id).to eq vendor1.id
@@ -60,18 +88,18 @@ RSpec.describe Spree::Product, type: :model do
   end
 
   describe 'scope' do
-    let(:vendor) { create(:active_vendor, name: 'Angkor Hotel') }
+    let(:vendor) { create(:active_vendor, name: 'Angkor Hotel', primary_product_type: :accommodation) }
     let(:state) { create(:state, name: 'Siemreap') }
     let!(:option_type) { create(:option_type, name: 'location', presentation: 'Location', attr_type: 'state_selection') }
     let!(:option_value) { create(:option_value, option_type: option_type, name: state.id) }
     let!(:stock_location) { vendor.stock_locations.first.update(state: state) }
 
     context 'vendor with many products' do
-      let!(:product1) { create(:product_with_option_types, name: 'Bedroom 1', vendor: vendor, price: 10) }
-      let!(:product2) { create(:product_with_option_types, name: 'Bedroom 2', vendor: vendor, price: 20 ) }
-      let!(:product3) { create(:product_with_option_types, name: 'Bedroom 3', vendor: vendor, price: 30 ) }
-      let!(:variant_product1) { create(:base_variant, product: product1, price: 8 ) }
-      let!(:variant_product3) { create(:base_variant, product: product1, price: 25 ) }
+      let!(:product1) { create(:cm_product, name: 'Bedroom 1', vendor: vendor, price: 10, product_type: :accommodation) }
+      let!(:product2) { create(:cm_product, name: 'Bedroom 2', vendor: vendor, price: 20, product_type: :accommodation) }
+      let!(:product3) { create(:cm_product, name: 'Bedroom 3', vendor: vendor, price: 30, product_type: :accommodation) }
+      let!(:variant_product1) { create(:cm_base_variant, product: product1, price: 8 ) }
+      let!(:variant_product3) { create(:cm_base_variant, product: product1, price: 25 ) }
 
       it '.min_price' do
         expect(Spree::Product.min_price(vendor)).to eq variant_product1.price
@@ -83,7 +111,7 @@ RSpec.describe Spree::Product, type: :model do
     end
 
     context 'vendor with 1 product' do
-      let!(:product1) { create(:base_product, name: 'Bedroom 1', vendor: vendor, price: 10) }
+      let!(:product1) { create(:cm_base_product, name: 'Bedroom 1', vendor: vendor, price: 10, product_type: :accommodation) }
 
       it '.min_price' do
         expect(Spree::Product.min_price(vendor)).to eq product1.price
@@ -102,6 +130,28 @@ RSpec.describe Spree::Product, type: :model do
       it '.max_price' do
         expect(Spree::Product.max_price(vendor)).to eq 0
       end
+    end
+  end
+
+  describe '#pre_inventory_days' do
+    it 'returns 365 for accommodation' do
+      product = create(:cm_product, product_type: :accommodation)
+      expect(product.pre_inventory_days).to eq(365)
+    end
+
+    it 'returns 90 for transit' do
+      product = create(:cm_product, product_type: :transit)
+      expect(product.pre_inventory_days).to eq(90)
+    end
+
+    it 'returns 30 for service' do
+      product = create(:cm_product, product_type: :service)
+      expect(product.pre_inventory_days).to eq(30)
+    end
+
+    it 'returns nil for none of above product_type' do
+      product = create(:cm_product, product_type: :ecommerce)
+      expect(product.pre_inventory_days).to be_nil
     end
   end
 end

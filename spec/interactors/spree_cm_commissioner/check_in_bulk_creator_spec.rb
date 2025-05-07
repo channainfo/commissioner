@@ -10,8 +10,8 @@ RSpec.describe SpreeCmCommissioner::CheckInBulkCreator do
     let(:section_a) { create(:taxon, parent: event, taxonomy: taxonomy, name: 'Section A') }
     let(:section_b) { create(:taxon, parent: event, taxonomy: taxonomy, name: 'Section B') }
 
-    let(:product_a) { create(:product, product_type: :ecommerce, taxons: [section_a]) }
-    let(:product_b) { create(:product, product_type: :ecommerce, taxons: [section_b]) }
+    let(:product_a) { create(:cm_product, product_type: :ecommerce, taxons: [section_a]) }
+    let(:product_b) { create(:cm_product, product_type: :ecommerce, taxons: [section_b]) }
 
     let(:line_item_a) { create(:line_item, product: product_a) }
     let(:line_item_b) { create(:line_item, product: product_b) }

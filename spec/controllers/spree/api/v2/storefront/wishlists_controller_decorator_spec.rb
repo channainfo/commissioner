@@ -4,7 +4,7 @@ RSpec.describe Spree::Api::V2::Storefront::WishlistsControllerDecorator do
   let(:user) { create(:user) }
   let(:wishlist1) { create(:wishlist, user: user) }
   let(:wishlist2) { create(:wishlist, user: user) }
-  let(:variant) { create(:variant) }
+  let(:variant) { create(:cm_variant) }
   let(:wished_item) { create(:wished_item, wishlist: wishlist1, variant: variant) }
   let(:params) { {} }
   let(:controller) { Spree::Api::V2::Storefront::WishlistsController.new }

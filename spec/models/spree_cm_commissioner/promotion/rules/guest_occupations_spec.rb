@@ -3,8 +3,8 @@ require 'spec_helper'
 RSpec.describe SpreeCmCommissioner::Promotion::Rules::GuestOccupations do
   describe '#eligible?' do
 
-    let(:product1) { create(:product, name: "TedTalk Adult Ticket", kyc: 1 ) }
-    let(:product2) { create(:product, name: "TedTalk Student Ticket", kyc:1 ) }
+    let(:product1) { create(:cm_product, name: "TedTalk Adult Ticket", kyc: 1 ) }
+    let(:product2) { create(:cm_product, name: "TedTalk Student Ticket", kyc:1 ) }
 
     let(:taxonomy) { create(:taxonomy, kind: :occupation) }
 

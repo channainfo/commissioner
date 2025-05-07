@@ -29,3 +29,4 @@ node_modules
 .vscode
 !.vscode/.settings.json
 .env
+vendor/bundle/

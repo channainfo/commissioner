@@ -13,8 +13,8 @@ RSpec.describe SpreeCmCommissioner::VendorUpdater do
 
   describe '.call' do
     context 'without product variants' do
-      let!(:product1) { create(:product, name: 'Bedroom 1', vendor: vendor, product_type: accommodation, price: 10, shipping_category: shipping_category ) }
-      let!(:product3) { create(:product, name: 'Bedroom 3', vendor: vendor, product_type: accommodation, price: 20, shipping_category: shipping_category ) }
+      let!(:product1) { create(:cm_product, name: 'Bedroom 1', vendor: vendor, product_type: accommodation, price: 10, shipping_category: shipping_category ) }
+      let!(:product3) { create(:cm_product, name: 'Bedroom 3', vendor: vendor, product_type: accommodation, price: 20, shipping_category: shipping_category ) }
 
       before do
         vendor.stock_items.first.adjust_count_on_hand(2)
@@ -40,12 +40,12 @@ RSpec.describe SpreeCmCommissioner::VendorUpdater do
 
     context 'with product variants' do
       it 'update vendor min and max price if [variant product_type] is primary_product_type' do
-        product1 = create(:product, name: 'Bedroom', vendor: vendor, product_type: accommodation, price: 13, shipping_category: shipping_category )
-        product2 = create(:product, name: 'Breakfast', vendor: vendor, product_type: service, price: 14, shipping_category: shipping_category )
+        product1 = create(:cm_product, name: 'Bedroom', vendor: vendor, product_type: accommodation, price: 13, shipping_category: shipping_category )
+        product2 = create(:cm_product, name: 'Breakfast', vendor: vendor, product_type: service, price: 14, shipping_category: shipping_category )
 
-        variant1 = create(:base_variant, product: product1, price: 10 )
-        variant2 = create(:base_variant, product: product1, price: 20 )
-        variant3 = create(:base_variant, product: product2, price: 30 )
+        variant1 = create(:cm_base_variant, product: product1, price: 10 )
+        variant2 = create(:cm_base_variant, product: product1, price: 20 )
+        variant3 = create(:cm_base_variant, product: product2, price: 30 )
 
         context = SpreeCmCommissioner::VendorUpdater.call(vendor: vendor)
         vendor.reload
@@ -58,10 +58,10 @@ RSpec.describe SpreeCmCommissioner::VendorUpdater do
       end
 
       it 'update min and max price even base on master variant price' do
-        product = create(:product, name: 'Breakfast', vendor: vendor, product_type: accommodation, price: 5, shipping_category: shipping_category )
+        product = create(:cm_product, name: 'Breakfast', vendor: vendor, product_type: accommodation, price: 5, shipping_category: shipping_category )
 
-        variant1 = create(:base_variant, product: product, price: 10 )
-        variant2 = create(:base_variant, product: product, price: 30 )
+        variant1 = create(:cm_base_variant, product: product, price: 10 )
+        variant2 = create(:cm_base_variant, product: product, price: 30 )
 
         context = SpreeCmCommissioner::VendorUpdater.call(vendor: vendor)
         vendor.reload
@@ -74,7 +74,7 @@ RSpec.describe SpreeCmCommissioner::VendorUpdater do
       end
 
       it "return min, max price zero if vendor couldn't find primary_product_type variants" do
-        product = create(:product, name: 'Breakfast', vendor: vendor, product_type: service, price: 5, shipping_category: shipping_category )
+        product = create(:cm_product, name: 'Breakfast', vendor: vendor, product_type: service, price: 5, shipping_category: shipping_category )
 
         context = SpreeCmCommissioner::VendorUpdater.call(vendor: vendor)
         vendor.reload

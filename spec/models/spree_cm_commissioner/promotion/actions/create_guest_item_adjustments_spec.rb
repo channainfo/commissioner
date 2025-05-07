@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::Promotion::Actions::CreateGuestItemAdjustments do
 
-  let(:product) { create(:product, name: "TedTalk Adult Ticket", price: BigDecimal('10.0'), kyc: 1 ) }
+  let(:product) { create(:cm_product, name: "TedTalk Adult Ticket", price: BigDecimal('10.0'), kyc: 1 ) }
 
   let(:taxonomy) { create(:taxonomy, kind: :occupation) }
   let(:occupation) {  create(:taxon, name: 'Student', taxonomy: taxonomy) }

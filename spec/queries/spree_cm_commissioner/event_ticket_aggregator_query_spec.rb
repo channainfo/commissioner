@@ -11,8 +11,8 @@ RSpec.describe SpreeCmCommissioner::EventTicketAggregatorQuery do
   let(:section_a) { create(:taxon, parent: event, taxonomy: taxonomy, name: 'Section A', from_date: from_date, to_date: to_date) }
   let(:section_b) { create(:taxon, parent: event, taxonomy: taxonomy, name: 'Section B', from_date: from_date, to_date: to_date) }
 
-  let(:product_a) { create(:product, product_type: :ecommerce, taxons: [section_a]) }
-  let(:product_b) { create(:product, product_type: :ecommerce, taxons: [section_b]) }
+  let(:product_a) { create(:cm_product, product_type: :ecommerce, taxons: [section_a]) }
+  let(:product_b) { create(:cm_product, product_type: :ecommerce, taxons: [section_b]) }
 
   before do
     create_orders

@@ -138,7 +138,11 @@ Spree::Core::Engine.add_routes do
         end
       end
 
-      resources :stock_managements
+      resources :stock_managements do
+        collection do
+          get :calendar
+        end
+      end
 
       resources :product_completion_steps do
         collection do
@@ -519,6 +523,8 @@ Spree::Core::Engine.add_routes do
       end
 
       namespace :storefront do
+        resources :inventory_item
+
         resources :waiting_room_sessions, only: :create
         resources :vattanac_banks, only: %i[create]
         resource :cart, controller: :cart, only: %i[show create destroy] do
@@ -544,7 +550,10 @@ Spree::Core::Engine.add_routes do
         resource :cart_guests, only: %i[create destroy]
         resources :cart_payment_method_groups, only: %i[index]
 
-        resources :accommodations, only: %i[index show]
+        resources :accommodations, only: %i[index show] do
+          resources :variants, only: %i[index show], module: :accommodations
+        end
+
         resources :line_items, only: %i[index show]
         resources :account_checker
         resource :account_recovers, only: [:update]

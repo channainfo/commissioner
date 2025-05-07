@@ -8,8 +8,8 @@ RSpec.describe SpreeCmCommissioner::LineItemSearcherQuery do
   let(:section_a) { create(:taxon, parent: event, taxonomy: taxonomy, name: 'Section A') }
   let(:section_b) { create(:taxon, parent: event, taxonomy: taxonomy, name: 'Section B') }
 
-  let(:product_a) { create(:product, product_type: :ecommerce, taxons: [section_a]) }
-  let(:product_b) { create(:product, product_type: :ecommerce, taxons: [section_b]) }
+  let(:product_a) { create(:cm_product, product_type: :ecommerce, taxons: [section_a]) }
+  let(:product_b) { create(:cm_product, product_type: :ecommerce, taxons: [section_b]) }
 
   let(:guest_a) { create(:guest, first_name: 'Ean', last_name: 'Eii') }
   let(:guest_b) { create(:guest, first_name: 'Sao', last_name: 'San') }
