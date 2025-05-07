@@ -68,7 +68,7 @@ RSpec.describe SpreeCmCommissioner::InventoryItem, type: :model do
   end
 
   describe '#adjust_quantity!' do
-    let(:variant) { create(:cm_variant, pregenerate_inventory_items: false) }
+    let(:variant) { create(:cm_variant) }
     let(:inventory_item) do
       item = variant.inventory_items.first
       item.update!(product_type: :ecommerce, max_capacity: 10, quantity_available: 5)

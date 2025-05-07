@@ -7,12 +7,20 @@ FactoryBot.define do
       total_inventory { 10 }
       backorderable { false }
       pregenerate_inventory_items { true }
+      pre_inventory_days { nil } # optional for permanent only
     end
 
     after :create do |variant, evaluator|
       variant.stock_items.first.adjust_count_on_hand(evaluator.total_inventory)
       variant.stock_items.update_all(backorderable: evaluator.backorderable)
-      variant.create_default_non_permanent_inventory_item! if !variant.permanent_stock? && evaluator.pregenerate_inventory_items
+
+      if evaluator.pregenerate_inventory_items
+        variant.inventory_items.each { |item| item.adjust_quantity!(evaluator.total_inventory) }
+        SpreeCmCommissioner::Stock::PermanentInventoryItemsGenerator.call(pre_inventory_days: evaluator.pre_inventory_days || 3) if variant.permanent_stock?
+      else
+        # make sure all inventory items are remove if exist.
+        variant.inventory_items.destroy_all
+      end
     end
   end
 
