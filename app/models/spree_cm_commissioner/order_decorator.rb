@@ -203,10 +203,12 @@ module SpreeCmCommissioner
 
     def unstock_inventory_in_redis!
       SpreeCmCommissioner::RedisStock::InventoryUpdater.new(line_item_ids).unstock!
+      CmAppLogger.log(label: 'unstock_inventory_in_redis', data: { order_id: id })
     end
 
     def restock_inventory_in_redis!
       SpreeCmCommissioner::RedisStock::InventoryUpdater.new(line_item_ids).restock!
+      CmAppLogger.log(label: 'restock_inventory_in_redis', data: { order_id: id })
     end
 
     # override :spree_api
