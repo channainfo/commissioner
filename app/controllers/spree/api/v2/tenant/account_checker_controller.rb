@@ -14,7 +14,7 @@ module Spree
           end
 
           def filter_params
-            params.permit(:login, :locale, :format)
+            params.permit(:login, :locale, :format).merge(tenant_id: MultiTenant.current_tenant_id)
           end
         end
       end

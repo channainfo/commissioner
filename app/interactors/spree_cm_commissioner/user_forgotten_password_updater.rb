@@ -1,6 +1,7 @@
 module SpreeCmCommissioner
   class UserForgottenPasswordUpdater < BaseInteractor
     # :email, :phone_number, :country_code :pin_code, :pin_code_token, :password, :password_confirmation
+    delegate :tenant_id, to: :context
 
     def call
       find_user_by_login!
@@ -19,7 +20,7 @@ module SpreeCmCommissioner
     def find_user_by_login!
       login = phone_number || email
 
-      context.user = Spree.user_class.find_user_by_login(login)
+      context.user = Spree.user_class.find_user_by_login(login, tenant_id)
       context.fail!(message: I18n.t('account_checker.verify.not_exist', login: login)) if context.user.blank?
     end
 

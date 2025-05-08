@@ -9,7 +9,7 @@ RSpec.describe SpreeCmCommissioner::UserAuthenticator do
       context = double(:user_password_authenticator, 'user': user, 'success?': true)
       expect(SpreeCmCommissioner::UserPasswordAuthenticator)
           .to receive(:call)
-          .with({ login: user.email, password: user.password })
+          .with({ login: user.email, password: user.password, tenant_id: nil })
           .and_return(context)
 
       params = { grant_type: 'password', username: user.email, password: user.password }

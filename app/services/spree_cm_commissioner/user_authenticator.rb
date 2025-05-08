@@ -25,9 +25,11 @@ module SpreeCmCommissioner
     end
 
     def self.auth_context(params)
+      tenant_id = find_oauth_application(params)&.tenant_id
+
       case flow_type(params)
       when 'login_auth'
-        options = { login: params[:username], password: params[:password] }
+        options = { login: params[:username], password: params[:password], tenant_id: tenant_id }
         SpreeCmCommissioner::UserPasswordAuthenticator.call(options)
       when 'social_auth'
         options = { id_token: params[:id_token] }

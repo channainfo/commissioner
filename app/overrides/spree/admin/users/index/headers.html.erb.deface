@@ -20,6 +20,9 @@
       <%= sort_link @search, :phone_number,  I18n.t('activerecord.attributes.spree/order.phone_number'), {}, {title: 'phone_number_title'} %>
     </th>
     <th>
+      <%= Spree.t(:tenant) %>
+    </th>
+    <th>
       <%= sort_link @search, :created_at, Spree.t(:create_at), {}, {title: 'create_at_title'} %>
     </th>
     <th data-hook="admin_users_index_header_actions" class="actions"></th>
