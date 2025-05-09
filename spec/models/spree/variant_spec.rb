@@ -227,7 +227,7 @@ RSpec.describe Spree::Variant, type: :model do
   end
 
   describe '#default_inventory_item_exist?' do
-    let(:variant) { create(:cm_variant, pregenerate_inventory_items: true) }
+    let(:variant) { create(:cm_variant) }
 
     context 'when there is an inventory item with nil inventory_date' do
       it { expect(variant.default_inventory_item_exist?).to be true }
@@ -255,13 +255,13 @@ RSpec.describe Spree::Variant, type: :model do
       before { allow(variant).to receive(:should_track_inventory?).and_return(false) }
 
       it 'does not create an inventory item' do
-        expect { variant.create_default_non_permanent_inventory_item! }.not_to change(variant.inventory_items, :count)
+        expect { variant.create_default_non_permanent_inventory_item! }.not_to change(variant.reload.inventory_items, :count)
       end
     end
 
     context 'when all conditions pass and no default inventory item exists' do
       it 'creates a default inventory item with variant.total_on_hand' do
-        expect { variant.create_default_non_permanent_inventory_item! }.to change(variant.inventory_items, :count).by(1)
+        expect { variant.create_default_non_permanent_inventory_item! }.to change(variant.reload.inventory_items, :count).by(1)
 
         item = variant.inventory_items.last
 
@@ -274,7 +274,7 @@ RSpec.describe Spree::Variant, type: :model do
     context 'when custom quantity and max capacity are passed' do
       it 'uses the provided values instead of variant.total_on_hand' do
         variant.create_default_non_permanent_inventory_item!(quantity_available: 5, max_capacity: 10)
-        item = variant.inventory_items.last
+        item = variant.reload.inventory_items.last
 
         expect(item.quantity_available).to eq(5)
         expect(item.max_capacity).to eq(10)

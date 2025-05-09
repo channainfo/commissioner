@@ -55,5 +55,10 @@ module Spree
       age
       gender
     ]
+
+    @@stock_movement_attributes += %i[
+      originator_type
+      originator_id
+    ]
   end
 end
