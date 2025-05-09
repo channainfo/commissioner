@@ -27,9 +27,11 @@ module SpreeCmCommissioner
         taxonomy_id: context.params[:taxonomy_id]
       )
 
-      return if @parent_taxon.save
-
-      context.fail!(message: @parent_taxon.errors.full_messages.join(', '))
+      if @parent_taxon.save
+        context.slug = @parent_taxon.event_slug
+      else
+        context.fail!(message: @parent_taxon.errors.full_messages.join(', '))
+      end
     end
 
     def assign_vendor
@@ -44,6 +46,8 @@ module SpreeCmCommissioner
     def create_child_taxon
       child_taxon = Spree::Taxon.new(
         name: 'Ticket Type',
+        from_date: @parent_taxon.from_date,
+        to_date: @parent_taxon.to_date,
         parent_id: @parent_taxon.id,
         taxonomy_id: context.params[:taxonomy_id]
       )
