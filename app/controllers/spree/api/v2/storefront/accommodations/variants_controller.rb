@@ -10,9 +10,9 @@ module Spree
             @collection ||= SpreeCmCommissioner::Accommodations::FindVariant.new(
               from_date: params[:from_date]&.to_date,
               to_date: params[:to_date]&.to_date,
-              vendor_id: params[:accommodation_id],
-              number_of_adults: params[:number_of_adults].to_i,
-              number_of_kids: params[:number_of_kids].to_i
+              vendor_id: params[:vendor_id],
+              number_of_adults: params[:adult].to_i,
+              number_of_kids: params[:children].to_i
             ).execute
           end
 
