@@ -2,16 +2,25 @@ require 'spec_helper'
 
 RSpec.describe SpreeCmCommissioner::InventoryItemSyncerJob, type: :job do
   let(:inventory_id_and_quantities) { [{inventory_id: 1, quantity: 2}, {inventory_id: 2, quantity: 1}] }
+  let(:line_item_ids) { [1, 2] }
 
   describe '#perform' do
     let(:syncer_class) { SpreeCmCommissioner::InventoryItemSyncer }
 
-    subject { described_class.new.perform(inventory_id_and_quantities:) }
+    subject { described_class.new.perform(inventory_id_and_quantities:, line_item_ids:) }
 
     it 'calls InventoryItemSyncer with correct parameters' do
       expect(syncer_class).to receive(:call).with(
         inventory_id_and_quantities: inventory_id_and_quantities
       )
+      expect(CmAppLogger).to receive(:log).with(
+        label: 'InventoryItemSyncerJob',
+        data: {
+          inventory_id_and_quantities: inventory_id_and_quantities.as_json,
+          line_item_ids: line_item_ids
+        }
+      )
+
       subject
     end
   end

@@ -119,7 +119,9 @@ module SpreeCmCommissioner
       end
 
       def schedule_sync_inventory(inventory_id_and_quantities)
-        SpreeCmCommissioner::InventoryItemSyncerJob.perform_later(inventory_id_and_quantities:)
+        SpreeCmCommissioner::InventoryItemSyncerJob.perform_later(inventory_id_and_quantities: inventory_id_and_quantities,
+                                                                  line_item_ids: @line_item_ids
+                                                                 )
       end
     end
   end
