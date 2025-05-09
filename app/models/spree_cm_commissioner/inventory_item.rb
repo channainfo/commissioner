@@ -20,7 +20,7 @@ module SpreeCmCommissioner
     def adjust_quantity!(quantity)
       with_lock do
         self.max_capacity = max_capacity + quantity
-        self.quantity_available = quantity_available + quantity
+        self.quantity_available = [0, quantity_available + quantity].max
         save!
 
         # When user has been searched or booked a product, it has cached the quantity in redis,

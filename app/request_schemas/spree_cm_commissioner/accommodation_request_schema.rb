@@ -3,9 +3,9 @@ module SpreeCmCommissioner
     params do
       required(:from_date).value(:date)
       required(:to_date).value(:date)
-      required(:state_id).value(:integer)
-      required(:number_of_adults).value(:integer)
-      required(:number_of_kids).value(:integer)
+      required(:province_id).value(:integer)
+      required(:adult).value(:integer)
+      required(:children).value(:integer)
     end
 
     rule(:from_date, :to_date) do
