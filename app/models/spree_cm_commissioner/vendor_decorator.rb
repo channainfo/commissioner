@@ -79,7 +79,8 @@ module SpreeCmCommissioner
                     dependent: :destroy, inverse_of: :relatable
 
       base.has_many :vehicle_types, class_name: 'SpreeCmCommissioner::VehicleType', dependent: :destroy
-      base.has_many :vehicles, through: :vehicle_types, class_name: 'SpreeCmCommissioner::Vehicle', dependent: :destroy
+      base.has_many :vehicles, class_name: 'SpreeCmCommissioner::Vehicle', dependent: :destroy
+      # base.has_many :vehicles, through: :vehicle_types, class_name: 'SpreeCmCommissioner::Vehicle', dependent: :destroy
 
       base.validates :account_name, :account_number, presence: true, if: lambda {
                                                                            payment_qrcode.present? && Spree::Store.default.code.include?('billing')
