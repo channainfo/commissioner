@@ -12,10 +12,18 @@ module SpreeCmCommissioner
 
       search = Spree::Product.ransack(
         tenant_id_eq: tenant_id,
-        name_i_cont_all: params[:term]&.split
+        name_i_cont_all: sanitized_terms
       )
 
       search.result.distinct
+    end
+
+    private
+
+    def sanitized_terms
+      return [] if params[:term].blank?
+
+      params[:term].split.map(&:strip)
     end
   end
 end
