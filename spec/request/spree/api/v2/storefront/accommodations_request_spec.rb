@@ -31,9 +31,9 @@ RSpec.describe Spree::Api::V2::Storefront::AccommodationsController, type: :requ
       {
         from_date: from_date.to_s,
         to_date: to_date.to_s,
-        state_id: state.id,
-        number_of_adults: 2,
-        number_of_kids: 1
+        province_id: state.id,
+        adult: 2,
+        children: 1
       }
     end
 
@@ -60,7 +60,7 @@ RSpec.describe Spree::Api::V2::Storefront::AccommodationsController, type: :requ
 
     context 'with missing required parameters' do
       before do
-        get '/api/v2/storefront/accommodations', params: { state_id: state.id }
+        get '/api/v2/storefront/accommodations', params: { province_id: state.id }
       end
 
       it 'returns a bad request response' do
@@ -101,7 +101,7 @@ RSpec.describe Spree::Api::V2::Storefront::AccommodationsController, type: :requ
 
     context 'with no matching vendors' do
       let(:other_state) { create(:state, id: 2) }
-      let(:params_with_different_state) { valid_params.merge(state_id: other_state.id) }
+      let(:params_with_different_state) { valid_params.merge(province_id: other_state.id) }
 
       before do
         get '/api/v2/storefront/accommodations', params: params_with_different_state
@@ -119,9 +119,9 @@ RSpec.describe Spree::Api::V2::Storefront::AccommodationsController, type: :requ
       {
         from_date: from_date.to_s,
         to_date: to_date.to_s,
-        state_id: state.id,
-        number_of_adults: 2,
-        number_of_kids: 1
+        province_id: state.id,
+        adult: 2,
+        children: 1
       }
     end
 
