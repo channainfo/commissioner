@@ -1,0 +1,7 @@
+<!-- insert_before "erb[loud]:contains('f.field_container :title')" -->
+
+<%= f.field_container :tenant_id, class: ['col-12'] do %>
+  <%= f.label :tenant_id, raw(Spree.t(:tenant) + ' (optional)') %>
+  <%= f.collection_select :tenant_id, SpreeCmCommissioner::Tenant.all, :id, :name, { prompt: Spree.t('select_tenant') }, { class: 'form-control select2' } %>
+  <%= f.error_message_on :tenant_id %>
+<% end %>

@@ -1,0 +1,21 @@
+<!-- insert_before "erb[silent]:contains('content_for :page_actions')" -->
+
+<%= render partial: 'spree/admin/shared/cms_pages_tabs' %>
+
+<% if params[:tab] == 'default' %>
+  <div class="alert alert-info mb-3">
+    <%= svg_icon name: "info-circle.svg", classes: 'mr-2', width: '16', height: '16' %>
+    CMS Pages for the default store. These pages are shared globally and are not tied to any specific tenant.
+  </div>
+<% elsif params[:tab] == 'tenants' && params[:tenant_id].present? %>
+  <div class="alert alert-info mb-3">
+    <%= svg_icon name: "info-circle.svg", classes: 'mr-2', width: '16', height: '16' %>
+    CMS Pages for the tenant: <strong><%= SpreeCmCommissioner::Tenant.find(params[:tenant_id]).name %></strong>.
+    These pages are displayed only to users associated with this tenant.
+  </div>
+<% elsif params[:tab] == 'tenants' %>
+  <div class="alert alert-info mb-3">
+    <%= svg_icon name: "info-circle.svg", classes: 'mr-2', width: '16', height: '16' %>
+    CMS Pages for all tenants. These pages are displayed only to users associated with specific tenants.
+  </div>
+<% end %>

@@ -1,0 +1,20 @@
+<% content_for(:page_tabs) do %>
+  <% if can?(:admin, Spree::CmsPage) %>
+    <%= content_tag :li, class: 'nav-item' do %>
+      <%= link_to_with_icon 'building.svg',
+        Spree::Store.default&.name || Spree.t(:store),
+        admin_cms_pages_url(tab: :default),
+        class: "nav-link #{'active' if params[:tab].blank? || params[:tab] == 'default'}" %>
+    <% end %>
+
+    <!-- Tenant Tabs -->
+    <% SpreeCmCommissioner::Tenant.all.each do |tenant| %>
+      <%= content_tag :li, class: 'nav-item' do %>
+        <%= link_to_with_icon 'building.svg',
+          tenant.name,
+          admin_cms_pages_url(tab: :tenants, tenant_id: tenant.id),
+          class: "nav-link #{'active' if params[:tenant_id].to_s == tenant.id.to_s}" %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
