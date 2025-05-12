@@ -129,7 +129,7 @@ RSpec.describe Spree::Api::V2::Storefront::Accommodations::VariantsController, t
         )
       end
       let(:product) { create(:cm_product, vendor: other_vendor, product_type: 'accommodation') }
-      let(:invalid_variant) { create(:cm_variant, number_of_adults: 2, number_of_kids: 2, vendor: other_vendor, product: product) }
+      let(:invalid_variant) { create(:cm_variant, number_of_adults: 2, number_of_kids: 2, vendor: other_vendor, product: product, pregenerate_inventory_items: false) }
 
       before do
         (from_date..to_date.prev_day).each do |date|

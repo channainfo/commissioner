@@ -24,4 +24,14 @@ RSpec.configure do |config|
   # https://github.com/channainfo/commissioner/pull/316
   config.order = :random
   Kernel.srand config.seed
+
+  config.before(:each) do
+    SpreeCmCommissioner.redis_pool.with do |redis|
+      begin
+        redis.flushdb
+      rescue Redis::CannotConnectError => e
+        Rails.logger.warn("Redis not available: #{e.message}")
+      end
+    end
+  end
 end
