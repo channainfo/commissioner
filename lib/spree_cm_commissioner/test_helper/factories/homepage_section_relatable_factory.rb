@@ -17,7 +17,7 @@ FactoryBot.define do
     end
 
     factory :cm_product_homepage_section_relatable do
-      relatable { create(:product) }
+      relatable { create(:cm_product) }
     end
 
     factory :cm_taxon_homepage_section_relatable do

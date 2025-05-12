@@ -30,7 +30,7 @@ FactoryBot.define do
         if vendor.primary_product_type == :accommodation
           product = create(:cm_accommodation_product, vendor: vendor, total_inventory: evaluator.total_inventory)
         else
-          product = create(:product, vendor: vendor, product_type: vendor.primary_product_type)
+          product = create(:cm_product, vendor: vendor, product_type: vendor.primary_product_type)
           product.master.stock_items.first.adjust_count_on_hand(evaluator.total_inventory)
         end
 

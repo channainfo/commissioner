@@ -20,7 +20,7 @@ services:
 
     volumes:
       - .:/gem
-      - /gem/vendor/bundle
+      - ./vendor/bundle:/gem/vendor/bundle
 
     # depends_on:
     #   - db

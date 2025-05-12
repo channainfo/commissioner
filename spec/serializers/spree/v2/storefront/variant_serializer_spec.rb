@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Spree::V2::Storefront::VariantSerializer, type: :serializer do
   describe '#serializable_hash' do
-    let!(:variant) { create(:cm_variant) }
+    let!(:variant) { create(:cm_variant, total_inventory: 10) }
 
     subject {
       described_class.new(variant, params: { 'store': variant.product.stores.first }, include: [
@@ -62,9 +62,7 @@ describe Spree::V2::Storefront::VariantSerializer, type: :serializer do
 
     it 'returns [included] with stock_items' do
       stock_items = subject[:included].filter { |item| item[:type] == :stock_item }
-
-      expect(stock_items[0][:attributes][:count_on_hand]).to eq 0
-      expect(stock_items[1][:attributes][:count_on_hand]).to eq 0
+      expect(stock_items[0][:attributes][:count_on_hand]).to eq 10
     end
 
     it 'returns high_demand' do

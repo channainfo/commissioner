@@ -3,7 +3,8 @@ module SpreeCmCommissioner
     module AvailabilityValidatorDecorator
       # override
       def item_available?(line_item, quantity)
-        SpreeCmCommissioner::Stock::LineItemAvailabilityChecker.new(line_item).can_supply?(quantity)
+        SpreeCmCommissioner::Stock::LineItemAvailabilityChecker.new(line_item)
+                                                               .can_supply?(quantity)
       end
     end
   end

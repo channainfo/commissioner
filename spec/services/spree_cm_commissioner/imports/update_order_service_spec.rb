@@ -2,9 +2,9 @@ require "spec_helper"
 require "csv"
 
 RSpec.describe SpreeCmCommissioner::Imports::UpdateOrderService do
-  let(:variant1) { create(:variant) }
-  let(:variant2) { create(:variant) }
-  let(:variant3) { create(:variant) }
+  let(:variant1) { create(:cm_variant) }
+  let(:variant2) { create(:cm_variant) }
+  let(:variant3) { create(:cm_variant) }
 
   let(:guest1) { create(:guest, seat_number: 'A001') }
   let(:guest2) { create(:guest, seat_number: 'A002') }

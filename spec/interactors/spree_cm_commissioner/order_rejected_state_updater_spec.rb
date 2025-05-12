@@ -3,7 +3,7 @@ require 'spec_helper'
 RSpec.describe SpreeCmCommissioner::OrderRejectedStateUpdater do
   let(:order) { create(:order_with_line_items , request_state: :requested , state: :complete) }
   let!(:product) { create(:cm_accommodation_product, total_inventory: 3) }
-  let!(:line_item) { create(:line_item, quantity: 3, order: order, product: product ) }
+  let!(:line_item) { create(:line_item, quantity: 3, order: order, product: product, from_date: date('2023-01-01'), to_date: date('2023-01-03') ) }
 
   let(:user) { create(:cm_user) }
   describe '.call' do

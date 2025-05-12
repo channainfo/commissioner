@@ -1,6 +1,6 @@
 module SpreeCmCommissioner
   module LineItemDecorator
-    def self.prepended(base) # rubocop:disable Metrics/MethodLength
+    def self.prepended(base) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
       include_modules(base)
 
       base.belongs_to :accepter, class_name: 'Spree::User', optional: true
@@ -9,6 +9,11 @@ module SpreeCmCommissioner
       base.has_one :google_wallet, class_name: 'SpreeCmCommissioner::GoogleWallet', through: :product
 
       base.has_many :option_types, through: :product
+
+      base.has_many :inventory_items, lambda { |line_item|
+        where(inventory_date: nil).or(where(inventory_date: line_item.date_range))
+      }, through: :variant
+
       base.has_many :taxons, class_name: 'Spree::Taxon', through: :product
       base.has_many :guests, class_name: 'SpreeCmCommissioner::Guest', dependent: :destroy
       base.has_many :pending_guests, pending_guests_query, class_name: 'SpreeCmCommissioner::Guest', dependent: :destroy
@@ -21,16 +26,15 @@ module SpreeCmCommissioner
       base.validate :validate_seats_reservation, if: :transit?
 
       base.before_create :add_due_date, if: :subscription?
+      base.before_save -> { self.product_type = variant.product_type }, if: -> { product_type.nil? }
 
       base.validate :ensure_not_exceed_max_quantity_per_order, if: -> { variant&.max_quantity_per_order.present? }
 
       base.whitelisted_ransackable_associations |= %w[guests order]
       base.whitelisted_ransackable_attributes |= %w[number to_date from_date vendor_id]
 
-      base.delegate :delivery_required?, :permanent_stock?, :high_demand, :transit?,
+      base.delegate :delivery_required?, :high_demand,
                     to: :variant
-      base.delegate :discontinue_on, :product_type, :accommodation?, :service?, :ecommerce?, :need_confirmation,
-                    to: :product
 
       base.accepts_nested_attributes_for :guests, allow_destroy: true
       base.accepts_nested_attributes_for :line_item_seats, allow_destroy: true
@@ -39,6 +43,10 @@ module SpreeCmCommissioner
         json_api_columns = column_names.reject { |c| c.match(/_id$|id|preferences|(.*)password|(.*)token|(.*)api_key/) }
         json_api_columns << :options_text
         json_api_columns << :vendor_id
+      end
+
+      def discontinue_on
+        variant.discontinue_on || product.discontinue_on
       end
 
       def base.search_by_qr_data!(data)
@@ -59,6 +67,7 @@ module SpreeCmCommissioner
       base.include SpreeCmCommissioner::LineItemDurationable
       base.include SpreeCmCommissioner::LineItemsFilterScope
       base.include SpreeCmCommissioner::LineItemGuestsConcern
+      base.include SpreeCmCommissioner::ProductType
       base.include SpreeCmCommissioner::ProductDelegation
       base.include SpreeCmCommissioner::KycBitwise
     end
@@ -174,7 +183,7 @@ module SpreeCmCommissioner
 
     # override
     def sufficient_stock?
-      return transit_sufficient_stock? if variant.product.product_type == 'transit'
+      return transit_sufficient_stock? if transit?
 
       SpreeCmCommissioner::Stock::LineItemAvailabilityChecker.new(self).can_supply?(quantity)
     end
@@ -230,6 +239,8 @@ module SpreeCmCommissioner
     end
 
     def validate_seats_reservation
+      return if reservation_trip.blank?
+
       if reservation_trip.allow_seat_selection && !selected_seats_available?
         errors.add(:base, :some_seats_are_booked, message: 'Some seats are already booked')
       elsif !reservation_trip.allow_seat_selection && !seat_quantity_available?(reservation_trip)

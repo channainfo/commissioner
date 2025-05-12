@@ -54,6 +54,11 @@ Gem::Specification.new do |s|
   s.add_dependency "rqrcode", "~> 2.0"
   s.add_dependency "premailer-rails"
   s.add_dependency 'counter_culture', '~> 3.2'
+  # Redis
+  s.add_dependency 'redis'
+  s.add_dependency 'redis-rails'
+  s.add_dependency 'connection_pool'
+
   s.add_development_dependency 'pg'
   s.add_development_dependency 'spree_dev_tools'
   s.add_dependency 'blazer', '~> 3.0.4'

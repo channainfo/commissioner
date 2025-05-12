@@ -16,7 +16,7 @@ FactoryBot.define do
     variant { product.master }
 
     factory :cm_need_confirmation_line_item do
-      product { create(:product, need_confirmation: true) }
+      product { create(:cm_product, need_confirmation: true) }
     end
 
     factory :cm_kyc_line_item do
