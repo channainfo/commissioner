@@ -14,6 +14,7 @@ module SpreeCmCommissioner
       state_machine.after_transition to: :complete, do: :send_order_complete_telegram_alert_to_vendors, unless: :need_confirmation?
       state_machine.after_transition to: :complete, do: :send_order_complete_telegram_alert_to_store, unless: :need_confirmation?
 
+      state_machine.after_transition to: :complete, do: :send_transaction_email_to_user, if: :user_has_email?
       state_machine.after_transition to: :resumed, do: :precalculate_conversion
 
       state_machine.after_transition to: :canceled, do: :precalculate_conversion
@@ -91,6 +92,19 @@ module SpreeCmCommissioner
           line_item.rejected_by(user)
         end
       end
+    end
+
+    def send_transaction_email_to_user
+      line_items.each do |line_item|
+        next if line_item.event.nil?
+
+        event_id = line_item.event.parent_id
+        SpreeCmCommissioner::EventTransactionalMailer.send_to_participant(event_id, user.id).deliver_later
+      end
+    end
+
+    def user_has_email?
+      user.email.present?
     end
 
     # allow authorized user to accept all requested line items

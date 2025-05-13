@@ -1,0 +1,59 @@
+<table role="presentation" align="center">
+  <tr>
+    <td class="container">
+      <div class="header">
+        <%= render partial: 'spree_cm_commissioner/event_transactional_mailer/event_banner' %>
+        <h1><%= t('mail.event_engagement_mailer.organizer.header_title') %></h1>
+        <h2><%= t('mail.event_engagement_mailer.organizer.header_subtitle', event_name: @event.name) %></h2>
+      </div>
+
+      <div class="intro">
+        <p><%= t('mail.event_engagement_mailer.organizer.hello', event_name: @event.name).html_safe %></p>
+        <p><%= t('mail.event_engagement_mailer.organizer.intro') %></p>
+      </div>
+
+      <div class="impact-section">
+        <h3><%= t('mail.event_engagement_mailer.organizer.impact_title') %></h3>
+        <ul class="impact-list">
+          <li>
+            <span>📸</span>
+            <div><%= t('mail.event_engagement_mailer.organizer.impact_post_highlights').html_safe %></div>
+          </li>
+          <li>
+            <span>💬</span>
+            <div><%= t('mail.event_engagement_mailer.organizer.impact_engage_posts').html_safe %></div>
+          </li>
+          <li>
+            <span>⚡</span>
+            <div><%= t('mail.event_engagement_mailer.organizer.impact_sneak_peek').html_safe %></div>
+          </li>
+          <li>
+            <span>📹</span>
+            <div><%= t('mail.event_engagement_mailer.organizer.impact_go_live').html_safe %></div>
+          </li>
+          <li>
+            <span>📣</span>
+            <div>
+              <%= t('mail.event_engagement_mailer.organizer.impact_hashtag', hashtag: @event.name.gsub(/\s+/, "").gsub(/[^0-9a-z]/i, '')).html_safe %>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="closing">
+        <%= render partial: 'spree_cm_commissioner/event_transactional_mailer/share_button' %>
+        <p><%= t('mail.event_engagement_mailer.organizer.closing_visibility') %></p>
+        <p><%= t('mail.event_engagement_mailer.organizer.closing_call_to_action', event_name: @event.name) %></p>
+      </div>
+
+      <div class="signature">
+        <p><%= t('mail.event_engagement_mailer.organizer.signature_best') %></p>
+        <p><%= t('mail.event_engagement_mailer.organizer.signature_team', event_name: @event.name) %></p>
+      </div>
+    </td>
+  </tr>
+  <tr>
+   <%= render partial: 'spree_cm_commissioner/event_transactional_mailer/note' %>
+  </tr>
+</table>
+
