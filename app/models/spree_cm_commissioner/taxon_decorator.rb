@@ -60,6 +60,8 @@ module SpreeCmCommissioner
       base.has_many :taxon_option_types, class_name: 'SpreeCmCommissioner::TaxonOptionType'
       base.has_many :taxon_option_values, class_name: 'SpreeCmCommissioner::TaxonOptionValue'
 
+      base.after_commit :send_transaction_email_to_organizers, on: :create
+
       def base.active_homepage_events
         joins(:homepage_section_relatables)
           .joins("INNER JOIN spree_taxons taxon ON taxon.id = cm_homepage_section_relatables.relatable_id
@@ -109,6 +111,12 @@ module SpreeCmCommissioner
 
     def event_url
       "https://#{Spree::Store.default.url}/t/#{permalink}"
+    end
+
+    def send_transaction_email_to_organizers
+      return unless kind == 'event' && level == 1
+
+      SpreeCmCommissioner::OrganizersTransactionalEmailNotifier.call(event_id: id)
     end
   end
 end

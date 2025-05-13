@@ -25,6 +25,8 @@ module Spree
           end
 
           base.cache_options store: nil
+
+          base.attribute :event_url, &:event_url
         end
       end
     end

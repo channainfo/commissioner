@@ -1,0 +1,315 @@
+<style>
+  body {
+    margin-top: 20px;
+    padding: 0;
+    font-family: 'Poppins', Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  img {
+    border: 0;
+    line-height: 100%;
+    outline: none;
+    text-decoration: none;
+    max-width: 100%;
+    height: auto;
+  }
+
+  a {
+    color: #6444D8;
+  }
+
+  .container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    margin: 16px auto;
+  }
+
+  .header {
+    text-align: left;
+    margin-bottom: 20px;
+  }
+
+  .header .icon {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+
+  .main-title {
+    color: #6444D8;
+  }
+
+  .header h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+  }
+
+  .header h2 {
+    font-size: 18px;
+    margin: 8px 0 0;
+  }
+
+  .intro p {
+    color: #1f2937;
+    font-size: 14px;
+    margin: 0 0 8px;
+    text-align: left;
+  }
+
+  .impact-section {
+    background-color: #F1F2FE;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+  }
+
+  .impact-section h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 0 12px;
+    color: #1f2937;
+    text-align: left;
+  }
+
+  .impact-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .impact-list li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+
+  .impact-list span {
+    margin-right: 8px;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .impact-list div {
+    font-size: 14px;
+    color: #1f2937;
+    text-align: left;
+  }
+
+  .closing p {
+    font-size: 14px;
+    color: #1f2937;
+    margin: 0 0 8px;
+    text-align: left;
+  }
+
+  .closing p:last-child {
+    font-weight: 600;
+  }
+
+  .button-wrapper {
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  .cta-button {
+    display: inline-block;
+    background-color: #6444D8;
+    color: #ffffff;
+    padding: 12px 24px;
+    border-radius: 24px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  .cta-button:hover {
+    background-color: #7b5ce0;
+    text-decoration: none;
+  }
+
+  .signature {
+    text-align: left;
+    color: #4b5563;
+    margin: 20px 0;
+  }
+
+  .signature p {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  .social-icons {
+    display: flex;
+    justify-content: flex-start;
+    gap: 16px;
+    margin: 12px 0 0;
+  }
+
+  .social-icons a {
+    font-size: 18px;
+    text-decoration: none;
+    color: #4b5563;
+    transition: color 0.3s ease;
+  }
+
+  .social-icons a:hover {
+    color: #6444D8;
+  }
+
+  .footer {
+    text-align: center;
+    color: #6b7280;
+    font-size: 12px;
+    padding: 16px;
+  }
+
+  .footer-content {
+    max-width: 100%;
+  }
+
+  .footer-brand {
+    font-size: 14px;
+    color: #1f2937;
+    margin: 0 0 8px;
+  }
+
+  .footer-text {
+    margin: 0 0 8px;
+    color: #6b7280;
+  }
+
+  .footer-links {
+    margin: 0 0 8px;
+  }
+
+  .footer-links a {
+    color: #6444D8;
+    text-decoration: none;
+    margin-right: 12px;
+  }
+
+  .footer-links a:hover {
+    text-decoration: underline;
+  }
+
+  .footer a {
+    color: #6444D8;
+    text-decoration: none;
+  }
+
+  .footer a:hover {
+    text-decoration: underline;
+  }
+
+  .footer-logo {
+    font-weight: bold;
+    color: #1f2937;
+  }
+
+  .footer-logo-icon {
+    font-weight: bold;
+    color: #6444D8;
+  }
+
+  .banner {
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .banner-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  @media only screen and (max-width: 600px) {
+    .container {
+      padding: 16px;
+      margin: 8px;
+      border-radius: 4px;
+    }
+
+    .header .icon {
+      font-size: 20px;
+    }
+
+    .header h1 {
+      font-size: 20px;
+    }
+
+    .header h2 {
+      font-size: 16px;
+    }
+
+    .intro p {
+      font-size: 13px;
+    }
+
+    .impact-section {
+      padding: 16px;
+    }
+
+    .impact-section h3 {
+      font-size: 13px;
+    }
+
+    .impact-list span {
+      font-size: 13px;
+    }
+
+    .impact-list div {
+      font-size: 13px;
+    }
+
+    .closing p {
+      font-size: 13px;
+    }
+
+    .cta-button {
+      padding: 10px 20px;
+      font-size: 13px;
+    }
+
+    .signature p {
+      font-size: 13px;
+    }
+
+    .social-icons a {
+      font-size: 16px;
+    }
+
+    .footer {
+      font-size: 11px;
+      padding: 12px;
+    }
+
+    .footer-brand {
+      font-size: 13px;
+    }
+
+    .footer-text {
+      font-size: 11px;
+    }
+
+    .footer-links a {
+      font-size: 11px;
+      margin-right: 8px;
+    }
+
+    .banner-image {
+      border-radius: 4px;
+    }
+  }
+</style>

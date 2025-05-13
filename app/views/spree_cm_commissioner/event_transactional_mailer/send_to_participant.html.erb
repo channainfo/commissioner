@@ -1,0 +1,52 @@
+<table role="presentation" align="center">
+  <tr>
+    <td class="container">
+      <div class="header">
+        <%= render partial: 'spree_cm_commissioner/event_transactional_mailer/event_banner' %>
+        <h1><%= t('mail.event_engagement_mailer.participant.header_title') %></h1>
+        <h2><%= t('mail.event_engagement_mailer.participant.header_subtitle', event_name: @event.name) %></h2>
+      </div>
+
+      <div class="intro">
+        <p><%= t('mail.event_engagement_mailer.participant.hello', event_name: @event.name).html_safe %></p>
+        <p><%= t('mail.event_engagement_mailer.participant.intro', event_name: @event.name) %></p>
+      </div>
+
+      <div class="impact-section">
+        <h3><%= t('mail.event_engagement_mailer.participant.impact_title') %></h3>
+        <ul class="impact-list">
+          <li>
+            <span>📸</span>
+            <div><%= t('mail.event_engagement_mailer.participant.impact_share_experience', hashtag: @event.name.gsub(/\s+/, "").gsub(/[^0-9a-z]/i, '')).html_safe %></div>
+          </li>
+          <li>
+            <span>🌍</span>
+            <div><%= t('mail.event_engagement_mailer.participant.impact_create_awareness').html_safe %></div>
+          </li>
+          <li>
+            <span>🏷️</span>
+            <div><%= t('mail.event_engagement_mailer.participant.impact_tag_us').html_safe %></div>
+          </li>
+          <li>
+            <span>👥</span>
+            <div><%= t('mail.event_engagement_mailer.participant.impact_invite_others').html_safe %></div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="closing">
+        <%= render partial: 'spree_cm_commissioner/event_transactional_mailer/share_button' %>
+        <p><%= t('mail.event_engagement_mailer.participant.closing') %></p>
+        <p><%= t('mail.event_engagement_mailer.participant.closing_thank_you') %></p>
+      </div>
+
+      <div class="signature">
+        <p><%= t('mail.event_engagement_mailer.participant.signature_regards') %></p>
+        <p> <%= @participant.full_name || @participant.email  %> </p>
+      </div>
+    </td>
+  </tr>
+  <tr>
+   <%= render partial: 'spree_cm_commissioner/event_transactional_mailer/note' %>
+  </tr>
+</table>
