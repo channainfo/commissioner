@@ -1,6 +1,6 @@
 module SpreeCmCommissioner
   class AccountRecover < BaseInteractor
-    delegate :id_token, :login, :password, to: :context
+    delegate :id_token, :login, :password, :tenant_id, to: :context
 
     def call
       validate_user
@@ -15,7 +15,7 @@ module SpreeCmCommissioner
     def validate_user
       # get email password user
       if login.present? && password.present?
-        context.user = Spree.user_class.find_user_by_login(login)
+        context.user = Spree.user_class.find_user_by_login(login, tenant_id)
       # get social user
       elsif id_token.present?
         checker_context = SpreeCmCommissioner::UserIdTokenChecker.call(id_token: id_token)

@@ -26,7 +26,7 @@ module Spree
               :pin_code_token,
               :password,
               :password_confirmation
-            )
+            ).merge(tenant_id: MultiTenant.current_tenant_id)
           end
         end
       end
