@@ -46,7 +46,7 @@ RSpec.describe SpreeCmCommissioner::TripQuery do
   # Test Setup
   let(:origin_id)       { siem_reap.id }
   let(:destination_id)  { ho_chi_minh.id }
-  let(:travel_date)     { Time.now }
+  let(:travel_date)     { Date.tomorrow }
 
   let(:result)          { described_class.new(origin_id: origin_id, destination_id: destination_id, travel_date: travel_date) }
 
@@ -105,7 +105,7 @@ RSpec.describe SpreeCmCommissioner::TripQuery do
     context 'when no direct trips are available' do
       let!(:connection)     { create(:trip_connection, from_trip: first_leg_variant, to_trip: second_leg_variant) }
       let(:direct_trips)    { [] }
-      let(:connected_trips) { [connection] }
+      let!(:connected_trips) { [connection] }
 
       it 'returns the connected trips, matching the origin of the first leg and destination of the second leg' do
         search_result = result.call
@@ -170,7 +170,40 @@ RSpec.describe SpreeCmCommissioner::TripQuery do
         expect(search_result.count).to eq(direct_trips.count + connected_trips.count)
       end
     end
+
+    context 'when given params filter the results' do
+      let!(:direct_trip_variant) {  vet_siem_reap_ho_chi_minh.variants.create!(option_values: [
+                                    siem_reap_option_value,
+                                    ho_chi_minh_option_value,
+                                    departure_time_option_value2,
+                                    duration_h_option_value2,
+                                    bus2_option_value
+                                  ]) }
+      let!(:direct_trips)    { [direct_trip_variant] }
+      let!(:connection)      { create(:trip_connection, from_trip: first_leg_variant, to_trip: second_leg_variant) }
+      let!(:connected_trips) { [connection] }
+      let(:result1)          { described_class.new(origin_id: origin_id, destination_id: destination_id, travel_date: travel_date, params: {trip_type: 'direct'}) }
+      let(:result2)          { described_class.new(origin_id: origin_id, destination_id: destination_id, travel_date: travel_date, params: {trip_type: 'connected'}) }
+      it 'returns only direct or connected trips when trip_type is set filter' do
+        search_result1 = result1.call
+        trip = search_result1.first.trips.first
+        expect(search_result1.count).to eq(1)
+        expect(search_result1.first).to be_a(SpreeCmCommissioner::TripQueryResult)
+        expect(trip.origin_id).to eq(origin_id)
+        expect(trip.destination_id).to eq(destination_id)
+
+        search_result2 = result2.call
+        trip1 = search_result2.first.trips.first
+        trip2 = search_result2.first.trips.last
+        expect(search_result2.count).to eq(1)
+        expect(search_result2.first).to be_a(SpreeCmCommissioner::TripQueryResult)
+        expect(trip1.origin_id).to eq(origin_id)
+        expect(trip2.destination_id).to eq(destination_id)
+
+      end
+    end
   end
+
 
   describe '.direct_trips' do
     it 'returns the direct trips from the database' do
