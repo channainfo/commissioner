@@ -18,7 +18,7 @@ RSpec.describe SpreeCmCommissioner::RedisStock::VariantCachedInventoryItemsBuild
     end
 
     it 'return inventory keys of variant.inventory_items base on checkin/checkout date' do
-      result = described_class.new(variant_id: variant.id, from_date: Time.zone.tomorrow, to_date: Time.zone.today + 4).call # +4 because it exclude checkout date
+      result = described_class.new(variant_id: variant.id, dates: Time.zone.tomorrow..(Time.zone.tomorrow + 3)).call
 
       expect(result.map(&:to_h)).to eq([
         {:inventory_key => "inventory:#{inventory_items[0].id}", active: true, :quantity_available => 2, :inventory_item_id => inventory_items[0].id, :variant_id => variant.id},

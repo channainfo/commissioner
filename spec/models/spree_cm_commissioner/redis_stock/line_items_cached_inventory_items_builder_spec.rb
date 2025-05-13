@@ -5,7 +5,7 @@ RSpec.describe SpreeCmCommissioner::RedisStock::LineItemsCachedInventoryItemsBui
   let(:variant) { create(:cm_variant, product: product, total_inventory: 10, pregenerate_inventory_items: true, pre_inventory_days: 3) }
 
   describe '#call' do
-    let(:line_item) { create(:line_item, variant: variant, quantity: 1, from_date: Time.zone.tomorrow, to_date: Time.zone.tomorrow + 3) }
+    let(:line_item) { create(:line_item, variant: variant, quantity: 1, from_date: Time.zone.tomorrow, to_date: Time.zone.tomorrow + 2) }
     let(:inventory_items) { variant.reload.inventory_items }
 
     before do
