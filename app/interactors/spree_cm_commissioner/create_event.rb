@@ -10,8 +10,6 @@ module SpreeCmCommissioner
         assign_prototype
         create_child_taxon
         build_home_banner
-        assign_option_types
-        assign_option_values
       end
     end
 
@@ -27,9 +25,11 @@ module SpreeCmCommissioner
         taxonomy_id: context.params[:taxonomy_id]
       )
 
-      return if @parent_taxon.save
-
-      context.fail!(message: @parent_taxon.errors.full_messages.join(', '))
+      if @parent_taxon.save
+        context.slug = @parent_taxon.event_slug
+      else
+        context.fail!(message: @parent_taxon.errors.full_messages.join(', '))
+      end
     end
 
     def assign_vendor
@@ -44,6 +44,8 @@ module SpreeCmCommissioner
     def create_child_taxon
       child_taxon = Spree::Taxon.new(
         name: 'Ticket Type',
+        from_date: @parent_taxon.from_date,
+        to_date: @parent_taxon.to_date,
         parent_id: @parent_taxon.id,
         taxonomy_id: context.params[:taxonomy_id]
       )
@@ -62,27 +64,6 @@ module SpreeCmCommissioner
       )
 
       context.fail!(message: 'Home banner upload failed') unless banner.persisted?
-    end
-
-    def assign_options(model_class, param_key, foreign_key)
-      return unless params[param_key]
-
-      params[param_key].each do |id|
-        record = model_class.new(
-          taxon_id: @parent_taxon.id,
-          foreign_key => id
-        )
-
-        context.fail!(message: record.errors.full_messages.join(', ')) unless record.save
-      end
-    end
-
-    def assign_option_types
-      assign_options(SpreeCmCommissioner::TaxonOptionType, :option_type_id, :option_type_id)
-    end
-
-    def assign_option_values
-      assign_options(SpreeCmCommissioner::TaxonOptionValue, :option_value_id, :option_value_id)
     end
   end
 end
