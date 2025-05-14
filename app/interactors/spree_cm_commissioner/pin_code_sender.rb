@@ -1,5 +1,7 @@
 module  SpreeCmCommissioner
   class PinCodeSender < BaseInteractor
+    include SpreeCmCommissioner::PinCodeSenderHelper
+
     def call
       context.fail!(message: I18n.t('pincode_sender.pincode.blank')) if context.pin_code.nil?
 
@@ -15,10 +17,8 @@ module  SpreeCmCommissioner
     private
 
     def send_sms
-      from = context.tenant || Spree::Store.default
-
       options = {
-        from: from,
+        from: sender_name(context.tenant),
         to: context.pin_code.contact,
         body: I18n.t('pincode_sender.sms.body', code: context.pin_code.code, readable_type: context.pin_code.readable_type)
       }
