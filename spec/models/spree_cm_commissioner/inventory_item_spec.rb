@@ -166,5 +166,63 @@ RSpec.describe SpreeCmCommissioner::InventoryItem, type: :model do
         end
       end
     end
+
+    it 'calls adjust_quantity_in_redis with the provided quantity' do
+      expect(inventory_item).to receive(:adjust_quantity_in_redis).with(10)
+      inventory_item.adjust_quantity!(10)
+    end
+  end
+
+  describe '#adjust_quantity_in_redis' do
+    let(:redis) { Redis.new(url: ENV['REDIS_URL'] || 'redis://localhost:6379/0') }
+    let(:redis_pool) { double('RedisPool') }
+    let(:inventory_item) { create(:cm_inventory_item) }
+
+    before do
+      allow(SpreeCmCommissioner).to receive(:redis_pool).and_return(redis_pool)
+      allow(redis_pool).to receive(:with).and_yield(redis)
+    end
+
+    context 'with real Redis', redis: true do
+      let(:key) { "inventory:#{inventory_item.id}" }
+
+      before do
+        # Ensure SpreeCmCommissioner.redis_pool uses the real Redis instance
+        allow(redis_pool).to receive(:with).and_yield(redis)
+        # Clean up Redis before each test
+        redis.del(key)
+      end
+
+      after do
+        # Clean up Redis after each test
+        redis.del(key)
+      end
+
+      context 'when redis key exists' do
+        before do
+          # Set an initial value in Redis
+          redis.set(key, 50)
+        end
+
+        it 'increments the quantity in Redis' do
+          expect {
+            inventory_item.adjust_quantity_in_redis(10)
+          }.to change { redis.get(key).to_i }.from(50).to(60)
+        end
+
+        it 'decreases the quantity in Redis' do
+          expect {
+            inventory_item.adjust_quantity_in_redis(-10)
+          }.to change { redis.get(key).to_i }.from(50).to(40)
+        end
+      end
+
+      context 'when redis key does not exist' do
+        it 'does not create or increment the key' do
+          inventory_item.adjust_quantity_in_redis(10)
+          expect(redis.get(key)).to be_nil
+        end
+      end
+    end
   end
 end
