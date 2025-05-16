@@ -40,6 +40,8 @@ RSpec.describe Spree::V2::Storefront::LineItemSerializer, type: :serializer do
         :display_pre_tax_amount,
         :amount,
         :display_amount,
+        :checkin_date,
+        :checkout_date,
         :public_metadata,
         :from_date,
         :to_date,

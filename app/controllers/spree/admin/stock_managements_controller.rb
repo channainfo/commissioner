@@ -36,6 +36,38 @@ module Spree
         redirect_back fallback_location: admin_product_stock_managements_path(@product)
       end
 
+      # POST /products/:slug/stock_managements/create_inventory_item?variant_id=:id
+      def create_inventory_item
+        variant = @product.variants.find(params[:variant_id])
+        inventory_item = variant.create_default_non_permanent_inventory_item!
+
+        if inventory_item.present?
+          result = SpreeCmCommissioner::Stock::InventoryItemResetter.call(inventory_item: inventory_item)
+
+          if result.success?
+            flash[:success] = flash_message_for(result.inventory_item, :successfully_created)
+          else
+            flash[:error] = result.message
+          end
+        end
+
+        redirect_back fallback_location: admin_product_stock_managements_path(@product)
+      end
+
+      # PATCH /products/:slug/stock_managements/reset_inventory_item?inventory_item_id=:id
+      def reset_inventory_item
+        inventory_item = @product.inventory_items.find(params[:inventory_item_id])
+        result = SpreeCmCommissioner::Stock::InventoryItemResetter.call(inventory_item: inventory_item)
+
+        if result.success?
+          flash[:success] = flash_message_for(result.inventory_item, :successfully_updated)
+        else
+          flash[:error] = result.message
+        end
+
+        redirect_back fallback_location: admin_product_stock_managements_path(@product)
+      end
+
       def calendar
         @year = params[:year].present? ? params[:year].to_i : Time.zone.today.year
 

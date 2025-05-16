@@ -53,6 +53,23 @@ RSpec.describe SpreeCmCommissioner::Stock::AvailabilityChecker do
           expect(subject.can_supply?).to be true
         end
       end
+
+      context 'when cached_inventory_items is empty' do
+        let(:product) { create(:cm_product, product_type: :accommodation) }
+        let(:variant) { create(:cm_variant, product: product) }
+
+        subject { described_class.new(variant) }
+
+        it 'return can_supply? false' do
+          expect(variant.available?).to be true
+          expect(variant.should_track_inventory?).to be true
+          expect(variant.backorderable?).to be false
+          expect(variant.need_confirmation?).to be false
+
+          expect(subject).to receive(:cached_inventory_items).and_return([])
+          expect(subject.can_supply?).to be false
+        end
+      end
     end
 
     context 'check with redis after passed basic conditions above' do
@@ -84,25 +101,38 @@ RSpec.describe SpreeCmCommissioner::Stock::AvailabilityChecker do
   end
 
   describe '#cached_inventory_items' do
-    let(:cached_inventory_klass) { SpreeCmCommissioner::CachedInventoryItem }
-    let(:cached_inventory_items) { [ cached_inventory_klass.new(inventory_key: "inventory:1", active: true, quantity_available: 5, inventory_item_id: 1, variant_id: variant.id ) ] }
-    let(:options) { { from_date: Time.zone.today, to_date: Time.zone.tomorrow } }
-
     context 'when variant has permanent_stock (accomodation, transit, ...)' do
       let(:product) { create(:cm_product, product_type: :accommodation) }
-      let(:variant) { create(:cm_variant, product: product) }
+      let(:variant) { create(:cm_variant, product: product, total_inventory: 10, pregenerate_inventory_items: true, pre_inventory_days: 2) }
 
-      subject { described_class.new(variant, options) }
+      context 'when inventory_items are exist for all dates' do
+        let(:options) { { from_date: Time.zone.tomorrow, to_date: Time.zone.tomorrow + 1 } }
+        subject { described_class.new(variant, options) }
 
-      it 'fetch inventories key/quantity from VariantCachedInventoryItemsBuilder with :variant_id & date options' do
-        expect_any_instance_of(SpreeCmCommissioner::RedisStock::VariantCachedInventoryItemsBuilder).to receive(:call).once
-        expect(SpreeCmCommissioner::RedisStock::VariantCachedInventoryItemsBuilder).to receive(:new).with(
-          variant_id: variant.id,
-          from_date: options[:from_date],
-          to_date: options[:to_date],
-        ).once.and_call_original
+        it 'fetch inventories key/quantity from VariantCachedInventoryItemsBuilder with :variant_id & date options' do
+          expect_any_instance_of(SpreeCmCommissioner::RedisStock::VariantCachedInventoryItemsBuilder).to receive(:call).once.and_call_original
+          expect(SpreeCmCommissioner::RedisStock::VariantCachedInventoryItemsBuilder).to receive(:new).with(
+            variant_id: variant.id,
+            dates: options[:from_date].to_date..options[:to_date].to_date,
+          ).once.and_call_original
 
-        subject.cached_inventory_items
+          expect(subject.cached_inventory_items.count).to eq 2
+
+          expect(subject.cached_inventory_items[0].inventory_item_id).to eq variant.inventory_items[0].id
+          expect(subject.cached_inventory_items[0].active).to eq true
+
+          expect(subject.cached_inventory_items[1].inventory_item_id).to eq variant.inventory_items[1].id
+          expect(subject.cached_inventory_items[1].active).to eq true
+        end
+      end
+
+      context 'when inventory_items are NOT exist for some dates' do
+        let(:options) { { from_date: Time.zone.today, to_date: Time.zone.tomorrow + 1.day } }
+        subject { described_class.new(variant, options) }
+
+        it 'return empty' do
+          expect(subject.cached_inventory_items).to eq([])
+        end
       end
     end
 
@@ -110,7 +140,7 @@ RSpec.describe SpreeCmCommissioner::Stock::AvailabilityChecker do
       let(:product) { create(:cm_product, product_type: :ecommerce) }
       let(:variant) { create(:cm_variant, product: product) }
 
-      subject { described_class.new(variant, options) }
+      subject { described_class.new(variant) }
 
       it 'fetch inventories key/quantity from VariantCachedInventoryItemsBuilder with just :variant_id' do
         expect(SpreeCmCommissioner::RedisStock::VariantCachedInventoryItemsBuilder).to receive(:new).with(variant_id: variant.id).once.and_call_original

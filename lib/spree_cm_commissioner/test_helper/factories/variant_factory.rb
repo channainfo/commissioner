@@ -32,6 +32,7 @@ FactoryBot.define do
     transient do
       number_of_adults { nil }
       number_of_kids { nil }
+      delivery_required { nil }
     end
 
     after(:create) do |variant, evaluator|
@@ -45,6 +46,12 @@ FactoryBot.define do
         number_of_kids = create(:cm_option_type, :number_of_kids)
         variant.product.option_types << number_of_kids
         variant.option_values << create(:cm_option_value, presentation: evaluator.number_of_kids, name: evaluator.number_of_kids, option_type: number_of_kids)
+      end
+
+      if evaluator.delivery_required == true
+        delivery_option = create(:cm_option_type, :delivery_option)
+        variant.product.option_types << delivery_option
+        variant.option_values << create(:cm_option_value, presentation: 'Delivery', name: 'delivery', option_type: delivery_option)
       end
 
       variant.save!
