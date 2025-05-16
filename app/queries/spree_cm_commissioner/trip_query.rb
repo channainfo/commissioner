@@ -1,24 +1,36 @@
 module SpreeCmCommissioner
   class TripQuery
-    attr_reader :origin_id, :destination_id, :travel_date
+    attr_reader :origin_id, :destination_id, :travel_date, :params
 
-    def initialize(origin_id:, destination_id:, travel_date: Time.zone.now)
+    def initialize(origin_id:, destination_id:, travel_date: DateTime.current, params: {})
       @origin_id = origin_id
       @destination_id = destination_id
-      @travel_date = travel_date
+      @travel_date = travel_date.to_datetime
+      @travel_date = DateTime.current.to_datetime if travel_date.to_date == Date.current
+      @params = params
     end
 
     def call
-      trips = direct_trips
-      connections = connected_trips if trips.size < 3
+      return [] if travel_date.to_date < Date.current
 
-      trip_results = trips.map { |trip| SpreeCmCommissioner::TripQueryResult.new([trip]) }
+      trip_type = params[:trip_type]
+      sort_desc = params[:sort] == 'desc'
 
-      trip_results += connections if connections
-      trip_results
+      return direct_trips.map { |trip| SpreeCmCommissioner::TripQueryResult.new([trip]) } if trip_type == 'direct'
+
+      return connected_trips || [] if trip_type == 'connected'
+
+      direct_results = direct_trips.map { |trip| SpreeCmCommissioner::TripQueryResult.new([trip]) }
+      connected_results = connected_trips || []
+      combined_results = direct_results + connected_results
+
+      combined_results.sort_by do |result|
+        time = result.trips.first.departure_time.strftime('%H%M%S').to_i
+        sort_desc ? -time : time
+      end
     end
 
-    def direct_trips
+    def direct_trips # rubocop:disable Metrics/AbcSize
       result = Spree::Variant
                .select('spree_variants.id AS variant_id,
                         vendors.id AS vendor_id,
@@ -38,7 +50,13 @@ module SpreeCmCommissioner
                .joins('INNER JOIN cm_trip_stops AS drop_off ON drop_off.trip_id = spree_variants.id AND drop_off.stop_type = 1')
                .joins('INNER JOIN spree_vendors AS vendors ON vendors.id = spree_variants.vendor_id')
                .joins('INNER JOIN spree_products AS routes ON routes.id = spree_variants.product_id')
-               .where('boarding.stop_id = ? AND drop_off.stop_id = ?', origin_id, destination_id)
+      result = result.where(vendors: { id: params[:vendor_id] }) if params[:vendor_id].present?
+      result = result.where('boarding.stop_id = ? AND drop_off.stop_id = ?', origin_id, destination_id)
+                     .where('trips.departure_time > ? AND trips.departure_time <= ?',
+                            Time.zone.parse(travel_date.to_s).utc.strftime('%H:%M:%S'),
+                            Time.zone.parse(travel_date.end_of_day.to_s).utc.strftime('%H:%M:%S')
+                           )
+                     .order("trips.departure_time #{params[:sort] == 'desc' ? 'DESC' : 'ASC'}")
 
       result.map do |trip|
         trip_result_options = {
@@ -53,7 +71,7 @@ module SpreeCmCommissioner
           destination_id: trip[:destination_id],
           destination: trip[:destination],
           vehicle_id: trip[:vehicle_id],
-          departure_time: trip[:departure_time],
+          departure_time: Time.zone.parse(trip[:departure_time].to_s),
           duration: trip[:duration]
         }
         SpreeCmCommissioner::TripResult.new(trip_result_options)
@@ -63,17 +81,17 @@ module SpreeCmCommissioner
     def connected_trips # rubocop:disable Metrics/MethodLength
       result = SpreeCmCommissioner::TripConnection
                .joins('
-                 INNER JOIN spree_variants variant1 ON variant1.id = cm_trip_connections.from_trip_id
-                 INNER JOIN spree_variants variant2 ON variant2.id = cm_trip_connections.to_trip_id
-                 INNER JOIN spree_products AS routes1 ON routes1.id = variant1.product_id
-                 INNER JOIN spree_products AS routes2 ON routes2.id = variant2.product_id
-                 INNER JOIN cm_trips AS trip1 ON trip1.variant_id = cm_trip_connections.from_trip_id
-                 INNER JOIN cm_trips AS trip2 ON trip2.variant_id = cm_trip_connections.to_trip_id
-                 INNER JOIN cm_trip_stops trip1_origin ON trip1_origin.trip_id = variant1.id AND trip1_origin.stop_type = 0
-                 INNER JOIN cm_trip_stops trip2_origin ON trip2_origin.trip_id = variant2.id AND trip2_origin.stop_type = 0
-                 INNER JOIN cm_trip_stops trip2_destination ON trip2_destination.trip_id = variant2.id AND trip2_destination.stop_type = 1
-                 INNER JOIN spree_vendors AS vendor1 ON vendor1.id = variant1.vendor_id
-                 INNER JOIN spree_vendors AS vendor2 ON vendor2.id = variant2.vendor_id'
+                INNER JOIN spree_variants variant1 ON variant1.id = cm_trip_connections.from_trip_id
+                INNER JOIN spree_variants variant2 ON variant2.id = cm_trip_connections.to_trip_id
+                INNER JOIN spree_products AS routes1 ON routes1.id = variant1.product_id
+                INNER JOIN spree_products AS routes2 ON routes2.id = variant2.product_id
+                INNER JOIN cm_trips AS trip1 ON trip1.variant_id = cm_trip_connections.from_trip_id
+                INNER JOIN cm_trips AS trip2 ON trip2.variant_id = cm_trip_connections.to_trip_id
+                INNER JOIN cm_trip_stops trip1_origin ON trip1_origin.trip_id = variant1.id AND trip1_origin.stop_type = 0
+                INNER JOIN cm_trip_stops trip2_origin ON trip2_origin.trip_id = variant2.id AND trip2_origin.stop_type = 0
+                INNER JOIN cm_trip_stops trip2_destination ON trip2_destination.trip_id = variant2.id AND trip2_destination.stop_type = 1
+                INNER JOIN spree_vendors AS vendor1 ON vendor1.id = variant1.vendor_id
+                INNER JOIN spree_vendors AS vendor2 ON vendor2.id = variant2.vendor_id'
                      )
                .select('cm_trip_connections.id AS id,
                         trip1.variant_id AS trip1_id,
@@ -97,8 +115,13 @@ module SpreeCmCommissioner
                         trip2_origin.stop_name AS trip2_origin,
                         trip2_destination.stop_name AS trip2_destination,
                         vendor2.name AS trip2_vendor_name'
-                      ).where('trip1_origin.stop_id = ? AND trip2_destination.stop_id = ?', origin_id, destination_id
-                      ).uniq
+                      ).where('trip1_origin.stop_id = ? AND trip2_destination.stop_id = ?', origin_id, destination_id)
+      result = result.where('vendor1.id = ? OR vendor2.id = ?', params[:vendor_id], params[:vendor_id]) if params[:vendor_id].present?
+      result = result.where('trip1.departure_time > ? AND trip1.departure_time <= ?', Time.zone.parse(travel_date.to_s).utc.strftime('%H:%M:%S'),
+                            Time.zone.parse(travel_date.end_of_day.to_s).utc.strftime('%H:%M:%S')
+      )
+                     .distinct
+                     .order("trip1.departure_time #{params[:sort] == 'desc' ? 'DESC' : 'ASC'}")
 
       return [] if result.blank?
 
@@ -113,7 +136,7 @@ module SpreeCmCommissioner
           trip_id: trip[:trip1_id],
           origin_id: trip[:trip1_origin_id],
           destination_id: trip[:trip1_destination_id],
-          departure_time: trip[:trip1_departure_time],
+          departure_time: Time.zone.parse(trip[:trip1_departure_time].to_s),
           duration: trip[:trip1_duration],
           vendor_name: trip[:trip1_vendor_name],
           route_name: trip[:route1_name],
@@ -126,7 +149,7 @@ module SpreeCmCommissioner
           trip_id: trip[:trip2_id],
           origin_id: trip[:trip2_origin_id],
           destination_id: trip[:trip2_destination_id],
-          departure_time: trip[:trip2_departure_time],
+          departure_time: Time.zone.parse(trip[:trip2_departure_time].to_s),
           duration: trip[:trip2_duration],
           vendor_name: trip[:trip2_vendor_name],
           route_name: trip[:route2_name],
