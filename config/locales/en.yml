@@ -579,4 +579,6 @@ en:
   event_blazer_queries:
     success: 'Event saved Successfully'
     fail: 'Event already saved'
+  invite_guest:
+    fully_claimed: 'This invitation has been fully claimed'
 

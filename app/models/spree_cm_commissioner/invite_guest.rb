@@ -8,5 +8,15 @@ module SpreeCmCommissioner
     belongs_to :taxon, class_name: 'Spree::Taxon'
 
     self.whitelisted_ransackable_attributes = %w[claimed_status]
+
+    def logical_claim_status
+      return :expired if expiration_date.present? && expiration_date.past?
+      claimed_status.to_sym
+    end
+
+    scope :logically_expired, -> {
+      where("expiration_date IS NOT NULL AND expiration_date <= ?", Time.current)
+    }
   end
 end
+

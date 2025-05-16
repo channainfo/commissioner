@@ -8,13 +8,11 @@ module SpreeCmCommissioner
         return context.fail!(message: 'email_or_phone_is_required') if params[:order_email].blank? && params[:order_phone_number].blank?
 
         context.order = construct_order
-        context.fail!(message: context.order.errors.full_messages.to_sentence) unless context.order.save
+        context.fail!(message: order.errors.full_messages.to_sentence) unless context.order.save
+
       end
 
       def construct_order
-        guest_params = params.slice(*SpreeCmCommissioner::Guest.csv_importable_columns)
-        guest_params[:token] = guest_token if guest_token.present?
-
         Spree::Order.new(
           email: params[:order_email],
           phone_number: params[:order_phone_number],
@@ -25,9 +23,6 @@ module SpreeCmCommissioner
             {
               quantity: quantity.to_i,
               variant_id: params[:variant_id],
-              guests_attributes: [
-                guest_params
-              ]
             }
           ]
         )
