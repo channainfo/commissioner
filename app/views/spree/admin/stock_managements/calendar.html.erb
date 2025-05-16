@@ -8,14 +8,10 @@
       <% (1..12).each do |month| %>
         <%= month_calendar(start_date: Date.new(@year, month, 1), attribute: :from_date, end_attribute: :to_date, events: @events) do |date, events| %>
           <div class="c-annual-day"
-            data-date="<%= date.strftime '%Y-%m-%d' %>"
             type="button"
-            tabindex="0"
-            data-toggle="popover"
-            data-trigger="hover"
-            data-placement="right"
-            data-html="true"
-            data-content="<%= raw render_escape_html partial: "events_popover", locals: { events: events } if events.any? %>">
+            data-date="<%= date.strftime '%Y-%m-%d' %>"
+            data-toggle="modal"
+            data-target="#inventory-<%= date %>">
             <%= date.day %>
             <ul class="p-0 m-0 list-unstyled">
               <% events.each do |event| %>
@@ -27,6 +23,16 @@
                 </li>
               <% end %>
             </ul>
+          </div>
+
+          <div class="modal fade" id="inventory-<%= date %>" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <%= render partial: "events", locals: { events: events } if events.any? %>
+                </div>
+              </div>
+            </div>
           </div>
         <% end %>
       <% end %>

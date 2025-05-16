@@ -141,6 +141,9 @@ Spree::Core::Engine.add_routes do
       resources :stock_managements do
         collection do
           get :calendar
+
+          patch :reset_inventory_item
+          post :create_inventory_item
         end
       end
 

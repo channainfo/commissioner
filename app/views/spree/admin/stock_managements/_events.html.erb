@@ -4,6 +4,7 @@
 
     <div class="mb-3">
       <h6><%= inventory_item.variant.options_text %></h6>
+
       <ul class="list-group mt-1 mb-1">
         <li class="list-group-item d-flex justify-content-between align-items-center">
           Max capacity
@@ -18,6 +19,13 @@
       <small class="text-muted">
         <%= inventory_item_message(inventory_item, @cached_inventory_items[inventory_item.id]) %>
       </small>
+
+      <%= link_to_with_icon('arrow-counterclockwise.svg', "Reset Inventory Item", reset_inventory_item_admin_product_stock_managements_path(@product, inventory_item_id: inventory_item.id),
+        method: :patch,
+        remote: false,
+        class: 'icon_link btn btn-sm outline text-dark',
+        data: { confirm: "Only reset if stock is incorrect. Are you sure?" }, no_text: true
+      ) %>
     </div>
   <% end %>
 </div>
