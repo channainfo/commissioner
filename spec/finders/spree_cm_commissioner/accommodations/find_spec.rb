@@ -264,25 +264,4 @@ RSpec.describe SpreeCmCommissioner::Accommodations::Find do
       end
     end
   end
-
-  describe '#date_range_excluding_checkout' do
-    let(:from_date) { Time.zone.today }
-    let(:to_date) { Time.zone.today + 2 }
-
-    subject do
-      described_class.new(
-        state_id: 1,
-        from_date: from_date,
-        to_date: to_date,
-        number_of_adults: 2,
-        number_of_kids: 1
-      )
-    end
-
-    it 'returns range from from_date to day before to_date' do
-      range = subject.send(:date_range_excluding_checkout)
-      expect(range).to eq(from_date..(to_date - 1))
-      expect(range).not_to include(to_date)
-    end
-  end
 end

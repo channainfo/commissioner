@@ -32,11 +32,10 @@ module SpreeCmCommissioner
         if variant.permanent_stock?
           return [] if options[:from_date].blank? || options[:to_date].blank?
 
-          @cached_inventory_items = builder_klass.new(
-            variant_id: variant.id,
-            from_date: options[:from_date].to_date,
-            to_date: options[:to_date].to_date
-          ).call
+          dates = options[:from_date].to_date..options[:to_date].to_date
+          @cached_inventory_items = builder_klass.new(variant_id: variant.id, dates: dates).call
+          @cached_inventory_items = [] if @cached_inventory_items.size != dates.count
+          @cached_inventory_items
         else
           @cached_inventory_items = builder_klass.new(variant_id: variant.id).call
         end

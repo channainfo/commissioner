@@ -17,29 +17,23 @@ module SpreeCmCommissioner
     def date_unit
       return nil unless permanent_stock?
 
-      date_range_excluding_checkout.size if accommodation?
+      date_range.size
     end
 
-    def date_range_excluding_checkout
-      return [] unless date_present?
-
-      date_range = (from_date.to_date..to_date.to_date).to_a
-      date_range.pop if date_range.size > 1
-      date_range
-    end
-
-    def date_range_including_checkout
+    def date_range
       return [] unless date_present?
 
       (from_date.to_date..to_date.to_date).to_a
     end
 
-    def date_range
-      if accommodation?
-        date_range_excluding_checkout
-      else
-        date_range_including_checkout
-      end
+    def checkin_date
+      from_date&.to_date
+    end
+
+    def checkout_date
+      return to_date ? to_date.to_date - 1.day : nil if accommodation?
+
+      to_date&.to_date
     end
 
     def event

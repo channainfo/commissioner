@@ -1,12 +1,11 @@
 module SpreeCmCommissioner
   module RedisStock
     class VariantCachedInventoryItemsBuilder
-      attr_reader :variant_id, :from_date, :to_date
+      attr_reader :variant_id, :dates
 
-      def initialize(variant_id:, from_date: nil, to_date: nil)
+      def initialize(variant_id:, dates: [])
         @variant_id = variant_id
-        @from_date = from_date
-        @to_date = to_date
+        @dates = dates
       end
 
       # output: [ CachedInventoryItem(...), CachedInventoryItem(...) ]
@@ -18,8 +17,7 @@ module SpreeCmCommissioner
         variant = Spree::Variant.find(variant_id)
 
         inventory_items = variant.inventory_items
-        inventory_items.where(inventory_date: from_date..to_date) if variant.permanent_stock?
-
+        inventory_items = inventory_items.where(inventory_date: dates) if variant.permanent_stock?
         inventory_items
       end
     end

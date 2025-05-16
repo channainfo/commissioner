@@ -28,6 +28,7 @@ module SpreeCmCommissioner
 
       def cache_inventory(key, inventory_item, count_in_redis)
         return count_in_redis.to_i if count_in_redis.present?
+        return inventory_item.quantity_available unless inventory_item.active?
 
         SpreeCmCommissioner.redis_pool.with do |redis|
           redis.set(key, inventory_item.quantity_available, ex: inventory_item.redis_expired_in)

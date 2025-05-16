@@ -13,7 +13,7 @@ module SpreeCmCommissioner
       def execute
         scope
           .where(default_state_id: state_id)
-          .where(inventory_items: { inventory_date: date_range_excluding_checkout })
+          .where(inventory_items: { inventory_date: stay_dates })
           .where('CAST(spree_variants.public_metadata->\'cm_options\'->>\'number-of-adults\' AS INTEGER) +
                   CAST(spree_variants.public_metadata->\'cm_options\'->>\'number-of-kids\' AS INTEGER) >= ?', number_of_guests
           )
@@ -29,11 +29,8 @@ module SpreeCmCommissioner
           .where(primary_product_type: :accommodation, state: :active)
       end
 
-      # Why? check_out date is not considered to be charged
-      # For example, if you check in on 2023-10-01 and check out on 2023-10-02,
-      # you will be charged for one night (2023-10-01).
-      def date_range_excluding_checkout
-        from_date..to_date.prev_day
+      def stay_dates
+        from_date..to_date
       end
     end
   end
