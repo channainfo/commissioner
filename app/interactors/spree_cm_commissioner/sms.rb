@@ -11,6 +11,8 @@ module  SpreeCmCommissioner
         context.sms_log.error = e.message
         context.sms_log.save
         context.fail!(message: e.message)
+
+        log_error_to_telegram(e.message)
       end
     end
 
@@ -56,6 +58,18 @@ module  SpreeCmCommissioner
 
       result = SpreeCmCommissioner::InternationalMobileFormatter.call(phone_number: number)
       result.formatted_phone_number
+    end
+
+    def log_error_to_telegram(message)
+      return unless ENV['PIN_CODE_DEBUG_NOTIFIY_TELEGRAM_ENABLE'] == 'yes'
+
+      options = {
+        pin_code_id: context.pin_code.id,
+        tenant_id: context.tenant&.id,
+        error_message: message
+      }
+
+      SpreeCmCommissioner::TelegramDebugPinCodeSenderJob.perform_later(options)
     end
   end
 end

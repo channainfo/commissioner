@@ -23,6 +23,9 @@
   <td class='phone_number'>
     <%= user.phone_number%>
   </td>
+  <td class='tenant'>
+    <%= user.tenant&.name || Spree::Store.default.name %>
+  </td>
   <td class='created_at'>
     <%= user.created_at %>
   </td>

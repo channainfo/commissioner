@@ -523,6 +523,8 @@ Spree::Core::Engine.add_routes do
         resource :reset_passwords, only: [:update]
         resource :change_passwords, only: [:update]
         resource :user_contacts, only: [:update]
+
+        resources :cms_pages, only: %i[index show]
       end
 
       namespace :storefront do

@@ -25,18 +25,21 @@ module SpreeCmCommissioner
     end
 
     class_methods do
-      def find_user_by_login(login)
+      def find_user_by_login(login, tenant_id)
         return nil if login.blank?
 
         login = login.downcase
         parser = PhoneNumberParser.call(phone_number: login)
 
+        scope = Spree.user_class.all
+        scope = scope.where(tenant_id: tenant_id) if tenant_id.present?
+
         if parser.intel_phone_number.present?
-          find_by(intel_phone_number: parser.intel_phone_number)
+          scope.find_by(intel_phone_number: parser.intel_phone_number)
         elsif login =~ URI::MailTo::EMAIL_REGEXP
-          find_by(email: login)
+          scope.find_by(email: login)
         else
-          find_by(login: login)
+          scope.find_by(login: login)
         end
       end
     end
