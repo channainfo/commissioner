@@ -34,7 +34,7 @@ RSpec.describe Spree::LineItem, type: :model do
     context 'when product_type is accommodation' do
       let(:product) { create(:cm_product, product_type: :accommodation) }
       let(:variant) { create(:cm_variant, product: product, total_inventory: 10) }
-      let(:line_item) { create(:line_item, variant: variant, quantity: 1, from_date: Time.zone.tomorrow, to_date: Time.zone.tomorrow + 3) }
+      let(:line_item) { create(:line_item, variant: variant, quantity: 1, from_date: Time.zone.tomorrow, to_date: Time.zone.tomorrow + 2) }
 
       # generate inventory items for 10 days
       before do
@@ -198,7 +198,7 @@ RSpec.describe Spree::LineItem, type: :model do
   describe '#amount' do
     context 'product type: accommodation' do
       let(:product) { create(:cm_accommodation_product, price: BigDecimal('10.0'), total_inventory: 4) }
-      let(:line_item) { create(:line_item, price: BigDecimal('10.0'), quantity: 2, product: product, from_date: '2023-01-10'.to_date, to_date: '2023-01-13'.to_date) }
+      let(:line_item) { create(:line_item, price: BigDecimal('10.0'), quantity: 2, product: product, from_date: '2023-01-10'.to_date, to_date: '2023-01-12'.to_date) }
 
       it 'calculates amount based on price, quantity & number of nights' do
         expect(line_item.amount).to eq BigDecimal('60.0') # 10.0 * 2 * 3 nights
