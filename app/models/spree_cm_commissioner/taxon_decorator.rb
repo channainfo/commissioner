@@ -60,6 +60,8 @@ module SpreeCmCommissioner
       base.has_many :taxon_option_types, class_name: 'SpreeCmCommissioner::TaxonOptionType'
       base.has_many :taxon_option_values, class_name: 'SpreeCmCommissioner::TaxonOptionValue'
 
+      base.validate :validate_event_date, if: -> { from_date.present? && to_date.present? }
+
       def base.active_homepage_events
         joins(:homepage_section_relatables)
           .joins("INNER JOIN spree_taxons taxon ON taxon.id = cm_homepage_section_relatables.relatable_id
@@ -109,6 +111,12 @@ module SpreeCmCommissioner
 
     def event_url
       "https://#{Spree::Store.default.url}/t/#{permalink}"
+    end
+
+    def validate_event_date
+      return unless from_date > to_date
+
+      errors.add(:to_date, 'must be after Start Date.')
     end
   end
 end

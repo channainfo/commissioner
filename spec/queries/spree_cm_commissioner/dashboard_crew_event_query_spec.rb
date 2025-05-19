@@ -6,12 +6,32 @@ RSpec.describe SpreeCmCommissioner::DashboardCrewEventQuery do
   let!(:incoming_event_a) { create(:cm_taxon_event, name: 'Run with Sai', from_date: start_from_date, to_date: 2.day.from_now) }
   let!(:incoming_event_b) { create(:cm_taxon_event, name: 'BunPhum', from_date: 8.day.from_now, to_date: 11.day.from_now) }
   let!(:incoming_event_c) { create(:cm_taxon_event, name: 'TedX', from_date: 15.day.from_now, to_date: 18.day.from_now) }
-  let!(:previous_event_a) { create(:cm_taxon_event, name: 'GardenSplash', from_date: start_from_date - 1.day, to_date: start_from_date - 3.day) }
-  let!(:previous_event_b) { create(:cm_taxon_event, name: 'SangkranSR', from_date: 8.day.ago, to_date: 11.day.ago) }
+
+  let!(:previous_event_a) { build(:cm_taxon_event, name: 'GardenSplash', from_date: start_from_date - 1.day, to_date: start_from_date - 3.days) }
+  let!(:previous_event_b) { build(:cm_taxon_event, name: 'SangkranSR', from_date: 8.days.ago, to_date: 11.days.ago) }
+
+  before do
+    previous_event_a.save(validate: false)
+    previous_event_b.save(validate: false)
+  end
 
   describe '#events' do
-    let(:user_a) { create(:cm_operator_user, events: [incoming_event_a, incoming_event_b, previous_event_a, previous_event_b]) }
-    let(:user_b) { create(:cm_operator_user, events: [incoming_event_a, incoming_event_b, previous_event_a, previous_event_b]) }
+    let(:user_a) do
+      user = create(:cm_operator_user)
+      user.events << incoming_event_a
+      user.events << incoming_event_b
+      user.events << previous_event_a
+      user.events << previous_event_b
+      user
+    end
+    let(:user_b) do
+      user = create(:cm_operator_user)
+      user.events << incoming_event_a
+      user.events << incoming_event_b
+      user.events << previous_event_a
+      user.events << previous_event_b
+      user
+    end
 
     it 'should return only incoming events that user has access to' do
       query_a = SpreeCmCommissioner::DashboardCrewEventQuery.new(user_id: user_a.id, section: 'incoming')
@@ -24,7 +44,15 @@ RSpec.describe SpreeCmCommissioner::DashboardCrewEventQuery do
     end
 
     context 'when section is incoming' do
-      let(:user) { create(:cm_operator_user, events: [incoming_event_a, incoming_event_b, incoming_event_c, previous_event_a, previous_event_b]) }
+      let(:user) do
+        user = create(:cm_operator_user)
+        user.events << incoming_event_a
+        user.events << incoming_event_b
+        user.events << incoming_event_c
+        user.events << previous_event_a
+        user.events << previous_event_b
+        user
+      end
 
       subject { SpreeCmCommissioner::DashboardCrewEventQuery.new(user_id: user.id, section: 'incoming', start_from_date: start_from_date) }
 
@@ -51,7 +79,15 @@ RSpec.describe SpreeCmCommissioner::DashboardCrewEventQuery do
     end
 
     context 'when section is previous' do
-      let(:user) { create(:cm_operator_user, events: [incoming_event_a, incoming_event_b, incoming_event_c, previous_event_a, previous_event_b]) }
+      let(:user) do
+        user = create(:cm_operator_user)
+        user.events << incoming_event_a
+        user.events << incoming_event_b
+        user.events << incoming_event_c
+        user.events << previous_event_a
+        user.events << previous_event_b
+        user
+      end
 
       subject { SpreeCmCommissioner::DashboardCrewEventQuery.new(user_id: user.id, section: 'previous', start_from_date: start_from_date) }
 

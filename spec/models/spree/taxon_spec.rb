@@ -116,4 +116,24 @@ RSpec.describe Spree::Taxon, type: :model do
       expect(Spree::Taxon.active_homepage_events).not_to include(unrelated_event)
     end
   end
+
+  describe 'validations' do
+    context 'when to_date is before from_date' do
+      it 'adds an error on to_date' do
+        taxon = build(:taxon, from_date: Date.today, to_date: Date.yesterday)
+        taxon.valid?
+
+        expect(taxon.errors[:to_date]).to include('must be after Start Date.')
+      end
+    end
+
+    context 'when to_date is after from_date' do
+      it 'is valid' do
+        taxon = build(:taxon, from_date: Date.today, to_date: Date.tomorrow)
+        taxon.valid?
+
+        expect(taxon.errors[:to_date]).to be_empty
+      end
+    end
+  end
 end
