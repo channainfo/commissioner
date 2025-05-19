@@ -7,6 +7,9 @@ module SpreeCmCommissioner
       base.belongs_to :vendor, optional: true
 
       base.scope :non_vendor, -> { where(vendor_id: nil) }
+      base.scope :filter_by_vendor, lambda { |vendor|
+        where(vendor_id: vendor)
+      }
 
       base.accepts_nested_attributes_for :role_permissions, allow_destroy: true
 

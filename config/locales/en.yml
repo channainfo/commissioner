@@ -570,6 +570,8 @@ en:
   user_roles_assigner:
     user_not_found: 'User not found'
     roles_empty: 'Roles are empty'
+    roles_required: 'Roles are required'
+    user_already_assigned: 'User already assigned to this vendor'
   invite:
     url_not_found: 'Invite link not found or have been expired'
     accept_fail: 'Failed to accept invite'
