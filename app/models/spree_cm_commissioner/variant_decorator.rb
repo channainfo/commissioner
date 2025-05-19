@@ -138,7 +138,8 @@ module SpreeCmCommissioner
         destination_id: options.destination,
         departure_time: options.departure_time,
         duration: options.total_duration_in_seconds,
-        vehicle_id: options.vehicle
+        vehicle_id: options.vehicle,
+        allow_seat_selection: options.allow_seat_selection || true
       )
       trip.save
     end
