@@ -31,9 +31,9 @@ RSpec.describe Spree::Api::V2::Storefront::Accommodations::VariantsController, t
       {
         from_date: from_date.to_s,
         to_date: to_date.to_s,
-        accommodation_id: vendor.id,
-        number_of_adults: 2,
-        number_of_kids: 1
+        vendor_id: vendor.id,
+        adult: 2,
+        children: 1
       }
     end
 
@@ -77,7 +77,7 @@ RSpec.describe Spree::Api::V2::Storefront::Accommodations::VariantsController, t
           state: :active
         )
       end
-      let(:params_with_different_vendor) { valid_params.merge(accommodation_id: other_vendor.id) }
+      let(:params_with_different_vendor) { valid_params.merge(vendor_id: other_vendor.id) }
 
       before do
         get "/api/v2/storefront/accommodations/#{other_vendor.id}/variants", params: params_with_different_vendor
@@ -95,8 +95,8 @@ RSpec.describe Spree::Api::V2::Storefront::Accommodations::VariantsController, t
       {
         from_date: from_date.to_s,
         to_date: to_date.to_s,
-        number_of_adults: 2,
-        number_of_kids: 1
+        adult: 2,
+        children: 1
       }
     end
 
