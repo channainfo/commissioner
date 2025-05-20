@@ -69,6 +69,10 @@ module SpreeCmCommissioner
           .where(cm_homepage_sections: { tenant_id: nil, active: true })
           .where(kind: :event)
       end
+
+      def base.find_event(id)
+        find_by(slug: "events-#{id}")
+      end
     end
     # rubocop:enable Metrics/MethodLength
 
