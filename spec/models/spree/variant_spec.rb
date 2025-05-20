@@ -83,34 +83,40 @@ RSpec.describe Spree::Variant, type: :model do
   end
 
   describe 'callbacks' do
-    context '#after_commit' do
-      let(:vendor) { create(:active_vendor, name: 'Angkor Hotel', min_price: 10, max_price: 30) }
-      let(:state) { create(:state, name: 'Siemreap') }
-      let!(:option_type) { create(:option_type, name: 'location', presentation: 'Location', attr_type: 'state_selection') }
-      let!(:option_value) { create(:option_value, option_type: option_type, name: state.id) }
-      let!(:stock_location) { vendor.stock_locations.first.update(state: state) }
-      let!(:product1) { create(:base_product, name: 'Bedroom 1', vendor: vendor, price: 10 ) }
-      let!(:product2) { create(:base_product, name: 'Bedroom 2', vendor: vendor, price: 20 ) }
-      let!(:product3) { create(:base_product, name: 'Bedroom 3', vendor: vendor, price: 30 ) }
+    context 'after_commit #update_vendor_price' do
+      let(:vendor) { create(:active_vendor, name: 'Angkor Hotel', min_price: 10, max_price: 30, primary_product_type: :accommodation) }
+      let(:product1) { create(:base_product, name: 'Bedroom 1', vendor: vendor, price: 10, product_type: :accommodation) }
+      let(:product2) { create(:base_product, name: 'Bedroom 2', vendor: vendor, price: 20, product_type: :accommodation) }
+      let(:product3) { create(:base_product, name: 'Bedroom 3', vendor: vendor, price: 30, product_type: :accommodation) }
 
-      it 'updates vendor min_price' do
-        subject { product1.update(price: 5) }
+      it 'updates vendor min_price when new price lower then min_price' do
+        product1.update(price: 5)
         expect(vendor.min_price).to eq product1.price
       end
 
-      it 'updates vendor max_price' do
-        subject { product3.update(price: 35) }
+      it 'updates vendor max_price when new price higher then min_price' do
+        product3.update(price: 35)
         expect(vendor.max_price).to eq product3.price
       end
 
-      it 'should not update vendor min_price' do
-        subject { product1.update(price: 15) }
-        expect(vendor.min_price).to eq product1.price
+      it 'should not update vendor min_price/max_price when new price is between min_price/max_price' do
+        product1.update(price: 15)
+        product3.update(price: 25)
+
+        expect(vendor.min_price).to eq 10
+        expect(vendor.max_price).to eq 30
       end
 
-      it 'should not update vendor max_price' do
-        subject { product3.update(price: 25) }
-        expect(vendor.max_price).to eq product3.price
+      context 'when vendor.max_price or min_price nil' do
+        let(:vendor) { create(:active_vendor, name: 'Angkor Hotel', min_price: nil, max_price: nil, primary_product_type: :accommodation) }
+
+        it 'should update vendor new price to both min/max_price' do
+          # when create product, it will also update price to variant & update_vendor_price
+          create(:base_product, name: 'Bedroom 3', vendor: vendor, price: 25, product_type: :accommodation)
+
+          expect(vendor.min_price).to eq 25
+          expect(vendor.max_price).to eq 25
+        end
       end
     end
   end

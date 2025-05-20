@@ -99,8 +99,8 @@ module SpreeCmCommissioner
     def update_vendor_price
       return unless vendor.present? && product&.product_type == vendor&.primary_product_type
 
-      vendor.update(min_price: price) if price < vendor.min_price
-      vendor.update(max_price: price) if price > vendor.max_price
+      vendor.update(min_price: price) if vendor.min_price.nil? || price < vendor.min_price
+      vendor.update(max_price: price) if vendor.max_price.nil? || price > vendor.max_price
     end
 
     def validate_option_types
