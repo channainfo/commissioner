@@ -411,6 +411,8 @@ km:
   user_roles_assigner:
     user_not_found: 'រកមិនឃើញអ្នកប្រើប្រាស់'
     roles_empty: 'តួនាទីគឺទទេ'
+    roles_required: 'តួនាទីត្រូវបានទាមទារ'
+    user_already_assigned: 'អ្នកប្រើប្រាស់បានបង្កើតតួនាទីរួចហើយ'
 
   invite:
     url_not_found: 'រកមិនឃើញតំណអញ្ជើញ ឬផុតកំណត់ហើយ'

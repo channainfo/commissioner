@@ -1,2 +1,0 @@
-<!-- replace 'erb[loud]:contains("f.collection_check_boxes :spree_role_ids")' -->
-<%= f.collection_check_boxes :spree_role_ids, Spree::Role.non_vendor, :id, :name do |role_form| %>
