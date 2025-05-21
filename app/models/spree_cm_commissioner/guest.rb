@@ -5,8 +5,8 @@ module SpreeCmCommissioner
     delegate :kyc, to: :line_item, allow_nil: true
     delegate :allowed_upload_later?, to: :line_item, allow_nil: true
 
-    enum gender: { :other => 0, :male => 1, :female => 2 }
-    enum social_contact_platform: {
+    enum :gender, { :other => 0, :male => 1, :female => 2 }
+    enum :social_contact_platform, {
       :other => 0,
       :telegram => 1,
       :facebook => 2,
@@ -14,7 +14,7 @@ module SpreeCmCommissioner
       :whatsapp => 4,
       :line => 5,
       :viber => 6
-    }, _prefix: true
+    }, prefix: true
 
     scope :complete, -> { joins(:line_item).merge(Spree::LineItem.complete) }
     scope :complete_or_canceled, -> { joins(:line_item).merge(Spree::LineItem.complete_or_canceled) }
@@ -183,24 +183,21 @@ module SpreeCmCommissioner
       line_item.variant.bib_display_prefix?
     end
 
-    def generate_bib
-      return if bib_prefix.present?
-      return unless bib_required?
-      return if event_id.blank?
-
-      self.bib_prefix = line_item.variant.bib_prefix
-
-      last_bib_number = event.guests
-                             .where(bib_prefix: bib_prefix)
-                             .maximum(:bib_number) || 0
-
-      self.bib_number = last_bib_number + 1
-      self.bib_index = "#{event_id}-#{bib_prefix}-#{bib_number}"
-    end
-
     def generate_bib!
-      generate_bib
-      save!
+      return if bib_prefix.present? || !bib_required? || event_id.blank?
+
+      transaction do
+        reload # Reloads the record with the latest lock_version
+        self.bib_prefix = line_item.variant.bib_prefix
+
+        last_bib_number = event.guests
+                               .where(bib_prefix: bib_prefix)
+                               .maximum(:bib_number) || 0
+
+        self.bib_number = last_bib_number + 1
+        self.bib_index = "#{event_id}-#{bib_prefix}-#{bib_number}"
+        save!
+      end
     end
 
     # bib_number: 345, bib_prefix: 5KM, bib_zerofill: 5 => return 5KM00345

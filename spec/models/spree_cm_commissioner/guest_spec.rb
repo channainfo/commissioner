@@ -322,7 +322,7 @@ RSpec.describe SpreeCmCommissioner::Guest, type: :model do
     end
   end
 
-  describe '#generate_bib' do
+  describe '#generate_bib!' do
     let(:taxonomy) { create(:taxonomy, kind: :event) }
     let(:event1) { create(:taxon, name: 'BunPhum', taxonomy: taxonomy) }
     let(:event2) { create(:taxon, name: 'BunPhum 2', taxonomy: taxonomy) }
@@ -343,7 +343,6 @@ RSpec.describe SpreeCmCommissioner::Guest, type: :model do
       end
     end
 
-
     context "when guest in the same event" do
       context "when guest has the same prefix" do
         let(:line_item) { create(:line_item, order: order, variant: product_with_bib1.variants.first) }
@@ -358,6 +357,23 @@ RSpec.describe SpreeCmCommissioner::Guest, type: :model do
           expect(guest2.bib_number).to eq 2
           expect(guest1.formatted_bib_number).to eq '3KM001'
           expect(guest2.formatted_bib_number).to eq '3KM002'
+        end
+      end
+
+      context "when multiple generate_bib! concurrently" do
+        let(:line_item) { create(:line_item, order: order, variant: product_with_bib1.variants.first) }
+        let(:guest1) { create(:guest, line_item: line_item, seat_number: 1) }
+        let(:guest2) { create(:guest, line_item: line_item, seat_number: 2) }
+        let(:bib_prefix) { line_item.variant.bib_prefix }
+
+        it 'ensures unique bib_numbers and bib_index for each guest' do
+          threads = []
+          threads << Thread.new { guest1.generate_bib! }
+          threads << Thread.new { guest2.generate_bib! }
+          threads.each(&:join)
+
+          bib_indices = SpreeCmCommissioner::Guest.where(event_id: guest1.event_id, bib_prefix: bib_prefix).pluck(:bib_index)
+          expect(bib_indices.uniq.size).to eq(2)
         end
       end
 
@@ -398,6 +414,7 @@ RSpec.describe SpreeCmCommissioner::Guest, type: :model do
       guest.generate_bib!
 
       variant.update(option_values: [not_display_bib_prefix])
+      guest.reload
 
       expect(guest.formatted_bib_number).to eq "001"
     end
