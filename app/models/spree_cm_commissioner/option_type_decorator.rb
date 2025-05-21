@@ -1,5 +1,7 @@
 module SpreeCmCommissioner
   module OptionTypeDecorator
+    RULES_OPTION_TYPE_NAME = 'rules'.freeze
+
     def self.prepended(base)
       base.include SpreeCmCommissioner::ParameterizeName
       base.include SpreeCmCommissioner::OptionTypeAttrType
@@ -23,6 +25,10 @@ module SpreeCmCommissioner
         Spree::OptionType.where(presentation: 'vehicle', attr_type: 'vehicle_id', kind: 'variant',
                                 name: 'vehicle'
         ).first_or_create
+      end
+
+      def base.rules_option_type
+        Spree::OptionType.find_by(name: RULES_OPTION_TYPE_NAME)
       end
     end
 

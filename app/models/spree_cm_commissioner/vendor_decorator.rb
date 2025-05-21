@@ -182,6 +182,13 @@ module SpreeCmCommissioner
     def organizer_url
       "#{Spree::Store.default.formatted_url}/organizers/#{slug}"
     end
+
+    def vendor_rules
+      rules_option_type = Spree::OptionType.rules_option_type
+      return vendor_kind_option_values.none if rules_option_type.nil?
+
+      vendor_kind_option_values.where(option_type_id: rules_option_type.id)
+    end
   end
 end
 
