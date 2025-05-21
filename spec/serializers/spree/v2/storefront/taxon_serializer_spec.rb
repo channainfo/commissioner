@@ -53,7 +53,8 @@ RSpec.describe Spree::V2::Storefront::TaxonSerializer, type: :serializer do
         :purchasable_on_web,
         :vendor_id,
         :available_on,
-        :hide_video_banner
+        :hide_video_banner,
+        :event_url
       )
     end
 
