@@ -46,6 +46,8 @@ module SpreeCmCommissioner
       base.before_save :set_kind
       base.before_save :set_slug
 
+      base.after_update :sync_event_dates_to_line_items, if: -> { saved_change_to_from_date? || saved_change_to_to_date? }
+
       base.whitelisted_ransackable_associations |= %w[vendor]
       base.whitelisted_ransackable_attributes |= %w[kind from_date to_date]
 
@@ -54,6 +56,8 @@ module SpreeCmCommissioner
       base.has_many :invite_user_events, through: :user_events, class_name: 'SpreeCmCommissioner::InviteUserEvent'
 
       base.has_many :line_items, through: :products
+      base.has_many :event_line_items, class_name: 'Spree::LineItem', foreign_key: :event_id
+
       base.has_many :event_blazer_queries, class_name: 'SpreeCmCommissioner::TaxonBlazerQuery'
       base.has_many :blazer_queries, through: :event_blazer_queries, class_name: 'Blazer::Query'
 
@@ -120,6 +124,12 @@ module SpreeCmCommissioner
       return unless kind == 'event' && level == 1
 
       SpreeCmCommissioner::OrganizersTransactionalEmailNotifier.call(event_id: id)
+    end
+
+    def sync_event_dates_to_line_items
+      return unless event? && depth == 1
+
+      ::SpreeCmCommissioner::EventLineItemsDateSyncerJob.perform_later(id)
     end
   end
 end

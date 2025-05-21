@@ -1,6 +1,8 @@
 <!-- insert_before "erb[loud]:contains('field_container :parent_id')" -->
 
-<div class="form-group">
+<%# Sections don't use available_on, so we hide the form here to avoid confusing admin. %>
+
+<div class="form-group <%= "d-none" unless @taxon.depth == 1 %>">
   <%= label_tag nil, Spree.t(:available_on) %>
   <div class="input-group datePickerFrom"
           data-wrap="true"

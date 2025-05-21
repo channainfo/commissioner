@@ -22,6 +22,54 @@ RSpec.describe Spree::Taxon, type: :model do
     it { should have_many(:visible_products).through(:visible_classifications).class_name('Spree::Product') }
   end
 
+  describe 'callbacks' do
+    describe '#sync_event_dates_to_line_items' do
+      context 'when update taxon is root event' do
+        let(:taxonomy) { create(:taxonomy, kind: :event) }
+        let(:event) { create(:taxon, name: 'BunPhum', taxonomy: taxonomy, kind: :event, from_date: '2001-01-01'.to_date, to_date: '2001-01-02'.to_date) }
+        let(:event_section) { create(:taxon, parent: event, taxonomy: taxonomy, name: 'Section A') }
+        let(:product) { create(:product, taxons: [event_section]) }
+        let(:variant) { create(:cm_variant, product: product) }
+        let(:line_item) { create(:line_item, variant: variant) }
+
+        before do
+          # make sure data correct
+          expect(line_item.event_id).to eq event.id
+          expect(line_item.from_date).to eq '2001-01-01'.to_date
+          expect(line_item.to_date).to eq '2001-01-02'.to_date
+          expect(product.event_id).to eq event.id
+        end
+
+        it 'trigger :sync_event_dates_to_line_items on update & sync new event date to previous line items' do
+          expect(::SpreeCmCommissioner::EventLineItemsDateSyncerJob).to receive(:perform_later).with(event.id).and_call_original
+
+          perform_enqueued_jobs do
+            event.update(from_date: '2023-01-01'.to_date, to_date: '2024-01-02'.to_date)
+          end
+
+          expect(line_item.reload.from_date).to eq '2023-01-01'.to_date
+          expect(line_item.reload.to_date).to eq '2024-01-02'.to_date
+        end
+      end
+
+      context 'when update taxon is not event or is section' do
+        let(:cms_taxonomy) { create(:taxonomy, kind: :cms) }
+        let(:event_taxonomy) { create(:taxonomy, kind: :event) }
+        let(:event) { create(:taxon, name: 'BunPhum', taxonomy: event_taxonomy, kind: :event, from_date: '2001-01-01'.to_date, to_date: '2001-01-02'.to_date) }
+
+        let(:cms) { create(:taxon, taxonomy: cms_taxonomy, name: 'CMS') }
+        let(:event_section) { create(:taxon, parent: event, taxonomy: event_taxonomy, name: 'Section A') }
+
+        it 'does not trigger sync_event_dates_to_line_items & sync to line items' do
+          expect(::SpreeCmCommissioner::EventLineItemsDateSyncerJob).not_to receive(:perform_later)
+
+          cms.update(from_date: '2023-01-01'.to_date, to_date: '2024-01-02'.to_date)
+          event_section.update(from_date: '2023-01-01'.to_date, to_date: '2024-01-02'.to_date)
+        end
+      end
+    end
+  end
+
   describe 'reposition children awesome_nested_set' do
     let(:taxonomy) { create(:taxonomy) }
     let(:parent_taxon) { create(:taxon, taxonomy: taxonomy) }
