@@ -33,6 +33,7 @@ module SpreeCmCommissioner
       base.has_one :google_wallet, class_name: 'SpreeCmCommissioner::GoogleWallet', dependent: :destroy
 
       base.has_many :complete_line_items, through: :classifications, source: :line_items
+      base.has_many :guests, through: :line_items
 
       base.has_many :product_places, class_name: 'SpreeCmCommissioner::ProductPlace', dependent: :destroy
       base.has_many :places, through: :product_places
@@ -42,6 +43,8 @@ module SpreeCmCommissioner
       base.accepts_nested_attributes_for :product_places, allow_destroy: true
 
       base.has_one :trip, class_name: 'SpreeCmCommissioner::Trip', dependent: :destroy
+
+      base.belongs_to :event, class_name: 'Spree::Taxon', optional: true
 
       base.scope :min_price, lambda { |vendor|
         joins(:prices_including_master)
@@ -56,6 +59,8 @@ module SpreeCmCommissioner
       }
       base.scope :subscribable, -> { where(subscribable: 1) }
 
+      base.before_validation :set_event_id
+
       base.validate :validate_event_taxons, if: -> { taxons.event.present? }
 
       base.validate :validate_product_date, if: -> { available_on.present? && discontinue_on.present? }
@@ -65,6 +70,7 @@ module SpreeCmCommissioner
       base.whitelisted_ransackable_attributes = %w[description name slug discontinue_on status vendor_id short_name route_type]
 
       base.after_update :update_variants_vendor_id, if: :saved_change_to_vendor_id?
+      base.after_update :sync_event_id_to_children, if: :saved_change_to_event_id?
 
       base.enum purchasable_on: { both: 0, web: 1, app: 2 }
 
@@ -72,10 +78,6 @@ module SpreeCmCommissioner
 
       base.multi_tenant :tenant, class_name: 'SpreeCmCommissioner::Tenant'
       base.before_save :set_tenant
-    end
-
-    def associated_event
-      taxons.event.first&.parent
     end
 
     def ticket_url
@@ -88,13 +90,21 @@ module SpreeCmCommissioner
       self.tenant_id = vendor&.tenant_id
     end
 
+    def set_event_id
+      self.event_id = taxons.select(&:event?).first&.parent_id
+    end
+
     def update_variants_vendor_id
       variants_including_master.find_each { |variant| variant.update!(vendor_id: vendor_id) }
     end
 
+    def sync_event_id_to_children
+      ::SpreeCmCommissioner::ProductEventIdToChildrenSyncerJob.perform_later(id)
+    end
+
     def validate_event_taxons
       errors.add(:taxons, 'Event Taxon can\'t not be more than 1') if taxons.event.size > 1
-      errors.add(:taxons, 'Must add event date to taxon') if taxons.event.first.from_date.nil? || taxons.event.first.to_date.nil?
+      errors.add(:taxons, 'Must add event date to taxon') if event.from_date.nil? || event.to_date.nil?
     end
 
     def validate_product_date

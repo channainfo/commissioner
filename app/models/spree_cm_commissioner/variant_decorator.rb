@@ -9,6 +9,7 @@ module SpreeCmCommissioner
       base.before_save -> { self.track_inventory = false }, if: :subscribable?
 
       base.belongs_to :vendor, class_name: 'Spree::Vendor'
+      base.has_one :event, class_name: 'Spree::Taxon', through: :product
 
       base.has_many :taxons, class_name: 'Spree::Taxon', through: :product
       base.has_many :visible_option_values, lambda {
@@ -53,10 +54,6 @@ module SpreeCmCommissioner
 
     def permanent_stock?
       accommodation?
-    end
-
-    def event
-      taxons.event.first
     end
 
     # override

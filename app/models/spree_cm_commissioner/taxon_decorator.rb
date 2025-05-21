@@ -1,7 +1,6 @@
 module SpreeCmCommissioner
   module TaxonDecorator
-    # rubocop:disable Metrics/MethodLength
-    def self.prepended(base) # rubocop:disable Metrics/AbcSize
+    def self.prepended(base) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       base.include SpreeCmCommissioner::TaxonKind
       base.include SpreeCmCommissioner::Transit::TaxonBitwise
 
@@ -33,6 +32,7 @@ module SpreeCmCommissioner
       # Update children association to work with nested set (lft, rgt)
       base.has_many :children, -> { order(:lft) }, class_name: 'Spree::Taxon', foreign_key: :parent_id, dependent: :destroy
       base.has_many :children_classifications, through: :children, source: :classifications, class_name: 'Spree::Classification'
+      base.has_many :children_products, through: :children_classifications, class_name: 'Spree::Product', source: :product
 
       base.has_many :notification_taxons, class_name: 'SpreeCmCommissioner::NotificationTaxon'
       base.has_many :customer_notifications, through: :notification_taxons, class_name: 'SpreeCmCommissioner::CustomerNotification'
@@ -76,7 +76,6 @@ module SpreeCmCommissioner
         find_by(slug: "events-#{id}")
       end
     end
-    # rubocop:enable Metrics/MethodLength
 
     def background_color
       preferred_background_color

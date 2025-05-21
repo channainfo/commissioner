@@ -57,6 +57,29 @@ RSpec.describe Spree::Product, type: :model do
         expect(variant2.reload.vendor_id).to eq vendor2.id
       end
     end
+
+    describe '#set_event_id' do
+      context 'when association taxon is section of an event' do
+        let(:taxonomy) { create(:taxonomy, kind: :event) }
+        let(:event) { create(:taxon, name: 'BunPhum', taxonomy: taxonomy) }
+        let(:section) { create(:taxon, parent: event, taxonomy: taxonomy, name: 'Section A') }
+
+        it 'set event_id to product' do
+          product = create(:product, taxons: [section])
+          expect(product.event_id).to eq event.id
+        end
+      end
+
+      context 'when association taxon is not event section' do
+        let(:taxonomy) { create(:taxonomy, kind: :cms) }
+        let(:taxon) { create(:taxon, taxonomy: taxonomy, name: 'CMS') }
+
+        it 'set event_id: nil to product' do
+          product = create(:product, taxons: [taxon])
+          expect(product.event_id).to eq nil
+        end
+      end
+    end
   end
 
   describe 'scope' do

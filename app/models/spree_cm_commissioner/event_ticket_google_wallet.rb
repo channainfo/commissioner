@@ -53,11 +53,11 @@ module SpreeCmCommissioner
     end
 
     def event_start_date
-      product.taxons.first&.from_date
+      product.event&.from_date
     end
 
     def event_end_date
-      product.taxons.first&.to_date
+      product.event&.to_date
     end
 
     def set_class_id

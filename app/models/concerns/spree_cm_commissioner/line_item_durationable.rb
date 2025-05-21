@@ -42,15 +42,11 @@ module SpreeCmCommissioner
       end
     end
 
-    def event
-      taxons.event.first
-    end
-
     private
 
     def set_duration
-      self.from_date ||= variant.start_date_time
-      self.to_date ||= variant.end_date_time
+      self.from_date ||= variant.start_date_time || event&.from_date
+      self.to_date ||= variant.end_date_time || event&.to_date
     end
   end
 end

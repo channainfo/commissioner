@@ -117,7 +117,7 @@ module SpreeCmCommissioner
     end
 
     def set_event_id
-      self.event_id ||= line_item.associated_event&.id if line_item.present?
+      self.event_id ||= line_item&.event_id
     end
 
     def assign_seat_number

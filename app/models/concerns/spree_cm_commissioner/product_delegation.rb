@@ -9,7 +9,6 @@ module SpreeCmCommissioner
                :need_confirmation?, :need_confirmation, :kyc,
                :allow_anonymous_booking,
                :accommodation?, :service?, :ecommerce?,
-               :associated_event,
                :allow_self_check_in,
                :allow_self_check_in?,
                :required_self_check_in_location,

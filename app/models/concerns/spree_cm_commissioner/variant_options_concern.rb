@@ -6,6 +6,8 @@ module SpreeCmCommissioner
       before_save :set_options_to_public_metadata
 
       delegate :location,
+               :start_date,
+               :start_time,
                :reminder_in_hours,
                :duration_in_hours,
                :duration_in_minutes,
@@ -48,6 +50,8 @@ module SpreeCmCommissioner
       option_values.detect { |o| o.option_type.name.downcase.strip == option_type_name.downcase.strip }.try(:name)
     end
 
+    # No need to fallback to event start date to avoid n+1.
+    # To get end_time duration of event, include event when needed instead.
     def start_date_time
       return nil if start_date.blank?
       return start_date if start_time.blank?
@@ -55,6 +59,8 @@ module SpreeCmCommissioner
       start_date.change(hour: start_time.hour, min: start_time.min, sec: start_time.sec)
     end
 
+    # No need to fallback to event end date to avoid n+1.
+    # To get end_time duration of event, include event when needed instead.
     def end_date_time
       return nil if end_date.blank?
       return end_date if end_time.blank?
@@ -62,24 +68,16 @@ module SpreeCmCommissioner
       end_date.change(hour: end_time.hour, min: end_time.min, sec: end_time.sec)
     end
 
-    def start_date
-      options.start_date || event&.from_date
-    end
-
     def end_date
       return start_date + options.total_duration_in_seconds.seconds if start_date.present? && options.total_duration_in_seconds.positive?
 
-      options.end_date || event&.to_date
-    end
-
-    def start_time
-      options.start_time || event&.from_date
+      options.end_date
     end
 
     def end_time
       return start_time + options.total_duration_in_seconds.seconds if start_time.present? && options.total_duration_in_seconds.positive?
 
-      options.end_time || event&.to_date
+      options.end_time
     end
 
     def post_paid?
