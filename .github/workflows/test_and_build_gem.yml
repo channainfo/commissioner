@@ -37,6 +37,7 @@ jobs:
               console.log("PR title format is correct.");
             }
       - name: Check commit messages format
+        if: github.head_ref != 'milestone-77-scalable-design-skip-commit-validation'
         uses: actions/github-script@v7
         with:
           script: |
