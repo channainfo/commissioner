@@ -5,6 +5,7 @@ module SpreeCmCommissioner
 
       base.belongs_to :accepter, class_name: 'Spree::User', optional: true
       base.belongs_to :rejecter, class_name: 'Spree::User', optional: true
+      base.belongs_to :event, class_name: 'Spree::Taxon', optional: true, inverse_of: :line_items
 
       base.has_one :google_wallet, class_name: 'SpreeCmCommissioner::GoogleWallet', through: :product
 
@@ -14,6 +15,8 @@ module SpreeCmCommissioner
       base.has_many :pending_guests, pending_guests_query, class_name: 'SpreeCmCommissioner::Guest', dependent: :destroy
       base.has_many :product_completion_steps, class_name: 'SpreeCmCommissioner::ProductCompletionStep', through: :product
       base.has_many :line_item_seats, class_name: 'SpreeCmCommissioner::LineItemSeat', dependent: :destroy
+
+      base.before_validation :set_event_id
 
       base.before_save :update_vendor_id
       base.before_save :update_quantity, if: :transit?
@@ -204,6 +207,10 @@ module SpreeCmCommissioner
       return if line_item_seats.blank?
 
       self.quantity = line_item_seats.size
+    end
+
+    def set_event_id
+      self.event_id ||= product.event_id
     end
 
     def update_vendor_id

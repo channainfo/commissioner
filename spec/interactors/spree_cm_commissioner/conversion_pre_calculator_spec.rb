@@ -90,17 +90,17 @@ RSpec.describe SpreeCmCommissioner::ConversionPreCalculator do
     context 'when event_id is present' do
       let(:taxonomy) { create(:taxonomy, kind: :event) }
       let(:event) { create(:taxon, name: 'BunPhum', taxonomy: taxonomy) }
-      let!(:section1) { create(:taxon, parent: event, taxonomy: taxonomy, name: 'Section A', products: [product_without_bib, product_with_5km_bib, product_with_7km_bib]) }
-      let!(:section2) { create(:taxon, parent: event, taxonomy: taxonomy, name: 'Section B', products: [product_with_5km_bib_from_different_section]) }
+      let!(:section1) { create(:taxon, parent: event, taxonomy: taxonomy, name: 'Section A') }
+      let!(:section2) { create(:taxon, parent: event, taxonomy: taxonomy, name: 'Section B') }
 
       let(:bib_prefix) { create(:cm_option_type, :bib_prefix) }
       let(:bib_prefix_5km) { create(:cm_option_value, name: '5KM', option_type: bib_prefix) }
       let(:bib_prefix_7km) { create(:cm_option_value, name: '7KM', option_type: bib_prefix) }
 
-      let(:product_without_bib) { create(:product, option_types: []) }
-      let(:product_with_5km_bib) { create(:product, option_types: [bib_prefix]) }
-      let(:product_with_7km_bib) { create(:product, option_types: [bib_prefix]) }
-      let(:product_with_5km_bib_from_different_section) { create(:product, option_types: [bib_prefix]) }
+      let(:product_without_bib) { create(:product, option_types: [], taxons: [section1]) }
+      let(:product_with_5km_bib) { create(:product, option_types: [bib_prefix], taxons: [section1]) }
+      let(:product_with_7km_bib) { create(:product, option_types: [bib_prefix], taxons: [section1]) }
+      let(:product_with_5km_bib_from_different_section) { create(:product, option_types: [bib_prefix], taxons: [section2]) }
 
       let(:variant_without_bib) { create(:variant, product: product_without_bib) }
       let(:variant_with_5km_bib) { create(:variant, option_values: [bib_prefix_5km], product: product_with_5km_bib) }
