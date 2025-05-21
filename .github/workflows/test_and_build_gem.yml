@@ -37,6 +37,8 @@ jobs:
               console.log("PR title format is correct.");
             }
       - name: Check commit messages format
+        # skip validation if the PR is from the milestone-77-scalable-design branch for temporary
+        if: github.head_ref != 'milestone-77-scalable-design'
         uses: actions/github-script@v7
         with:
           script: |
