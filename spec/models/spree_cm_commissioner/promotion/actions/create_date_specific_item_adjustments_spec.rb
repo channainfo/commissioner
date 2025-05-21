@@ -10,7 +10,7 @@ RSpec.describe SpreeCmCommissioner::Promotion::Actions::CreateDateSpecificItemAd
       price: BigDecimal('10.0'),
       product: product,
       from_date: '2023-01-10'.to_date,
-      to_date: '2023-01-13'.to_date
+      to_date: '2023-01-12'.to_date
     )
   }
 
@@ -22,7 +22,7 @@ RSpec.describe SpreeCmCommissioner::Promotion::Actions::CreateDateSpecificItemAd
       price: BigDecimal('10.0'),
       product: product,
       from_date: '2023-01-13'.to_date,
-      to_date: '2023-01-15'.to_date
+      to_date: '2023-01-14'.to_date
     )
   }
 

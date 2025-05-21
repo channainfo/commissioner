@@ -25,7 +25,7 @@ RSpec.describe Spree::Variant, type: :model do
 
       let(:vendor) { create(:active_vendor, stock_locations: [ create(:stock_location) ]) }
       let(:product) {
-        product = create(:base_product, vendor: vendor, option_types: [ product_kind_option_type, normal_option_type ])
+        product = create(:cm_base_product, vendor: vendor, option_types: [ product_kind_option_type, normal_option_type ], product_type: :accommodation)
         product.reload
       }
 
@@ -82,6 +82,29 @@ RSpec.describe Spree::Variant, type: :model do
     it { is_expected.to have_many(:guest_card_classes).through(:variant_guest_card_class).class_name('SpreeCmCommissioner::GuestCardClass') }
   end
 
+  describe 'scopes' do
+    let!(:permanent_variant) { create(:cm_variant, product: create(:cm_product, product_type: 'service')) }
+    let!(:non_permanent_variant) { create(:cm_variant, product: create(:cm_product, product_type: 'ecommerce')) }
+
+    describe '.with_permanent_stock' do
+      it 'returns only variants with permanent product types' do
+        result = described_class.with_permanent_stock
+
+        expect(result).to include(permanent_variant)
+        expect(result).not_to include(non_permanent_variant)
+      end
+    end
+
+    describe '.with_non_permanent_stock' do
+      it 'returns only variants with non-permanent product types' do
+        result = described_class.with_non_permanent_stock
+
+        expect(result).to include(non_permanent_variant)
+        expect(result).not_to include(permanent_variant)
+      end
+    end
+  end
+
   describe 'callbacks' do
     context '#after_commit' do
       let(:vendor) { create(:active_vendor, name: 'Angkor Hotel', min_price: 10, max_price: 30) }
@@ -89,9 +112,9 @@ RSpec.describe Spree::Variant, type: :model do
       let!(:option_type) { create(:option_type, name: 'location', presentation: 'Location', attr_type: 'state_selection') }
       let!(:option_value) { create(:option_value, option_type: option_type, name: state.id) }
       let!(:stock_location) { vendor.stock_locations.first.update(state: state) }
-      let!(:product1) { create(:base_product, name: 'Bedroom 1', vendor: vendor, price: 10 ) }
-      let!(:product2) { create(:base_product, name: 'Bedroom 2', vendor: vendor, price: 20 ) }
-      let!(:product3) { create(:base_product, name: 'Bedroom 3', vendor: vendor, price: 30 ) }
+      let!(:product1) { create(:cm_base_product, name: 'Bedroom 1', vendor: vendor, price: 10, product_type: :accommodation) }
+      let!(:product2) { create(:cm_base_product, name: 'Bedroom 2', vendor: vendor, price: 20, product_type: :accommodation) }
+      let!(:product3) { create(:cm_base_product, name: 'Bedroom 3', vendor: vendor, price: 30, product_type: :accommodation) }
 
       it 'updates vendor min_price' do
         subject { product1.update(price: 5) }
@@ -117,10 +140,10 @@ RSpec.describe Spree::Variant, type: :model do
 
   # delivery required will be base entirely on option type
   describe '#delivery_required?' do
-    let(:product) { create(:product, product_type: :ecommerce, option_types: [option_type]) }
+    let(:product) { create(:cm_product, product_type: :ecommerce, option_types: [option_type]) }
     let(:option_type) { create(:cm_option_type, :delivery_option) }
 
-    subject { build(:variant, product: product, digitals: [create(:digital)], option_values: [option_value]) }
+    subject { build(:cm_variant, product: product, digitals: [create(:digital)], option_values: [option_value]) }
 
     context 'when deliver option is "delivery"' do
       let(:option_value) { create(:option_value, name: 'delivery', presentation: 'Delivery', option_type: option_type) }
@@ -143,8 +166,8 @@ RSpec.describe Spree::Variant, type: :model do
 
   describe '#non_digital_ecommerce?' do
     context 'when digital? is false and ecommerce? is true' do
-      let(:product) { create(:product, product_type: :ecommerce) }
-      subject { build(:variant, product: product, digitals: []) }
+      let(:product) { create(:cm_product, product_type: :ecommerce) }
+      subject { create(:cm_variant, product: product, digitals: []) }
 
       it 'returns true' do
         expect(subject.digital?).to be false
@@ -154,8 +177,8 @@ RSpec.describe Spree::Variant, type: :model do
     end
 
     context 'when digital? is true' do
-      let(:product) { create(:product, product_type: :ecommerce) }
-      subject { build(:variant, product: product, digitals: [create(:digital)]) }
+      let(:product) { create(:cm_product, product_type: :ecommerce) }
+      subject { create(:cm_variant, product: product, digitals: [create(:digital)]) }
 
       it 'returns false even variant is ecommerce' do
         expect(subject.ecommerce?).to be true
@@ -165,8 +188,8 @@ RSpec.describe Spree::Variant, type: :model do
     end
 
     context 'when ecommerce? is false' do
-      let(:product) { create(:product, product_type: :service) }
-      subject { build(:variant, product: product, digitals: []) }
+      let(:product) { create(:cm_product, product_type: :service) }
+      subject { create(:cm_variant, product: product, digitals: []) }
 
       it 'returns false event variant is not digital' do
         expect(subject.ecommerce?).to be false
@@ -177,8 +200,8 @@ RSpec.describe Spree::Variant, type: :model do
   end
 
   describe '#discontinued?' do
-    let(:product) { create(:product) }
-    let(:variant) { create(:variant, product: product) }
+    let(:product) { create(:cm_product) }
+    let(:variant) { create(:cm_variant, product: product) }
 
     context 'when variant is discontinued' do
       it 'return true' do
@@ -199,6 +222,62 @@ RSpec.describe Spree::Variant, type: :model do
     context 'when both variant, product are not discontinued' do
       it 'return false' do
         expect(variant.discontinued?).to be false
+      end
+    end
+  end
+
+  describe '#default_inventory_item_exist?' do
+    let(:variant) { create(:cm_variant) }
+
+    context 'when there is an inventory item with nil inventory_date' do
+      it { expect(variant.default_inventory_item_exist?).to be true }
+    end
+  end
+
+  describe '#create_default_non_permanent_inventory_item!' do
+    let(:variant) { create(:cm_variant, pregenerate_inventory_items: false) }
+
+    before do
+      allow(variant).to receive(:should_track_inventory?).and_return(true)
+      allow(variant).to receive(:total_on_hand).and_return(20)
+      allow(variant).to receive(:product_type).and_return('ecommerce')
+    end
+
+    context 'when default inventory item already exists' do
+      before { create(:cm_inventory_item, product_type: :ecommerce, variant: variant, inventory_date: nil) }
+
+      it 'does not create a new inventory item' do
+        expect { variant.create_default_non_permanent_inventory_item! }.not_to change(variant.inventory_items, :count)
+      end
+    end
+
+    context 'when it does not track inventory' do
+      before { allow(variant).to receive(:should_track_inventory?).and_return(false) }
+
+      it 'does not create an inventory item' do
+        expect { variant.create_default_non_permanent_inventory_item! }.not_to change(variant.reload.inventory_items, :count)
+      end
+    end
+
+    context 'when all conditions pass and no default inventory item exists' do
+      it 'creates a default inventory item with variant.total_on_hand' do
+        expect { variant.create_default_non_permanent_inventory_item! }.to change(variant.reload.inventory_items, :count).by(1)
+
+        item = variant.inventory_items.last
+
+        expect(item.quantity_available).to eq(20)
+        expect(item.max_capacity).to eq(20)
+        expect(item.product_type).to eq('ecommerce')
+      end
+    end
+
+    context 'when custom quantity and max capacity are passed' do
+      it 'uses the provided values instead of variant.total_on_hand' do
+        variant.create_default_non_permanent_inventory_item!(quantity_available: 5, max_capacity: 10)
+        item = variant.reload.inventory_items.last
+
+        expect(item.quantity_available).to eq(5)
+        expect(item.max_capacity).to eq(10)
       end
     end
   end

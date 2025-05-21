@@ -6,8 +6,8 @@ RSpec.describe SpreeCmCommissioner::Organizer::ExportGuestCsvService do
 
   let(:option_type) { create(:cm_option_type, name: 'Ticket Type ') }
   let(:option_value) { create(:cm_option_value, name: 'Standard', option_type: option_type) }
-  let(:variant) { create(:variant, option_values: [option_value]) }
-  let(:line_item) { create(:line_item, variant:variant) }
+  let(:variant) { create(:cm_variant, option_values: [option_value]) }
+  let(:line_item) { create(:line_item, variant: variant) }
   let(:guest) { create(:guest, first_name: 'Panha', last_name: 'Chom', phone_number: '012123456', dob: '1986-03-28', line_item:line_item) }
 
   let(:columns) { ['guest_name', 'guest_phone_number', 'guest_dob', "#{option_type.name}"] }

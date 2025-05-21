@@ -17,9 +17,11 @@
           </td>
           <td class="text-center d-flex flex-column align-items-center justify-content-center">
             <div style="width: 90px;">
-              <%= form_tag admin_stock_items_path(variant_id: variant.id, stock_location_id: stock_location.id), method: :post do %>
+              <%= form_tag admin_product_stock_managements_path(product_id: params[:product_id], variant_id: variant.id, stock_location_id: stock_location.id), method: :post do %>
                 <div class="input-group input-group-sm">
                   <%= number_field_tag 'stock_movement[quantity]', 0, class: 'form-control text-center p-0' %>
+                  <%= hidden_field_tag 'stock_movement[originator_id]', spree_current_user.id %>
+                  <%= hidden_field_tag 'stock_movement[originator_type]', spree_current_user.class.name %>
                   <div class="input-group-append">
                     <%= button_tag(class: 'btn btn-outline-success pl-2 pr-1') do %>
                       <%= svg_icon(name: 'arrow-left-right.svg', classes: "icon", width: 14, height: 14) %>
@@ -32,7 +34,10 @@
           <td class="text-center">
             <% if item.persisted? && can?(:update, item) %>
               <%= form_tag admin_stock_item_path(item), method: :put, class: 'toggle_stock_item_backorderable' do %>
-                <%= check_box_tag 'stock_item[backorderable]', true, item.backorderable?, class: 'stock_item_backorderable', id: "stock_item_backorderable_#{stock_location.id}" %>
+                <%= check_box_tag 'stock_item[backorderable]', true, item.backorderable?,
+                  class: 'stock_item_backorderable',
+                  id: "stock_item_backorderable_#{stock_location.id}",
+                  onclick: "if (!confirm('Are you sure to change backorderable status?')) { this.checked = !this.checked; }" %>
               <% end %>
             <% else %>
               <%= 'N/A' %>

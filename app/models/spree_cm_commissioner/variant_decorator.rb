@@ -1,9 +1,9 @@
 module SpreeCmCommissioner
   module VariantDecorator
-    def self.prepended(base)
+    def self.prepended(base) # rubocop:disable Metrics/AbcSize
+      base.include SpreeCmCommissioner::ProductType
       base.include SpreeCmCommissioner::ProductDelegation
       base.include SpreeCmCommissioner::VariantOptionsConcern
-
       base.after_commit :update_vendor_price
       base.validate     :validate_option_types
       base.before_save -> { self.track_inventory = false }, if: :subscribable?
@@ -21,11 +21,19 @@ module SpreeCmCommissioner
       base.has_many :variant_guest_card_class, class_name: 'SpreeCmCommissioner::VariantGuestCardClass'
       base.has_many :guest_card_classes, class_name: 'SpreeCmCommissioner::GuestCardClass', through: :variant_guest_card_class
 
+      base.has_many :inventory_items, class_name: 'SpreeCmCommissioner::InventoryItem'
+
       base.scope :subscribable, -> { active.joins(:product).where(product: { subscribable: true, status: :active }) }
+      base.scope :with_permanent_stock, -> { where(product_type: base::PERMANENT_STOCK_PRODUCT_TYPES) }
+      base.scope :with_non_permanent_stock, -> { where.not(product_type: base::PERMANENT_STOCK_PRODUCT_TYPES) }
+
       base.has_one :trip,
                    class_name: 'SpreeCmCommissioner::Trip'
       base.has_many :trip_stops, class_name: 'SpreeCmCommissioner::TripStop', dependent: :destroy, foreign_key: :trip_id
       base.accepts_nested_attributes_for :option_values
+
+      base.before_save -> { self.product_type = product.product_type }, if: -> { product_type.nil? }
+
       base.after_commit :sync_trip, if: :transit?
       base.accepts_nested_attributes_for :trip_stops, allow_destroy: true
       base.after_commit :create_trip_stops, if: :transit?
@@ -51,12 +59,24 @@ module SpreeCmCommissioner
       super || product.discontinued?
     end
 
-    def permanent_stock?
-      accommodation?
-    end
-
     def event
       taxons.event.first
+    end
+
+    def default_inventory_item_exist?
+      inventory_items.exists?(inventory_date: nil)
+    end
+
+    def create_default_non_permanent_inventory_item!(quantity_available: nil, max_capacity: nil)
+      return if product_type.blank? # handle in case product not exist for variant.
+      return unless should_track_inventory?
+      return if default_inventory_item_exist?
+
+      inventory_items.create!(
+        product_type: product_type,
+        quantity_available: [0, quantity_available || total_on_hand].max,
+        max_capacity: [0, max_capacity || total_on_hand].max
+      )
     end
 
     # override
@@ -74,30 +94,15 @@ module SpreeCmCommissioner
       "#{display_sku} - #{display_price}"
     end
 
-    def transit?
-      product.product_type == 'transit'
-    end
-
     # override
-    def in_stock?
-      available_quantity.positive?
+    def in_stock?(options = {})
+      SpreeCmCommissioner::Stock::AvailabilityChecker.new(self, options).can_supply?
     end
 
     private
 
-    def total_purchases
-      Spree::LineItem.complete.where(variant_id: id).sum(:quantity).to_i
-    end
-
-    def available_quantity
-      stock_count = stock_items.sum(&:count_on_hand)
-      return stock_count if delivery_required?
-
-      stock_count - total_purchases
-    end
-
     def update_vendor_price
-      return unless vendor.present? && product&.product_type == vendor&.primary_product_type
+      return unless vendor.present? && product_type == vendor&.primary_product_type
 
       vendor.update(min_price: price) if price < vendor.min_price
       vendor.update(max_price: price) if price > vendor.max_price
@@ -123,7 +128,7 @@ module SpreeCmCommissioner
     end
 
     def sync_trip
-      return unless product.product_type == 'transit'
+      return unless transit?
 
       trip = SpreeCmCommissioner::Trip.find_or_initialize_by(variant_id: id)
 

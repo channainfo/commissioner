@@ -1,6 +1,19 @@
 FactoryBot.define do
-  factory :cm_product, parent: :base_product do
+  factory :cm_product_in_stock, parent: :product_in_stock do
+    product_type { :ecommerce }
+  end
+
+  factory :cm_product_with_option_types, parent: :product_with_option_types do
+    product_type { :ecommerce }
+  end
+
+  factory :cm_base_product, parent: :base_product do
+    product_type { :ecommerce }
+  end
+
+  factory :cm_product, parent: :product do
     vendor { Spree::Vendor.first || create(:cm_vendor) }
+    product_type { :ecommerce }
 
     before(:create) do |product|
       create(:stock_location) unless Spree::StockLocation.any?
@@ -85,7 +98,7 @@ FactoryBot.define do
         option_value2 = create(:cm_option_value, presentation: "#{evaluator.due_date} Days", name: evaluator.due_date.to_s, option_type: product.option_types[1])
         option_value3 = create(:cm_option_value, presentation: "#{evaluator.payment_option}", name: evaluator.payment_option.to_s, option_type: product.option_types[2])
 
-        variant = create(:variant, price: product.price, product: product)
+        variant = create(:cm_variant, price: product.price, product: product)
         variant.option_values = [option_value1, option_value2, option_value3]
         variant.save!
 
@@ -103,7 +116,7 @@ FactoryBot.define do
       end
 
       after(:create) do |product, evaluator|
-        variant = create(:variant, price: product.price, product: product)
+        variant = create(:cm_variant, price: product.price, product: product)
         variant.save!
 
         variant.stock_items.first.adjust_count_on_hand(evaluator.total_inventory)
@@ -136,12 +149,12 @@ FactoryBot.define do
           create(:cm_option_value, presentation: 'Yes', name: '1', option_type: product.option_types.find_by(name: 'bib-pre-generation-on-create'))
         end
 
-        variant1 = create(:variant, price: product.price, product: product)
+        variant1 = create(:cm_variant, price: product.price, product: product)
         variant1.option_values = [option_value1]
         variant1.option_values << bib_pre_generation_option_value if evaluator.bib_pre_generation_on_create
         variant1.save!
 
-        variant2 = create(:variant, price: product.price, product: product)
+        variant2 = create(:cm_variant, price: product.price, product: product)
         variant2.option_values = [option_value2]
         variant2.option_values << bib_pre_generation_option_value if evaluator.bib_pre_generation_on_create
         variant2.save!

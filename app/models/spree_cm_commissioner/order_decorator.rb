@@ -58,6 +58,13 @@ module SpreeCmCommissioner
       end
     end
 
+    # override
+    # spree use this method to check stock availability & consider whether :order can continue to next state.
+    def insufficient_stock_lines
+      checker = SpreeCmCommissioner::Stock::OrderAvailabilityChecker.new(self)
+      checker.insufficient_stock_lines
+    end
+
     def ticket_seller_user?
       return false if user.nil?
 
@@ -193,6 +200,14 @@ module SpreeCmCommissioner
     end
 
     private
+
+    def unstock_inventory_in_redis!
+      SpreeCmCommissioner::RedisStock::InventoryUpdater.new(line_item_ids).unstock!
+    end
+
+    def restock_inventory_in_redis!
+      SpreeCmCommissioner::RedisStock::InventoryUpdater.new(line_item_ids).restock!
+    end
 
     # override :spree_api
     def webhook_payload_body

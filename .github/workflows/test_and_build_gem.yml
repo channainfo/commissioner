@@ -10,6 +10,7 @@ on:
       - reopened
     branches:
       - develop
+      - milestone-77-scalable-design
   push:
     tags:
       - "*"
@@ -36,6 +37,8 @@ jobs:
               console.log("PR title format is correct.");
             }
       - name: Check commit messages format
+        # skip validation if the PR is from the milestone-77-scalable-design branch for temporary
+        if: github.head_ref != 'milestone-77-scalable-design'
         uses: actions/github-script@v7
         with:
           script: |
@@ -133,6 +136,17 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
+      redis:
+        image: redis
+        # Set health checks to wait until redis has started
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379 # Maps port 6379 on service container to the host
+
     steps:
       - uses: actions/checkout@v3
 
@@ -168,8 +182,9 @@ jobs:
       - name: Run test
         env:
           DATABASE_URL: postgres://myuser:mypassword@localhost:5432/test_db
+          REDIS_URL: redis://localhost:6379/0
 
-        if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'develop'
+        if: github.event_name == 'pull_request'
         run: |
           bundle exec rake
 

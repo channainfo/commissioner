@@ -40,9 +40,17 @@ module SpreeCmCommissioner
                          after: %r{//= require spree/backend}, verbose: true
 
         # For NPM support
-        template 'app/javascript/spree_cm_commissioner/utilities.js'
-        inject_into_file 'app/javascript/spree-dashboard.js', "\nimport \"./spree_cm_commissioner/utilities.js\"",
-                         after: %r{import "@spree/dashboard"}, verbose: true
+        if File.exist?(File.join(destination_root, 'app/javascript/spree_dashboard'))
+          template 'app/javascript/spree_dashboard/spree_cm_commissioner/utilities.js'
+          inject_into_file 'app/javascript/spree_dashboard/spree-dashboard.js', "\nimport \"./spree_cm_commissioner/utilities.js\"",
+                           after: %r{import "@spree/dashboard"}, verbose: true
+        else
+          Logger.new($stdout).debug <<~MSG
+            SpreeCmCommissioner: JavaScript files for the dashboard are missing.
+            Please move your JavaScript files to the appropriate location in
+            app/javascript/spree_dashboard.
+          MSG
+        end
       end
 
       def install_telegram_web_bot

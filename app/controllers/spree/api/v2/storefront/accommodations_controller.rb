@@ -5,55 +5,38 @@ module Spree
         class AccommodationsController < ::Spree::Api::V2::ResourceController
           private
 
+          # override
           def collection
-            @collection ||= collection_finder.call(params: params).value
+            @collection ||= SpreeCmCommissioner::Accommodations::Find.new(
+              from_date: params[:from_date]&.to_date,
+              to_date: params[:to_date]&.to_date,
+              state_id: params[:province_id],
+              number_of_adults: params[:adult].to_i,
+              number_of_kids: params[:children].to_i
+            ).execute
           end
 
-          def paginated_collection
-            return @paginated_collection if defined?(@paginated_collection)
-
-            @paginated_collection = super
-            @paginated_collection = apply_service_availability(@paginated_collection)
-          end
-
+          # override
           def resource
-            resource = resource_finder.call(params: params).value
-            raise ActiveRecord::RecordNotFound if resource.nil?
-
-            apply_service_availability(resource)
+            @resource ||= collection.find_by!(slug: params[:id])
           end
 
-          def apply_service_availability(resource)
-            SpreeCmCommissioner::ApplyServiceAvailability.call(calendarable: resource,
-                                                               from_date: params[:from_date].to_date,
-                                                               to_date: params[:to_date].to_date
-                                                              ).value
-          end
-
+          # override
           def allowed_sort_attributes
             super << :min_price << :max_price
           end
 
-          def model_class
-            Spree::Vendor
-          end
-
+          # override
           def resource_serializer
             Spree::V2::Storefront::AccommodationSerializer
           end
 
+          # override
           def collection_serializer
             Spree::V2::Storefront::AccommodationSerializer
           end
 
-          def collection_finder
-            SpreeCmCommissioner::AccommodationSearchDetail
-          end
-
-          def resource_finder
-            SpreeCmCommissioner::AccommodationSearchDetail
-          end
-
+          # override
           def required_schema
             SpreeCmCommissioner::AccommodationRequestSchema
           end

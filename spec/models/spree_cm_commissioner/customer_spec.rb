@@ -52,8 +52,8 @@ RSpec.describe SpreeCmCommissioner::Customer, type: :model do
       create(:cm_customer_taxon, customer: customer1, taxon: taxon1)
       create(:cm_customer_taxon, customer: customer2, taxon: taxon2)
 
-      product1 = create(:product, vendor: vendor, subscribable: true)
-      product2 = create(:product, vendor: vendor, subscribable: true)
+      product1 = create(:cm_product, vendor: vendor, subscribable: true)
+      product2 = create(:cm_product, vendor: vendor, subscribable: true)
 
       product1.taxons = [taxon1]
       product2.taxons = [taxon2]

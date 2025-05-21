@@ -13,11 +13,14 @@ module SpreeCmCommissioner
       state_machine.after_transition to: :complete, do: :notify_order_complete_telegram_notification_to_user, unless: :subscription?
       state_machine.after_transition to: :complete, do: :send_order_complete_telegram_alert_to_vendors, unless: :need_confirmation?
       state_machine.after_transition to: :complete, do: :send_order_complete_telegram_alert_to_store, unless: :need_confirmation?
+      state_machine.around_transition to: :complete, do: :handle_unstock_in_redis
 
       state_machine.after_transition to: :complete, do: :send_transaction_email_to_user, if: :user_has_email?
       state_machine.after_transition to: :resumed, do: :precalculate_conversion
+      state_machine.around_transition to: :resumed, do: :handle_unstock_in_redis
 
       state_machine.after_transition to: :canceled, do: :precalculate_conversion
+      state_machine.after_transition to: :canceled, do: :restock_inventory_in_redis!
 
       scope :accepted, -> { where(request_state: 'accepted') }
 
@@ -65,6 +68,29 @@ module SpreeCmCommissioner
       line_items.each do |item|
         SpreeCmCommissioner::ConversionPreCalculatorJob.perform_later(item.product_id)
       end
+    end
+
+    def handle_unstock_in_redis
+      ActiveRecord::Base.transaction do
+        yield # Equal to block.call
+
+        # After the transition is complete, the following code will execute first before proceeding to other `after_transition` callbacks.
+        # This ensures that if `unstock_inventory_in_redis!` fails, the state will be rolled back,
+        # and neither the `finalize!` method nor any notifications will be triggered.
+        # The payment will be reversed in vPago gem, and `Spree::Checkout::Complete` will be called, which checks `order.reload.complete?`.
+        # This is critical because if the order state is complete, the payment will be marked as paid.
+        CmAppLogger.log(label: 'order_state_machine_before_unstock', data: { order_id: id, state: state })
+        unstock_inventory_in_redis!
+        # We rollback only order state, and we keep payment state as it is.
+        # We implement payment in vPago gem, and it will be reversed in the gem.
+        # Some bank has api for refund, but some don't have the api to refund yet. So we keep the payment state as it is and refund manually.
+        CmAppLogger.log(label: 'order_state_machine_after_unstock', data: { order_id: id, state: state })
+      end
+    rescue StandardError => e
+      CmAppLogger.log(label: 'order_state_machine',
+                      data: { order_id: id, error: e.message, type: e.class.name, backtrace: e.backtrace.first(5).join("\n") }
+                     )
+      raise e
     end
 
     def generate_bib_number

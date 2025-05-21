@@ -11,7 +11,7 @@ RSpec.describe SpreeCmCommissioner::EnsureEventIdForGuestsJob, type: :job do
     let(:taxonomy) { create(:taxonomy, kind: :event) }
     let(:event) { create(:taxon, name: 'BunPhum', taxonomy: taxonomy) }
     let(:section) { create(:taxon, parent: event, taxonomy: taxonomy, name: 'Section A') }
-    let(:product) { create(:product, product_type: :ecommerce, taxons: [section]) }
+    let(:product) { create(:cm_product, product_type: :ecommerce, taxons: [section]) }
     let(:order) { create(:order, completed_at: Date.current) }
     let(:line_item) { create(:line_item, product: product, order: order) }
 

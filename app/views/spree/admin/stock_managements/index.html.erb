@@ -19,29 +19,72 @@
       <% @variants.each do |variant| %>
         <tr id="<%= spree_dom_id variant %>" data-hook="admin_product_stock_management_index_rows">
           <td class="image text-center">
-              <%= small_image(variant) %>
-              <div class="mt-4">
-                Reserved Stock: <%= @reserved_stocks[variant.id] || 0 %></strong>
-              </div>
+            <%= small_image(variant) %>
           </td>
           <td>
             <%= variant.sku_and_options_text %>
             <%= form_tag admin_product_variants_including_master_path(@product, variant, format: :js), method: :put, class: 'toggle_variant_track_inventory mt-2' do %>
               <div class="checkbox">
                 <%= label_tag "track_inventory_#{ variant.id }", class: 'm-0' do %>
-                  <%= check_box_tag 'track_inventory', 1, variant.track_inventory?, class: 'track_inventory_checkbox', id: "track_inventory_#{ variant.id }" %>
+                  <%= check_box_tag 'track_inventory', 1, variant.track_inventory?,
+                    class: 'track_inventory_checkbox',
+                    id: "track_inventory_#{ variant.id }",
+                    onclick: "if (!confirm('Are you sure to change track inventory status?')) { this.checked = !this.checked; }" %>
                   <%= Spree.t(:track_inventory) %>
                   <%= hidden_field_tag 'variant[track_inventory]', variant.track_inventory?, class: 'variant_track_inventory', id: "variant_track_inventory_#{variant.id}" %>
                 <% end %>
               </div>
             <% end if can?(:update, @product) && can?(:update, variant) %>
+
+            <% if defined?(@reserved_stocks) %>
+              <div>
+                <%= svg_icon name: "cart-check.svg", width: '14', height: '14' %>
+                <%= label_tag "reserved_stock#{variant.id}", "Reserved Stock: #{@reserved_stocks[variant.id] || 0}", class: "m-0" %>
+                <%= link_to_with_icon('capture.svg', "Create Inventory Item", create_inventory_item_admin_product_stock_managements_path(@product, variant_id: variant.id),
+                  method: :post,
+                  remote: false,
+                  class: 'icon_link btn btn-sm btn-outline-primary ml-2',
+                  no_text: true
+                ) unless @inventory_items[variant.id].present? %>
+              </div>
+            <% end %>
+
             <% if variant.permanent_stock? %>
               <div>
                 <span type="button" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="This product stock will renew every day">
                     <%= svg_icon name: "info-circle-fill.svg", width: '14', height: '14' %>
                 </span>
-                <%= label_tag "permanent_stock_#{ variant.id }", Spree.t(:permanent_stock) %>
+                <%= label_tag "permanent_stock_#{ variant.id }", Spree.t(:permanent_stock), class: "m-0" %>
               </div>
+            <% end %>
+
+            <% if defined?(@inventory_items) %>
+              <% @inventory_items[variant.id]&.each do |inventory_item| %>
+                <div>
+                  <%= svg_icon name: "handbag.svg", width: '14', height: '14' %>
+                  <%= label_tag "max_capacity_#{ inventory_item.id }", "Max capacity: #{inventory_item.max_capacity}", class: "m-0" %>
+                </div>
+                <div>
+                  <%= svg_icon name: "approve.svg", width: '14', height: '14' %>
+                  <%= label_tag "quantity_available_#{ inventory_item.id }", "Quantity available: #{inventory_item.quantity_available}", class: "m-0" %>
+
+                  <% synced = inventory_item.quantity_available == @cached_inventory_items[inventory_item.id].quantity_available %>
+                  <span type="button" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="<%= inventory_item_message(inventory_item, @cached_inventory_items[inventory_item.id]) %>">
+                    <% if synced %>
+                      <%= svg_icon name: "cloud-check.svg", width: '14', height: '14', classes: 'text-success' %>
+                    <% else %>
+                      <%= svg_icon name: "cloud-slash.svg", width: '14', height: '14', classes: 'text-danger' %>
+                    <% end %>
+                  </span>
+
+                  <%= link_to_with_icon('arrow-counterclockwise.svg', "Reset Inventory Item", reset_inventory_item_admin_product_stock_managements_path(@product, inventory_item_id: inventory_item.id),
+                    method: :patch,
+                    remote: false,
+                    class: 'icon_link btn btn-sm outline text-dark',
+                    data: { confirm: "Only reset if stock is incorrect. Are you sure?" }, no_text: true
+                  ) %>
+                </div>
+              <% end %>
             <% end %>
           </td>
 
@@ -53,3 +96,9 @@
     </tbody>
   </table>
 </div>
+
+<%= turbo_frame_tag "calendar", src: calendar_admin_product_stock_managements_path(year: params[:year]) do %>
+  <div class="spinner-border mt-2" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+<% end if @product.permanent_stock? %>
