@@ -1,11 +1,19 @@
 <!-- override base_mailer_header.html.erb -->
 <tr>
   <td class="email-masthead">
-    <%= link_to @sender_name, class: 'template-label' do %>
+    <% if defined?(@tenant) && @tenant.present? %>
       <% if @logo_path.present? %>
         <%= image_tag @logo_path, class: 'logo', alt: @sender_name, title: @sender_name %>
       <% else %>
-        <%= @sender_name %>
+        <span class="template-label"><%= @sender_name %></span>
+      <% end %>
+    <% else %>
+      <%= link_to current_store.url, class: 'template-label' do %>
+        <% if @logo_path.present? %>
+          <%= image_tag @logo_path, class: 'logo', alt: current_store.name, title: current_store.name %>
+        <% else %>
+          <%= current_store.name %>
+        <% end %>
       <% end %>
     <% end %>
   </td>

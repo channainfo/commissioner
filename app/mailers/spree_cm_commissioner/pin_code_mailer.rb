@@ -4,6 +4,7 @@ module SpreeCmCommissioner
 
     def send_pin_code(pin_code_id, action, tenant)
       @pin_code = SpreeCmCommissioner::PinCode.find(pin_code_id)
+      @tenant = tenant
 
       @sender_name = sender_name(tenant)
       @sender_email = sender_email(tenant)
