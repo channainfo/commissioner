@@ -44,19 +44,10 @@ module SpreeCmCommissioner
     end
 
     def log_to_firebase
-      current_date = Time.zone.now.strftime('%Y-%m-%d')
-
-      document = firestore.col('waiting_guests')
-                          .doc(current_date)
-                          .col('records')
-                          .doc(waiting_guest_firebase_doc_id)
-
-      data = document.get.data.dup
-      data[:entered_room_at] = Time.zone.now
-      data[:page_path] = page_path
-      data[:tenant_id] = tenant_id
-
-      document.update(data)
+      SpreeCmCommissioner::WaitingRoomSessionFirebaseLoggerJob.perform_later(
+        room_session_id: context.room_session.id,
+        waiting_guest_firebase_doc_id: waiting_guest_firebase_doc_id
+      )
     end
 
     def call_other_waiting_guests

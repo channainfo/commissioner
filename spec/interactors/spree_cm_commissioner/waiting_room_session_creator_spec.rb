@@ -4,8 +4,8 @@ RSpec.describe SpreeCmCommissioner::WaitingRoomSessionCreator do
   describe '.call', :vcr do
     it 'generate jwt token, record session to db & log it in user firebase document' do
       ENV['WAITING_ROOM_SESSION_SIGNATURE'] = '4234f0a3-c42f-40b5-9057-7c006793cea4'
-      allow_any_instance_of(described_class).to receive(:log_to_firebase)
-      allow_any_instance_of(described_class).to receive(:full?).and_return(false)
+      expect_any_instance_of(described_class).to receive(:log_to_firebase).and_call_original
+      expect_any_instance_of(described_class).to receive(:full?).and_return(false)
 
       # https://github.com/channainfo/commissioner/issues/2185
       expect_any_instance_of(described_class).not_to receive(:call_other_waiting_guests)
