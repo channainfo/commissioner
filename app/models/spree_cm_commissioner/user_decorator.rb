@@ -134,6 +134,12 @@ module SpreeCmCommissioner
     def update_otp_enabled
       self.otp_enabled = otp_email || otp_phone_number
     end
+
+    def update_tracked_fields!(request)
+      ActiveRecord::Base.connected_to(role: :writing) do
+        super(request)
+      end
+    end
   end
 end
 
