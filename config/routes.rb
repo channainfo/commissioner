@@ -518,6 +518,7 @@ Spree::Core::Engine.add_routes do
         resource :user_contacts, only: [:update]
 
         resources :cms_pages, only: %i[index show]
+        resources :waiting_room_sessions, only: :create
       end
 
       namespace :storefront do
