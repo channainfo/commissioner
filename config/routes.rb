@@ -450,6 +450,7 @@ Spree::Core::Engine.add_routes do
         resources :images
         resource :s3_signed_urls
         resources :invites
+        resources :invite_guests, only: %i[show update]
       end
 
       namespace :tenant do
