@@ -1,7 +1,7 @@
 module SpreeCmCommissioner
   module CmsPageDecorator
     def self.prepended(base)
-      base.multi_tenant :tenant, class_name: 'SpreeCmCommissioner::Tenant'
+      base.belongs_to :tenant, class_name: 'SpreeCmCommissioner::Tenant'
     end
   end
 end
