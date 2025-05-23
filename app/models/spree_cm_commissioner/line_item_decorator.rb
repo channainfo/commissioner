@@ -64,6 +64,10 @@ module SpreeCmCommissioner
       base.include SpreeCmCommissioner::KycBitwise
     end
 
+    def kyc
+      variant.kyc || product.kyc
+    end
+
     def self.pending_guests_query
       lambda {
         left_outer_joins(:id_card)

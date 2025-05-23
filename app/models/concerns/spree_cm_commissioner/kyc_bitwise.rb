@@ -53,6 +53,8 @@ module SpreeCmCommissioner
     end
 
     def kyc_value_enabled?(bit_value)
+      return false if kyc.nil?
+
       kyc & bit_value != 0
     end
 

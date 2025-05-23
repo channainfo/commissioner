@@ -187,6 +187,26 @@ RSpec.describe Spree::LineItem, type: :model do
     end
   end
 
+  describe '#kyc' do
+    let(:product) { create(:product, kyc: 5) }
+    let(:variant) { create(:variant, product: product, kyc: nil) }
+    let(:line_item) { build(:line_item, variant: variant) }
+
+    context 'when variant kyc is nil' do
+      it 'returns the product kyc value' do
+        expect(line_item.kyc).to eq(product.kyc)
+      end
+    end
+
+    context 'when variant kyc is not nil' do
+      before { variant.kyc = 2 }
+
+      it 'returns the variant kyc value' do
+        expect(line_item.kyc).to eq(variant.kyc)
+      end
+    end
+  end
+
   # context 'transit?' do
   #   let!(:vet) {create(:vendor, name: 'Vet', code:"VET")}
   #   let!(:phnom_penh) { create(:cm_place, name: 'Phnom Penh') }

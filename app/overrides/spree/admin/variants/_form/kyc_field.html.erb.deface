@@ -1,0 +1,40 @@
+<!-- insert_bottom "[data-hook='admin_variant_form_additional_fields']" -->
+
+<p>Guest Information Fields</p>
+
+<div class="form-check mb-3">
+  <%= f.check_box :use_product_kyc, id: "toggleGuestInfo", class: 'form-check-input mr-2', checked: (@variant.kyc == nil) %>
+  <label for="toggleGuestInfo" class="form-check-label">
+    Use Product KYC
+  </label>
+</div>
+
+<div id="guestInfoForm" <% if @variant.kyc == nil %>style="display: none;"<% end %>">
+  <small class="form-text text-muted mb-4">
+    <%= raw I18n.t('kyc.variant_note') %>
+  </small>
+  <div class="row row-cols-2 row-cols-md-3">
+    <% @variant.class::BIT_FIELDS.each do |key, value| %>
+      <div class="col">
+        <div class="form-check form-check-inline">
+          <%= f.field_container key do %>
+            <%= f.check_box key, class: 'form-check-input', checked: @variant.kyc_value_enabled?(value) %>
+            <%= f.label key, key.to_s.sub(/^guest_/, '').titleize, class: 'form-check-label' %>
+            <%= f.error_message_on key, class: 'text-danger' %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("turbo:load", function () {
+    const checkbox = document.getElementById("toggleGuestInfo");
+    const guestForm = document.getElementById("guestInfoForm");
+
+    checkbox.addEventListener("change", function () {
+      guestForm.style.display = this.checked ? "none" : "block";
+    });
+  });
+</script>
