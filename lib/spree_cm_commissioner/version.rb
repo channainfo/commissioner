@@ -1,5 +1,5 @@
 module SpreeCmCommissioner
-  VERSION = '1.10.0-hotfix-sms'.freeze
+  VERSION = '1.12.0'.freeze
 
   module_function
 
