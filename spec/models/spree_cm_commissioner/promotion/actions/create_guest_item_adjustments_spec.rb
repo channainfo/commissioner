@@ -101,7 +101,7 @@ RSpec.describe SpreeCmCommissioner::Promotion::Actions::CreateGuestItemAdjustmen
       amount = subject.perform(order: order, promotion: promotion)
 
       expect(subject.adjustments.size).to eq 1
-      expect(subject.adjustments[0].adjustable).to eq line_item_with_1_guest
+      expect(subject.adjustments[0].adjustable.id).to eq line_item_with_1_guest.id
       expect(subject.adjustments[0].amount).to eq -1.0
     end
 
@@ -114,10 +114,10 @@ RSpec.describe SpreeCmCommissioner::Promotion::Actions::CreateGuestItemAdjustmen
 
       expect(subject.adjustments.size).to eq 2
 
-      expect(subject.adjustments[0].adjustable).to eq line_item_with_1_guest
+      expect(subject.adjustments[0].adjustable.id).to eq line_item_with_1_guest.id
       expect(subject.adjustments[0].amount).to eq -1.0
 
-      expect(subject.adjustments[1].adjustable).to eq line_item_with_2_guest
+      expect(subject.adjustments[1].adjustable.id).to eq line_item_with_2_guest.id
       expect(subject.adjustments[1].amount).to eq -2.0
    end
   end

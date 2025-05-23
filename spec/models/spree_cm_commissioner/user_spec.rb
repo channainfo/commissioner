@@ -177,4 +177,17 @@ RSpec.describe Spree::User, type: :model do
       end
     end
   end
+
+  describe '#update_tracked_fields!' do
+    let(:user) { create(:user) }
+    let(:request) { double('request', remote_ip: '123.123.123.123') }
+
+    it 'updates tracked fields and persists changes to the database' do
+      expect(ActiveRecord::Base).to receive(:connected_to).with(role: :writing).and_call_original
+
+      user.update_tracked_fields!(request)
+
+      expect(user.reload.last_sign_in_ip).to eq('123.123.123.123')
+    end
+  end
 end
