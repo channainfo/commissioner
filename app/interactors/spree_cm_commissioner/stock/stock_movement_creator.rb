@@ -13,10 +13,18 @@ module SpreeCmCommissioner
         stock_movement.stock_item = stock_location.set_up_stock_item(variant)
 
         if stock_movement.save
-          SpreeCmCommissioner::Stock::InventoryItemsAdjusterJob.perform_later(variant_id: variant.id, quantity: stock_movement.quantity)
+          adjust_inventory_items_async(variant_id, stock_movement.quantity)
           context.stock_movement = stock_movement
         else
           context.fail!(message: stock_movement.errors.full_messages.join(', '))
+        end
+      end
+
+      private
+
+      def adjust_inventory_items_async(variant_id, quantity)
+        CmAppLogger.log(label: "#{self.class.name}:call#adjust_inventory_items_async", data: { variant_id: variant_id, quantity: quantity }) do
+          SpreeCmCommissioner::Stock::InventoryItemsAdjusterJob.perform_later(variant_id: variant_id, quantity: quantity)
         end
       end
     end
