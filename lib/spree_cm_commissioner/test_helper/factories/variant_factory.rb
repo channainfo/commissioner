@@ -59,22 +59,28 @@ FactoryBot.define do
   end
 
   factory :trip, class: Spree::Variant do
-    permanent_stock { 5 }
     transient do
       departure_time { "10:00" }
       duration { "1" }
+      option_values { [] }
       route { }
     end
 
     before(:create) do |trip, evaluator|
       trip.product = evaluator.route
-
-      trip.option_values = [evaluator.departure_time, evaluator.duration]
+      trip.option_values = evaluator.option_values
     end
 
     after(:create) do |trip, evaluator|
-      trip.stock_items = [create(:stock_item, variant: trip, stock_location: evaluator.product.vendor.stock_locations.first)]
-      trip.stock_items.first.adjust_count_on_hand(10)
+      vehicle = SpreeCmCommissioner::Vehicle.find(trip.options.vehicle)
+      trip.stock_items = [create(:stock_item, variant: trip, count_on_hand: vehicle.number_of_seats, stock_location: evaluator.product.vendor.stock_locations.first)]
+      trip.stock_items.first.adjust_count_on_hand(-10)
+      trip.inventory_items.create!(
+        max_capacity: vehicle.number_of_seats,
+        quantity_available: vehicle.number_of_seats,
+        inventory_date: Date.today,
+        product_type: trip.product_type)
+      SpreeCmCommissioner::Stock::PermanentInventoryItemsGenerator.call(variant_ids: [trip.id])
     end
   end
 end
