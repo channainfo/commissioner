@@ -16,8 +16,6 @@ module SpreeCmCommissioner
       base.has_many :product_completion_steps, class_name: 'SpreeCmCommissioner::ProductCompletionStep', through: :product
       base.has_many :line_item_seats, class_name: 'SpreeCmCommissioner::LineItemSeat', dependent: :destroy
 
-      base.before_validation :set_event_id
-
       base.before_save :update_vendor_id
       base.before_save :update_quantity, if: :transit?
 
@@ -207,10 +205,6 @@ module SpreeCmCommissioner
       return if line_item_seats.blank?
 
       self.quantity = line_item_seats.size
-    end
-
-    def set_event_id
-      self.event_id ||= product.event_id
     end
 
     def update_vendor_id

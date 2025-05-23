@@ -1,7 +1,8 @@
 <!-- replace "erb[loud]:contains('assets_form')" -->
 
+<%# Sections don't use assets, so we hide the form here to avoid confusing admin. %>
 
-<div class="row">
+<div class="row <%= "d-none" unless @taxon.depth == 1 %>">
   <%# "@taxon.icon is not used yet" %>
   <%# render 'shared/asset_field',
     field: :icon,
@@ -67,4 +68,3 @@
     <% end %>
   <% end %>
 </div>
-

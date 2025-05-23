@@ -2,12 +2,15 @@
 
 <% unless f.object.accommodation? %>
   <div class="m-3 mb-0">
-    <% valid_duration = f.object.start_date_time.present? && f.object.end_date_time.present? %>
+    <% from_date = f.object.start_date_time || f.object.event.from_date %>
+    <% to_date = f.object.end_date_time || f.object.event.to_date %>
+
+    <% valid_duration = from_date.present? && to_date.present? %>
     <% alert_class = valid_duration ? 'alert-success' : 'alert-warning' %>
 
     <div class="alert <%= alert_class %> mb-0">
       <%= svg_icon(name: valid_duration ? "check2-circle.svg" : 'cancel.svg', width: '16', height: '16') %>
-      This variant have start date: <strong><%= pretty_time(f.object.start_date_time).presence || 'N/A' %></strong> and end date: <strong><%= pretty_time(f.object.end_date_time).presence || 'N/A' %></strong>
+      This variant have start date: <strong><%= pretty_time(from_date).presence || 'N/A' %></strong> and end date: <strong><%= pretty_time(to_date).presence || 'N/A' %></strong>
     </div>
 
     <div class="mb-1"></div>
@@ -16,7 +19,7 @@
       <% option_types = Spree::OptionType.where(name: ["start-date", "end-date", "start-time", "end-time", "reminder-in-hours", "duration-in-hours", "duration-in-minutes", "duration-in-seconds"]) %>
       <% event_link = f.object.event.present? ? edit_admin_taxonomy_taxon_url(f.object.event.taxonomy.id, f.object.event.id) : edit_admin_product_url(f.object.product) %>
 
-      Duration can be set by either adding <%= link_to 'event section date', event_link, target: '_blank' %> or add option type such as <%= option_types.pluck(:presentation).to_sentence %>
+      Duration can be set by either adding <%= link_to 'event date', event_link, target: '_blank' %> or add option type such as <%= option_types.pluck(:presentation).to_sentence %>
     </small>
   </div>
 <% end %>

@@ -1,6 +1,8 @@
 <!-- insert_before "erb[loud]:contains('field_container :meta_title')" -->
 
-<div class="row">
+<%# Sections don't use colors, so we hide the form here to avoid confusing admin. %>
+
+<div class="row <%= "d-none" unless @taxon.depth == 1 %>">
   <div class="col-md-6">
     <%= f.label :preferred_background_color, Spree.t('background_color'), class: 'form-label' %>
     <%= f.text_field :preferred_background_color, class: 'form-control color-picker', placeholder: '#FFFFFF', value: @object.preferred_background_color %>

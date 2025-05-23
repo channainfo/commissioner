@@ -1,6 +1,8 @@
 <!-- insert_after "erb[loud]:contains('field_container :permalink')" -->
 
+<%# Sections don't use custom_redirect_url, so we hide the form here to avoid confusing admin. %>
+
 <%= f.field_container :custom_redirect_url do %>
   <%= f.label :custom_redirect_url, Spree.t(:custom_redirect_url) %>
   <%= f.text_field :custom_redirect_url, class: 'form-control', rows: 6 %>
-<% end %>
+<% end if @taxon.depth == 1 %>

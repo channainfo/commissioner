@@ -3,6 +3,7 @@ module SpreeCmCommissioner
     extend ActiveSupport::Concern
 
     included do
+      before_validation :set_event_id
       before_validation :set_duration
     end
 
@@ -44,6 +45,13 @@ module SpreeCmCommissioner
 
     private
 
+    def set_event_id
+      self.event_id ||= product.event_id
+    end
+
+    # Line item date now depends directly on the event date and variant date.
+    # No longer depend on the event section date.
+    # This keeps the setup simple for the organizer and consistent for users.
     def set_duration
       self.from_date ||= variant.start_date_time || event&.from_date
       self.to_date ||= variant.end_date_time || event&.to_date

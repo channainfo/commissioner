@@ -1,7 +1,9 @@
 <!-- insert_before "erb[loud]:contains('field_container :hide_from_nav')" -->
 
+<%# Sections don't use video banner, so we hide the form here to avoid confusing admin. %>
+
 <%= f.field_container :hide_video_banner, class: ['custom-control', 'custom-checkbox', 'my-4'] do %>
   <%= f.check_box :hide_video_banner, class: 'custom-control-input' %>
   <%= f.label :hide_video_banner, Spree.t(:hide_video_banner), class: 'custom-control-label' %>
   <%= f.error_message_on :hide_video_banner %>
-<% end %>
+<% end if @taxon.depth == 1 %> %>

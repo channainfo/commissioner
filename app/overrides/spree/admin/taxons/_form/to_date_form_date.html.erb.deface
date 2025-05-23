@@ -1,6 +1,8 @@
 <!-- insert_after "erb[loud]:contains('field_container :permalink')" -->
 
-<div class="form-group date-range-filter">
+<%# Beside event, from_date & to_date aren't used inside the system elsewhere. Hide them from UI to avoid confusion %>
+
+<div class="form-group date-range-filter <%= "d-none" unless @object.event? && @object.depth == 1 %>">
   <div class="date-range-filter row">
     <div class="col-12 col-md-6 mb-3 mb-md-0">
       <%= label_tag nil, Spree.t(:from_date) %>
@@ -35,6 +37,3 @@
     </div>
   </div>
 </div>
-
-
-
