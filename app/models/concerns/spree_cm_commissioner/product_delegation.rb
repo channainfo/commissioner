@@ -6,7 +6,7 @@ module SpreeCmCommissioner
       delegate :product_type,
                :subscribable?,
                :allowed_upload_later?,
-               :need_confirmation?, :need_confirmation, :kyc,
+               :need_confirmation?, :need_confirmation,
                :allow_anonymous_booking,
                :accommodation?, :service?, :ecommerce?,
                :allow_self_check_in,

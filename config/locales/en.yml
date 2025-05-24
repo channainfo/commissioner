@@ -565,6 +565,7 @@ en:
     cannot_delete_account: "You cannot delete this account because you own a special role"
   kyc:
     note: "<b>Note:</b> Select Required KYC Field For this Product"
+    variant_note: "<b>Note:</b> Select Required Guest Information Field For this Variant"
     allowed_upload_later: "<b>Allow upload later:</b> Check this box if you allow to upload later"
   video_on_demand:
     quality:

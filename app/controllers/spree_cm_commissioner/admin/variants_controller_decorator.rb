@@ -1,9 +1,12 @@
 module SpreeCmCommissioner
   module Admin
     module VariantsControllerDecorator
+      include SpreeCmCommissioner::Admin::KycableHelper
+
       def self.prepended(base)
         base.before_action :build_option_values_form, only: %i[edit new]
         base.before_action :build_option_values, only: %i[create update]
+        base.before_action :build_guest_info, only: %i[create update]
       end
 
       # build option values that not exist. All option values will display to UI.
@@ -28,6 +31,20 @@ module SpreeCmCommissioner
 
           new_option_values << existing_option_value
         end
+      end
+
+      def build_guest_info
+        bit_fields = SpreeCmCommissioner::KycBitwise::BIT_FIELDS.keys
+
+        if permitted_resource_params[:use_product_kyc] == '1'
+          permitted_resource_params[:kyc] = nil
+        else
+          @kyc_result = calculate_kyc_value(params[:variant])
+          permitted_resource_params[:kyc] = @kyc_result
+        end
+        # remove these fields from params to prevent unknown attribute error
+        bit_fields.each { |field| params.require(:variant).delete(field) }
+        params.require(:variant).delete(:use_product_kyc)
       end
 
       # some option value name changed after validate.

@@ -3,6 +3,7 @@ module SpreeCmCommissioner
     def self.prepended(base)
       base.include SpreeCmCommissioner::ProductDelegation
       base.include SpreeCmCommissioner::VariantOptionsConcern
+      base.include SpreeCmCommissioner::KycBitwise
 
       base.after_commit :update_vendor_price
       base.validate     :validate_option_types
