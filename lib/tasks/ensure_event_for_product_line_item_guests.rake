@@ -2,6 +2,6 @@
 namespace :spree_cm_commissioner do
   desc 'Ensure event for product variant line items.'
   task ensure_event_for_product_line_item_guests: :environment do
-    SpreeCmCommissioner::EnsureEventForProductVariantLineItemsJob.perform_now
+    SpreeCmCommissioner::EnsureEventForProductLineItemGuestsJob.perform_now
   end
 end

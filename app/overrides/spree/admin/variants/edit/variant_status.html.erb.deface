@@ -2,8 +2,8 @@
 
 <% unless f.object.accommodation? %>
   <div class="m-3 mb-0">
-    <% from_date = f.object.start_date_time || f.object.event.from_date %>
-    <% to_date = f.object.end_date_time || f.object.event.to_date %>
+    <% from_date = f.object.start_date_time || f.object.event&.from_date %>
+    <% to_date = f.object.end_date_time || f.object.event&.to_date %>
 
     <% valid_duration = from_date.present? && to_date.present? %>
     <% alert_class = valid_duration ? 'alert-success' : 'alert-warning' %>
