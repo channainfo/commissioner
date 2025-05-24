@@ -310,6 +310,120 @@ RSpec.describe Spree::Order, type: :model do
     end
   end
 
+  describe '#FlatPercentItemTotal' do
+    let(:calculator) { Spree::Calculator::FlatPercentItemTotal.create(preferred_flat_percent: 50) }
+    let!(:promotion) { create(:promotion_with_order_adjustment, starts_at: Date.today - 1.day, expires_at: Date.today + 5.day, match_policy: "any")}
+    let!(:order) { create(:order_with_totals, line_items_price: 30, total: 30, item_total: 30) }
+    let!(:promotion_action) { Spree::Promotion::Actions::CreateAdjustment.create!(promotion: promotion, calculator: calculator) }
+    let!(:order_promotion) { create(:order_promotion, order: order, promotion: promotion)}
+    let!(:order_adjustment) { create(:adjustment, order: order, source: promotion_action, adjustable: order)}
+
+    context 'when order has a promotion with a cap' do
+      before do
+        calculator.update(cap: 20)
+      end
+
+      it 'does not adjust promotion order adjustment if within the cap' do
+        order.update_with_updater!
+        order.reload
+
+        expect(order.item_total.to_f).to eq(30.0)
+        expect(order.total.to_f).to eq(15.0)
+        expect(order.adjustment_total.to_f).to eq(-15.0)
+      end
+
+      it 'adjusts promotion order adjustment to cap if exceeded' do
+        create(:line_item, order: order, price: 100)
+        order.reload.update_with_updater!
+        order.reload
+
+        expect(order.item_total.to_f).to eq(130.0)
+        expect(order.total.to_f).to eq(110.0)
+        expect(order.adjustment_total.to_f).to eq(-20.0)
+      end
+    end
+
+    context 'when order has a promotion without a cap' do
+      it 'adjust promotion order adjustment' do
+        order.reload.update_with_updater!
+
+        expect(order.item_total.to_f).to eq(30.0)
+        expect(order.total.to_f).to eq(15.0)
+        expect(order.adjustment_total.to_f).to eq(-15.0)
+      end
+
+      it 'adjusts promotion order adjustment 50%' do
+        create(:line_item, order: order, price: 100)
+
+        order.reload.update_with_updater!
+        order.update_totals
+
+        expect(order.item_total.to_f).to eq(130.0)
+        expect(order.total.to_f).to eq(65.0)
+        expect(order.adjustment_total.to_f).to eq(-65.0)
+      end
+    end
+  end
+
+  describe '#PercentOnLineItem' do
+    let(:calculator) { Spree::Calculator::PercentOnLineItem.create(preferred_percent: 20) }
+    let!(:promotion) { create(:promotion_with_order_adjustment, starts_at: Date.today - 1.day, expires_at: Date.today + 5.day, match_policy: "any")}
+    let!(:order) { create(:order) }
+    let!(:line_item) { create(:line_item, order: order, quantity: 2, price: 30.0)}
+    let!(:promotion_action) { Spree::Promotion::Actions::CreateItemAdjustments.create!(promotion: promotion, calculator: calculator) }
+    let!(:order_promotion) { create(:order_promotion, order: order, promotion: promotion)}
+    let!(:order_adjustment) { create(:adjustment, order: order, source: promotion_action, adjustable: line_item)}
+
+    context 'when order has a promotion with a cap' do
+      before do
+        calculator.update(cap: 20)
+      end
+
+      it 'does not adjust promotion line item if within the cap' do
+        order.update_with_updater!
+        order.reload
+
+        expect(order.item_total.to_f).to eq(60.0)
+        expect(order.total.to_f).to eq(48.0)
+        expect(order.adjustment_total.to_f).to eq(-12.0)
+      end
+
+      it 'adjusts promotion line item to cap if exceeded' do
+        line_item2 = create(:line_item, order: order, quantity: 2, price: 60)
+        create(:adjustment, order: order, source: promotion_action, adjustable: line_item2)
+        order.reload.update_with_updater!
+        order.reload
+
+        # line_item1 discount 60x0.2 = 12 < cap 20, line_item2 discount 120x0.2 = 24 > cap 20
+        expect(order.item_total.to_f).to eq(180.0)
+        expect(order.total.to_f).to eq(148.0)
+        expect(order.adjustment_total.to_f).to eq(-32.0)
+      end
+    end
+
+    context 'when order has a promotion without a cap' do
+      it 'adjust promotion line item adjustment' do
+        order.reload.update_with_updater!
+
+        expect(order.item_total.to_f).to eq(60.0)
+        expect(order.total.to_f).to eq(48.0)
+        expect(order.adjustment_total.to_f).to eq(-12.0)
+      end
+
+      it 'adjusts promotion line item adjustment 20% ' do
+        line_item2 = create(:line_item, order: order, quantity: 2, price: 60)
+        create(:adjustment, order: order, source: promotion_action, adjustable: line_item2)
+
+        order.reload.update_with_updater!
+        order.update_totals
+
+        # line_item1 discount 60x0.2 = 12 , line_item2 discount 120x0.2 = 24
+        expect(order.item_total.to_f).to eq(180.0)
+        expect(order.total.to_f).to eq(144.0)
+        expect(order.adjustment_total.to_f).to eq(-36.0)
+      end
+    end
+  end
   describe '#valid_promotion_ids' do
     let!(:order) { create(:order, total: 100) }
     let!(:promotion) { create(:promotion, :with_order_adjustment) }
